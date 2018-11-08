@@ -1,0 +1,92 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/koren/Documents/workspace/expat/output/read_data.log
+  log type:  text
+ opened on:   8 Nov 2018, 08:35:20
+
+. 
+. import delimited input/manager_position/pos5.csv, varnames(1) clear
+(8 vars, 4,716,752 obs)
+
+. drop if pos5==9
+(394,536 observations deleted)
+
+. gen rovat_id=13
+
+. keep ceg_id rovat_id alrovat_id pos5
+
+. compress
+  variable rovat_id was float now byte
+  (12,966,648 bytes saved)
+
+. save temp/positions, replace
+file temp/positions.dta saved
+
+. 
+. import delimited input/motherlode/manage.csv, varnames(1) clear
+(7 vars, 5,111,112 obs)
+
+. 
+. *Külföldi-magyar dummy
+. gen person_type=substr(manager_id,1,2)
+
+. keep if person_type=="FP"|person_type=="PH"|person_type=="PP"|person_type=="P
+> R"|person_type=="NH"|person_type=="NO"
+(50,814 observations deleted)
+
+. gen person_foreign=0
+
+. replace person_foreign=1 if person_type=="FP"
+(850,967 real changes made)
+
+. 
+. 
+. *Source darabolása
+. gen byte rovat_id=real(substr(source,1,2))
+
+. gen long ceg_id=real(substr(source,4,10))
+
+. * there can be more than 999 alrovats
+. gen int alrovat_id=real(substr(source,15,5))
+
+. 
+. 
+. *Panelify
+. replace valid_till="2018-12-31" if valid_till==""
+(612,823 real changes made)
+
+. 
+. * ruthless loops. otherwise, prone to error.
+. foreach X in from till {
+  2.         gen year_`X'=real(substr(valid_`X',1,4))
+  3.         gen month_`X'=real(substr(valid_`X',6,2))
+  4.         gen day_`X'=real(substr(valid_`X',9,2))
+  5. }
+(30,996 missing values generated)
+(30,996 missing values generated)
+(30,996 missing values generated)
+
+. 
+. * drop unnecessary strings before merging
+. drop source valid_from valid_till manager_type person_type
+
+. compress
+  variable person_foreign was float now byte
+  variable year_from was float now int
+  variable month_from was float now byte
+  variable day_from was float now byte
+  variable year_till was float now int
+  variable month_till was float now byte
+  variable day_till was float now byte
+  (96,145,662 bytes saved)
+
+. save temp/managers, replace
+file temp/managers.dta saved
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/koren/Documents/workspace/expat/output/read_data.log
+  log type:  text
+ closed on:   8 Nov 2018, 08:36:47
+-------------------------------------------------------------------------------

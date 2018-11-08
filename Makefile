@@ -1,0 +1,7 @@
+STATA = stata -b do
+temp/firm_ceo_panel.dta: temp/manager_panel.dta firm_panel.do fill_in_ceo.do
+	$(STATA) firm_panel
+temp/manager_panel.dta: temp/managers.dta temp/positions.dta manager_panel.do 
+	$(STATA) manager_panel
+temp/managers.dta temp/positions.dta: input/manager_position/pos5.csv input/motherlode/manage.csv read_data.do
+	$(STATA) read_data
