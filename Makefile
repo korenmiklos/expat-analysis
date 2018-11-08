@@ -1,4 +1,6 @@
 STATA = stata -b do
+temp/analysis_sample.dta: input/balance-small/balance-sheet-1992-2016-small.dta temp/firm_ceo_panel.dta variables.do
+	$(STATA) variables
 temp/firm_ceo_panel.dta: temp/manager_panel.dta firm_panel.do fill_in_ceo.do
 	$(STATA) firm_panel
 temp/manager_panel.dta: temp/managers.dta temp/positions.dta manager_panel.do 

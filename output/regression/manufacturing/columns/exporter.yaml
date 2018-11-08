@@ -1,0 +1,195 @@
+id: exporter
+label: exporter
+coefficients:
+ - id: foreign
+   estimate: .004992
+   standard_error: .01632
+   t_statistic: .3058796
+   p_value: .7597072
+ - id: new
+   estimate: -.0227495
+   standard_error: .0067706
+   t_statistic: -3.360053
+   p_value: .0007843
+ - id: fnew
+   estimate: .0158015
+   standard_error: .018759
+   t_statistic: .8423419
+   p_value: .3996311
+ - id: fnew_expat
+   estimate: .0248881
+   standard_error: .0207339
+   t_statistic: 1.200358
+   p_value: .2300491
+ - id: fold_expat
+   estimate: .0139135
+   standard_error: .0251758
+   t_statistic: .5526547
+   p_value: .580521
+ - id: 26b.ind_year
+   estimate: 0
+   standard_error: .
+   t_statistic: .
+   p_value: .
+ - id: 27.ind_year
+   estimate: -.0111501
+   standard_error: .0095026
+   t_statistic: -1.173379
+   p_value: .2406916
+ - id: 28.ind_year
+   estimate: -.0141649
+   standard_error: .0110817
+   t_statistic: -1.278227
+   p_value: .2012203
+ - id: 29.ind_year
+   estimate: -.0135094
+   standard_error: .0122957
+   t_statistic: -1.098714
+   p_value: .2719381
+ - id: 30.ind_year
+   estimate: .0004937
+   standard_error: .0135754
+   t_statistic: .0363688
+   p_value: .9709895
+ - id: 31.ind_year
+   estimate: -.0080573
+   standard_error: .0143898
+   t_statistic: -.5599328
+   p_value: .5755468
+ - id: 32.ind_year
+   estimate: -.0040131
+   standard_error: .0151523
+   t_statistic: -.2648483
+   p_value: .7911357
+ - id: 33.ind_year
+   estimate: -.0193532
+   standard_error: .0160582
+   t_statistic: -1.205194
+   p_value: .2281772
+ - id: 34.ind_year
+   estimate: -.0211089
+   standard_error: .0170601
+   t_statistic: -1.237326
+   p_value: .2160157
+ - id: 35.ind_year
+   estimate: -.0159124
+   standard_error: .0176504
+   t_statistic: -.9015286
+   p_value: .3673445
+ - id: 36.ind_year
+   estimate: -.0180276
+   standard_error: .018436
+   t_statistic: -.977851
+   p_value: .3281885
+ - id: 37.ind_year
+   estimate: -.0218075
+   standard_error: .0189049
+   t_statistic: -1.15354
+   p_value: .2487359
+ - id: 38.ind_year
+   estimate: -.0225083
+   standard_error: .0193908
+   t_statistic: -1.160772
+   p_value: .2457821
+ - id: 39.ind_year
+   estimate: -.0145654
+   standard_error: .0199062
+   t_statistic: -.7317027
+   p_value: .4643794
+ - id: 40.ind_year
+   estimate: -.0037356
+   standard_error: .020359
+   t_statistic: -.183487
+   p_value: .8544223
+ - id: 41.ind_year
+   estimate: .0138819
+   standard_error: .0206736
+   t_statistic: .6714815
+   p_value: .5019404
+ - id: 42.ind_year
+   estimate: .0197326
+   standard_error: .0209153
+   t_statistic: .9434546
+   p_value: .3454875
+ - id: 43.ind_year
+   estimate: .0235066
+   standard_error: .0213996
+   t_statistic: 1.098462
+   p_value: .2720481
+ - id: 44.ind_year
+   estimate: .0383574
+   standard_error: .0218539
+   t_statistic: 1.755171
+   p_value: .0792825
+ - id: 45.ind_year
+   estimate: .0480192
+   standard_error: .0218489
+   t_statistic: 2.197783
+   p_value: .0280037
+ - id: 46.ind_year
+   estimate: .0528672
+   standard_error: .0223235
+   t_statistic: 2.368231
+   p_value: .0179058
+ - id: 47.ind_year
+   estimate: .0684392
+   standard_error: .0224717
+   t_statistic: 3.045573
+   p_value: .0023327
+ - id: 48.ind_year
+   estimate: .0516385
+   standard_error: .0227255
+   t_statistic: 2.272272
+   p_value: .0231063
+ - id: 49.ind_year
+   estimate: -.2171229
+   standard_error: .0234416
+   t_statistic: -9.262273
+   p_value: 2.75e-20
+ - id: 50.ind_year
+   estimate: -.2724799
+   standard_error: .0235935
+   t_statistic: -11.54894
+   p_value: 1.60e-30
+ - id: 1b.age_cat
+   estimate: 0
+   standard_error: .
+   t_statistic: .
+   p_value: .
+ - id: 2.age_cat
+   estimate: .0783111
+   standard_error: .0098696
+   t_statistic: 7.934554
+   p_value: 2.51e-15
+ - id: 3.age_cat
+   estimate: .1060418
+   standard_error: .0110218
+   t_statistic: 9.621106
+   p_value: 9.44e-22
+ - id: 4.age_cat
+   estimate: .1487338
+   standard_error: .0119855
+   t_statistic: 12.40953
+   p_value: 6.38e-35
+ - id: 5.age_cat
+   estimate: .200065
+   standard_error: .0146566
+   t_statistic: 13.65019
+   p_value: 8.77e-42
+ - id: 6.age_cat
+   estimate: .2465647
+   standard_error: .0176662
+   t_statistic: 13.95684
+   p_value: 1.42e-43
+ - id: _cons
+   estimate: .3710559
+   standard_error: .0134208
+   t_statistic: 27.64786
+   p_value: 3.2e-158
+extra_rows:
+ - id: R2
+   value: .064406569675018
+ - id: observations
+   value: 59007
+ - id: R2_within
+   value: .064406569675018

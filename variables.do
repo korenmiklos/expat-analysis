@@ -11,105 +11,65 @@ drop _merge
 
 
 egen id=group(frame_id)
-xtset id year
-BRK	
+xtset id year	
 
 *Expat CEO létezik változó készítése
-gen expat_ceo_exist=0
-egen expat_ceo_number=rowtotal(expat_ceo_entry_exit expat_ceo_entry expat_ceo_exit expat_ceo)
-replace expat_ceo_exist=1 if expat_ceo_number>0&expat_ceo_number!=.
+gen byte expat = N_expat>0&!missing(N_expat)
+ren fo3 foreign
 
+* time invariant vars
+foreach X of var expat foreign {
+	egen first_year_`X' = min(cond(`X'==1,year,.)), by(frame_id)
+	egen ever_`X' = max(`X'==1), by(frame_id)
+}
 
-*Első expat CEO változó készítése
-gen expat_ceo_year=expat_ceo_exist*year
-bys frame_id: egen expat_ceo_first=min(cond(expat_ceo_year!=0,expat_ceo_year,.))
-drop expat_ceo_year
+*foreign átalakítása 
+recode foreign (.=0)
 
-
-*Több CEO
-gen ceo_more=0
-egen ceo_number=rowtotal(domestic_ceo_entry_exit domestic_ceo_entry domestic_ceo_exit domestic_ceo expat_ceo_entry_exit expat_ceo_entry expat_ceo_exit expat_ceo)
-replace ceo_more=1 if ceo_number>1&ceo_number!=.
-
-
-*Switch változó létrehozása
-gen switch_ceo_exist=0
-egen switch_ceo_number=rowtotal(expat_ceo_entry_exit expat_ceo_entry domestic_ceo_entry_exit domestic_ceo_entry)
-replace switch_ceo_exist=1 if switch_ceo_number>0&switch_ceo_number!=.
-
-
-bys frame_id: egen switch_ceo_total=total(switch_ceo_exist)
+*foreign-at többször váltók kidobása
 xtset id year
-replace switch_ceo_exist=1 if ((l1.switch_ceo_number>0&l1.switch_ceo_number!=.)|(l2.switch_ceo_number>0&l2.switch_ceo_number!=.)|(l3.switch_ceo_number>0&l3.switch_ceo_number!=.)|(l4.switch_ceo_number>0&l4.switch_ceo_number!=.))&switch_ceo_number==0
+gen foreign_change=1 if l1.foreign==0&foreign==1
+gen foreign_change_rev=1 if l1.foreign==1&foreign==0
+bys frame_id: egen foreign_change_total=total(foreign_change)
+bys frame_id: egen foreign_change_rev_total=total(foreign_change_rev)
+drop if foreign_change_total>1|foreign_change_rev_total>1
+scalar dropped_too_many_foreign_change = r(N_drop)
+drop foreign_change foreign_change_rev foreign_change_total foreign_change_rev_total
 
 
-*Expat_switch és expat_after interakciók létrehozása
-gen expat_after=0
-gen expat_switch=expat_ceo_exist*switch_ceo_exist
-replace expat_after=1 if expat_ceo_exist==1&expat_switch==0
+*foreign visszahúzása expatba, valaha expat-tal, de soha foreign-mal bíró cégek teljes kidobása
+replace foreign=1 if first_year_expat<=year&foreign==0&ever_foreign==1
+drop first_year_foreign
+egen first_year_foreign = min(cond(foreign==1,year,.)), by(frame_id)
+
+drop if ever_expat==1 & ever_foreign==0
+scalar dropped_do3_expat_firmyears = r(N_drop)
 
 
-*Final netgép (K érdekében) hozzátétele
-preserve
-use ${data}/balance_sheet92_14_address_machines, clear
-duplicates drop frame_id year, force
-tempfile machines
-save `machines'
-restore
+* newly arriving CEOs
+local T 4
+gen age_since_foreign = year - first_year_foreign
+foreach X in domestic expat {
+	gen byte new_`X' = tenure_`X' <=`T'
+	* exclude founders joining the firm in years [0,1]
+	replace new_`X' = 0 if tenure_`X' >= firm_age-1
+	
+	* new managers at foreign firms
+	gen byte fnew_`X' = new_`X' & foreign==1
+	* only include managers joining in years [-1,...) since foreign
+	replace fnew_`X' = 0 if tenure_`X' > age_since_foreign+1
+}
+gen fold_expat = expat==1 & fnew_expat==0
+gen byte new = new_domestic | new_expat
+gen byte fnew = fnew_domestic | fnew_expat
 
+*foreign_switch interakció létrehozása
+gen byte foreign_new = foreign & new
 
-merge 1:1 frame_id year using `machines', keepusing(final_netgep)
-drop if _merge==2
-drop _merge
-
-
-*Fo3 átalakítása 
-recode fo3 (.=0)
-
-
-*Fo3-at többször váltók kidobása
-xtset id year
-gen fo3_change=1 if l1.fo3==0&fo3==1
-gen fo3_change_rev=1 if l1.fo3==1&fo3==0
-bys frame_id: egen fo3_change_total=total(fo3_change)
-bys frame_id: egen fo3_change_rev_total=total(fo3_change_rev)
-drop if fo3_change_total>1|fo3_change_rev_total>1
-drop fo3_change fo3_change_rev fo3_change_total fo3_change_rev_total
-
-
-*Fo3 visszahúzása expatba, valaha expat-tal, de soha fo3-mal bíró cégek teljes kidobása
-bys frame_id: egen fo3_ever=max(fo3) 
-bys frame_id: egen expat_ceo_ever=max(expat_ceo_exist) 
-replace fo3=1 if expat_ceo_first<=year&fo3==0&fo3_ever!=0
-drop if expat_ceo_ever==1&fo3_ever==0
-
-
-*Fo3_switch interakció létrehozása
-gen fo3_switch_exist=fo3*switch_ceo_exist
-
-
-*Fo3_switch szétbontása az fo3 váltás megtörténte előtt és után megjelenő új ceo szerint (lehet időben némi átfedés közöttük)
-gen fo3_switch_before=0
-xtset id year
-replace fo3_switch_before=1 if (fo3_switch_exist==0&switch_ceo_exist==1&fo3_ever==1)|(fo3_switch_exist==1&l1.switch_ceo_number>0&l1.fo3==0)| ///
-(fo3_switch_exist==1&l2.switch_ceo_number>0&l2.fo3==0)|(fo3_switch_exist==1&l3.switch_ceo_number>0&l3.fo3==0)|(fo3_switch_exist==1&l4.switch_ceo_number>0&l4.fo3==0)
-
-
-gen fo3_switch_after=0
-replace fo3_switch_after=1 if fo3_switch_exist==1&fo3_switch_before!=1
-replace fo3_switch_after=1 if fo3_switch_exist==1&fo3_switch_before==1&(switch_ceo_number>0|(l1.fo3==1&l1.switch_ceo_number>0)|(l2.fo3==1&l2.switch_ceo_number>0)|(l3.fo3==1&l3.switch_ceo_number>0))
-
-
-count if fo3_switch_exist==1
-count if fo3_switch_before==1
-count if fo3_switch_after==1
-
-
-*Greenfield - fo3 húzás után, de a sampling előtt
+*Greenfield - foreign húzás után, de a sampling előtt
 bys frame_id (year): gen relative_year=_n
-gen fo3_infirst=1 if relative_year==1&fo3==1
-bys frame_id: egen greenfield=max(fo3_infirst)
-
+gen foreign_infirst=1 if relative_year==1&foreign==1
+bys frame_id: egen byte greenfield=max(foreign_infirst)
 
 recode greenfield (.=0)
 
@@ -130,8 +90,7 @@ egen industry_year = group(teaor08_2d year)
 
 
 *Industry dummy
-gen ind=0
-replace ind=1 if teaor08_1d=="B"|teaor08_1d=="C"|teaor08_1d=="D"|teaor08_1d=="E"
+gen byte ind = inlist(teaor08_1d,"B","C","D","E")
 egen ind_year=group(ind year)
 
 
@@ -158,20 +117,35 @@ replace age_cat=6 if age>8
 *Mintavétel létszám és a K-n kvül a többi függő változó nem missing alapján
 local sample (avg_emp>=20)&!missing(lnL,lnQ,exporter)
 keep if `sample'
+scalar dropped_size_or_missing = r(N_drop)
 
 
 *Pénzügyi szektorban működő vállalatok kiszűrése
 bys frame_id: egen industry_mode=mode(teaor08_2d)
 drop if industry_mode==64|industry_mode==65|industry_mode==66
+scalar dropped_finance = r(N_drop)
+
+
+** do stats here
+tempvar tag
+foreach X of var foreign new expat new_expat fnew fnew_expat {
+	count if `X'==1
+	scalar N_it_`X' = r(N)
+	
+	* by firms
+	egen `tag' = tag(frame_id `X')
+	count if `X'==1 & `tag'==1
+	scalar N_i_`X' = r(N)
+	drop `tag'
+}
 
 
 *Firm_tag
 egen firm_tag=tag(frame_id)
 
 
-
 *Investment változó készítése
-reg lnK industry_year
+areg lnK, a(industry_year)
 predict res, res
 sum res, d
 
@@ -187,6 +161,8 @@ replace inv=. if d_res==.
 
 
 *Teljes minta elmentése a kontrollokkal
-save ${data}/sample_full, replace
-
+compress
+save temp/analysis_sample, replace
+save_all_to_json
+log close
 
