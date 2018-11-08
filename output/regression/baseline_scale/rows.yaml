@@ -1,0 +1,21 @@
+-   id: foreign
+    label: Firm is foreign owned\\{}\hspace*{1em}(dummy)
+    type: coefficient
+-   id: new
+    label: New manager (5 years)\\{}\hspace*{1em}(dummy)
+    type: coefficient
+-   id: fnew
+    label: New manager hired by FO\\{}\hspace*{1em}(dummy)
+    type: coefficient
+-   id: fnew_expat
+    label: New expat hired by FO\\{}\hspace*{1em}(dummy)
+    type: coefficient
+-   id: fold_expat
+    label: Old expat hired by FO\\{}\hspace*{1em}(dummy)
+    type: coefficient
+-   id: R2_w
+    type: extra_row
+    label: $R^2$ (within)
+-   id: observations
+    type: extra_row
+    label: Number of observations
