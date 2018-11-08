@@ -10,22 +10,27 @@ local sample_acquisitions `sample_baseline' & ever_foreign==1
 
 local samples baseline manufacturing acquisitions
 
+local scale lnL lnK lnQ
+local intensity lnKL lnQL exporter inv
+
 xtset id year
 foreach sample in `samples' {
-	foreach X of var lnL lnQ lnK lnQL lnKL exporter inv {
-		xtreg `X' foreign new fnew fnew_expat fold_expat i.ind_year i.age_cat if `sample_`sample'', i(id ) fe vce(cluster id)
-		local r2_w = `e(r2_w)'
-		do regram output/regression/`sample' `X' `X' R2_within "`r2_w'"
+	foreach group in scale intensity {
+		foreach X of var ``group'' {
+			xtreg `X' foreign new fnew fnew_expat fold_expat i.ind_year i.age_cat if `sample_`sample'', i(id ) fe vce(cluster id)
+			local r2_w = `e(r2_w)'
+			do regram output/regression/`sample'_`group' `X' `X' R2_within "`r2_w'"
+		}
 	}
 }
 
 *Szelekció az akvicíziós mintában
 xtset id year
-areg f1.expat lnL lnQ lnK exporter if ever_forein==1&greenfield!=1, a(industry_year) cluster(frame_id)
+areg f1.expat lnL lnQ lnK exporter if ever_foreign==1&greenfield!=1, a(industry_year) cluster(frame_id)
 do regram output/regression/selection 1 1
 
 *Akvizíciós minta (greenfield nélkül)
-keep if forein_ever==1&greenfield!=1
+keep if ever_foreign==1&greenfield!=1
 clonevar tenure_foreign = age_since_foreign
 
 BRK
