@@ -1,8 +1,8 @@
 ----------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Documents/workspace/expat/output/estimate.log
+       log:  /Users/koren/Documents/workspace/expat-analysis/output/estimate.log
   log type:  text
- opened on:   8 Nov 2018, 12:27:41
+ opened on:   9 Nov 2018, 08:58:29
 
 . 
 . use temp/analysis_sample
@@ -281,7 +281,6 @@ corr(u_i, Xb)  = -0.3024                        Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/baseline_scale/columns/lnL.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -558,7 +557,6 @@ corr(u_i, Xb)  = 0.0502                         Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/baseline_scale/columns/lnK.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -835,7 +833,6 @@ corr(u_i, Xb)  = -0.0236                        Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/baseline_scale/columns/lnQ.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -1112,7 +1109,6 @@ corr(u_i, Xb)  = 0.0492                         Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/baseline_intensity/columns/lnKL.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -1389,7 +1385,6 @@ corr(u_i, Xb)  = 0.0714                         Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/baseline_intensity/columns/lnQL.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -1666,7 +1661,6 @@ corr(u_i, Xb)  = 0.1712                         Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/baseline_intensity/columns/exporter.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -1937,7 +1931,6 @@ corr(u_i, Xb)  = -0.1864                        Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/baseline_intensity/columns/inv.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -2164,7 +2157,6 @@ corr(u_i, Xb)  = -0.1076                        Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/manufacturing_scale/columns/lnL.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -2391,7 +2383,6 @@ corr(u_i, Xb)  = 0.0613                         Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/manufacturing_scale/columns/lnK.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -2618,7 +2609,6 @@ corr(u_i, Xb)  = 0.0604                         Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/manufacturing_scale/columns/lnQ.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -2845,7 +2835,6 @@ corr(u_i, Xb)  = 0.1287                         Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/manufacturing_intensity/columns/lnKL.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -3072,7 +3061,6 @@ corr(u_i, Xb)  = 0.1256                         Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/manufacturing_intensity/columns/lnQL.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -3299,8 +3287,6 @@ corr(u_i, Xb)  = 0.0404                         Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/manufacturing_intensity/columns/exporter.yaml not fo
-> und)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -3523,7 +3509,6 @@ corr(u_i, Xb)  = -0.1720                        Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/manufacturing_intensity/columns/inv.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -3800,7 +3785,6 @@ corr(u_i, Xb)  = -0.0147                        Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/acquisitions_scale/columns/lnL.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -4077,7 +4061,6 @@ corr(u_i, Xb)  = 0.0859                         Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/acquisitions_scale/columns/lnK.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -4354,7 +4337,6 @@ corr(u_i, Xb)  = 0.0187                         Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/acquisitions_scale/columns/lnQ.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -4631,7 +4613,6 @@ corr(u_i, Xb)  = -0.0194                        Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/acquisitions_intensity/columns/lnKL.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -4908,7 +4889,6 @@ corr(u_i, Xb)  = -0.0042                        Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/acquisitions_intensity/columns/lnQL.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -5185,8 +5165,6 @@ corr(u_i, Xb)  = 0.1988                         Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/acquisitions_intensity/columns/exporter.yaml not fou
-> nd)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -5457,7 +5435,6 @@ corr(u_i, Xb)  = -0.1355                        Prob > F          =     0.0000
 . 
 . file open `output' using "`tablefile'/columns/`specname'.yaml", write text repla
 > ce
-(note: file output/regression/acquisitions_intensity/columns/inv.yaml not found)
 
 . 
 . file write `output' "id: " "`specname'" _newline
@@ -5650,14 +5627,1720 @@ end of do-file
 . keep if ever_foreign==1&greenfield!=1
 (243,154 observations deleted)
 
+. *Dinamika
+. scalar Tbefore = 4
+
+. scalar Tafter = 5
+
+. 
+. local N = Tbefore+Tafter+1
+
+. 
 . clonevar tenure_foreign = age_since_foreign
 
 . 
-. BRK
-command BRK is unrecognized
-r(199);
+. do event_study
 
+. 
+. gsort frame_id -year
+
+. foreach X of var tenure_* {
+  2.         clonevar `X'_recoded = `X'
+  3.         replace `X'_recoded = . if `X'<-Tbefore | `X'>Tafter
+  4.         * create "before" event windows only if there is no overlap with a pr
+> ior "after" event window
+.         by frame_id: replace `X'_recoded = `X'_recoded[_n-1]+year-year[_n-1] if 
+> missing(`X'_recoded) & (`X'_recoded[_n-1]+year-year[_n-1]>=-Tbefore)
+  5.         * winsorize all tenure "after"
+.         replace `X'_recoded = Tafter if `X'>Tafter & missing(`X'_recoded) & !mis
+> sing(`X')
+  6. }
+(4,647 missing values generated)
+(5,123 real changes made, 5,123 to missing)
+(2,889 real changes made)
+(3,653 real changes made)
+(17,263 missing values generated)
+(669 real changes made, 669 to missing)
+(1,844 real changes made)
+(541 real changes made)
+(10,829 real changes made, 10,829 to missing)
+(0 real changes made)
+(7,256 real changes made)
+
+. local T1 = Tbefore 
+
+. local T2 = Tafter
+
+. 
+. foreach X in foreign expat domestic {
+  2.         gen byte `X'_p_0 = tenure_`X'_recoded==0
+  3.         forval t=1/`T1' {
+  4.                 gen byte `X'_m_`t' = tenure_`X'_recoded==-`t'
+  5.         }
+  6.         forval t=1/`T2' {
+  7.                 gen byte `X'_p_`t' = tenure_`X'_recoded==`t'
+  8.         }
+  9. }
+
+. sort frame_id year
+
+. 
+. * illustrate window overlap and recoding
+. foreach X in domestic expat foreign {
+  2.         l year tenure_`X' tenure_`X'_recoded if frame_id=="ft10072219"
+  3. }
+
+       +----------------------------+
+       | year   tenure~c   tenure.. |
+       |----------------------------|
+  526. | 1992          .          . |
+  527. | 1993          .          . |
+  528. | 1994          .          . |
+  529. | 1995          .          . |
+  530. | 1996          .          . |
+       |----------------------------|
+  531. | 1997          .          . |
+  532. | 1998          .          . |
+  533. | 1999          .          . |
+  534. | 2000          .          . |
+  535. | 2001          .          . |
+       |----------------------------|
+  536. | 2002          .         -4 |
+  537. | 2003         54         -3 |
+  538. | 2004         55         -2 |
+  539. | 2005         56         -1 |
+  540. | 2006          0          0 |
+       |----------------------------|
+  541. | 2007          1          1 |
+  542. | 2008          2          2 |
+  543. | 2009          3          3 |
+  544. | 2010          4          4 |
+  545. | 2011          5          5 |
+       |----------------------------|
+  546. | 2012          0          0 |
+  547. | 2013          0          0 |
+  548. | 2014          1          1 |
+  549. | 2015          2          2 |
+  550. | 2016          3          3 |
+       +----------------------------+
+
+       +----------------------------+
+       | year   tenure~t   tenure.. |
+       |----------------------------|
+  526. | 1992          .          . |
+  527. | 1993          .          . |
+  528. | 1994          .          . |
+  529. | 1995          .          . |
+  530. | 1996          .          . |
+       |----------------------------|
+  531. | 1997          .          . |
+  532. | 1998          .          . |
+  533. | 1999          .          . |
+  534. | 2000          .          . |
+  535. | 2001          .          . |
+       |----------------------------|
+  536. | 2002          .          . |
+  537. | 2003          .          . |
+  538. | 2004          .          . |
+  539. | 2005          .          . |
+  540. | 2006          .          . |
+       |----------------------------|
+  541. | 2007          .          . |
+  542. | 2008          .          . |
+  543. | 2009          .          . |
+  544. | 2010          .          . |
+  545. | 2011          .          . |
+       |----------------------------|
+  546. | 2012          .          . |
+  547. | 2013          .          . |
+  548. | 2014          .          . |
+  549. | 2015          .          . |
+  550. | 2016          .          . |
+       +----------------------------+
+
+       +----------------------------+
+       | year   tenure~n   tenure.. |
+       |----------------------------|
+  526. | 1992        -19          . |
+  527. | 1993        -18          . |
+  528. | 1994        -17          . |
+  529. | 1995        -16          . |
+  530. | 1996        -15          . |
+       |----------------------------|
+  531. | 1997        -14          . |
+  532. | 1998        -13          . |
+  533. | 1999        -12          . |
+  534. | 2000        -11          . |
+  535. | 2001        -10          . |
+       |----------------------------|
+  536. | 2002         -9          . |
+  537. | 2003         -8          . |
+  538. | 2004         -7          . |
+  539. | 2005         -6          . |
+  540. | 2006         -5          . |
+       |----------------------------|
+  541. | 2007         -4         -4 |
+  542. | 2008         -3         -3 |
+  543. | 2009         -2         -2 |
+  544. | 2010         -1         -1 |
+  545. | 2011          0          0 |
+       |----------------------------|
+  546. | 2012          1          1 |
+  547. | 2013          2          2 |
+  548. | 2014          3          3 |
+  549. | 2015          4          4 |
+  550. | 2016          5          5 |
+       +----------------------------+
+
+. 
 end of do-file
 
-r(199);
+. 
+. local Tbefore = Tbefore
 
+. local Tafter = Tafter
+
+. foreach Y of var `scale' `intensity' {
+  2.         * with firm FE, controls are years more than Tbefore before any event
+>  happens
+.         xtreg `Y' *_m_? *_p_? i.ind_year i.age_cat if expat!=.&greenfield!=1 & e
+> ver_foreign==1, i(id) fe vce(cluster id)
+  3.         preserve
+  4.         clear
+  5.         set obs `N'
+  6.         gen t = _n-1-`Tbefore'
+  7.         label var t "Time since event (year)"
+  8. 
+.         foreach X in foreign expat domestic {
+  9.                 gen `X'_beta=.
+ 10.                 gen `X'_lower=.
+ 11.                 gen `X'_upper=.
+ 12.                 forval t=-`Tbefore'/`Tafter' {
+ 13.                         local tag "`t'"
+ 14.                         if (`t'<0) {
+ 15.                                 local tag = -`t'
+ 16.                                 local tag  _m_`tag'
+ 17.                         }
+ 18.                         else {
+ 19.                                 local tag  _p_`t'
+ 20.                         }
+ 21.                         replace `X'_beta = _b[`X'`tag'] if t==`t'
+ 22.                         replace `X'_lower = `X'_beta-1.69*_se[`X'`tag'] if t=
+> =`t'
+ 23.                         replace `X'_upper = `X'_beta+1.69*_se[`X'`tag'] if t=
+> =`t'
+ 24.                 }
+ 25.                 label var `X'_beta "`Y'"
+ 26.                 label var `X'_upper "90% CI"
+ 27.                 label var `X'_lower "90% CI"
+ 28. 
+.         }
+ 29.         label var foreign_beta "Foreign acquistion"
+ 30.         label var expat_beta "New expat manager"
+ 31.         label var domestic_beta "New domestic manager"
+ 32.         * omit last event year from graph, which is winsorized
+.         tw (line foreign_beta expat_beta domestic_beta t if t>=-Tbefore & t<Taft
+> er, sort), scheme(538w) title(`Y') aspect(0.67)
+ 33.         graph export output/figure/`Y'_event_study.png, replace width(800)
+ 34.         
+.         restore
+ 35. 
+. }
+
+Fixed-effects (within) regression               Number of obs     =     21,343
+Group variable: id                              Number of groups  =      1,495
+
+R-sq:                                           Obs per group:
+     within  = 0.1068                                         min =          1
+     between = 0.0956                                         avg =       14.3
+     overall = 0.1036                                         max =         25
+
+                                                F(84,1494)        =       6.40
+corr(u_i, Xb)  = -0.0366                        Prob > F          =     0.0000
+
+                                 (Std. Err. adjusted for 1,495 clusters in id)
+------------------------------------------------------------------------------
+             |               Robust
+         lnL |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ foreign_m_1 |  -.1516809   .0749314    -2.02   0.043    -.2986628    -.004699
+ foreign_m_2 |  -.1484791   .0680556    -2.18   0.029    -.2819738   -.0149844
+ foreign_m_3 |  -.0961427   .0593371    -1.62   0.105    -.2125357    .0202502
+ foreign_m_4 |  -.0681973   .0500148    -1.36   0.173    -.1663041    .0299094
+   expat_m_1 |   .1333654   .0661226     2.02   0.044     .0036625    .2630684
+   expat_m_2 |   .1193134   .0679494     1.76   0.079    -.0139729    .2525997
+   expat_m_3 |   .1297854   .0653672     1.99   0.047     .0015642    .2580066
+   expat_m_4 |   .1100092   .0620948     1.77   0.077     -.011793    .2318114
+domestic_m_1 |   .0193833    .064191     0.30   0.763    -.1065307    .1452974
+domestic_m_2 |   .0241718   .0655186     0.37   0.712    -.1043464    .1526901
+domestic_m_3 |   .0605202   .0647715     0.93   0.350    -.0665325    .1875729
+domestic_m_4 |   .0752883   .0616202     1.22   0.222     -.045583    .1961597
+ foreign_p_0 |  -.1670529   .0816322    -2.05   0.041    -.3271787   -.0069271
+ foreign_p_1 |  -.1486692   .0876572    -1.70   0.090    -.3206135    .0232751
+ foreign_p_2 |  -.1813888   .0943583    -1.92   0.055    -.3664776    .0037001
+ foreign_p_3 |  -.1304234   .0996676    -1.31   0.191    -.3259266    .0650798
+ foreign_p_4 |  -.1148715   .1045012    -1.10   0.272    -.3198561    .0901131
+ foreign_p_5 |  -.1584227   .1146548    -1.38   0.167    -.3833241    .0664787
+   expat_p_0 |   .0321538   .0690179     0.47   0.641    -.1032284     .167536
+   expat_p_1 |   .0482816   .0710002     0.68   0.497     -.090989    .1875522
+   expat_p_2 |   .0776657   .0766872     1.01   0.311    -.0727603    .2280917
+   expat_p_3 |   .0890887     .07847     1.14   0.256    -.0648344    .2430118
+   expat_p_4 |   .2123673   .0780145     2.72   0.007     .0593378    .3653968
+   expat_p_5 |   .1115371   .0915774     1.22   0.223    -.0680968     .291171
+domestic_p_0 |  -.0552562   .0618336    -0.89   0.372     -.176546    .0660336
+domestic_p_1 |  -.0675098   .0639512    -1.06   0.291    -.1929534    .0579339
+domestic_p_2 |   -.101821   .0638908    -1.59   0.111    -.2271463    .0235043
+domestic_p_3 |  -.0623235   .0647919    -0.96   0.336    -.1894162    .0647692
+domestic_p_4 |  -.0039959   .0646016    -0.06   0.951    -.1307154    .1227236
+domestic_p_5 |   .0773199   .0642033     1.20   0.229    -.0486183    .2032581
+             |
+    ind_year |
+          2  |  -.1161221    .064631    -1.80   0.073    -.2428993    .0106552
+          3  |  -.2526555   .0757643    -3.33   0.001    -.4012712   -.1040398
+          4  |  -.2972356   .0791482    -3.76   0.000    -.4524891   -.1419822
+          5  |  -.3477786   .0883556    -3.94   0.000    -.5210927   -.1744645
+          6  |  -.4591545   .0961277    -4.78   0.000     -.647714    -.270595
+          7  |  -.5368705   .1020005    -5.26   0.000    -.7369499   -.3367912
+          8  |  -.5620883   .1060445    -5.30   0.000    -.7701002   -.3540764
+          9  |  -.6319582   .1126885    -5.61   0.000    -.8530027   -.4109138
+         10  |  -.6713209   .1176447    -5.71   0.000    -.9020873   -.4405546
+         11  |  -.7434855   .1209355    -6.15   0.000    -.9807068   -.5062641
+         12  |  -.7477238   .1250027    -5.98   0.000    -.9929232   -.5025244
+         13  |  -.7518631   .1294699    -5.81   0.000    -1.005825    -.497901
+         14  |  -.7703799   .1348079    -5.71   0.000    -1.034813   -.5059471
+         15  |  -.7290159    .137188    -5.31   0.000    -.9981173   -.4599144
+         16  |  -.6810665   .1402013    -4.86   0.000    -.9560788   -.4060542
+         17  |  -.6871806   .1457658    -4.71   0.000     -.973108   -.4012532
+         18  |  -.7485523   .1479893    -5.06   0.000    -1.038841   -.4582635
+         19  |  -.6983235   .1508395    -4.63   0.000    -.9942032   -.4024439
+         20  |  -.7444528   .1537439    -4.84   0.000     -1.04603   -.4428759
+         21  |  -.8269189   .1576159    -5.25   0.000    -1.136091    -.517747
+         22  |  -.8681124   .1597458    -5.43   0.000    -1.181462   -.5547625
+         23  |  -.8597577   .1640066    -5.24   0.000    -1.181465   -.5380501
+         24  |   -.894406   .1671756    -5.35   0.000     -1.22233   -.5664823
+         25  |  -.9052334   .1688876    -5.36   0.000    -1.236515   -.5739513
+         26  |   .8383123   .1890183     4.44   0.000      .467543    1.209082
+         27  |    .667906   .1810379     3.69   0.000     .3127905    1.023021
+         28  |   .6091507   .1740303     3.50   0.000     .2677811    .9505204
+         29  |   .4732112   .1769664     2.67   0.008     .1260822    .8203402
+         30  |   .3867322   .1752031     2.21   0.027      .043062    .7304024
+         31  |   .2629686   .1758862     1.50   0.135    -.0820415    .6079788
+         32  |    .185649   .1724056     1.08   0.282    -.1525337    .5238316
+         33  |   .0808731   .1706563     0.47   0.636    -.2538783    .4156244
+         34  |   .0386729   .1719258     0.22   0.822    -.2985686    .3759145
+         35  |  -.0570075   .1727493    -0.33   0.741    -.3958644    .2818494
+         36  |  -.1085939   .1742019    -0.62   0.533    -.4503003    .2331124
+         37  |  -.2262887   .1750057    -1.29   0.196    -.5695717    .1169942
+         38  |   -.252155   .1748654    -1.44   0.150    -.5951628    .0908528
+         39  |   -.266069   .1755857    -1.52   0.130    -.6104898    .0783517
+         40  |  -.2895176   .1740973    -1.66   0.097    -.6310188    .0519836
+         41  |  -.3224938   .1767891    -1.82   0.068     -.669275    .0242874
+         42  |   -.376242   .1819722    -2.07   0.039    -.7331901   -.0192939
+         43  |  -.4502915   .1851029    -2.43   0.015    -.8133806   -.0872023
+         44  |  -.5049565   .1892106    -2.67   0.008    -.8761031     -.13381
+         45  |  -.5330213    .190798    -2.79   0.005    -.9072817   -.1587609
+         46  |  -.5025083   .1933308    -2.60   0.009    -.8817371   -.1232796
+         47  |  -.4840536    .196503    -2.46   0.014    -.8695047   -.0986025
+         48  |  -.4483113   .1966592    -2.28   0.023    -.8340688   -.0625537
+         49  |  -.4288456   .1996676    -2.15   0.032    -.8205042   -.0371869
+         50  |  -.4328983   .2018118    -2.15   0.032    -.8287629   -.0370337
+             |
+     age_cat |
+          2  |   .4791078    .052292     9.16   0.000     .3765342    .5816814
+          3  |   .7819513   .0619365    12.63   0.000     .6604596    .9034429
+          4  |   1.141335   .0742022    15.38   0.000     .9957834    1.286886
+          5  |   1.458976   .0916164    15.92   0.000     1.279266    1.638687
+          6  |   1.743138   .1111234    15.69   0.000     1.525164    1.961113
+             |
+       _cons |   3.148438   .1215836    25.90   0.000     2.909945    3.386931
+-------------+----------------------------------------------------------------
+     sigma_u |  1.0381205
+     sigma_e |  .85603138
+         rho |    .595252   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+number of observations (_N) was 0, now 10
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(file output/figure/lnL_event_study.png written in PNG format)
+
+Fixed-effects (within) regression               Number of obs     =     19,550
+Group variable: id                              Number of groups  =      1,460
+
+R-sq:                                           Obs per group:
+     within  = 0.1975                                         min =          1
+     between = 0.1452                                         avg =       13.4
+     overall = 0.1258                                         max =         25
+
+                                                F(84,1459)        =      11.15
+corr(u_i, Xb)  = 0.0788                         Prob > F          =     0.0000
+
+                                 (Std. Err. adjusted for 1,460 clusters in id)
+------------------------------------------------------------------------------
+             |               Robust
+         lnK |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ foreign_m_1 |   .0052798   .0946749     0.06   0.956    -.1804337    .1909932
+ foreign_m_2 |  -.0170259   .0847285    -0.20   0.841    -.1832285    .1491767
+ foreign_m_3 |   .0276301    .076678     0.36   0.719    -.1227807    .1780409
+ foreign_m_4 |    .059697   .0638329     0.94   0.350     -.065517     .184911
+   expat_m_1 |   .0342524   .0894299     0.38   0.702    -.1411725    .2096772
+   expat_m_2 |   .0584722   .0962749     0.61   0.544    -.1303798    .2473242
+   expat_m_3 |   .0773105   .0917084     0.84   0.399    -.1025839    .2572048
+   expat_m_4 |   .1295108   .0794158     1.63   0.103    -.0262705    .2852921
+domestic_m_1 |  -.0011116    .090723    -0.01   0.990    -.1790731    .1768498
+domestic_m_2 |   .0626593   .0878002     0.71   0.476    -.1095689    .2348875
+domestic_m_3 |   .1148642   .0898181     1.28   0.201    -.0613222    .2910506
+domestic_m_4 |   .1631174   .0841825     1.94   0.053    -.0020143     .328249
+ foreign_p_0 |   .0175684   .1034423     0.17   0.865    -.1853431    .2204798
+ foreign_p_1 |   .0951986   .1084114     0.88   0.380    -.1174604    .3078575
+ foreign_p_2 |   .1194936    .116003     1.03   0.303    -.1080569    .3470442
+ foreign_p_3 |   .1840479   .1211545     1.52   0.129    -.0536076    .4217035
+ foreign_p_4 |   .2135711   .1276253     1.67   0.094    -.0367777    .4639199
+ foreign_p_5 |   .1192723   .1442118     0.83   0.408    -.1636123     .402157
+   expat_p_0 |    .009022   .0878464     0.10   0.918    -.1632968    .1813408
+   expat_p_1 |   .0523336   .0901604     0.58   0.562    -.1245243    .2291916
+   expat_p_2 |   .0981867   .0910685     1.08   0.281    -.0804526     .276826
+   expat_p_3 |    .182592   .0884711     2.06   0.039      .009048    .3561361
+   expat_p_4 |   .1949658   .0925861     2.11   0.035     .0133498    .3765818
+   expat_p_5 |   .1059859   .1208046     0.88   0.380    -.1309833     .342955
+domestic_p_0 |  -.0696583   .0874131    -0.80   0.426    -.2411272    .1018106
+domestic_p_1 |  -.0837994   .0885754    -0.95   0.344    -.2575481    .0899493
+domestic_p_2 |  -.1214837   .0904699    -1.34   0.180    -.2989486    .0559812
+domestic_p_3 |  -.0832484   .0910069    -0.91   0.360    -.2617666    .0952699
+domestic_p_4 |   -.031737   .0906325    -0.35   0.726    -.2095209    .1460468
+domestic_p_5 |   .1091902   .0888814     1.23   0.219    -.0651588    .2835391
+             |
+    ind_year |
+          2  |   .0951574   .1074549     0.89   0.376    -.1156252      .30594
+          3  |   .5621927   .1242428     4.52   0.000     .3184791    .8059062
+          4  |   .6357897   .1336326     4.76   0.000     .3736572    .8979221
+          5  |   .8414263   .1399645     6.01   0.000     .5668732    1.115979
+          6  |   .9168319   .1502056     6.10   0.000       .62219    1.211474
+          7  |   1.091078   .1631992     6.69   0.000     .7709481    1.411208
+          8  |   1.246543   .1677964     7.43   0.000     .9173949    1.575691
+          9  |   1.293319    .174144     7.43   0.000       .95172    1.634919
+         10  |   1.375131   .1784308     7.71   0.000     1.025123     1.72514
+         11  |   1.467879   .1831496     8.01   0.000     1.108614    1.827144
+         12  |    1.44876   .1898236     7.63   0.000     1.076404    1.821116
+         13  |   1.521368   .1938964     7.85   0.000     1.141022    1.901713
+         14  |   1.548829   .1991796     7.78   0.000      1.15812    1.939538
+         15  |    1.51327   .2035792     7.43   0.000     1.113931     1.91261
+         16  |   1.561033   .2077897     7.51   0.000     1.153435    1.968631
+         17  |   1.629448   .2134055     7.64   0.000     1.210833    2.048062
+         18  |   1.557625   .2197741     7.09   0.000     1.126518    1.988732
+         19  |   1.498538   .2240216     6.69   0.000     1.059099    1.937977
+         20  |   1.427612    .231078     6.18   0.000     .9743318    1.880893
+         21  |   1.374216   .2349971     5.85   0.000     .9132479    1.835185
+         22  |   1.321204   .2450946     5.39   0.000     .8404285     1.80198
+         23  |   1.360401   .2503866     5.43   0.000     .8692453    1.851558
+         24  |   .8761799   .2677292     3.27   0.001     .3510046    1.401355
+         25  |   .9040579   .2838556     3.18   0.001     .3472492    1.460867
+         26  |   1.537301   .2500895     6.15   0.000     1.046728    2.027875
+         27  |   1.398809   .2446266     5.72   0.000     .9189515    1.878666
+         28  |   1.477549    .227425     6.50   0.000     1.031434    1.923663
+         29  |   1.476396   .2287242     6.45   0.000     1.027732    1.925059
+         30  |   1.525195    .228263     6.68   0.000     1.077437    1.972954
+         31  |   1.552071   .2270346     6.84   0.000     1.106722     1.99742
+         32  |   1.688555   .2226181     7.58   0.000     1.251869    2.125241
+         33  |   1.746842   .2238359     7.80   0.000     1.307768    2.185917
+         34  |   1.770776   .2251262     7.87   0.000      1.32917    2.212381
+         35  |   1.802011   .2281887     7.90   0.000     1.354398    2.249624
+         36  |   1.792587    .231202     7.75   0.000     1.339063    2.246111
+         37  |   1.830453   .2341051     7.82   0.000     1.371234    2.289671
+         38  |   1.880923   .2372742     7.93   0.000     1.415488    2.346358
+         39  |   1.903528   .2382166     7.99   0.000     1.436244    2.370811
+         40  |   1.891609   .2431136     7.78   0.000      1.41472    2.368499
+         41  |   1.907345   .2481006     7.69   0.000     1.420673    2.394017
+         42  |   1.980765   .2475186     8.00   0.000     1.495235    2.466296
+         43  |   1.937045   .2511684     7.71   0.000     1.444355    2.429734
+         44  |    1.85501   .2560253     7.25   0.000     1.352793    2.357227
+         45  |   1.877687   .2568561     7.31   0.000     1.373841    2.381534
+         46  |   1.847174    .259437     7.12   0.000     1.338265    2.356083
+         47  |   1.877345   .2646739     7.09   0.000     1.358163    2.396527
+         48  |     1.8956    .265075     7.15   0.000     1.375631    2.415569
+         49  |      1.884   .2666809     7.06   0.000     1.360881    2.407119
+         50  |   1.937318     .28174     6.88   0.000     1.384659    2.489976
+             |
+     age_cat |
+          2  |   .4783287   .0850335     5.63   0.000     .3115276    .6451297
+          3  |   .8129372   .0982655     8.27   0.000     .6201803    1.005694
+          4  |   1.082852   .1122812     9.64   0.000     .8626022    1.303102
+          5  |   1.285334   .1321608     9.73   0.000     1.026089     1.54458
+          6  |   1.488827   .1552149     9.59   0.000     1.184359    1.793296
+             |
+       _cons |   8.009231   .1821516    43.97   0.000     7.651924    8.366538
+-------------+----------------------------------------------------------------
+     sigma_u |  1.9358877
+     sigma_e |  1.1652419
+         rho |   .7340511   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+number of observations (_N) was 0, now 10
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(file output/figure/lnK_event_study.png written in PNG format)
+
+Fixed-effects (within) regression               Number of obs     =     21,343
+Group variable: id                              Number of groups  =      1,495
+
+R-sq:                                           Obs per group:
+     within  = 0.2967                                         min =          1
+     between = 0.0826                                         avg =       14.3
+     overall = 0.1424                                         max =         25
+
+                                                F(84,1494)        =      25.35
+corr(u_i, Xb)  = 0.0045                         Prob > F          =     0.0000
+
+                                 (Std. Err. adjusted for 1,495 clusters in id)
+------------------------------------------------------------------------------
+             |               Robust
+         lnQ |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ foreign_m_1 |  -.1825477   .0810836    -2.25   0.025    -.3415974    -.023498
+ foreign_m_2 |  -.2120999   .0731882    -2.90   0.004    -.3556624   -.0685374
+ foreign_m_3 |  -.1334688   .0638142    -2.09   0.037    -.2586436   -.0082939
+ foreign_m_4 |  -.0823675   .0530209    -1.55   0.121    -.1863708    .0216359
+   expat_m_1 |   .1694611    .076798     2.21   0.027     .0188178    .3201045
+   expat_m_2 |   .1156147   .0877162     1.32   0.188    -.0564454    .2876748
+   expat_m_3 |   .1691193   .0754548     2.24   0.025     .0211108    .3171278
+   expat_m_4 |   .1394881   .0670473     2.08   0.038     .0079713    .2710049
+domestic_m_1 |  -.1082926   .0772108    -1.40   0.161    -.2597456    .0431604
+domestic_m_2 |   .0229047   .0762776     0.30   0.764    -.1267178    .1725272
+domestic_m_3 |   .0899883   .0776167     1.16   0.246     -.062261    .2422376
+domestic_m_4 |    .108142   .0728107     1.49   0.138    -.0346801     .250964
+ foreign_p_0 |  -.2019631   .0877271    -2.30   0.021    -.3740444   -.0298817
+ foreign_p_1 |  -.1798738   .0962359    -1.87   0.062    -.3686457    .0088981
+ foreign_p_2 |  -.1590084   .1042491    -1.53   0.127    -.3634985    .0454817
+ foreign_p_3 |  -.1219819   .1116093    -1.09   0.275    -.3409094    .0969456
+ foreign_p_4 |  -.0928979   .1190175    -0.78   0.435     -.326357    .1405613
+ foreign_p_5 |  -.1194875   .1370818    -0.87   0.384    -.3883808    .1494058
+   expat_p_0 |    .161533   .0794209     2.03   0.042     .0057447    .3173213
+   expat_p_1 |   .2557531   .0811691     3.15   0.002     .0965356    .4149707
+   expat_p_2 |   .2196174    .091308     2.41   0.016     .0405118    .3987229
+   expat_p_3 |   .2384603   .0961267     2.48   0.013     .0499026    .4270179
+   expat_p_4 |   .3259628   .0840413     3.88   0.000     .1611114    .4908143
+   expat_p_5 |   .2558566   .0964512     2.65   0.008     .0666623    .4450508
+domestic_p_0 |  -.0150339   .0745039    -0.20   0.840    -.1611772    .1311093
+domestic_p_1 |  -.0332945   .0765679    -0.43   0.664    -.1834865    .1168975
+domestic_p_2 |  -.0613099    .078613    -0.78   0.436    -.2155135    .0928937
+domestic_p_3 |  -.0311218   .0785102    -0.40   0.692    -.1851237    .1228801
+domestic_p_4 |   .0278806   .0785997     0.35   0.723    -.1262969    .1820582
+domestic_p_5 |   .0684775   .0768074     0.89   0.373    -.0821843    .2191393
+             |
+    ind_year |
+          2  |   .0297277     .07834     0.38   0.704    -.1239403    .1833957
+          3  |   .1268414   .0878611     1.44   0.149    -.0455029    .2991857
+          4  |    .268086   .0929208     2.89   0.004     .0858169    .4503551
+          5  |   .4220082   .0981692     4.30   0.000     .2294441    .6145722
+          6  |   .5057168   .1066006     4.74   0.000     .2966142    .7148195
+          7  |   .5755927   .1134503     5.07   0.000     .3530539    .7981315
+          8  |   .6458473   .1202954     5.37   0.000     .4098815    .8818131
+          9  |   .6939189    .127065     5.46   0.000     .4446742    .9431636
+         10  |   .7666632    .130292     5.88   0.000     .5110886    1.022238
+         11  |   .8049054    .134677     5.98   0.000     .5407292    1.069082
+         12  |   .8920484   .1378056     6.47   0.000     .6217355    1.162361
+         13  |   .9591387   .1431375     6.70   0.000     .6783669     1.23991
+         14  |   .9822503   .1501604     6.54   0.000     .6877026    1.276798
+         15  |   1.043286   .1539127     6.78   0.000     .7413785    1.345194
+         16  |   1.100621   .1598685     6.88   0.000     .7870303    1.414211
+         17  |   1.148647   .1675857     6.85   0.000     .8199187    1.477375
+         18  |   .9846224   .1738241     5.66   0.000     .6436572    1.325588
+         19  |    1.08077   .1776823     6.08   0.000     .7322372    1.429304
+         20  |    1.06471   .1794948     5.93   0.000     .7126217    1.416799
+         21  |   .9656999   .1848918     5.22   0.000     .6030249    1.328375
+         22  |   1.023975   .1880992     5.44   0.000     .6550086    1.392942
+         23  |   1.078636   .1974719     5.46   0.000     .6912849    1.465988
+         24  |   1.033807   .2003598     5.16   0.000     .6407909    1.426823
+         25  |   1.023643   .2023105     5.06   0.000        .6268    1.420485
+         26  |   .3554037   .2100808     1.69   0.091    -.0566809    .7674883
+         27  |   .4165908   .1968256     2.12   0.034     .0305069    .8026746
+         28  |   .5603126   .1873429     2.99   0.003     .1928296    .9277956
+         29  |   .7237084   .1827337     3.96   0.000     .3652665     1.08215
+         30  |   .8340863   .1799642     4.63   0.000      .481077    1.187096
+         31  |   .9052071    .180231     5.02   0.000     .5516744     1.25874
+         32  |   1.024243   .1793714     5.71   0.000      .672396    1.376089
+         33  |   1.031916   .1778672     5.80   0.000     .6830197    1.380811
+         34  |   1.139888   .1778047     6.41   0.000     .7911145    1.488661
+         35  |   1.138681   .1796344     6.34   0.000     .7863183    1.491043
+         36  |   1.129083   .1822788     6.19   0.000     .7715336    1.486633
+         37  |   1.129612     .18436     6.13   0.000     .7679803    1.491244
+         38  |   1.149472   .1883265     6.10   0.000       .78006    1.518885
+         39  |   1.204631   .1886374     6.39   0.000     .8346087    1.574653
+         40  |   1.343807   .1877837     7.16   0.000      .975459    1.712154
+         41  |   1.397054   .1900624     7.35   0.000     1.024237    1.769872
+         42  |   1.370827   .1971737     6.95   0.000       .98406    1.757593
+         43  |   1.288535   .1959854     6.57   0.000     .9040995    1.672971
+         44  |   1.273505   .2039459     6.24   0.000     .8734539    1.673555
+         45  |    1.40507   .2037399     6.90   0.000     1.005423    1.804717
+         46  |   1.401495   .2082305     6.73   0.000     .9930393     1.80995
+         47  |   1.464864   .2140664     6.84   0.000     1.044962    1.884767
+         48  |   1.537078   .2163914     7.10   0.000     1.112615    1.961541
+         49  |    1.59633   .2183402     7.31   0.000     1.168044    2.024616
+         50  |   1.546191   .2269859     6.81   0.000     1.100946    1.991436
+             |
+     age_cat |
+          2  |   1.160487   .0694352    16.71   0.000     1.024286    1.296688
+          3  |   1.487019     .07728    19.24   0.000     1.335431    1.638608
+          4  |   1.858998   .0913364    20.35   0.000     1.679836    2.038159
+          5  |   2.157782   .1122869    19.22   0.000     1.937525    2.378039
+          6  |   2.395464   .1428884    16.76   0.000     2.115181    2.675748
+             |
+       _cons |   10.51514   .1358156    77.42   0.000     10.24873    10.78155
+-------------+----------------------------------------------------------------
+     sigma_u |  1.4876086
+     sigma_e |  1.0248764
+         rho |  .67813094   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+number of observations (_N) was 0, now 10
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(file output/figure/lnQ_event_study.png written in PNG format)
+
+Fixed-effects (within) regression               Number of obs     =     19,550
+Group variable: id                              Number of groups  =      1,460
+
+R-sq:                                           Obs per group:
+     within  = 0.1927                                         min =          1
+     between = 0.0039                                         avg =       13.4
+     overall = 0.0852                                         max =         25
+
+                                                F(84,1459)        =      12.49
+corr(u_i, Xb)  = -0.0229                        Prob > F          =     0.0000
+
+                                 (Std. Err. adjusted for 1,460 clusters in id)
+------------------------------------------------------------------------------
+             |               Robust
+        lnKL |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ foreign_m_1 |   .1424723   .0760582     1.87   0.061    -.0067228    .2916673
+ foreign_m_2 |     .10095   .0676925     1.49   0.136    -.0318351     .233735
+ foreign_m_3 |   .1352609   .0620313     2.18   0.029     .0135809    .2569409
+ foreign_m_4 |   .1238553   .0530469     2.33   0.020     .0197989    .2279116
+   expat_m_1 |  -.0792557   .0678435    -1.17   0.243    -.2123368    .0538254
+   expat_m_2 |    -.05155   .0734587    -0.70   0.483    -.1956459    .0925459
+   expat_m_3 |  -.0403556   .0728093    -0.55   0.579    -.1831776    .1024664
+   expat_m_4 |    .016897   .0659834     0.26   0.798    -.1125354    .1463294
+domestic_m_1 |    .006384   .0695672     0.09   0.927    -.1300785    .1428464
+domestic_m_2 |   .0510258   .0682812     0.75   0.455     -.082914    .1849656
+domestic_m_3 |   .0765325   .0692855     1.10   0.270    -.0593773    .2124423
+domestic_m_4 |   .1167399   .0660672     1.77   0.077    -.0128569    .2463367
+ foreign_p_0 |   .1692102    .083315     2.03   0.042     .0057803    .3326401
+ foreign_p_1 |   .2483715   .0884322     2.81   0.005     .0749036    .4218394
+ foreign_p_2 |   .2795199   .0934388     2.99   0.003     .0962312    .4628087
+ foreign_p_3 |   .3114466   .0986962     3.16   0.002      .117845    .5050481
+ foreign_p_4 |   .3041531   .1033672     2.94   0.003     .1013889    .5069174
+ foreign_p_5 |    .258996   .1149826     2.25   0.024     .0334471    .4845449
+   expat_p_0 |   .0135304   .0676952     0.20   0.842      -.11926    .1463207
+   expat_p_1 |   .0350749   .0710175     0.49   0.621    -.1042323    .1743821
+   expat_p_2 |   .0249758   .0739994     0.34   0.736    -.1201807    .1701323
+   expat_p_3 |   .0688866   .0735274     0.94   0.349    -.0753441    .2131173
+   expat_p_4 |   .0361941   .0814656     0.44   0.657     -.123608    .1959963
+   expat_p_5 |   .0518634   .0968779     0.54   0.592    -.1381715    .2418983
+domestic_p_0 |   .0134764   .0669963     0.20   0.841    -.1179429    .1448957
+domestic_p_1 |   .0183464   .0683171     0.27   0.788    -.1156638    .1523565
+domestic_p_2 |   .0043192   .0693637     0.06   0.950     -.131744    .1403824
+domestic_p_3 |   .0103534   .0708247     0.15   0.884    -.1285757    .1492825
+domestic_p_4 |   .0119248   .0708549     0.17   0.866    -.1270636    .1509132
+domestic_p_5 |   .0610568   .0694143     0.88   0.379    -.0751057    .1972194
+             |
+    ind_year |
+          2  |    .239474   .0887548     2.70   0.007     .0653734    .4135747
+          3  |   .8529834   .1087455     7.84   0.000     .6396692    1.066298
+          4  |   .9596474   .1156566     8.30   0.000     .7327765    1.186518
+          5  |   1.186475   .1202427     9.87   0.000     .9506075    1.422342
+          6  |   1.362404   .1273646    10.70   0.000     1.112567    1.612242
+          7  |   1.639813   .1369472    11.97   0.000     1.371179    1.908448
+          8  |   1.821986   .1401224    13.00   0.000     1.547123    2.096849
+          9  |   1.910534   .1437048    13.29   0.000     1.628644    2.192424
+         10  |   2.038367   .1467587    13.89   0.000     1.750486    2.326247
+         11  |   2.198934   .1505712    14.60   0.000     1.903575    2.494293
+         12  |   2.184088   .1560268    14.00   0.000     1.878027    2.490149
+         13  |   2.238234   .1611521    13.89   0.000      1.92212    2.554349
+         14  |   2.286103   .1654357    13.82   0.000     1.961586     2.61062
+         15  |     2.2009   .1690628    13.02   0.000     1.869268    2.532532
+         16  |   2.198191   .1715589    12.81   0.000     1.861662    2.534719
+         17  |    2.23525    .175209    12.76   0.000     1.891562    2.578938
+         18  |   2.224508   .1785936    12.46   0.000     1.874181    2.574836
+         19  |   2.173322   .1810619    12.00   0.000     1.818152    2.528491
+         20  |   2.099477    .186286    11.27   0.000      1.73406    2.464894
+         21  |   2.109228   .1913202    11.02   0.000     1.733936     2.48452
+         22  |   2.120297   .1972124    10.75   0.000     1.733447    2.507147
+         23  |   2.134781   .2008765    10.63   0.000     1.740743    2.528818
+         24  |   1.477359   .2201275     6.71   0.000     1.045559    1.909159
+         25  |   1.498896   .2418282     6.20   0.000     1.024528    1.973264
+         26  |   .7261862   .1877863     3.87   0.000     .3578262    1.094546
+         27  |   .8086197   .1792394     4.51   0.000     .4570252    1.160214
+         28  |   .9477733   .1717528     5.52   0.000     .6108644    1.284682
+         29  |   1.071783   .1746348     6.14   0.000     .7292213    1.414345
+         30  |   1.202065   .1786695     6.73   0.000     .8515882    1.552541
+         31  |   1.335276   .1778579     7.51   0.000     .9863913     1.68416
+         32  |   1.552095   .1771317     8.76   0.000     1.204635    1.899555
+         33  |   1.693991    .185883     9.11   0.000     1.329365    2.058618
+         34  |    1.75578   .1863287     9.42   0.000     1.390279    2.121281
+         35  |   1.872974     .19013     9.85   0.000     1.500016    2.245931
+         36  |   1.905403   .1930267     9.87   0.000     1.526763    2.284042
+         37  |   2.065704   .1958102    10.55   0.000     1.681604    2.449803
+         38  |   2.110488   .1970058    10.71   0.000     1.724043    2.496933
+         39  |   2.155182   .1987683    10.84   0.000      1.76528    2.545084
+         40  |   2.192463   .2028508    10.81   0.000     1.794553    2.590374
+         41  |   2.214837   .2060147    10.75   0.000      1.81072    2.618954
+         42  |   2.328503   .2036186    11.44   0.000     1.929087     2.72792
+         43  |   2.396251   .2061005    11.63   0.000     1.991966    2.800536
+         44  |   2.309694   .2085318    11.08   0.000     1.900639    2.718748
+         45  |   2.379392   .2093201    11.37   0.000     1.968792    2.789993
+         46  |   2.346774   .2116385    11.09   0.000     1.931626    2.761922
+         47  |    2.35543   .2156964    10.92   0.000     1.932322    2.778538
+         48  |   2.324083   .2191919    10.60   0.000     1.894118    2.754048
+         49  |   2.197397   .2163753    10.16   0.000     1.772957    2.621837
+         50  |   2.219329   .2263788     9.80   0.000     1.775266    2.663391
+             |
+     age_cat |
+          2  |    .065233   .0773605     0.84   0.399    -.0865167    .2169827
+          3  |   .0956762   .0877748     1.09   0.276     -.076502    .2678545
+          4  |   .0640477   .0957873     0.67   0.504    -.1238478    .2519431
+          5  |   -.023711   .1105378    -0.21   0.830     -.240541     .193119
+          6  |  -.0790308   .1286266    -0.61   0.539    -.3313436     .173282
+             |
+       _cons |   4.666083   .1445644    32.28   0.000     4.382507    4.949659
+-------------+----------------------------------------------------------------
+     sigma_u |  1.7289406
+     sigma_e |  .99563255
+         rho |  .75096614   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+number of observations (_N) was 0, now 10
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(file output/figure/lnKL_event_study.png written in PNG format)
+
+Fixed-effects (within) regression               Number of obs     =     21,343
+Group variable: id                              Number of groups  =      1,495
+
+R-sq:                                           Obs per group:
+     within  = 0.3737                                         min =          1
+     between = 0.0917                                         avg =       14.3
+     overall = 0.2031                                         max =         25
+
+                                                F(84,1494)        =      39.20
+corr(u_i, Xb)  = -0.0025                        Prob > F          =     0.0000
+
+                                 (Std. Err. adjusted for 1,495 clusters in id)
+------------------------------------------------------------------------------
+             |               Robust
+        lnQL |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ foreign_m_1 |  -.0308668   .0478682    -0.64   0.519    -.1247628    .0630291
+ foreign_m_2 |  -.0636208   .0462476    -1.38   0.169    -.1543379    .0270963
+ foreign_m_3 |   -.037326   .0406426    -0.92   0.359    -.1170485    .0423965
+ foreign_m_4 |  -.0141701   .0348814    -0.41   0.685    -.0825919    .0542516
+   expat_m_1 |   .0360957   .0496404     0.73   0.467    -.0612766     .133468
+   expat_m_2 |  -.0036987   .0554557    -0.07   0.947    -.1124781    .1050807
+   expat_m_3 |   .0393339   .0498705     0.79   0.430    -.0584898    .1371575
+   expat_m_4 |   .0294789   .0436969     0.67   0.500    -.0562349    .1151927
+domestic_m_1 |  -.1276759    .051216    -2.49   0.013    -.2281387    -.027213
+domestic_m_2 |  -.0012671    .049943    -0.03   0.980    -.0992329    .0966987
+domestic_m_3 |   .0294681   .0509592     0.58   0.563    -.0704912    .1294273
+domestic_m_4 |   .0328537   .0504635     0.65   0.515    -.0661331    .1318404
+ foreign_p_0 |  -.0349102   .0519771    -0.67   0.502     -.136866    .0670456
+ foreign_p_1 |  -.0312046   .0579666    -0.54   0.590    -.1449092    .0825001
+ foreign_p_2 |   .0223804   .0624167     0.36   0.720    -.1000533    .1448141
+ foreign_p_3 |   .0084415   .0662445     0.13   0.899    -.1215006    .1383837
+ foreign_p_4 |   .0219737    .071347     0.31   0.758    -.1179773    .1619246
+ foreign_p_5 |   .0389352   .0824353     0.47   0.637    -.1227659    .2006364
+   expat_p_0 |   .1293792   .0509739     2.54   0.011     .0293912    .2293671
+   expat_p_1 |   .2074715   .0530741     3.91   0.000     .1033639    .3115792
+   expat_p_2 |   .1419516   .0591619     2.40   0.017     .0259024    .2580008
+   expat_p_3 |   .1493715   .0632435     2.36   0.018      .025316     .273427
+   expat_p_4 |   .1135954   .0568874     2.00   0.046     .0020077    .2251831
+   expat_p_5 |   .1443195   .0614832     2.35   0.019     .0237169    .2649221
+domestic_p_0 |   .0402222   .0486766     0.83   0.409    -.0552595    .1357039
+domestic_p_1 |   .0342152   .0497758     0.69   0.492    -.0634227    .1318532
+domestic_p_2 |   .0405111   .0511866     0.79   0.429    -.0598941    .1409164
+domestic_p_3 |   .0312017   .0514444     0.61   0.544    -.0697093    .1321126
+domestic_p_4 |   .0318765   .0521009     0.61   0.541    -.0703221    .1340752
+domestic_p_5 |  -.0088424   .0494807    -0.18   0.858    -.1059015    .0882167
+             |
+    ind_year |
+          2  |   .1458497   .0624372     2.34   0.020     .0233759    .2683236
+          3  |   .3794968   .0682514     5.56   0.000      .245618    .5133756
+          4  |   .5653216    .071845     7.87   0.000     .4243937    .7062495
+          5  |   .7697868   .0745466    10.33   0.000     .6235597    .9160138
+          6  |   .9648713   .0784551    12.30   0.000     .8109776    1.118765
+          7  |   1.112463    .082676    13.46   0.000     .9502899    1.274637
+          8  |   1.207936   .0859806    14.05   0.000      1.03928    1.376591
+          9  |   1.325877   .0889969    14.90   0.000     1.151305    1.500449
+         10  |   1.437984   .0908293    15.83   0.000     1.259818    1.616151
+         11  |   1.548391   .0937046    16.52   0.000     1.364584    1.732197
+         12  |   1.639772   .0967028    16.96   0.000     1.450085     1.82946
+         13  |   1.711002   .0990854    17.27   0.000      1.51664    1.905363
+         14  |    1.75263   .1027004    17.07   0.000     1.551178    1.954082
+         15  |   1.772302   .1037704    17.08   0.000     1.568751    1.975853
+         16  |   1.781687   .1082217    16.46   0.000     1.569405     1.99397
+         17  |   1.835827   .1109806    16.54   0.000     1.618133    2.053522
+         18  |   1.733175   .1129287    15.35   0.000     1.511659     1.95469
+         19  |   1.779094    .116008    15.34   0.000     1.551538     2.00665
+         20  |   1.809163   .1175992    15.38   0.000     1.578486     2.03984
+         21  |   1.792619   .1221215    14.68   0.000     1.553071    2.032167
+         22  |   1.892088   .1217917    15.54   0.000     1.653187    2.130988
+         23  |   1.938394    .125506    15.44   0.000     1.692207    2.184581
+         24  |   1.928213   .1294453    14.90   0.000     1.674299    2.182127
+         25  |   1.928876   .1277923    15.09   0.000     1.678205    2.179547
+         26  |  -.4829086   .1198387    -4.03   0.000    -.7179785   -.2478387
+         27  |  -.2513152   .1198146    -2.10   0.036     -.486338   -.0162924
+         28  |  -.0488381   .1174432    -0.42   0.678    -.2792093     .181533
+         29  |   .2504971     .11252     2.23   0.026     .0297832    .4712111
+         30  |   .4473541   .1137794     3.93   0.000     .2241698    .6705384
+         31  |   .6422384   .1146316     5.60   0.000     .4173825    .8670943
+         32  |   .8385935   .1195961     7.01   0.000     .6039994    1.073188
+         33  |   .9510425   .1176263     8.09   0.000     .7203123    1.181773
+         34  |   1.101215   .1189544     9.26   0.000     .8678796     1.33455
+         35  |   1.195688   .1190846    10.04   0.000     .9620973    1.429279
+         36  |   1.237677   .1209504    10.23   0.000     1.000427    1.474928
+         37  |   1.355901   .1244699    10.89   0.000     1.111747    1.600055
+         38  |   1.401627   .1239417    11.31   0.000     1.158509    1.644746
+         39  |     1.4707   .1245714    11.81   0.000     1.226347    1.715053
+         40  |   1.633324   .1252879    13.04   0.000     1.387566    1.879083
+         41  |   1.719548   .1262393    13.62   0.000     1.471923    1.967173
+         42  |   1.747069   .1325588    13.18   0.000     1.487048     2.00709
+         43  |   1.738827   .1311848    13.25   0.000     1.481501    1.996153
+         44  |   1.778461   .1345056    13.22   0.000     1.514621    2.042301
+         45  |   1.938091   .1326304    14.61   0.000      1.67793    2.198253
+         46  |   1.904003   .1345557    14.15   0.000     1.640065    2.167941
+         47  |   1.948918   .1372994    14.19   0.000     1.679598    2.218238
+         48  |   1.985389   .1380588    14.38   0.000     1.714579    2.256199
+         49  |   2.025176   .1387572    14.60   0.000     1.752996    2.297355
+         50  |   1.979089   .1402043    14.12   0.000     1.704071    2.254107
+             |
+     age_cat |
+          2  |   .6813794   .0532798    12.79   0.000     .5768683    .7858905
+          3  |   .7050681   .0571862    12.33   0.000     .5928943    .8172419
+          4  |   .7176627   .0642479    11.17   0.000      .591637    .8436883
+          5  |   .6988057   .0754705     9.26   0.000     .5507662    .8468451
+          6  |    .652326   .0931695     7.00   0.000     .4695691     .835083
+             |
+       _cons |   7.366703   .0936691    78.65   0.000     7.182967     7.55044
+-------------+----------------------------------------------------------------
+     sigma_u |  1.1214034
+     sigma_e |  .71792389
+         rho |  .70929144   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+number of observations (_N) was 0, now 10
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(file output/figure/lnQL_event_study.png written in PNG format)
+
+Fixed-effects (within) regression               Number of obs     =     21,343
+Group variable: id                              Number of groups  =      1,495
+
+R-sq:                                           Obs per group:
+     within  = 0.0553                                         min =          1
+     between = 0.2123                                         avg =       14.3
+     overall = 0.1206                                         max =         25
+
+                                                F(84,1494)        =       5.26
+corr(u_i, Xb)  = 0.1945                         Prob > F          =     0.0000
+
+                                 (Std. Err. adjusted for 1,495 clusters in id)
+------------------------------------------------------------------------------
+             |               Robust
+    exporter |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ foreign_m_1 |  -.0177228    .020872    -0.85   0.396    -.0586643    .0232187
+ foreign_m_2 |  -.0233022   .0198442    -1.17   0.240    -.0622276    .0156232
+ foreign_m_3 |  -.0070705   .0181926    -0.39   0.698    -.0427562    .0286152
+ foreign_m_4 |  -.0068276   .0164673    -0.41   0.678     -.039129    .0254738
+   expat_m_1 |   .0478272   .0208961     2.29   0.022     .0068384    .0888161
+   expat_m_2 |   .0534152   .0214893     2.49   0.013     .0112627    .0955676
+   expat_m_3 |   .0527665   .0205672     2.57   0.010     .0124229    .0931101
+   expat_m_4 |   .0447582    .020752     2.16   0.031     .0040521    .0854643
+domestic_m_1 |   .0060895   .0191239     0.32   0.750     -.031423     .043602
+domestic_m_2 |   .0144643   .0194703     0.74   0.458    -.0237277    .0526563
+domestic_m_3 |   .0075122   .0193371     0.39   0.698    -.0304184    .0454429
+domestic_m_4 |  -.0001249   .0206994    -0.01   0.995    -.0407279    .0404781
+ foreign_p_0 |   .0008969   .0227903     0.04   0.969    -.0438075    .0456014
+ foreign_p_1 |   .0108737   .0245025     0.44   0.657    -.0371893    .0589367
+ foreign_p_2 |   .0026503   .0266617     0.10   0.921    -.0496481    .0549487
+ foreign_p_3 |  -.0039143   .0283624    -0.14   0.890    -.0595487      .05172
+ foreign_p_4 |   .0102842   .0303299     0.34   0.735    -.0492095     .069778
+ foreign_p_5 |  -.0059586   .0336774    -0.18   0.860    -.0720185    .0601014
+   expat_p_0 |   .0679927   .0210256     3.23   0.001     .0267499    .1092355
+   expat_p_1 |   .0728252    .021128     3.45   0.001     .0313815    .1142689
+   expat_p_2 |   .0570274   .0228355     2.50   0.013     .0122344    .1018204
+   expat_p_3 |   .0540899    .024394     2.22   0.027     .0062398    .1019399
+   expat_p_4 |   .0974585   .0250823     3.89   0.000     .0482583    .1466587
+   expat_p_5 |   .0422071   .0261646     1.61   0.107    -.0091161    .0935303
+domestic_p_0 |  -.0000449   .0177557    -0.00   0.998    -.0348737    .0347839
+domestic_p_1 |  -.0091102   .0178931    -0.51   0.611    -.0442086    .0259881
+domestic_p_2 |  -.0148064   .0180573    -0.82   0.412    -.0502267    .0206139
+domestic_p_3 |   .0105751   .0188895     0.56   0.576    -.0264776    .0476278
+domestic_p_4 |  -.0079369   .0192056    -0.41   0.679    -.0456097     .029736
+domestic_p_5 |  -.0038357   .0185552    -0.21   0.836    -.0402326    .0325613
+             |
+    ind_year |
+          2  |   .0230595   .0288178     0.80   0.424    -.0334682    .0795871
+          3  |  -.0531541   .0314923    -1.69   0.092    -.1149279    .0086198
+          4  |  -.0844229   .0319616    -2.64   0.008    -.1471173   -.0217286
+          5  |  -.0539817    .032582    -1.66   0.098     -.117893    .0099296
+          6  |  -.0765191   .0345122    -2.22   0.027    -.1442167   -.0088215
+          7  |  -.0697091   .0368622    -1.89   0.059    -.1420163    .0025981
+          8  |  -.0776712    .037571    -2.07   0.039    -.1513688   -.0039736
+          9  |  -.1012733   .0376168    -2.69   0.007    -.1750608   -.0274859
+         10  |  -.0926373   .0384504    -2.41   0.016    -.1680597   -.0172149
+         11  |  -.0975841   .0395645    -2.47   0.014     -.175192   -.0199763
+         12  |  -.0842184    .041056    -2.05   0.040    -.1647519   -.0036848
+         13  |  -.0820826   .0424215    -1.93   0.053    -.1652946    .0011293
+         14  |  -.0624527   .0428423    -1.46   0.145    -.1464901    .0215847
+         15  |  -.0388655   .0433499    -0.90   0.370    -.1238986    .0461676
+         16  |  -.0258918   .0446558    -0.58   0.562    -.1134866     .061703
+         17  |  -.0127099   .0461744    -0.28   0.783    -.1032835    .0778636
+         18  |   .0148876   .0475273     0.31   0.754    -.0783398    .1081149
+         19  |   .0288978   .0482508     0.60   0.549    -.0657486    .1235442
+         20  |   .0708594   .0499233     1.42   0.156    -.0270677    .1687865
+         21  |   .0426719   .0506151     0.84   0.399    -.0566124    .1419561
+         22  |   .0575184   .0516734     1.11   0.266    -.0438418    .1588785
+         23  |   .0462825   .0520062     0.89   0.374    -.0557304    .1482955
+         24  |  -.0250261   .0524245    -0.48   0.633    -.1278596    .0778074
+         25  |  -.0654759   .0538216    -1.22   0.224    -.1710498    .0400981
+         26  |   .0814539   .0511549     1.59   0.112    -.0188892     .181797
+         27  |   .0775101   .0478646     1.62   0.106    -.0163788     .171399
+         28  |   .1030483    .047218     2.18   0.029     .0104276     .195669
+         29  |   .0902535   .0475999     1.90   0.058    -.0031163    .1836233
+         30  |   .1165717    .047128     2.47   0.013     .0241277    .2090157
+         31  |   .1056678   .0473507     2.23   0.026     .0127868    .1985487
+         32  |   .1233255   .0479421     2.57   0.010     .0292846    .2173665
+         33  |   .0801627   .0484434     1.65   0.098    -.0148617     .175187
+         34  |   .0645052   .0502517     1.28   0.199    -.0340662    .1630765
+         35  |   .0775749   .0505636     1.53   0.125    -.0216084    .1767581
+         36  |   .0616907   .0513161     1.20   0.229    -.0389687      .16235
+         37  |   .0683781   .0511123     1.34   0.181    -.0318814    .1686375
+         38  |   .0651502   .0512379     1.27   0.204    -.0353556     .165656
+         39  |   .0963492   .0515738     1.87   0.062    -.0048154    .1975139
+         40  |   .0986673   .0525374     1.88   0.061    -.0043876    .2017223
+         41  |    .102608    .052929     1.94   0.053    -.0012151    .2064311
+         42  |   .1016519   .0537225     1.89   0.059    -.0037277    .2070314
+         43  |   .1390225   .0547496     2.54   0.011     .0316283    .2464167
+         44  |   .0914894    .056973     1.61   0.109    -.0202662     .203245
+         45  |   .0968832   .0565299     1.71   0.087    -.0140032    .2077696
+         46  |   .1147606   .0564838     2.03   0.042     .0039646    .2255566
+         47  |   .1476872   .0577872     2.56   0.011     .0343345    .2610399
+         48  |   .1271612   .0585205     2.17   0.030     .0123702    .2419523
+         49  |   .0217613    .059808     0.36   0.716    -.0955553     .139078
+         50  |  -.0177418   .0608442    -0.29   0.771     -.137091    .1016074
+             |
+     age_cat |
+          2  |   .1236298   .0183229     6.75   0.000     .0876884    .1595712
+          3  |   .1305937   .0203304     6.42   0.000     .0907145    .1704729
+          4  |   .1776789   .0224698     7.91   0.000     .1336032    .2217547
+          5  |   .2122954   .0263181     8.07   0.000     .1606711    .2639197
+          6  |   .2437632   .0308755     7.90   0.000     .1831992    .3043272
+             |
+       _cons |   .3063855    .037939     8.08   0.000     .2319661    .3808048
+-------------+----------------------------------------------------------------
+     sigma_u |  .37022416
+     sigma_e |  .31590359
+         rho |  .57867663   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+number of observations (_N) was 0, now 10
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(file output/figure/exporter_event_study.png written in PNG format)
+
+Fixed-effects (within) regression               Number of obs     =     17,521
+Group variable: id                              Number of groups  =      1,415
+
+R-sq:                                           Obs per group:
+     within  = 0.0486                                         min =          1
+     between = 0.0060                                         avg =       12.4
+     overall = 0.0375                                         max =         24
+
+                                                F(81,1414)        =      13.84
+corr(u_i, Xb)  = -0.1404                        Prob > F          =     0.0000
+
+                                 (Std. Err. adjusted for 1,415 clusters in id)
+------------------------------------------------------------------------------
+             |               Robust
+         inv |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ foreign_m_1 |  -.0143845   .0422127    -0.34   0.733    -.0971907    .0684218
+ foreign_m_2 |  -.1058638   .0421494    -2.51   0.012    -.1885458   -.0231817
+ foreign_m_3 |  -.0589618   .0431186    -1.37   0.172    -.1435451    .0256214
+ foreign_m_4 |   -.118713   .0434968    -2.73   0.006    -.2040382   -.0333878
+   expat_m_1 |  -.1029048   .0472217    -2.18   0.029    -.1955369   -.0102728
+   expat_m_2 |   .0552859    .051294     1.08   0.281    -.0453345    .1559063
+   expat_m_3 |   .0082569   .0563759     0.15   0.884    -.1023325    .1188463
+   expat_m_4 |  -.0749469   .0560799    -1.34   0.182    -.1849558    .0350619
+domestic_m_1 |   .0711749   .0443326     1.61   0.109      -.01579    .1581397
+domestic_m_2 |   .0425325   .0484655     0.88   0.380    -.0525396    .1376045
+domestic_m_3 |   .0278605   .0482452     0.58   0.564    -.0667792    .1225003
+domestic_m_4 |   .1425165    .050784     2.81   0.005     .0428964    .2421367
+ foreign_p_0 |   .0479923   .0425634     1.13   0.260     -.035502    .1314866
+ foreign_p_1 |   .0176129   .0432207     0.41   0.684    -.0671708    .1023965
+ foreign_p_2 |   -.023336   .0463356    -0.50   0.615    -.1142298    .0675579
+ foreign_p_3 |  -.0099984   .0489707    -0.20   0.838    -.1060613    .0860646
+ foreign_p_4 |  -.0766153   .0497174    -1.54   0.124     -.174143    .0209125
+ foreign_p_5 |  -.0694955   .0541928    -1.28   0.200    -.1758025    .0368115
+   expat_p_0 |  -.0059632   .0372987    -0.16   0.873    -.0791299    .0672035
+   expat_p_1 |  -.0023563    .043113    -0.05   0.956    -.0869287     .082216
+   expat_p_2 |   -.029071   .0467449    -0.62   0.534    -.1207678    .0626258
+   expat_p_3 |  -.0292926   .0531731    -0.55   0.582    -.1335993    .0750141
+   expat_p_4 |   .0367916   .0608952     0.60   0.546    -.0826631    .1562464
+   expat_p_5 |  -.0305156   .0477329    -0.64   0.523    -.1241504    .0631193
+domestic_p_0 |   .0466755   .0366184     1.27   0.203    -.0251568    .1185078
+domestic_p_1 |   .0620765   .0385435     1.61   0.108    -.0135322    .1376852
+domestic_p_2 |   .0512612   .0399399     1.28   0.200    -.0270867    .1296091
+domestic_p_3 |   .0697523   .0402691     1.73   0.083    -.0092414     .148746
+domestic_p_4 |   .0396755   .0413424     0.96   0.337    -.0414236    .1207745
+domestic_p_5 |   .0612949   .0367943     1.67   0.096    -.0108823    .1334722
+             |
+    ind_year |
+          3  |  -.1709016    .084778    -2.02   0.044    -.3372058   -.0045975
+          4  |  -.1783265   .0857172    -2.08   0.038     -.346473     -.01018
+          5  |  -.0274294   .0853281    -0.32   0.748    -.1948127    .1399538
+          6  |  -.1775637    .086835    -2.04   0.041    -.3479029   -.0072244
+          7  |  -.0287832   .0860266    -0.33   0.738    -.1975367    .1399703
+          8  |  -.0819518   .0849767    -0.96   0.335    -.2486457    .0847422
+          9  |   -.139838   .0895559    -1.56   0.119    -.3155148    .0358387
+         10  |  -.1341816   .0865196    -1.55   0.121    -.3039023     .035539
+         11  |  -.0755877   .0879668    -0.86   0.390    -.2481473    .0969718
+         12  |  -.1416592   .0881374    -1.61   0.108    -.3145534    .0312349
+         13  |  -.2266065   .0902813    -2.51   0.012    -.4037062   -.0495069
+         14  |   -.169166   .0879097    -1.92   0.055    -.3416134    .0032814
+         15  |  -.1074196   .0903329    -1.19   0.235    -.2846204    .0697812
+         16  |  -.1816324   .0884836    -2.05   0.040    -.3552056   -.0080591
+         17  |  -.1805425    .092281    -1.96   0.051     -.361565    .0004799
+         18  |  -.1608567   .0921681    -1.75   0.081    -.3416575    .0199442
+         19  |   -.218432    .095453    -2.29   0.022    -.4056767   -.0311873
+         20  |  -.1893877   .0973983    -1.94   0.052    -.3804484    .0016729
+         21  |  -.2996049   .0966878    -3.10   0.002    -.4892719   -.1099379
+         22  |   -.176645   .0995787    -1.77   0.076    -.3719828    .0186928
+         23  |  -.2972687   .1019058    -2.92   0.004    -.4971716   -.0973658
+         24  |  -.7290637   .1002628    -7.27   0.000    -.9257435   -.5323839
+         25  |  -.3877028   .1080747    -3.59   0.000    -.5997067   -.1756989
+         27  |  -.0710429   .1107335    -0.64   0.521    -.2882625    .1461766
+         28  |  -.6276187   .1015542    -6.18   0.000    -.8268317   -.4284056
+         29  |  -.2384715    .100061    -2.38   0.017    -.4347554   -.0421875
+         30  |  -.2613395   .1005762    -2.60   0.009    -.4586341   -.0640449
+         31  |  -.3260118   .1005039    -3.24   0.001    -.5231645   -.1288591
+         32  |  -.3310824   .0988629    -3.35   0.001    -.5250162   -.1371486
+         33  |  -.3081684   .1016951    -3.03   0.002     -.507658   -.1086789
+         34  |  -.3362091   .1019244    -3.30   0.001    -.5361483   -.1362699
+         35  |  -.2414313   .1034342    -2.33   0.020    -.4443323   -.0385304
+         36  |  -.2977438   .1032118    -2.88   0.004    -.5002086    -.095279
+         37  |  -.2070152   .1060259    -1.95   0.051    -.4150002    .0009698
+         38  |  -.2737091   .1039367    -2.63   0.009    -.4775957   -.0698224
+         39  |   -.331064    .106806    -3.10   0.002    -.5405792   -.1215488
+         40  |  -.1940048    .105907    -1.83   0.067    -.4017566     .013747
+         41  |  -.3949044   .1072565    -3.68   0.000    -.6053035   -.1845054
+         42  |  -.2637051   .1100682    -2.40   0.017    -.4796196   -.0477906
+         43  |   -.195774   .1104393    -1.77   0.076    -.4124164    .0208685
+         44  |  -.3096689   .1118746    -2.77   0.006     -.529127   -.0902109
+         45  |  -.3914196   .1122484    -3.49   0.001    -.6116109   -.1712283
+         46  |  -.3069413   .1104267    -2.78   0.006    -.5235592   -.0903235
+         47  |  -.1144609   .1139836    -1.00   0.315    -.3380561    .1091343
+         48  |  -.4654168   .1118433    -4.16   0.000    -.6848134   -.2460201
+         49  |  -.9614023   .1053742    -9.12   0.000    -1.168109   -.7546957
+         50  |  -.4893415   .1218014    -4.02   0.000    -.7282723   -.2504107
+             |
+     age_cat |
+          3  |  -.1231178   .0547507    -2.25   0.025    -.2305191   -.0157166
+          4  |  -.2903576   .0512563    -5.66   0.000    -.3909042    -.189811
+          5  |  -.4033371   .0544839    -7.40   0.000    -.5102151   -.2964592
+          6  |  -.4413875    .059326    -7.44   0.000     -.557764   -.3250111
+             |
+       _cons |   .4472128   .0918229     4.87   0.000      .267089    .6273366
+-------------+----------------------------------------------------------------
+     sigma_u |  .39905686
+     sigma_e |  .85223164
+         rho |  .17982864   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+number of observations (_N) was 0, now 10
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(10 missing values generated)
+(10 missing values generated)
+(10 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(file output/figure/inv_event_study.png written in PNG format)
+
+. 
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/koren/Documents/workspace/expat-analysis/output/estimate.log
+  log type:  text
+ closed on:   9 Nov 2018, 08:59:12
+----------------------------------------------------------------------------------
