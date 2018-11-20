@@ -19,6 +19,9 @@ foreach X of var expat foreign {
 	egen ever_`X' = max(`X'==1), by(frame_id)
 }
 
+gen tenure_foreign = year-first_year_foreign
+
+
 *foreign átalakítása 
 recode foreign (.=0)
 
@@ -56,7 +59,7 @@ foreach X in domestic expat {
 	* only include managers joining in years [-1,...) since foreign
 	replace fnew_`X' = 0 if tenure > age_since_foreign+1
 }
-gen fold_expat = expat==1 & fnew_expat==0
+gen fold_expat = expat==1 & tenure>`T'
 gen byte new = new_domestic | new_expat
 gen byte fnew = fnew_domestic | fnew_expat
 

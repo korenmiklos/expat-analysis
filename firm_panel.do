@@ -4,7 +4,8 @@ clear all
 capture log close
 log using output/firm_panel, text replace
 
-local T 4
+* keep managers this many years before and after they start at a firm
+local T 10
 
 use temp/manager_panel
 

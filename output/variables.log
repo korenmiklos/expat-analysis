@@ -1,8 +1,9 @@
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Volumes/Projects3/workspace/expat-analysis/output/variables.log
+       log:  /Users/koren/Tresors/Data3/projects/expat-analysis/output/variable
+> s.log
   log type:  text
- opened on:  20 Nov 2018, 10:53:20
+ opened on:  20 Nov 2018, 17:43:58
 
 . 
 . use temp/firm_ceo_panel
@@ -16,7 +17,7 @@
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
-    matched                         7,260,984  
+    matched                        11,319,143  
     -----------------------------------------
 
 . 
@@ -36,13 +37,18 @@
   2.         egen first_year_`X' = min(cond(`X'==1,year,.)), by(frame_id)
   3.         egen ever_`X' = max(`X'==1), by(frame_id)
   4. }
-(4986521 missing values generated)
-(6012193 missing values generated)
+(7735069 missing values generated)
+(9397968 missing values generated)
 
+. 
+. gen tenure_foreign = year-first_year_foreign
+(9,397,968 missing values generated)
+
+. 
 . 
 . *foreign átalakítása 
 . recode foreign (.=0)
-(foreign: 6362322 changes made)
+(foreign: 9991204 changes made)
 
 . 
 . *foreign-at többször váltók kidobása
@@ -52,17 +58,17 @@
                 delta:  1 unit
 
 . gen foreign_change=1 if l1.foreign==0&foreign==1
-(7,223,008 missing values generated)
+(11,263,248 missing values generated)
 
 . gen foreign_change_rev=1 if l1.foreign==1&foreign==0
-(7,196,306 missing values generated)
+(11,222,989 missing values generated)
 
 . bys frame_id: egen foreign_change_total=total(foreign_change)
 
 . bys frame_id: egen foreign_change_rev_total=total(foreign_change_rev)
 
 . drop if foreign_change_total>1|foreign_change_rev_total>1
-(517,729 observations deleted)
+(1,060,635 observations deleted)
 
 . scalar dropped_too_many_foreign_change = r(N_drop)
 
@@ -74,16 +80,16 @@
 . *foreign visszahúzása expatba, valaha expat-tal, de soha foreign-mal bíró cég
 > ek teljes kidobása
 . replace foreign=1 if first_year_expat<=year&foreign==0&ever_foreign==1
-(66,148 real changes made)
+(65,327 real changes made)
 
 . drop first_year_foreign
 
 . egen first_year_foreign = min(cond(foreign==1,year,.)), by(frame_id)
-(6012193 missing values generated)
+(9397968 missing values generated)
 
 . 
 . drop if ever_expat==1 & ever_foreign==0
-(1,296,111 observations deleted)
+(2,083,489 observations deleted)
 
 . scalar dropped_do3_expat_firmyears = r(N_drop)
 
@@ -93,7 +99,7 @@
 . local T 4
 
 . gen age_since_foreign = year - first_year_foreign
-(4,716,082 missing values generated)
+(7,314,479 missing values generated)
 
 . gen byte domestic = (expat==0)
 
@@ -107,12 +113,12 @@
   5.         * only include managers joining in years [-1,...) since foreign
 .         replace fnew_`X' = 0 if tenure > age_since_foreign+1
   6. }
-(2,715,287 real changes made)
-(628 real changes made)
-(218,840 real changes made)
-(37 real changes made)
+(2,686,884 real changes made)
+(374 real changes made)
+(192,016 real changes made)
+(31 real changes made)
 
-. gen fold_expat = expat==1 & fnew_expat==0
+. gen fold_expat = expat==1 & tenure>`T'
 
 . gen byte new = new_domestic | new_expat
 
@@ -127,35 +133,35 @@
 . bys frame_id (year): gen relative_year=_n
 
 . gen foreign_infirst=1 if relative_year==1&foreign==1
-(5,374,988 missing values generated)
+(8,109,370 missing values generated)
 
 . bys frame_id: egen byte greenfield=max(foreign_infirst)
-(4764275 missing values generated)
+(7357129 missing values generated)
 
 . 
 . recode greenfield (.=0)
-(greenfield: 4764275 changes made)
+(greenfield: 7357129 changes made)
 
 . 
 . 
 . *Függő változók készítése
 . gen lnL=ln(emp)
-(1,703,739 missing values generated)
+(2,461,037 missing values generated)
 
 . gen lnK=ln(final_netgep)
-(2,702,458 missing values generated)
+(3,910,035 missing values generated)
 
 . gen lnM=ln(ranyag)
-(366,045 missing values generated)
+(559,931 missing values generated)
 
 . gen lnQ=ln(sales)
-(806,171 missing values generated)
+(1,161,573 missing values generated)
 
 . gen lnQL=lnQ-lnL
-(1,881,183 missing values generated)
+(2,709,792 missing values generated)
 
 . gen lnKL=lnK-lnL
-(3,155,883 missing values generated)
+(4,573,126 missing values generated)
 
 . gen byte exporter = export>0&export!=.
 
@@ -166,7 +172,7 @@
 . 
 . *Industry_year dummy
 . egen industry_year = group(teaor08_2d year)
-(27 missing values generated)
+(32 missing values generated)
 
 . 
 . 
@@ -181,13 +187,13 @@
 . gen manufacturing=0
 
 . replace manufacturing=1 if teaor08_1d=="C"
-(533,776 real changes made)
+(841,501 real changes made)
 
 . 
 . 
 . *Átlagos létszám változó
 . bys frame_id: egen avg_emp = mean(emp)
-(49561 missing values generated)
+(52941 missing values generated)
 
 . 
 . 
@@ -195,25 +201,25 @@
 . gen age=year-foundyear
 
 . gen age_cat=.
-(5,447,144 missing values generated)
+(8,175,019 missing values generated)
 
 . replace age_cat=1 if age==0
-(429,386 real changes made)
+(499,330 real changes made)
 
 . replace age_cat=2 if age==1
-(945,976 real changes made)
+(1,089,921 real changes made)
 
 . replace age_cat=3 if age==2
-(829,192 real changes made)
+(948,992 real changes made)
 
 . replace age_cat=4 if age>=3&age<=5
-(1,815,722 real changes made)
+(2,217,111 real changes made)
 
 . replace age_cat=5 if age>=6&age<=8
-(500,595 real changes made)
+(1,480,426 real changes made)
 
 . replace age_cat=6 if age>8
-(926,273 real changes made)
+(1,939,239 real changes made)
 
 . 
 . 
@@ -221,7 +227,7 @@
 . local sample (avg_emp>=20)&!missing(lnL,lnQ,exporter)
 
 . keep if `sample'
-(5,176,492 observations deleted)
+(7,735,117 observations deleted)
 
 . scalar dropped_size_or_missing = r(N_drop)
 
@@ -232,10 +238,10 @@
 Warning: at least one group contains all missing values or contains multiple
 modes.  Generating missing values for the mode of these groups.  Use the
 missing, maxmode, minmode, or nummode() options to control this behavior.
-(2277 missing values generated)
+(3347 missing values generated)
 
 . drop if industry_mode==64|industry_mode==65|industry_mode==66
-(7,048 observations deleted)
+(10,864 observations deleted)
 
 . scalar dropped_finance = r(N_drop)
 
@@ -254,18 +260,18 @@ missing, maxmode, minmode, or nummode() options to control this behavior.
   6.         scalar N_i_`X' = r(N)
   7.         drop `tag'
   8. }
-  76,715
-  3,737
-  82,721
-  9,305
-  42,933
-  2,830
-  13,982
-  1,720
-  25,357
-  2,413
-  13,973
-  1,719
+  94,264
+  3,130
+  76,705
+  8,932
+  52,965
+  2,353
+  10,697
+  1,382
+  18,729
+  1,891
+  10,688
+  1,381
 
 . 
 . 
@@ -277,40 +283,39 @@ missing, maxmode, minmode, or nummode() options to control this behavior.
 . *Investment változó készítése
 . areg lnK, a(industry_year)
 
-Linear regression, absorbing indicators         Number of obs     =    238,928
-Absorbed variable: industry_year                No. of categories =      1,978
-                                                F(   0, 236950)   =          .
+Linear regression, absorbing indicators         Number of obs     =    393,130
+                                                F(   0, 391120)   =          .
                                                 Prob > F          =          .
-                                                R-squared         =     0.2749
-                                                Adj R-squared     =     0.2688
-                                                Root MSE          =     1.9089
+                                                R-squared         =     0.2419
+                                                Adj R-squared     =     0.2380
+                                                Root MSE          =     1.8516
 
 ------------------------------------------------------------------------------
          lnK |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-       _cons |   10.33682   .0039053  2646.87   0.000     10.32917    10.34448
-------------------------------------------------------------------------------
-F test of absorbed indicators: F(1977, 236950) = 45.429       Prob > F = 0.000
+       _cons |   10.27221   .0029532  3478.37   0.000     10.26642      10.278
+-------------+----------------------------------------------------------------
+industry_y~r |   F(2009, 391120) =     62.115   0.000        (2010 categories)
 
 . predict res, res
-(24,676 missing values generated)
+(35,908 missing values generated)
 
 . sum res, d
 
                           Residuals
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%    -5.210282      -11.34141
- 5%    -3.237448       -11.3214
-10%    -2.344319      -11.01346       Obs             238,928
-25%    -1.113357      -10.96776       Sum of Wgt.     238,928
+ 1%    -5.147245       -11.2615
+ 5%    -3.137804      -11.14946
+10%    -2.256072       -11.0914       Obs             393,130
+25%    -1.056234      -10.91753       Sum of Wgt.     393,130
 
-50%     .0690119                      Mean           5.61e-10
-                        Largest       Std. Dev.      1.901008
-75%      1.18304       7.403928
-90%     2.315506        9.26861       Variance        3.61383
-95%      3.02498        9.26861       Skewness      -.2992978
-99%      4.37146        9.26861       Kurtosis       3.947484
+50%     .0822538                      Mean           2.04e-10
+                        Largest       Std. Dev.      1.846901
+75%      1.12844       9.396624
+90%     2.220772       9.396624       Variance       3.411042
+95%     2.929734       9.396624       Skewness       -.340484
+99%     4.278016       9.396624       Kurtosis       4.189631
 
 . 
 . 
@@ -320,20 +325,20 @@ F test of absorbed indicators: F(1977, 236950) = 45.429       Prob > F = 0.000
                 delta:  1 unit
 
 . g d_res=res-l1.res
-(80,978 missing values generated)
+(96,355 missing values generated)
 
 . g inv=0
 
 . 
 . 
 . replace inv=1 if d_res>=0.1&d_res!=.
-(66,112 real changes made)
+(116,966 real changes made)
 
 . replace inv=-1 if d_res<=-0.1&d_res!=.
-(83,650 real changes made)
+(153,297 real changes made)
 
 . replace inv=. if d_res==.
-(80,978 real changes made, 80,978 to missing)
+(96,355 real changes made, 96,355 to missing)
 
 . 
 . 
@@ -343,6 +348,7 @@ F test of absorbed indicators: F(1977, 236950) = 45.429       Prob > F = 0.000
   variable first_year_expat was float now int
   variable ever_expat was float now byte
   variable ever_foreign was float now byte
+  variable tenure_foreign was float now byte
   variable first_year_foreign was float now int
   variable age_since_foreign was float now byte
   variable fold_expat was float now byte
@@ -361,7 +367,7 @@ F test of absorbed indicators: F(1977, 236950) = 45.429       Prob > F = 0.000
   variable sales was double now long
   variable final_netgep was double now long
   variable frame_id was str12 now str10
-  (17,134,260 bytes saved)
+  (29,174,584 bytes saved)
 
 . save temp/analysis_sample, replace
 file temp/analysis_sample.dta saved
@@ -370,7 +376,8 @@ file temp/analysis_sample.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Volumes/Projects3/workspace/expat-analysis/output/variables.log
+       log:  /Users/koren/Tresors/Data3/projects/expat-analysis/output/variable
+> s.log
   log type:  text
- closed on:  20 Nov 2018, 10:56:08
+ closed on:  20 Nov 2018, 18:00:17
 -------------------------------------------------------------------------------
