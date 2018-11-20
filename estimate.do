@@ -4,7 +4,7 @@ log using output/estimate, text replace
 
 use temp/analysis_sample
 
-local sample_baseline expat!=.&greenfield!=1
+local sample_baseline expat!=.
 local sample_manufacturing `sample_baseline' & manufacturing==1
 local sample_acquisitions `sample_baseline' & ever_foreign==1
 
@@ -33,8 +33,7 @@ xtset firm_person year
 areg f1.expat lnL lnQ lnK exporter if ever_foreign==1&greenfield!=1, a(industry_year) cluster(frame_id)
 do regram output/regression/selection 1 1
 
-*Akvizíciós minta (greenfield nélkül)
-keep if ever_foreign==1&greenfield!=1
+keep if ever_foreign==1
 *Dinamika
 scalar Tbefore = 4
 scalar Tafter = 5
