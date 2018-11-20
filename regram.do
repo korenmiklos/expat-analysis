@@ -1,5 +1,7 @@
 args tablefile specname speclabel
 
+local fmt "%10.5f"
+
 * create directory if needed
 * FIXME: this only works with relative paths
 local list_of_dirs = subinstr("`tablefile'/columns","/"," ",.)
@@ -50,10 +52,10 @@ foreach X in ``variables'' {
 	scalar `b' = `coefs'[rownumb(`coefs',"b"),colnumb(`coefs',"`X'")]
 	scalar `se' = `coefs'[rownumb(`coefs',"se"),colnumb(`coefs',"`X'")]
 	file write `output' (" - id: `X'") _newline
-	file write `output' ("   estimate: " + string(`b')) _newline
-	file write `output' ("   standard_error: " + string(`se')) _newline
-	file write `output' ("   t_statistic: " + string(`b'/`se')) _newline
-	file write `output' ("   p_value: " + string(`coefs'[rownumb(`coefs',"pvalue"),colnumb(`coefs',"`X'")])) _newline
+	file write `output' ("   estimate: " + string(`b', "`fmt'")) _newline
+	file write `output' ("   standard_error: " + string(`se', "`fmt'")) _newline
+	file write `output' ("   t_statistic: " + string(`b'/`se', "`fmt'")) _newline
+	file write `output' ("   p_value: " + string(`coefs'[rownumb(`coefs',"pvalue"),colnumb(`coefs',"`X'")]), "`fmt'") _newline
 }
 file write `output' "extra_rows:" _newline
 foreach X in R2 observations `_others'{

@@ -4,48 +4,41 @@ clear all
 capture log close
 log using output/firm_panel, text replace
 
-use temp/manager_panel
+use temp/balance-small
+collapse (max) firm_death=year, by(frame_id)
+tempfile sample
+save `sample', replace
+
+use temp/manager_panel, clear
+
+* only keep sample firms
+merge m:1 frame_id using `sample', keep(match) nogen
+drop if year>firm_death
 
 do fill_in_ceo
 
-
 *Cégalapítás éve
 bys frame_id: egen first_year=min(year)
+egen id=group(frame_id manager_id)
 
 *Adott ceo első megjelenése és utolsó kilépése
-bys frame_id manager_id: egen enter_year=min(cond(ceo==1,year,.))
-bys frame_id manager_id: egen exit_year=max(cond(ceo==1,year,.))
+egen enter_year=min(cond(ceo==1,year,.)), by(frame_id manager_id)
+egen exit_year=max(cond(ceo==1,year,.)), by(frame_id manager_id)
+xtset id year
+egen first_exit_year = min(cond(ceo==1 & F.ceo!=1, year, .)), by(frame_id manager_id)
+
+* FIXME: keep stats on non-CEO managers
+keep if ceo==1
 
 gen int tenure = year - enter_year
 gen int firm_age = year - first_year
 ren person_foreign expat
 
-gen egy=1
-* FIXME: keep stats on non-CEO managers
-keep if ceo==1
+* drop founders
+drop if first_year==enter_year
+scalar dropped_founders = r(N_drop)
 
-*Cégév szintre ejtés
-/* how many ceos in a category? what is their lowest tenure? so that
-
-manager_id      = 1 1 1 1 2 2 2 3 3 3
-expat           = 0 0 0 0 1 1 1 0 0 0
-tenure_expat    = . . . . 0 1 2 . . .
-tenure_domestic = 0 1 2 3 . . . 0 1 2
-
-*/
-collapse (sum) N=egy (min) tenure (firstnm) N_total=man_number firm_age, by(frame_id year expat)
-reshape wide N tenure, i(frame_id year) j(expat)
-ren *0 *_domestic
-ren *1 *_expat
-
-mvencode N*, mv(0) override
-
-label var N_total "Number of all managers"
-label var N_domestic "Number of domestic CEOs"
-label var N_expat "Number of expatriate CEOs"
-label var tenure_domestic "Lowest tenure (domestic CEOs)"
-label var tenure_expat "Lowest tenure (expatriate CEOs)"
-label var firm_age "Firm age"
+collapse (min) enter_year first_exit_year (firstnm) expat (count) N_ceos=expat, by(frame_id manager_id)
 
 compress
 save_all_to_json
