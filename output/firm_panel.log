@@ -1,34 +1,55 @@
--------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Volumes/Projects3/workspace/expat-analysis/output/firm_panel.log
+       log:  /Users/koren/Tresors/Data3/projects/expat-analysis/output/firm_panel.log
   log type:  text
- opened on:  20 Nov 2018, 09:11:11
+ opened on:  20 Nov 2018, 19:13:02
 
 . 
-. local T 4
+. use temp/balance-small
+
+. collapse (max) firm_death=year, by(frame_id)
+
+. tempfile sample
+
+. save `sample', replace
+(note: file /var/folders/7b/svcv81g94n3fm6nrj7ckr15c0000gn/T//S_70963.000001 not found)
+file /var/folders/7b/svcv81g94n3fm6nrj7ckr15c0000gn/T//S_70963.000001 saved
 
 . 
-. use temp/manager_panel
+. use temp/manager_panel, clear
+
+. 
+. * only keep sample firms
+. merge m:1 frame_id using `sample', keep(match) nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                         1,705,303  
+    -----------------------------------------
+
+. drop if year>firm_death
+(255,056 observations deleted)
 
 . 
 . do fill_in_ceo
 
 . gen ceo = (pos5==1) if !missing(pos5)
-(2,561,297 missing values generated)
+(487,225 missing values generated)
 
 . 
-. *Amennyiben egy személy egy cégnél egy évben többször szerepelt, és ceo is vo
-> lt, esetében a ceo pos5 megtartása
+. *Amennyiben egy személy egy cégnél egy évben többször szerepelt, és ceo is volt, esetében a c
+> eo pos5 megtartása
 . duplicates tag frame_id manager_id year, gen(manager_duplicate)
 
 Duplicates in terms of frame_id manager_id year
 
 . 
 . bys frame_id manager_id year: egen manager_ceo = max(ceo)
-(2515652 missing values generated)
+(479852 missing values generated)
 
 . drop if manager_duplicate>0 & (manager_ceo==1) & !(ceo==1)
-(81,042 observations deleted)
+(7,669 observations deleted)
 
 . drop manager_duplicate
 
@@ -38,20 +59,19 @@ Duplicates in terms of frame_id manager_id year
 
         ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |  3,504,667       20.80       20.80
-          1 | 10,815,288       64.18       84.97
-          . |  2,532,244       15.03      100.00
+          0 |    479,032       33.21       33.21
+          1 |    478,519       33.17       66.38
+          . |    485,027       33.62      100.00
 ------------+-----------------------------------
-      Total | 16,852,199      100.00
+      Total |  1,442,578      100.00
 
 . count if missing(ceo)
-  2,532,244
+  485,027
 
 . scalar missing_ceo_before = r(N)
 
 . 
-. *Duplikációk összeejtése - innentől egy személy egyszer szerepel egy vállalat
-> i évben
+. *Duplikációk összeejtése - innentől egy személy egyszer szerepel egy vállalati évben
 . collapse (firstnm) person_foreign (max) ceo, by(frame_id manager_id year)
 
 . 
@@ -61,20 +81,20 @@ Duplicates in terms of frame_id manager_id year
 
 . *bys frame_id year: egen ceo_number=total(cond(pos5==1,pos5,.))
 . bys frame_id year: egen ceo_exist=max(ceo)
-(984916 missing values generated)
+(42175 missing values generated)
 
 . 
 . *Egy menedzseres cégeknél, ha nincs ceo, a menedzser ceo-vá kinevezése
 . count if ceo==1
-  10,815,288
+  478,519
 
 . scalar temp=r(N)
 
 .         replace ceo=1 if man_number==1&ceo_exist!=1
-(2,353,906 real changes made)
+(24,150 real changes made)
 
 . count if ceo==1
-  13,169,194
+  502,669
 
 . scalar no_other_manager = r(N)-temp
 
@@ -83,14 +103,14 @@ Duplicates in terms of frame_id manager_id year
 . drop ceo_exist
 
 . bys frame_id year: egen ceo_exist=max(ceo)
-(352699 missing values generated)
+(35607 missing values generated)
 
 . 
 . egen company_manager=group(frame_id manager_id)
 
 . xtset company_manager year
        panel variable:  company_manager (unbalanced)
-        time variable:  year, 1946 to 2018, but with gaps
+        time variable:  year, 1946 to 2016, but with gaps
                 delta:  1 unit
 
 . 
@@ -116,22 +136,22 @@ Duplicates in terms of frame_id manager_id year
 . 
 . xtset company_manager year
        panel variable:  company_manager (unbalanced)
-        time variable:  year, 1946 to 2018, but with gaps
+        time variable:  year, 1946 to 2016, but with gaps
                 delta:  1 unit
 
 . tempvar ceo_prev ceo_next
 
 . gen `ceo_prev' = cond(spell_year==1, L.ceo, .)
-(16,719,061 missing values generated)
+(1,419,507 missing values generated)
 
 . gen `ceo_next' = cond(spell_year==spell_length, F.ceo, .)
-(16,710,450 missing values generated)
+(1,418,629 missing values generated)
 
 . egen ceo_prev = mean(`ceo_prev'), by(company_manager spell)
-(16235297 missing values generated)
+(1363597 missing values generated)
 
 . egen ceo_next = mean(`ceo_next'), by(company_manager spell)
-(16271914 missing values generated)
+(1345689 missing values generated)
 
 . drop `ceo_prev' `ceo_next'
 
@@ -143,22 +163,24 @@ Duplicates in terms of frame_id manager_id year
            |            (max) ceo
   ceo_prev |         0          1          . |     Total
 -----------+---------------------------------+----------
-         0 |         0     56,981      4,742 |    61,723 
-         1 |    28,770          0     20,600 |    49,370 
-         . |   306,779  2,079,864    411,372 | 2,798,015 
+         0 |         0      8,737      1,627 |    10,364 
+         1 |     3,931          0      1,887 |     5,818 
+         . |    84,541     81,206     96,899 |   262,646 
 -----------+---------------------------------+----------
-     Total |   335,549  2,136,845    436,714 | 2,909,108 
+     Total |    88,472     89,943    100,413 |   278,828 
+
 
 . tab ceo ceo_next if spell_year==spell_length, miss
 
            |             ceo_next
  (max) ceo |         0          1          . |     Total
 -----------+---------------------------------+----------
-         0 |         0     56,981    278,568 |   335,549 
-         1 |    28,770          0  2,108,075 | 2,136,845 
-         . |     4,023     29,930    402,761 |   436,714 
+         0 |         0      8,737     79,735 |    88,472 
+         1 |     3,931          0     86,012 |    89,943 
+         . |     1,952      2,440     96,021 |   100,413 
 -----------+---------------------------------+----------
-     Total |    32,793     86,911  2,789,404 | 2,909,108 
+     Total |     5,883     11,177    261,768 |   278,828 
+
 
 . assert ceo!=ceo_next if !missing(ceo)
 
@@ -171,165 +193,146 @@ Duplicates in terms of frame_id manager_id year
 spell_lengt |
           h |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          1 |         64        9.80        9.80
-          2 |         84       12.86       22.66
-          3 |         81       12.40       35.07
-          4 |         84       12.86       47.93
-          5 |         90       13.78       61.72
-          6 |         54        8.27       69.98
-          7 |         70       10.72       80.70
-          8 |         48        7.35       88.06
-         10 |         30        4.59       92.65
-         11 |         22        3.37       96.02
-         12 |         12        1.84       97.86
-         14 |         14        2.14      100.00
+          1 |         38        9.18        9.18
+          2 |         50       12.08       21.26
+          3 |         45       10.87       32.13
+          4 |         56       13.53       45.65
+          5 |         75       18.12       63.77
+          6 |         30        7.25       71.01
+          7 |         42       10.14       81.16
+          8 |         32        7.73       88.89
+         10 |         20        4.83       93.72
+         12 |         12        2.90       96.62
+         14 |         14        3.38      100.00
 ------------+-----------------------------------
-      Total |        653      100.00
+      Total |        414      100.00
 
 . tab spell_length if missing(ceo) & ceo_prev==0 & ceo_next==1
 
 spell_lengt |
           h |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          1 |         78        8.09        8.09
-          2 |         94        9.75       17.84
-          3 |         96        9.96       27.80
-          4 |         68        7.05       34.85
-          5 |        100       10.37       45.23
-          6 |         96        9.96       55.19
-          7 |         77        7.99       63.17
-          8 |         64        6.64       69.81
-          9 |         54        5.60       75.41
-         10 |         60        6.22       81.64
-         11 |         22        2.28       83.92
-         12 |         12        1.24       85.17
-         13 |         52        5.39       90.56
-         14 |         42        4.36       94.92
-         15 |         15        1.56       96.47
-         16 |         16        1.66       98.13
-         18 |         18        1.87      100.00
+          1 |         20        8.33        8.33
+          2 |         18        7.50       15.83
+          3 |         24       10.00       25.83
+          4 |         12        5.00       30.83
+          5 |         35       14.58       45.42
+          6 |         18        7.50       52.92
+          7 |         35       14.58       67.50
+          8 |         16        6.67       74.17
+          9 |         18        7.50       81.67
+         10 |         20        8.33       90.00
+         11 |         11        4.58       94.58
+         13 |         13        5.42      100.00
 ------------+-----------------------------------
-      Total |        964      100.00
+      Total |        240      100.00
 
 . tab spell_length if missing(ceo) & ceo_prev==1 & ceo_next==0
 
 spell_lengt |
           h |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          1 |         34        9.52        9.52
-          2 |         30        8.40       17.93
-          3 |         36       10.08       28.01
-          4 |         36       10.08       38.10
-          5 |         75       21.01       59.10
-          6 |         12        3.36       62.46
-          7 |         28        7.84       70.31
-          8 |         16        4.48       74.79
-          9 |          9        2.52       77.31
-         10 |         30        8.40       85.71
-         12 |         12        3.36       89.08
-         13 |         39       10.92      100.00
+          1 |         14       14.00       14.00
+          2 |         12       12.00       26.00
+          3 |         12       12.00       38.00
+          4 |          8        8.00       46.00
+          5 |         15       15.00       61.00
+         13 |         39       39.00      100.00
 ------------+-----------------------------------
-      Total |        357      100.00
+      Total |        100      100.00
 
 . tab spell_length if missing(ceo) & ceo_prev==1 & ceo_next==1
 
 spell_lengt |
           h |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          1 |      1,413       17.34       17.34
-          2 |      1,142       14.02       31.36
-          3 |        843       10.35       41.70
-          4 |        644        7.90       49.61
-          5 |        675        8.28       57.89
-          6 |        588        7.22       65.11
-          7 |        560        6.87       71.98
-          8 |        336        4.12       76.10
-          9 |        360        4.42       80.52
-         10 |        250        3.07       83.59
-         11 |        253        3.11       86.70
-         12 |        204        2.50       89.20
-         13 |        195        2.39       91.59
-         14 |        210        2.58       94.17
-         15 |         75        0.92       95.09
-         16 |        128        1.57       96.66
-         18 |         90        1.10       97.77
-         19 |         76        0.93       98.70
-         20 |         20        0.25       98.94
-         21 |         21        0.26       99.20
-         24 |         24        0.29       99.50
-         41 |         41        0.50      100.00
+          1 |         90        8.69        8.69
+          2 |        144       13.90       22.59
+          3 |         87        8.40       30.98
+          4 |        100        9.65       40.64
+          5 |         95        9.17       49.81
+          6 |         78        7.53       57.34
+          7 |        119       11.49       68.82
+          8 |         56        5.41       74.23
+          9 |         54        5.21       79.44
+         10 |         70        6.76       86.20
+         11 |         33        3.19       89.38
+         12 |         48        4.63       94.02
+         13 |         13        1.25       95.27
+         14 |         28        2.70       97.97
+         21 |         21        2.03      100.00
 ------------+-----------------------------------
-      Total |      8,148      100.00
+      Total |      1,036      100.00
 
 . 
 . 
-. *Pos5 kihúzása, ha egy, kettő, három, négy vagy öt évnyi lyuk van, ugyanazon 
-> személy ugyanazon cégnél történő ceo tevékenysége között
+. *Pos5 kihúzása, ha egy, kettő, három, négy vagy öt évnyi lyuk van, ugyanazon személy ugyanazo
+> n cégnél történő ceo tevékenysége között
 . tab ceo_prev ceo_next if missing(ceo)
 
            |       ceo_next
   ceo_prev |         0          1 |     Total
 -----------+----------------------+----------
-         0 |       653        964 |     1,617 
-         1 |       357      8,148 |     8,505 
+         0 |       414        240 |       654 
+         1 |       100      1,036 |     1,136 
 -----------+----------------------+----------
-     Total |     1,010      9,112 |    10,122 
+     Total |       514      1,276 |     1,790 
+
 
 . 
 . count if ceo==1
-  13,169,194
+  502,669
 
 . scalar temp=r(N)
 
-.         replace ceo = ceo_prev if ceo_prev==ceo_next & !missing(ceo_prev) & m
-> issing(ceo) & spell_length<=5
-(5,120 real changes made)
+.         replace ceo = ceo_prev if ceo_prev==ceo_next & !missing(ceo_prev) & missing(ceo) & sp
+> ell_length<=5
+(780 real changes made)
 
 . count if ceo==1
-  13,173,911
+  503,185
 
 . scalar fill_gap_5 = r(N)-temp
 
 . drop ceo_exist
 
 . bys frame_id year: egen ceo_exist=max(ceo)
-(347782 missing values generated)
+(35110 missing values generated)
 
 . 
-. *Pos5 kihúzása három, kettő vagy egy évig, ha nincs más ceo és több menedzser
->  van a cégnél - itt marad az eltolt ceo_exist, mert kicsit más a logika
+. *Pos5 kihúzása három, kettő vagy egy évig, ha nincs más ceo és több menedzser van a cégnél - 
+> itt marad az eltolt ceo_exist, mert kicsit más a logika
 . count if ceo==1
-  13,173,911
+  503,185
 
 . scalar temp=r(N)
 
-.         replace ceo = 1 if (ceo_prev==1) & missing(ceo) & (ceo_exist==0) & sp
-> ell_year<=3
-(1,917 real changes made)
+.         replace ceo = 1 if (ceo_prev==1) & missing(ceo) & (ceo_exist==0) & spell_year<=3
+(206 real changes made)
 
 . count if ceo==1
-  13,175,828
+  503,391
 
 . scalar fill_forward_3 = r(N)-temp
 
 . drop ceo_exist
 
 . bys frame_id year: egen ceo_exist=max(ceo)
-(347782 missing values generated)
+(35110 missing values generated)
 
 . 
 . * one year back
 . count if ceo==1
-  13,175,828
+  503,391
 
 . scalar temp=r(N)
 
-.         replace ceo = 1 if (ceo_next==1) & missing(ceo) & (ceo_exist==0) & sp
-> ell_year==spell_length
-(2,097 real changes made)
+.         replace ceo = 1 if (ceo_next==1) & missing(ceo) & (ceo_exist==0) & spell_year==spell_
+> length
+(179 real changes made)
 
 . count if ceo==1
-  13,177,925
+  503,570
 
 . scalar fill_backward_1 = r(N)-temp
 
@@ -339,14 +342,14 @@ spell_lengt |
 
   (max) ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |  1,777,928       10.56       10.56
-          1 | 13,177,925       78.30       88.86
-          . |  1,874,301       11.14      100.00
+          0 |    460,000       32.04       32.04
+          1 |    503,570       35.08       67.12
+          . |    472,119       32.88      100.00
 ------------+-----------------------------------
-      Total | 16,830,154      100.00
+      Total |  1,435,689      100.00
 
 . count if missing(ceo)
-  1,874,301
+  472,119
 
 . scalar missing_ceo_after = r(N)
 
@@ -354,81 +357,66 @@ spell_lengt |
 end of do-file
 
 . 
-. 
 . *Cégalapítás éve
 . bys frame_id: egen first_year=min(year)
 
+. egen id=group(frame_id manager_id)
+
 . 
 . *Adott ceo első megjelenése és utolsó kilépése
-. bys frame_id manager_id: egen enter_year=min(cond(ceo==1,year,.))
-(3089553 missing values generated)
+. egen enter_year=min(cond(ceo==1,year,.)), by(frame_id manager_id)
+(845961 missing values generated)
 
-. bys frame_id manager_id: egen exit_year=max(cond(ceo==1,year,.))
-(3089553 missing values generated)
+. egen exit_year=max(cond(ceo==1,year,.)), by(frame_id manager_id)
+(845961 missing values generated)
+
+. xtset id year
+       panel variable:  id (unbalanced)
+        time variable:  year, 1946 to 2016, but with gaps
+                delta:  1 unit
+
+. egen first_exit_year = min(cond(ceo==1 & F.ceo!=1, year, .)), by(frame_id manager_id)
+(845961 missing values generated)
+
+. 
+. * FIXME: keep stats on non-CEO managers
+. keep if ceo==1
+(932,119 observations deleted)
 
 . 
 . gen int tenure = year - enter_year
-(3,089,553 missing values generated)
 
 . gen int firm_age = year - first_year
 
 . ren person_foreign expat
 
 . 
-. gen egy=1
+. * drop founders
+. drop if first_year==enter_year
+(246,981 observations deleted)
 
-. * FIXME: keep stats on non-CEO managers
-. keep if ceo==1
-(3,652,229 observations deleted)
-
-. 
-. keep if tenure<=`T'
-(5,541,994 observations deleted)
-
-. * create pre years
-. egen firm_age_at_ceo_entry = mean(cond(tenure==0,firm_age,.)), by(frame_id ma
-> nager_id)
-
-. gen pre_years = min(`T', firm_age_at_ceo_entry)
-
-. expand (tenure==0)*(pre_years+1), gen(expanded)
-(5,510,387 zero counts ignored; observations not deleted)
-(2,999,662 observations created)
-
-. * fill in data for these years
-. bys expanded frame_id manager_id: replace tenure = -_n if expanded==1
-(2,999,662 real changes made)
-
-. replace year = enter_year+tenure if expanded==1
-(2,999,662 real changes made)
+. scalar dropped_founders = r(N_drop)
 
 . 
-. keep frame_id manager_id year tenure expat man_number firm_age
+. collapse (min) enter_year first_exit_year (firstnm) expat (count) N_ceos=expat, by(frame_id m
+> anager_id)
 
 . 
 . compress
-  variable year was float now int
-  variable man_number was float now int
-  variable tenure was int now byte
-  variable firm_age was int now byte
-  (63,813,558 bytes saved)
+  variable enter_year was float now int
+  variable first_exit_year was float now int
+  variable N_ceos was long now byte
+  variable frame_id was str12 now str10
+  (488,763 bytes saved)
 
 . save_all_to_json
-(note: file output/scalar/missing_ceo_after.json not found)
-(note: file output/scalar/fill_backward_1.json not found)
-(note: file output/scalar/fill_forward_3.json not found)
-(note: file output/scalar/fill_gap_5.json not found)
-(note: file output/scalar/no_other_manager.json not found)
-(note: file output/scalar/temp.json not found)
-(note: file output/scalar/missing_ceo_before.json not found)
 
 . save temp/firm_ceo_panel, replace
-(note: file temp/firm_ceo_panel.dta not found)
 file temp/firm_ceo_panel.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Volumes/Projects3/workspace/expat-analysis/output/firm_panel.log
+       log:  /Users/koren/Tresors/Data3/projects/expat-analysis/output/firm_panel.log
   log type:  text
- closed on:  20 Nov 2018, 09:18:57
--------------------------------------------------------------------------------
+ closed on:  20 Nov 2018, 19:14:45
+-----------------------------------------------------------------------------------------------

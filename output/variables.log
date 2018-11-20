@@ -1,122 +1,119 @@
--------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Tresors/Data3/projects/expat-analysis/output/variable
-> s.log
+       log:  /Users/koren/Tresors/Data3/projects/expat-analysis/output/variables.log
   log type:  text
- opened on:  20 Nov 2018, 17:43:58
+ opened on:  20 Nov 2018, 19:26:08
 
 . 
 . use temp/firm_ceo_panel
 
+. * drop very large firms
+. drop if N_ceos>10
+(5,967 observations deleted)
+
 . 
-. *Balance sheet-tel kapcsolás
-. * if m ceos at firm, the firm-year will appear m times
-. merge m:1 frame_id year using input/balance-small/balance-sheet-1992-2016-sma
-> ll, keep(match) nogen
+. scalar T1 = 1989
+
+. scalar T2 = 2016
+
+. expand T2-T1+1
+(1,305,180 observations created)
+
+. bys frame_id manager_id: gen year = _n-1+T1
+
+. 
+. tempfile expand
+
+. save `expand', replace
+(note: file /var/folders/7b/svcv81g94n3fm6nrj7ckr15c0000gn/T//S_70963.000001 not found)
+file /var/folders/7b/svcv81g94n3fm6nrj7ckr15c0000gn/T//S_70963.000001 saved
+
+. 
+. merge m:1 frame_id year using temp/balance-small, nogen keep(match)
 
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
-    matched                        11,319,143  
+    matched                           804,018  
     -----------------------------------------
 
+. codebook frame_id
+
+-----------------------------------------------------------------------------------------------
+frame_id                                                                            (unlabeled)
+-----------------------------------------------------------------------------------------------
+
+                  type:  string (str10)
+
+         unique values:  15,128                   missing "":  0/804,018
+
+              examples:  "ft10364354"
+                         "ft10741038"
+                         "ft11107967"
+                         "ft12098477"
+
 . 
-. egen id=group(frame_id manager_id)
-
-. xtset id year   
-       panel variable:  id (unbalanced)
-        time variable:  year, 1992 to 2016, but with gaps
-                delta:  1 unit
-
-. 
-. ren fo3 foreign
-
 . 
 . * time invariant vars
 . foreach X of var expat foreign {
   2.         egen first_year_`X' = min(cond(`X'==1,year,.)), by(frame_id)
   3.         egen ever_`X' = max(`X'==1), by(frame_id)
   4. }
-(7735069 missing values generated)
-(9397968 missing values generated)
+(393370 missing values generated)
+(453243 missing values generated)
 
 . 
 . gen tenure_foreign = year-first_year_foreign
-(9,397,968 missing values generated)
+(453,243 missing values generated)
 
 . 
 . 
-. *foreign átalakítása 
-. recode foreign (.=0)
-(foreign: 9991204 changes made)
-
-. 
-. *foreign-at többször váltók kidobása
-. xtset id year
-       panel variable:  id (unbalanced)
-        time variable:  year, 1992 to 2016, but with gaps
-                delta:  1 unit
-
-. gen foreign_change=1 if l1.foreign==0&foreign==1
-(11,263,248 missing values generated)
-
-. gen foreign_change_rev=1 if l1.foreign==1&foreign==0
-(11,222,989 missing values generated)
-
-. bys frame_id: egen foreign_change_total=total(foreign_change)
-
-. bys frame_id: egen foreign_change_rev_total=total(foreign_change_rev)
-
-. drop if foreign_change_total>1|foreign_change_rev_total>1
-(1,060,635 observations deleted)
-
-. scalar dropped_too_many_foreign_change = r(N_drop)
-
-. drop foreign_change foreign_change_rev foreign_change_total foreign_change_re
-> v_total
-
-. 
-. 
-. *foreign visszahúzása expatba, valaha expat-tal, de soha foreign-mal bíró cég
-> ek teljes kidobása
+. *foreign visszahúzása expatba, valaha expat-tal, de soha foreign-mal bíró cégek teljes kidobá
+> sa
 . replace foreign=1 if first_year_expat<=year&foreign==0&ever_foreign==1
-(65,327 real changes made)
+(62,438 real changes made)
 
 . drop first_year_foreign
 
 . egen first_year_foreign = min(cond(foreign==1,year,.)), by(frame_id)
-(9397968 missing values generated)
+(453243 missing values generated)
 
 . 
 . drop if ever_expat==1 & ever_foreign==0
-(2,083,489 observations deleted)
+(115,864 observations deleted)
 
 . scalar dropped_do3_expat_firmyears = r(N_drop)
 
 . 
+. * spell relation dummies
+. gen byte before = year<enter_year
+
+. gen byte during = year>=enter_year & year<=first_exit_year
+
+. gen byte after = year>first_exit_year
+
+. gen tenure = year-enter_year
+
 . 
 . * newly arriving CEOs
 . local T 4
-
-. gen age_since_foreign = year - first_year_foreign
-(7,314,479 missing values generated)
 
 . gen byte domestic = (expat==0)
 
 . foreach X in domestic expat {
   2.         gen byte new_`X' = (tenure <=`T') & (tenure>=0) & (`X'==1)
-  3.         * exclude founders joining the firm in years [0,1]
-.         replace new_`X' = 0 if (tenure >= firm_age-1) & (`X'==1)
-  4.         
+  3.         
 .         * new managers at foreign firms
 .         gen byte fnew_`X' = new_`X' & foreign==1
-  5.         * only include managers joining in years [-1,...) since foreign
-.         replace fnew_`X' = 0 if tenure > age_since_foreign+1
-  6. }
-(2,686,884 real changes made)
-(374 real changes made)
-(192,016 real changes made)
-(31 real changes made)
+  4.         * only include managers joining in years [-1,...) since foreign
+.         replace fnew_`X' = 0 if tenure > tenure_foreign+1
+  5. 
+.         foreach Y of var tenure before during after {
+  6.                 gen `Y'_`X' = (`X'==1)*`Y'
+  7.         }
+  8. }
+(3,700 real changes made)
+(1,375 real changes made)
 
 . gen fold_expat = expat==1 & tenure>`T'
 
@@ -127,123 +124,6 @@
 . 
 . *foreign_switch interakció létrehozása
 . gen byte foreign_new = foreign & new
-
-. 
-. *Greenfield - foreign húzás után, de a sampling előtt
-. bys frame_id (year): gen relative_year=_n
-
-. gen foreign_infirst=1 if relative_year==1&foreign==1
-(8,109,370 missing values generated)
-
-. bys frame_id: egen byte greenfield=max(foreign_infirst)
-(7357129 missing values generated)
-
-. 
-. recode greenfield (.=0)
-(greenfield: 7357129 changes made)
-
-. 
-. 
-. *Függő változók készítése
-. gen lnL=ln(emp)
-(2,461,037 missing values generated)
-
-. gen lnK=ln(final_netgep)
-(3,910,035 missing values generated)
-
-. gen lnM=ln(ranyag)
-(559,931 missing values generated)
-
-. gen lnQ=ln(sales)
-(1,161,573 missing values generated)
-
-. gen lnQL=lnQ-lnL
-(2,709,792 missing values generated)
-
-. gen lnKL=lnK-lnL
-(4,573,126 missing values generated)
-
-. gen byte exporter = export>0&export!=.
-
-. replace exporter=0 if export==.
-(0 real changes made)
-
-. 
-. 
-. *Industry_year dummy
-. egen industry_year = group(teaor08_2d year)
-(32 missing values generated)
-
-. 
-. 
-. *Industry dummy
-. gen byte ind = inlist(teaor08_1d,"B","C","D","E")
-
-. egen ind_year=group(ind year)
-
-. 
-. 
-. *Manufacaturing dummy
-. gen manufacturing=0
-
-. replace manufacturing=1 if teaor08_1d=="C"
-(841,501 real changes made)
-
-. 
-. 
-. *Átlagos létszám változó
-. bys frame_id: egen avg_emp = mean(emp)
-(52941 missing values generated)
-
-. 
-. 
-. *Életkor változó
-. gen age=year-foundyear
-
-. gen age_cat=.
-(8,175,019 missing values generated)
-
-. replace age_cat=1 if age==0
-(499,330 real changes made)
-
-. replace age_cat=2 if age==1
-(1,089,921 real changes made)
-
-. replace age_cat=3 if age==2
-(948,992 real changes made)
-
-. replace age_cat=4 if age>=3&age<=5
-(2,217,111 real changes made)
-
-. replace age_cat=5 if age>=6&age<=8
-(1,480,426 real changes made)
-
-. replace age_cat=6 if age>8
-(1,939,239 real changes made)
-
-. 
-. 
-. *Mintavétel létszám és a K-n kvül a többi függő változó nem missing alapján
-. local sample (avg_emp>=20)&!missing(lnL,lnQ,exporter)
-
-. keep if `sample'
-(7,735,117 observations deleted)
-
-. scalar dropped_size_or_missing = r(N_drop)
-
-. 
-. 
-. *Pénzügyi szektorban működő vállalatok kiszűrése
-. bys frame_id: egen industry_mode=mode(teaor08_2d)
-Warning: at least one group contains all missing values or contains multiple
-modes.  Generating missing values for the mode of these groups.  Use the
-missing, maxmode, minmode, or nummode() options to control this behavior.
-(3347 missing values generated)
-
-. drop if industry_mode==64|industry_mode==65|industry_mode==66
-(10,864 observations deleted)
-
-. scalar dropped_finance = r(N_drop)
 
 . 
 . 
@@ -260,18 +140,18 @@ missing, maxmode, minmode, or nummode() options to control this behavior.
   6.         scalar N_i_`X' = r(N)
   7.         drop `tag'
   8. }
-  94,264
-  3,130
-  76,705
-  8,932
-  52,965
-  2,353
-  10,697
-  1,382
-  18,729
-  1,891
-  10,688
-  1,381
+  320,801
+  4,629
+  163,032
+  13,186
+  173,656
+  3,094
+  41,269
+  3,091
+  70,451
+  4,116
+  39,894
+  2,974
 
 . 
 . 
@@ -283,91 +163,99 @@ missing, maxmode, minmode, or nummode() options to control this behavior.
 . *Investment változó készítése
 . areg lnK, a(industry_year)
 
-Linear regression, absorbing indicators         Number of obs     =    393,130
-                                                F(   0, 391120)   =          .
+Linear regression, absorbing indicators         Number of obs     =    633,552
+                                                F(   0, 631496)   =          .
                                                 Prob > F          =          .
-                                                R-squared         =     0.2419
-                                                Adj R-squared     =     0.2380
-                                                Root MSE          =     1.8516
+                                                R-squared         =     0.3280
+                                                Adj R-squared     =     0.3258
+                                                Root MSE          =     2.0130
 
 ------------------------------------------------------------------------------
          lnK |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-       _cons |   10.27221   .0029532  3478.37   0.000     10.26642      10.278
+       _cons |   11.11665    .002529  4395.74   0.000     11.11169    11.12161
 -------------+----------------------------------------------------------------
-industry_y~r |   F(2009, 391120) =     62.115   0.000        (2010 categories)
+industry_y~r |   F(2055, 631496) =    150.005   0.000        (2056 categories)
 
 . predict res, res
-(35,908 missing values generated)
+(54,602 missing values generated)
 
 . sum res, d
 
                           Residuals
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%    -5.147245       -11.2615
- 5%    -3.137804      -11.14946
-10%    -2.256072       -11.0914       Obs             393,130
-25%    -1.056234      -10.91753       Sum of Wgt.     393,130
+ 1%     -5.61637      -13.78567
+ 5%    -3.441709      -13.78567
+10%     -2.48798       -12.6702       Obs             633,552
+25%    -1.158808       -12.6702       Sum of Wgt.     633,552
 
-50%     .0822538                      Mean           2.04e-10
-                        Largest       Std. Dev.      1.846901
-75%      1.12844       9.396624
-90%     2.220772       9.396624       Variance       3.411042
-95%     2.929734       9.396624       Skewness       -.340484
-99%     4.278016       9.396624       Kurtosis       4.189631
+50%     .0811902                      Mean           1.23e-09
+                        Largest       Std. Dev.      2.009685
+75%     1.281887       8.841757
+90%     2.441539       8.841757       Variance       4.038835
+95%     3.122231       8.841757       Skewness      -.4021811
+99%      4.57371       8.841757       Kurtosis       4.046121
 
 . 
+. egen firm_person = group(frame_id manager_id)
+
 . 
-. xtset id year
-       panel variable:  id (unbalanced)
+. xtset firm_person year
+       panel variable:  firm_person (unbalanced)
         time variable:  year, 1992 to 2016, but with gaps
                 delta:  1 unit
 
 . g d_res=res-l1.res
-(96,355 missing values generated)
+(113,176 missing values generated)
 
 . g inv=0
 
 . 
 . 
 . replace inv=1 if d_res>=0.1&d_res!=.
-(116,966 real changes made)
+(191,098 real changes made)
 
 . replace inv=-1 if d_res<=-0.1&d_res!=.
-(153,297 real changes made)
+(266,146 real changes made)
 
 . replace inv=. if d_res==.
-(96,355 real changes made, 96,355 to missing)
+(113,176 real changes made, 113,176 to missing)
 
 . 
 . 
 . *Teljes minta elmentése a kontrollokkal
 . compress
+  variable year was float now int
   variable emp was long now int
-  variable first_year_expat was float now int
-  variable ever_expat was float now byte
-  variable ever_foreign was float now byte
-  variable tenure_foreign was float now byte
-  variable first_year_foreign was float now int
-  variable age_since_foreign was float now byte
-  variable fold_expat was float now byte
-  variable relative_year was float now int
+  variable id was float now int
+  variable relative_year was float now byte
   variable foreign_infirst was float now byte
   variable industry_year was float now int
   variable ind_year was float now byte
   variable manufacturing was float now byte
   variable age was float now int
   variable age_cat was float now byte
+  variable first_year_expat was float now int
+  variable ever_expat was float now byte
+  variable ever_foreign was float now byte
+  variable tenure_foreign was float now byte
+  variable first_year_foreign was float now int
+  variable tenure was float now byte
+  variable tenure_domestic was float now byte
+  variable before_domestic was float now byte
+  variable during_domestic was float now byte
+  variable after_domestic was float now byte
+  variable tenure_expat was float now byte
+  variable before_expat was float now byte
+  variable during_expat was float now byte
+  variable after_expat was float now byte
+  variable fold_expat was float now byte
   variable inv was float now byte
   variable jetok was double now long
-  variable export was double now long
-  variable ranyag was double now long
   variable wbill was double now long
-  variable sales was double now long
   variable final_netgep was double now long
-  variable frame_id was str12 now str10
-  (29,174,584 bytes saved)
+  (57,116,782 bytes saved)
 
 . save temp/analysis_sample, replace
 file temp/analysis_sample.dta saved
@@ -376,8 +264,7 @@ file temp/analysis_sample.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Tresors/Data3/projects/expat-analysis/output/variable
-> s.log
+       log:  /Users/koren/Tresors/Data3/projects/expat-analysis/output/variables.log
   log type:  text
- closed on:  20 Nov 2018, 18:00:17
--------------------------------------------------------------------------------
+ closed on:  20 Nov 2018, 19:27:08
+-----------------------------------------------------------------------------------------------
