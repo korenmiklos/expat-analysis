@@ -4,6 +4,8 @@ clear all
 capture log close
 log using output/firm_panel, text replace
 
+local T 4
+
 use temp/manager_panel
 
 do fill_in_ceo
@@ -24,28 +26,16 @@ gen egy=1
 * FIXME: keep stats on non-CEO managers
 keep if ceo==1
 
-*Cégév szintre ejtés
-/* how many ceos in a category? what is their lowest tenure? so that
+keep if tenure<=`T'
+* create pre years
+egen firm_age_at_ceo_entry = mean(cond(tenure==0,firm_age,.)), by(frame_id manager_id)
+gen pre_years = min(`T', firm_age_at_ceo_entry)
+expand (tenure==0)*(pre_years+1), gen(expanded)
+* fill in data for these years
+bys expanded frame_id manager_id: replace tenure = -_n if expanded==1
+replace year = enter_year+tenure if expanded==1
 
-manager_id      = 1 1 1 1 2 2 2 3 3 3
-expat           = 0 0 0 0 1 1 1 0 0 0
-tenure_expat    = . . . . 0 1 2 . . .
-tenure_domestic = 0 1 2 3 . . . 0 1 2
-
-*/
-collapse (sum) N=egy (min) tenure (firstnm) N_total=man_number firm_age, by(frame_id year expat)
-reshape wide N tenure, i(frame_id year) j(expat)
-ren *0 *_domestic
-ren *1 *_expat
-
-mvencode N*, mv(0) override
-
-label var N_total "Number of all managers"
-label var N_domestic "Number of domestic CEOs"
-label var N_expat "Number of expatriate CEOs"
-label var tenure_domestic "Lowest tenure (domestic CEOs)"
-label var tenure_expat "Lowest tenure (expatriate CEOs)"
-label var firm_age "Firm age"
+keep frame_id manager_id year tenure expat man_number firm_age
 
 compress
 save_all_to_json

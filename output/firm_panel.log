@@ -1,8 +1,11 @@
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Documents/workspace/expat/output/firm_panel.log
+       log:  /Volumes/Projects3/workspace/expat-analysis/output/firm_panel.log
   log type:  text
- opened on:   8 Nov 2018, 09:41:46
+ opened on:  20 Nov 2018, 09:11:11
+
+. 
+. local T 4
 
 . 
 . use temp/manager_panel
@@ -379,77 +382,53 @@ end of do-file
 (3,652,229 observations deleted)
 
 . 
-. *Cégév szintre ejtés
-. /* how many ceos in a category? what is their lowest tenure? so that
-> 
-> manager_id      = 1 1 1 1 2 2 2 3 3 3
-> expat           = 0 0 0 0 1 1 1 0 0 0
-> tenure_expat    = . . . . 0 1 2 . . .
-> tenure_domestic = 0 1 2 3 . . . 0 1 2
-> 
-> */
-. collapse (sum) N=egy (min) tenure (firstnm) N_total=man_number firm_age, by(f
-> rame_id year expat)
+. keep if tenure<=`T'
+(5,541,994 observations deleted)
 
-. reshape wide N tenure, i(frame_id year) j(expat)
-(note: j = 0 1)
+. * create pre years
+. egen firm_age_at_ceo_entry = mean(cond(tenure==0,firm_age,.)), by(frame_id ma
+> nager_id)
 
-Data                               long   ->   wide
------------------------------------------------------------------------------
-Number of obs.                  1.1e+07   -> 1.1e+07
-Number of variables                   7   ->       8
-j variable (2 values)             expat   ->   (dropped)
-xij variables:
-                                      N   ->   N0 N1
-                                 tenure   ->   tenure0 tenure1
------------------------------------------------------------------------------
+. gen pre_years = min(`T', firm_age_at_ceo_entry)
 
-. ren *0 *_domestic
+. expand (tenure==0)*(pre_years+1), gen(expanded)
+(5,510,387 zero counts ignored; observations not deleted)
+(2,999,662 observations created)
 
-. ren *1 *_expat
+. * fill in data for these years
+. bys expanded frame_id manager_id: replace tenure = -_n if expanded==1
+(2,999,662 real changes made)
+
+. replace year = enter_year+tenure if expanded==1
+(2,999,662 real changes made)
 
 . 
-. mvencode N*, mv(0) override
-  N_domestic: 1559541 missing values recoded
-     N_expat: 9051570 missing values recoded
-
-. 
-. label var N_total "Number of all managers"
-
-. label var N_domestic "Number of domestic CEOs"
-
-. label var N_expat "Number of expatriate CEOs"
-
-. label var tenure_domestic "Lowest tenure (domestic CEOs)"
-
-. label var tenure_expat "Lowest tenure (expatriate CEOs)"
-
-. label var firm_age "Firm age"
+. keep frame_id manager_id year tenure expat man_number firm_age
 
 . 
 . compress
   variable year was float now int
-  variable tenure_domestic was int now byte
-  variable tenure_expat was int now byte
-  variable N_total was float now int
+  variable man_number was float now int
+  variable tenure was int now byte
   variable firm_age was int now byte
-  variable N_domestic was double now int
-  variable N_expat was double now byte
-  (217,721,880 bytes saved)
+  (63,813,558 bytes saved)
 
 . save_all_to_json
+(note: file output/scalar/missing_ceo_after.json not found)
 (note: file output/scalar/fill_backward_1.json not found)
 (note: file output/scalar/fill_forward_3.json not found)
 (note: file output/scalar/fill_gap_5.json not found)
 (note: file output/scalar/no_other_manager.json not found)
 (note: file output/scalar/temp.json not found)
+(note: file output/scalar/missing_ceo_before.json not found)
 
 . save temp/firm_ceo_panel, replace
+(note: file temp/firm_ceo_panel.dta not found)
 file temp/firm_ceo_panel.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Documents/workspace/expat/output/firm_panel.log
+       log:  /Volumes/Projects3/workspace/expat-analysis/output/firm_panel.log
   log type:  text
- closed on:   8 Nov 2018, 09:55:06
+ closed on:  20 Nov 2018, 09:18:57
 -------------------------------------------------------------------------------

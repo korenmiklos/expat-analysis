@@ -17,7 +17,7 @@ xtset id year
 foreach sample in `samples' {
 	foreach group in scale intensity {
 		foreach X of var ``group'' {
-			xtreg `X' foreign new fnew fnew_expat fold_expat i.ind_year i.age_cat if `sample_`sample'', i(id ) fe vce(cluster id)
+			xtreg `X' foreign new fnew fnew_expat i.ind_year i.age_cat if `sample_`sample'', i(id ) fe vce(cluster id)
 			local r2_w = `e(r2_w)'
 			do regram output/regression/`sample'_`group' `X' `X' R2_within "`r2_w'"
 		}
@@ -33,7 +33,7 @@ do regram output/regression/selection 1 1
 keep if ever_foreign==1&greenfield!=1
 *Dinamika
 scalar Tbefore = 4
-scalar Tafter = 5
+scalar Tafter = 4
 
 local N = Tbefore+Tafter+1
 
@@ -43,16 +43,21 @@ do event_study
 
 local Tbefore = Tbefore
 local Tafter = Tafter
+
+* t = -Tbefore will serve as benchmark
+drop *_m_`Tbefore'
+local Tbefore = Tbefore-1
+
 foreach Y of var `scale' `intensity' {
 	* with firm FE, controls are years more than Tbefore before any event happens
-	xtreg `Y' *_m_? *_p_? i.ind_year i.age_cat if expat!=.&greenfield!=1 & ever_foreign==1, i(id) fe vce(cluster id)
+	xtreg `Y' *_m_? *_p_? foreign i.ind_year i.age_cat if expat!=.&greenfield!=1 & ever_foreign==1, i(id) fe vce(cluster id)
 	preserve
 	clear
 	set obs `N'
 	gen t = _n-1-`Tbefore'
 	label var t "Time since event (year)"
 
-	foreach X in foreign expat domestic {
+	foreach X in expat domestic {
 		gen `X'_beta=.
 		gen `X'_lower=.
 		gen `X'_upper=.
@@ -74,11 +79,10 @@ foreach Y of var `scale' `intensity' {
 		label var `X'_lower "90% CI"
 
 	}
-	label var foreign_beta "Foreign acquistion"
 	label var expat_beta "New expat manager"
 	label var domestic_beta "New domestic manager"
 	* omit last event year from graph, which is winsorized
-	tw (line foreign_beta expat_beta domestic_beta t if t>=-Tbefore & t<Tafter, sort), scheme(538w) title(`Y') aspect(0.67)
+	tw (line expat_beta domestic_beta t if t>=-Tbefore & t<Tafter, sort), scheme(538w) title(`Y') aspect(0.67)
 	graph export output/figure/`Y'_event_study.png, replace width(800)
 	
 	restore

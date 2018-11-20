@@ -2,19 +2,15 @@ clear all
 capture log close
 log using output/variables, text replace
 
+use temp/firm_ceo_panel
+
 *Balance sheet-tel kapcsolás
-use input/balance-small/balance-sheet-1992-2016-small, clear
-drop if frame_id==""
+* if m ceos at firm, the firm-year will appear m times
+merge m:1 frame_id year using input/balance-small/balance-sheet-1992-2016-small, keep(match) nogen
 
-merge 1:1 frame_id year using temp/firm_ceo_panel, keep(master match)
-drop _merge
-
-
-egen id=group(frame_id)
+egen id=group(frame_id manager_id)
 xtset id year	
 
-*Expat CEO létezik változó készítése
-gen byte expat = N_expat>0&!missing(N_expat)
 ren fo3 foreign
 
 * time invariant vars
@@ -49,15 +45,16 @@ scalar dropped_do3_expat_firmyears = r(N_drop)
 * newly arriving CEOs
 local T 4
 gen age_since_foreign = year - first_year_foreign
+gen byte domestic = (expat==0)
 foreach X in domestic expat {
-	gen byte new_`X' = tenure_`X' <=`T'
+	gen byte new_`X' = (tenure <=`T') & (tenure>=0) & (`X'==1)
 	* exclude founders joining the firm in years [0,1]
-	replace new_`X' = 0 if tenure_`X' >= firm_age-1
+	replace new_`X' = 0 if (tenure >= firm_age-1) & (`X'==1)
 	
 	* new managers at foreign firms
 	gen byte fnew_`X' = new_`X' & foreign==1
 	* only include managers joining in years [-1,...) since foreign
-	replace fnew_`X' = 0 if tenure_`X' > age_since_foreign+1
+	replace fnew_`X' = 0 if tenure > age_since_foreign+1
 }
 gen fold_expat = expat==1 & fnew_expat==0
 gen byte new = new_domestic | new_expat
