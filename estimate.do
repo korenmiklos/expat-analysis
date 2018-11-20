@@ -47,7 +47,7 @@ local Tafter = Tafter
 
 foreach Y of var `scale' `intensity' {
 	* with firm FE, controls are years more than Tbefore before any event happens
-	xtreg `Y' *_m_? *_p_? i.ind_year i.age_cat if expat!=.&greenfield!=1 & ever_foreign==1, i(id) fe vce(cluster id)
+	xtreg `Y' *_m_? *_p_? i.ind_year i.age_cat if expat!=. & ever_foreign==1 [aw=inverse_weight], i(id) fe vce(cluster id)
 	preserve
 	clear
 	set obs `N'
