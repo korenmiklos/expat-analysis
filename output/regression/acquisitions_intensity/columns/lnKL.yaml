@@ -2,29 +2,29 @@ id: lnKL
 label: lnKL
 coefficients:
  - id: foreign
-   estimate: 0.08944
-   standard_error: 0.04147
-   t_statistic: 2.15678
-   p_value: 0.03108
- - id: during_domestic
-   estimate: -0.00092
-   standard_error: 0.01539
-   t_statistic: -0.05980
-   p_value: 0.95231
- - id: after_domestic
-   estimate: 0.00956
-   standard_error: 0.01690
-   t_statistic: 0.56582
-   p_value: 0.57154
+   estimate: 0.08923
+   standard_error: 0.04131
+   t_statistic: 2.15989
+   p_value: 0.03083
+ - id: during
+   estimate: 0.00801
+   standard_error: 0.02030
+   t_statistic: 0.39439
+   p_value: 0.69331
+ - id: after
+   estimate: 0.02037
+   standard_error: 0.02938
+   t_statistic: 0.69317
+   p_value: 0.48824
  - id: during_expat
-   estimate: -0.03832
-   standard_error: 0.01521
-   t_statistic: -2.51940
-   p_value: 0.01179
+   estimate: -0.09717
+   standard_error: 0.02867
+   t_statistic: -3.38915
+   p_value: 0.00071
  - id: after_expat
-   estimate: -0.09288
-   standard_error: 0.01461
-   t_statistic: -6.35620
+   estimate: -0.20988
+   standard_error: 0.03858
+   t_statistic: -5.43958
    p_value: 0.00000
  - id: 1b.ind_year
    estimate: 0.00000
@@ -32,289 +32,384 @@ coefficients:
    t_statistic: .
    p_value: .
  - id: 2.ind_year
-   estimate: 0.19160
-   standard_error: 0.04925
-   t_statistic: 3.89032
-   p_value: 0.00010
+   estimate: 0.20143
+   standard_error: 0.04997
+   t_statistic: 4.03069
+   p_value: 0.00006
  - id: 3.ind_year
-   estimate: 0.73586
-   standard_error: 0.05863
-   t_statistic: 12.55014
+   estimate: 0.76299
+   standard_error: 0.06117
+   t_statistic: 12.47227
    p_value: 0.00000
  - id: 4.ind_year
-   estimate: 0.87644
-   standard_error: 0.06303
-   t_statistic: 13.90602
+   estimate: 0.92158
+   standard_error: 0.07030
+   t_statistic: 13.10914
    p_value: 0.00000
  - id: 5.ind_year
-   estimate: 1.09842
-   standard_error: 0.06648
-   t_statistic: 16.52152
+   estimate: 1.15494
+   standard_error: 0.07770
+   t_statistic: 14.86425
    p_value: 0.00000
  - id: 6.ind_year
-   estimate: 1.27769
-   standard_error: 0.06951
-   t_statistic: 18.38089
+   estimate: 1.34983
+   standard_error: 0.08576
+   t_statistic: 15.74044
    p_value: 0.00000
  - id: 7.ind_year
-   estimate: 1.49386
-   standard_error: 0.07279
-   t_statistic: 20.52229
+   estimate: 1.58482
+   standard_error: 0.09470
+   t_statistic: 16.73447
    p_value: 0.00000
  - id: 8.ind_year
-   estimate: 1.65760
-   standard_error: 0.07530
-   t_statistic: 22.01215
+   estimate: 1.75669
+   standard_error: 0.10310
+   t_statistic: 17.03884
    p_value: 0.00000
  - id: 9.ind_year
-   estimate: 1.78276
-   standard_error: 0.07723
-   t_statistic: 23.08386
+   estimate: 1.89419
+   standard_error: 0.11112
+   t_statistic: 17.04630
    p_value: 0.00000
  - id: 10.ind_year
-   estimate: 1.87374
-   standard_error: 0.07905
-   t_statistic: 23.70395
+   estimate: 1.99963
+   standard_error: 0.12024
+   t_statistic: 16.62991
    p_value: 0.00000
  - id: 11.ind_year
-   estimate: 1.96292
-   standard_error: 0.08073
-   t_statistic: 24.31473
+   estimate: 2.10155
+   standard_error: 0.12917
+   t_statistic: 16.26976
    p_value: 0.00000
  - id: 12.ind_year
-   estimate: 1.97258
-   standard_error: 0.08250
-   t_statistic: 23.91026
+   estimate: 2.12954
+   standard_error: 0.13910
+   t_statistic: 15.30958
    p_value: 0.00000
  - id: 13.ind_year
-   estimate: 2.02385
-   standard_error: 0.08468
-   t_statistic: 23.89981
+   estimate: 2.20047
+   standard_error: 0.14943
+   t_statistic: 14.72581
    p_value: 0.00000
  - id: 14.ind_year
-   estimate: 2.01767
-   standard_error: 0.08486
-   t_statistic: 23.77535
+   estimate: 2.21006
+   standard_error: 0.15864
+   t_statistic: 13.93126
    p_value: 0.00000
  - id: 15.ind_year
-   estimate: 1.95933
-   standard_error: 0.08630
-   t_statistic: 22.70426
+   estimate: 2.16778
+   standard_error: 0.16859
+   t_statistic: 12.85818
    p_value: 0.00000
  - id: 16.ind_year
-   estimate: 1.92975
-   standard_error: 0.08813
-   t_statistic: 21.89705
+   estimate: 2.15351
+   standard_error: 0.17852
+   t_statistic: 12.06340
    p_value: 0.00000
  - id: 17.ind_year
-   estimate: 1.93283
-   standard_error: 0.08918
-   t_statistic: 21.67418
+   estimate: 2.17393
+   standard_error: 0.18869
+   t_statistic: 11.52142
    p_value: 0.00000
  - id: 18.ind_year
-   estimate: 1.92207
-   standard_error: 0.09109
-   t_statistic: 21.09999
+   estimate: 2.17875
+   standard_error: 0.19959
+   t_statistic: 10.91611
    p_value: 0.00000
  - id: 19.ind_year
-   estimate: 1.86497
-   standard_error: 0.09183
-   t_statistic: 20.30855
+   estimate: 2.13939
+   standard_error: 0.21036
+   t_statistic: 10.17018
    p_value: 0.00000
  - id: 20.ind_year
-   estimate: 1.82105
-   standard_error: 0.09374
-   t_statistic: 19.42761
+   estimate: 2.11037
+   standard_error: 0.22022
+   t_statistic: 9.58289
    p_value: 0.00000
  - id: 21.ind_year
-   estimate: 1.82342
-   standard_error: 0.09564
-   t_statistic: 19.06523
+   estimate: 2.12714
+   standard_error: 0.22982
+   t_statistic: 9.25550
    p_value: 0.00000
  - id: 22.ind_year
-   estimate: 1.81395
-   standard_error: 0.09800
-   t_statistic: 18.51029
+   estimate: 2.13220
+   standard_error: 0.23759
+   t_statistic: 8.97420
    p_value: 0.00000
  - id: 23.ind_year
-   estimate: 1.81325
-   standard_error: 0.10000
-   t_statistic: 18.13321
+   estimate: 2.14675
+   standard_error: 0.24646
+   t_statistic: 8.71032
    p_value: 0.00000
  - id: 24.ind_year
-   estimate: 1.02990
-   standard_error: 0.11242
-   t_statistic: 9.16148
+   estimate: 1.39045
+   standard_error: 0.26260
+   t_statistic: 5.29496
    p_value: 0.00000
  - id: 25.ind_year
-   estimate: 1.08051
-   standard_error: 0.12354
-   t_statistic: 8.74598
+   estimate: 1.46006
+   standard_error: 0.27523
+   t_statistic: 5.30496
    p_value: 0.00000
  - id: 26.ind_year
-   estimate: 0.40511
-   standard_error: 0.10345
-   t_statistic: 3.91583
-   p_value: 0.00009
+   estimate: 0.40790
+   standard_error: 0.10317
+   t_statistic: 3.95372
+   p_value: 0.00008
  - id: 27.ind_year
-   estimate: 0.57021
-   standard_error: 0.09711
-   t_statistic: 5.87181
+   estimate: 0.58262
+   standard_error: 0.09728
+   t_statistic: 5.98890
    p_value: 0.00000
  - id: 28.ind_year
-   estimate: 0.77545
-   standard_error: 0.09399
-   t_statistic: 8.25071
+   estimate: 0.80279
+   standard_error: 0.09566
+   t_statistic: 8.39196
    p_value: 0.00000
  - id: 29.ind_year
-   estimate: 0.92917
-   standard_error: 0.09487
-   t_statistic: 9.79432
+   estimate: 0.97241
+   standard_error: 0.09912
+   t_statistic: 9.81050
    p_value: 0.00000
  - id: 30.ind_year
-   estimate: 1.06025
-   standard_error: 0.09483
-   t_statistic: 11.18058
+   estimate: 1.11486
+   standard_error: 0.10237
+   t_statistic: 10.89063
    p_value: 0.00000
  - id: 31.ind_year
-   estimate: 1.18509
-   standard_error: 0.09532
-   t_statistic: 12.43334
+   estimate: 1.25927
+   standard_error: 0.10707
+   t_statistic: 11.76119
    p_value: 0.00000
  - id: 32.ind_year
-   estimate: 1.39334
-   standard_error: 0.09521
-   t_statistic: 14.63421
+   estimate: 1.48214
+   standard_error: 0.11177
+   t_statistic: 13.26082
    p_value: 0.00000
  - id: 33.ind_year
-   estimate: 1.56328
-   standard_error: 0.09638
-   t_statistic: 16.21971
+   estimate: 1.66392
+   standard_error: 0.11850
+   t_statistic: 14.04190
    p_value: 0.00000
  - id: 34.ind_year
-   estimate: 1.67637
-   standard_error: 0.09718
-   t_statistic: 17.25085
+   estimate: 1.79137
+   standard_error: 0.12546
+   t_statistic: 14.27814
    p_value: 0.00000
  - id: 35.ind_year
-   estimate: 1.77451
-   standard_error: 0.09835
-   t_statistic: 18.04327
+   estimate: 1.90002
+   standard_error: 0.13305
+   t_statistic: 14.28061
    p_value: 0.00000
  - id: 36.ind_year
-   estimate: 1.83080
-   standard_error: 0.09966
-   t_statistic: 18.37066
+   estimate: 1.97085
+   standard_error: 0.14128
+   t_statistic: 13.95008
    p_value: 0.00000
  - id: 37.ind_year
-   estimate: 1.89261
-   standard_error: 0.10007
-   t_statistic: 18.91331
+   estimate: 2.04919
+   standard_error: 0.14933
+   t_statistic: 13.72288
    p_value: 0.00000
  - id: 38.ind_year
-   estimate: 1.93891
-   standard_error: 0.10180
-   t_statistic: 19.04653
+   estimate: 2.11402
+   standard_error: 0.15914
+   t_statistic: 13.28368
    p_value: 0.00000
  - id: 39.ind_year
-   estimate: 1.98977
-   standard_error: 0.10276
-   t_statistic: 19.36370
+   estimate: 2.18407
+   standard_error: 0.16807
+   t_statistic: 12.99507
    p_value: 0.00000
  - id: 40.ind_year
-   estimate: 2.03015
-   standard_error: 0.10324
-   t_statistic: 19.66416
+   estimate: 2.24216
+   standard_error: 0.17677
+   t_statistic: 12.68387
    p_value: 0.00000
  - id: 41.ind_year
-   estimate: 2.01603
-   standard_error: 0.10372
-   t_statistic: 19.43788
+   estimate: 2.24470
+   standard_error: 0.18690
+   t_statistic: 12.01035
    p_value: 0.00000
  - id: 42.ind_year
-   estimate: 2.06903
-   standard_error: 0.10408
-   t_statistic: 19.87839
+   estimate: 2.31491
+   standard_error: 0.19594
+   t_statistic: 11.81416
    p_value: 0.00000
  - id: 43.ind_year
-   estimate: 2.15739
-   standard_error: 0.10529
-   t_statistic: 20.48968
+   estimate: 2.41956
+   standard_error: 0.20673
+   t_statistic: 11.70393
    p_value: 0.00000
  - id: 44.ind_year
-   estimate: 2.10534
-   standard_error: 0.10605
-   t_statistic: 19.85243
+   estimate: 2.38574
+   standard_error: 0.21738
+   t_statistic: 10.97501
    p_value: 0.00000
  - id: 45.ind_year
-   estimate: 2.16775
-   standard_error: 0.10604
-   t_statistic: 20.44325
+   estimate: 2.46435
+   standard_error: 0.22747
+   t_statistic: 10.83362
    p_value: 0.00000
  - id: 46.ind_year
-   estimate: 2.16084
-   standard_error: 0.10635
-   t_statistic: 20.31754
+   estimate: 2.47317
+   standard_error: 0.23555
+   t_statistic: 10.49937
    p_value: 0.00000
  - id: 47.ind_year
-   estimate: 2.19882
-   standard_error: 0.10783
-   t_statistic: 20.39127
+   estimate: 2.52463
+   standard_error: 0.24387
+   t_statistic: 10.35256
    p_value: 0.00000
  - id: 48.ind_year
-   estimate: 2.25166
-   standard_error: 0.10795
-   t_statistic: 20.85764
+   estimate: 2.59476
+   standard_error: 0.25164
+   t_statistic: 10.31129
    p_value: 0.00000
  - id: 49.ind_year
-   estimate: 2.02435
-   standard_error: 0.10923
-   t_statistic: 18.53296
+   estimate: 2.39177
+   standard_error: 0.25899
+   t_statistic: 9.23501
    p_value: 0.00000
  - id: 50.ind_year
-   estimate: 2.08768
-   standard_error: 0.11250
-   t_statistic: 18.55663
+   estimate: 2.47562
+   standard_error: 0.26722
+   t_statistic: 9.26430
    p_value: 0.00000
- - id: 1b.age_cat
+ - id: 0b.age_cat
    estimate: 0.00000
    standard_error: .
    t_statistic: .
    p_value: .
+ - id: 1.age_cat
+   estimate: 0.03849
+   standard_error: 0.04398
+   t_statistic: 0.87510
+   p_value: 0.38157
  - id: 2.age_cat
-   estimate: 0.05242
-   standard_error: 0.04283
-   t_statistic: 1.22390
-   p_value: 0.22105
+   estimate: 0.00543
+   standard_error: 0.04971
+   t_statistic: 0.10923
+   p_value: 0.91302
  - id: 3.age_cat
-   estimate: 0.03226
-   standard_error: 0.04533
-   t_statistic: 0.71169
-   p_value: 0.47669
+   estimate: -0.03940
+   standard_error: 0.05646
+   t_statistic: -0.69789
+   p_value: 0.48528
  - id: 4.age_cat
-   estimate: -0.01927
-   standard_error: 0.04858
-   t_statistic: -0.39656
-   p_value: 0.69171
+   estimate: -0.05586
+   standard_error: 0.06423
+   t_statistic: -0.86966
+   p_value: 0.38453
  - id: 5.age_cat
-   estimate: -0.11427
-   standard_error: 0.05622
-   t_statistic: -2.03270
-   p_value: 0.04214
+   estimate: -0.12124
+   standard_error: 0.07320
+   t_statistic: -1.65622
+   p_value: 0.09775
  - id: 6.age_cat
-   estimate: -0.21571
-   standard_error: 0.06564
-   t_statistic: -3.28595
-   p_value: 0.00102
+   estimate: -0.15833
+   standard_error: 0.08239
+   t_statistic: -1.92167
+   p_value: 0.05471
+ - id: 7.age_cat
+   estimate: -0.21190
+   standard_error: 0.09206
+   t_statistic: -2.30168
+   p_value: 0.02140
+ - id: 8.age_cat
+   estimate: -0.25468
+   standard_error: 0.10188
+   t_statistic: -2.49975
+   p_value: 0.01246
+ - id: 9.age_cat
+   estimate: -0.31044
+   standard_error: 0.11217
+   t_statistic: -2.76762
+   p_value: 0.00567
+ - id: 10.age_cat
+   estimate: -0.35640
+   standard_error: 0.12225
+   t_statistic: -2.91544
+   p_value: 0.00357
+ - id: 11.age_cat
+   estimate: -0.33912
+   standard_error: 0.13203
+   t_statistic: -2.56852
+   p_value: 0.01025
+ - id: 12.age_cat
+   estimate: -0.35711
+   standard_error: 0.14227
+   t_statistic: -2.51016
+   p_value: 0.01210
+ - id: 13.age_cat
+   estimate: -0.41094
+   standard_error: 0.15261
+   t_statistic: -2.69269
+   p_value: 0.00711
+ - id: 14.age_cat
+   estimate: -0.41430
+   standard_error: 0.16304
+   t_statistic: -2.54108
+   p_value: 0.01108
+ - id: 15.age_cat
+   estimate: -0.45258
+   standard_error: 0.17304
+   t_statistic: -2.61546
+   p_value: 0.00894
+ - id: 16.age_cat
+   estimate: -0.44982
+   standard_error: 0.18407
+   t_statistic: -2.44383
+   p_value: 0.01457
+ - id: 17.age_cat
+   estimate: -0.45555
+   standard_error: 0.19493
+   t_statistic: -2.33704
+   p_value: 0.01948
+ - id: 18.age_cat
+   estimate: -0.47417
+   standard_error: 0.20565
+   t_statistic: -2.30575
+   p_value: 0.02117
+ - id: 19.age_cat
+   estimate: -0.49913
+   standard_error: 0.21713
+   t_statistic: -2.29873
+   p_value: 0.02157
+ - id: 20.age_cat
+   estimate: -0.52256
+   standard_error: 0.23970
+   t_statistic: -2.18004
+   p_value: 0.02931
+ - id: 25.age_cat
+   estimate: -0.64521
+   standard_error: 0.27833
+   t_statistic: -2.31815
+   p_value: 0.02049
+ - id: 30.age_cat
+   estimate: -0.59100
+   standard_error: 0.37662
+   t_statistic: -1.56924
+   p_value: 0.11666
+ - id: 40.age_cat
+   estimate: -0.66385
+   standard_error: 0.48565
+   t_statistic: -1.36694
+   p_value: 0.17171
+ - id: 50.age_cat
+   estimate: -0.23390
+   standard_error: 0.54454
+   t_statistic: -0.42953
+   p_value: 0.66756
  - id: _cons
-   estimate: 5.28607
-   standard_error: 0.08362
-   t_statistic: 63.21237
+   estimate: 5.25698
+   standard_error: 0.08503
+   t_statistic: 61.82711
    p_value: 0.00000
 extra_rows:
  - id: R2
-   value: .1420965136224303
+   value: .1443687320031207
  - id: observations
    value: 325013
  - id: R2_within
-   value: .1420965136224303
+   value: .1443687320031207

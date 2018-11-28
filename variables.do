@@ -17,6 +17,11 @@ save `expand', replace
 merge m:1 frame_id year using temp/balance-small, nogen keep(match)
 codebook frame_id
 
+drop age_cat
+clonevar age_cat = age
+recode age_cat 20/24=20 25/29=25 30/39=30 40/49=40 50/max=50
+tab age_cat
+
 
 * time invariant vars
 foreach X of var expat foreign {

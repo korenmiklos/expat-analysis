@@ -1,8 +1,8 @@
------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Tresors/Data3/projects/expat-analysis/output/variables.log
+       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/variables.log
   log type:  text
- opened on:  20 Nov 2018, 19:26:08
+ opened on:  28 Nov 2018, 16:49:51
 
 . 
 . use temp/firm_ceo_panel
@@ -25,8 +25,8 @@
 . tempfile expand
 
 . save `expand', replace
-(note: file /var/folders/7b/svcv81g94n3fm6nrj7ckr15c0000gn/T//S_70963.000001 not found)
-file /var/folders/7b/svcv81g94n3fm6nrj7ckr15c0000gn/T//S_70963.000001 saved
+(note: file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//S_00414.000001 not found)
+file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//S_00414.000001 saved
 
 . 
 . merge m:1 frame_id year using temp/balance-small, nogen keep(match)
@@ -39,9 +39,9 @@ file /var/folders/7b/svcv81g94n3fm6nrj7ckr15c0000gn/T//S_70963.000001 saved
 
 . codebook frame_id
 
------------------------------------------------------------------------------------------------
-frame_id                                                                            (unlabeled)
------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+frame_id                                                                                                             (unlabeled)
+--------------------------------------------------------------------------------------------------------------------------------
 
                   type:  string (str10)
 
@@ -51,6 +51,46 @@ frame_id                                                                        
                          "ft10741038"
                          "ft11107967"
                          "ft12098477"
+
+. 
+. drop age_cat
+
+. clonevar age_cat = age
+
+. recode age_cat 20/24=20 25/29=25 30/39=30 40/49=40 50/max=50
+(age_cat: 161895 changes made)
+
+. tab age_cat
+
+    age_cat |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |     13,663        1.70        1.70
+          1 |     29,079        3.62        5.32
+          2 |     34,707        4.32        9.63
+          3 |     37,623        4.68       14.31
+          4 |     38,109        4.74       19.05
+          5 |     37,933        4.72       23.77
+          6 |     37,113        4.62       28.39
+          7 |     36,391        4.53       32.91
+          8 |     35,469        4.41       37.32
+          9 |     34,292        4.27       41.59
+         10 |     33,188        4.13       45.72
+         11 |     31,919        3.97       49.69
+         12 |     30,588        3.80       53.49
+         13 |     29,195        3.63       57.12
+         14 |     27,762        3.45       60.57
+         15 |     26,680        3.32       63.89
+         16 |     25,326        3.15       67.04
+         17 |     23,641        2.94       69.98
+         18 |     21,925        2.73       72.71
+         19 |     20,618        2.56       75.27
+         20 |     79,493        9.89       85.16
+         25 |     25,692        3.20       88.36
+         30 |     24,627        3.06       91.42
+         40 |     31,902        3.97       95.39
+         50 |     37,083        4.61      100.00
+------------+-----------------------------------
+      Total |    804,018      100.00
 
 . 
 . 
@@ -68,8 +108,7 @@ frame_id                                                                        
 
 . 
 . 
-. *foreign visszahúzása expatba, valaha expat-tal, de soha foreign-mal bíró cégek teljes kidobá
-> sa
+. *foreign visszahúzása expatba, valaha expat-tal, de soha foreign-mal bíró cégek teljes kidobása
 . replace foreign=1 if first_year_expat<=year&foreign==0&ever_foreign==1
 (62,438 real changes made)
 
@@ -164,6 +203,7 @@ frame_id                                                                        
 . areg lnK, a(industry_year)
 
 Linear regression, absorbing indicators         Number of obs     =    633,552
+Absorbed variable: industry_year                No. of categories =      2,056
                                                 F(   0, 631496)   =          .
                                                 Prob > F          =          .
                                                 R-squared         =     0.3280
@@ -174,8 +214,8 @@ Linear regression, absorbing indicators         Number of obs     =    633,552
          lnK |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
        _cons |   11.11665    .002529  4395.74   0.000     11.11169    11.12161
--------------+----------------------------------------------------------------
-industry_y~r |   F(2055, 631496) =    150.005   0.000        (2056 categories)
+------------------------------------------------------------------------------
+F test of absorbed indicators: F(2055, 631496) = 150.005      Prob > F = 0.000
 
 . predict res, res
 (54,602 missing values generated)
@@ -190,7 +230,7 @@ industry_y~r |   F(2055, 631496) =    150.005   0.000        (2056 categories)
 10%     -2.48798       -12.6702       Obs             633,552
 25%    -1.158808       -12.6702       Sum of Wgt.     633,552
 
-50%     .0811902                      Mean           1.23e-09
+50%     .0811902                      Mean           1.21e-09
                         Largest       Std. Dev.      2.009685
 75%     1.281887       8.841757
 90%     2.441539       8.841757       Variance       4.038835
@@ -264,7 +304,7 @@ file temp/analysis_sample.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Tresors/Data3/projects/expat-analysis/output/variables.log
+       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/variables.log
   log type:  text
- closed on:  20 Nov 2018, 19:27:08
------------------------------------------------------------------------------------------------
+ closed on:  28 Nov 2018, 16:50:29
+--------------------------------------------------------------------------------------------------------------------------------
