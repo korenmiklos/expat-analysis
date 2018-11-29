@@ -49,9 +49,11 @@ do event_study
 local Tbefore = Tbefore
 local Tafter = Tduring
 
+gen byte event_window = (after==0) & (tenure>=-Tbefore-1) & (tenure<=Tduring)
+
 foreach Y of var `scale' `intensity' {
 	* with firm FE, controls are years more than Tbefore before any event happens
-	xtreg `Y' *_m_* *_p_* i.ind_year i.age_cat if expat!=. & ever_foreign==1 & after==0 [aw=inverse_weight], i(firm_person) fe vce(cluster id)
+	xtreg `Y' *_m_* *_p_* i.ind_year i.age_cat if expat!=. & ever_foreign==1 & event_window [aw=inverse_weight], i(firm_person) fe vce(cluster id)
 	preserve
 	clear
 	set obs `N'
@@ -84,7 +86,7 @@ foreach Y of var `scale' `intensity' {
 	label var expat_beta "New expat manager"
 	label var domestic_beta "New domestic manager"
 	* omit last event year from graph, which is winsorized
-	tw (line expat_beta domestic_beta t if t>=-Tbefore & t<Tduring, sort), scheme(538w) title(`Y') aspect(0.67)
+	tw (line expat_beta domestic_beta t if t>=-Tbefore & t<=Tduring, sort), scheme(538w) title(`Y') aspect(0.67)
 	graph export output/figure/`Y'_event_study.png, replace width(800)
 	
 	restore
