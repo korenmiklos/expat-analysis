@@ -1,5 +1,5 @@
 local T1 = Tbefore 
-local T2 = Tafter
+local T2 = Tduring
 
 foreach X in expat domestic {
 	gen byte `X'_p_0 = tenure==0 & (`X'==1)

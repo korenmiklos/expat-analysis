@@ -4,9 +4,16 @@ log using output/estimate, text replace
 
 use temp/analysis_sample
 
-local sample_baseline expat!=.
+*Dinamika
+scalar Tbefore = 4
+scalar Tduring = 6
+scalar Tafter = 4
+
+gen byte analysis_window = (tenure>=-Tbefore)&(year-first_exit_year<=Tafter)
+
+local sample_baseline analysis_window
 local sample_manufacturing `sample_baseline' & manufacturing==1
-local sample_acquisitions `sample_baseline' & ever_foreign==1
+local sample_acquisitions `sample_baseline' & greenfield==0
 
 local samples baseline manufacturing acquisitions
 
@@ -34,16 +41,13 @@ areg f1.expat lnL lnQ lnK exporter if ever_foreign==1&greenfield!=1, a(industry_
 do regram output/regression/selection 1 1
 
 keep if ever_foreign==1
-*Dinamika
-scalar Tbefore = 4
-scalar Tafter = 6
 
-local N = Tbefore+Tafter+1
+local N = Tbefore+Tduring+1
 
 do event_study
 
 local Tbefore = Tbefore
-local Tafter = Tafter
+local Tafter = Tduring
 
 foreach Y of var `scale' `intensity' {
 	* with firm FE, controls are years more than Tbefore before any event happens
@@ -80,7 +84,7 @@ foreach Y of var `scale' `intensity' {
 	label var expat_beta "New expat manager"
 	label var domestic_beta "New domestic manager"
 	* omit last event year from graph, which is winsorized
-	tw (line expat_beta domestic_beta t if t>=-Tbefore & t<Tafter, sort), scheme(538w) title(`Y') aspect(0.67)
+	tw (line expat_beta domestic_beta t if t>=-Tbefore & t<Tduring, sort), scheme(538w) title(`Y') aspect(0.67)
 	graph export output/figure/`Y'_event_study.png, replace width(800)
 	
 	restore
