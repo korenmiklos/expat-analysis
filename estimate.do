@@ -17,8 +17,11 @@ local sample_acquisitions `sample_baseline' & greenfield==0
 
 local samples baseline manufacturing acquisitions
 
-local scale lnL lnK lnQ
-local intensity lnKL lnQL exporter inv
+local outcomes lnL lnKL lnQL exporter
+label var lnL "Employment (log)"
+label var lnKL "Capital per worker (log)"
+label var lnQL "Revenue per worker (log)"
+label var exporter "Firm is an exporter (dummy)"
 
 egen person_tag = tag(frame_id manager_id)
 egen N = sum(person_tag), by(frame_id)
@@ -26,18 +29,16 @@ gen inverse_weight = 1/N
 
 xtset firm_person year
 foreach sample in `samples' {
-	foreach group in scale intensity {
-		foreach X of var ``group'' {
-			xtreg `X' foreign during after during_expat after_expat i.ind_year i.age_cat if `sample_`sample'' [aw=inverse_weight], i(firm_person ) fe vce(cluster id)
-			local r2_w = `e(r2_w)'
-			do regram output/regression/`sample'_`group' `X' `X' R2_within "`r2_w'"
-		}
+	foreach X of var `outcomes' {
+		xtreg `X' foreign during after during_expat after_expat i.ind_year i.age_cat if `sample_`sample'' [aw=inverse_weight], i(firm_person ) fe vce(cluster id)
+		local r2_w = `e(r2_w)'
+		do regram output/regression/`sample' `X' `X' R2_within "`r2_w'"
 	}
 }
 
 *Szelekció az akvicíziós mintában
 xtset firm_person year
-areg f1.expat lnL lnQ lnK exporter if ever_foreign==1&greenfield!=1, a(industry_year) cluster(frame_id)
+areg f1.expat `outcomes' if ever_foreign==1&greenfield!=1, a(industry_year) cluster(frame_id)
 do regram output/regression/selection 1 1
 
 keep if ever_foreign==1
@@ -51,14 +52,14 @@ local Tafter = Tduring
 
 gen byte event_window = (after==0) & (tenure>=-Tbefore-1) & (tenure<=Tduring)
 
-foreach Y of var `scale' `intensity' {
+foreach Y of var `outcomes' {
 	* with firm FE, controls are years more than Tbefore before any event happens
 	xtreg `Y' *_m_* *_p_* i.ind_year i.age_cat if expat!=. & ever_foreign==1 & event_window [aw=inverse_weight], i(firm_person) fe vce(cluster id)
 	preserve
 	clear
 	set obs `N'
 	gen t = _n-1-`Tbefore'
-	label var t "Time since event (year)"
+	label var t "Time since new manager (year)"
 
 	foreach X in foreign expat domestic {
 		gen `X'_beta=.
@@ -83,8 +84,8 @@ foreach Y of var `scale' `intensity' {
 
 	}
 	label var foreign_beta "Foreign owner"
-	label var expat_beta "New expat manager"
-	label var domestic_beta "New domestic manager"
+	label var expat_beta "Expat manager"
+	label var domestic_beta "Domestic manager"
 	* omit last event year from graph, which is winsorized
 	tw (line expat_beta domestic_beta t if t>=-Tbefore & t<=Tduring, sort), scheme(538w) title(`Y') aspect(0.67)
 	graph export output/figure/`Y'_event_study.png, replace width(800)
