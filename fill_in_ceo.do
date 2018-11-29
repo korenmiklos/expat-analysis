@@ -1,3 +1,4 @@
+tab pos5
 gen ceo = (pos5==1) if !missing(pos5)
 
 *Amennyiben egy személy egy cégnél egy évben többször szerepelt, és ceo is volt, esetében a ceo pos5 megtartása

@@ -9,11 +9,11 @@ scalar Tbefore = 4
 scalar Tduring = 6
 scalar Tafter = 4
 
-gen byte analysis_window = (tenure>=-Tbefore)&(year-first_exit_year<=Tafter)
+gen byte analysis_window = (tenure>=-Tbefore-1)&(year-first_exit_year<=Tafter)
 
-local sample_baseline analysis_window
-local sample_manufacturing `sample_baseline' & manufacturing==1
-local sample_acquisitions `sample_baseline' & greenfield==0
+local sample_baseline (analysis_window==1)
+local sample_manufacturing `sample_baseline' & (manufacturing==1)
+local sample_acquisitions `sample_baseline' & (greenfield==0)
 
 local samples baseline manufacturing acquisitions
 
@@ -43,28 +43,29 @@ do regram output/regression/selection 1 1
 
 keep if ever_foreign==1
 
-local N = Tbefore+Tduring+1
+local N = Tbefore+Tduring+2
 
 do event_study
 
 local Tbefore = Tbefore
 local Tafter = Tduring
 
-gen byte event_window = (after==0) & (tenure>=-Tbefore-1) & (tenure<=Tduring)
+* keep post event and after observations for estimation of fixed effects, but dummy these out
+gen byte post_event = (after==0) & tenure>Tduring
 
 foreach Y of var `outcomes' {
 	* with firm FE, controls are years more than Tbefore before any event happens
-	xtreg `Y' *_m_* *_p_* i.ind_year i.age_cat if expat!=. & ever_foreign==1 & event_window [aw=inverse_weight], i(firm_person) fe vce(cluster id)
+	xtreg `Y' *_m_* *_p_* post_event after i.ind_year i.age_cat if `sample_baseline' [aw=inverse_weight], i(firm_person) fe vce(cluster id)
 	preserve
 	clear
 	set obs `N'
-	gen t = _n-1-`Tbefore'
+	gen t = _n-2-`Tbefore'
 	label var t "Time since new manager (year)"
 
 	foreach X in foreign expat domestic {
-		gen `X'_beta=.
-		gen `X'_lower=.
-		gen `X'_upper=.
+		gen `X'_beta=0
+		gen `X'_lower=0
+		gen `X'_upper=0
 		forval t=-`Tbefore'/`Tafter' {
 			local tag "`t'"
 			if (`t'<0) {
@@ -87,7 +88,7 @@ foreach Y of var `outcomes' {
 	label var expat_beta "Expat manager"
 	label var domestic_beta "Domestic manager"
 	* omit last event year from graph, which is winsorized
-	tw (line expat_beta domestic_beta t if t>=-Tbefore & t<=Tduring, sort), scheme(538w) title(`Y') aspect(0.67)
+	tw (line expat_beta domestic_beta t if t>=-Tbefore-1 & t<=Tduring, sort), scheme(538w) title(`Y') aspect(0.67)
 	graph export output/figure/`Y'_event_study.png, replace width(800)
 	
 	restore

@@ -34,11 +34,24 @@ gen int tenure = year - enter_year
 gen int firm_age = year - first_year
 ren person_foreign expat
 
-* drop founders
-drop if first_year==enter_year
-scalar dropped_founders = r(N_drop)
+* flag founders
+gen byte founder = (first_year==enter_year)
+drop if year<enter_year | year>first_exit_year
 
-collapse (min) enter_year first_exit_year (firstnm) expat (count) N_ceos=expat, by(frame_id manager_id)
+* count number of CEOs
+preserve
+	collapse (count) N_ceos = expat, by(frame_id year)
+	save temp/N_ceos, replace
+restore
+
+collapse (min) enter_year first_exit_year (firstnm) expat founder, by(frame_id manager_id)
+
+gen byte spell = 1
+bysort frame_id (enter_year manager_id): replace spell =  cond(enter_year>enter_year[_n-1],spell[_n-1]+1,spell[_n-1]) if _n>1
+
+egen max_expat = max(expat), by(frame_id spell)
+gen lag_expat = .
+bysort frame_id (enter_year manager_id): replace lag_expat =  cond(enter_year>enter_year[_n-1],max_expat[_n-1],lag_expat) if _n>1
 
 compress
 save_all_to_json

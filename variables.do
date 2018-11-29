@@ -3,8 +3,6 @@ capture log close
 log using output/variables, text replace
 
 use temp/firm_ceo_panel
-* drop very large firms
-drop if N_ceos>10
 
 scalar T1 = 1989
 scalar T2 = 2016
@@ -15,6 +13,18 @@ tempfile expand
 save `expand', replace
 
 merge m:1 frame_id year using temp/balance-small, nogen keep(match)
+merge m:1 frame_id year using temp/N_ceos, nogen keep(match)
+* drop very large firms
+egen fp_tag = tag(frame_id manager_id ) 
+egen total_CEOs = sum(fp_tag ), by(frame_id )
+tab total_CEOs 
+
+drop if total_CEOs>15
+scalar dropped_too_many_CEOs = r(N_drop)
+
+drop if founder==1
+scalar dropped_founders = r(N_drop)
+
 codebook frame_id
 
 drop age_cat
@@ -45,6 +55,12 @@ gen byte before = year<enter_year
 gen byte during = year>=enter_year & year<=first_exit_year
 gen byte after = year>first_exit_year
 gen tenure = year-enter_year
+
+* spell-to-spell transition
+gen byte DD = (lag_expat==0)&(expat==0)
+gen byte DE = (lag_expat==0)&(expat==1)
+gen byte ED = (lag_expat==1)&(expat==0)
+gen byte EE = (lag_expat==1)&(expat==1)
 
 * newly arriving CEOs
 local T 4
@@ -85,24 +101,7 @@ foreach X of var foreign new expat new_expat fnew fnew_expat {
 
 *Firm_tag
 egen firm_tag=tag(frame_id)
-
-
-*Investment változó készítése
-areg lnK, a(industry_year)
-predict res, res
-sum res, d
-
 egen firm_person = group(frame_id manager_id)
-
-xtset firm_person year
-g d_res=res-l1.res
-g inv=0
-
-
-replace inv=1 if d_res>=0.1&d_res!=.
-replace inv=-1 if d_res<=-0.1&d_res!=.
-replace inv=. if d_res==.
-
 
 *Teljes minta elmentése a kontrollokkal
 compress

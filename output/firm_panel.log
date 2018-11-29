@@ -1,8 +1,8 @@
------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Tresors/Data3/projects/expat-analysis/output/firm_panel.log
+       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/firm_panel.log
   log type:  text
- opened on:  20 Nov 2018, 19:13:02
+ opened on:  29 Nov 2018, 15:52:12
 
 . 
 . use temp/balance-small
@@ -12,8 +12,8 @@
 . tempfile sample
 
 . save `sample', replace
-(note: file /var/folders/7b/svcv81g94n3fm6nrj7ckr15c0000gn/T//S_70963.000001 not found)
-file /var/folders/7b/svcv81g94n3fm6nrj7ckr15c0000gn/T//S_70963.000001 saved
+(note: file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//S_00414.000001 not found)
+file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//S_00414.000001 saved
 
 . 
 . use temp/manager_panel, clear
@@ -34,12 +34,22 @@ file /var/folders/7b/svcv81g94n3fm6nrj7ckr15c0000gn/T//S_70963.000001 saved
 . 
 . do fill_in_ceo
 
+. tab pos5
+
+       pos5 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    154,951       16.09       16.09
+          1 |    478,519       49.69       65.78
+          2 |    155,477       16.14       81.92
+          3 |    174,075       18.08      100.00
+------------+-----------------------------------
+      Total |    963,022      100.00
+
 . gen ceo = (pos5==1) if !missing(pos5)
 (487,225 missing values generated)
 
 . 
-. *Amennyiben egy személy egy cégnél egy évben többször szerepelt, és ceo is volt, esetében a c
-> eo pos5 megtartása
+. *Amennyiben egy személy egy cégnél egy évben többször szerepelt, és ceo is volt, esetében a ceo pos5 megtartása
 . duplicates tag frame_id manager_id year, gen(manager_duplicate)
 
 Duplicates in terms of frame_id manager_id year
@@ -169,7 +179,6 @@ Duplicates in terms of frame_id manager_id year
 -----------+---------------------------------+----------
      Total |    88,472     89,943    100,413 |   278,828 
 
-
 . tab ceo ceo_next if spell_year==spell_length, miss
 
            |             ceo_next
@@ -180,7 +189,6 @@ Duplicates in terms of frame_id manager_id year
          . |     1,952      2,440     96,021 |   100,413 
 -----------+---------------------------------+----------
      Total |     5,883     11,177    261,768 |   278,828 
-
 
 . assert ceo!=ceo_next if !missing(ceo)
 
@@ -266,8 +274,8 @@ spell_lengt |
 
 . 
 . 
-. *Pos5 kihúzása, ha egy, kettő, három, négy vagy öt évnyi lyuk van, ugyanazon személy ugyanazo
-> n cégnél történő ceo tevékenysége között
+. *Pos5 kihúzása, ha egy, kettő, három, négy vagy öt évnyi lyuk van, ugyanazon személy ugyanazon cégnél történő ceo tevékenysége
+>  között
 . tab ceo_prev ceo_next if missing(ceo)
 
            |       ceo_next
@@ -278,15 +286,13 @@ spell_lengt |
 -----------+----------------------+----------
      Total |       514      1,276 |     1,790 
 
-
 . 
 . count if ceo==1
   502,669
 
 . scalar temp=r(N)
 
-.         replace ceo = ceo_prev if ceo_prev==ceo_next & !missing(ceo_prev) & missing(ceo) & sp
-> ell_length<=5
+.         replace ceo = ceo_prev if ceo_prev==ceo_next & !missing(ceo_prev) & missing(ceo) & spell_length<=5
 (780 real changes made)
 
 . count if ceo==1
@@ -300,8 +306,8 @@ spell_lengt |
 (35110 missing values generated)
 
 . 
-. *Pos5 kihúzása három, kettő vagy egy évig, ha nincs más ceo és több menedzser van a cégnél - 
-> itt marad az eltolt ceo_exist, mert kicsit más a logika
+. *Pos5 kihúzása három, kettő vagy egy évig, ha nincs más ceo és több menedzser van a cégnél - itt marad az eltolt ceo_exist, me
+> rt kicsit más a logika
 . count if ceo==1
   503,185
 
@@ -327,8 +333,7 @@ spell_lengt |
 
 . scalar temp=r(N)
 
-.         replace ceo = 1 if (ceo_next==1) & missing(ceo) & (ceo_exist==0) & spell_year==spell_
-> length
+.         replace ceo = 1 if (ceo_next==1) & missing(ceo) & (ceo_exist==0) & spell_year==spell_length
 (179 real changes made)
 
 . count if ceo==1
@@ -391,23 +396,50 @@ end of do-file
 . ren person_foreign expat
 
 . 
-. * drop founders
-. drop if first_year==enter_year
-(246,981 observations deleted)
+. * flag founders
+. gen byte founder = (first_year==enter_year)
 
-. scalar dropped_founders = r(N_drop)
+. drop if year<enter_year | year>first_exit_year
+(22,536 observations deleted)
 
 . 
-. collapse (min) enter_year first_exit_year (firstnm) expat (count) N_ceos=expat, by(frame_id m
-> anager_id)
+. * count number of CEOs
+. preserve
+
+.         collapse (count) N_ceos = expat, by(frame_id year)
+
+.         save temp/N_ceos, replace
+file temp/N_ceos.dta saved
+
+. restore
+
+. 
+. collapse (min) enter_year first_exit_year (firstnm) expat founder, by(frame_id manager_id)
+
+. 
+. gen byte spell = 1
+
+. bysort frame_id (enter_year manager_id): replace spell =  cond(enter_year>enter_year[_n-1],spell[_n-1]+1,spell[_n-1]) if _n>1
+(50,483 real changes made)
+
+. 
+. egen max_expat = max(expat), by(frame_id spell)
+
+. gen lag_expat = .
+(88,371 missing values generated)
+
+. bysort frame_id (enter_year manager_id): replace lag_expat =  cond(enter_year>enter_year[_n-1],max_expat[_n-1],lag_expat) if _
+> n>1
+(36410 real changes made)
 
 . 
 . compress
   variable enter_year was float now int
   variable first_exit_year was float now int
-  variable N_ceos was long now byte
+  variable max_expat was float now byte
+  variable lag_expat was float now byte
   variable frame_id was str12 now str10
-  (488,763 bytes saved)
+  (1,060,452 bytes saved)
 
 . save_all_to_json
 
@@ -416,7 +448,7 @@ file temp/firm_ceo_panel.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Tresors/Data3/projects/expat-analysis/output/firm_panel.log
+       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/firm_panel.log
   log type:  text
- closed on:  20 Nov 2018, 19:14:45
------------------------------------------------------------------------------------------------
+ closed on:  29 Nov 2018, 15:53:16
+--------------------------------------------------------------------------------------------------------------------------------
