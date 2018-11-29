@@ -51,11 +51,12 @@ local Tbefore = Tbefore
 local Tafter = Tduring
 
 * keep post event and after observations for estimation of fixed effects, but dummy these out
-gen byte post_event = (after==0) & tenure>Tduring
+gen byte post = (after==0) & tenure>Tduring
+gen byte post_expat = post & expat
 
 foreach Y of var `outcomes' {
 	* with firm FE, controls are years more than Tbefore before any event happens
-	xtreg `Y' *_m_* *_p_* post_event after i.ind_year i.age_cat if `sample_baseline' [aw=inverse_weight], i(firm_person) fe vce(cluster id)
+	xtreg `Y' *_m_* *_p_* post post_expat after after_expat i.ind_year i.age_cat if `sample_acquisitions' [aw=inverse_weight], i(firm_person) fe vce(cluster id)
 	preserve
 	clear
 	set obs `N'
