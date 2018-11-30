@@ -3,7 +3,7 @@
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/
 > estimate.log
   log type:  text
- opened on:  30 Nov 2018, 18:31:25
+ opened on:  30 Nov 2018, 21:53:26
 
 . 
 . use temp/analysis_sample
@@ -71,7 +71,8 @@
 >                         to(1 _b[during] 2 _b[after] 1 _b[during]+_b[during_expat
 > ] 2 _b[after]+_b[after_expat]) ///
 >                         style(p1 p1 p2 p2) ///
->                         label("" "" "Local" "Expat" ) ///
+>                         label("Local-during" "Local-after" "Expat-during" "Expat
+> -after" ) ///
 >                         width_test(during after==during during_expat after_expat
 > ==during_expat) ///
 >                         star_test(1==1 1==1 during_expat after_expat) ///
@@ -423,7 +424,7 @@ number of observations (_N) was 0, now 8
 (1 real change made)
 (1 real change made)
 (1 real change made)
-variable label was str1 now str5
+variable label was str1 now str12
 (1 real change made)
 
  ( 1)  during = 0
@@ -456,7 +457,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  during_expat = 0
 
@@ -467,12 +468,13 @@ variable label was str1 now str5
 
        F(  1, 14145) =    6.31
             Prob > F =    0.0120
+variable label was str12 now str14
 (1 real change made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  - during_expat + after_expat = 0
 
@@ -761,7 +763,7 @@ number of observations (_N) was 0, now 8
 (1 real change made)
 (1 real change made)
 (1 real change made)
-variable label was str1 now str5
+variable label was str1 now str12
 (1 real change made)
 
  ( 1)  during = 0
@@ -794,7 +796,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  during_expat = 0
 
@@ -809,7 +811,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  - during_expat + after_expat = 0
 
@@ -820,6 +822,7 @@ variable label was str1 now str5
 
        F(  1,  5219) =   11.31
             Prob > F =    0.0008
+variable label was str12 now str13
 (1 real change made)
 (file output/figure/manufacturing_lnL_slope.png written in PNG format)
 
@@ -1148,7 +1151,7 @@ number of observations (_N) was 0, now 8
 (1 real change made)
 (1 real change made)
 (1 real change made)
-variable label was str1 now str5
+variable label was str1 now str12
 (1 real change made)
 
  ( 1)  during = 0
@@ -1181,7 +1184,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  during_expat = 0
 
@@ -1196,7 +1199,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  - during_expat + after_expat = 0
 
@@ -1545,7 +1548,7 @@ end of do-file
 >         to(1 _b[during_DD] 1 _b[during_DE] 2 _b[during_ED]+_b[during_DE] 2 _b[du
 > ring_EE]+_b[during_DE]) ///
 >         style(p1 p2 p1 p2) ///
->         label(local-local local-expat expat-local expat-expat) ///
+>         label(Local-Local Local-Expat Expat-Local Expat-Expat) ///
 >         width_test(during_DD during_DE during_ED during_EE) ///
 >         star_test(1==1 during_DE==during_DD 1==1 during_EE==during_ED) ///
 >         format(scheme(538w) xlabel(none) xtitle("") ytitle(`title') legend(off) 
@@ -3222,7 +3225,7 @@ number of observations (_N) was 0, now 8
 (1 real change made)
 (1 real change made)
 (1 real change made)
-variable label was str1 now str5
+variable label was str1 now str12
 (1 real change made)
 
  ( 1)  during = 0
@@ -3255,7 +3258,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  during_expat = 0
 
@@ -3266,12 +3269,13 @@ variable label was str1 now str5
 
        F(  1, 13691) =  103.01
             Prob > F =    0.0000
+variable label was str12 now str14
 (1 real change made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  - during_expat + after_expat = 0
 
@@ -3560,7 +3564,7 @@ number of observations (_N) was 0, now 8
 (1 real change made)
 (1 real change made)
 (1 real change made)
-variable label was str1 now str5
+variable label was str1 now str12
 (1 real change made)
 
  ( 1)  during = 0
@@ -3593,7 +3597,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  during_expat = 0
 
@@ -3604,12 +3608,13 @@ variable label was str1 now str5
 
        F(  1,  5069) =   24.76
             Prob > F =    0.0000
+variable label was str12 now str14
 (1 real change made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  - during_expat + after_expat = 0
 
@@ -3948,7 +3953,7 @@ number of observations (_N) was 0, now 8
 (1 real change made)
 (1 real change made)
 (1 real change made)
-variable label was str1 now str5
+variable label was str1 now str12
 (1 real change made)
 
  ( 1)  during = 0
@@ -3981,7 +3986,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  during_expat = 0
 
@@ -3996,7 +4001,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  - during_expat + after_expat = 0
 
@@ -4007,6 +4012,7 @@ variable label was str1 now str5
 
        F(  1, 10541) =    5.37
             Prob > F =    0.0206
+variable label was str12 now str13
 (1 real change made)
 (file output/figure/acquisitions_lnKL_slope.png written in PNG format)
 
@@ -4346,7 +4352,7 @@ end of do-file
 >         to(1 _b[during_DD] 1 _b[during_DE] 2 _b[during_ED]+_b[during_DE] 2 _b[du
 > ring_EE]+_b[during_DE]) ///
 >         style(p1 p2 p1 p2) ///
->         label(local-local local-expat expat-local expat-expat) ///
+>         label(Local-Local Local-Expat Expat-Local Expat-Expat) ///
 >         width_test(during_DD during_DE during_ED during_EE) ///
 >         star_test(1==1 during_DE==during_DD 1==1 during_EE==during_ED) ///
 >         format(scheme(538w) xlabel(none) xtitle("") ytitle(`title') legend(off) 
@@ -6023,7 +6029,7 @@ number of observations (_N) was 0, now 8
 (1 real change made)
 (1 real change made)
 (1 real change made)
-variable label was str1 now str5
+variable label was str1 now str12
 (1 real change made)
 
  ( 1)  during = 0
@@ -6056,7 +6062,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  during_expat = 0
 
@@ -6067,12 +6073,13 @@ variable label was str1 now str5
 
        F(  1, 14145) =   13.79
             Prob > F =    0.0002
+variable label was str12 now str14
 (1 real change made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  - during_expat + after_expat = 0
 
@@ -6361,7 +6368,7 @@ number of observations (_N) was 0, now 8
 (1 real change made)
 (1 real change made)
 (1 real change made)
-variable label was str1 now str5
+variable label was str1 now str12
 (1 real change made)
 
  ( 1)  during = 0
@@ -6394,7 +6401,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  during_expat = 0
 
@@ -6405,12 +6412,13 @@ variable label was str1 now str5
 
        F(  1,  5219) =   40.59
             Prob > F =    0.0000
+variable label was str12 now str14
 (1 real change made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  - during_expat + after_expat = 0
 
@@ -6749,7 +6757,7 @@ number of observations (_N) was 0, now 8
 (1 real change made)
 (1 real change made)
 (1 real change made)
-variable label was str1 now str5
+variable label was str1 now str12
 (1 real change made)
 
  ( 1)  during = 0
@@ -6782,7 +6790,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  during_expat = 0
 
@@ -6793,12 +6801,13 @@ variable label was str1 now str5
 
        F(  1, 10918) =   13.41
             Prob > F =    0.0003
+variable label was str12 now str14
 (1 real change made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  - during_expat + after_expat = 0
 
@@ -7148,7 +7157,7 @@ end of do-file
 >         to(1 _b[during_DD] 1 _b[during_DE] 2 _b[during_ED]+_b[during_DE] 2 _b[du
 > ring_EE]+_b[during_DE]) ///
 >         style(p1 p2 p1 p2) ///
->         label(local-local local-expat expat-local expat-expat) ///
+>         label(Local-Local Local-Expat Expat-Local Expat-Expat) ///
 >         width_test(during_DD during_DE during_ED during_EE) ///
 >         star_test(1==1 during_DE==during_DD 1==1 during_EE==during_ED) ///
 >         format(scheme(538w) xlabel(none) xtitle("") ytitle(`title') legend(off) 
@@ -8828,7 +8837,7 @@ number of observations (_N) was 0, now 8
 (1 real change made)
 (1 real change made)
 (1 real change made)
-variable label was str1 now str5
+variable label was str1 now str12
 (1 real change made)
 
  ( 1)  during = 0
@@ -8861,7 +8870,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  during_expat = 0
 
@@ -8876,7 +8885,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  - during_expat + after_expat = 0
 
@@ -9164,7 +9173,7 @@ number of observations (_N) was 0, now 8
 (1 real change made)
 (1 real change made)
 (1 real change made)
-variable label was str1 now str5
+variable label was str1 now str12
 (1 real change made)
 
  ( 1)  during = 0
@@ -9197,7 +9206,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  during_expat = 0
 
@@ -9212,7 +9221,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  - during_expat + after_expat = 0
 
@@ -9223,6 +9232,7 @@ variable label was str1 now str5
 
        F(  1,  5219) =    6.97
             Prob > F =    0.0083
+variable label was str12 now str13
 (1 real change made)
 (file output/figure/manufacturing_exporter_slope.png written in PNG format)
 
@@ -9551,7 +9561,7 @@ number of observations (_N) was 0, now 8
 (1 real change made)
 (1 real change made)
 (1 real change made)
-variable label was str1 now str5
+variable label was str1 now str12
 (1 real change made)
 
  ( 1)  during = 0
@@ -9584,7 +9594,7 @@ variable label was str1 now str5
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  during_expat = 0
 
@@ -9595,12 +9605,13 @@ variable label was str1 now str5
 
        F(  1, 10918) =    5.92
             Prob > F =    0.0150
+variable label was str12 now str14
 (1 real change made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
-(0 real changes made)
+(1 real change made)
 
  ( 1)  - during_expat + after_expat = 0
 
@@ -9950,7 +9961,7 @@ end of do-file
 >         to(1 _b[during_DD] 1 _b[during_DE] 2 _b[during_ED]+_b[during_DE] 2 _b[du
 > ring_EE]+_b[during_DE]) ///
 >         style(p1 p2 p1 p2) ///
->         label(local-local local-expat expat-local expat-expat) ///
+>         label(Local-Local Local-Expat Expat-Local Expat-Expat) ///
 >         width_test(during_DD during_DE during_ED during_EE) ///
 >         star_test(1==1 during_DE==during_DD 1==1 during_EE==during_ED) ///
 >         format(scheme(538w) xlabel(none) xtitle("") ytitle(`title') legend(off) 
@@ -11510,14 +11521,6 @@ end of do-file
 
         +---------------------------------------------------------------+
   2371. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        |         PP45376 |     0 | 2006 |       -5 |     -7 |       -7 |
-        |---------------------------------------------------------------|
-        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |         0  |         0  |         0  |         0  |
-        +---------------------------------------------------------------+
-
-        +---------------------------------------------------------------+
-  2372. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         | PP177715_998327 |     0 | 2006 |       -5 |     -6 |       -6 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
@@ -11525,8 +11528,16 @@ end of do-file
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
-  2373. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+  2372. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         |         PP71420 |     0 | 2006 |       -5 |      0 |        0 |
+        |---------------------------------------------------------------|
+        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
+        |        0  |         0  |         0  |         0  |         0  |
+        +---------------------------------------------------------------+
+
+        +---------------------------------------------------------------+
+  2373. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+        |         PP45376 |     0 | 2006 |       -5 |     -7 |       -7 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
         |        0  |         0  |         0  |         0  |         0  |
@@ -11542,14 +11553,6 @@ end of do-file
 
         +---------------------------------------------------------------+
   2375. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        |         PP45376 |     0 | 2007 |       -4 |     -6 |       -6 |
-        |---------------------------------------------------------------|
-        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |         0  |         0  |         0  |         0  |
-        +---------------------------------------------------------------+
-
-        +---------------------------------------------------------------+
-  2376. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         |         PP71420 |     0 | 2007 |       -4 |      1 |        1 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
@@ -11557,15 +11560,7 @@ end of do-file
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
-  2377. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        |         PP18562 |     0 | 2007 |       -4 |     -6 |       -6 |
-        |---------------------------------------------------------------|
-        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |        -6  |         0  |         0  |         0  |
-        +---------------------------------------------------------------+
-
-        +---------------------------------------------------------------+
-  2378. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+  2376. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         | PP177715_998327 |     0 | 2007 |       -4 |     -5 |       -5 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
@@ -11573,19 +11568,35 @@ end of do-file
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
-  2379. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        | PP177715_998327 |     0 | 2008 |       -3 |     -4 |       -4 |
+  2377. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+        |         PP45376 |     0 | 2007 |       -4 |     -6 |       -6 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |        -4  |         0  |         0  |         0  |
+        |        0  |         0  |         0  |         0  |         0  |
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
-  2380. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+  2378. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+        |         PP18562 |     0 | 2007 |       -4 |     -6 |       -6 |
+        |---------------------------------------------------------------|
+        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
+        |        0  |        -6  |         0  |         0  |         0  |
+        +---------------------------------------------------------------+
+
+        +---------------------------------------------------------------+
+  2379. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         |         PP45376 |     0 | 2008 |       -3 |     -5 |       -5 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
         |        0  |         0  |         0  |         0  |         0  |
+        +---------------------------------------------------------------+
+
+        +---------------------------------------------------------------+
+  2380. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+        |         PP18562 |     0 | 2008 |       -3 |     -5 |       -5 |
+        |---------------------------------------------------------------|
+        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
+        |        0  |        -5  |         0  |         0  |         0  |
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
@@ -11598,18 +11609,18 @@ end of do-file
 
         +---------------------------------------------------------------+
   2382. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        |         PP18562 |     0 | 2008 |       -3 |     -5 |       -5 |
+        | PP177715_998327 |     0 | 2008 |       -3 |     -4 |       -4 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |        -5  |         0  |         0  |         0  |
+        |        0  |        -4  |         0  |         0  |         0  |
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
   2383. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        | PP177715_998327 |     0 | 2009 |       -2 |     -3 |       -3 |
+        |         PP45376 |     0 | 2009 |       -2 |     -4 |       -4 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |        -3  |         0  |         0  |         0  |
+        |        0  |         0  |         0  |         0  |         0  |
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
@@ -11630,30 +11641,14 @@ end of do-file
 
         +---------------------------------------------------------------+
   2386. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        |         PP45376 |     0 | 2009 |       -2 |     -4 |       -4 |
-        |---------------------------------------------------------------|
-        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |         0  |         0  |         0  |         0  |
-        +---------------------------------------------------------------+
-
-        +---------------------------------------------------------------+
-  2387. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        |         PP18562 |     0 | 2010 |       -1 |     -3 |       -3 |
+        | PP177715_998327 |     0 | 2009 |       -2 |     -3 |       -3 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
         |        0  |        -3  |         0  |         0  |         0  |
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
-  2388. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        |         PP45376 |     0 | 2010 |       -1 |     -3 |       -3 |
-        |---------------------------------------------------------------|
-        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |         0  |         0  |         0  |         0  |
-        +---------------------------------------------------------------+
-
-        +---------------------------------------------------------------+
-  2389. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+  2387. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         | PP177715_998327 |     0 | 2010 |       -1 |     -2 |       -2 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
@@ -11661,7 +11656,15 @@ end of do-file
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
-  2390. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+  2388. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+        |         PP18562 |     0 | 2010 |       -1 |     -3 |       -3 |
+        |---------------------------------------------------------------|
+        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
+        |        0  |        -3  |         0  |         0  |         0  |
+        +---------------------------------------------------------------+
+
+        +---------------------------------------------------------------+
+  2389. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         |         PP71420 |     0 | 2010 |       -1 |      4 |        4 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
@@ -11669,11 +11672,19 @@ end of do-file
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
-  2391. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        | PP177715_998327 |     0 | 2011 |        0 |     -1 |       -1 |
+  2390. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+        |         PP45376 |     0 | 2010 |       -1 |     -3 |       -3 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |        -1  |         0  |         0  |         0  |
+        |        0  |         0  |         0  |         0  |         0  |
+        +---------------------------------------------------------------+
+
+        +---------------------------------------------------------------+
+  2391. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+        |         PP71420 |     0 | 2011 |        0 |      5 |        5 |
+        |---------------------------------------------------------------|
+        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
+        |        0  |         5  |         0  |         0  |         0  |
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
@@ -11686,10 +11697,10 @@ end of do-file
 
         +---------------------------------------------------------------+
   2393. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        |         PP71420 |     0 | 2011 |        0 |      5 |        5 |
+        | PP177715_998327 |     0 | 2011 |        0 |     -1 |       -1 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |         5  |         0  |         0  |         0  |
+        |        0  |        -1  |         0  |         0  |         0  |
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
@@ -11702,10 +11713,10 @@ end of do-file
 
         +---------------------------------------------------------------+
   2395. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        |         PP71420 |     0 | 2012 |        1 |      6 |        6 |
+        |         PP18562 |     0 | 2012 |        1 |     -1 |       -1 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |         6  |         0  |         0  |         0  |
+        |        0  |        -1  |         0  |         0  |         0  |
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
@@ -11718,6 +11729,14 @@ end of do-file
 
         +---------------------------------------------------------------+
   2397. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+        |         PP71420 |     0 | 2012 |        1 |      6 |        6 |
+        |---------------------------------------------------------------|
+        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
+        |        0  |         6  |         0  |         0  |         0  |
+        +---------------------------------------------------------------+
+
+        +---------------------------------------------------------------+
+  2398. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         |         PP45376 |     0 | 2012 |        1 |     -1 |       -1 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
@@ -11725,23 +11744,7 @@ end of do-file
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
-  2398. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        |         PP18562 |     0 | 2012 |        1 |     -1 |       -1 |
-        |---------------------------------------------------------------|
-        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |        -1  |         0  |         0  |         0  |
-        +---------------------------------------------------------------+
-
-        +---------------------------------------------------------------+
   2399. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        |         PP18562 |     0 | 2013 |        2 |      0 |        0 |
-        |---------------------------------------------------------------|
-        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |         0  |         0  |         0  |         0  |
-        +---------------------------------------------------------------+
-
-        +---------------------------------------------------------------+
-  2400. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         | PP177715_998327 |     0 | 2013 |        2 |      1 |        1 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
@@ -11749,7 +11752,7 @@ end of do-file
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
-  2401. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+  2400. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         |         PP71420 |     0 | 2013 |        2 |      7 |        7 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
@@ -11757,7 +11760,7 @@ end of do-file
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
-  2402. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+  2401. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         |         PP45376 |     0 | 2013 |        2 |      0 |        0 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
@@ -11765,7 +11768,23 @@ end of do-file
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
+  2402. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+        |         PP18562 |     0 | 2013 |        2 |      0 |        0 |
+        |---------------------------------------------------------------|
+        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
+        |        0  |         0  |         0  |         0  |         0  |
+        +---------------------------------------------------------------+
+
+        +---------------------------------------------------------------+
   2403. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+        | PP177715_998327 |     0 | 2014 |        3 |      2 |        2 |
+        |---------------------------------------------------------------|
+        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
+        |        0  |         2  |         0  |         0  |         0  |
+        +---------------------------------------------------------------+
+
+        +---------------------------------------------------------------+
+  2404. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         |         PP18562 |     0 | 2014 |        3 |      1 |        1 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
@@ -11773,19 +11792,11 @@ end of do-file
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
-  2404. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+  2405. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         |         PP45376 |     0 | 2014 |        3 |      1 |        1 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
         |        0  |         0  |         0  |         0  |         0  |
-        +---------------------------------------------------------------+
-
-        +---------------------------------------------------------------+
-  2405. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        | PP177715_998327 |     0 | 2014 |        3 |      2 |        2 |
-        |---------------------------------------------------------------|
-        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |         2  |         0  |         0  |         0  |
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
@@ -11798,22 +11809,6 @@ end of do-file
 
         +---------------------------------------------------------------+
   2407. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        |         PP71420 |     0 | 2015 |        4 |      9 |        9 |
-        |---------------------------------------------------------------|
-        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |         9  |         0  |         0  |         0  |
-        +---------------------------------------------------------------+
-
-        +---------------------------------------------------------------+
-  2408. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        | PP177715_998327 |     0 | 2015 |        4 |      3 |        3 |
-        |---------------------------------------------------------------|
-        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |         3  |         0  |         0  |         0  |
-        +---------------------------------------------------------------+
-
-        +---------------------------------------------------------------+
-  2409. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         |         PP45376 |     0 | 2015 |        4 |      2 |        2 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
@@ -11821,7 +11816,15 @@ end of do-file
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
-  2410. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+  2408. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+        |         PP71420 |     0 | 2015 |        4 |      9 |        9 |
+        |---------------------------------------------------------------|
+        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
+        |        0  |         9  |         0  |         0  |         0  |
+        +---------------------------------------------------------------+
+
+        +---------------------------------------------------------------+
+  2409. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         |         PP18562 |     0 | 2015 |        4 |      2 |        2 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
@@ -11829,15 +11832,15 @@ end of do-file
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
-  2411. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        |         PP71420 |     0 | 2016 |        5 |     10 |       10 |
+  2410. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+        | PP177715_998327 |     0 | 2015 |        4 |      3 |        3 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |        10  |         0  |         0  |         0  |
+        |        0  |         3  |         0  |         0  |         0  |
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
-  2412. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+  2411. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         |         PP18562 |     0 | 2016 |        5 |      3 |        3 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
@@ -11845,19 +11848,27 @@ end of do-file
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
-  2413. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
-        | PP177715_998327 |     0 | 2016 |        5 |      4 |        4 |
+  2412. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+        |         PP71420 |     0 | 2016 |        5 |     10 |       10 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
-        |        0  |         4  |         0  |         0  |         0  |
+        |        0  |        10  |         0  |         0  |         0  |
         +---------------------------------------------------------------+
 
         +---------------------------------------------------------------+
-  2414. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+  2413. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
         |         PP45376 |     0 | 2016 |        5 |      3 |        3 |
         |---------------------------------------------------------------|
         | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
         |        0  |         0  |         0  |         0  |         0  |
+        +---------------------------------------------------------------+
+
+        +---------------------------------------------------------------+
+  2414. |      manager_id | expat | year | tenure~n | tenure | tenure~c |
+        | PP177715_998327 |     0 | 2016 |        5 |      4 |        4 |
+        |---------------------------------------------------------------|
+        | tenure~t  |  tenur~DD  |  tenur~DE  |  tenur~ED  |  tenur~EE  |
+        |        0  |         4  |         0  |         0  |         0  |
         +---------------------------------------------------------------+
 
 . 
@@ -11877,9 +11888,8 @@ end of do-file
 . foreach Y of var $outcomes {
   2.         * with firm FE, controls are years more than Tbefore before any event
 >  happens
-.         xtreg `Y' *_m_* *_p_* post post_expat after after_expat i.ind_year i.age
-> _cat if $sample_acquisitions [aw=inverse_weight], i(firm_person) fe vce(cluster 
-> id)
+.         xtreg `Y' *_m_* *_p_* i.ind_year i.age_cat if $sample_acquisitions & ten
+> ure<=Tduring [aw=inverse_weight], i(firm_person) fe vce(cluster id)
   3.         local title : variable label `e(depvar)'
   4. 
 .         preserve
@@ -11923,142 +11933,139 @@ end of do-file
 .         restore
  36. 
 . }
+note: 50.ind_year omitted because of collinearity
 
-Fixed-effects (within) regression               Number of obs      =     48273
+Fixed-effects (within) regression               Number of obs      =     42713
 Group variable: firm_person                     Number of groups   =      5193
 
-R-sq:  within  = 0.1135                         Obs per group: min =         1
-       between = 0.1061                                        avg =       9.3
-       overall = 0.1105                                        max =        25
+R-sq:  within  = 0.1094                         Obs per group: min =         1
+       between = 0.1068                                        avg =       8.2
+       overall = 0.1148                                        max =        12
 
-                                                F(110,1292)        =      3.45
-corr(u_i, Xb)  = -0.1646                        Prob > F           =    0.0000
+                                                F(105,1292)        =      3.51
+corr(u_i, Xb)  = -0.1713                        Prob > F           =    0.0000
 
                                  (Std. Err. adjusted for 1,293 clusters in id)
 ------------------------------------------------------------------------------
              |               Robust
          lnL |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-domestic_m_1 |  -.1221027   .0307357    -3.97   0.000       -.1824   -.0618053
-domestic_m_2 |  -.0851371   .0297404    -2.86   0.004    -.1434818   -.0267923
-domestic_m_3 |  -.0445475   .0260722    -1.71   0.088    -.0956959    .0066009
-domestic_m_4 |   .0086951   .0224791     0.39   0.699    -.0354044    .0527946
-   expat_m_1 |   -.008124   .0469481    -0.17   0.863    -.1002269    .0839789
-   expat_m_2 |  -.0057391   .0419431    -0.14   0.891    -.0880231    .0765449
-   expat_m_3 |  -.0058604   .0370647    -0.16   0.874     -.078574    .0668533
-   expat_m_4 |  -.0113389   .0326863    -0.35   0.729    -.0754629    .0527852
- foreign_m_1 |  -.0581412   .0476263    -1.22   0.222    -.1515746    .0352923
- foreign_m_2 |  -.0492858    .050487    -0.98   0.329    -.1483314    .0497597
- foreign_m_3 |   -.058897   .0474983    -1.24   0.215    -.1520792    .0342852
- foreign_m_4 |  -.0383584   .0465537    -0.82   0.410    -.1296876    .0529708
-domestic_p_0 |  -.1567857   .0359549    -4.36   0.000    -.2273221   -.0862494
-domestic_p_1 |  -.1587551   .0369887    -4.29   0.000    -.2313196   -.0861905
-domestic_p_2 |  -.1705723   .0374831    -4.55   0.000    -.2441066    -.097038
-domestic_p_3 |  -.1606054   .0385548    -4.17   0.000    -.2362422   -.0849685
-domestic_p_4 |  -.1653247   .0413125    -4.00   0.000    -.2463717   -.0842778
-domestic_p_5 |  -.1436962     .04465    -3.22   0.001    -.2312907   -.0561017
-domestic_p_6 |  -.0857888   .0435068    -1.97   0.049    -.1711406   -.0004371
-   expat_p_0 |  -.1034009   .0571406    -1.81   0.071    -.2154994    .0086976
-   expat_p_1 |  -.0927641   .0537715    -1.73   0.085    -.1982532    .0127249
-   expat_p_2 |  -.1180888   .0557071    -2.12   0.034    -.2273751   -.0088025
-   expat_p_3 |  -.1446166    .058276    -2.48   0.013    -.2589426   -.0302905
-   expat_p_4 |  -.1174866   .0562513    -2.09   0.037    -.2278404   -.0071327
-   expat_p_5 |  -.0970884    .061339    -1.58   0.114    -.2174234    .0232466
-   expat_p_6 |  -.1097647   .0586357    -1.87   0.061    -.2247963    .0052669
- foreign_p_0 |   -.035256   .0490375    -0.72   0.472    -.1314579    .0609459
- foreign_p_1 |  -.0289927   .0481917    -0.60   0.548    -.1235353    .0655499
- foreign_p_2 |  -.0328533   .0468912    -0.70   0.484    -.1248445     .059138
- foreign_p_3 |  -.0249991   .0451552    -0.55   0.580    -.1135846    .0635865
- foreign_p_4 |  -.0630857   .0446899    -1.41   0.158    -.1507584     .024587
- foreign_p_5 |  -.0280784    .042084    -0.67   0.505    -.1106388    .0544821
- foreign_p_6 |  -.0179685   .0367177    -0.49   0.625    -.0900013    .0540643
-        post |  -.0007187   .0526093    -0.01   0.989    -.1039278    .1024905
-  post_expat |  -.1544357   .1265558    -1.22   0.223     -.402713    .0938416
-       after |  -.2136762   .0369167    -5.79   0.000    -.2860995    -.141253
- after_expat |   .0932687    .050907     1.83   0.067    -.0066008    .1931382
+domestic_m_1 |  -.1979361   .0705267    -2.81   0.005    -.3362954   -.0595767
+domestic_m_2 |  -.1421114   .0562086    -2.53   0.012    -.2523816   -.0318412
+domestic_m_3 |  -.0895397   .0416753    -2.15   0.032    -.1712984    -.007781
+domestic_m_4 |  -.0225316   .0258332    -0.87   0.383    -.0732111     .028148
+   expat_m_1 |  -.0764852   .0792948    -0.96   0.335    -.2320459    .0790756
+   expat_m_2 |   -.056455   .0626915    -0.90   0.368    -.1794432    .0665333
+   expat_m_3 |  -.0405193   .0479148    -0.85   0.398    -.1345187    .0534801
+   expat_m_4 |  -.0280402   .0323876    -0.87   0.387    -.0915782    .0354978
+ foreign_m_1 |  -.0761131   .0494667    -1.54   0.124    -.1731569    .0209307
+ foreign_m_2 |  -.0706057   .0518696    -1.36   0.174    -.1723635    .0311521
+ foreign_m_3 |  -.0911208   .0487505    -1.87   0.062    -.1867597    .0045181
+ foreign_m_4 |  -.0666538   .0452221    -1.47   0.141    -.1553706    .0220631
+domestic_p_0 |  -.2551264   .0857343    -2.98   0.003      -.42332   -.0869328
+domestic_p_1 |   -.310725   .1013557    -3.07   0.002    -.5095648   -.1118853
+domestic_p_2 |  -.3605422   .1159141    -3.11   0.002    -.5879427   -.1331417
+domestic_p_3 |  -.3803711   .1318908    -2.88   0.004    -.6391146   -.1216276
+domestic_p_4 |  -.4115916   .1480602    -2.78   0.006    -.7020563   -.1211268
+domestic_p_5 |  -.4110692    .162642    -2.53   0.012    -.7301406   -.0919979
+domestic_p_6 |  -.3649116   .1799566    -2.03   0.043    -.7179509   -.0118723
+   expat_p_0 |  -.1922804   .0979654    -1.96   0.050    -.3844691   -.0000916
+   expat_p_1 |  -.2234062   .1102137    -2.03   0.043    -.4396237   -.0071887
+   expat_p_2 |  -.2812368   .1257848    -2.24   0.026    -.5280016    -.034472
+   expat_p_3 |  -.3385931   .1408524    -2.40   0.016    -.6149175   -.0622687
+   expat_p_4 |  -.3351129   .1542644    -2.17   0.030    -.6377491   -.0324767
+   expat_p_5 |  -.3345747    .170265    -1.97   0.050    -.6686008   -.0005486
+   expat_p_6 |  -.3693872   .1842311    -2.01   0.045     -.730812   -.0079624
+ foreign_p_0 |  -.0460462   .0517599    -0.89   0.374    -.1475889    .0554966
+ foreign_p_1 |  -.0349218    .050991    -0.68   0.494    -.1349561    .0651124
+ foreign_p_2 |  -.0333337   .0491149    -0.68   0.497    -.1296873    .0630199
+ foreign_p_3 |  -.0261075   .0451289    -0.58   0.563    -.1146415    .0624265
+ foreign_p_4 |  -.0646414   .0434774    -1.49   0.137    -.1499354    .0206526
+ foreign_p_5 |  -.0203108   .0418155    -0.49   0.627    -.1023445    .0617228
+ foreign_p_6 |  -.0111663   .0352795    -0.32   0.752    -.0803776    .0580451
              |
     ind_year |
-          2  |  -.1101357   .0855332    -1.29   0.198     -.277935    .0576635
-          3  |  -.2691808   .1089564    -2.47   0.014    -.4829317   -.0554299
-          4  |  -.3809386    .118256    -3.22   0.001    -.6129334   -.1489437
-          5  |  -.4761913   .1275434    -3.73   0.000    -.7264062   -.2259764
-          6  |  -.5759889   .1413216    -4.08   0.000    -.8532338    -.298744
-          7  |  -.6795248   .1525068    -4.46   0.000    -.9787129   -.3803367
-          8  |  -.6578434   .1634148    -4.03   0.000    -.9784308   -.3372559
-          9  |  -.7132422   .1731871    -4.12   0.000    -1.053001   -.3734834
-         10  |  -.7469275   .1827563    -4.09   0.000    -1.105459   -.3883958
-         11  |  -.8426235   .1928772    -4.37   0.000     -1.22101   -.4642367
-         12  |  -.8656382   .2032513    -4.26   0.000    -1.264377   -.4668994
-         13  |  -.9214425   .2158131    -4.27   0.000    -1.344825   -.4980599
-         14  |  -.9597383   .2271488    -4.23   0.000    -1.405359   -.5141173
-         15  |  -.9732607   .2358804    -4.13   0.000    -1.436011   -.5105101
-         16  |  -.9277011   .2436032    -3.81   0.000    -1.405602      -.4498
-         17  |  -.9669277   .2538201    -3.81   0.000    -1.464872    -.468983
-         18  |  -1.046128   .2644416    -3.96   0.000     -1.56491   -.5273459
-         19  |  -1.049972   .2725523    -3.85   0.000    -1.584666   -.5152783
-         20  |  -1.061083   .2796638    -3.79   0.000    -1.609728   -.5124383
-         21  |  -1.143959   .2880722    -3.97   0.000      -1.7091   -.5788186
-         22  |  -1.196445   .2936823    -4.07   0.000    -1.772591   -.6202987
-         23  |  -1.224974    .300597    -4.08   0.000    -1.814686   -.6352624
-         24  |  -1.221237   .3091562    -3.95   0.000     -1.82774   -.6147338
-         25  |  -1.234745   .3198052    -3.86   0.000    -1.862139   -.6073505
-         26  |   1.463592   .2099102     6.97   0.000      1.05179    1.875394
-         27  |   1.249768   .1976011     6.32   0.000     .8621136    1.637422
-         28  |   1.060613    .195917     5.41   0.000     .6762628    1.444964
-         29  |   .8639005   .1921349     4.50   0.000     .4869699    1.240831
-         30  |   .7283927   .1990163     3.66   0.000     .3379623    1.118823
-         31  |     .61385    .204221     3.01   0.003     .2132089    1.014491
-         32  |   .5065998   .2095375     2.42   0.016     .0955287    .9176709
-         33  |   .4140628   .2151834     1.92   0.055    -.0080844    .8362101
-         34  |   .3620957   .2222157     1.63   0.103    -.0738474    .7980388
-         35  |   .2616109   .2312907     1.13   0.258    -.1921357    .7153575
-         36  |   .1981001   .2355241     0.84   0.400    -.2639515    .6601517
-         37  |   .0767228   .2416673     0.32   0.751    -.3973805    .5508262
-         38  |  -.0140556   .2456667    -0.06   0.954    -.4960049    .4678938
-         39  |  -.1079528   .2556428    -0.42   0.673    -.6094733    .3935676
-         40  |  -.1114859   .2614746    -0.43   0.670    -.6244473    .4014755
-         41  |  -.1781811   .2689785    -0.66   0.508    -.7058637    .3495014
-         42  |  -.2613195   .2805181    -0.93   0.352    -.8116403    .2890013
-         43  |  -.3237672   .2895034    -1.12   0.264    -.8917155    .2441811
-         44  |  -.4014525   .3013361    -1.33   0.183    -.9926141    .1897092
-         45  |   -.473017   .3097206    -1.53   0.127    -1.080627    .1345934
-         46  |  -.4062309   .3182725    -1.28   0.202    -1.030618    .2181566
-         47  |  -.3553805   .3235103    -1.10   0.272    -.9900436    .2792827
-         48  |  -.3155496   .3277663    -0.96   0.336    -.9585622     .327463
-         49  |  -.3355218   .3358205    -1.00   0.318     -.994335    .3232913
-         50  |  -.3294052   .3418609    -0.96   0.335    -1.000069    .3412582
+          2  |  -.0687953   .0778327    -0.88   0.377    -.2214877    .0838971
+          3  |   -.232511    .098085    -2.37   0.018    -.4249343   -.0400877
+          4  |  -.3200085   .1021051    -3.13   0.002    -.5203185   -.1196985
+          5  |  -.4130543     .10652    -3.88   0.000    -.6220254   -.2040831
+          6  |  -.4907064    .111985    -4.38   0.000    -.7103988    -.271014
+          7  |  -.5644309    .114689    -4.92   0.000    -.7894279   -.3394339
+          8  |  -.5394949     .11642    -4.63   0.000    -.7678879   -.3111018
+          9  |  -.5880832   .1185353    -4.96   0.000     -.820626   -.3555403
+         10  |  -.6075953   .1188471    -5.11   0.000    -.8407499   -.3744408
+         11  |  -.6968617   .1215156    -5.73   0.000    -.9352512   -.4584722
+         12  |  -.7142622   .1257863    -5.68   0.000    -.9610301   -.4674944
+         13  |  -.7626977   .1322357    -5.77   0.000    -1.022118   -.5032775
+         14  |  -.7944288   .1384431    -5.74   0.000    -1.066027   -.5228309
+         15  |  -.8146851   .1413752    -5.76   0.000    -1.092035   -.5373349
+         16  |  -.7715775   .1428542    -5.40   0.000    -1.051829   -.4913259
+         17  |  -.7997125   .1445954    -5.53   0.000     -1.08338   -.5160449
+         18  |  -.8659995   .1473657    -5.88   0.000    -1.155102   -.5768972
+         19  |  -.8419534   .1495826    -5.63   0.000    -1.135405    -.548502
+         20  |  -.8399283   .1561655    -5.38   0.000    -1.146294   -.5335624
+         21  |  -.9101487   .1659788    -5.48   0.000    -1.235766   -.5845312
+         22  |  -.9692186   .1705152    -5.68   0.000    -1.303736   -.6347016
+         23  |  -.9837542   .1762969    -5.58   0.000    -1.329614   -.6378947
+         24  |  -.9477237   .1834813    -5.17   0.000    -1.307678   -.5877697
+         25  |   -.947001   .1925577    -4.92   0.000    -1.324761   -.5692409
+         26  |   1.510476   .2178044     6.94   0.000     1.083187    1.937765
+         27  |   1.301697   .1991753     6.54   0.000     .9109544    1.692439
+         28  |    1.11505    .190518     5.85   0.000      .741291    1.488808
+         29  |   .9106524   .1760643     5.17   0.000     .5652492    1.256056
+         30  |   .7663726   .1708134     4.49   0.000     .4312705    1.101475
+         31  |   .6759399   .1649334     4.10   0.000     .3523734    .9995065
+         32  |   .5737814   .1599269     3.59   0.000     .2600366    .8875263
+         33  |   .4908927   .1534486     3.20   0.001     .1898569    .7919285
+         34  |   .4571119   .1528443     2.99   0.003     .1572617     .756962
+         35  |   .3726519   .1503153     2.48   0.013     .0777631    .6675407
+         36  |   .3121478   .1420882     2.20   0.028     .0333989    .5908967
+         37  |   .2037019   .1362751     1.49   0.135    -.0636428    .4710465
+         38  |   .1310752   .1273597     1.03   0.304    -.1187793    .3809296
+         39  |   .0678601   .1247846     0.54   0.587    -.1769425    .3126628
+         40  |   .0862681   .1187331     0.73   0.468    -.1466627    .3191989
+         41  |   .0178173   .1088711     0.16   0.870    -.1957663    .2314009
+         42  |  -.0309394   .1077341    -0.29   0.774    -.2422924    .1804136
+         43  |   -.107029   .1009538    -1.06   0.289    -.3050803    .0910222
+         44  |  -.1466027   .0931597    -1.57   0.116    -.3293635    .0361581
+         45  |  -.2277024   .0906688    -2.51   0.012    -.4055767   -.0498281
+         46  |  -.1389106   .0823082    -1.69   0.092     -.300383    .0225618
+         47  |  -.0659751   .0692477    -0.95   0.341    -.2018254    .0698752
+         48  |  -.0329181   .0658972    -0.50   0.617    -.1621953     .096359
+         49  |  -.0544951    .049035    -1.11   0.267    -.1506921    .0417019
+         50  |          0  (omitted)
              |
      age_cat |
-          1  |   .4966883   .1013365     4.90   0.000     .2978861    .6954905
-          2  |   .8460432   .1163171     7.27   0.000     .6178522    1.074234
-          3  |   1.073794   .1270475     8.45   0.000     .8245518    1.323036
-          4  |   1.315617   .1367461     9.62   0.000     1.047348    1.583885
-          5  |   1.486851   .1501089     9.91   0.000     1.192367    1.781335
-          6  |   1.626015   .1567621    10.37   0.000     1.318479    1.933551
-          7  |   1.749161   .1667787    10.49   0.000     1.421974    2.076348
-          8  |   1.835792   .1777233    10.33   0.000     1.487134     2.18445
-          9  |   1.884838   .1881728    10.02   0.000     1.515681    2.253996
-         10  |   1.966216   .1967489     9.99   0.000     1.580234    2.352199
-         11  |    2.05754   .2071684     9.93   0.000     1.651116    2.463963
-         12  |   2.109204   .2149375     9.81   0.000     1.687539    2.530869
-         13  |   2.170465   .2241904     9.68   0.000     1.730648    2.610282
-         14  |   2.197987   .2333991     9.42   0.000     1.740105     2.65587
-         15  |   2.219571    .243111     9.13   0.000     1.742635    2.696506
-         16  |   2.197432   .2529069     8.69   0.000     1.701278    2.693585
-         17  |   2.257183   .2632724     8.57   0.000     1.740695    2.773671
-         18  |    2.26952    .273972     8.28   0.000     1.732042    2.806999
-         19  |   2.293758   .2850656     8.05   0.000     1.734516       2.853
-         20  |   2.314341   .2981472     7.76   0.000     1.729435    2.899246
-         25  |   2.331216   .3251726     7.17   0.000     1.693292     2.96914
-         30  |    2.26137   .4261669     5.31   0.000     1.425315    3.097425
-         40  |   2.538028   .4626892     5.49   0.000     1.630323    3.445732
-         50  |   2.603256    .493939     5.27   0.000     1.634245    3.572266
+          1  |   .5014513   .0990943     5.06   0.000      .307048    .6958546
+          2  |   .8483764   .1148016     7.39   0.000     .6231584    1.073594
+          3  |    1.08432   .1267339     8.56   0.000     .8356936    1.332947
+          4  |   1.336278   .1382332     9.67   0.000     1.065092    1.607464
+          5  |   1.511922   .1520442     9.94   0.000     1.213641    1.810202
+          6  |   1.658438   .1602275    10.35   0.000     1.344104    1.972773
+          7  |     1.7851   .1719686    10.38   0.000     1.447731    2.122468
+          8  |   1.877572   .1848703    10.16   0.000     1.514893    2.240251
+          9  |   1.945962   .1972776     9.86   0.000     1.558943    2.332982
+         10  |      2.018   .2088322     9.66   0.000     1.608313    2.427688
+         11  |   2.137035   .2195604     9.73   0.000     1.706301    2.567769
+         12  |   2.177969   .2314897     9.41   0.000     1.723832    2.632106
+         13  |   2.241535    .244276     9.18   0.000     1.762314    2.720756
+         14  |   2.254833   .2557825     8.82   0.000     1.753039    2.756628
+         15  |   2.278083   .2687235     8.48   0.000     1.750901    2.805266
+         16  |    2.26663   .2823901     8.03   0.000     1.712636    2.820623
+         17  |   2.324051   .2947306     7.89   0.000     1.745848    2.902254
+         18  |   2.342137   .3078462     7.61   0.000     1.738203     2.94607
+         19  |    2.36011    .320229     7.37   0.000     1.731884    2.988335
+         20  |   2.396791    .334677     7.16   0.000     1.740221    3.053361
+         25  |    2.41067   .3640658     6.62   0.000     1.696445    3.124895
+         30  |   2.242397   .5278967     4.25   0.000     1.206769    3.278026
+         40  |   2.625775   .5072052     5.18   0.000     1.630738    3.620811
+         50  |   2.739244   .5488439     4.99   0.000     1.662521    3.815967
              |
-       _cons |   2.813657    .163612    17.20   0.000     2.492683    3.134632
+       _cons |   2.754332   .1576688    17.47   0.000     2.445017    3.063647
 -------------+----------------------------------------------------------------
-     sigma_u |  1.2093073
-     sigma_e |  .71243004
-         rho |  .74235455   (fraction of variance due to u_i)
+     sigma_u |  1.2274311
+     sigma_e |  .69457896
+         rho |   .7574493   (fraction of variance due to u_i)
 ------------------------------------------------------------------------------
 number of observations (_N) was 0, now 12
 (1 real change made)
@@ -12161,142 +12168,139 @@ number of observations (_N) was 0, now 12
 (1 real change made)
 (1 real change made)
 (file output/figure/lnL_event_study.png written in PNG format)
+note: 25.ind_year omitted because of collinearity
 
-Fixed-effects (within) regression               Number of obs      =     45012
-Group variable: firm_person                     Number of groups   =      5158
+Fixed-effects (within) regression               Number of obs      =     39993
+Group variable: firm_person                     Number of groups   =      5157
 
-R-sq:  within  = 0.1144                         Obs per group: min =         1
-       between = 0.0246                                        avg =       8.7
-       overall = 0.0588                                        max =        25
+R-sq:  within  = 0.0980                         Obs per group: min =         1
+       between = 0.0151                                        avg =       7.8
+       overall = 0.0006                                        max =        12
 
-                                                F(110,1280)        =      5.25
-corr(u_i, Xb)  = -0.0477                        Prob > F           =    0.0000
+                                                F(105,1279)        =      4.79
+corr(u_i, Xb)  = -0.2513                        Prob > F           =    0.0000
 
-                                 (Std. Err. adjusted for 1,281 clusters in id)
+                                 (Std. Err. adjusted for 1,280 clusters in id)
 ------------------------------------------------------------------------------
              |               Robust
         lnKL |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-domestic_m_1 |    .035897    .040186     0.89   0.372    -.0429406    .1147346
-domestic_m_2 |   .0100534    .040004     0.25   0.802    -.0684272     .088534
-domestic_m_3 |   .0078746   .0351896     0.22   0.823     -.061161    .0769103
-domestic_m_4 |   .0316125   .0301362     1.05   0.294    -.0275093    .0907342
-   expat_m_1 |   -.032016    .061349    -0.52   0.602    -.1523715    .0883396
-   expat_m_2 |  -.0372223    .054474    -0.68   0.495    -.1440905    .0696458
-   expat_m_3 |  -.0697967   .0545076    -1.28   0.201    -.1767308    .0371374
-   expat_m_4 |   -.005178   .0446419    -0.12   0.908    -.0927573    .0824014
- foreign_m_1 |   .0811911   .0581547     1.40   0.163     -.032898    .1952802
- foreign_m_2 |   .0555571   .0553622     1.00   0.316    -.0530534    .1641676
- foreign_m_3 |   .0561754   .0573781     0.98   0.328    -.0563901    .1687408
- foreign_m_4 |   .0488933   .0548261     0.89   0.373    -.0586655    .1564521
-domestic_p_0 |   .0310573   .0453036     0.69   0.493    -.0578201    .1199348
-domestic_p_1 |   .0021163   .0445307     0.05   0.962    -.0852449    .0894775
-domestic_p_2 |  -.0194372   .0474015    -0.41   0.682    -.1124303    .0735559
-domestic_p_3 |  -.0072772   .0466063    -0.16   0.876    -.0987103    .0841559
-domestic_p_4 |   -.018088   .0548965    -0.33   0.742     -.125785    .0896091
-domestic_p_5 |  -.0044392   .0547695    -0.08   0.935     -.111887    .1030086
-domestic_p_6 |   .0529453   .0550334     0.96   0.336    -.0550202    .1609108
-   expat_p_0 |   .0189745    .067879     0.28   0.780    -.1141918    .1521407
-   expat_p_1 |   .0643499   .0673446     0.96   0.339    -.0677681    .1964679
-   expat_p_2 |   .0556175   .0668689     0.83   0.406    -.0755673    .1868022
-   expat_p_3 |   .0531797   .0662552     0.80   0.422     -.076801    .1831604
-   expat_p_4 |   .0675392   .0725039     0.93   0.352    -.0747002    .2097787
-   expat_p_5 |   .0475222   .0727994     0.65   0.514     -.095297    .1903414
-   expat_p_6 |   .0255722    .076437     0.33   0.738    -.1243833    .1755277
- foreign_p_0 |   .0906425   .0569511     1.59   0.112    -.0210852    .2023703
- foreign_p_1 |   .1307513   .0552901     2.36   0.018     .0222822    .2392204
- foreign_p_2 |   .1005337   .0532857     1.89   0.059    -.0040033    .2050707
- foreign_p_3 |   .1416438   .0535283     2.65   0.008     .0366309    .2466567
- foreign_p_4 |   .1041287   .0520374     2.00   0.046     .0020407    .2062167
- foreign_p_5 |   .0311855   .0560119     0.56   0.578    -.0786998    .1410707
- foreign_p_6 |   .0720217   .0449549     1.60   0.109    -.0161717    .1602151
-        post |   .1631189   .0652884     2.50   0.013      .035035    .2912029
-  post_expat |  -.0754026   .1445356    -0.52   0.602    -.3589553    .2081501
-       after |   .0641328   .0445317     1.44   0.150    -.0232303     .151496
- after_expat |  -.1046196   .0608552    -1.72   0.086    -.2240064    .0147673
+domestic_m_1 |   .3309655   .0997695     3.32   0.001     .1352358    .5266953
+domestic_m_2 |   .2314944    .080155     2.89   0.004     .0742447     .388744
+domestic_m_3 |   .1546535   .0589777     2.62   0.009     .0389499    .2703572
+domestic_m_4 |   .1087532    .037398     2.91   0.004      .035385    .1821214
+   expat_m_1 |   .2386454   .1065247     2.24   0.025     .0296631    .4476277
+   expat_m_2 |   .1646324   .0853576     1.93   0.054    -.0028238    .3320886
+   expat_m_3 |   .0594544   .0687833     0.86   0.388     -.075486    .1943948
+   expat_m_4 |   .0479379   .0454675     1.05   0.292    -.0412612     .137137
+ foreign_m_1 |    .087702   .0623536     1.41   0.160    -.0346246    .2100286
+ foreign_m_2 |   .0673404   .0577857     1.17   0.244    -.0460249    .1807056
+ foreign_m_3 |   .0683108   .0596172     1.15   0.252    -.0486475    .1852691
+ foreign_m_4 |   .0598347   .0560983     1.07   0.286    -.0502201    .1698895
+domestic_p_0 |   .3972167   .1221567     3.25   0.001     .1575673    .6368661
+domestic_p_1 |   .4518035   .1437308     3.14   0.002     .1698295    .7337776
+domestic_p_2 |   .5052342   .1658636     3.05   0.002     .1798395    .8306289
+domestic_p_3 |   .5934453   .1885887     3.15   0.002     .2234682    .9634224
+domestic_p_4 |   .6589007   .2091956     3.15   0.002     .2484964    1.069305
+domestic_p_5 |   .7467286   .2294114     3.25   0.001     .2966647    1.196793
+domestic_p_6 |   .8715422   .2518882     3.46   0.001     .3773828    1.365702
+   expat_p_0 |   .3595108   .1289467     2.79   0.005     .1065405    .6124811
+   expat_p_1 |   .4674504   .1511147     3.09   0.002     .1709906    .7639102
+   expat_p_2 |   .5268637   .1734232     3.04   0.002     .1866384    .8670889
+   expat_p_3 |   .5909422   .1960503     3.01   0.003     .2063267    .9755576
+   expat_p_4 |   .6742515   .2209291     3.05   0.002     .2408282    1.107675
+   expat_p_5 |   .7166232   .2452787     2.92   0.004     .2354304    1.197816
+   expat_p_6 |   .7648814   .2716839     2.82   0.005     .2318863    1.297877
+ foreign_p_0 |   .0984228   .0620607     1.59   0.113    -.0233293    .2201748
+ foreign_p_1 |   .1296253   .0602278     2.15   0.032     .0114692    .2477815
+ foreign_p_2 |   .1043172   .0571738     1.82   0.068    -.0078476     .216482
+ foreign_p_3 |   .1399937   .0571864     2.45   0.014     .0278043    .2521832
+ foreign_p_4 |   .0984009   .0548635     1.79   0.073    -.0092314    .2060331
+ foreign_p_5 |   .0171671   .0611741     0.28   0.779    -.1028455    .1371796
+ foreign_p_6 |   .0668865   .0464978     1.44   0.151    -.0243339    .1581069
              |
     ind_year |
-          2  |   .0364669   .1356421     0.27   0.788    -.2296384    .3025723
-          3  |   .7701043   .1508952     5.10   0.000     .4740752    1.066133
-          4  |   .9093319   .1622203     5.61   0.000     .5910851    1.227579
-          5  |   1.118456   .1799921     6.21   0.000     .7653442    1.471568
-          6  |   1.321962   .1986823     6.65   0.000     .9321833    1.711741
-          7  |    1.59888   .2143095     7.46   0.000     1.178444    2.019317
-          8  |    1.81216   .2244956     8.07   0.000      1.37174     2.25258
-          9  |   1.955271   .2370105     8.25   0.000     1.490299    2.420243
-         10  |   2.067034   .2545978     8.12   0.000     1.567559    2.566509
-         11  |   2.208344   .2694775     8.19   0.000     1.679678     2.73701
-         12  |   2.250605   .2857961     7.87   0.000     1.689924    2.811285
-         13  |   2.298469   .3005831     7.65   0.000     1.708779    2.888158
-         14  |   2.320055   .3126104     7.42   0.000      1.70677     2.93334
-         15  |   2.266928   .3259229     6.96   0.000     1.627527     2.90633
-         16  |   2.307631   .3394127     6.80   0.000     1.641765    2.973498
-         17  |   2.362303   .3550121     6.65   0.000     1.665833    3.058772
-         18  |   2.348955   .3674289     6.39   0.000     1.628126    3.069784
-         19  |   2.321133   .3807639     6.10   0.000     1.574143    3.068123
-         20  |   2.253991   .3946193     5.71   0.000      1.47982    3.028163
-         21  |   2.254543   .4053291     5.56   0.000     1.459361    3.049725
-         22  |   2.274706   .4179625     5.44   0.000     1.454739    3.094672
-         23  |   2.312676    .426528     5.42   0.000     1.475905    3.149446
-         24  |   1.599405   .4503316     3.55   0.000     .7159358    2.482874
-         25  |   1.609075   .4773823     3.37   0.001     .6725375    2.545613
-         26  |   .6435649   .2622224     2.45   0.014     .1291319    1.157998
-         27  |   .5558126    .250463     2.22   0.027     .0644496    1.047176
-         28  |   .6654232   .2413584     2.76   0.006     .1919218    1.138925
-         29  |   .9413054   .2405404     3.91   0.000     .4694086    1.413202
-         30  |   1.026726   .2475437     4.15   0.000     .5410903    1.512362
-         31  |     1.1888    .253185     4.70   0.000     .6920974    1.685504
-         32  |    1.40436   .2565946     5.47   0.000     .9009681    1.907752
-         33  |   1.498755   .2637154     5.68   0.000     .9813927    2.016117
-         34  |   1.599889    .271404     5.89   0.000     1.067443    2.132335
-         35  |   1.699329   .2814063     6.04   0.000      1.14726    2.251397
-         36  |   1.788471   .2933918     6.10   0.000     1.212889    2.364053
-         37  |   1.889403   .3079361     6.14   0.000     1.285288    2.493518
-         38  |   1.880578   .3262784     5.76   0.000     1.240479    2.520677
-         39  |   1.974191   .3324216     5.94   0.000      1.32204    2.626342
-         40  |   2.060111   .3424299     6.02   0.000     1.388326    2.731897
-         41  |   2.075131   .3538917     5.86   0.000     1.380859    2.769402
-         42  |   2.193727   .3640069     6.03   0.000     1.479611    2.907842
-         43  |   2.310731   .3764261     6.14   0.000     1.572251    3.049211
-         44  |   2.182855   .3910317     5.58   0.000     1.415722    2.949989
-         45  |   2.325869   .4042721     5.75   0.000      1.53276    3.118977
-         46  |   2.309833   .4128599     5.59   0.000     1.499876    3.119789
-         47  |   2.315739   .4218839     5.49   0.000     1.488079    3.143399
-         48  |    2.30778   .4313078     5.35   0.000     1.461632    3.153928
-         49  |   2.053528   .4510477     4.55   0.000     1.168654    2.938402
-         50  |   2.169067   .4641119     4.67   0.000     1.258563     3.07957
+          2  |  -.0292167   .1259477    -0.23   0.817    -.2763036    .2178701
+          3  |   .6310861    .129417     4.88   0.000     .3771932     .884979
+          4  |    .694996   .1315104     5.28   0.000     .4369963    .9529958
+          5  |   .8332588   .1395733     5.97   0.000      .559441    1.107077
+          6  |   .9589551   .1460683     6.57   0.000     .6723954    1.245515
+          7  |   1.170568   .1504127     7.78   0.000     .8754852     1.46565
+          8  |   1.288484    .145918     8.83   0.000     1.002219    1.574749
+          9  |   1.371014    .144967     9.46   0.000     1.086615    1.655414
+         10  |   1.405274    .148865     9.44   0.000     1.113227     1.69732
+         11  |   1.488237   .1532693     9.71   0.000      1.18755    1.788924
+         12  |   1.468251   .1558464     9.42   0.000     1.162509    1.773994
+         13  |    1.45814   .1612406     9.04   0.000     1.141815    1.774465
+         14  |   1.427185   .1614201     8.84   0.000     1.110508    1.743862
+         15  |   1.323108   .1610141     8.22   0.000     1.007227    1.638989
+         16  |   1.288695   .1617144     7.97   0.000     .9714405     1.60595
+         17  |   1.286463   .1650345     7.80   0.000     .9626952    1.610231
+         18  |   1.186731   .1608876     7.38   0.000      .871098    1.502363
+         19  |   1.096551     .16279     6.74   0.000      .777186    1.415915
+         20  |   .9803614   .1621505     6.05   0.000     .6622512    1.298472
+         21  |    .912842   .1648563     5.54   0.000     .5894237     1.23626
+         22  |   .8640743   .1651995     5.23   0.000     .5399826    1.188166
+         23  |   .8222177   .1717911     4.79   0.000     .4851943    1.159241
+         24  |   .0710611   .1186917     0.60   0.549    -.1617908     .303913
+         25  |          0  (omitted)
+         26  |   .5195456   .2432277     2.14   0.033     .0423764    .9967148
+         27  |   .3661295   .2353416     1.56   0.120    -.0955685    .8278275
+         28  |   .4100912   .2212523     1.85   0.064    -.0239661    .8441485
+         29  |   .6242506   .2137751     2.92   0.004     .2048622    1.043639
+         30  |   .6433829   .2128096     3.02   0.003     .2258888    1.060877
+         31  |   .7368233   .2116689     3.48   0.001      .321567     1.15208
+         32  |   .8933926   .2084695     4.29   0.000      .484413    1.302372
+         33  |   .9301755   .2069352     4.50   0.000     .5242057    1.336145
+         34  |   .9515089    .206675     4.60   0.000     .5460497    1.356968
+         35  |   .9766249   .2084007     4.69   0.000     .5677802     1.38547
+         36  |    1.00508   .2048756     4.91   0.000     .6031507    1.407009
+         37  |   1.051215   .2126835     4.94   0.000     .6339679    1.468462
+         38  |   .9615914   .2328263     4.13   0.000      .504828    1.418355
+         39  |   1.024731   .2206304     4.64   0.000     .5918942    1.457568
+         40  |   1.054814   .2223714     4.74   0.000     .6185612    1.491067
+         41  |   .9942733   .2259882     4.40   0.000     .5509249    1.437622
+         42  |   1.063746   .2251849     4.72   0.000      .621974    1.505519
+         43  |   1.149159   .2300694     4.99   0.000     .6978044    1.600514
+         44  |    .954321   .2384645     4.00   0.000     .4864965    1.422146
+         45  |   1.107748   .2344996     4.72   0.000      .647702    1.567794
+         46  |   1.004438   .2406746     4.17   0.000      .532278    1.476599
+         47  |   .9044037   .2477925     3.65   0.000     .4182792    1.390528
+         48  |   .8172604   .2632258     3.10   0.002     .3008587    1.333662
+         49  |   .5234897   .2818529     1.86   0.063    -.0294551    1.076434
+         50  |   .5766119   .3140919     1.84   0.067    -.0395799    1.192804
              |
      age_cat |
-          1  |  -.0161701   .1448806    -0.11   0.911    -.3003997    .2680595
-          2  |  -.0491531   .1613763    -0.30   0.761    -.3657441    .2674379
-          3  |  -.0465608   .1768637    -0.26   0.792    -.3935355    .3004138
-          4  |  -.0231654   .1884175    -0.12   0.902    -.3928064    .3464757
-          5  |  -.0565126     .20391    -0.28   0.782    -.4565471     .343522
-          6  |   -.146943   .2183666    -0.67   0.501    -.5753388    .2814529
-          7  |  -.1517555   .2281487    -0.67   0.506    -.5993419     .295831
-          8  |   -.160077   .2449362    -0.65   0.514    -.6405975    .3204435
-          9  |  -.2086311   .2597143    -0.80   0.422    -.7181435    .3008813
-         10  |  -.2267361   .2703207    -0.84   0.402    -.7570565    .3035842
-         11  |  -.2050432   .2834751    -0.72   0.470      -.76117    .3510836
-         12  |  -.2158883   .2970257    -0.73   0.467     -.798599    .3668224
-         13  |  -.2855642   .3121013    -0.91   0.360    -.8978505     .326722
-         14  |   -.259595   .3259856    -0.80   0.426    -.8991197    .3799297
-         15  |  -.3173089   .3385327    -0.94   0.349    -.9814488     .346831
-         16  |  -.3393812    .351811    -0.96   0.335    -1.029571    .3508084
-         17  |  -.3335391   .3655844    -0.91   0.362     -1.05075    .3836715
-         18  |  -.3098059     .38077    -0.81   0.416    -1.056808    .4371959
-         19  |  -.3473279   .3954301    -0.88   0.380     -1.12309    .4284343
-         20  |  -.3152793    .417561    -0.76   0.450    -1.134458    .5038999
-         25  |  -.2657123   .4633434    -0.57   0.566    -1.174708    .6432837
-         30  |  -.0704381    .605871    -0.12   0.907    -1.259047    1.118171
-         40  |  -.2198748   .7227262    -0.30   0.761    -1.637733    1.197983
-         50  |   .0214772   .8320588     0.03   0.979    -1.610872    1.653826
+          1  |  -.0008586   .1431593    -0.01   0.995    -.2817114    .2799941
+          2  |  -.0465564   .1614511    -0.29   0.773    -.3632944    .2701815
+          3  |  -.0423579   .1794993    -0.24   0.813    -.3945033    .3097875
+          4  |  -.0260395   .1941274    -0.13   0.893    -.4068827    .3548036
+          5  |  -.0611488   .2124559    -0.29   0.774    -.4779492    .3556515
+          6  |  -.1586884   .2300613    -0.69   0.490    -.6100274    .2926506
+          7  |   -.163617   .2437086    -0.67   0.502    -.6417296    .3144956
+          8  |  -.1755573   .2649133    -0.66   0.508    -.6952696     .344155
+          9  |  -.2105855   .2834256    -0.74   0.458    -.7666157    .3454446
+         10  |   -.242176   .2975573    -0.81   0.416      -.82593     .341578
+         11  |   -.215612    .314742    -0.69   0.493    -.8330794    .4018554
+         12  |  -.2402613   .3319609    -0.72   0.469    -.8915089    .4109864
+         13  |  -.3269765    .351983    -0.93   0.353    -1.017504     .363551
+         14  |   -.310715   .3689673    -0.84   0.400    -1.034563    .4131327
+         15  |  -.3821566   .3847293    -0.99   0.321    -1.136926    .3726133
+         16  |  -.4524776   .4040344    -1.12   0.263    -1.245121    .3401653
+         17  |  -.4746434   .4220265    -1.12   0.261    -1.302584    .3532968
+         18  |  -.4579861    .439828    -1.04   0.298     -1.32085    .4048775
+         19  |   -.503409    .456275    -1.10   0.270    -1.398539    .3917207
+         20  |  -.5263746   .4856717    -1.08   0.279    -1.479175    .4264262
+         25  |  -.5384308   .5369456    -1.00   0.316    -1.591822    .5149601
+         30  |  -.1429747   .7473156    -0.19   0.848    -1.609074    1.323124
+         40  |  -.2916474   .8624375    -0.34   0.735    -1.983595      1.4003
+         50  |   .0149904   .9596481     0.02   0.988    -1.867667    1.897648
              |
-       _cons |   4.905965   .2228854    22.01   0.000     4.468704    5.343226
+       _cons |   5.430508   .2284761    23.77   0.000     4.982279    5.878737
 -------------+----------------------------------------------------------------
-     sigma_u |   1.595787
-     sigma_e |  .90166463
-         rho |   .7580025   (fraction of variance due to u_i)
+     sigma_u |  1.6829379
+     sigma_e |  .87889241
+         rho |  .78571169   (fraction of variance due to u_i)
 ------------------------------------------------------------------------------
 number of observations (_N) was 0, now 12
 (1 real change made)
@@ -12399,142 +12403,139 @@ number of observations (_N) was 0, now 12
 (1 real change made)
 (1 real change made)
 (file output/figure/lnKL_event_study.png written in PNG format)
+note: 50.ind_year omitted because of collinearity
 
-Fixed-effects (within) regression               Number of obs      =     48273
+Fixed-effects (within) regression               Number of obs      =     42713
 Group variable: firm_person                     Number of groups   =      5193
 
-R-sq:  within  = 0.2163                         Obs per group: min =         1
-       between = 0.1728                                        avg =       9.3
-       overall = 0.1792                                        max =        25
+R-sq:  within  = 0.1879                         Obs per group: min =         1
+       between = 0.0009                                        avg =       8.2
+       overall = 0.0245                                        max =        12
 
-                                                F(110,1292)        =     17.47
-corr(u_i, Xb)  = -0.0153                        Prob > F           =    0.0000
+                                                F(105,1292)        =     17.52
+corr(u_i, Xb)  = -0.2183                        Prob > F           =    0.0000
 
                                  (Std. Err. adjusted for 1,293 clusters in id)
 ------------------------------------------------------------------------------
              |               Robust
         lnQL |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-domestic_m_1 |  -.0442729   .0255864    -1.73   0.084    -.0944683    .0059224
-domestic_m_2 |   .0152325   .0234142     0.65   0.515    -.0307015    .0611664
-domestic_m_3 |   .0179894   .0208527     0.86   0.388    -.0229195    .0588984
-domestic_m_4 |    .026657   .0171418     1.56   0.120    -.0069717    .0602857
-   expat_m_1 |   .0089781   .0336696     0.27   0.790     -.057075    .0750312
-   expat_m_2 |  -.0239773   .0393087    -0.61   0.542    -.1010932    .0531385
-   expat_m_3 |   .0331504   .0357851     0.93   0.354    -.0370528    .1033537
-   expat_m_4 |   .0098134   .0366864     0.27   0.789     -.062158    .0817847
- foreign_m_1 |  -.0013989   .0373762    -0.04   0.970    -.0747237    .0719258
- foreign_m_2 |  -.0162212   .0380169    -0.43   0.670    -.0908028    .0583604
- foreign_m_3 |  -.0179769   .0411555    -0.44   0.662    -.0987158    .0627619
- foreign_m_4 |   -.017507   .0367311    -0.48   0.634     -.089566    .0545521
-domestic_p_0 |   .0222849   .0268385     0.83   0.407    -.0303669    .0749367
-domestic_p_1 |   .0418182   .0284791     1.47   0.142    -.0140521    .0976886
-domestic_p_2 |   .0521452   .0296011     1.76   0.078    -.0059263    .1102167
-domestic_p_3 |   .0750243   .0296264     2.53   0.011     .0169031    .1331455
-domestic_p_4 |   .0645729   .0353519     1.83   0.068    -.0047804    .1339262
-domestic_p_5 |   .0805561   .0319939     2.52   0.012     .0177904    .1433218
-domestic_p_6 |   .0417126    .033433     1.25   0.212    -.0238764    .1073015
-   expat_p_0 |   .0611706    .034507     1.77   0.077    -.0065253    .1288665
-   expat_p_1 |   .1102762   .0365974     3.01   0.003     .0384794     .182073
-   expat_p_2 |   .0725103   .0387692     1.87   0.062    -.0035472    .1485677
-   expat_p_3 |   .1147347   .0401796     2.86   0.004     .0359103     .193559
-   expat_p_4 |   .0852776   .0461347     1.85   0.065    -.0052296    .1757849
-   expat_p_5 |   .1419591   .0388697     3.65   0.000     .0657044    .2182139
-   expat_p_6 |   .1576437   .0401974     3.92   0.000     .0787844    .2365029
- foreign_p_0 |  -.0023357   .0377874    -0.06   0.951     -.076467    .0717957
- foreign_p_1 |   .0298946   .0378831     0.79   0.430    -.0444245    .1042136
- foreign_p_2 |   .0205747   .0355479     0.58   0.563    -.0491633    .0903127
- foreign_p_3 |   .0258399   .0341169     0.76   0.449    -.0410906    .0927704
- foreign_p_4 |   .0073591   .0337929     0.22   0.828    -.0589358     .073654
- foreign_p_5 |  -.0236699   .0333951    -0.71   0.479    -.0891844    .0418446
- foreign_p_6 |  -.0080797   .0294326    -0.27   0.784    -.0658206    .0496612
-        post |   -.013444   .0419988    -0.32   0.749    -.0958372    .0689493
-  post_expat |   .1597287   .0768101     2.08   0.038     .0090425    .3104148
-       after |   .0220159   .0279548     0.79   0.431    -.0328259    .0768576
- after_expat |   .0589536   .0370339     1.59   0.112    -.0136996    .1316068
+domestic_m_1 |   .3105855   .0633546     4.90   0.000     .1862963    .4348747
+domestic_m_2 |   .2806093   .0488904     5.74   0.000      .184696    .3765225
+domestic_m_3 |   .1941451   .0354113     5.48   0.000     .1246751    .2636151
+domestic_m_4 |   .1153011      .0218     5.29   0.000     .0725339    .1580683
+   expat_m_1 |   .4233431    .066809     6.34   0.000      .292277    .5544092
+   expat_m_2 |     .30197   .0591431     5.11   0.000     .1859431     .417997
+   expat_m_3 |   .2689036   .0458259     5.87   0.000     .1790024    .3588049
+   expat_m_4 |   .1542374   .0376686     4.09   0.000     .0803391    .2281358
+ foreign_m_1 |   .0167174   .0382346     0.44   0.662    -.0582914    .0917261
+ foreign_m_2 |   .0001171   .0379919     0.00   0.998    -.0744155    .0746497
+ foreign_m_3 |    .005438   .0411431     0.13   0.895    -.0752766    .0861525
+ foreign_m_4 |  -.0014895   .0349481    -0.04   0.966    -.0700507    .0670717
+domestic_p_0 |   .4673215   .0771523     6.06   0.000     .3159639    .6186791
+domestic_p_1 |   .5783014    .091701     6.31   0.000     .3984023    .7582005
+domestic_p_2 |   .6814309   .1056423     6.45   0.000     .4741817    .8886802
+domestic_p_3 |   .7943502   .1192315     6.66   0.000     .5604416    1.028259
+domestic_p_4 |   .8744215   .1328999     6.58   0.000     .6136982    1.135145
+domestic_p_5 |   .9803957   .1453455     6.75   0.000     .6952566    1.265535
+domestic_p_6 |   1.030699   .1603502     6.43   0.000     .7161232    1.345274
+   expat_p_0 |   .5682315   .0784326     7.24   0.000     .4143622    .7221007
+   expat_p_1 |   .7267568   .0939311     7.74   0.000     .5424826     .911031
+   expat_p_2 |    .791224   .1071631     7.38   0.000     .5809913    1.001457
+   expat_p_3 |   .9345471   .1199692     7.79   0.000     .6991913    1.169903
+   expat_p_4 |   1.003494   .1372336     7.31   0.000     .7342694     1.27272
+   expat_p_5 |    1.15672   .1478372     7.82   0.000     .8666928    1.446747
+   expat_p_6 |    1.26997   .1631863     7.78   0.000     .9498311     1.59011
+ foreign_p_0 |   .0148941   .0392992     0.38   0.705    -.0622032    .0919914
+ foreign_p_1 |   .0483782   .0399962     1.21   0.227    -.0300863    .1268428
+ foreign_p_2 |   .0445406   .0371898     1.20   0.231    -.0284184    .1174996
+ foreign_p_3 |   .0474784   .0357537     1.33   0.184    -.0226632      .11762
+ foreign_p_4 |    .037549   .0358995     1.05   0.296    -.0328787    .1079767
+ foreign_p_5 |   .0081734   .0366834     0.22   0.824    -.0637921     .080139
+ foreign_p_6 |   .0113484   .0319573     0.36   0.723    -.0513455    .0740424
              |
     ind_year |
-          2  |   .0864022   .0698248     1.24   0.216    -.0505802    .2233846
-          3  |   .3724998   .0911777     4.09   0.000     .1936272    .5513723
-          4  |   .6160281    .096127     6.41   0.000     .4274459    .8046103
-          5  |   .7994486   .1092744     7.32   0.000     .5850738    1.013823
-          6  |   .9877722   .1271809     7.77   0.000     .7382686    1.237276
-          7  |   1.159236   .1322756     8.76   0.000     .8997376    1.418735
-          8  |   1.221103    .139186     8.77   0.000     .9480477    1.494159
-          9  |    1.42528   .1466486     9.72   0.000     1.137584    1.712975
-         10  |   1.539758   .1561755     9.86   0.000     1.233372    1.846143
-         11  |   1.687532   .1647597    10.24   0.000     1.364306    2.010758
-         12  |   1.735623   .1763817     9.84   0.000     1.389597    2.081648
-         13  |   1.812067    .185809     9.75   0.000     1.447547    2.176588
-         14  |   1.890056   .1940104     9.74   0.000     1.509446    2.270666
-         15  |   1.942645   .2057855     9.44   0.000     1.538935    2.346356
-         16  |   1.959503   .2132338     9.19   0.000      1.54118    2.377825
-         17  |   2.044736   .2238543     9.13   0.000     1.605578    2.483893
-         18  |   1.966324   .2342032     8.40   0.000     1.506864    2.425784
-         19  |   2.020599   .2417714     8.36   0.000     1.546292    2.494907
-         20  |   2.012561    .250507     8.03   0.000     1.521115    2.504006
-         21  |   2.016111   .2607299     7.73   0.000      1.50461    2.527611
-         22  |   2.149023   .2647644     8.12   0.000     1.629608    2.668439
-         23  |   2.224017   .2729661     8.15   0.000     1.688512    2.759523
-         24  |   2.271898   .2837853     8.01   0.000     1.715167    2.828628
-         25  |   2.255785   .2912055     7.75   0.000     1.684498    2.827072
-         26  |  -.7469772    .153451    -4.87   0.000    -1.048018   -.4459368
-         27  |   -.465453   .1542567    -3.02   0.003     -.768074   -.1628319
-         28  |  -.2890342   .1578869    -1.83   0.067    -.5987771    .0207087
-         29  |   .0353688   .1532467     0.23   0.818    -.2652709    .3360085
-         30  |   .2016306    .157143     1.28   0.200    -.1066529    .5099141
-         31  |   .3785611   .1613104     2.35   0.019      .062102    .6950201
-         32  |   .6410739   .1680687     3.81   0.000     .3113564    .9707915
-         33  |   .7647075    .168285     4.54   0.000     .4345657    1.094849
-         34  |   .9826116   .1747073     5.62   0.000     .6398704    1.325353
-         35  |   1.117011   .1775369     6.29   0.000     .7687188    1.465303
-         36  |   1.143348   .1860228     6.15   0.000     .7784084    1.508288
-         37  |   1.307341   .1918425     6.81   0.000     .9309842    1.683698
-         38  |   1.352541   .1967168     6.88   0.000     .9666214     1.73846
-         39  |   1.447857   .2087321     6.94   0.000     1.038366    1.857348
-         40  |   1.606897   .2173752     7.39   0.000      1.18045    2.033344
-         41  |    1.70589    .224391     7.60   0.000      1.26568    2.146101
-         42  |   1.770049    .233454     7.58   0.000     1.312059    2.228039
-         43  |   1.725568   .2431811     7.10   0.000     1.248495    2.202641
-         44  |   1.774989   .2537088     7.00   0.000     1.277262    2.272715
-         45  |   1.946312   .2583974     7.53   0.000     1.439387    2.453236
-         46  |   1.927911     .26911     7.16   0.000     1.399971    2.455852
-         47  |   1.997223   .2720415     7.34   0.000     1.463531    2.530914
-         48  |   2.017142   .2804642     7.19   0.000     1.466927    2.567357
-         49  |   2.117615   .2872734     7.37   0.000     1.554041    2.681188
-         50  |   2.091152   .2913241     7.18   0.000     1.519632    2.662672
+          2  |  -.0038978   .0665093    -0.06   0.953    -.1343758    .1265801
+          3  |   .2023787   .0803682     2.52   0.012     .0447121    .3600452
+          4  |   .3457333   .0811979     4.26   0.000     .1864392    .5050275
+          5  |   .4479866   .0896998     4.99   0.000     .2720134    .6239599
+          6  |   .5453836   .1000599     5.45   0.000     .3490859    .7416813
+          7  |   .6231082    .096815     6.44   0.000     .4331763    .8130402
+          8  |   .6026809   .0973094     6.19   0.000     .4117792    .7935827
+          9  |   .7260715   .0959904     7.56   0.000     .5377574    .9143855
+         10  |   .7489072   .0986208     7.59   0.000     .5554328    .9423817
+         11  |   .8203699   .0999796     8.21   0.000     .6242298     1.01651
+         12  |   .7982804    .106547     7.49   0.000     .5892563    1.007305
+         13  |   .8012127   .1106802     7.24   0.000     .5840801    1.018345
+         14  |   .8070004   .1087814     7.42   0.000     .5935928    1.020408
+         15  |   .7678195   .1154718     6.65   0.000     .5412867    .9943522
+         16  |   .7141924   .1157316     6.17   0.000       .48715    .9412348
+         17  |   .7334095   .1201831     6.10   0.000      .497634     .969185
+         18  |   .5698018   .1214081     4.69   0.000     .3316232    .8079804
+         19  |   .5439825   .1246748     4.36   0.000     .2993953    .7885697
+         20  |   .4324517   .1294779     3.34   0.001     .1784417    .6864616
+         21  |   .3618831   .1383234     2.62   0.009     .0905199    .6332463
+         22  |   .4220835    .142004     2.97   0.003     .1434999    .7006672
+         23  |   .4133574   .1394259     2.96   0.003     .1398313    .6868834
+         24  |   .3749483    .148708     2.52   0.012     .0832127    .6666838
+         25  |   .2613005   .1547377     1.69   0.092    -.0422641    .5648652
+         26  |   -.791615    .161049    -4.92   0.000    -1.107561   -.4756687
+         27  |  -.5897291   .1560793    -3.78   0.000    -.8959257   -.2835324
+         28  |  -.4944857   .1544554    -3.20   0.001    -.7974966   -.1914748
+         29  |  -.2505854    .140449    -1.78   0.075    -.5261184    .0249477
+         30  |   -.179671   .1367714    -1.31   0.189    -.4479894    .0886474
+         31  |  -.0846331   .1328341    -0.64   0.524    -.3452273    .1759611
+         32  |   .0970936   .1321827     0.73   0.463    -.1622227    .3564099
+         33  |   .1494439    .121948     1.23   0.221    -.0897939    .3886817
+         34  |   .2824727   .1201351     2.35   0.019     .0467915    .5181539
+         35  |   .3211137   .1146708     2.80   0.005     .0961523     .546075
+         36  |   .2673457   .1088285     2.46   0.014     .0538458    .4808455
+         37  |   .3623053   .1019608     3.55   0.000     .1622785    .5623322
+         38  |   .3320951   .0996374     3.33   0.001     .1366262     .527564
+         39  |   .3399314   .0952124     3.57   0.000     .1531436    .5267193
+         40  |   .4235291   .0921317     4.60   0.000     .2427849    .6042732
+         41  |   .4616896   .0849323     5.44   0.000     .2950693    .6283099
+         42  |   .4453094   .0848049     5.25   0.000      .278939    .6116799
+         43  |   .3239489   .0850625     3.81   0.000      .157073    .4908247
+         44  |   .2465611    .082222     3.00   0.003     .0852578    .4078643
+         45  |   .3531144   .0758707     4.65   0.000     .2042711    .5019577
+         46  |   .2173891   .0813796     2.67   0.008     .0577384    .3770398
+         47  |   .2378311   .0658815     3.61   0.000     .1085846    .3670775
+         48  |   .1219759   .0734038     1.66   0.097    -.0220278    .2659796
+         49  |   .1710386   .0680686     2.51   0.012     .0375015    .3045757
+         50  |          0  (omitted)
              |
      age_cat |
-          1  |   .3281469   .0882379     3.72   0.000     .1550416    .5012522
-          2  |   .2931204   .0945375     3.10   0.002     .1076567    .4785842
-          3  |   .2802044   .1013776     2.76   0.006     .0813218    .4790871
-          4  |     .26357   .1072544     2.46   0.014      .053158    .4739819
-          5  |   .2185629   .1169209     1.87   0.062    -.0108128    .4479386
-          6  |   .1496985   .1225604     1.22   0.222    -.0907407    .3901377
-          7  |   .1545336   .1294947     1.19   0.233    -.0995093    .4085764
-          8  |    .126379   .1375986     0.92   0.359    -.1435622    .3963202
-          9  |   .0850855   .1478675     0.58   0.565    -.2050014    .3751723
-         10  |   .0450044   .1548824     0.29   0.771    -.2588441     .348853
-         11  |   .0558895    .163906     0.34   0.733    -.2656616    .3774407
-         12  |   .0857441   .1728475     0.50   0.620    -.2533484    .4248366
-         13  |   .0296988   .1840755     0.16   0.872    -.3314208    .3908183
-         14  |  -.0180002    .193576    -0.09   0.926    -.3977579    .3617574
-         15  |  -.0243656   .2036949    -0.12   0.905    -.4239746    .3752434
-         16  |   -.033007   .2154675    -0.15   0.878    -.4557114    .3896975
-         17  |  -.1208053    .223412    -0.54   0.589    -.5590953    .3174846
-         18  |  -.0728941   .2334964    -0.31   0.755    -.5309678    .3851795
-         19  |  -.0970726    .243668    -0.40   0.690    -.5751008    .3809557
-         20  |  -.1190202   .2596428    -0.46   0.647     -.628388    .3903475
-         25  |  -.2133312   .2871289    -0.74   0.458    -.7766212    .3499589
-         30  |  -.2039192   .3890902    -0.52   0.600    -.9672371    .5593988
-         40  |  -.5330506   .4355989    -1.22   0.221    -1.387609    .3215081
-         50  |  -.4796516    .494318    -0.97   0.332    -1.449406    .4901024
+          1  |   .3160159   .0894117     3.53   0.000     .1406079    .4914239
+          2  |   .2711448   .0973305     2.79   0.005     .0802016     .462088
+          3  |   .2502507   .1063697     2.35   0.019     .0415744     .458927
+          4  |   .2234331   .1146239     1.95   0.051    -.0014362    .4483025
+          5  |   .1707262   .1263653     1.35   0.177    -.0771774    .4186299
+          6  |   .0920464   .1348363     0.68   0.495    -.1724756    .3565685
+          7  |    .089083   .1451775     0.61   0.540    -.1957264    .3738924
+          8  |   .0556868   .1562725     0.36   0.722    -.2508889    .3622626
+          9  |   .0025142   .1700192     0.01   0.988    -.3310298    .3360582
+         10  |  -.0358956   .1800968    -0.20   0.842    -.3892099    .3174188
+         11  |  -.0235538   .1927212    -0.12   0.903    -.4016347    .3545271
+         12  |   .0001808   .2051449     0.00   0.999    -.4022727    .4026344
+         13  |  -.0744041   .2194188    -0.34   0.735    -.5048604    .3560522
+         14  |  -.1383254   .2314199    -0.60   0.550    -.5923253    .3156746
+         15  |  -.1498958   .2451427    -0.61   0.541    -.6308172    .3310255
+         16  |  -.1842999   .2599164    -0.71   0.478    -.6942043    .3256045
+         17  |  -.2654699   .2720446    -0.98   0.329    -.7991675    .2682276
+         18  |  -.2278223   .2866509    -0.79   0.427    -.7901745      .33453
+         19  |   -.273105   .2980226    -0.92   0.360    -.8577664    .3115563
+         20  |  -.3384139    .320651    -1.06   0.291    -.9674676    .2906397
+         25  |  -.4485966   .3574058    -1.26   0.210    -1.149756    .2525628
+         30  |  -.3211022   .4799557    -0.67   0.504     -1.26268    .6204758
+         40  |  -.7870671   .5166578    -1.52   0.128    -1.800647    .2265132
+         50  |  -.8818483   .5749444    -1.53   0.125    -2.009775    .2460786
              |
-       _cons |   7.921696   .1401772    56.51   0.000     7.646696    8.196696
+       _cons |   8.561894   .1397205    61.28   0.000      8.28779    8.835998
 -------------+----------------------------------------------------------------
-     sigma_u |  1.1168776
-     sigma_e |  .62358085
-         rho |  .76235376   (fraction of variance due to u_i)
+     sigma_u |  1.2895135
+     sigma_e |  .61901668
+         rho |  .81271914   (fraction of variance due to u_i)
 ------------------------------------------------------------------------------
 number of observations (_N) was 0, now 12
 (1 real change made)
@@ -12637,142 +12638,139 @@ number of observations (_N) was 0, now 12
 (1 real change made)
 (1 real change made)
 (file output/figure/lnQL_event_study.png written in PNG format)
+note: 50.ind_year omitted because of collinearity
 
-Fixed-effects (within) regression               Number of obs      =     48273
+Fixed-effects (within) regression               Number of obs      =     42713
 Group variable: firm_person                     Number of groups   =      5193
 
-R-sq:  within  = 0.0367                         Obs per group: min =         1
-       between = 0.1221                                        avg =       9.3
-       overall = 0.0823                                        max =        25
+R-sq:  within  = 0.0358                         Obs per group: min =         1
+       between = 0.1458                                        avg =       8.2
+       overall = 0.1039                                        max =        12
 
-                                                F(110,1292)        =      2.39
-corr(u_i, Xb)  = 0.1033                         Prob > F           =    0.0000
+                                                F(105,1292)        =      2.31
+corr(u_i, Xb)  = 0.1233                         Prob > F           =    0.0000
 
                                  (Std. Err. adjusted for 1,293 clusters in id)
 ------------------------------------------------------------------------------
              |               Robust
     exporter |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-domestic_m_1 |  -.0129356   .0129591    -1.00   0.318    -.0383588    .0124875
-domestic_m_2 |   -.001925   .0121148    -0.16   0.874    -.0256919     .021842
-domestic_m_3 |  -.0086658   .0118437    -0.73   0.464    -.0319007    .0145692
-domestic_m_4 |  -.0106518   .0105694    -1.01   0.314     -.031387    .0100833
-   expat_m_1 |   .0127964   .0208597     0.61   0.540    -.0281262     .053719
-   expat_m_2 |   .0075866   .0190639     0.40   0.691     -.029813    .0449861
-   expat_m_3 |   .0240139   .0170109     1.41   0.158    -.0093582    .0573859
-   expat_m_4 |   .0151286   .0163761     0.92   0.356     -.016998    .0472552
- foreign_m_1 |  -.0249743   .0156718    -1.59   0.111    -.0557193    .0057707
- foreign_m_2 |  -.0158878   .0160639    -0.99   0.323    -.0474019    .0156263
- foreign_m_3 |  -.0105481   .0170425    -0.62   0.536    -.0439822    .0228859
- foreign_m_4 |  -.0189735   .0167065    -1.14   0.256    -.0517484    .0138014
-domestic_p_0 |  -.0063115   .0133555    -0.47   0.637    -.0325124    .0198893
-domestic_p_1 |   .0016796    .013528     0.12   0.901    -.0248598    .0282189
-domestic_p_2 |  -.0037357   .0137125    -0.27   0.785    -.0306369    .0231655
-domestic_p_3 |   .0018517   .0147716     0.13   0.900    -.0271272    .0308307
-domestic_p_4 |   .0027949   .0153803     0.18   0.856    -.0273782    .0329679
-domestic_p_5 |  -.0076407   .0157282    -0.49   0.627    -.0384963    .0232149
-domestic_p_6 |  -.0042313    .016421    -0.26   0.797     -.036446    .0279834
-   expat_p_0 |   .0262652   .0198738     1.32   0.187    -.0127233    .0652538
-   expat_p_1 |    .018318   .0177867     1.03   0.303    -.0165759    .0532119
-   expat_p_2 |   .0241846   .0188413     1.28   0.200    -.0127782    .0611474
-   expat_p_3 |    .040823   .0186577     2.19   0.029     .0042204    .0774257
-   expat_p_4 |   .0370023   .0193438     1.91   0.056    -.0009464     .074951
-   expat_p_5 |   .0167074   .0194024     0.86   0.389    -.0213563    .0547711
-   expat_p_6 |   .0070991   .0203605     0.35   0.727    -.0328443    .0470424
- foreign_p_0 |   .0107065   .0153616     0.70   0.486    -.0194299    .0408429
- foreign_p_1 |   .0135165   .0159194     0.85   0.396    -.0177142    .0447473
- foreign_p_2 |   .0100416   .0160428     0.63   0.531    -.0214312    .0415145
- foreign_p_3 |   .0062977    .016445     0.38   0.702    -.0259642    .0385596
- foreign_p_4 |    .009506   .0148845     0.64   0.523    -.0196944    .0387064
- foreign_p_5 |   .0078819    .015453     0.51   0.610    -.0224338    .0381976
- foreign_p_6 |   .0134779   .0140824     0.96   0.339    -.0141489    .0411047
-        post |  -.0038819   .0216098    -0.18   0.857    -.0462759    .0385122
-  post_expat |   .0388705   .0377085     1.03   0.303    -.0351061    .1128471
-       after |  -.0179075   .0120487    -1.49   0.137    -.0415446    .0057296
- after_expat |   .0288768   .0180532     1.60   0.110    -.0065399    .0642936
+domestic_m_1 |  -.0185064   .0235004    -0.79   0.431    -.0646096    .0275969
+domestic_m_2 |  -.0065761   .0193306    -0.34   0.734    -.0444989    .0313467
+domestic_m_3 |  -.0120133   .0155474    -0.77   0.440    -.0425141    .0184876
+domestic_m_4 |  -.0139559   .0115362    -1.21   0.227    -.0365877    .0086759
+   expat_m_1 |   .0209739    .028671     0.73   0.465    -.0352729    .0772206
+   expat_m_2 |   .0172515   .0237606     0.73   0.468    -.0293622    .0638651
+   expat_m_3 |   .0358153   .0198842     1.80   0.072    -.0031937    .0748242
+   expat_m_4 |   .0268501   .0168379     1.59   0.111    -.0061825    .0598827
+ foreign_m_1 |   -.020076   .0165628    -1.21   0.226    -.0525689     .012417
+ foreign_m_2 |  -.0111623   .0168489    -0.66   0.508    -.0442166    .0218919
+ foreign_m_3 |  -.0039578   .0174279    -0.23   0.820    -.0381478    .0302322
+ foreign_m_4 |   -.011119   .0168985    -0.66   0.511    -.0442706    .0220326
+domestic_p_0 |  -.0129558   .0276073    -0.47   0.639     -.067116    .0412043
+domestic_p_1 |  -.0089268   .0319849    -0.28   0.780    -.0716748    .0538212
+domestic_p_2 |  -.0173254   .0366537    -0.47   0.637    -.0892327    .0545819
+domestic_p_3 |  -.0136393   .0410832    -0.33   0.740    -.0942364    .0669578
+domestic_p_4 |  -.0141909   .0454387    -0.31   0.755    -.1033325    .0749507
+domestic_p_5 |  -.0257113    .050628    -0.51   0.612    -.1250334    .0736109
+domestic_p_6 |  -.0228642    .056055    -0.41   0.683    -.1328331    .0871046
+   expat_p_0 |   .0333465   .0321272     1.04   0.299    -.0296806    .0963737
+   expat_p_1 |   .0251321   .0347584     0.72   0.470     -.043057    .0933211
+   expat_p_2 |    .031572   .0400982     0.79   0.431    -.0470927    .1102366
+   expat_p_3 |   .0467843   .0446888     1.05   0.295    -.0408863    .1344548
+   expat_p_4 |   .0434598   .0497047     0.87   0.382    -.0540509    .1409706
+   expat_p_5 |   .0256373   .0537451     0.48   0.633       -.0798    .1310746
+   expat_p_6 |   .0171963   .0580581     0.30   0.767    -.0967022    .1310948
+ foreign_p_0 |    .016692   .0162964     1.02   0.306    -.0152784    .0486623
+ foreign_p_1 |   .0163911   .0173245     0.95   0.344    -.0175963    .0503784
+ foreign_p_2 |   .0182246   .0174329     1.05   0.296    -.0159752    .0524245
+ foreign_p_3 |   .0165046   .0177149     0.93   0.352    -.0182486    .0512578
+ foreign_p_4 |   .0202976   .0161895     1.25   0.210     -.011463    .0520583
+ foreign_p_5 |   .0172983   .0168837     1.02   0.306    -.0158242    .0504208
+ foreign_p_6 |   .0159573   .0152353     1.05   0.295    -.0139314     .045846
              |
     ind_year |
-          2  |   .0157573   .0445913     0.35   0.724     -.071722    .1032367
-          3  |  -.0289612   .0434813    -0.67   0.505    -.1142628    .0563404
-          4  |  -.0200372   .0465983    -0.43   0.667    -.1114538    .0713795
-          5  |  -.0635203   .0515475    -1.23   0.218    -.1646462    .0376056
-          6  |  -.0691146   .0541573    -1.28   0.202    -.1753604    .0371313
-          7  |  -.0741592   .0562167    -1.32   0.187    -.1844451    .0361268
-          8  |  -.0645017   .0576478    -1.12   0.263    -.1775951    .0485918
-          9  |  -.0733769   .0605804    -1.21   0.226    -.1922237    .0454698
-         10  |  -.1001321   .0621533    -1.61   0.107    -.2220645    .0218004
-         11  |  -.0992472   .0655226    -1.51   0.130    -.2277896    .0292952
-         12  |  -.0863878   .0686968    -1.26   0.209    -.2211572    .0483816
-         13  |  -.0965855   .0712543    -1.36   0.175    -.2363724    .0432014
-         14  |  -.0581951   .0743652    -0.78   0.434    -.2040848    .0876946
-         15  |   -.037629   .0773455    -0.49   0.627    -.1893655    .1141075
-         16  |  -.0497765   .0801679    -0.62   0.535    -.2070501    .1074971
-         17  |  -.0209106   .0841175    -0.25   0.804    -.1859325    .1441113
-         18  |  -.0078879   .0883996    -0.09   0.929    -.1813105    .1655346
-         19  |  -.0066254   .0909785    -0.07   0.942    -.1851071    .1718564
-         20  |   .0356104   .0937679     0.38   0.704    -.1483437    .2195645
-         21  |  -.0143091   .0955207    -0.15   0.881    -.2017018    .1730837
-         22  |   .0114929   .0987919     0.12   0.907    -.1823174    .2053031
-         23  |  -.0101396   .1003397    -0.10   0.920    -.2069862     .186707
-         24  |  -.0726108   .1034564    -0.70   0.483    -.2755718    .1303501
-         25  |  -.1326105   .1063483    -1.25   0.213    -.3412448    .0760237
-         26  |   .1473902   .0679632     2.17   0.030     .0140598    .2807205
-         27  |   .1136832   .0639838     1.78   0.076    -.0118404    .2392068
-         28  |    .130333   .0632357     2.06   0.039      .006277     .254389
-         29  |   .1450065   .0658636     2.20   0.028     .0157951    .2742179
-         30  |   .1495553   .0650251     2.30   0.022     .0219889    .2771218
-         31  |   .1240624   .0660687     1.88   0.061    -.0055512    .2536761
-         32  |    .124328   .0662514     1.88   0.061     -.005644    .2543001
-         33  |     .10391   .0673739     1.54   0.123    -.0282641    .2360842
-         34  |   .0711932   .0698302     1.02   0.308    -.0657997    .2081861
-         35  |   .0969526   .0713896     1.36   0.175    -.0430996    .2370048
-         36  |   .0504181   .0744156     0.68   0.498    -.0955705    .1964067
-         37  |   .0543129   .0760143     0.71   0.475     -.094812    .2034378
-         38  |    .056615   .0781267     0.72   0.469    -.0966542    .2098842
-         39  |   .0934572   .0804388     1.16   0.246    -.0643477    .2512622
-         40  |   .1064959   .0824359     1.29   0.197     -.055227    .2682188
-         41  |   .0912607   .0856108     1.07   0.287    -.0766908    .2592122
-         42  |   .0948626    .088981     1.07   0.287    -.0797004    .2694256
-         43  |   .1103011   .0916589     1.20   0.229    -.0695154    .2901177
-         44  |   .0743959   .0967615     0.77   0.442     -.115431    .2642229
-         45  |   .0784912   .0977202     0.80   0.422    -.1132165    .2701989
-         46  |   .1055559   .1005394     1.05   0.294    -.0916824    .3027943
-         47  |   .1349479   .1039572     1.30   0.194    -.0689955    .3388912
-         48  |   .1153881   .1060177     1.09   0.277    -.0925977    .3233738
-         49  |  -.0325336   .1112295    -0.29   0.770    -.2507438    .1856766
-         50  |  -.0716499    .114367    -0.63   0.531    -.2960153    .1527155
+          2  |   .0279081   .0430746     0.65   0.517    -.0565957    .1124118
+          3  |  -.0194255    .040698    -0.48   0.633    -.0992668    .0604158
+          4  |  -.0080797   .0420901    -0.19   0.848    -.0906521    .0744926
+          5  |  -.0479375   .0455028    -1.05   0.292    -.1372049    .0413299
+          6  |  -.0523506   .0447671    -1.17   0.242    -.1401748    .0354736
+          7  |  -.0505429   .0443346    -1.14   0.254    -.1375187    .0364328
+          8  |   -.041854   .0438577    -0.95   0.340    -.1278941    .0441862
+          9  |  -.0504079    .043917    -1.15   0.251    -.1365644    .0357486
+         10  |  -.0781298   .0425651    -1.84   0.067     -.161634    .0053745
+         11  |   -.079786   .0432881    -1.84   0.066    -.1647085    .0051366
+         12  |  -.0718055   .0435405    -1.65   0.099    -.1572234    .0136123
+         13  |   -.085022   .0440713    -1.93   0.054    -.1714812    .0014371
+         14  |  -.0475413   .0443622    -1.07   0.284    -.1345712    .0394886
+         15  |  -.0320454   .0451141    -0.71   0.478    -.1205502    .0564595
+         16  |  -.0384862   .0469734    -0.82   0.413    -.1306388    .0536663
+         17  |  -.0139526   .0468943    -0.30   0.766      -.10595    .0780448
+         18  |  -.0023871   .0497438    -0.05   0.962    -.0999747    .0952004
+         19  |  -.0073278   .0506621    -0.14   0.885    -.1067167    .0920612
+         20  |   .0455977    .052333     0.87   0.384    -.0570692    .1482646
+         21  |  -.0129337   .0533301    -0.24   0.808    -.1175569    .0916894
+         22  |   -.000117   .0540714    -0.00   0.998    -.1061945    .1059604
+         23  |  -.0076824   .0571222    -0.13   0.893    -.1197448      .10438
+         24  |  -.0892917   .0606053    -1.47   0.141    -.2081873    .0296038
+         25  |  -.1497777   .0650955    -2.30   0.022    -.2774822   -.0220732
+         26  |    .178405   .0693429     2.57   0.010     .0423679    .3144421
+         27  |   .1426166   .0635244     2.25   0.025     .0179944    .2672389
+         28  |   .1625022   .0606433     2.68   0.007     .0435321    .2814723
+         29  |   .1722502    .060499     2.85   0.004     .0535632    .2909372
+         30  |   .1754804   .0567505     3.09   0.002     .0641472    .2868136
+         31  |   .1508954   .0551041     2.74   0.006     .0427921    .2589986
+         32  |   .1508774   .0519688     2.90   0.004      .048925    .2528299
+         33  |   .1292943   .0496047     2.61   0.009     .0319797    .2266089
+         34  |   .1034391   .0482989     2.14   0.032     .0086862    .1981921
+         35  |    .127286   .0469672     2.71   0.007     .0351457    .2194263
+         36  |   .0759156   .0472148     1.61   0.108    -.0167105    .1685417
+         37  |   .0892368   .0441933     2.02   0.044     .0025382    .1759354
+         38  |   .0839647   .0436586     1.92   0.055    -.0016849    .1696142
+         39  |   .1293801   .0419554     3.08   0.002     .0470719    .2116884
+         40  |   .1441624   .0417698     3.45   0.001     .0622184    .2261064
+         41  |   .1299283   .0393226     3.30   0.001     .0527852    .2070715
+         42  |   .1294396    .039593     3.27   0.001     .0517661    .2071132
+         43  |   .1449799   .0371084     3.91   0.000     .0721806    .2177792
+         44  |   .1073565   .0398365     2.69   0.007     .0292051    .1855078
+         45  |   .1141831   .0389603     2.93   0.003     .0377506    .1906155
+         46  |   .1358755   .0395335     3.44   0.001     .0583185    .2134324
+         47  |     .18285   .0380248     4.81   0.000     .1082527    .2574472
+         48  |   .1587311   .0396658     4.00   0.000     .0809147    .2365475
+         49  |   .0260967   .0318409     0.82   0.413    -.0363688    .0885621
+         50  |          0  (omitted)
              |
      age_cat |
-          1  |   .0760178   .0349994     2.17   0.030      .007356    .1446796
-          2  |   .0641702   .0359148     1.79   0.074    -.0062876     .134628
-          3  |    .119166   .0392557     3.04   0.002     .0421541    .1961778
-          4  |   .1579029   .0416864     3.79   0.000     .0761226    .2396833
-          5  |   .1511789   .0441745     3.42   0.001     .0645173    .2378405
-          6  |   .1648526   .0466239     3.54   0.000     .0733858    .2563195
-          7  |   .1808682   .0490965     3.68   0.000     .0845506    .2771859
-          8  |   .1994583   .0508852     3.92   0.000     .0996317    .2992849
-          9  |    .202372   .0539168     3.75   0.000     .0965979    .3081462
-         10  |   .2237316   .0570221     3.92   0.000     .1118654    .3355977
-         11  |    .231756   .0602084     3.85   0.000      .113639     .349873
-         12  |   .2324073   .0636753     3.65   0.000     .1074891    .3573256
-         13  |   .2111968   .0668996     3.16   0.002      .079953    .3424407
-         14  |   .2104786   .0703513     2.99   0.003     .0724634    .3484938
-         15  |   .2149985   .0735502     2.92   0.004     .0707077    .3592893
-         16  |   .2053185   .0767723     2.67   0.008     .0547065    .3559306
-         17  |   .2285434   .0807869     2.83   0.005     .0700554    .3870313
-         18  |   .2211977   .0843391     2.62   0.009     .0557411    .3866544
-         19  |   .2198623   .0881383     2.49   0.013     .0469524    .3927722
-         20  |    .204373   .0913825     2.24   0.025     .0250987    .3836473
-         25  |   .2650558   .0999266     2.65   0.008     .0690196    .4610919
-         30  |   .3069543   .1380972     2.22   0.026      .036035    .5778737
-         40  |   .3939716   .1607257     2.45   0.014     .0786597    .7092835
-         50  |   .4006837    .193504     2.07   0.039     .0210671    .7803003
+          1  |   .0791953   .0354046     2.24   0.025     .0097384    .1486521
+          2  |   .0688064     .03662     1.88   0.060    -.0030347    .1406475
+          3  |   .1248533   .0402686     3.10   0.002     .0458543    .2038523
+          4  |   .1629091   .0430751     3.78   0.000     .0784043    .2474139
+          5  |   .1548346   .0457522     3.38   0.001     .0650777    .2445914
+          6  |   .1699655   .0483144     3.52   0.000     .0751821    .2647488
+          7  |    .186329   .0511124     3.65   0.000     .0860565    .2866015
+          8  |   .2057774   .0535189     3.84   0.000      .100784    .3107708
+          9  |   .2086318   .0569577     3.66   0.000     .0968922    .3203715
+         10  |   .2321551   .0610133     3.80   0.000     .1124591    .3518511
+         11  |   .2460834   .0648585     3.79   0.000     .1188439     .373323
+         12  |   .2504081   .0691725     3.62   0.000     .1147054    .3861108
+         13  |   .2242823   .0726481     3.09   0.002     .0817612    .3668034
+         14  |   .2310987   .0769235     3.00   0.003       .08019    .3820073
+         15  |   .2302603   .0806035     2.86   0.004     .0721322    .3883884
+         16  |   .2242227    .084146     2.66   0.008     .0591449    .3893005
+         17  |    .253016    .088665     2.85   0.004     .0790729    .4269591
+         18  |   .2387435   .0932385     2.56   0.011     .0558281    .4216589
+         19  |   .2429725   .0983095     2.47   0.014     .0501087    .4358363
+         20  |   .2403734   .1031548     2.33   0.020      .038004    .4427427
+         25  |   .2918856    .115006     2.54   0.011     .0662667    .5175046
+         30  |   .2738795    .170708     1.60   0.109    -.0610158    .6087748
+         40  |    .358886   .1860133     1.93   0.054    -.0060352    .7238073
+         50  |   .3528957   .2207014     1.60   0.110    -.0800767    .7858681
              |
-       _cons |   .3675259   .0589576     6.23   0.000     .2518627    .4831891
+       _cons |   .3337631   .0562871     5.93   0.000      .223339    .4441872
 -------------+----------------------------------------------------------------
-     sigma_u |  .38979523
-     sigma_e |  .29499354
-         rho |  .63583597   (fraction of variance due to u_i)
+     sigma_u |  .38752683
+     sigma_e |  .28918823
+         rho |  .64231235   (fraction of variance due to u_i)
 ------------------------------------------------------------------------------
 number of observations (_N) was 0, now 12
 (1 real change made)
@@ -12885,5 +12883,5 @@ end of do-file
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/
 > estimate.log
   log type:  text
- closed on:  30 Nov 2018, 18:52:56
+ closed on:  30 Nov 2018, 22:12:11
 ----------------------------------------------------------------------------------
