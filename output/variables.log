@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/variables.log
   log type:  text
- opened on:  29 Nov 2018, 17:45:20
+ opened on:  30 Nov 2018, 14:22:57
 
 . 
 . use temp/firm_ceo_panel
@@ -113,6 +113,103 @@ file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//S_00414.000001 saved
 (148,335 observations deleted)
 
 . scalar dropped_too_many_CEOs = r(N_drop)
+
+. 
+. * create sample splits based on data in founder years
+. local continuous lnL lnKL lnQL
+
+. local dummy exporter
+
+. foreach X of var `continuous' {
+  2.         egen mean_`X' = mean(cond(founder==1 & year<=first_exit_year,`X',.)), by(frame_id)
+  3.         su mean_`X' if founder==1 & year<=first_exit_year, d
+  4.         gen byte high_`X' = mean_`X' > r(p50)
+  5.         tab high_`X'
+  6. }
+(184591 missing values generated)
+
+                          mean_lnL
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     1.386294              0
+ 5%     2.520027              0
+10%     2.812434              0       Obs             190,613
+25%     3.083511              0       Sum of Wgt.     190,613
+
+50%     3.435773                      Mean           3.601287
+                        Largest       Std. Dev.       .881396
+75%     4.007333       8.552879
+90%     4.725972       8.552946       Variance       .7768589
+95%     5.251342       8.552946       Skewness        .692607
+99%     6.345925       8.952993       Kurtosis       5.718285
+
+   high_lnL |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    369,149       36.36       36.36
+          1 |    646,228       63.64      100.00
+------------+-----------------------------------
+      Total |  1,015,377      100.00
+(213013 missing values generated)
+
+                          mean_lnKL
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     1.490049      -2.913362
+ 5%     3.278963      -2.833213
+10%      4.00863      -2.823361       Obs             185,148
+25%      5.15635      -2.823361       Sum of Wgt.     185,148
+
+50%     6.170938                      Mean           6.035857
+                        Largest       Std. Dev.       1.58173
+75%     7.055581       13.33796
+90%     7.845722       13.33796       Variance       2.501871
+95%     8.395376       13.33796       Skewness       -.531194
+99%     9.441648       13.33796       Kurtosis       4.207348
+
+  high_lnKL |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    414,064       40.78       40.78
+          1 |    601,313       59.22      100.00
+------------+-----------------------------------
+      Total |  1,015,377      100.00
+(184591 missing values generated)
+
+                          mean_lnQL
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     5.934895      -.7419374
+ 5%     6.923409        -.63908
+10%     7.417465      -.5192983       Obs             190,613
+25%     8.154797      -.5192983       Sum of Wgt.     190,613
+
+50%     8.932902                      Mean           8.917605
+                        Largest       Std. Dev.      1.223922
+75%      9.68838       15.76679
+90%     10.42861       15.76679       Variance       1.497985
+95%     10.85916       15.78194       Skewness      -.1417743
+99%     11.82675       15.78194       Kurtosis       4.572135
+
+  high_lnQL |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    461,757       45.48       45.48
+          1 |    553,620       54.52      100.00
+------------+-----------------------------------
+      Total |  1,015,377      100.00
+
+. foreach X of var `dummy' {
+  2.         egen mean_`X' = mean(cond(founder==1 & year<=first_exit_year,`X',.)), by(frame_id)
+  3.         gen byte high_`X' = mean_`X' > 0.5
+  4.         tab high_`X'
+  5. }
+(184591 missing values generated)
+
+high_export |
+         er |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    471,174       46.40       46.40
+          1 |    544,203       53.60      100.00
+------------+-----------------------------------
+      Total |  1,015,377      100.00
 
 . 
 . drop if founder==1
@@ -361,5 +458,5 @@ file temp/analysis_sample.dta saved
       name:  <unnamed>
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/variables.log
   log type:  text
- closed on:  29 Nov 2018, 17:45:58
+ closed on:  30 Nov 2018, 14:23:38
 --------------------------------------------------------------------------------------------------------------------------------
