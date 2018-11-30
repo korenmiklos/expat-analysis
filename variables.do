@@ -65,7 +65,7 @@ gen byte EE = (lag_expat==1)&(expat==1)
 * newly arriving CEOs
 local T 4
 gen byte domestic = (expat==0)
-foreach X in domestic expat {
+foreach X in domestic expat DD DE ED EE {
 	gen byte new_`X' = (tenure <=`T') & (tenure>=0) & (`X'==1)
 	
 	* new managers at foreign firms

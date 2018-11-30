@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/variables.log
   log type:  text
- opened on:  29 Nov 2018, 16:59:07
+ opened on:  29 Nov 2018, 17:45:20
 
 . 
 . use temp/firm_ceo_panel
@@ -233,7 +233,7 @@ frame_id                                                                        
 
 . gen byte domestic = (expat==0)
 
-. foreach X in domestic expat {
+. foreach X in domestic expat DD DE ED EE {
   2.         gen byte new_`X' = (tenure <=`T') & (tenure>=0) & (`X'==1)
   3.         
 .         * new managers at foreign firms
@@ -247,6 +247,10 @@ frame_id                                                                        
   8. }
 (2,669 real changes made)
 (1,167 real changes made)
+(1,119 real changes made)
+(444 real changes made)
+(638 real changes made)
+(469 real changes made)
 
 . gen fold_expat = expat==1 & tenure>`T'
 
@@ -322,6 +326,22 @@ frame_id                                                                        
   variable before_expat was float now byte
   variable during_expat was float now byte
   variable after_expat was float now byte
+  variable tenure_DD was float now byte
+  variable before_DD was float now byte
+  variable during_DD was float now byte
+  variable after_DD was float now byte
+  variable tenure_DE was float now byte
+  variable before_DE was float now byte
+  variable during_DE was float now byte
+  variable after_DE was float now byte
+  variable tenure_ED was float now byte
+  variable before_ED was float now byte
+  variable during_ED was float now byte
+  variable after_ED was float now byte
+  variable tenure_EE was float now byte
+  variable before_EE was float now byte
+  variable during_EE was float now byte
+  variable after_EE was float now byte
   variable fold_expat was float now byte
   variable jetok was double now long
   variable export was double now long
@@ -330,7 +350,7 @@ frame_id                                                                        
   variable sales was double now long
   variable final_netgep was double now long
   variable frame_id was str12 now str10
-  (58,879,300 bytes saved)
+  (87,141,364 bytes saved)
 
 . save temp/analysis_sample, replace
 file temp/analysis_sample.dta saved
@@ -341,5 +361,5 @@ file temp/analysis_sample.dta saved
       name:  <unnamed>
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/variables.log
   log type:  text
- closed on:  29 Nov 2018, 16:59:42
+ closed on:  29 Nov 2018, 17:45:58
 --------------------------------------------------------------------------------------------------------------------------------
