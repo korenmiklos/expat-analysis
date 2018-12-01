@@ -1,8 +1,9 @@
---------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/variables.log
+       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/
+> variables.log
   log type:  text
- opened on:  30 Nov 2018, 14:22:57
+ opened on:   1 Dec 2018, 17:04:55
 
 . 
 . use temp/firm_ceo_panel
@@ -21,8 +22,9 @@
 . tempfile expand
 
 . save `expand', replace
-(note: file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//S_00414.000001 not found)
-file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//S_00414.000001 saved
+(note: file /var/folders/7b/svcv81g94n3fm6nrj7ckr15c0000gn/T//S_69488.000001 not f
+> ound)
+file /var/folders/7b/svcv81g94n3fm6nrj7ckr15c0000gn/T//S_69488.000001 saved
 
 . 
 . merge m:1 frame_id year using temp/balance-small, nogen keep(match)
@@ -34,7 +36,8 @@ file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//S_00414.000001 saved
     -----------------------------------------
 
 . merge m:1 frame_id year using temp/N_ceos, nogen keep(match)
-(note: variable frame_id was str10, now str12 to accommodate using data's values)
+(note: variable frame_id was str10, now str12 to accommodate using data's
+       values)
 
     Result                           # of obs.
     -----------------------------------------
@@ -115,101 +118,192 @@ file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//S_00414.000001 saved
 . scalar dropped_too_many_CEOs = r(N_drop)
 
 . 
+. gen ceo_span = first_exit_year-enter_year+1
+
+. tab ceo_span
+
+   ceo_span |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |    199,644       19.66       19.66
+          2 |    126,989       12.51       32.17
+          3 |     97,255        9.58       41.75
+          4 |     81,032        7.98       49.73
+          5 |     76,737        7.56       57.28
+          6 |     54,040        5.32       62.61
+          7 |     45,097        4.44       67.05
+          8 |     38,888        3.83       70.88
+          9 |     37,596        3.70       74.58
+         10 |     31,523        3.10       77.69
+         11 |     25,452        2.51       80.19
+         12 |     22,761        2.24       82.43
+         13 |     22,923        2.26       84.69
+         14 |     18,091        1.78       86.47
+         15 |     16,504        1.63       88.10
+         16 |     14,434        1.42       89.52
+         17 |     15,404        1.52       91.04
+         18 |     11,734        1.16       92.19
+         19 |     11,803        1.16       93.36
+         20 |     11,116        1.09       94.45
+         21 |      9,735        0.96       95.41
+         22 |      7,966        0.78       96.19
+         23 |      8,280        0.82       97.01
+         24 |      7,674        0.76       97.76
+         25 |      8,556        0.84       98.61
+         26 |      5,866        0.58       99.18
+         27 |      3,761        0.37       99.56
+         28 |        839        0.08       99.64
+         29 |        147        0.01       99.65
+         30 |         64        0.01       99.66
+         31 |        116        0.01       99.67
+         32 |        118        0.01       99.68
+         33 |        199        0.02       99.70
+         34 |         58        0.01       99.71
+         35 |         61        0.01       99.71
+         36 |         93        0.01       99.72
+         37 |        221        0.02       99.74
+         38 |        111        0.01       99.75
+         39 |        139        0.01       99.77
+         40 |        216        0.02       99.79
+         41 |        249        0.02       99.81
+         42 |        496        0.05       99.86
+         43 |        359        0.04       99.90
+         44 |        208        0.02       99.92
+         45 |        158        0.02       99.93
+         46 |         86        0.01       99.94
+         47 |         53        0.01       99.95
+         48 |         54        0.01       99.95
+         49 |         61        0.01       99.96
+         50 |         50        0.00       99.96
+         51 |         42        0.00       99.97
+         53 |         51        0.01       99.97
+         54 |         15        0.00       99.98
+         55 |         25        0.00       99.98
+         56 |         18        0.00       99.98
+         58 |        140        0.01       99.99
+         61 |         24        0.00      100.00
+         64 |         45        0.00      100.00
+------------+-----------------------------------
+      Total |  1,015,377      100.00
+
+. egen industry_ceo_span = median(ceo_span), by(industry_mode)
+
+. tab industry_ceo_span
+
+industry_ce |
+     o_span |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          2 |      7,723        0.76        0.76
+          3 |     82,342        8.11        8.87
+          4 |    411,133       40.49       49.36
+          5 |    369,648       36.41       85.77
+          6 |    144,531       14.23      100.00
+------------+-----------------------------------
+      Total |  1,015,377      100.00
+
+. gen byte slow = industry_ceo_span>4
+
+. 
+. tab industry_mode if slow
+
+industry_mo |
+         de |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |     80,432       16.16       16.16
+          5 |        512        0.10       16.26
+          8 |      3,300        0.66       16.93
+         13 |     12,389        2.49       19.42
+         14 |     19,736        3.97       23.38
+         15 |      8,524        1.71       25.10
+         16 |     11,991        2.41       27.51
+         18 |      9,452        1.90       29.40
+         25 |     51,512       10.35       39.76
+         27 |     13,136        2.64       42.40
+         28 |     29,918        6.01       48.41
+         31 |      9,405        1.89       50.30
+         32 |      4,471        0.90       51.20
+         33 |      1,862        0.37       51.57
+         41 |     26,357        5.30       56.87
+         42 |     22,305        4.48       61.35
+         43 |     25,818        5.19       66.54
+         45 |     30,606        6.15       72.69
+         47 |     57,221       11.50       84.18
+         49 |     23,137        4.65       88.83
+         56 |     19,448        3.91       92.74
+         71 |     17,446        3.51       96.25
+         74 |      2,426        0.49       96.73
+         81 |     12,958        2.60       99.34
+         87 |      1,665        0.33       99.67
+         95 |      1,633        0.33      100.00
+------------+-----------------------------------
+      Total |    497,660      100.00
+
+. 
 . * create sample splits based on data in founder years
 . local continuous lnL lnKL lnQL
 
-. local dummy exporter
+. local dummy exporter slow
 
 . foreach X of var `continuous' {
-  2.         egen mean_`X' = mean(cond(founder==1 & year<=first_exit_year,`X',.)), by(frame_id)
-  3.         su mean_`X' if founder==1 & year<=first_exit_year, d
-  4.         gen byte high_`X' = mean_`X' > r(p50)
-  5.         tab high_`X'
+  2.         egen mean_`X' = mean(cond(founder==1 & year<=first_exit_year,`X',.)),
+>  by(frame_id)
+  3.         egen median_`X' = median(mean_`X'), by(industry_mode)
+  4.         gen byte H_`X' = mean_`X' > median_`X'
+  5.         tab H_`X'
   6. }
 (184591 missing values generated)
+(75 missing values generated)
 
-                          mean_lnL
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     1.386294              0
- 5%     2.520027              0
-10%     2.812434              0       Obs             190,613
-25%     3.083511              0       Sum of Wgt.     190,613
-
-50%     3.435773                      Mean           3.601287
-                        Largest       Std. Dev.       .881396
-75%     4.007333       8.552879
-90%     4.725972       8.552946       Variance       .7768589
-95%     5.251342       8.552946       Skewness        .692607
-99%     6.345925       8.952993       Kurtosis       5.718285
-
-   high_lnL |      Freq.     Percent        Cum.
+      H_lnL |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    369,149       36.36       36.36
-          1 |    646,228       63.64      100.00
+          0 |    419,485       41.31       41.31
+          1 |    595,892       58.69      100.00
 ------------+-----------------------------------
       Total |  1,015,377      100.00
 (213013 missing values generated)
+(75 missing values generated)
 
-                          mean_lnKL
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     1.490049      -2.913362
- 5%     3.278963      -2.833213
-10%      4.00863      -2.823361       Obs             185,148
-25%      5.15635      -2.823361       Sum of Wgt.     185,148
-
-50%     6.170938                      Mean           6.035857
-                        Largest       Std. Dev.       1.58173
-75%     7.055581       13.33796
-90%     7.845722       13.33796       Variance       2.501871
-95%     8.395376       13.33796       Skewness       -.531194
-99%     9.441648       13.33796       Kurtosis       4.207348
-
-  high_lnKL |      Freq.     Percent        Cum.
+     H_lnKL |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    414,064       40.78       40.78
-          1 |    601,313       59.22      100.00
+          0 |    405,392       39.93       39.93
+          1 |    609,985       60.07      100.00
 ------------+-----------------------------------
       Total |  1,015,377      100.00
 (184591 missing values generated)
+(75 missing values generated)
 
-                          mean_lnQL
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     5.934895      -.7419374
- 5%     6.923409        -.63908
-10%     7.417465      -.5192983       Obs             190,613
-25%     8.154797      -.5192983       Sum of Wgt.     190,613
-
-50%     8.932902                      Mean           8.917605
-                        Largest       Std. Dev.      1.223922
-75%      9.68838       15.76679
-90%     10.42861       15.76679       Variance       1.497985
-95%     10.85916       15.78194       Skewness      -.1417743
-99%     11.82675       15.78194       Kurtosis       4.572135
-
-  high_lnQL |      Freq.     Percent        Cum.
+     H_lnQL |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    461,757       45.48       45.48
-          1 |    553,620       54.52      100.00
+          0 |    419,360       41.30       41.30
+          1 |    596,017       58.70      100.00
 ------------+-----------------------------------
       Total |  1,015,377      100.00
 
 . foreach X of var `dummy' {
-  2.         egen mean_`X' = mean(cond(founder==1 & year<=first_exit_year,`X',.)), by(frame_id)
-  3.         gen byte high_`X' = mean_`X' > 0.5
-  4.         tab high_`X'
+  2.         egen mean_`X' = mean(cond(founder==1 & year<=first_exit_year,`X',.)),
+>  by(frame_id)
+  3.         gen byte H_`X' = mean_`X' > 0.5
+  4.         tab H_`X'
   5. }
 (184591 missing values generated)
 
-high_export |
-         er |      Freq.     Percent        Cum.
+ H_exporter |      Freq.     Percent        Cum.
 ------------+-----------------------------------
           0 |    471,174       46.40       46.40
           1 |    544,203       53.60      100.00
 ------------+-----------------------------------
       Total |  1,015,377      100.00
+(184591 missing values generated)
+
+     H_slow |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    417,922       41.16       41.16
+          1 |    597,455       58.84      100.00
+------------+-----------------------------------
+      Total |  1,015,377      100.00
+
+. gen byte H_early = enter_year<=2000
+
+. gen byte H_young_firm = age<=10
 
 . 
 . drop if founder==1
@@ -220,9 +314,9 @@ high_export |
 . 
 . codebook frame_id
 
---------------------------------------------------------------------------------------------------------------------------------
-frame_id                                                                                                             (unlabeled)
---------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
+frame_id                                                               (unlabeled)
+----------------------------------------------------------------------------------
 
                   type:  string (str12), but longest is str10
 
@@ -289,7 +383,8 @@ frame_id                                                                        
 
 . 
 . 
-. *foreign visszahúzása expatba, valaha expat-tal, de soha foreign-mal bíró cégek teljes kidobása
+. *foreign visszahúzása expatba, valaha expat-tal, de soha foreign-mal bíró cégek 
+> teljes kidobása
 . replace foreign=1 if first_year_expat<=year&foreign==0&ever_foreign==1
 (44,245 real changes made)
 
@@ -330,7 +425,7 @@ frame_id                                                                        
 
 . gen byte domestic = (expat==0)
 
-. foreach X in domestic expat DD DE ED EE {
+. foreach X of var domestic expat DD DE ED EE {
   2.         gen byte new_`X' = (tenure <=`T') & (tenure>=0) & (`X'==1)
   3.         
 .         * new managers at foreign firms
@@ -340,8 +435,11 @@ frame_id                                                                        
   5. 
 .         foreach Y of var tenure before during after {
   6.                 gen `Y'_`X' = (`X'==1)*`Y'
-  7.         }
-  8. }
+  7.                 foreach Z of var H_* {
+  8.                         gen `Y'_`X'_`Z' = (`X'==1)*`Y'*(`Z'==1)
+  9.                 }
+ 10.         }
+ 11. }
 (2,669 real changes made)
 (1,167 real changes made)
 (1,119 real changes made)
@@ -408,6 +506,9 @@ frame_id                                                                        
   variable age was float now int
   variable N_ceos was long now byte
   variable total_CEOs was float now byte
+  variable ceo_span was float now byte
+  variable industry_ceo_span was float now byte
+  variable mean_slow was float now byte
   variable age_cat was float now byte
   variable first_year_expat was float now int
   variable ever_expat was float now byte
@@ -416,29 +517,197 @@ frame_id                                                                        
   variable first_year_foreign was float now int
   variable tenure was float now byte
   variable tenure_domestic was float now byte
+  variable tenure_domestic_H_lnL was float now byte
+  variable tenure_domestic_H_lnKL was float now byte
+  variable tenure_domestic_H_lnQL was float now byte
+  variable tenure_domestic_H_exporter was float now byte
+  variable tenure_domestic_H_slow was float now byte
+  variable tenure_domestic_H_early was float now byte
+  variable tenure_domestic_H_young_firm was float now byte
   variable before_domestic was float now byte
+  variable before_domestic_H_lnL was float now byte
+  variable before_domestic_H_lnKL was float now byte
+  variable before_domestic_H_lnQL was float now byte
+  variable before_domestic_H_exporter was float now byte
+  variable before_domestic_H_slow was float now byte
+  variable before_domestic_H_early was float now byte
+  variable before_domestic_H_young_firm was float now byte
   variable during_domestic was float now byte
+  variable during_domestic_H_lnL was float now byte
+  variable during_domestic_H_lnKL was float now byte
+  variable during_domestic_H_lnQL was float now byte
+  variable during_domestic_H_exporter was float now byte
+  variable during_domestic_H_slow was float now byte
+  variable during_domestic_H_early was float now byte
+  variable during_domestic_H_young_firm was float now byte
   variable after_domestic was float now byte
+  variable after_domestic_H_lnL was float now byte
+  variable after_domestic_H_lnKL was float now byte
+  variable after_domestic_H_lnQL was float now byte
+  variable after_domestic_H_exporter was float now byte
+  variable after_domestic_H_slow was float now byte
+  variable after_domestic_H_early was float now byte
+  variable after_domestic_H_young_firm was float now byte
   variable tenure_expat was float now byte
+  variable tenure_expat_H_lnL was float now byte
+  variable tenure_expat_H_lnKL was float now byte
+  variable tenure_expat_H_lnQL was float now byte
+  variable tenure_expat_H_exporter was float now byte
+  variable tenure_expat_H_slow was float now byte
+  variable tenure_expat_H_early was float now byte
+  variable tenure_expat_H_young_firm was float now byte
   variable before_expat was float now byte
+  variable before_expat_H_lnL was float now byte
+  variable before_expat_H_lnKL was float now byte
+  variable before_expat_H_lnQL was float now byte
+  variable before_expat_H_exporter was float now byte
+  variable before_expat_H_slow was float now byte
+  variable before_expat_H_early was float now byte
+  variable before_expat_H_young_firm was float now byte
   variable during_expat was float now byte
+  variable during_expat_H_lnL was float now byte
+  variable during_expat_H_lnKL was float now byte
+  variable during_expat_H_lnQL was float now byte
+  variable during_expat_H_exporter was float now byte
+  variable during_expat_H_slow was float now byte
+  variable during_expat_H_early was float now byte
+  variable during_expat_H_young_firm was float now byte
   variable after_expat was float now byte
+  variable after_expat_H_lnL was float now byte
+  variable after_expat_H_lnKL was float now byte
+  variable after_expat_H_lnQL was float now byte
+  variable after_expat_H_exporter was float now byte
+  variable after_expat_H_slow was float now byte
+  variable after_expat_H_early was float now byte
+  variable after_expat_H_young_firm was float now byte
   variable tenure_DD was float now byte
+  variable tenure_DD_H_lnL was float now byte
+  variable tenure_DD_H_lnKL was float now byte
+  variable tenure_DD_H_lnQL was float now byte
+  variable tenure_DD_H_exporter was float now byte
+  variable tenure_DD_H_slow was float now byte
+  variable tenure_DD_H_early was float now byte
+  variable tenure_DD_H_young_firm was float now byte
   variable before_DD was float now byte
+  variable before_DD_H_lnL was float now byte
+  variable before_DD_H_lnKL was float now byte
+  variable before_DD_H_lnQL was float now byte
+  variable before_DD_H_exporter was float now byte
+  variable before_DD_H_slow was float now byte
+  variable before_DD_H_early was float now byte
+  variable before_DD_H_young_firm was float now byte
   variable during_DD was float now byte
+  variable during_DD_H_lnL was float now byte
+  variable during_DD_H_lnKL was float now byte
+  variable during_DD_H_lnQL was float now byte
+  variable during_DD_H_exporter was float now byte
+  variable during_DD_H_slow was float now byte
+  variable during_DD_H_early was float now byte
+  variable during_DD_H_young_firm was float now byte
   variable after_DD was float now byte
+  variable after_DD_H_lnL was float now byte
+  variable after_DD_H_lnKL was float now byte
+  variable after_DD_H_lnQL was float now byte
+  variable after_DD_H_exporter was float now byte
+  variable after_DD_H_slow was float now byte
+  variable after_DD_H_early was float now byte
+  variable after_DD_H_young_firm was float now byte
   variable tenure_DE was float now byte
+  variable tenure_DE_H_lnL was float now byte
+  variable tenure_DE_H_lnKL was float now byte
+  variable tenure_DE_H_lnQL was float now byte
+  variable tenure_DE_H_exporter was float now byte
+  variable tenure_DE_H_slow was float now byte
+  variable tenure_DE_H_early was float now byte
+  variable tenure_DE_H_young_firm was float now byte
   variable before_DE was float now byte
+  variable before_DE_H_lnL was float now byte
+  variable before_DE_H_lnKL was float now byte
+  variable before_DE_H_lnQL was float now byte
+  variable before_DE_H_exporter was float now byte
+  variable before_DE_H_slow was float now byte
+  variable before_DE_H_early was float now byte
+  variable before_DE_H_young_firm was float now byte
   variable during_DE was float now byte
+  variable during_DE_H_lnL was float now byte
+  variable during_DE_H_lnKL was float now byte
+  variable during_DE_H_lnQL was float now byte
+  variable during_DE_H_exporter was float now byte
+  variable during_DE_H_slow was float now byte
+  variable during_DE_H_early was float now byte
+  variable during_DE_H_young_firm was float now byte
   variable after_DE was float now byte
+  variable after_DE_H_lnL was float now byte
+  variable after_DE_H_lnKL was float now byte
+  variable after_DE_H_lnQL was float now byte
+  variable after_DE_H_exporter was float now byte
+  variable after_DE_H_slow was float now byte
+  variable after_DE_H_early was float now byte
+  variable after_DE_H_young_firm was float now byte
   variable tenure_ED was float now byte
+  variable tenure_ED_H_lnL was float now byte
+  variable tenure_ED_H_lnKL was float now byte
+  variable tenure_ED_H_lnQL was float now byte
+  variable tenure_ED_H_exporter was float now byte
+  variable tenure_ED_H_slow was float now byte
+  variable tenure_ED_H_early was float now byte
+  variable tenure_ED_H_young_firm was float now byte
   variable before_ED was float now byte
+  variable before_ED_H_lnL was float now byte
+  variable before_ED_H_lnKL was float now byte
+  variable before_ED_H_lnQL was float now byte
+  variable before_ED_H_exporter was float now byte
+  variable before_ED_H_slow was float now byte
+  variable before_ED_H_early was float now byte
+  variable before_ED_H_young_firm was float now byte
   variable during_ED was float now byte
+  variable during_ED_H_lnL was float now byte
+  variable during_ED_H_lnKL was float now byte
+  variable during_ED_H_lnQL was float now byte
+  variable during_ED_H_exporter was float now byte
+  variable during_ED_H_slow was float now byte
+  variable during_ED_H_early was float now byte
+  variable during_ED_H_young_firm was float now byte
   variable after_ED was float now byte
+  variable after_ED_H_lnL was float now byte
+  variable after_ED_H_lnKL was float now byte
+  variable after_ED_H_lnQL was float now byte
+  variable after_ED_H_exporter was float now byte
+  variable after_ED_H_slow was float now byte
+  variable after_ED_H_early was float now byte
+  variable after_ED_H_young_firm was float now byte
   variable tenure_EE was float now byte
+  variable tenure_EE_H_lnL was float now byte
+  variable tenure_EE_H_lnKL was float now byte
+  variable tenure_EE_H_lnQL was float now byte
+  variable tenure_EE_H_exporter was float now byte
+  variable tenure_EE_H_slow was float now byte
+  variable tenure_EE_H_early was float now byte
+  variable tenure_EE_H_young_firm was float now byte
   variable before_EE was float now byte
+  variable before_EE_H_lnL was float now byte
+  variable before_EE_H_lnKL was float now byte
+  variable before_EE_H_lnQL was float now byte
+  variable before_EE_H_exporter was float now byte
+  variable before_EE_H_slow was float now byte
+  variable before_EE_H_early was float now byte
+  variable before_EE_H_young_firm was float now byte
   variable during_EE was float now byte
+  variable during_EE_H_lnL was float now byte
+  variable during_EE_H_lnKL was float now byte
+  variable during_EE_H_lnQL was float now byte
+  variable during_EE_H_exporter was float now byte
+  variable during_EE_H_slow was float now byte
+  variable during_EE_H_early was float now byte
+  variable during_EE_H_young_firm was float now byte
   variable after_EE was float now byte
+  variable after_EE_H_lnL was float now byte
+  variable after_EE_H_lnKL was float now byte
+  variable after_EE_H_lnQL was float now byte
+  variable after_EE_H_exporter was float now byte
+  variable after_EE_H_slow was float now byte
+  variable after_EE_H_early was float now byte
+  variable after_EE_H_young_firm was float now byte
   variable fold_expat was float now byte
   variable jetok was double now long
   variable export was double now long
@@ -447,7 +716,7 @@ frame_id                                                                        
   variable sales was double now long
   variable final_netgep was double now long
   variable frame_id was str12 now str10
-  (87,141,364 bytes saved)
+  (389,192,173 bytes saved)
 
 . save temp/analysis_sample, replace
 file temp/analysis_sample.dta saved
@@ -456,7 +725,8 @@ file temp/analysis_sample.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/variables.log
+       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/
+> variables.log
   log type:  text
- closed on:  30 Nov 2018, 14:23:38
---------------------------------------------------------------------------------------------------------------------------------
+ closed on:   1 Dec 2018, 17:07:31
+----------------------------------------------------------------------------------

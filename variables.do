@@ -22,20 +22,30 @@ tab total_CEOs
 drop if total_CEOs>15
 scalar dropped_too_many_CEOs = r(N_drop)
 
+gen ceo_span = first_exit_year-enter_year+1
+tab ceo_span
+egen industry_ceo_span = median(ceo_span), by(industry_mode)
+tab industry_ceo_span
+gen byte slow = industry_ceo_span>4
+
+tab industry_mode if slow
+
 * create sample splits based on data in founder years
 local continuous lnL lnKL lnQL
-local dummy exporter
+local dummy exporter slow
 foreach X of var `continuous' {
 	egen mean_`X' = mean(cond(founder==1 & year<=first_exit_year,`X',.)), by(frame_id)
-	su mean_`X' if founder==1 & year<=first_exit_year, d
-	gen byte high_`X' = mean_`X' > r(p50)
-	tab high_`X'
+	egen median_`X' = median(mean_`X'), by(industry_mode)
+	gen byte H_`X' = mean_`X' > median_`X'
+	tab H_`X'
 }
 foreach X of var `dummy' {
 	egen mean_`X' = mean(cond(founder==1 & year<=first_exit_year,`X',.)), by(frame_id)
-	gen byte high_`X' = mean_`X' > 0.5
-	tab high_`X'
+	gen byte H_`X' = mean_`X' > 0.5
+	tab H_`X'
 }
+gen byte H_early = enter_year<=2000
+gen byte H_young_firm = age<=10
 
 drop if founder==1
 scalar dropped_founders = r(N_drop)
@@ -80,7 +90,7 @@ gen byte EE = (lag_expat==1)&(expat==1)
 * newly arriving CEOs
 local T 4
 gen byte domestic = (expat==0)
-foreach X in domestic expat DD DE ED EE {
+foreach X of var domestic expat DD DE ED EE {
 	gen byte new_`X' = (tenure <=`T') & (tenure>=0) & (`X'==1)
 	
 	* new managers at foreign firms
@@ -90,6 +100,9 @@ foreach X in domestic expat DD DE ED EE {
 
 	foreach Y of var tenure before during after {
 		gen `Y'_`X' = (`X'==1)*`Y'
+		foreach Z of var H_* {
+			gen `Y'_`X'_`Z' = (`X'==1)*`Y'*(`Z'==1)
+		}
 	}
 }
 gen fold_expat = expat==1 & tenure>`T'
