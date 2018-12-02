@@ -3,7 +3,7 @@
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/
 > variables.log
   log type:  text
- opened on:   1 Dec 2018, 17:04:55
+ opened on:   2 Dec 2018, 17:06:18
 
 . 
 . use temp/firm_ceo_panel
@@ -306,12 +306,6 @@ industry_mo |
 . gen byte H_young_firm = age<=10
 
 . 
-. drop if founder==1
-(341,470 observations deleted)
-
-. scalar dropped_founders = r(N_drop)
-
-. 
 . codebook frame_id
 
 ----------------------------------------------------------------------------------
@@ -320,12 +314,12 @@ frame_id                                                               (unlabele
 
                   type:  string (str12), but longest is str10
 
-         unique values:  16,089                   missing "":  0/673,907
+         unique values:  25,815                   missing "":  0/1,015,377
 
-              examples:  "ft10411614"
-                         "ft10760729"
-                         "ft11183934"
-                         "ft12216109"
+              examples:  "ft10459065"
+                         "ft10820593"
+                         "ft11274359"
+                         "ft12503579"
 
 . 
 . drop age_cat
@@ -333,39 +327,39 @@ frame_id                                                               (unlabele
 . clonevar age_cat = age
 
 . recode age_cat 20/24=20 25/29=25 30/39=30 40/49=40 50/max=50
-(age_cat: 110175 changes made)
+(age_cat: 137578 changes made)
 
 . tab age_cat
 
     age_cat |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      7,579        1.12        1.12
-          1 |     25,392        3.77        4.89
-          2 |     30,512        4.53        9.42
-          3 |     32,982        4.89       14.31
-          4 |     33,563        4.98       19.29
-          5 |     33,618        4.99       24.28
-          6 |     32,857        4.88       29.16
-          7 |     32,059        4.76       33.92
-          8 |     31,314        4.65       38.56
-          9 |     30,475        4.52       43.08
-         10 |     29,632        4.40       47.48
-         11 |     28,597        4.24       51.73
-         12 |     27,585        4.09       55.82
-         13 |     26,419        3.92       59.74
-         14 |     25,290        3.75       63.49
-         15 |     24,319        3.61       67.10
-         16 |     23,008        3.41       70.51
-         17 |     21,285        3.16       73.67
-         18 |     19,750        2.93       76.60
-         19 |     18,401        2.73       79.33
-         20 |     67,767       10.06       89.39
-         25 |     17,901        2.66       92.05
-         30 |     14,368        2.13       94.18
-         40 |     17,018        2.53       96.70
-         50 |     22,216        3.30      100.00
+          0 |     14,862        1.46        1.46
+          1 |     48,796        4.81        6.27
+          2 |     55,500        5.47       11.74
+          3 |     57,552        5.67       17.40
+          4 |     56,333        5.55       22.95
+          5 |     54,819        5.40       28.35
+          6 |     52,472        5.17       33.52
+          7 |     50,301        4.95       38.47
+          8 |     48,367        4.76       43.24
+          9 |     46,409        4.57       47.81
+         10 |     44,585        4.39       52.20
+         11 |     42,514        4.19       56.38
+         12 |     40,523        3.99       60.37
+         13 |     38,445        3.79       64.16
+         14 |     36,474        3.59       67.75
+         15 |     34,715        3.42       71.17
+         16 |     32,602        3.21       74.38
+         17 |     30,106        2.97       77.35
+         18 |     27,780        2.74       80.08
+         19 |     25,749        2.54       82.62
+         20 |     92,808        9.14       91.76
+         25 |     22,947        2.26       94.02
+         30 |     16,117        1.59       95.61
+         40 |     19,775        1.95       97.55
+         50 |     24,826        2.45      100.00
 ------------+-----------------------------------
-      Total |    673,907      100.00
+      Total |  1,015,377      100.00
 
 . 
 . 
@@ -374,28 +368,28 @@ frame_id                                                               (unlabele
   2.         egen first_year_`X' = min(cond(`X'==1,year,.)), by(frame_id)
   3.         egen ever_`X' = max(`X'==1), by(frame_id)
   4. }
-(367089 missing values generated)
-(401216 missing values generated)
+(455753 missing values generated)
+(641537 missing values generated)
 
 . 
 . gen tenure_foreign = year-first_year_foreign
-(401,216 missing values generated)
+(641,537 missing values generated)
 
 . 
 . 
 . *foreign visszahúzása expatba, valaha expat-tal, de soha foreign-mal bíró cégek 
 > teljes kidobása
 . replace foreign=1 if first_year_expat<=year&foreign==0&ever_foreign==1
-(44,245 real changes made)
+(70,641 real changes made)
 
 . drop first_year_foreign
 
 . egen first_year_foreign = min(cond(foreign==1,year,.)), by(frame_id)
-(401216 missing values generated)
+(641537 missing values generated)
 
 . 
 . drop if ever_expat==1 & ever_foreign==0
-(85,114 observations deleted)
+(236,438 observations deleted)
 
 . scalar dropped_do3_expat_firmyears = r(N_drop)
 
@@ -440,11 +434,11 @@ frame_id                                                               (unlabele
   9.                 }
  10.         }
  11. }
-(2,669 real changes made)
-(1,167 real changes made)
-(1,119 real changes made)
+(6,286 real changes made)
+(3,660 real changes made)
+(1,296 real changes made)
 (444 real changes made)
-(638 real changes made)
+(896 real changes made)
 (469 real changes made)
 
 . gen fold_expat = expat==1 & tenure>`T'
@@ -472,18 +466,18 @@ frame_id                                                               (unlabele
   6.         scalar N_i_`X' = r(N)
   7.         drop `tag'
   8. }
-  246,451
-  4,508
-  159,475
-  14,122
-  132,299
-  2,976
-  33,998
-  2,975
-  59,060
-  4,060
-  32,831
-  2,865
+  346,267
+  5,666
+  235,470
+  20,117
+  186,535
+  4,120
+  51,574
+  4,091
+  85,029
+  5,228
+  47,914
+  3,752
 
 . 
 . 
@@ -491,6 +485,19 @@ frame_id                                                               (unlabele
 . egen firm_tag=tag(frame_id)
 
 . egen firm_person = group(frame_id manager_id)
+
+. 
+. * zero out all treatment dummies for founders. they are alwyas just control
+. foreach X of var before during after DD DE ED EE {
+  2.         replace `X' = 0 if founder==1
+  3. }
+(0 real changes made)
+(160,751 real changes made)
+(105,506 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 
 . 
 . *Teljes minta elmentése a kontrollokkal
@@ -716,7 +723,7 @@ frame_id                                                               (unlabele
   variable sales was double now long
   variable final_netgep was double now long
   variable frame_id was str12 now str10
-  (389,192,173 bytes saved)
+  (514,878,679 bytes saved)
 
 . save temp/analysis_sample, replace
 file temp/analysis_sample.dta saved
@@ -728,5 +735,5 @@ file temp/analysis_sample.dta saved
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/
 > variables.log
   log type:  text
- closed on:   1 Dec 2018, 17:07:31
+ closed on:   2 Dec 2018, 17:09:33
 ----------------------------------------------------------------------------------

@@ -47,9 +47,6 @@ foreach X of var `dummy' {
 gen byte H_early = enter_year<=2000
 gen byte H_young_firm = age<=10
 
-drop if founder==1
-scalar dropped_founders = r(N_drop)
-
 codebook frame_id
 
 drop age_cat
@@ -130,6 +127,11 @@ foreach X of var foreign new expat new_expat fnew fnew_expat {
 *Firm_tag
 egen firm_tag=tag(frame_id)
 egen firm_person = group(frame_id manager_id)
+
+* zero out all treatment dummies for founders. they are alwyas just control
+foreach X of var before during after DD DE ED EE {
+	replace `X' = 0 if founder==1
+}
 
 *Teljes minta elmentése a kontrollokkal
 compress

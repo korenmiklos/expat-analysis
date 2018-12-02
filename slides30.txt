@@ -1,0 +1,76 @@
+% ./preamble.tex
+
+= Data =
+
+== CEO succession ==
+\begin{tikzpicture}
+\scaffolding
+\draw (2.5,-0.5) node[above=6pt, align=center] {Gábor};
+\draw (5.5,-0.5) node[above=6pt, align=center] {Görgy};
+\draw (8.5,-0.5) node[above=6pt, align=center] {Georg};
+\draw (11.5,-0.5) node[above=6pt, align=center] {Gergely};
+\end{tikzpicture}
+
+= Research design =
+== Manager-level event study ==
+\begin{tikzpicture}
+\draw [->] (0,-0.5)--(10,-0.5);
+\foreach \x in {1,4,7,9}
+\draw(\x cm,3pt - 0.5cm) -- (\x cm, -3pt - 0.5cm);
+\draw (2.5,-0.5) node[below=6pt, align=center] {5 years before};
+\draw (5.5,-0.5) node[above=6pt, align=center] {György};
+\draw (5.5,-0.5) node[below=6pt, align=center] {during};
+\draw (8,-0.5) node[below=6pt, align=center] {4 years after};
+\end{tikzpicture}
+
+\noindent
+\begin{tikzpicture}
+\draw [->] (0,-0.5)--(13,-0.5);
+\foreach \x in {4,7,10,12}
+\draw(\x cm,3pt - 0.5cm) -- (\x cm, -3pt - 0.5cm);
+\draw (5.5,-0.5) node[below=6pt, align=center] {5 years before};
+\draw (8.5,-0.5) node[above=6pt, align=center] {Georg};
+\draw (8.5,-0.5) node[below=6pt, align=center] {during};
+\draw (11,-0.5) node[below=6pt, align=center] {4 years after};
+\end{tikzpicture}
+
+= Mechanism =
+== Specific knowledge ==
+\begin{tikzpicture}
+\scaffolding
+\draw [red](0,0)--(7,0)--(7,3)--(10,3)--(10,0)--(14,0);
+\end{tikzpicture}
+
+== Technology transfer ==
+\begin{tikzpicture}
+\scaffolding
+\draw [red](0,0)--(7,0)--(7,3)--(14,3);
+\end{tikzpicture}
+
+== Reorganization ==
+\begin{tikzpicture}
+\scaffolding
+\draw [red](0,0)--(4,0)--(4,1)--(7,1)--(7,2)--(10,2)--(10,3)--(14,3);
+\end{tikzpicture}
+
+= Descriptives =
+\longfigure{shares_over_time}{Local and expat managers over time}
+\longfigure{CEO_type_by_age}{Founder CEOs are slowly replace}
+\longfigure{CEO_N_histogram}{Firms sometimes have multiple CEOs}
+\longfigure{CEO_N_histogram_by}{80 percent of firms have no expat CEO}
+\longfigure{CEO_tenure_histogram}{Expat CEOs leave somewhat earlier}
+
+= Estimates from acquisitions sample =
+\longfigure{acquisitions_lnL_slope}{Local and expat managers reduce employment by same amount}
+\longfigure{acquisitions_lnQL_slope}{Expat managers improve revenue per worker by 15--25 percent}
+\longfigure{acquisitions_exporter_slope}{Expat managers increases probability of exporting by 3pp}
+
+\longfigure{lnQL_event_study}{Expat managers have persistent effect on revenue per worker}
+\longfigure{exporter_event_study}{Exporting firms are more likely taken over by an expat}
+
+
+= Estimates from manager switches =
+\longfigure{lnL_tree}{All reorganization results in loss of employment}
+\longfigure{lnQL_tree}{Productivity effect of expats remains after they leave}
+\longfigure{exporter_tree}{Exporting effect of expats remains after they leave}
+
