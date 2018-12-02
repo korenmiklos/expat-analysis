@@ -27,6 +27,11 @@ egen person_tag = tag(frame_id manager_id)
 egen N = sum(person_tag), by(frame_id)
 gen inverse_weight = 1/N
 
+* verify founders are not in analysis sample
+foreach X of var during* after* {
+	replace `X'=0 if founder==1
+}
+
 xtset firm_person year
 foreach X of var `outcomes' {
 	foreach sample in `samples' {
