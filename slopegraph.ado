@@ -1,5 +1,5 @@
 program define slopegraph
-syntax, from(string) to(string) [style(string) width_test(string) star_test(string) label(string) format(string asis)]
+syntax, from(string) to(string) [style(string) width_test(string) star_test(string) label(string) format(string asis) connect(string)]
 
 local N2 : word count `from'
 local N = `N2'/2
@@ -12,6 +12,9 @@ gen x = .
 gen y = .
 gen str label = ""
 local lines ""
+if "`connect'"=="" {
+	local connect direct
+}
 forval n=1/`N' {
 	local n2 = 2*(`n'-1)+1
 	local n21 = 2*`n'
@@ -48,7 +51,7 @@ forval n=1/`N' {
 		}
 	}
 
-	local lines "scatter y x if (_n==`n2')|(_n==`n21'), connect(direct) mstyle(`sty') lstyle(`sty') lwidth(`width') mlabstyle(`sty') mlabposition(10) mlabgap(2) mlabel(label) || `lines'"
+	local lines "scatter y x if (_n==`n2')|(_n==`n21'), connect(`connect') mstyle(`sty') lstyle(`sty') lwidth(`width') mlabstyle(`sty') mlabposition(10) mlabgap(2) mlabel(label) || `lines'"
 }
 local fmt = `" `format' "'
 `lines', `fmt'

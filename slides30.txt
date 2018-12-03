@@ -1,13 +1,33 @@
 % ./preamble.tex
 
+= Motivation =
+== Motivation ==
+- Some firms produce vastly more output per worker than others.
+	- technology
+	- organization
+...
+- Two interventions know to improve firm performance:
+	1. foreign investment
+	2. management training
+
+== Research question ==
+Do foreign managers improve firm performance?
+
 = Data =
+
+== Data ==
+- Hungarian Manager Database, 1992--2016: names and addresses of all corporations and their executives.
+- Analysis sample: foreign owned firms employing 20 people or more.
+- Foreign manager: firm representative with a non-Hungarian name
+	- e.g. Eva Bauer v Bauer Éva
+
 
 == CEO succession ==
 \begin{tikzpicture}
 \scaffolding
-\draw (2.5,-0.5) node[above=6pt, align=center] {Gábor};
-\draw (5.5,-0.5) node[above=6pt, align=center] {Görgy};
-\draw (8.5,-0.5) node[above=6pt, align=center] {Georg};
+\draw (2.5,-0.5) node[above=6pt, align=center] {Göngyi};
+\draw (5.5,-0.5) node[above=6pt, align=center] {Gábor};
+\draw (8.5,-0.5) node[above=6pt, align=center] {Gisele};
 \draw (11.5,-0.5) node[above=6pt, align=center] {Gergely};
 \end{tikzpicture}
 
@@ -18,7 +38,7 @@
 \foreach \x in {1,4,7,9}
 \draw(\x cm,3pt - 0.5cm) -- (\x cm, -3pt - 0.5cm);
 \draw (2.5,-0.5) node[below=6pt, align=center] {5 years before};
-\draw (5.5,-0.5) node[above=6pt, align=center] {György};
+\draw (5.5,-0.5) node[above=6pt, align=center] {Gábor};
 \draw (5.5,-0.5) node[below=6pt, align=center] {during};
 \draw (8,-0.5) node[below=6pt, align=center] {4 years after};
 \end{tikzpicture}
@@ -29,7 +49,7 @@
 \foreach \x in {4,7,10,12}
 \draw(\x cm,3pt - 0.5cm) -- (\x cm, -3pt - 0.5cm);
 \draw (5.5,-0.5) node[below=6pt, align=center] {5 years before};
-\draw (8.5,-0.5) node[above=6pt, align=center] {Georg};
+\draw (8.5,-0.5) node[above=6pt, align=center] {Gisele};
 \draw (8.5,-0.5) node[below=6pt, align=center] {during};
 \draw (11,-0.5) node[below=6pt, align=center] {4 years after};
 \end{tikzpicture}
@@ -73,4 +93,9 @@
 \longfigure{lnL_tree}{All reorganization results in loss of employment}
 \longfigure{lnQL_tree}{Productivity effect of expats remains after they leave}
 \longfigure{exporter_tree}{Exporting effect of expats remains after they leave}
+
+= Conclusions =
+== Conclusions ==
+- Firms with expat managers improve output per worker and enter export markets.
+- Patterns are consistent with a "technology transfer" interpretation.
 

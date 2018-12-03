@@ -3,10 +3,10 @@
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/
 > descriptives.log
   log type:  text
- opened on:   2 Dec 2018, 17:47:09
+ opened on:   2 Dec 2018, 23:31:16
 
 . 
-. local format scheme(538w) aspect(0.67)
+. local format scheme(538w)
 
 . 
 . use temp/firm_ceo_panel
@@ -166,6 +166,14 @@ xij variables:
 (file output/figure/CEO_N_histogram_by.png written in PNG format)
 
 . 
+. * only count one CEO per firm
+. replace N=1 if N>1
+(67,558 real changes made)
+
+. replace entrant=1 if entrant>1
+(8,544 real changes made)
+
+. 
 . reshape wide
 (note: j = 0 1)
 
@@ -188,7 +196,7 @@ xij variables:
 
 . 
 . line N1_share entrant0_share entrant1_share year, sort `format' ytitle("Share of
->  CEOs (%)") legend(order(1 "Expat" 2 "New local" 3 "New expat"))
+>  firms (%)") legend(order(1 "Expat CEO" 2 "New local CEO" 3 "New expat CEO"))
 
 . graph export output/figure/shares_over_time.png, width(800) replace
 (file output/figure/shares_over_time.png written in PNG format)
@@ -199,5 +207,5 @@ xij variables:
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/
 > descriptives.log
   log type:  text
- closed on:   2 Dec 2018, 17:47:42
+ closed on:   2 Dec 2018, 23:32:02
 ----------------------------------------------------------------------------------

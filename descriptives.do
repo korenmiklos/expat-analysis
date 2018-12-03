@@ -2,7 +2,7 @@ clear all
 capture log close
 log using output/descriptives, text replace
 
-local format scheme(538w) aspect(0.67)
+local format scheme(538w)
 
 use temp/firm_ceo_panel
 
@@ -64,6 +64,10 @@ graph export output/figure/CEO_N_histogram.png, width(800) replace
 hist N if N <=5, by(expat ) disc `format'
 graph export output/figure/CEO_N_histogram_by.png, width(800) replace
 
+* only count one CEO per firm
+replace N=1 if N>1
+replace entrant=1 if entrant>1
+
 reshape wide
 collapse (sum) N0 N1 entrant0 entrant1 total_N, by(year)
 
@@ -71,7 +75,7 @@ foreach X of var N1 entrant1 entrant0 {
 	gen `X'_share = `X'/total_N*100
 }
 
-line N1_share entrant0_share entrant1_share year, sort `format' ytitle("Share of CEOs (%)") legend(order(1 "Expat" 2 "New local" 3 "New expat"))
+line N1_share entrant0_share entrant1_share year, sort `format' ytitle("Share of firms (%)") legend(order(1 "Expat CEO" 2 "New local CEO" 3 "New expat CEO"))
 graph export output/figure/shares_over_time.png, width(800) replace
 
 log close

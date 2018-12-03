@@ -33,11 +33,20 @@ foreach X of var during* after* {
 }
 
 xtset firm_person year
+local i = 1
 foreach X of var `outcomes' {
 	foreach sample in `samples' {
+		* simple, descriptive regressions first, including founders, but not before/after years
+		reg `X' foreign expat i.ind_year i.age_cat if `sample_`sample'' & year>=enter_year & year<=first_exit_year [aw=inverse_weight], vce(cluster id)
+		do regram output/regression/`sample'_OLS `i' `X'
+
+		xtreg `X' foreign expat i.ind_year i.age_cat if `sample_`sample'' & year>=enter_year & year<=first_exit_year [aw=inverse_weight], i(id) fe vce(cluster id)
+		local r2_w = `e(r2_w)'
+		do regram output/regression/`sample'_FE `i' `X' R2_within "`r2_w'"
+
 		xtreg `X' foreign during after during_expat after_expat i.ind_year i.age_cat if `sample_`sample'' [aw=inverse_weight], i(firm_person ) fe vce(cluster id)
 		local r2_w = `e(r2_w)'
-		do regram output/regression/`sample' `X' `X' R2_within "`r2_w'"
+		do regram output/regression/`sample' `i' `X' R2_within "`r2_w'"
 
 		local fname = e(depvar)
 		local title : variable label `fname'
@@ -49,15 +58,17 @@ foreach X of var `outcomes' {
 			label("Local-during" "Local-after" "Expat-during" "Expat-after" ) ///
 			width_test(during after==during during_expat after_expat==during_expat) ///
 			star_test(1==1 1==1 during_expat after_expat) ///
+			connect(stepstair) ///
 			format(scheme(538w) xlabel(none) xtitle("") ytitle(`title') legend(off) aspect(0.67))
 
 		graph export output/figure/`sample'_`fname'_slope.png, width(800) replace
 	}
 	xtreg `X' foreign during_?? after_?? i.ind_year i.age_cat if `sample_acquisitions' [aw=inverse_weight], i(firm_person ) fe vce(cluster id)
 	local r2_w = `e(r2_w)'
-	do regram output/regression/acquisitions_change `X' `X' R2_within "`r2_w'"
+	do regram output/regression/acquisitions_change `i' `X' R2_within "`r2_w'"
 	do tree_graph
 
+	local i = `i' + 1
 }
 foreach X of var exporter lnQL {
 	local i = 1

@@ -8,6 +8,7 @@ slopegraph, ///
 	label(Local-Local Local-Expat Expat-Local Expat-Expat) ///
 	width_test(during_DD during_DE during_ED during_EE) ///
 	star_test(1==1 during_DE==during_DD 1==1 during_EE==during_ED) ///
+	connect(stepstair) ///
 	format(scheme(538w) xlabel(none) xtitle("") ytitle(`title') legend(off) aspect(0.67))
 
 graph export output/figure/`fname'_tree.png, width(800) replace
