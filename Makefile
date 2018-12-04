@@ -1,6 +1,14 @@
 STATA = stata -b do
-output/estimate.log: temp/analysis_sample.dta estimate.do event_study.do regram.do
-	$(STATA) estimate
+ESTIMATOR = temp/analysis_sample.dta estimate.do regram.do
+.PHONY: all
+SPECS = descriptive manager_level heterogeneity event_study
+
+all: $(foreach spec,$(SPECS),output/estimate_$(spec).log) output/descriptives.log
+
+output/estimate_%.log: est_%.do $(ESTIMATOR)
+	$(STATA) estimate $(subst est_,,$(basename $<))
+output/descriptives.log: temp/analysis_sample.dta descriptives.do
+	$(STATA) descriptives 
 temp/analysis_sample.dta: temp/balance-small.dta temp/firm_ceo_panel.dta variables.do
 	$(STATA) variables
 temp/firm_ceo_panel.dta: temp/manager_panel.dta firm_panel.do fill_in_ceo.do

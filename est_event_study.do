@@ -61,11 +61,13 @@ foreach Y of var $outcomes {
 				local tag  _p_`t'
 			}
 			replace `X'_beta = _b[`X'`tag'] if t==`t'
-			matrix V = e(V)
-			matrix V_diff = V["expat`tag'", "expat`tag'"] + V["domestic`tag'", "domestic`tag'"] - 2*V["expat`tag'", "domestic`tag'"]
-			scalar se_diff = sqrt(V_diff[1,1])
-			replace expat_lower = `X'_beta-1.96*se_diff if t==`t'
-			replace expat_upper = `X'_beta+1.96*se_diff if t==`t'
+			if ("`X'"=="expat") {
+				matrix V = e(V)
+				matrix V_diff = V["expat`tag'", "expat`tag'"] + V["domestic`tag'", "domestic`tag'"] - 2*V["expat`tag'", "domestic`tag'"]
+				scalar se_diff = sqrt(V_diff[1,1])
+				replace expat_lower = expat_beta-1.96*se_diff if t==`t'
+				replace expat_upper = expat_beta+1.96*se_diff if t==`t'
+			}
 		}
 		label var `X'_beta "`Y'"
 
@@ -77,7 +79,7 @@ foreach Y of var $outcomes {
 	tw 	(rarea expat_lower expat_upper  t if t>=-Tbefore-1 & t<=Tduring, fintensity(inten10) pstyle(p2)) ///
 		(line domestic_beta  t if t>=-Tbefore-1 & t<=Tduring, sort pstyle(p1) lwidth(thick)) ///
 		(line expat_beta  t if t>=-Tbefore-1 & t<=Tduring, sort pstyle(p2) lwidth(thick)) ///
-		, scheme(538w) title(`title') xline(-0.5) aspect(.5) plotregion(style(none)) xsize(16) ysize(10)
+		, scheme(538w) title(`title') xline(-0.5) aspect(.5) plotregion(style(none)) xsize(16) ysize(8)
 	graph export output/figure/`Y'_event_study.png, replace width(1600)
 	
 	restore

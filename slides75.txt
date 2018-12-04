@@ -35,15 +35,16 @@
 	- controlling for domestic change in management
 
 == Contributions ==
-1. Linked firm-CEO data for the universe of corporations for Hungary.
+1. Linked firm-CEO data for the universe of corporations.
 2. Compare expat CEOs to local CEOs.
+3. Research design around CEO switches.
 
 == Why care? ==
 - Different modes of global engagement are highly correlated:
 	- foreign investment/ownership
 	- foreign management
 	- foreign trade
-- Which are most important for productivity gains?
+- Which are most important for gains from globalization?
 %% in the era of Brexit, Trump and Orban, this is not only of academic interest
 
 %% BUT: We do not relate to trade. Showing that German managers are good is not an argument for free mobility of managers. Much of the literature, eg in Melitz is about selection, not causal effects.
@@ -59,10 +60,31 @@
 = Data =
 
 == Data ==
-- Hungarian Manager Database, 1992--2016: names and addresses of all corporations and their executives.
-- Analysis sample: foreign owned firms employing 20 people or more, excluding founder-managed years.
-- Foreign manager: firm representative with a non-Hungarian name
+=== Hungarian Manager Database ===
+- coverage: universe of corporations, 1992--2016
+- CEO: highest officer of corporation as specified in corporate law.
+	- information: name, mother's name, address, tenure at firm
+- 1 million firms, 2 million CEOs, 5 million job spells
+
+=== Balance sheet data ===
+- coverage: universe of double entry firms, 1992--2016
+- information: sales, exports, employment, equipment etc.
+
+== Names ==
+- We use manager names to infer (i) CEO change, (ii) nationality and (iii) gender (not used today)
+- Foreign manager: firm representative with a non-Hungarian first name
 	- e.g. Eva Bauer v Bauer Éva
+	- but: George Soros v Soros György
+- Allow for misspelling, omitted middle name, missing data (jr, dr)
+
+== Sample ==
+- Exclude: 
+	- employing less than 20 people
+	- financial sector
+	- domestic firms with expat CEO (data?)
+	- firms with more than 15 CEOs
+- Left with 18,000 firms
+- Focus on years around CEO switches.
 
 
 == CEO succession ==
@@ -78,8 +100,8 @@
 \longfigure{shares_over_time}{Local and expat managers over time}
 \longfigure{CEO_type_by_age}{Founder CEOs are slowly replaced}
 \longfigure{CEO_N_histogram}{Firms sometimes have multiple CEOs}
-\longfigure{CEO_N_histogram_by}{80 percent of firms have no expat CEO}
-\longfigure{CEO_tenure_histogram}{Expat CEOs leave somewhat earlier}
+\widefigure{CEO_N_histogram_by}{80 percent of firms have no expat CEO}
+\widefigure{CEO_tenure_histogram}{Expat CEOs leave somewhat earlier}
 
 == Number of CEO switches ==
 \input{output/table/switches.tex}
@@ -124,13 +146,13 @@ $I()$: indicator function
 
 $X_{m}$: expat dummy
 
-\begin{multline}
+\begin{multline*}
 Y_{imt} = 
 \beta_1 I(t\in T_{im}) + \beta_2 I(t>T_{im}) \\
 +\gamma_1 X_m I(t\in T_{im}) + \gamma_2 X_m I(t>T_{im}) \\
 +f(\text{age}_{it})
 +\mu_{im} + \nu_{st} + \varepsilon_{imt}
-\end{multline}
+\end{multline*}
 
 = Mechanism =
 == Specific knowledge ==
@@ -176,7 +198,7 @@ Y_{imt} =
 \longfigure{lnL_event_study}{Expat managers come to somewhat faster growing firms}
 \longfigure{lnKL_event_study}{No significant changes in capital per worker}
 \longfigure{lnQL_event_study}{Expat managers have persistent effect on revenue per worker}
-\longfigure{exporter_event_study}{Expat managers gradually increase likelihood of exporting}
+\longfigure{exporter_event_study}{Expat managers have temporary effect on likelihood of exporting}
 
 
 

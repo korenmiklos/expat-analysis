@@ -2,10 +2,10 @@
       name:  <unnamed>
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/descriptives.log
   log type:  text
- opened on:   4 Dec 2018, 15:25:40
+ opened on:   4 Dec 2018, 17:10:45
 
 . 
-. local format scheme(538w) plotregion(style(none)) xsize(16) ysize(10) aspect(.5)
+. local format scheme(538w) plotregion(style(none)) 
 
 . 
 . use temp/firm_ceo_panel
@@ -25,7 +25,7 @@
 . egen spt = tag(frame_id manager_id)
 
 . 
-. hist spell_length if spell_length <=30 & spt, by(expat) disc `format'
+. hist spell_length if spell_length <=30 & spt, by(expat) disc `format' xsize(20) ysize(8)
 (note:  clockdir by_legend_position not found in scheme, default attributes used)
 
 . graph export output/figure/CEO_tenure_histogram.png, width(1600) replace
@@ -47,7 +47,7 @@
 . * only count managers actually at firm
 . * cannot use "during" for this as that is 0 for founders
 . keep if year>=enter_year & year<=first_exit_year
-(460,254 observations deleted)
+(443,166 observations deleted)
 
 . 
 . preserve
@@ -85,11 +85,11 @@
      +-----------------------+
      |     N   from   to   i |
      |-----------------------|
-  1. | 32344               1 |
-  2. |  4814      E    E   1 |
-  3. |  2601      E    D   1 |
-  4. |  1914      D    E   1 |
-  5. | 15587      D    D   1 |
+  1. | 31732               1 |
+  2. |  4694      E    E   1 |
+  3. |  2450      E    D   1 |
+  4. |  1819      D    E   1 |
+  5. | 15197      D    D   1 |
      +-----------------------+
 
 .         drop if missing(from)
@@ -128,17 +128,17 @@ file output/table/switches.csv saved
 .         gen byte categ = 1+expat
 
 .         replace categ = 0 if founder==1
-(154,869 real changes made)
+(152,521 real changes made)
 
 .         tab categ
 
       categ |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    154,869       48.68       48.68
-          1 |    131,111       41.21       89.89
-          2 |     32,177       10.11      100.00
+          0 |    152,521       49.02       49.02
+          1 |    127,517       40.99       90.01
+          2 |     31,081        9.99      100.00
 ------------+-----------------------------------
-      Total |    318,157      100.00
+      Total |    311,119      100.00
 
 .         collapse (count) N=entrant, by(age categ)
 
@@ -174,7 +174,7 @@ xij variables:
 .         label var age "Firm age (year)"
 
 .         tw (area N0_share N1_share N2_share age if age<=20, fintensity(inten20 inten20 inten20) ),  `format' legend(order(1 "F
-> ounder" 2 "New local" 3 "New expat")) 
+> ounder" 2 "New local" 3 "New expat")) xsize(16) ysize(10) aspect(.67)
 
 .         graph export output/figure/CEO_type_by_age.png, width(1600) replace
 (file output/figure/CEO_type_by_age.png written in PNG format)
@@ -189,7 +189,7 @@ xij variables:
 
 Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of obs.                   221394   ->  206933
+Number of obs.                   216271   ->  202460
 Number of variables                   6   ->       7
 j variable (2 values)             expat   ->   (dropped)
 xij variables:
@@ -202,7 +202,7 @@ xij variables:
 
 Data                               wide   ->   long
 -----------------------------------------------------------------------------
-Number of obs.                   206933   ->  413866
+Number of obs.                   202460   ->  404920
 Number of variables                   7   ->       6
 j variable (2 values)                     ->   expat
 xij variables:
@@ -212,8 +212,8 @@ xij variables:
 
 . 
 . mvencode N entrant, mv(0) override
-           N: 192472 missing values recoded
-     entrant: 192472 missing values recoded
+           N: 188649 missing values recoded
+     entrant: 188649 missing values recoded
 
 . 
 . egen total_N = sum(N), by(frame_id year)
@@ -224,26 +224,26 @@ xij variables:
 . label var total_N "Number of CEOs"
 
 . 
-. hist total_N, disc `format'
+. hist total_N, disc `format' xsize(16) ysize(10) aspect(.67)
 (start=1, width=1)
 
 . graph export output/figure/CEO_N_histogram.png, width(1600) replace
 (file output/figure/CEO_N_histogram.png written in PNG format)
 
 . 
-. hist N if N <=5, by(expat ) disc `format'
+. hist N if N <=5, by(expat ) disc `format' xsize(20) ysize(8)
 (note:  clockdir by_legend_position not found in scheme, default attributes used)
 
-. graph export output/figure/CEO_N_histogram_by.png, width(1600) replace
+. graph export output/figure/CEO_N_histogram_by.png, width(1600) replace 
 (file output/figure/CEO_N_histogram_by.png written in PNG format)
 
 . 
 . * only count one CEO per firm
 . replace N=1 if N>1
-(67,316 real changes made)
+(65,973 real changes made)
 
 . replace entrant=1 if entrant>1
-(8,076 real changes made)
+(7,877 real changes made)
 
 . 
 . reshape wide
@@ -251,7 +251,7 @@ xij variables:
 
 Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of obs.                   413866   ->  206933
+Number of obs.                   404920   ->  202460
 Number of variables                   7   ->       8
 j variable (2 values)             expat   ->   (dropped)
 xij variables:
@@ -268,7 +268,7 @@ xij variables:
 
 . 
 . line N1_share entrant0_share entrant1_share year, sort lwidth(thick thick thick) `format' ytitle("Share of firms (%)") legend(
-> order(1 "Expat CEO" 2 "New local CEO" 3 "New expat CEO"))
+> order(1 "Expat CEO" 2 "New local CEO" 3 "New expat CEO")) xsize(16) ysize(10) aspect(.67)
 
 . graph export output/figure/shares_over_time.png, width(1600) replace
 (file output/figure/shares_over_time.png written in PNG format)
@@ -278,5 +278,5 @@ xij variables:
       name:  <unnamed>
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/descriptives.log
   log type:  text
- closed on:   4 Dec 2018, 15:26:02
+ closed on:   4 Dec 2018, 17:11:07
 --------------------------------------------------------------------------------------------------------------------------------

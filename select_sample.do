@@ -23,15 +23,16 @@ recode foreign (.=0)
 egen id = group(frame_id)
 
 
-/*
+
 *foreign-at többször váltók kidobása
+xtset id year
 gen foreign_change=1 if l1.foreign==0&foreign==1
 gen foreign_change_rev=1 if l1.foreign==1&foreign==0
 bys frame_id: egen foreign_change_total=total(foreign_change)
 bys frame_id: egen foreign_change_rev_total=total(foreign_change_rev)
 drop if foreign_change_total>1|foreign_change_rev_total>1
-drop foreign_change foreign_change_rev foreign_change_total foreign_change_rev_total */
-scalar dropped_too_many_foreign_change = 0
+scalar dropped_too_many_foreign_change = r(N_drop)
+drop foreign_change foreign_change_rev foreign_change_total foreign_change_rev_total
 
 *Greenfield - foreign húzás után, de a sampling előtt
 bys frame_id (year): gen relative_year=_n

@@ -51,7 +51,7 @@ forval n=1/`N' {
 		}
 	}
 
-	local lines "scatter y x if (_n==`n2')|(_n==`n21'), connect(`connect') mstyle(`sty') lstyle(`sty') lwidth(`width') mlabstyle(`sty') mlabposition(10) mlabgap(2) mlabel(label) || `lines'"
+	local lines "scatter y x if (_n==`n2')|(_n==`n21'), connect(`connect') mstyle(`sty') lstyle(`sty') lwidth(`width') mlabstyle(`sty') mlabtext(body) mlabposition(10) mlabgap(2) mlabel(label) || `lines'"
 }
 local fmt = `" `format' "'
 `lines', `fmt'
