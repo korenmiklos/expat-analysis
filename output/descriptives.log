@@ -1,9 +1,8 @@
-----------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/
-> descriptives.log
+       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/descriptives.log
   log type:  text
- opened on:   2 Dec 2018, 23:31:16
+ opened on:   4 Dec 2018, 13:21:39
 
 . 
 . local format scheme(538w)
@@ -49,6 +48,80 @@
 . * cannot use "during" for this as that is 0 for founders
 . keep if year>=enter_year & year<=first_exit_year
 (456,745 observations deleted)
+
+. 
+. preserve
+
+.         egen spt = tag(frame_id manager_id)
+
+.         collapse (sum) N=spt, by(DD DE ED EE)
+
+.         gen str1 from = ""
+(5 missing values generated)
+
+.         gen str1 to = ""
+(5 missing values generated)
+
+.         gen byte i = 1
+
+.         foreach from in D E {
+  2.         foreach to in D E {
+  3.                 replace from = "`from'" if `from'`to'
+  4.                 replace to = "`to'" if `from'`to'
+  5.                 drop `from'`to'
+  6.         }
+  7.         }
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+.         l
+
+     +-----------------------+
+     |     N   from   to   i |
+     |-----------------------|
+  1. | 34471               1 |
+  2. |  4774      E    E   1 |
+  3. |  2493      E    D   1 |
+  4. |  1849      D    E   1 |
+  5. | 15783      D    D   1 |
+     +-----------------------+
+
+.         drop if missing(from)
+(1 observation deleted)
+
+.         drop i
+
+.         reshape wide N, i(from) j(to) string
+(note: j = D E)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                        4   ->       2
+Number of variables                   3   ->       3
+j variable (2 values)                to   ->   (dropped)
+xij variables:
+                                      N   ->   ND NE
+-----------------------------------------------------------------------------
+
+.         replace from = cond(from=="D","domestic","expat")
+variable from was str1 now str8
+(2 real changes made)
+
+.         ren ND to_domestic
+
+.         ren NE to_expat
+
+.         export delimited output/table/switches.csv, replace
+(note: file output/table/switches.csv not found)
+file output/table/switches.csv saved
+
+. restore
 
 . 
 . preserve
@@ -101,8 +174,7 @@ xij variables:
 
 .         label var age "Firm age (year)"
 
-.         tw (area N0_share N1_share N2_share age if age<=20), `format' legend(ord
-> er(1 "Founder" 2 "New local" 3 "New expat")) 
+.         tw (area N0_share N1_share N2_share age if age<=20), `format' legend(order(1 "Founder" 2 "New local" 3 "New expat")) 
 
 .         graph export output/figure/CEO_type_by_age.png, width(800) replace
 (file output/figure/CEO_type_by_age.png written in PNG format)
@@ -195,8 +267,8 @@ xij variables:
   3. }
 
 . 
-. line N1_share entrant0_share entrant1_share year, sort `format' ytitle("Share of
->  firms (%)") legend(order(1 "Expat CEO" 2 "New local CEO" 3 "New expat CEO"))
+. line N1_share entrant0_share entrant1_share year, sort `format' ytitle("Share of firms (%)") legend(order(1 "Expat CEO" 2 "New
+>  local CEO" 3 "New expat CEO"))
 
 . graph export output/figure/shares_over_time.png, width(800) replace
 (file output/figure/shares_over_time.png written in PNG format)
@@ -204,8 +276,7 @@ xij variables:
 . 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/
-> descriptives.log
+       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/descriptives.log
   log type:  text
- closed on:   2 Dec 2018, 23:32:02
-----------------------------------------------------------------------------------
+ closed on:   4 Dec 2018, 13:22:00
+--------------------------------------------------------------------------------------------------------------------------------

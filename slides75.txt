@@ -2,7 +2,7 @@
 
 = Motivation =
 == Motivation ==
-- Some firms produce vastly more output per worker than others.
+- Some firms produce vastly more output per worker than others (Syverson, 2011).
 	- technology
 	- organization
 ...
@@ -10,14 +10,57 @@
 	1. foreign investment
 	2. management training
 
-== Research question ==
-Do foreign managers improve firm performance?
+== Foreign owned firms perform better than domestic firms ==
+- US: Doms and Jensen (1998)
+- UK: Griffith (1999)
+- Hungary, Romania, Russia, Ukraine: Brown, Earle, Telegdy (2006)
+- Indonesia: Arnold and Javorcik (2009)
+
+
+== Management improves firm performance ==
+- Good nanagement practices  increase  productivity  (Bloom  and  Van  Reenen  2010;  Bloom  et  al.  2012;  Bloom  et  al.  2014) and market access (Bloom et al. 2016). 
+- CEOs behaving like ``leaders" gradually improve firm performance. (Bandiera, Hansen, Prat and Sadun 2018)
+- Large increase  in  the  level  and  inequality  of  CEO  pay.  (Murphy  and  Zábojník  2004;  Gabaix  and  Landier  2008;  Tervio  2008; Frydman and Saks 2010)
+
+== Manager identity matters ==
+- Managers have persistent effects across firms on investment policy, R\&D, advertising, return on assets.  (Bertrand and Schoar 2003)
+- Sudden CEO death worsens firm performance. (Bennedsen, Pérez-González and Wolfenzon 2007) 
+- Managers having past export experience increase likelihood of expoting. (Mion and Opromolla 2014; Mion, Opromolla and Sforza 2016:
+
+== This paper ==
+- Foreign owners improve firm performance by improving management.
+- Compile new, unique data on which firm is run by expat manager: Hungary, 1992--2016. 
+- Research design: 
+	- differences-in-differences comparing expat-managed firms to domestic managed firms before and after takeover
+	- controlling for domestic change in management
+
+== Contributions ==
+1. Linked firm-CEO data for the universe of corporations for Hungary.
+2. Compare expat CEOs to local CEOs.
+
+== Why care? ==
+- Different modes of global engagement are highly correlated:
+	- foreign investment/ownership
+	- foreign management
+	- foreign trade
+- Which are most important for productivity gains?
+%% in the era of Brexit, Trump and Orban, this is not only of academic interest
+
+%% BUT: We do not relate to trade. Showing that German managers are good is not an argument for free mobility of managers. Much of the literature, eg in Melitz is about selection, not causal effects.
+
+%% family ownership vs dynastic management
+
+== Three potential benefits ==
+1. Better firm-specific skills and loyalty
+2. Better general management skills
+3. Reorganization
+
 
 = Data =
 
 == Data ==
 - Hungarian Manager Database, 1992--2016: names and addresses of all corporations and their executives.
-- Analysis sample: foreign owned firms employing 20 people or more.
+- Analysis sample: foreign owned firms employing 20 people or more, excluding founder-managed years.
 - Foreign manager: firm representative with a non-Hungarian name
 	- e.g. Eva Bauer v Bauer Éva
 
@@ -38,8 +81,20 @@ Do foreign managers improve firm performance?
 \longfigure{CEO_N_histogram_by}{80 percent of firms have no expat CEO}
 \longfigure{CEO_tenure_histogram}{Expat CEOs leave somewhat earlier}
 
+== Number of CEO switches ==
+\input{output/table/switches.tex}
+
 
 = Research design =
+== Research design ==
+- Take each CEO spell at each firm (e.g., Steve Ballmer, Microsoft, 2000--2014)
+- Exclude founders (e.g., Bill Gates, Microsoft, 1975--1999)
+- For each spell, collect firm-level data for three periods:
+	- before (1975--1999)
+	- during (2000-2014)
+	- after (2015--)
+- Comparing these periods, we estimate the impact of a new CEO and whether it is long lasting.
+
 == Manager-level event study ==
 \begin{tikzpicture}
 \draw [->] (0,-0.5)--(10,-0.5);
@@ -113,11 +168,16 @@ Y_{imt} =
 == ==
 
 \longfigure{acquisitions_lnL_slope}{Local and expat managers reduce employment by same amount}
+\longfigure{acquisitions_lnKL_slope}{Capital intensity drops after first expat manager leaves}
 \longfigure{acquisitions_lnQL_slope}{Expat managers improve revenue per worker by 15--25 percent}
-\longfigure{acquisitions_exporter_slope}{Expat managers increases probability of exporting by 3pp}
+\longfigure{acquisitions_exporter_slope}{Expat managers increase probability of exporting by 3pp}
 
+= Event studies =
+\longfigure{lnL_event_study}{Expat managers come to somewhat faster growing firms}
+\longfigure{lnKL_event_study}{No significant changes in capital per worker}
 \longfigure{lnQL_event_study}{Expat managers have persistent effect on revenue per worker}
-\longfigure{exporter_event_study}{Exporting firms are more likely taken over by an expat}
+\longfigure{exporter_event_study}{Expat managers gradually increase likelihood of exporting}
+
 
 
 = Estimates from manager switches =
@@ -125,8 +185,28 @@ Y_{imt} =
 \longfigure{lnQL_tree}{Productivity effect of expats remains after they leave}
 \longfigure{exporter_tree}{Exporting effect of expats remains after they leave}
 
+
+= Interpretation =
+== Interpretation ==
+Three alternative explanations
+
+1. Firm-specific skills
+	- heterogeneity with initial firm characteristics
+2. General skills
+	- labor productivity improvement has persistent effect
+3. Reorganization
+	- effects relative to domestic change in management
+
+== Costs ==
+Why does not every firm hire a foreign manager?
+
+1. Wages are higher 
+2. Search costs are higher
+3. Match is less than perfect
+
+
 = Conclusions =
 == Conclusions ==
 - Firms with expat managers improve output per worker and enter export markets.
-- Patterns are consistent with a "technology transfer" interpretation.
+- Patterns are consistent with a ``technology transfer" interpretation.
 

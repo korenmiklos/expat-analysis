@@ -29,6 +29,29 @@ gen byte entrant = year==enter_year
 keep if year>=enter_year & year<=first_exit_year
 
 preserve
+	egen spt = tag(frame_id manager_id)
+	collapse (sum) N=spt, by(DD DE ED EE)
+	gen str1 from = ""
+	gen str1 to = ""
+	gen byte i = 1
+	foreach from in D E {
+	foreach to in D E {
+		replace from = "`from'" if `from'`to'
+		replace to = "`to'" if `from'`to'
+		drop `from'`to'
+	}
+	}
+	l
+	drop if missing(from)
+	drop i
+	reshape wide N, i(from) j(to) string
+	replace from = cond(from=="D","domestic","expat")
+	ren ND to_domestic
+	ren NE to_expat
+	export delimited output/table/switches.csv, replace
+restore
+
+preserve
 	gen byte categ = 1+expat
 	replace categ = 0 if founder==1
 	tab categ
