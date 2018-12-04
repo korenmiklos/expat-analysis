@@ -182,8 +182,12 @@ Y_{imt} =
 == Foreign takeover is associated with higher capital intensity, productivity and exporting (firm FE estimates) ==
 \regressiontable{baseline_FE}
 
-== Foreign takeover is associated with higher capital intensity, productivity and exporting (firm FE estimates on acquisition sample only) ==
+== Foreign takeover is associated with higher productivity (firm FE estimates on acquisition sample only) ==
 \regressiontable{acquisitions_FE}
+
+== Better, more global firms receive expat CEOs ==
+\regressiontable{selection}
+
 
 == Manager-level estimates on acquisitions sample ==
 \regressiontable{acquisitions}
@@ -203,6 +207,22 @@ Y_{imt} =
 
 
 = Estimates from manager switches =
+
+== Estimating equation ==
+$X_{m}$: manager $m$ is expat 
+
+$X_{m-1}$: previous manager is expat 
+
+omit $t>T_{im}$ years
+
+\begin{multline*}
+Y_{imt} = 
+\sum_{j=0,1}\sum_{k=0,1} \beta_{jk} I(X_{m-1}=j)I(X_{m}=k)I(t\in T_{im})\\
++f(\text{age}_{it})
++\mu_{im} + \nu_{st} + \varepsilon_{imt}
+\end{multline*}
+
+== ==
 \longfigure{lnL_tree}{All reorganization results in loss of employment}
 \longfigure{lnQL_tree}{Productivity effect of expats remains after they leave}
 \longfigure{exporter_tree}{Exporting effect of expats remains after they leave}
