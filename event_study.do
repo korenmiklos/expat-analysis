@@ -77,8 +77,8 @@ foreach Y of var $outcomes {
 	tw 	(rarea expat_lower expat_upper  t if t>=-Tbefore-1 & t<=Tduring, fintensity(inten10) pstyle(p2)) ///
 		(line domestic_beta  t if t>=-Tbefore-1 & t<=Tduring, sort pstyle(p1) lwidth(thick)) ///
 		(line expat_beta  t if t>=-Tbefore-1 & t<=Tduring, sort pstyle(p2) lwidth(thick)) ///
-		, scheme(538w) title(`title') aspect(0.67) xline(-0.5)
-	graph export output/figure/`Y'_event_study.png, replace width(800)
+		, scheme(538w) title(`title') xline(-0.5) aspect(.5) plotregion(style(none)) xsize(16) ysize(10)
+	graph export output/figure/`Y'_event_study.png, replace width(1600)
 	
 	restore
 

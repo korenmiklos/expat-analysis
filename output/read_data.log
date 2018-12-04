@@ -1,8 +1,9 @@
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Volumes/Data3/projects/expat-analysis/output/read_data.log
+       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/outp
+> ut/read_data.log
   log type:  text
- opened on:  20 Nov 2018, 14:25:14
+ opened on:   4 Dec 2018, 14:37:56
 
 . 
 . import delimited input/manager_position/pos5.csv, varnames(1) clear
@@ -20,7 +21,6 @@
   (12,966,648 bytes saved)
 
 . save temp/positions, replace
-(note: file temp/positions.dta not found)
 file temp/positions.dta saved
 
 . 
@@ -82,13 +82,13 @@ file temp/positions.dta saved
   (96,145,662 bytes saved)
 
 . save temp/managers, replace
-(note: file temp/managers.dta not found)
 file temp/managers.dta saved
 
 . 
 . log close
       name:  <unnamed>
-       log:  /Volumes/Data3/projects/expat-analysis/output/read_data.log
+       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/outp
+> ut/read_data.log
   log type:  text
- closed on:  20 Nov 2018, 14:29:23
+ closed on:   4 Dec 2018, 14:39:24
 -------------------------------------------------------------------------------

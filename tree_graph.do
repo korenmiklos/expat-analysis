@@ -9,6 +9,6 @@ slopegraph, ///
 	width_test(during_DD during_DE during_ED during_EE) ///
 	star_test(1==1 during_DE==during_DD 1==1 during_EE==during_ED) ///
 	connect(stepstair) ///
-	format(scheme(538w) xlabel(none) xtitle("") ytitle("") title(`title') legend(off) aspect(0.67))
+	format(scheme(538w) xlabel(none) xtitle("") ytitle("") title(`title') legend(off) aspect(.5) plotregion(style(none)) xsize(16) ysize(10))
 
-graph export output/figure/`fname'_tree.png, width(800) replace
+graph export output/figure/`fname'_tree.png, width(1600) replace

@@ -1,7 +1,4 @@
 STATA = stata -b do
-tables: 
-	python3 ~/Dropbox/projects/py/oak/oak.py -p id -c output -o output .
-
 output/estimate.log: temp/analysis_sample.dta estimate.do event_study.do regram.do
 	$(STATA) estimate
 temp/analysis_sample.dta: temp/balance-small.dta temp/firm_ceo_panel.dta variables.do
@@ -16,3 +13,6 @@ temp/managers.dta temp/positions.dta: input/manager_position/pos5.csv input/moth
 	$(STATA) read_data
 install:
 	stata -b ssc install g538schemes, replace all
+tables: 
+	python3 ~/Dropbox/projects/py/oak/oak.py -p id -c output -o output .
+

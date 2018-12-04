@@ -4,11 +4,9 @@ use input/balance-small/balance-sheet-1992-2016-small
 * limit sample before large merge
 *Függő változók készítése
 gen lnL=ln(emp)
-gen lnK=ln(final_netgep)
 gen lnM=ln(ranyag)
 gen lnQ=ln(sales)
 gen lnQL=lnQ-lnL
-gen lnKL=lnK-lnL
 gen byte exporter = export>0&export!=.
 replace exporter=0 if export==.
 *Átlagos létszám változó
@@ -24,15 +22,16 @@ recode foreign (.=0)
 
 egen id = group(frame_id)
 
+
+/*
 *foreign-at többször váltók kidobása
-xtset id year
 gen foreign_change=1 if l1.foreign==0&foreign==1
 gen foreign_change_rev=1 if l1.foreign==1&foreign==0
 bys frame_id: egen foreign_change_total=total(foreign_change)
 bys frame_id: egen foreign_change_rev_total=total(foreign_change_rev)
 drop if foreign_change_total>1|foreign_change_rev_total>1
-scalar dropped_too_many_foreign_change = r(N_drop)
-drop foreign_change foreign_change_rev foreign_change_total foreign_change_rev_total
+drop foreign_change foreign_change_rev foreign_change_total foreign_change_rev_total */
+scalar dropped_too_many_foreign_change = 0
 
 *Greenfield - foreign húzás után, de a sampling előtt
 bys frame_id (year): gen relative_year=_n
@@ -41,6 +40,15 @@ bys frame_id: egen byte greenfield=max(foreign_infirst)
 
 recode greenfield (.=0)
 
+* extrapolate capital stock
+xtset id year
+local condition  final_netgep==0 & !missing(L.final_netgep) & L.final_netgep>0
+count if `condition'
+scalar replaced_capital = r(N)
+replace final_netgep = L.final_netgep if `condition'
+gen lnK=ln(final_netgep)
+gen lnKL=lnK-lnL
+drop if missing(lnK)
 
 
 
@@ -62,19 +70,16 @@ replace manufacturing=1 if teaor08_1d=="C"
 
 *Életkor változó
 gen age=year-foundyear
-gen age_cat=.
-replace age_cat=1 if age==0
-replace age_cat=2 if age==1
-replace age_cat=3 if age==2
-replace age_cat=4 if age>=3&age<=5
-replace age_cat=5 if age>=6&age<=8
-replace age_cat=6 if age>8
 
+clonevar age_cat = age
+recode age_cat 20/24=20 25/29=25 30/39=30 40/49=40 50/max=50
+tab age_cat
 
 
 
 *Pénzügyi szektorban működő vállalatok kiszűrése
-bys frame_id: egen industry_mode=mode(teaor08_2d)
+* break the tie when mode is not unique
+bys frame_id: egen industry_mode=mode(teaor08_2d), minmode
 drop if industry_mode==64|industry_mode==65|industry_mode==66
 scalar dropped_finance = r(N_drop)
 

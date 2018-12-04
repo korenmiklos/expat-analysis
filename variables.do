@@ -49,12 +49,6 @@ gen byte H_young_firm = age<=10
 
 codebook frame_id
 
-drop age_cat
-clonevar age_cat = age
-recode age_cat 20/24=20 25/29=25 30/39=30 40/49=40 50/max=50
-tab age_cat
-
-
 * time invariant vars
 foreach X of var expat foreign {
 	egen first_year_`X' = min(cond(`X'==1,year,.)), by(frame_id)
