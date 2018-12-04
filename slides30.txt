@@ -31,6 +31,14 @@ Do foreign managers improve firm performance?
 \draw (11.5,-0.5) node[above=6pt, align=center] {Gergely};
 \end{tikzpicture}
 
+= Descriptives =
+\longfigure{shares_over_time}{Local and expat managers over time}
+\longfigure{CEO_type_by_age}{Founder CEOs are slowly replaced}
+\longfigure{CEO_N_histogram}{Firms sometimes have multiple CEOs}
+\longfigure{CEO_N_histogram_by}{80 percent of firms have no expat CEO}
+\longfigure{CEO_tenure_histogram}{Expat CEOs leave somewhat earlier}
+
+
 = Research design =
 == Manager-level event study ==
 \begin{tikzpicture}
@@ -54,33 +62,56 @@ Do foreign managers improve firm performance?
 \draw (11,-0.5) node[below=6pt, align=center] {4 years after};
 \end{tikzpicture}
 
+== Estimating equation ==
+$T_{im}\subset [1992,2016]$: tenure of CEO $m$ at firm $i$
+
+$I()$: indicator function
+
+$X_{m}$: expat dummy
+
+\begin{multline}
+Y_{imt} = 
+\beta_1 I(t\in T_{im}) + \beta_2 I(t>T_{im}) \\
++\gamma_1 X_m I(t\in T_{im}) + \gamma_2 X_m I(t>T_{im}) \\
++f(\text{age}_{it})
++\mu_{im} + \nu_{st} + \varepsilon_{imt}
+\end{multline}
+
 = Mechanism =
 == Specific knowledge ==
 \begin{tikzpicture}
 \scaffolding
-\draw [red](0,0)--(7,0)--(7,3)--(10,3)--(10,0)--(14,0);
+\draw [red, very thick](0,0)--(7,0)--(7,3)--(10,3)--(10,0)--(14,0);
 \end{tikzpicture}
 
 == Technology transfer ==
 \begin{tikzpicture}
 \scaffolding
-\draw [red](0,0)--(7,0)--(7,3)--(14,3);
+\draw [red, very thick](0,0)--(7,0)--(7,3)--(14,3);
 \end{tikzpicture}
 
 == Reorganization ==
 \begin{tikzpicture}
 \scaffolding
-\draw [red](0,0)--(4,0)--(4,1)--(7,1)--(7,2)--(10,2)--(10,3)--(14,3);
+\draw [red, very thick](0,0)--(4,0)--(4,1)--(7,1)--(7,2)--(10,2)--(10,3)--(14,3);
 \end{tikzpicture}
 
-= Descriptives =
-\longfigure{shares_over_time}{Local and expat managers over time}
-\longfigure{CEO_type_by_age}{Founder CEOs are slowly replaced}
-\longfigure{CEO_N_histogram}{Firms sometimes have multiple CEOs}
-\longfigure{CEO_N_histogram_by}{80 percent of firms have no expat CEO}
-\longfigure{CEO_tenure_histogram}{Expat CEOs leave somewhat earlier}
 
-= Estimates from acquisitions sample =
+
+= Estimates =
+== Foreign firms are better in every respect (OLS estimates) ==
+\regressiontable{baseline_OLS}
+
+== Foreign takeover is associated with higher capital intensity, productivity and exporting (firm FE estimates) ==
+\regressiontable{baseline_FE}
+
+== Foreign takeover is associated with higher capital intensity, productivity and exporting (firm FE estimates on acquisition sample only) ==
+\regressiontable{acquisitions_FE}
+
+== Manager-level estimates on acquisitions sample ==
+\regressiontable{acquisitions}
+== ==
+
 \longfigure{acquisitions_lnL_slope}{Local and expat managers reduce employment by same amount}
 \longfigure{acquisitions_lnQL_slope}{Expat managers improve revenue per worker by 15--25 percent}
 \longfigure{acquisitions_exporter_slope}{Expat managers increases probability of exporting by 3pp}

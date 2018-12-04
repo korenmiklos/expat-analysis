@@ -1,4 +1,7 @@
 STATA = stata -b do
+tables: 
+	python3 ~/Dropbox/projects/py/oak/oak.py -p id -c output -o output .
+
 output/estimate.log: temp/analysis_sample.dta estimate.do event_study.do regram.do
 	$(STATA) estimate
 temp/analysis_sample.dta: temp/balance-small.dta temp/firm_ceo_panel.dta variables.do

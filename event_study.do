@@ -45,10 +45,12 @@ foreach Y of var $outcomes {
 	gen t = _n-2-`Tbefore'
 	label var t "Time since new manager (year)"
 
+	gen expat_lower = 0
+	gen expat_upper = 0
+	label var expat_upper "95% CI of difference"
+	label var expat_lower "95% CI of difference"
 	foreach X in foreign domestic expat  {
 		gen `X'_beta=0
-		gen `X'_lower=0
-		gen `X'_upper=0
 		forval t=-`Tbefore'/`Tafter' {
 			local tag "`t'"
 			if (`t'<0) {
@@ -59,19 +61,23 @@ foreach Y of var $outcomes {
 				local tag  _p_`t'
 			}
 			replace `X'_beta = _b[`X'`tag'] if t==`t'
-			replace `X'_lower = `X'_beta-1.69*_se[`X'`tag'] if t==`t'
-			replace `X'_upper = `X'_beta+1.69*_se[`X'`tag'] if t==`t'
+			matrix V = e(V)
+			matrix V_diff = V["expat`tag'", "expat`tag'"] + V["domestic`tag'", "domestic`tag'"] - 2*V["expat`tag'", "domestic`tag'"]
+			scalar se_diff = sqrt(V_diff[1,1])
+			replace expat_lower = `X'_beta-1.96*se_diff if t==`t'
+			replace expat_upper = `X'_beta+1.96*se_diff if t==`t'
 		}
 		label var `X'_beta "`Y'"
-		label var `X'_upper "90% CI"
-		label var `X'_lower "90% CI"
 
 	}
 	label var foreign_beta "Foreign owner"
 	label var expat_beta "Expat manager"
 	label var domestic_beta "Domestic manager"
 
-	tw (line domestic_beta expat_beta  t if t>=-Tbefore-1 & t<=Tduring, sort), scheme(538w) title(`title') aspect(0.67)
+	tw 	(rarea expat_lower expat_upper  t if t>=-Tbefore-1 & t<=Tduring, fintensity(inten10) pstyle(p2)) ///
+		(line domestic_beta  t if t>=-Tbefore-1 & t<=Tduring, sort pstyle(p1) lwidth(thick)) ///
+		(line expat_beta  t if t>=-Tbefore-1 & t<=Tduring, sort pstyle(p2) lwidth(thick)) ///
+		, scheme(538w) title(`title') aspect(0.67) xline(-0.5)
 	graph export output/figure/`Y'_event_study.png, replace width(800)
 	
 	restore

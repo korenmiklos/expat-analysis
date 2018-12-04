@@ -59,7 +59,7 @@ foreach X of var `outcomes' {
 			width_test(during after==during during_expat after_expat==during_expat) ///
 			star_test(1==1 1==1 during_expat after_expat) ///
 			connect(stepstair) ///
-			format(scheme(538w) xlabel(none) xtitle("") ytitle(`title') legend(off) aspect(0.67))
+			format(scheme(538w) xlabel(none) xtitle("") ytitle("") title(`title') legend(off) aspect(0.67))
 
 		graph export output/figure/`sample'_`fname'_slope.png, width(800) replace
 	}
