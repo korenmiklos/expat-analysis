@@ -1,11 +1,15 @@
-foreach X of var exporter lnQL {
-	local i = 1
-	foreach Z of var H_* {
-		xtreg `X' foreign during_domestic after_domestic during_expat after_expat during_domestic_`Z' after_domestic_`Z' during_expat_`Z' after_expat_`Z' i.ind_year i.age_cat if $sample_acquisitions [aw=inverse_weight], i(firm_person ) fe vce(cluster id)
-		local r2_w = `e(r2_w)'
-		test during_expat_`Z'==during_domestic_`Z'
-		local p = `r(p)'	
-		do regram output/regression/`X'_heterogeneity `i' `Z' R2_within "`r2_w'" p_value "`p'"
-		local i = `i'+1
-	}
-}
+xtreg exporter during after during_expat after_expat $controls if $sample_acquisitions & H_exporter==0 [aw=inverse_weight], i(firm_person ) fe vce(cluster id)
+local r2_w = `e(r2_w)'
+do regram output/regression/exporter_heterogeneity 1 Start R2_within "`r2_w'" 
+
+xtreg exporter during after during_expat after_expat $controls if $sample_acquisitions & H_exporter==1 [aw=inverse_weight], i(firm_person ) fe vce(cluster id)
+local r2_w = `e(r2_w)'
+do regram output/regression/exporter_heterogeneity 2 Continue R2_within "`r2_w'" 
+
+xtreg exporter during after during_expat after_expat $controls if $sample_acquisitions & H_exporter==0 & lag_expat==0 [aw=inverse_weight], i(firm_person ) fe vce(cluster id)
+local r2_w = `e(r2_w)'
+do regram output/regression/exporter_heterogeneity 3 Domestic R2_within "`r2_w'" 
+
+xtreg exporter during after during_expat after_expat $controls if $sample_acquisitions & H_exporter==1 & lag_expat==1 [aw=inverse_weight], i(firm_person ) fe vce(cluster id)
+local r2_w = `e(r2_w)'
+do regram output/regression/exporter_heterogeneity 4 Global R2_within "`r2_w'" 

@@ -25,6 +25,8 @@ global sample_ever_foreign $sample_acquisitions & (ever_foreign==1)
 global samples baseline acquisitions
 
 global outcomes lnL lnKL lnQL exporter
+global controls foreign i.ind_year i.age_cat
+
 label var lnL "Employment (log)"
 label var lnKL "Capital per worker (log)"
 label var lnQL "Revenue per worker (log)"

@@ -23,4 +23,5 @@ install:
 	stata -b ssc install g538schemes, replace all
 tables: 
 	python3 ~/Dropbox/projects/py/oak/oak.py -p id -c output -o output .
+	rm -rf output/regression/_*
 
