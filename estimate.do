@@ -19,6 +19,7 @@ global sample_baseline (analysis_window==1)
 global sample_manufacturing $sample_baseline & (manufacturing==1)
 global sample_acquisitions $sample_baseline & (greenfield==0)
 global sample_1990s $sample_acquisitions & (enter_year>=1994 & enter_year<=1999)
+global sample_2000s $sample_acquisitions & (enter_year>=2000)
 global sample_ever_foreign $sample_acquisitions & (ever_foreign==1)
 
 global samples baseline acquisitions
