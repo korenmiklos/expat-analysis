@@ -5,10 +5,18 @@
 - Some firms produce vastly more output per worker than others (Syverson, 2011).
 	- technology
 	- organization
-...
-- Two interventions know to improve firm performance:
-	1. foreign investment
-	2. management training
+	- unmeasured input quality
+
+
+== Management improves firm performance ==
+- Good management practices  increase  productivity  (Bloom  and  Van  Reenen  2010;  Bloom  et  al.  2012;  Bloom  et  al.  2014) and market access (Bloom et al. 2016). 
+- CEOs behaving like ``leaders" gradually improve firm performance. (Bandiera, Hansen, Prat and Sadun 2018)
+- Large increase  in  the  level  and  inequality  of  CEO  pay.  (Murphy  and  Zábojník  2004;  Gabaix  and  Landier  2008;  Tervio  2008; Frydman and Saks 2010)
+
+== Manager identity matters ==
+- Managers have persistent effects across firms on investment policy, R\&D, advertising, return on assets.  (Bertrand and Schoar 2003)
+- Sudden CEO death worsens firm performance. (Bennedsen, Pérez-González and Wolfenzon 2007) 
+- Managers having past export experience increase likelihood of exporting (Mion and Opromolla 2014; Mion, Opromolla and Sforza 2016) and importing (Bisztray, Koren and Szeidl 2018).
 
 == Foreign owned firms perform better than domestic firms ==
 - US: Doms and Jensen (1998)
@@ -16,16 +24,6 @@
 - Hungary, Romania, Russia, Ukraine: Brown, Earle, Telegdy (2006)
 - Indonesia: Arnold and Javorcik (2009)
 
-
-== Management improves firm performance ==
-- Good nanagement practices  increase  productivity  (Bloom  and  Van  Reenen  2010;  Bloom  et  al.  2012;  Bloom  et  al.  2014) and market access (Bloom et al. 2016). 
-- CEOs behaving like ``leaders" gradually improve firm performance. (Bandiera, Hansen, Prat and Sadun 2018)
-- Large increase  in  the  level  and  inequality  of  CEO  pay.  (Murphy  and  Zábojník  2004;  Gabaix  and  Landier  2008;  Tervio  2008; Frydman and Saks 2010)
-
-== Manager identity matters ==
-- Managers have persistent effects across firms on investment policy, R\&D, advertising, return on assets.  (Bertrand and Schoar 2003)
-- Sudden CEO death worsens firm performance. (Bennedsen, Pérez-González and Wolfenzon 2007) 
-- Managers having past export experience increase likelihood of expoting. (Mion and Opromolla 2014; Mion, Opromolla and Sforza 2016:
 
 == This paper ==
 - Foreign owners improve firm performance by improving management.
@@ -45,17 +43,19 @@
 	- foreign management
 	- foreign trade
 - Which are most important for gains from globalization?
+	- What are the costs of protectionism?
+
 %% in the era of Brexit, Trump and Orban, this is not only of academic interest
 
 %% BUT: We do not relate to trade. Showing that German managers are good is not an argument for free mobility of managers. Much of the literature, eg in Melitz is about selection, not causal effects.
 
 %% family ownership vs dynastic management
 
-== Three potential benefits ==
-1. Better firm-specific skills and loyalty
-2. Better general management skills
-3. Reorganization
-
+= Outline =
+== Outline ==
+1. Measurement: finding expat managers
+2. Research design: comparing CEO spells
+3. Estimates from manager-level event studies
 
 = Data =
 
@@ -71,7 +71,10 @@
 - information: sales, exports, employment, equipment etc.
 
 == Names ==
-- We use manager names to infer (i) CEO change, (ii) nationality and (iii) gender (not used today)
+- We use manager names to infer 
+	1. CEO change
+	2. nationality
+	3. gender (not used today)
 - Foreign manager: firm representative with a non-Hungarian first name
 	- e.g. Eva Bauer v Bauer Éva
 	- but: George Soros v Soros György
@@ -86,11 +89,29 @@
 - Left with 18,000 firms
 - Focus on years around CEO switches.
 
+== Shape of data ==
+\texttt{firm,manager,from,to\\
+123456,Gyöngyi,1992-01-01,1996-12-31\\
+123456,Gábor,1997-01-01,1999-12-31}
+
+== Data cleaning ==
+1. Convert names to numerical IDs
+	- normalization
+	- Levenshtein distance of name components
+	- stricter matching across firms (not used today)
+	- more liberal matching within firm
+2. Infer Hungarian nationality from name
+	- given name in closed list of admissible Hungarian names
+3. Classify everyone else as foreign
+	- remove firms
+	- but: weird typos with limited supporting information
+4. Clean up time interval and position description
+5. Create annual panel for June 21
 
 == CEO succession ==
 \begin{tikzpicture}
 \scaffolding
-\draw (2.5,-0.5) node[above=6pt, align=center] {Göngyi};
+\draw (2.5,-0.5) node[above=6pt, align=center] {Gyöngyi};
 \draw (5.5,-0.5) node[above=6pt, align=center] {Gábor};
 \draw (8.5,-0.5) node[above=6pt, align=center] {Gisele};
 \draw (11.5,-0.5) node[above=6pt, align=center] {Gergely};
@@ -101,7 +122,7 @@
 \longfigure{CEO_type_by_age}{Founder CEOs are slowly replaced}
 \longfigure{CEO_N_histogram}{Firms sometimes have multiple CEOs}
 \widefigure{CEO_N_histogram_by}{80 percent of firms have no expat CEO}
-\widefigure{CEO_tenure_histogram}{Expat CEOs leave somewhat earlier}
+\widefigure{CEO_tenure_histogram}{Expat CEOs leave somewhat earlier (median 3 v 4 years)}
 
 == Number of CEO switches ==
 \input{output/table/switches.tex}
@@ -155,13 +176,20 @@ Y_{imt} =
 \end{multline*}
 
 = Mechanism =
-== Specific knowledge ==
+
+== Three potential benefits ==
+1. Better firm-specific skills and loyalty
+2. Better general management skills  
+3. Reorganization
+
+
+== Specific skills ==
 \begin{tikzpicture}
 \scaffolding
 \draw [red, very thick](0,0)--(7,0)--(7,3)--(10,3)--(10,0)--(14,0);
 \end{tikzpicture}
 
-== Technology transfer ==
+== Transferable skills ==
 \begin{tikzpicture}
 \scaffolding
 \draw [red, very thick](0,0)--(7,0)--(7,3)--(14,3);
@@ -173,6 +201,10 @@ Y_{imt} =
 \draw [red, very thick](0,0)--(4,0)--(4,1)--(7,1)--(7,2)--(10,2)--(10,3)--(14,3);
 \end{tikzpicture}
 
+== Identification concerns ==
+- Reverse causality: Expats come to firms with good prospects.
+	- no plausible IV with strong first stage (source countries, EU accession, bilingual schools)
+- Omitted variables: Expats are just a signal of strong owner attention.
 
 
 = Estimates =
@@ -185,7 +217,7 @@ Y_{imt} =
 == Foreign takeover is associated with higher productivity (firm FE estimates on acquisition sample only) ==
 \regressiontable{acquisitions_FE}
 
-== Better, more global firms receive expat CEOs ==
+== Selection: Better, more global firms receive expat CEOs ==
 \regressiontable{selection}
 
 
@@ -235,11 +267,11 @@ Y_{imt} =
 Three alternative explanations
 
 1. Firm-specific skills
-	- heterogeneity with initial firm characteristics
+	- no substantial heterogeneity with initial firm characteristics other than exporting
 2. General skills
 	- labor productivity improvement has persistent effect
 3. Reorganization
-	- effects relative to domestic change in management
+	- effects of domestic change in management much smaller
 
 == Costs ==
 Why does not every firm hire a foreign manager?
@@ -249,8 +281,16 @@ Why does not every firm hire a foreign manager?
 3. Match is less than perfect
 
 
+
 = Conclusions =
 == Conclusions ==
 - Firms with expat managers improve output per worker and enter export markets.
-- Patterns are consistent with a ``technology transfer" interpretation.
+- Patterns are consistent with a transferable skill interpretation:
+	- persistent reorganization
+	- technology transfer
 
+== Next steps ==
+- Improve identification with matching.
+- Explore complementarities of expat managers.
+- Explore management team and succession in expat firms.
+- Link to World Management Survey: how do management practices of expats differ?
