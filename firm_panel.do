@@ -50,8 +50,11 @@ gen byte spell = 1
 bysort frame_id (enter_year manager_id): replace spell =  cond(enter_year>enter_year[_n-1],spell[_n-1]+1,spell[_n-1]) if _n>1
 
 egen max_expat = max(expat), by(frame_id spell)
-gen lag_expat = .
-bysort frame_id (enter_year manager_id): replace lag_expat =  cond(enter_year>enter_year[_n-1],max_expat[_n-1],lag_expat) if _n>1
+tempvar lag_expat
+gen `lag_expat' = .
+bysort frame_id (enter_year manager_id): replace `lag_expat' = max_expat[_n-1] if _n>1 & enter_year>enter_year[_n-1]
+egen lag_expat = mean(`lag_expat'), by(frame_id spell)
+assert lag_expat==0 | lag_expat==1 | (missing(lag_expat) & spell==1)
 
 compress
 save_all_to_json

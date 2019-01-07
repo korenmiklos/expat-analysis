@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/estimate_descriptive.log
   log type:  text
- opened on:   4 Dec 2018, 17:13:52
+ opened on:   7 Jan 2019, 18:02:09
 
 . 
 . 
@@ -26,12 +26,21 @@
 
 . global sample_acquisitions $sample_baseline & (greenfield==0)
 
+. global sample_1990s $sample_acquisitions & (enter_year>=1994 & enter_year<=1999)
+
+. global sample_2000s $sample_acquisitions & (enter_year>=2000)
+
+. global sample_ever_foreign $sample_acquisitions & (ever_foreign==1)
+
 . 
 . global samples baseline acquisitions
 
 . 
 . global outcomes lnL lnKL lnQL exporter
 
+. global controls foreign i.ind_year i.age_cat
+
+. 
 . label var lnL "Employment (log)"
 
 . label var lnKL "Capital per worker (log)"
@@ -616,7 +625,7 @@ corr(u_i, Xb)  = -0.3491                        Prob > F          =     0.0000
  13.         macro shift
  14. }
 key: R2_within
-value: .1138316927183624
+value: .1138316927183625
 
 . 
 . estimates
@@ -2419,7 +2428,7 @@ corr(u_i, Xb)  = 0.0051                         Prob > F          =     0.0000
  13.         macro shift
  14. }
 key: R2_within
-value: .2056984644323606
+value: .2056984644323607
 
 . 
 . estimates
@@ -3020,7 +3029,7 @@ corr(u_i, Xb)  = 0.0338                         Prob > F          =     0.0000
  13.         macro shift
  14. }
 key: R2_within
-value: .2830547973548901
+value: .2830547973548903
 
 . 
 . estimates
@@ -3621,7 +3630,7 @@ corr(u_i, Xb)  = -0.0010                        Prob > F          =     0.0000
  13.         macro shift
  14. }
 key: R2_within
-value: .2791470826118606
+value: .2791470826118607
 
 . 
 . estimates
@@ -4222,7 +4231,7 @@ corr(u_i, Xb)  = 0.2060                         Prob > F          =     0.0000
  13.         macro shift
  14. }
 key: R2_within
-value: .0479139965663238
+value: .0479139965663236
 
 . 
 . estimates
@@ -4823,7 +4832,7 @@ corr(u_i, Xb)  = 0.1035                         Prob > F          =     0.0000
  13.         macro shift
  14. }
 key: R2_within
-value: .0523963309631238
+value: .0523963309631239
 
 . 
 . estimates
@@ -4994,5 +5003,5 @@ end of do-file
       name:  <unnamed>
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/estimate_descriptive.log
   log type:  text
- closed on:   4 Dec 2018, 17:15:03
+ closed on:   7 Jan 2019, 18:03:05
 --------------------------------------------------------------------------------------------------------------------------------

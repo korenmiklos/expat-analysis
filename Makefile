@@ -1,7 +1,7 @@
 STATA = stata -b do
 ESTIMATOR = temp/analysis_sample.dta estimate.do regram.do
 .PHONY: all
-SPECS = descriptive manager_level heterogeneity event_study
+SPECS = descriptive manager_level heterogeneity event_study switch selection
 
 all: $(foreach spec,$(SPECS),output/estimate_$(spec).log) output/descriptives.log
 

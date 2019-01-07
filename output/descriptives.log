@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/descriptives.log
   log type:  text
- opened on:   4 Dec 2018, 17:10:45
+ opened on:   7 Jan 2019, 18:16:35
 
 . 
 . local format scheme(538w) plotregion(style(none)) 
@@ -23,6 +23,7 @@
 
 . 
 . egen spt = tag(frame_id manager_id)
+variable __000000 already defined
 
 . 
 . hist spell_length if spell_length <=30 & spt, by(expat) disc `format' xsize(20) ysize(8)
@@ -85,11 +86,11 @@
      +-----------------------+
      |     N   from   to   i |
      |-----------------------|
-  1. | 31732               1 |
-  2. |  4694      E    E   1 |
-  3. |  2450      E    D   1 |
-  4. |  1819      D    E   1 |
-  5. | 15197      D    D   1 |
+  1. | 24318               1 |
+  2. |  5793      E    E   1 |
+  3. |  3565      E    D   1 |
+  4. |  2228      D    E   1 |
+  5. | 19988      D    D   1 |
      +-----------------------+
 
 .         drop if missing(from)
@@ -278,5 +279,5 @@ xij variables:
       name:  <unnamed>
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/descriptives.log
   log type:  text
- closed on:   4 Dec 2018, 17:11:07
+ closed on:   7 Jan 2019, 18:16:55
 --------------------------------------------------------------------------------------------------------------------------------

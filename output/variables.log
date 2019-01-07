@@ -3,10 +3,12 @@
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/outp
 > ut/variables.log
   log type:  text
- opened on:   4 Dec 2018, 16:08:45
+ opened on:   7 Jan 2019, 17:51:38
 
 . 
 . use temp/firm_ceo_panel
+
+. drop _*
 
 . 
 . scalar T1 = 1989
@@ -14,7 +16,7 @@
 . scalar T2 = 2016
 
 . expand T2-T1+1
-(2,324,943 observations created)
+(2,277,342 observations created)
 
 . bys frame_id manager_id: gen year = _n-1+T1
 
@@ -22,9 +24,9 @@
 . tempfile expand
 
 . save `expand', replace
-(note: file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St04838.000001 no
+(note: file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St14737.000001 no
 > t found)
-file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St04838.000001 saved
+file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St14737.000001 saved
 
 . 
 . merge m:1 frame_id year using temp/balance-small, nogen keep(match)
@@ -394,10 +396,10 @@ frame_id                                                            (unlabeled)
  11. }
 (6,289 real changes made)
 (3,853 real changes made)
-(1,278 real changes made)
-(445 real changes made)
-(893 real changes made)
-(475 real changes made)
+(1,748 real changes made)
+(524 real changes made)
+(1,251 real changes made)
+(541 real changes made)
 
 . gen fold_expat = expat==1 & tenure>`T'
 
@@ -687,11 +689,13 @@ frame_id                                                            (unlabeled)
 file temp/analysis_sample.dta saved
 
 . save_all_to_json
+(note: file output/scalar/T2.json not found)
+(note: file output/scalar/T1.json not found)
 
 . log close
       name:  <unnamed>
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/outp
 > ut/variables.log
   log type:  text
- closed on:   4 Dec 2018, 16:10:23
+ closed on:   7 Jan 2019, 17:53:09
 -------------------------------------------------------------------------------

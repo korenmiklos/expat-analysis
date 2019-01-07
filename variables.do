@@ -3,6 +3,7 @@ capture log close
 log using output/variables, text replace
 
 use temp/firm_ceo_panel
+drop _*
 
 scalar T1 = 1989
 scalar T2 = 2016
