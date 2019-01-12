@@ -12,11 +12,8 @@ save temp/positions, replace
 import delimited input/motherlode/manage.csv, varnames(1) clear
 
 *Külföldi-magyar dummy
-gen person_type=substr(manager_id,1,2)
-keep if person_type=="FP"|person_type=="PH"|person_type=="PP"|person_type=="PR"|person_type=="NH"|person_type=="NO"
-gen person_foreign=0
-replace person_foreign=1 if person_type=="FP"
-
+keep if inlist(manager_type,"FO-P","HU-P")
+gen byte person_foreign = manager_type=="FO-P"
 
 *Source darabolása
 gen byte rovat_id=real(substr(source,1,2))
@@ -36,7 +33,7 @@ foreach X in from till {
 }
 
 * drop unnecessary strings before merging
-drop source valid_from valid_till manager_type person_type
+drop source valid_from valid_till manager_type
 compress
 save temp/managers, replace
 

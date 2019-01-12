@@ -3,7 +3,7 @@
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/outp
 > ut/read_data.log
   log type:  text
- opened on:   4 Dec 2018, 14:37:56
+ opened on:  12 Jan 2019, 12:25:51
 
 . 
 . import delimited input/manager_position/pos5.csv, varnames(1) clear
@@ -29,18 +29,11 @@ file temp/positions.dta saved
 
 . 
 . *Külföldi-magyar dummy
-. gen person_type=substr(manager_id,1,2)
+. keep if inlist(manager_type,"FO-P","HU-P")
+(94,686 observations deleted)
 
-. keep if person_type=="FP"|person_type=="PH"|person_type=="PP"|person_type=="P
-> R"|person_type=="NH"|person_type=="NO"
-(50,814 observations deleted)
+. gen byte person_foreign = manager_type=="FO-P"
 
-. gen person_foreign=0
-
-. replace person_foreign=1 if person_type=="FP"
-(850,967 real changes made)
-
-. 
 . 
 . *Source darabolása
 . gen byte rovat_id=real(substr(source,1,2))
@@ -54,7 +47,7 @@ file temp/positions.dta saved
 . 
 . *Panelify
 . replace valid_till="2018-12-31" if valid_till==""
-(612,823 real changes made)
+(612,221 real changes made)
 
 . 
 . * ruthless loops. otherwise, prone to error.
@@ -63,23 +56,22 @@ file temp/positions.dta saved
   3.         gen month_`X'=real(substr(valid_`X',6,2))
   4.         gen day_`X'=real(substr(valid_`X',9,2))
   5. }
-(30,996 missing values generated)
-(30,996 missing values generated)
-(30,996 missing values generated)
+(30,666 missing values generated)
+(30,666 missing values generated)
+(30,666 missing values generated)
 
 . 
 . * drop unnecessary strings before merging
-. drop source valid_from valid_till manager_type person_type
+. drop source valid_from valid_till manager_type
 
 . compress
-  variable person_foreign was float now byte
   variable year_from was float now int
   variable month_from was float now byte
   variable day_from was float now byte
   variable year_till was float now int
   variable month_till was float now byte
   variable day_till was float now byte
-  (96,145,662 bytes saved)
+  (80,262,816 bytes saved)
 
 . save temp/managers, replace
 file temp/managers.dta saved
@@ -90,5 +82,5 @@ file temp/managers.dta saved
        log:  /Users/koren/Google Drive/Research/expat/research_design/talk/outp
 > ut/read_data.log
   log type:  text
- closed on:   4 Dec 2018, 14:39:24
+ closed on:  12 Jan 2019, 12:27:58
 -------------------------------------------------------------------------------

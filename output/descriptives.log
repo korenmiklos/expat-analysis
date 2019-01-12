@@ -1,8 +1,9 @@
---------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/descriptives.log
+       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/
+> descriptives.log
   log type:  text
- opened on:   7 Jan 2019, 18:16:35
+ opened on:  12 Jan 2019, 13:15:14
 
 . 
 . local format scheme(538w) plotregion(style(none)) 
@@ -26,7 +27,8 @@
 variable __000000 already defined
 
 . 
-. hist spell_length if spell_length <=30 & spt, by(expat) disc `format' xsize(20) ysize(8)
+. hist spell_length if spell_length <=30 & spt, by(expat) disc `format' xsize(20) 
+> ysize(8)
 (note:  clockdir by_legend_position not found in scheme, default attributes used)
 
 . graph export output/figure/CEO_tenure_histogram.png, width(1600) replace
@@ -48,7 +50,7 @@ variable __000000 already defined
 . * only count managers actually at firm
 . * cannot use "during" for this as that is 0 for founders
 . keep if year>=enter_year & year<=first_exit_year
-(443,166 observations deleted)
+(539,789 observations deleted)
 
 . 
 . preserve
@@ -86,11 +88,11 @@ variable __000000 already defined
      +-----------------------+
      |     N   from   to   i |
      |-----------------------|
-  1. | 24318               1 |
-  2. |  5793      E    E   1 |
-  3. |  3565      E    D   1 |
-  4. |  2228      D    E   1 |
-  5. | 19988      D    D   1 |
+  1. | 29118               1 |
+  2. |  4999      E    E   1 |
+  3. |  2915      E    D   1 |
+  4. |  2340      D    E   1 |
+  5. | 28005      D    D   1 |
      +-----------------------+
 
 .         drop if missing(from)
@@ -129,17 +131,17 @@ file output/table/switches.csv saved
 .         gen byte categ = 1+expat
 
 .         replace categ = 0 if founder==1
-(152,521 real changes made)
+(173,878 real changes made)
 
 .         tab categ
 
       categ |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    152,521       49.02       49.02
-          1 |    127,517       40.99       90.01
-          2 |     31,081        9.99      100.00
+          0 |    173,878       47.19       47.19
+          1 |    165,579       44.93       92.12
+          2 |     29,036        7.88      100.00
 ------------+-----------------------------------
-      Total |    311,119      100.00
+      Total |    368,493      100.00
 
 .         collapse (count) N=entrant, by(age categ)
 
@@ -148,7 +150,7 @@ file output/table/switches.csv saved
 
 Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of obs.                      279   ->     108
+Number of obs.                      286   ->     108
 Number of variables                   3   ->       4
 j variable (3 values)             categ   ->   (dropped)
 xij variables:
@@ -156,7 +158,7 @@ xij variables:
 -----------------------------------------------------------------------------
 
 .         mvencode N*, mv(0) override
-          N0: 39 missing values recoded
+          N0: 32 missing values recoded
           N2: 6 missing values recoded
 
 .         
@@ -174,8 +176,9 @@ xij variables:
 
 .         label var age "Firm age (year)"
 
-.         tw (area N0_share N1_share N2_share age if age<=20, fintensity(inten20 inten20 inten20) ),  `format' legend(order(1 "F
-> ounder" 2 "New local" 3 "New expat")) xsize(16) ysize(10) aspect(.67)
+.         tw (area N0_share N1_share N2_share age if age<=20, fintensity(inten20 i
+> nten20 inten20) ),  `format' legend(order(1 "Founder" 2 "New local" 3 "New expat
+> ")) xsize(16) ysize(10) aspect(.67)
 
 .         graph export output/figure/CEO_type_by_age.png, width(1600) replace
 (file output/figure/CEO_type_by_age.png written in PNG format)
@@ -190,7 +193,7 @@ xij variables:
 
 Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of obs.                   216271   ->  202460
+Number of obs.                   254144   ->  241123
 Number of variables                   6   ->       7
 j variable (2 values)             expat   ->   (dropped)
 xij variables:
@@ -203,7 +206,7 @@ xij variables:
 
 Data                               wide   ->   long
 -----------------------------------------------------------------------------
-Number of obs.                   202460   ->  404920
+Number of obs.                   241123   ->  482246
 Number of variables                   7   ->       6
 j variable (2 values)                     ->   expat
 xij variables:
@@ -213,8 +216,8 @@ xij variables:
 
 . 
 . mvencode N entrant, mv(0) override
-           N: 188649 missing values recoded
-     entrant: 188649 missing values recoded
+           N: 228102 missing values recoded
+     entrant: 228102 missing values recoded
 
 . 
 . egen total_N = sum(N), by(frame_id year)
@@ -241,10 +244,10 @@ xij variables:
 . 
 . * only count one CEO per firm
 . replace N=1 if N>1
-(65,973 real changes made)
+(79,076 real changes made)
 
 . replace entrant=1 if entrant>1
-(7,877 real changes made)
+(9,412 real changes made)
 
 . 
 . reshape wide
@@ -252,7 +255,7 @@ xij variables:
 
 Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of obs.                   404920   ->  202460
+Number of obs.                   482246   ->  241123
 Number of variables                   7   ->       8
 j variable (2 values)             expat   ->   (dropped)
 xij variables:
@@ -268,8 +271,9 @@ xij variables:
   3. }
 
 . 
-. line N1_share entrant0_share entrant1_share year, sort lwidth(thick thick thick) `format' ytitle("Share of firms (%)") legend(
-> order(1 "Expat CEO" 2 "New local CEO" 3 "New expat CEO")) xsize(16) ysize(10) aspect(.67)
+. line N1_share entrant0_share entrant1_share year, sort lwidth(thick thick thick)
+>  `format' ytitle("Share of firms (%)") legend(order(1 "Expat CEO" 2 "New local C
+> EO" 3 "New expat CEO")) xsize(16) ysize(10) aspect(.67)
 
 . graph export output/figure/shares_over_time.png, width(1600) replace
 (file output/figure/shares_over_time.png written in PNG format)
@@ -277,7 +281,8 @@ xij variables:
 . 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/descriptives.log
+       log:  /Users/koren/Google Drive/Research/expat/research_design/talk/output/
+> descriptives.log
   log type:  text
- closed on:   7 Jan 2019, 18:16:55
---------------------------------------------------------------------------------------------------------------------------------
+ closed on:  12 Jan 2019, 13:15:55
+----------------------------------------------------------------------------------
