@@ -1,6 +1,25 @@
 clear all
 use input/balance-small/balance-sheet-1992-2016-small
 
+collapse (firstnm) year, by(frame_id)
+drop year
+tempfile add
+save `add'
+
+use input/balance-small/balance_sheet80_14.dta, clear
+keep if year<1992
+drop if frame_id==""
+merge m:1 frame_id using `add'
+keep if _merge==3
+count
+tempfile eighties
+save `eighties'
+
+use input/balance-small/balance-sheet-1992-2016-small, clear
+count
+append using `eighties'
+count
+
 * limit sample before large merge
 *Függő változók készítése
 gen lnL=ln(emp)
@@ -13,8 +32,17 @@ replace exporter=0 if export==.
 bys frame_id: egen avg_emp = mean(emp)
 *Mintavétel létszám és a K-n kvül a többi függő változó nem missing alapján
 local sample (avg_emp>=20)&!missing(lnL,lnQ,exporter)
+count
+tempvar before
+gen `before' = r(N)
 keep if `sample'
-scalar dropped_size_or_missing = r(N_drop)
+count
+tempvar after
+gen `after' = r(N)
+scalar dropped_size_or_missing = `before'-`after'
+di dropped_size_or_missing
+*scalar dropped_size_or_missing = r(N_drop)
+
 
 ren fo3 foreign
 *foreign átalakítása 
@@ -30,8 +58,16 @@ gen foreign_change=1 if l1.foreign==0&foreign==1
 gen foreign_change_rev=1 if l1.foreign==1&foreign==0
 bys frame_id: egen foreign_change_total=total(foreign_change)
 bys frame_id: egen foreign_change_rev_total=total(foreign_change_rev)
+count
+tempvar before
+gen `before' = r(N)
 drop if foreign_change_total>1|foreign_change_rev_total>1
-scalar dropped_too_many_foreign_change = r(N_drop)
+count
+tempvar after
+gen `after' = r(N)
+scalar dropped_too_many_foreign_change = `before'-`after'
+di dropped_too_many_foreign_change
+*scalar dropped_too_many_foreign_change = r(N_drop)
 drop foreign_change foreign_change_rev foreign_change_total foreign_change_rev_total
 
 *Greenfield - foreign húzás után, de a sampling előtt
@@ -81,8 +117,16 @@ tab age_cat
 *Pénzügyi szektorban működő vállalatok kiszűrése
 * break the tie when mode is not unique
 bys frame_id: egen industry_mode=mode(teaor08_2d), minmode
+count
+tempvar before
+gen `before' = r(N)
 drop if industry_mode==64|industry_mode==65|industry_mode==66
-scalar dropped_finance = r(N_drop)
+count
+tempvar after
+gen `after' = r(N)
+scalar dropped_finance = `before'-`after'
+di dropped_finance
+*scalar dropped_finance = r(N_drop)
 
 save_all_to_json
 save temp/balance-small, replace
