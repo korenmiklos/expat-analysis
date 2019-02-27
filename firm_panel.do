@@ -5,6 +5,8 @@ capture log close
 log using output/firm_panel, text replace
 
 use temp/balance-small
+*Tempvars were created for some reason when I was closing the previous file
+*drop __* - deleted in select_sample
 collapse (max) firm_death=year, by(frame_id)
 tempfile sample
 save `sample', replace

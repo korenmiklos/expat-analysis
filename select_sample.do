@@ -6,7 +6,7 @@ drop year
 tempfile add
 save `add'
 
-use input/balance-small/balance_sheet80_14.dta, clear
+use input/balance-small/balance_sheet80_14, clear
 keep if year<1992
 drop if frame_id==""
 merge m:1 frame_id using `add'
@@ -85,7 +85,7 @@ scalar replaced_capital = r(N)
 replace final_netgep = L.final_netgep if `condition'
 gen lnK=ln(final_netgep)
 gen lnKL=lnK-lnL
-drop if missing(lnK)
+drop if missing(lnK)&year>1991
 
 
 
@@ -129,4 +129,5 @@ di dropped_finance
 *scalar dropped_finance = r(N_drop)
 
 save_all_to_json
+drop __*
 save temp/balance-small, replace

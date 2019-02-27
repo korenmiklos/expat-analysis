@@ -5,7 +5,7 @@ log using output/variables, text replace
 use temp/firm_ceo_panel
 drop _*
 
-scalar T1 = 1989
+scalar T1 = 1980
 scalar T2 = 2016
 expand T2-T1+1
 bys frame_id manager_id: gen year = _n-1+T1
