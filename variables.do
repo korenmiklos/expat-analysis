@@ -52,17 +52,21 @@ codebook frame_id
 
 * time invariant vars
 foreach X of var expat foreign {
-	egen first_year_`X' = min(cond(`X'==1,year,.)), by(frame_id)
 	egen ever_`X' = max(`X'==1), by(frame_id)
 }
 
-gen tenure_foreign = year-first_year_foreign
-
+egen first_year_expat_original = min(cond(expat==1,enter_year,.)), by(frame_id)
+egen first_year_foreign_original = min(cond(foreign==1,year,.)), by(frame_id)
 
 *foreign visszahúzása expatba, valaha expat-tal, de soha foreign-mal bíró cégek teljes kidobása
-replace foreign=1 if first_year_expat<=year&foreign==0&ever_foreign==1
-drop first_year_foreign
+replace foreign=1 if (first_year_expat_original==(year-1)|first_year_expat_original==year)&foreign==0&ever_foreign==1
 egen first_year_foreign = min(cond(foreign==1,year,.)), by(frame_id)
+
+clonevar enter_year_original=enter_year
+replace enter_year=first_year_foreign_original if ((enter_year_original-2)<first_year_foreign_original)&expat==1&ever_foreign==1
+egen first_year_expat = min(cond(expat==1,enter_year,.)), by(frame_id)
+
+gen tenure_foreign = year-first_year_foreign
 
 drop if ever_expat==1 & ever_foreign==0
 scalar dropped_do3_expat_firmyears = r(N_drop)
@@ -104,7 +108,6 @@ gen byte fnew = fnew_domestic | fnew_expat
 *foreign_switch interakció létrehozása
 gen byte foreign_new = foreign & new
 
-
 ** do stats here
 tempvar tag
 foreach X of var foreign new expat new_expat fnew fnew_expat {
@@ -117,7 +120,6 @@ foreach X of var foreign new expat new_expat fnew fnew_expat {
 	scalar N_i_`X' = r(N)
 	drop `tag'
 }
-
 
 *Firm_tag
 egen firm_tag=tag(frame_id)
@@ -133,4 +135,3 @@ compress
 save temp/analysis_sample, replace
 save_all_to_json
 log close
-
