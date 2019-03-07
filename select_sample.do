@@ -68,6 +68,11 @@ gen `after' = r(N)
 scalar dropped_too_many_foreign_change = `before'-`after'
 di dropped_too_many_foreign_change
 *scalar dropped_too_many_foreign_change = r(N_drop)
+
+*divesztíció
+recode foreign_change_rev (.=0)
+bys frame_id (year): gen div=sum(foreign_change_rev)
+replace div=1 if div>0
 drop foreign_change foreign_change_rev foreign_change_total foreign_change_rev_total
 
 *Greenfield - foreign húzás után, de a sampling előtt

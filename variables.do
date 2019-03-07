@@ -125,6 +125,11 @@ foreach X of var foreign new expat new_expat fnew fnew_expat {
 egen firm_tag=tag(frame_id)
 egen firm_person = group(frame_id manager_id)
 
+*Foreign hire
+gen byte foreign_hire = 1 if first_year_foreign <= enter_year
+recode foreign_hire (. = 0)
+gen during_foreign = during*foreign_hire
+
 * zero out all treatment dummies for founders. they are alwyas just control
 foreach X of var before during after DD DE ED EE {
 	replace `X' = 0 if founder==1
