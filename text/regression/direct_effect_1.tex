@@ -1,0 +1,24 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{3}{D{.}{.}{-1}}}
+\hline\hline
+            &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}\\
+            &\multicolumn{1}{c}{lnQ}&\multicolumn{1}{c}{lnQL}&\multicolumn{1}{c}{exporter\_5}\\
+\hline
+foreign     &       0.118\sym{***}&       0.101\sym{***}&       0.036\sym{***}\\
+            &     (0.028)         &     (0.018)         &     (0.008)         \\
+[1em]
+during      &      -0.020\sym{***}&       0.004         &      -0.003\sym{*}  \\
+            &     (0.008)         &     (0.005)         &     (0.002)         \\
+[1em]
+during\_foreign&       0.033         &       0.073\sym{***}&       0.002         \\
+            &     (0.031)         &     (0.021)         &     (0.008)         \\
+[1em]
+during\_expat&       0.089\sym{**} &       0.068\sym{**} &       0.037\sym{***}\\
+            &     (0.043)         &     (0.028)         &     (0.012)         \\
+\hline
+\(N\)       &      482421         &      482421         &      482421         \\
+\(R^{2}\)   &       0.784         &       0.847         &       0.651         \\
+\hline\hline
+\end{tabular}
+}

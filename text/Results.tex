@@ -1,0 +1,89 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+%\usepackage{mitpress}
+\usepackage{amssymb}
+\usepackage[USenglish]{babel}
+%\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{harvard}
+\usepackage{booktabs}
+\usepackage[utf8]{inputenc}
+%\usepackage{longtable}
+
+\begin{document}
+
+\begin{table}
+\input{descriptives/firm_desc.tex}
+\end{table}
+
+\begin{table}
+\caption{Effect of foreign acquisition}
+\input{Regression/foreign_effect_1.tex}
+\input{Regression/foreign_effect_2.tex}
+\end{table}
+
+\begin{table}
+\caption{Direct effect of management}
+\input{Regression/direct_effect_1.tex}
+\input{Regression/direct_effect_2.tex}
+\end{table}
+
+\begin{table}
+\caption{Long-run effect of management}
+\input{Regression/long_effect_1.tex}
+\end{table}
+
+\begin{table}
+\input{Regression/long_effect_2.tex}
+\end{table}
+
+\begin{table}
+\caption{Dynamic effect (next three tables from the same reg.}
+\input{Regression/dynamic_effect_10.tex}
+\end{table}
+
+\begin{table}
+\input{Regression/dynamic_effect_11.tex}
+\end{table}
+
+\begin{table}
+\input{Regression/dynamic_effect_12.tex}
+\end{table}
+
+\begin{table}
+\caption{Dynamic effect (next three tables from the same reg.}
+\input{Regression/dynamic_effect_20.tex}
+\end{table}
+
+\begin{table}
+\input{Regression/dynamic_effect_21.tex}
+\end{table}
+
+\begin{table}
+\input{Regression/dynamic_effect_22.tex}
+\end{table}
+
+
+\begin{table}
+\caption{Switching effect}
+\input{Regression/switch_effect_1.tex}
+\end{table}
+
+\begin{table}
+\input{Regression/switch_effect_2.tex}
+\end{table}
+
+\begin{table}
+\caption{Employment shares effect}
+\input{Regression/employment_effect.tex}
+\end{table}
+
+\begin{table}
+\caption{Wage effect (university, highschool voc+elementary}
+\input{Regression/wage_effect.tex}
+\end{table}
+
+
+\end{document} 

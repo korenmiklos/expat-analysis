@@ -1,0 +1,24 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{4}{D{.}{.}{-1}}}
+\hline\hline
+            &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\
+            &\multicolumn{1}{c}{invest\_10}&\multicolumn{1}{c}{lnL}&\multicolumn{1}{c}{lnKL}&\multicolumn{1}{c}{lnML}\\
+\hline
+foreign     &       0.002         &       0.012         &       0.103\sym{***}&       0.092\sym{***}\\
+            &     (0.004)         &     (0.027)         &     (0.032)         &     (0.021)         \\
+[1em]
+during      &      -0.000         &       0.004         &       0.016\sym{**} &       0.000         \\
+            &     (0.001)         &     (0.006)         &     (0.007)         &     (0.005)         \\
+[1em]
+during\_foreign&       0.010\sym{***}&      -0.029         &      -0.112\sym{***}&       0.071\sym{***}\\
+            &     (0.003)         &     (0.028)         &     (0.031)         &     (0.021)         \\
+[1em]
+during\_expat&       0.002         &       0.021         &       0.029         &       0.085\sym{***}\\
+            &     (0.004)         &     (0.038)         &     (0.041)         &     (0.030)         \\
+\hline
+\(N\)       &      464090         &      482421         &      464090         &      461186         \\
+\(R^{2}\)   &       0.155         &       0.691         &       0.763         &       0.849         \\
+\hline\hline
+\end{tabular}
+}
