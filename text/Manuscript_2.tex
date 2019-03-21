@@ -15,6 +15,7 @@
 %\usepackage{caption} 
 %\captionsetup[table]{skip=10pt}
 \usepackage{threeparttable}
+\usepackage{caption}
 
 \newtheorem{theorem}{Theorem}
 %\newtheorem{acknowledgement}{Acknowledgement}
@@ -51,7 +52,7 @@
 \maketitle
 
 \begin{abstract}
-This study aims to understand how foreign investment increases firm performance. Using exhaustive administrative data from Hungary on the universe of firms over 20 employees and their managers for 1992-2014, we study the performance of firms led by expatriate Chief Executive Officers (CEOs). Using about 5,000 switches between domestic and foreign CEOs, we employ difference-in-difference techniques to compare foreign firms that do not change their CEO, replace their CEO with a domestic individual, and replace the CEO with an expatriate. We find that CEOs employed after the acquisition increase firm labor productivity by 7 percent but do not alter output levels and exporting status. Expatriate CEOs have an additional productivity effect of 7 percent and they also increase output by 9 and exporting status by 10 percent. Newly hired CEOs increase investments by 14 percent but do not change the number of employees nor the capital-labor ratio of the firm. Intermediate inputs per capita increase by 7 percent for newly hired CEOs and an additional 8.5 percent if the CEO is foreign. 
+Using exhaustive administrative data from Hungary on the universe of firms over 20 employees and their managers for 1980-2015, we study how Chief Executive Officers (CEOs) elected by foreign owners affect the performance of firms. Using over 1,600 foreign acquisitions out of which about 1,300 replace their CEO after the foreign takeover, some with locals and others with expatriate managers, we employ difference-in-differences techniques to compare foreign firms that do not change their CEO, replace their CEO with a domestic individual, and replace the CEO with an expatriate. We find that CEOs employed after the foreign acquisition increase firm labor productivity by 7 percent but do not alter output levels and exporting status. Expatriate CEOs have an additional productivity effect of 7 percent and they also increase output by 9 and exporting status by 17 percent. Newly hired CEOs increase investments by 14 percent but do not change the number of employees nor the capital-labor ratio of the firm. Intermediate inputs per employee, however, increase by 7 percent for newly hired CEOs and an additional 8.5 percent if the CEO is expatriate suggesting the part of the foreign productivity gain is due to the use of high quality intermediate outputs. 
 \end{abstract}
 
 Firms differ vastly in productivity even within narrowly defined industries (\cite{Syverson2011-ti}), and one reason for this difference is the identity of the firm's owner. A large literature documents that subsidiaries of multinationals and other foreign-owned firms are more productive than local firms (see \cite{Doms1998-su,Barba_Navaretti2004-cs}. This observed difference may partly be the result of selection as firms that expand across national borders are better than those which do not, but the literature suggests that the productivity gap is at least partly causal \cite{Arnold2009-so}.\footnote{In the CEE context, \cite{Javorcik2004-gz} studies productivity spillovers in Lithuania, while \cite{David_Brown2010-iz,Brown2006-rn} study the effects of foreign privatization acquisitions on productivity, employment and wages in four transition countries. Regarding parent effects, \cite{Javorcik2011-uj} show that American and European foreign companies behave differently in Romania, consistently with tariff incentives.} 
@@ -74,11 +75,10 @@ We next study firm outcomes with and without expatriate managers. Here we use a 
 Our work uncovers a mechanism which can explain -- albeit partially -- the superior performance of foreign-owned enterprises and we also provide new facts about the role of expatriate managers for firm performance. The  findings can help evaluate the relative efficacy of trade, FDI, and immigration policies of high-skilled individuals in promoting economic growth. For example, if expatriate managers contribute largely to knowledge flows, then immigration restrictions are harmful to growth (see \cite{Kerr2010-le} on the effects of visa restrictions on scientists and engineers). 
 
 \section{Data and Descriptive Statistics}
-For the analysis of expatriate CEO effects we developed a novel dataset which provides information on all managers of Hungarian companies for the period of 1992-2016. Each company has to register all the individuals with signatory rights at the Company Court. These information are stored in a sequence of strings and provides the name and of the individual, her mother's maiden name, the position occupied in the firm, the starting and closing the date of the data entry (see Table \ref{table:rawdata}).\footnote{Although the data start in 1992, the starting dates of the managers with a company are recorded even if they happend before 1992, if the manager was with the company in 1992.}
+For the analysis of expatriate CEO effects we developed a novel dataset which provides information on all managers of Hungarian companies for the period of 1992-2016. Each company has to register all the individuals with signatory rights at the Company Court. These information are stored in a sequence of strings and provides the name and of the individual, her mother's maiden name, the position occupied in the firm, the starting and closing the date of the data entry (see Table \ref{table:rawdata}).\footnote{Although the data start in 1992, the starting dates of the managers with a company are recorded even if they happened before 1992, if the manager was with the company in 1992.}
 %Describe data construction process.
 
 \begin{table}[h!]
-\begin{threeparttable}
 \caption{Shape of the Raw Data}
 \label{table:rawdata}
 \centering
@@ -89,7 +89,6 @@ For the analysis of expatriate CEO effects we developed a novel dataset which pr
 			\small
       \item {Notes: the table presents two entries that identify managerial names and tenures in a given firm as they are in the Company Court Enterprise Database}.
     \end{tablenotes}
-\end{threeparttable}
 \end{table}
 
 The Hungarian regulation constrains the use of given names for its citizens, as names can be chosen from a closed list.\footnote{(If parents belong to an ethnic minority, they may choose any name for their offspring. Since Hungary is fairly homogenous ethnically and most parents choose typical names, this is not a serious problem in the data.}  In addition, Hungarians use the Eastern name order (surname first, given name last).\footnote{For example, Bauer Éva would be inferred as Hungarian while Eva Bauer as an expatriate.} The data also has  information on the address of the individual. We use these three pieces of information to identify Hungarians. Those who are not identified as Hungarians can be of three distinct categories: firm liquidators and foreign managers.  As liquidators are legal entities, we can distinguish them by searching for indicators for businesses such as \emph{ltd}, \emph{jcs}, etc. Those entries, which are left in the data after removing Hungarians and firms, are coded as foreign.
@@ -194,9 +193,9 @@ Our goal is to study the performance enhancement of foreign ownership through th
 \begin{equation}
 	Y_{jkt} = \gamma_F F_{jkt} + f(age_{jt}) + ind_{k}year_{t}+\mu_j+\varepsilon_{jkt},
 \end{equation}
-where $F_{jkt}$ is a 0/1 indicator whether firm $j$ in industry $k$ is foreign-owned at time $t$. As foreign-owned enterprises tend to be older than domestic businesses and firm performance may depend on age, we add a set of dummy variables $f(age_{jt})$ controlling for the age of the firm.\footnote{$f(age_{jt})$ consists of the following vector of dummy variables: one variable for each firm age between 0--10 years; dummies for ages 11--15, 16--20, 21-30, 31-40, over 40 years.} We also control for two-digit industry-year interactions to remove any industry-level shock and to correct for price changes not taken into account by our deflators. $\mu_j$ is a firm fixed-effect so $gamma{F_{jkt}}$ shows the change of the dependent variable $Y_{ikt}$ around the foreign takeover relative to continuously domestic firms. As there are firms with multiple CEOs in the same year, the unit of observation in the data is a CEO-year and we weight down firm-years with the inverse of the number of CEOs who serve in the firm in a given year to allow each firm-year have an identical weight in the regression. We cluster standard errors at the firm-level.
+where $F_{jkt}$ is a 0/1 indicator whether firm $j$ in industry $k$ is foreign-owned at time $t$. As foreign-owned enterprises tend to be older than domestic businesses and firm performance may depend on age, we add a set of dummy variables $f(age_{jt})$ controlling for the age of the firm.\footnote{$f(age_{jt})$ equals the following vector of dummy variables: one variable for each year between 0--10; dummies for years 11--15, 16--20, 21-30, 31-40, over 40 years.} We also control for two-digit industry-year interactions to remove any industry-level shock and to correct for price changes not taken up by our deflators. $\mu_j$ is a firm fixed-effect so $\gamma{F_{jkt}}$ shows the change of the dependent variable $Y_{ikt}$ around the foreign takeover relative to continuously domestic firms in the sampe period of time. As there are firms with multiple CEOs in the same year, the unit of observation in the data is a CEO-year and we weight down firm-years with the inverse of the number of CEOs who serve in the firm in a given year to allow each firm-year have an identical weight in the regression. To correct for correlations between the error terms of the same firm, we cluster standard errors at the firm-level.
 
-To study the direct effects of management under foreign ownership, we augment the preceding equation with variables indicating the arrival of a new CEO to the firm and its identity (local or expatriate) while we keep the same control variables, weights and clustering method. The estimation equation is the following:
+To study the effects of management of foreign-owned enterprises, we augment the preceding equation with variables indicating the arrival of a new CEO to the firm and her identity (local or expatriate) while we keep the same control variables, weights and clustering method. The estimation equation is the following:
 \begin{equation}
 \begin{split}
 	Y_{ijkt} = \gamma_F F_{jkt} + \gamma_M M_{ijkt} + \gamma_{Fhire} M_{ijkt} F_{jkt} + \gamma_{Expat}  M_{ijkt} Expat_{ijkt} F_{jkt} \\
@@ -204,65 +203,16 @@ To study the direct effects of management under foreign ownership, we augment th
 \end{split}
 \end{equation}
 
-In this equation $i$ indices CEOs. $M_{ijkt}$ is a dummy variable which equals 1 throughout the spell $T_{ij}$ of manager $i$ serving as Chief Executive Officer for firm $j$. We add this variable interacted with $F_{jkt}$. This interaction term equals 1 if the CEO was hired by the new foreign owner. We also add the triple interaction between $M_{ijkt}$, $F_{jkt}$ and $Expat_{ijkt}$, which equals 1 if the CEO is expatriate. 
+In this equation $i$ indices CEOs. $M_{ijkt}$ is a dummy variable which equals 1 throughout the spell $T_{ij}$ of manager $i$ serving as CEO for firm $j$. We interact $M_{ijkt}$ with an indicator variable $I_{jkt}$ which equals 1 if the CEO arrived to the firm after it was acquired by the foreign owner. We also add the triple interaction between $M_{ijkt}$, $I_{jkt}$ and $Expat_{ijkt}$, the latter indicating that the CEO is expatriate. 
 
-The coefficients of interest are $\gamma_{Fhire}$ and $\gamma_{Expat}$. The difference $\gamma_{Fhire}-\gamma_{M}$ is the effect of CEOs hired by foreign owners, relative to those hired by domestic ones and the difference $\gamma_{Expat}-\gamma_{Fhire}$ is the effect of having an expatriate CEO relative to a domestic manager also hired by a foreign owner.
+The coefficients of interest are $\gamma_{Fhire}$ and $\gamma_{Expat}$. $\gamma_{Fhire}$ measures the effect of CEOs hired by foreign owners relative to incumbent CEOs inherited from the pre-acquisition period (measured by $\gamma_{F_{jkt}}$) and $\gamma_{Expat}$ is the effect of having an expatriate CEO relative to a domestic manager, both hired by the foreign owner.
 
-The coefficients $\gamma_{Fhire}$ and $\gamma_{Expat}$ provide a measure of the direct effect of the CEOs chosen by foreign owners. Next we extend the analysis to measuring the effect of management post separation: after an expatriate CEO leaves the firm, will she still have an effect on performance? For this we augment the regression with dummy variables which equal 1 for the period of 5 years subsequent to the separation of the CEO. In the same specification we also look at selection (or anticipation effects by adding to the regression dummy variables which equal 1 in the 5-years period before the CEO arrives to the firm.\footnote{We run this specification with a full set of interactions between even time years before, during and after the CEO joined the firm.} Finally, we take into account not only the managerial switch but also the type of CEO change. Here we distinguish between local-to-local CEO changes as well as local-to-expatriate, expatriate-to-domestic and expatriate-to-expatriate.
-
-\section{Selection of CEOs into foreign-owned enterprises}
-Table \ref{table:selection} presents the results. The value of sales and employment size decreases the likelihood of having an expatriate CEO, while captial size increases it.  Exporting activity also increses the presence of expatriates.  As already presented in the description of the sample in Table \ref{table:nobs}, expatriates are mostly in foreign-owned firms, and within this group in greenfield FDI.  Among sending countries, firms based in Italy and the Netherlands have a much higher probability of having a Hungarian subsidiary managed by an expatriate CEO, while the effects are in a narrow range for the other countries.
-
-\begin{table}
-\caption{Selection of Expatriate Managers}
-\label{table:selection}
-\centering
-\begin{tabular}{lllll} 
-\hline
-~               & (1)       & (2)       & (3)       & (4)        \\ 
-\hline
-lnL             & -0.003*** & -0.001*   & -0.002*** & -0.001     \\
-~               & (0.001)   & (0.000)   & (0.001)   & (0.000)    \\
-lnQ             & -0.006*** & -0.007*** & -0.006*** & -0.007***  \\
-~               & (0.001)   & (0.000)   & (0.001)   & (0.000)    \\
-lnK             & 0.003***  & 0.002***  & 0.003***  & 0.002***   \\
-~               & (0.000)   & (0.000)   & (0.000)   & (0.000)    \\
-Exporter        & 0.005***  & 0.007***  & 0.004***  & 0.004***   \\ 
-\hline
-~               & (0.001)   & (0.001)   & (0.001)   & (0.001)    \\
-Greenfield      & 0.151***  & 0.153***  & 0.130***  & 0.131***   \\
-~               & (0.005)   & (0.006)   & (0.006)   & (0.006)    \\
-Acquisition     & 0.044***  & 0.046***  & 0.034***  & 0.035***   \\
-~               & (0.002)   & (0.002)   & (0.002)   & (0.002)    \\ 
-\hline
-AT              & ~         & ~         & 0.034***  & 0.036***   \\
-~               & ~         & ~         & (0.009)   & (0.009)    \\
-DE              & ~         & ~         & 0.021***  & 0.023***   \\
-~               & ~         & ~         & (0.006)   & (0.006)    \\
-GB              & ~         & ~         & 0.026     & 0.027*     \\
-~               & ~         & ~         & (0.013)   & (0.014)    \\
-IT              & ~         & ~         & 0.151***  & 0.151***   \\
-~               & ~         & ~         & (0.033)   & (0.033)    \\
-NL              & ~         & ~         & 0.141***  & 0.148***   \\
-~               & ~         & ~         & (0.025)   & (0.025)    \\
-US              & ~         & ~         & 0.021*    & 0.023*     \\
-~               & ~         & ~         & (0.009)   & (0.009)    \\
-CH              & ~         & ~         & 0.043**   & 0.047**    \\
-~               & ~         & ~         & (0.016)   & (0.016)    \\ 
-\hline
-Industry x Year & Yes       & No        & Yes       & No         \\ 
-\hline
- \textit{R}^2    & 0.118     & 0.098     & 0.129     & 0.110      \\
-\hline
-\end{tabular}
-\begin{tablenotes}
-			\small
-      \item Notes: N = 209,995. Dependent variable: The CEO is expatriate (lagged).  Sample: for firms that had an expatriate CEO, the year before the CEO change; for firms that never had an expatriate CEO, all years. *** = significant at the 1-percent level; ** = significant at the 5-percent level; * = significant at the 10-percent level;.}
-    \end{tablenotes}
-\end{table}
+The coefficients $\gamma_{Fhire}$ and $\gamma_{Expat}$ measure the direct effect of the CEOs chosen by foreign owners. Next we extend the analysis to measuring the effect of management post separation: after an expatriate CEO leaves the firm, will she still have an effect on performance? For this we augment the regression with dummy variables which equal 1 for the period of 5 years subsequent to the separation of the CEO. In the same specification we also look at selection (or anticipation effects by adding to the regression dummy variables which equal 1 in the 5-years period before the CEO arrives to the firm.\footnote{We run this specification with a full set of interactions between even time years before, during and after the CEO joined the firm.} Finally, we take into account not only the managerial switch but also the type of CEO change. Here we distinguish between local-to-local CEO changes as well as local-to-expatriate, expatriate-to-domestic and expatriate-to-expatriate.
 
 \section{Effects of CEOs on Firm Performance}
-In this section we present the estimated effects of CEOs employed by foreign-owned firms on firm performance. We measure performance with three variables: the scale of production (measured by the log real value of yearly sales), labor productivity (log real value of sales per employee) and the propensity to export (a dummy variable which equals 1 if the firm exports at least 5 percent of its output). Before we present these results, however, we test whether foreign ownership per se increases firm performance. As Table \ref{table:foreign_effect_1} demonstrates, this is indeed the case in our data: foreign ownership increases output by 12 percent, labor productivity by 11 percent and export status by about 4 percentage points. As the mean level of exporting in the regression sample equals 0.22, foreign ownership increases the likelihood of exporting by 18 percent.
+
+\subsection{Performance Effects of CEOs: Scale of Production, Productivity, Exporting}
+To study the effect of CEOs employed by foreign-owned firms on firm performance, we apply three measures: the scale of production (measured by the log real value of yearly sales), labor productivity (log real value of sales per employee) and the propensity to export (a dummy variable which equals 1 if the firm exports at least 5 percent of its output in a given year). First we test whether foreign ownership per se increases firm performance. As Table \ref{table:foreign_effect_1} demonstrates, this is indeed the case in our data: foreign ownership increases output by 12 percent, labor productivity by 11 percent and export status by about 3.8 percentage points. Relative to the mean level of exporting in the regression sample of 0.22, foreign ownership increases the likelihood of exporting by 17 percent.
 
 \begin{table}[h!]
 \centering
@@ -273,12 +223,10 @@ In this section we present the estimated effects of CEOs employed by foreign-own
 \input{Regression/foreign_effect_1.tex}
 \begin{tablenotes}
 			\small
-      \item Notes: The unit of observation in the regression is a CEO-year. Number of firm-years = 163,320. The regression is weighted with the inverse of the number of CEOs in a firm-year. Foreign = 1 if 50 percent of the firm is owned by foreigners or the firm is owned by a foreign firm registered in Hungary. The regressions control for a set of firm age dummies, industry-year interactions and firm fixed-effects. Mean(exporting) = 0.22. Standard errors clustered at the firm level in parentheses. *** = significant at the 1-percent level; ** = significant at the 5-percent level; * = significant at the 10-percent level;.}
+      \item {Notes: The unit of observation in the regression is a CEO-year. Time span for each CEO: 5 years before the start of service as CEO to 5 years after resigning. Number of firms: 19,497; number of firm-years = 209,664. The regression is weighted with the inverse of the number of CEOs in a firm-year. Foreign = 1 if 50 percent of the firm is owned by foreigners or the firm is owned by a foreign firm registered in Hungary. The regressions control for a set of firm age dummies, industry-year interactions and firm fixed-effects. Mean(exporting) = 0.22. Standard errors clustered at the firm level in parentheses. *** = significant at the 1-percent level; ** = significant at the 5-percent level; * = significant at the 10-percent level.}
     \end{tablenotes}
 \end{threeparttable}
 \end{table}
-
-Next we turn to measuring the effect of management on firm outcomes. Table \ref{table:direct_effect_1} presents the baseline specification where we estimate the effect of foreign hired CEOs and the differences between local and expatriate CEOs. The foreign effect (which equals the effect of foreign ownership with managers inherited from the preceding domestic ownership period) on the scale of production, labor productivity and exporting status does not change much. Local managers hired by the foreign owners do not change sales and exporting status, but they increase labor productivity by 7 percent (relative to foreign-owned firms without managers hired by the new foreign owners). Expatriates (also hired by the foreign owners) boost all the three performance variables: their scale effect equals 9 percent, the productivity effect 7 percent and they also increase exporting status by 3.7 percentage points (which is 17 percent relative to the mean value of exporting status in the sample).
 
 \begin{table}[h!]
 \centering
@@ -289,16 +237,40 @@ Next we turn to measuring the effect of management on firm outcomes. Table \ref{
 \input{Regression/direct_effect_1.tex}
 \begin{tablenotes}
 			\small
-      \item Notes: The unit of observation in the regression is a CEO-year. Number of firm-years = 163,320. The regression is weighted with the inverse of the number of CEOs in a firm-year. Foreign = 1 if 50 percent of the firm is owned by foreigners or the firm is owned by a foreign firm registered in Hungary. The regressions control for a set of firm age dummies, industry-year interactions and firm fixed-effects. Mean(exporting) = 0.22. Standard errors clustered at the firm level in parentheses. *** = significant at the 1-percent level; ** = significant at the 5-percent level; * = significant at the 10-percent level;.}
+      \item Notes: The unit of observation in the regression is a CEO-year. Time span for each CEO: 5 years before the start of service as CEO to 5 years after resigning. Number of firms: 19,497; number of firm-years = 209,664. The regression is weighted with the inverse of the number of CEOs in a firm-year. The regressions control for a set of firm age dummies, industry-year interactions and firm fixed-effects. Mean(exporting) = 0.22. Standard errors clustered at the firm level in parentheses. *** = significant at the 1-percent level; ** = significant at the 5-percent level; * = significant at the 10-percent level.}
     \end{tablenotes}
 \end{threeparttable}
 \end{table}
 
-While the table above suggests that foreigners are better at selecting managers and that expatriates outperform local managers, the effects may be contaminated by selection effects. If managerial change takes place at firms with better chances to become productive, the measured managerial effect will be contaminated with selection bias. We cannot pass the limits of our identification strategy, but we estimate pre-treatment effects. If selection is an issue, the pre-trends will be positive (although they may also be positive as a result of anticipation effects). Figure \ref{figure:} presents the results. %continue when the figure is ready
+Next we turn to measuring the effect of management on firm outcomes. Table \ref{table:direct_effect_1} presents the baseline specification where we estimate the effect of foreign hired CEOs and the differences between local and expatriate CEOs. The foreign effects (which equals the effect of foreign ownership with managers inherited from the pre-acquisition period) on our measures of performance are quite similar to the estimated effects reported in Table \ref{table:foreign_effect_1}. Local managers hired by the foreign owners do not change sales and exporting status, but they increase labor productivity by 7 percent (relative to foreign-owned firms without managers hired by the new foreign owners). Expatriates (also hired by the foreign owners) boost all the three performance variables: the scale effect equals 9 percent, the productivity effect 7 percent and they also increase exporting status by 3.7 percentage points (which is 17 percent relative to the mean value of exporting status in the sample).
 
-Is the managerial performance effect linked to the manager's person or it is long lasting? If the manager leaves the firm, does she still have an effect on firm performance? We test this in Table \ref{table:long_effect_1} where we augment the specification with dummy variables that take the value of 1 for the period of 5 years after the manager (local or expatriate) left the company. Foreign hired managers have long lasting effect on both the value of sales and labor productivity as the estimated coefficients associated with the period after the manager left are positive, statistically significant and somewhat larger in magnitude than the coefficients for the period of activity of the manager. For expatriate managers the magnitude is much larger for the period after the separation: for example, the effect of the manager on labor productivity is 8 percent, which increases to 12 percent after the expatriate manager leaves the company. Exporting activity is different from the two other variables as the effect fades away as the expatriate CEO leaves the firm.
+While the table above suggests that foreigners are better at selecting managers and that expatriates outperform local managers, the effects may be contaminated by selection effects. If managerial change takes place at firms with better chances to become productive, the measured managerial effect will be contaminated with selection bias. We cannot pass the limits of our identification strategy, but we estimate pre-treatment effects. If selection is an issue, the pre-trends will be positive (although they may also be positive as a result of anticipation effects). Figures \ref{figure:dynamics_lnQ} to \ref{figure:dynamics_exporter_5} present the results. Pre-treatment trends are present when the CEO is expatriate and the dependent variables are the scale of production and labor productivity, but the pre-treatment coefficients are all insignificant but one. 
 
-%switches 
+\begin{figure}
+\caption{The Effect of Managers on the Scale of Production (Event Time Estimations)}
+\label{figure:dynamics_lnQ}
+\center
+\includegraphics[width=15cm]{Regression/gr_lnQ.pdf}
+\caption*{The figure presents the estimated coefficients and confidence intervals associated with the 5-percent levels of significance of foreign hired local and expatriate mangers on the scale of production by event-time (year 0 = the year when the manager became CEO. Regression attributes as in the notes of Table \ref{table:direct_effect_1}.}
+\end{figure}
+
+\begin{figure}
+\center
+\caption{The Effect of Managers on Labor Productivity (Event Time Estimations)}
+\label{figure:dynamics_lnQL}
+\includegraphics[width=15cm]{Regression/gr_lnQL.pdf}
+\caption*{The figure presents the estimated coefficients and confidence intervals associated with the 5-percent levels of significance of foreign hired local and expatriate mangers on the scale of production by event-time (year 0 = the year when the manager became CEO. Regression attributes as in the notes of Table \ref{table:direct_effect_1}.}
+\end{figure}
+
+\begin{figure}
+\caption{The Effect of Managers on Exporter Status (Event Time Estimations)}
+\label{figure:dynamics_exporter_5}
+\center
+\includegraphics[width=15cm]{Regression/gr_exporter_5.pdf}
+\caption*{The figure presents the estimated coefficients and confidence intervals associated with the 5-percent levels of significance of foreign hired local and expatriate mangers on the scale of production by event-time (year 0 = the year when the manager became CEO. Regression attributes as in the notes of Table \ref{table:direct_effect_1}.  }
+\end{figure}
+
+Is managerial performance effect linked to the CEO or it is long lasting? Can the CEO induce so profound changes in the company that its behavior changes for the long run? We test this in Table \ref{table:long_effect_1} where we augment the specification with dummy variables that take the value of 1 for the period of 5 years after the CEO leaves the company. Foreign hired local CEOs have long lasting effect on labor productivity as the estimated coefficient associated with the period after the manager left is positive, statistically significant and as large as 0.124 (somewhat larger than the direct effect). Expatriate CEOs have long lasting effects on both the scale of production and productivity, and the magnitude of the coefficients are also larger for the period after the separation: sales increase continually by 10 percent annually after the CEO is replaced, while labor productivity raises by 8 percent. Exporting activity is different from the two other variables as the effect fades away as the expatriate CEO leaves the firm.
 
 \begin{table}[h!]
 \centering
@@ -309,7 +281,48 @@ Is the managerial performance effect linked to the manager's person or it is lon
 \input{Regression/long_effect_1.tex}
 \begin{tablenotes}
 			\small
-      \item Notes: The unit of observation in the regression is a CEO-year. Number of firm-years = 163,320. The regression is weighted with the inverse of the number of CEOs in a firm-year. Foreign = 1 if 50 percent of the firm is owned by foreigners or the firm is owned by a foreign firm registered in Hungary. The regressions control for a set of firm age dummies, industry-year interactions and firm fixed-effects. Mean(exporting) = 0.22. Standard errors clustered at the firm level in parentheses. *** = significant at the 1-percent level; ** = significant at the 5-percent level; * = significant at the 10-percent level;.}
+      \item Notes: The unit of observation in the regression is a CEO-year. Time span for each CEO: 5 years before the start of service as CEO to 5 years after resigning. Number of firms: 19,497; number of firm-years = 209,664. The regression is weighted with the inverse of the number of CEOs in a firm-year. The regressions control for a set of firm age dummies, industry-year interactions and firm fixed-effects. Mean(exporting) = 0.22. Standard errors clustered at the firm level in parentheses. *** = significant at the 1-percent level; ** = significant at the 5-percent level; * = significant at the 10-percent level.}
+    \end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+One long lasting effect of foreign hired domestic CEOs is that increases the likelihood of becoming exporter, while the direct effect of local CEOs is zero. One possible solution to this apparent contradiction is that local and expatriate CEOs sometimes replace each other and so the long term exporting effect of local CEOs coincides with the direct effect of the next (expatriate) manager. We test this in the next table when we directly estimate the effect on firm performance of CEOs when they switch between local and expatriate. We replace the foreign hire and expatriate variables with 4 other variables representing the type of switch between local and expatriate managers: local-local, local-expatriate, expatriate-local and expatriate-expatriate.\footnote{The variables refer to the identity of the new CEO. For example the local-expatriate variable equals 1 when the CEO is expatriate, while the preceding CEO was local.} 
+
+Table \ref{table:switch_effect_1} shows the estimated coefficients associated with the switch type. Local CEOs raise productivity regardless of the identity of the previous CEO, but their effect is more than twice as large when they replace an expatriate (13.5 percent). In this case we find a scale effect of the local CEO of the magnitude of 8 percent which does not exist in the case of domestic-domestic switch. Turning to expatriates, we find positive effects which are significantly different from zero on all the three measures of performance regardless the previous CEOs identity, but they are much larger in magnitude when the switch is between to expatriate CEOs. For the scale of production, the effect 7.6 percent when locals are the preceding CEOs and 23.3 percent when expatriates; for productivity and exporting status the effect are twice as large when expatriates replace expatriates. It seems thus that while the foreign owners are better at selecting their CEOs in general, expatriates have long lasting effects which prevail in the period subsequent to the expatrate presence in the firm and this effect does not depend on the identity of the next CEO. 
+
+\begin{table}[h!]
+\centering
+\caption{Effects of Managers Switching Between Locals and Expatriates}
+\bigskip
+\label{table:switch_effect_1}
+\begin{threeparttable}
+\input{Regression/switch_effect_1.tex}
+\begin{tablenotes}
+			\small
+      \item Notes: The unit of observation in the regression is a CEO-year. Time span for each CEO: 5 years before the start of service as CEO to 5 years after resigning. Number of firms: 19,497; number of firm-years = 209,664. The regression is weighted with the inverse of the number of CEOs in a firm-year. The regressions control for a set of firm age dummies, industry-year interactions and firm fixed-effects. Mean(exporting) = 0.22. Standard errors clustered at the firm level in parentheses. *** = significant at the 1-percent level; ** = significant at the 5-percent level; * = significant at the 10-percent level.}
+    \end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Changes within the Firm: Capital, Intermediate Inputs, Structure of Employment and Wages}
+Having established the performance effects of CEOs appointed by foreign owners, we now try to understand what induces the increase in sales, labor productivity and exporting activity. For this we study the utilization of inputs that are usually included in standard production functions, such as capital, labor and material costs. Next, employ our employee-level data to take a closer look at the utilization of labor. We first disentangle labor into three types (skilled, medium skilled and unskilled) and we also analyze the wages of the three groups. Relative wages may shed light on the relative marginal productivity of the three groups and its change as the new CEO changes the organization of the firm.
+
+First we look at the utilization of capital. One potential advantage of foreign ownership pointed out by policy makers and researchers as well at the beginning of the transition from the command economy to a capitalist system was the hope that the parent companies would inject the old socialist enterprises with new capital and advanced technologies (ref). To test whether this is true, we run the same regressions as before but with the log value of tangible assets and log capital-labor ratio as dependent variables. Such changes would hint towards an upgrading of technology and switch to more capital intensive modes of production (such as the robotization of production process). As the first two column of Table \ref{table:direct_effect_2} demonstrates, we fail to find such mechanisms. Only local CEOs hired after the acquisitions employ more capital than similar domestic companies, and the difference is economically small (1 percentage point or 14 percent, evaluated at the mean investment). Nor the level of employment is affected by the newly elected CEOs. As a consequence of the stability of the levels of capital and labor, the capital-labor ratio is also stable. It seems thus that the levels of the two most important factors of production -- capital and labor -- do not play an important role in the process of improvement of the value of sales and firm productivity.
+
+The last column of Table \ref{table:direct_effect_2} presents the last major input for the firm, the costs of intermediate inputs. Similar to the capital-labor ratio and labor productivity, we scale this variable with the number of employees in the firm. Unlike the other two factors, both foreign ownership and management has large effects on this ratio. Foreign acquisitions that are not accompanied with changes in the CEO have an associated effect of 9.2 percent. This effect increases by 7 percent when new local CEOs lead the company and an additional 8.5 percent when the new CEO is an expat. Taken together, a company that is led by an expat manager increases its material expenditures per employee by 25 percent. According to these estimations, the first reason for the higher output and labor productivity of foreign-owned companies is not capital or labor, but the quality of intermediate goods employed by the new owners. This effect is intensified if the foreign owners replace the CEO of the company and it further increases when the CEO is of foreign origin.
+
+  
+
+\begin{table}[h!]
+\centering
+\caption{The Effect of Managers on Input Utilization}
+\bigskip
+\label{table:direct_effect_2}
+\begin{threeparttable}
+\input{Regression/direct_effect_2.tex}
+\begin{tablenotes}
+			\small
+      \item Notes: The unit of observation in the regression is a CEO-year. Time span for each CEO: 5 years before the start of service as CEO to 5 years after resigning. Number of firms: 19,497; number of firm-years = 209,664. The regression is weighted with the inverse of the number of CEOs in a firm-year. The regressions control for a set of firm age dummies, industry-year interactions and firm fixed-effects. Mean(exporting) = 0.22. Standard errors clustered at the firm level in parentheses. *** = significant at the 1-percent level; ** = significant at the 5-percent level; * = significant at the 10-percent level.}
     \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -319,8 +332,6 @@ Is the managerial performance effect linked to the manager's person or it is lon
 Using exhaustive administrative data from Hungary 1992--2014, we study the performance of firms led by expatriate managers. Studying more than 2,000 foreign acquisitions and more than 3,000 greenfield foreign investments, we compare firms that bring in foreign management to those that remain locally managed. Foreign managed firms improve their productivity faster. Larger, more capital intensive and more productive firms are more likely to receive a foreign manager. Owners from distant countries and tax havens are more likely to leave domestic management in place. 
 
 Given the potential benefits of good management, it is puzzling that many firms do not upgrade their management practices, even given low-cost opportunities to do so \cite{Bloom2012-ek}. Are management needs specific to the firm? Evidence from CEOs moving across corporations reveals that managers differ in “style,” and they adopt different management practices \cite{Bertrand2003-io,Schoar2016-rj}. There is also evidence that managers moving across firms transfer specific knowledge. \cite{Mion2014-vi} show that managers leaving exporting firms increase the propensity of exports in their new host company. In previous work \cite{Bisztray2016-iq}, we documented similar patterns for importing firms, even after controlling for spatial and ownership links.
-
-
 
 Our work suggests that \emph{managers}, not only \emph{management} matters and can provide a link between foreign ownership and management practices.
 

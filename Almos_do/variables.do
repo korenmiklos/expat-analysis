@@ -82,22 +82,23 @@ gen exporter_5 = 1 if export/sales > .05 & export < .
 recode exporter_5 (. = 0)
 
 *TFP
-egen temp_ind = group(teaor08_2d year)
-gen TFP = .
-forval i = 1/84  {
-quietly reg lnQ lnL lnK lnM
-predict x, res
-replace TFP = x if temp_ind == `i'
-drop x
-}
-drop temp_ind
+*egen temp_ind = group(teaor08_2d year)
+*gen TFP = .
+*forval i = 1/84  {
+*quietly reg lnQ lnL lnK lnM
+*predict x, res
+*replace TFP = x if temp_ind == `i'
+*drop x
+*}
+*drop temp_ind
 
 
 *Managers hired by foreign owners
 gen byte foreign_hire = 1 if first_year_foreign <= enter_year
 recode foreign_hire (. = 0)
 gen during_foreign = during*foreign_hire
-
+bysort frame_id: egen ever_foreign_hire = max(foreign_hire)
+global sample_ever_switch $sample_ever_foreign & (ever_foreign_hire == 1)
 
 *Before and after variables
 gen byte after_foreign = after*foreign_hire
