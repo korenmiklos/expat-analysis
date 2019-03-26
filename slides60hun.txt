@@ -1,0 +1,261 @@
+% ./preamble_hun.tex
+
+= Bevezetés =
+== Bevezetés ==
+- Egyes cégek sokkal termelékenyebbek másoknál (Syverson, 2011).
+	- technológia
+	- szervezet
+	- nem mért inputminőség
+
+== A jó menedzsment előnyei ==
+- A helyes vezetési módszerek növelik a termelékenységet  (Bloom  and  Van  Reenen  2010;  Bloom  et  al.  2012;  Bloom  et  al.  2014). 
+- A ,,vezetőként" viselkedő CEO-k javítják a vállalati eredményességet. (Bandiera, Hansen, Prat and Sadun 2018)
+
+== A jó menedzser előnyei ==
+- A menedzserek hatása a beruházásra, K+F-re, marketingre és eszköz-megtérülésre cégek között is tartós.  (Bertrand and Schoar 2003)
+- A CEO hirtelen halála csökkenti a vállalat teljesítményét. (Bennedsen, Pérez-González and Wolfenzon 2007) 
+- A korábban exportáló menedzserek növelik az export valószínűségét (Mion and Opromolla 2014; Mion, Opromolla and Sforza 2016); az importét is (Bisztray, Koren and Szeidl 2018).
+
+== A külföldi tulajdon előnyei ==
+- USA: Doms and Jensen (1998)
+- UK: Griffith (1999)
+- Magyarország, Románia, Oroszország, Ukrajna: Brown, Earle, Telegdy (2006)
+- Indonézia: Arnold and Javorcik (2009)
+
+== A cikk állításai ==
+- A külföldi tulajdonosok a jobb menedzsereken keresztül javítják a vállalati teljesítményt.
+- Új adatok a magyar és külföldi menedzserekről az összes magyar cégre 1992--2016 között. 
+- Módszertan: 
+	- külföldi és magyar menedzserű cégek összehasonlítás a felvásárlás előtt és után (diff-in-diff)
+	- hazai menedzserváltásra kontrollálva
+
+== Miért fontos? ==
+- A globalizáció különböző módozatai korrelálnak:
+	- külföldi beruházás
+	- külföldi menedzsment
+	- külkereskedelem
+- Melyik fontos ezek közül?
+
+%% in the era of Brexit, Trump and Orban, this is not only of academic interest
+
+%% BUT: We do not relate to trade. Showing that German managers are good is not an argument for free mobility of managers. Much of the literature, eg in Melitz is about selection, not causal effects.
+
+%% family ownership vs dynastic management
+
+= Tartalom =
+== Tartalom ==
+1. Mérés: kik a külföldi menedzserek?
+2. Módszertan: CEO állások összehasonlítása
+3. Eredmények
+
+= Adatok =
+
+== Adatok ==
+=== Hungarian Manager Database ===
+- sokaság: minden gazdasági társaság, 1992--2016 
+- CEO: a Gazdasági Társaságokról szóló törvény szerinti vezető tisztségviselő.
+	- információk: név, anyja neve, lakcím, jogviszony kezdete
+- 1 millió cég, 2 millió CEO, 5 millió állás
+
+=== Mérlegadatok ===
+- sokaság: minden kettős könyvvitelt vezető vállalat, 1992--2016
+- információk: árbevétel, export, létszám, tárgyi eszköz stb.
+
+=== Forrás ===
+Cégközlöny és éves pénzügyi beszámolók (Wolters Kluwer Hungary Kft. és Opten Kft.)
+
+== Nevek ==
+- A menedzserek nevét használjuk az alábbiak mérésére: 
+	1. CEO-váltás
+	2. nemzetiség
+	3. nem (másik tanulmány)
+- Külföldi menedzser: olyan vezető tisztségviselő, akinek nincs magyar keresztneve
+	- pl: Eva Bauer vs Bauer Éva
+	- de: George Soros vs Soros György
+- Megengedjük az elírást, második keresztnév, titulus (ifj, dr) elhagyását.
+
+== Minta ==
+- Kizárjuk a
+	- 20 főnél kevesebbet foglalkoztatókat
+	- pénzügyi szektort
+	- végig magyar cégeket külföldi CEO-val (adathiba?)
+	- több mint 15 CEO-s cégeket
+- Marad 18,000 cég.
+- A CEO-váltás körüli évekre koncentrálunk.
+
+== Az adatok formája ==
+\begin{tabular}{cccc}
+\texttt{firm} & \texttt{manager} & \texttt{valid\_from} & \texttt{valid\_to}\\  
+\hline \\
+ \texttt{123456} & \texttt{Gyöngyi} & \texttt{1992-01-01} & \texttt{1996-12-31}    \\
+ \texttt{123456} & \texttt{Gábor} & \texttt{1997-01-01} & \texttt{1999-12-31}
+\end{tabular}
+
+== Adattisztítás ==
+1. A neveket numerikus azonosítóvá alakítjuk.
+	- normalizálás
+	- Levenshtein-távolság a név egyes részei között
+	- cég között szigorúbb kötés (másik tanulmány)
+	- cégen belül lazább kötés
+2. Magyar nemzetiség:
+	- az utolsó névrész szerepel az ``Anyakönyvezhető Utónevek" listáján
+	- de: Verne Gyula vs Almos Telegdy
+3. Mindenki más külföldi.
+	- cégeket kiszűrjük
+	- de: furcsa elírások kiegészítő információk nélkül
+4. Időintervallumot és poziciót megtisztítjuk.
+5. Éves panellé alakítjuk június 21-re.
+
+== CEO-váltás ==
+\begin{tikzpicture}
+\scaffolding
+\draw (2.5,-0.5) node[above=6pt, align=center] {Gyöngyi};
+\draw (5.5,-0.5) node[above=6pt, align=center] {Gábor};
+\draw (8.5,-0.5) node[above=6pt, align=center] {Gabriele};
+\draw (11.5,-0.5) node[above=6pt, align=center] {Gergely};
+\end{tikzpicture}
+
+= Minták =
+\longfigure{shares_over_time}{Magyar és külföldi menedzserek}
+\longfigure{CEO_type_by_age}{Az alapítók lassan lecserélődnek}
+\longfigure{CEO_N_histogram}{Némely cégnek több CEO-ja van}
+\widefigure{CEO_tenure_histogram}{A külföldi CEO-k gyorsabban cserélődnek (medián 3 vs 4 év)}
+
+== CEO-váltások száma ==
+\input{output/table/switches.tex}
+
+
+= Módszertan =
+== Módszertan ==
+- Vegyük minden CEO állásának időintervallumát (pl. Steve Ballmer, Microsoft, 2000--2014)
+- Zárjuk ki az alapítókat (pl. Bill Gates, Microsoft, 1975--1999)
+- Minden álláshoz rendeljünk három periódusból cégadatokat:
+	- előtte (1975--1999)
+	- közben (2000--2014)
+	- utána (2015--)
+- Mekkora a CEO hatása és mennyire hosszútávú?
+
+== Menedzserszintű eseményelemzés ==
+\begin{tikzpicture}
+\draw [->] (0,-0.5)--(10,-0.5);
+\foreach \x in {1,4,7,9}
+\draw(\x cm,3pt - 0.5cm) -- (\x cm, -3pt - 0.5cm);
+\draw (2.5,-0.5) node[below=6pt, align=center] {5 years before};
+\draw (5.5,-0.5) node[above=6pt, align=center] {Gábor};
+\draw (5.5,-0.5) node[below=6pt, align=center] {during};
+\draw (8,-0.5) node[below=6pt, align=center] {4 years after};
+\end{tikzpicture}
+
+\noindent
+\begin{tikzpicture}
+\draw [->] (0,-0.5)--(13,-0.5);
+\foreach \x in {4,7,10,12}
+\draw(\x cm,3pt - 0.5cm) -- (\x cm, -3pt - 0.5cm);
+\draw (5.5,-0.5) node[below=6pt, align=center] {5 years before};
+\draw (8.5,-0.5) node[above=6pt, align=center] {Gabriele};
+\draw (8.5,-0.5) node[below=6pt, align=center] {during};
+\draw (11,-0.5) node[below=6pt, align=center] {4 years after};
+\end{tikzpicture}
+
+== Becslőegyenlet ==
+$T_{im}\subset [1992,2016]$: $m$.~CEO $i$.~cégnél eltöltött ideje
+
+$I()$: indikátorfüggvény
+
+$X_{m}$: külföldi menedzser indikátor
+
+\begin{multline*}
+Y_{imt} = 
+\beta_1 I(t\in T_{im}) + \beta_2 I(t>T_{im}) \\
++\gamma_1 X_m I(t\in T_{im}) + \gamma_2 X_m I(t>T_{im}) \\
++f(\text{age}_{it})
++\mu_{im} + \nu_{st} + \varepsilon_{imt}
+\end{multline*}
+
+= Mechanizmus =
+
+== Három lehetséges értelmezés ==
+1. Cégspecifikus készségek és lojalitás
+2. Általános menedzsmentkészségek
+3. Átszervezés
+
+
+== Cégspecifikus készségek ==
+\begin{tikzpicture}
+\scaffolding
+\draw [red, very thick](0,0)--(7,0)--(7,3)--(10,3)--(10,0)--(14,0);
+\end{tikzpicture}
+
+== Általános készségek ==
+\begin{tikzpicture}
+\scaffolding
+\draw [red, very thick](0,0)--(7,0)--(7,3)--(14,3);
+\end{tikzpicture}
+
+== Átszervezés ==
+\begin{tikzpicture}
+\scaffolding
+\draw [red, very thick](0,0)--(4,0)--(4,1)--(7,1)--(7,2)--(10,2)--(10,3)--(14,3);
+\end{tikzpicture}
+
+== Alternatív értelmezések ==
+- Fordított okság: A gyorsabban fejlődő céghez küldenek külföldi menedzsert.
+- Kihagyott változók: A menedzser az tulajdonos figyelmét, elkötelezettségét jelezheti (pl. pénzügyi vs szakmai befektető).
+
+
+= Eredmények =
+== A külföldi cégek minden tekintetben jobbak (OLS) ==
+\regressiontable{baseline_OLS}
+
+== A jobb, globalizáltabb cégek kapnak külföldi CEO-t ==
+\regressiontable{selection}
+
+== Menedzserszintű becslések a felvásárlási mintán ==
+\regressiontable{acquisitions}
+== ==
+
+\longfigure{acquisitions_lnL_slope}{A magyar és külföldi menedzserek hasonló mértékben csökkentik a dolgozói létszámot}
+\longfigure{acquisitions_lnQL_slope}{A külföldi menedzserek 15--25 százalékkal növelik a termelékenységet}
+\longfigure{acquisitions_exporter_slope}{A külföldi menedzserek 3 százalékponttal növelik az export valószínűségét}
+
+= Eseményelemzés =
+\longfigure{lnL_event_study}{A külföldi menedzserek gyorsabban növő cégekhez mennek}
+\longfigure{lnKL_event_study}{Az egy főre jutó tőkében nincs különbség}
+\longfigure{lnQL_event_study}{A külföldi menedzserek ''tartósan növelik'' a termelékenységet}
+\longfigure{exporter_event_study}{A külföldi menedzserek ''átmenetileg'' növelik az exportvalószínűséget}
+
+
+== A külföldi menedzserek segítik az exportpiacra lépést ==
+\regressiontable{exporter_heterogeneity}
+
+= Értelmezés =
+== Értelmezés ==
+1. Cégspecifikus készségek
+	- Nincs heterogenitás a vállalatok között a külföldi menedzser hatásában.
+	- Kivéve: export, ahol a hatás kevésbé tartós.
+2. Általános készségek
+	- Munkatermelékenység tartósan megnő.
+3. Átszervezés
+	- A hazai menedzserváltás hatásai sokkal kisebbek.
+
+== Költségek ==
+Miért nem alkalmaz mindeki külföldi menedzsert?
+
+1. Magasabb bérek 
+2. Magasabb keresési költség
+3. Tökéletlen párosítás
+
+
+= Következtetések =
+== Következtetések ==
+- A külföldi menedzser által vezetett cégek növelik a munkatermelékenységet és belépnek az exportpiacra.
+- Összhangban a tartós, általános készségek értelmezésével:
+	- tartós átszervezás
+	- technológia-transzfer
+
+== Következő lépések ==
+- Komplementaritások: milyen helyi tényezők segítik a külföldi menedzsert?
+- Globalizáció módozatai: anyag- és gépimport.
+- A menedzsment összetétele és utódlás a külföldi cégekben.
+- World Management Survey: miben csinálnak mást a külföldi menedzserek?
+- Összekötés külföldi cégadatbázisokkal (opencorporates): milyen tapasztalata van a Magyarországra küldött menedzsereknek?
