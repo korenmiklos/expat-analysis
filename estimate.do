@@ -32,9 +32,10 @@ label var lnKL "Capital per worker (log)"
 label var lnQL "Revenue per worker (log)"
 label var exporter "Firm is an exporter (dummy)"
 
-egen person_tag = tag(frame_id manager_id)
-egen N = sum(person_tag), by(frame_id)
-gen inverse_weight = 1/N
+tempvar n 
+gen `n' = 1
+bysort frame_id year: egen N1 = sum(`n') if $sample_baseline
+gen inverse_weight_1 = 1/N1
 
 * verify founders are not in analysis sample
 foreach X of var during* after* {
