@@ -50,6 +50,9 @@ gen byte H_young_firm = age<=10
 
 codebook frame_id
 
+*expat before 1990
+replace expat=0 if enter_year<1990
+
 * time invariant vars
 foreach X of var expat foreign {
 	egen ever_`X' = max(`X'==1), by(frame_id)
@@ -70,6 +73,10 @@ gen tenure_foreign = year-first_year_foreign
 
 drop if ever_expat==1 & ever_foreign==0
 scalar dropped_do3_expat_firmyears = r(N_drop)
+
+egen enter_year_min=min(enter_year), by(frame_id)
+replace foundyear=enter_year_min if foundyear>enter_year_min
+drop enter_year_min
 
 * spell relation dummies
 gen byte before = year<enter_year
@@ -134,6 +141,9 @@ gen during_foreign = during*foreign_hire
 foreach X of var before during after DD DE ED EE {
 	replace `X' = 0 if founder==1
 }
+
+*Cégév szerinti szűrés
+drop if missing(lnL,lnQ,exporter)
 
 *Teljes minta elmentése a kontrollokkal
 compress
