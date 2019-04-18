@@ -1,25 +1,3 @@
-*Investment variable
-duplicates drop frame_id year, force
-
-egen fake_id = group(frame_id)
-tsset fake_id year
-
-gen invest_10 = . 
-replace invest_10 = 1 if lnK > 1.1*l.lnK
-recode invest_10 (. = 0) if lnK < .
-
-keep frame_id year invest_10
-sort frame_id year
-
-tempfile capital
-save `capital'
-
-use "$datadir\analysis_sample.dta", clear
-sort frame_id year
-merge m:1 frame_id year using `capital'
-drop _m
-save, replace 
-
 *********Sample, macros
 
 global datadir "C:\Users\Almos\Documents\Research\Expat\Expat_git\temp" 
@@ -43,11 +21,10 @@ global sample_ever_foreign $sample_acquisitions & (ever_foreign==1)
 
 global samples baseline acquisitions
 
-global outcomes_1 lnQ lnQL exporter_5
-global outcomes_2 invest_10 lnL lnKL lnML
-global fixed_effects frame_id teaor08_2d##year age_cat_1
-global fixed_effects_1 firm_person teaor08_2d##year age_cat_1
-global report foreign during*
+global outcomes_1 lnQ lnQL TFP 
+global outcomes_2 lnK lnL lnKL lnML exporter_5
+global fixed_effects firm_person teaor08_2d##year age_cat_1
+global report foreign during_foreign during_expat
 
 tempvar n 
 gen `n' = 1
@@ -82,23 +59,24 @@ gen exporter_5 = 1 if export/sales > .05 & export < .
 recode exporter_5 (. = 0)
 
 *TFP
-*egen temp_ind = group(teaor08_2d year)
-*gen TFP = .
-*forval i = 1/84  {
-*quietly reg lnQ lnL lnK lnM
-*predict x, res
-*replace TFP = x if temp_ind == `i'
-*drop x
-*}
-*drop temp_ind
+egen temp_ind = group(teaor08_2d year)
+gen TFP = .
+forval i = 1/84  {
+quietly reg lnQ lnL lnK lnM
+predict x, res
+replace TFP = x if temp_ind == `i'
+drop x
+}
+drop temp_ind
 
 
 *Managers hired by foreign owners
-gen byte foreign_hire = 1 if first_year_foreign <= enter_year
-recode foreign_hire (. = 0)
+gen byte foreign_hire = (first_year_foreign <= enter_year)
 gen during_foreign = during*foreign_hire
 bysort frame_id: egen ever_foreign_hire = max(foreign_hire)
 global sample_ever_switch $sample_ever_foreign & (ever_foreign_hire == 1)
+
+*foreign_hire and expat 
 
 *Before and after variables
 gen byte after_foreign = after*foreign_hire
@@ -117,7 +95,7 @@ foreach X of varlist DD DE ED EE {
 	gen during_foreign_`X' = during_foreign*`X'
 }
 
-global switch_type during_foreign_DD - during_foreign_EE
+global switch_type during_foreign_DD during_foreign_ED during_foreign_DE during_foreign_EE
 
 *Dynamics
 
@@ -158,17 +136,19 @@ global dynamics before_4 before_3 before_2 before_1 ///
 				 
 label var age "Firm Age"
 labe var emp "Employment"
-label var lnL "Employment (log)"
-label var lnKL "Capital per worker (log)"
+label var lnL "Emp."
+label var lnKL "K/L"
+label var lnK "Capital"
 label var lnQL "Labor Prod."
 label var exporter "Exporter"
-label var invest_10 "Investment"
 label var lnQ "Output"
 
 label var foreign "Foreign Owned"
 label var during "Local Man."
-label var during_foreign "Man. Foreign Hire"
-label var during_expat "Expatriate Man."
+label var during_foreign "Foreign Hired CEO"
+label var during_expat "Expatriate"
+label var after_foreign "Foreign Hired CEO Post"
+label var after_expat "Expatriate Post"
 label var exporter_5 "Exporter"
 
 gen indic = .

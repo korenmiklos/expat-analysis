@@ -2,23 +2,20 @@
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
 \begin{tabular}{l*{3}{D{.}{.}{-1}}}
 \hline\hline
-            &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}\\
-            &\multicolumn{1}{c}{lnQ}&\multicolumn{1}{c}{lnQL}&\multicolumn{1}{c}{exporter\_5}\\
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}\\
+                    &\multicolumn{1}{c}{Output}&\multicolumn{1}{c}{Labor Prod.}&\multicolumn{1}{c}{TFP}\\
 \hline
-foreign     &       0.118\sym{***}&       0.101\sym{***}&       0.036\sym{***}\\
-            &     (0.028)         &     (0.018)         &     (0.008)         \\
+Foreign Owned       &       0.085\sym{***}&       0.045\sym{**} &       0.011         \\
+                    &     (0.027)         &     (0.019)         &     (0.024)         \\
 [1em]
-during      &      -0.020\sym{***}&       0.004         &      -0.003\sym{*}  \\
-            &     (0.008)         &     (0.005)         &     (0.002)         \\
+Foreign Hired CEO   &       0.060\sym{**} &       0.060\sym{***}&       0.055\sym{*}  \\
+                    &     (0.030)         &     (0.020)         &     (0.031)         \\
 [1em]
-during\_foreign&       0.033         &       0.073\sym{***}&       0.002         \\
-            &     (0.031)         &     (0.021)         &     (0.008)         \\
-[1em]
-during\_expat&       0.089\sym{**} &       0.068\sym{**} &       0.037\sym{***}\\
-            &     (0.043)         &     (0.028)         &     (0.012)         \\
+Expatriate          &       0.107\sym{**} &       0.078\sym{***}&      -0.041         \\
+                    &     (0.048)         &     (0.030)         &     (0.040)         \\
 \hline
-\(N\)       &      482421         &      482421         &      482421         \\
-\(R^{2}\)   &       0.784         &       0.847         &       0.651         \\
+Observations        &      212614         &      212614         &       26802         \\
+\(R^{2}\)           &       0.862         &       0.868         &       0.561         \\
 \hline\hline
 \end{tabular}
 }

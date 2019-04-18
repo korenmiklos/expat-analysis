@@ -2,32 +2,26 @@
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
 \begin{tabular}{l*{3}{D{.}{.}{-1}}}
 \hline\hline
-            &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}\\
-            &\multicolumn{1}{c}{lnQ}&\multicolumn{1}{c}{lnQL}&\multicolumn{1}{c}{exporter\_5}\\
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}\\
+                    &\multicolumn{1}{c}{Output}&\multicolumn{1}{c}{Labor Prod.}&\multicolumn{1}{c}{TFP}\\
 \hline
-foreign     &       0.122\sym{***}&       0.103\sym{***}&       0.037\sym{***}\\
-            &     (0.029)         &     (0.019)         &     (0.008)         \\
+Foreign Owned       &       0.088\sym{***}&       0.044\sym{**} &       0.008         \\
+                    &     (0.027)         &     (0.019)         &     (0.027)         \\
 [1em]
-during      &      -0.020\sym{***}&       0.003         &      -0.003\sym{*}  \\
-            &     (0.008)         &     (0.005)         &     (0.002)         \\
+during\_foreign\_DD   &       0.008         &       0.038         &       0.036         \\
+                    &     (0.034)         &     (0.024)         &     (0.034)         \\
 [1em]
-after       &      -0.105\sym{***}&       0.019\sym{***}&      -0.006\sym{**} \\
-            &     (0.011)         &     (0.007)         &     (0.003)         \\
+during\_foreign\_ED   &       0.262\sym{***}&       0.145\sym{***}&       0.109         \\
+                    &     (0.049)         &     (0.032)         &     (0.069)         \\
 [1em]
-during\_foreign\_DD&      -0.015         &       0.060\sym{**} &      -0.006         \\
-            &     (0.040)         &     (0.026)         &     (0.010)         \\
+during\_foreign\_DE   &       0.177\sym{***}&       0.175\sym{***}&       0.050         \\
+                    &     (0.064)         &     (0.039)         &     (0.085)         \\
 [1em]
-during\_foreign\_DE&       0.076\sym{*}  &       0.111\sym{***}&       0.027\sym{**} \\
-            &     (0.040)         &     (0.025)         &     (0.012)         \\
-[1em]
-during\_foreign\_ED&       0.207\sym{***}&       0.135\sym{***}&       0.021         \\
-            &     (0.046)         &     (0.032)         &     (0.014)         \\
-[1em]
-during\_foreign\_EE&       0.233\sym{***}&       0.209\sym{***}&       0.067\sym{***}\\
-            &     (0.060)         &     (0.039)         &     (0.019)         \\
+during\_foreign\_EE   &       0.154\sym{***}&       0.089\sym{***}&      -0.033         \\
+                    &     (0.047)         &     (0.034)         &     (0.050)         \\
 \hline
-\(N\)       &      482421         &      482421         &      482421         \\
-\(R^{2}\)   &       0.784         &       0.847         &       0.651         \\
+Observations        &      212614         &      212614         &       26802         \\
+\(R^{2}\)           &       0.862         &       0.868         &       0.561         \\
 \hline\hline
 \end{tabular}
 }

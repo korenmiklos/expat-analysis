@@ -2,23 +2,20 @@
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
 \begin{tabular}{l*{3}{D{.}{.}{-1}}}
 \hline\hline
-            &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}\\
-            &\multicolumn{1}{c}{univ}&\multicolumn{1}{c}{high}&\multicolumn{1}{c}{low}\\
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}\\
+                    &\multicolumn{1}{c}{univ}&\multicolumn{1}{c}{high}&\multicolumn{1}{c}{low}\\
 \hline
-foreign     &       0.026\sym{***}&      -0.008         &      -0.019\sym{***}\\
-            &     (0.007)         &     (0.009)         &     (0.006)         \\
+Foreign owned dummy with ultimate owners from Complex&       0.009         &       0.027         &      -0.036         \\
+                    &     (0.027)         &     (0.029)         &     (0.029)         \\
 [1em]
-during      &       0.000         &       0.000         &       0.002         \\
-            &     (0.002)         &     (0.003)         &     (0.001)         \\
+during\_foreign      &      -0.008         &       0.013         &      -0.005         \\
+                    &     (0.016)         &     (0.024)         &     (0.025)         \\
 [1em]
-during\_foreign&       0.003         &       0.020\sym{**} &       0.011\sym{**} \\
-            &     (0.006)         &     (0.009)         &     (0.005)         \\
-[1em]
-during\_expat&      -0.006         &      -0.019         &       0.014\sym{*}  \\
-            &     (0.009)         &     (0.013)         &     (0.007)         \\
+during\_expat        &       0.021         &       0.005         &      -0.026         \\
+                    &     (0.020)         &     (0.036)         &     (0.036)         \\
 \hline
-\(N\)       &      707537         &      707537         &     1069837         \\
-\(R^{2}\)   &       0.250         &       0.225         &       0.270         \\
+Observations        &       55812         &       55812         &       55812         \\
+\(R^{2}\)           &       0.657         &       0.589         &       0.629         \\
 \hline\hline
 \end{tabular}
 }
