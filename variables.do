@@ -1,4 +1,5 @@
 clear all
+set more off
 capture log close
 log using output/variables, text replace
 
@@ -78,6 +79,8 @@ egen enter_year_min=min(enter_year), by(frame_id)
 replace foundyear=enter_year_min if foundyear>enter_year_min
 drop enter_year_min
 
+replace first_exit_year=enter_year if enter_year>first_exit_year
+
 * spell relation dummies
 gen byte before = year<enter_year
 gen byte during = year>=enter_year & year<=first_exit_year
@@ -144,6 +147,33 @@ foreach X of var before during after DD DE ED EE {
 
 *Cégév szerinti szűrés
 drop if missing(lnL,lnQ,exporter)
+
+*Tfp
+tab year, gen(year_d)
+egen firmyear_tag=tag(frame_id year)
+bysort frame_id: egen teaor_mode = mode(teaor08_2d), maxmode
+recode teaor_mode (6 75 = .)
+gen lnVA = ln(sales-ranyag)
+
+levelsof teaor_mode, local(levels)
+foreach l of local levels {
+  disp `l'
+  qui prodest lnVA if teaor_mode == `l' & firmyear_tag, ///
+            free(lnL) state(lnK) proxy(lnM)  ///
+            met(lp) va control (year_d*) id(firm_person) t(year) fsres(tfp_lp_`l')
+}
+
+
+gen  x =  .
+levelsof teaor_mode, local(levels)
+foreach l of local levels {
+
+		replace x = tfp_lp_`l' if x == .
+}
+
+bysort frame_id year: egen  tfp_lp = max(x)
+
+drop tfp_lp_* x year_d*
 
 *Teljes minta elmentése a kontrollokkal
 compress
