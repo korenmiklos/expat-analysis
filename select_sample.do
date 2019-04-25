@@ -1,13 +1,14 @@
 clear all
 set more off
-use input/balance-small/balance-sheet-1992-2016-small
+use "input/balance-small/balance-sheet-1992-2016-small.dta"
 
 collapse (firstnm) year, by(frame_id)
 drop year
 tempfile add
 save `add'
 
-use input/balance-small/balance_sheet80_14, clear
+* where is this data? is it not a bead?
+/*use input/balance-small/balance_sheet80_14, clear
 keep if year<1992
 drop if frame_id==""
 merge m:1 frame_id using `add'
@@ -15,12 +16,17 @@ keep if _merge==3
 count
 tempfile eighties
 save `eighties'
-
-use input/balance-small/balance-sheet-1992-2016-small, clear
+*/
+use "input/balance-small/balance-sheet-1992-2016-small.dta", clear
 count
-append using `eighties'
+* append using `eighties'
 count
 
+* add import dummies
+gen long id = real(substr(frame_id, 3, 8)) if substr(frame_id, 1, 2)=="ft"
+merge 1:1 id year using "input/import-dummies/import-dummies.dta", nogen keep(master match)
+mvencode *import, mv(0) override
+drop id
 * limit sample before large merge
 *Függő változók készítése
 gen lnL=ln(emp)
