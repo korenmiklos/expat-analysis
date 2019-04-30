@@ -1,9 +1,9 @@
 *********Sample, macros
 
-global datadir "../temp" 
-global outputdir "../text"
+global datadir "C:\Users\Almos\Documents\Research\Expat\Expat_git\temp" 
+global outputdir "C:\Users\Almos\Documents\Research\Expat\Expat_git\text"
 
-use "$datadir/analysis_sample.dta", clear
+use "$datadir\analysis_sample.dta", clear
 
 *Sampling
 scalar Tbefore = 4
@@ -22,8 +22,7 @@ global sample_ever_foreign $sample_acquisitions & (ever_foreign==1)
 global samples baseline acquisitions
 
 global outcomes_1 lnQ lnQL TFP 
-global outcomes_2 lnK lnL lnKL lnML
-global outcomes_3 exporter_5 capimport matimport
+global outcomes_2 lnK lnL lnKL lnML exporter_5
 global fixed_effects firm_person teaor08_2d##year age_cat_1
 global report foreign during_foreign during_expat
 
@@ -53,6 +52,12 @@ replace age_cat_1 = 15 if age_cat > 40 & age_cat < .
 
 gen lnML = lnM - lnL
 
+*Firm-year tag
+egen firmyear_tag = tag(frame_id year)
+
+gen exporter_5 = 1 if export/sales > .05 & export < .
+recode exporter_5 (. = 0)
+
 *TFP
 egen temp_ind = group(teaor08_2d year)
 gen TFP = .
@@ -65,6 +70,10 @@ drop x
 drop temp_ind
 
 
+*Managers hired by foreign owners
+gen byte foreign_hire = (first_year_foreign <= enter_year)
+gen during_foreign = during*foreign_hire
+bysort frame_id: egen ever_foreign_hire = max(foreign_hire)
 global sample_ever_switch $sample_ever_foreign & (ever_foreign_hire == 1)
 
 *foreign_hire and expat 
@@ -133,8 +142,6 @@ label var lnK "Capital"
 label var lnQL "Labor Prod."
 label var exporter "Exporter"
 label var lnQ "Output"
-label var matimport "Imports material"
-label var capimport "Imports capital"
 
 label var foreign "Foreign Owned"
 label var during "Local Man."

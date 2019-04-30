@@ -5,11 +5,11 @@ forval i = 1/3 {
 quietly estpost sum age emp lnQL if indic == `i' & $sample_acquisitions
 est store i`i'
 }
-esttab i1 i2 i3 using "$outputdir/descriptives/firm_level_desc.tex", ///
+esttab i1 i2 i3 using "$outputdir\descriptives\firm_level_desc.tex", ///
 cell(mean(fmt(%9.2f)) sd(par fmt(%9.2f)) n) mtitle("Alw. DO" "FO not Expat" "FO & Expat") ///
 label replace
 
-local TABLES 3
+
 
 *********Regressions in the paper
 
@@ -17,36 +17,40 @@ local TABLES 3
 foreach X of varlist $outcomes_1 {
 	eststo: qui reghdfe `X' foreign [aw = inverse_weight_1] if $sample_acquisitions & (before | during), a($fixed_effects) cluster(frame_id)
 }
-esttab using "$outputdir/Regression/foreign_effect_1.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(foreign) noconstant nonote alignment(D{.}{.}{-1}) replace label
+esttab using "$outputdir\Regression\foreign_effect_1.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(foreign) noconstant nonote alignment(D{.}{.}{-1}) replace label
 eststo clear
 
 *Direct effect
-forval i = 1/`TABLES' {
-	foreach X of varlist ${outcomes_`i'} {
-		eststo: qui reghdfe `X' foreign during during_foreign during_expat [aw = inverse_weight_1] if $sample_acquisitions & (before | during), a($fixed_effects) cluster(frame_id)
-	}
-	esttab using "$outputdir/Regression/direct_effect_`i'.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep($report) noconstant nonote alignment(D{.}{.}{-1}) label replace 
-	eststo clear
+foreach X of varlist $outcomes_1 {
+	eststo: qui reghdfe `X' foreign during during_foreign during_expat [aw = inverse_weight_1] if $sample_acquisitions & (before | during), a($fixed_effects) cluster(frame_id)
 }
+esttab using "$outputdir\Regression\direct_effect_1.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep($report) noconstant nonote alignment(D{.}{.}{-1}) label replace 
+eststo clear
+
+foreach X of varlist $outcomes_2 {
+	eststo: qui reghdfe `X' foreign during during_foreign during_expat [aw = inverse_weight_1] if $sample_acquisitions & (before | during), a($fixed_effects) cluster(frame_id)
+}
+esttab using "$outputdir\Regression\direct_effect_2.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep($report) noconstant nonote alignment(D{.}{.}{-1}) replace label
+eststo clear
 
 *Selection, direct, long-term effects
 foreach X of varlist $outcomes_1 {
 	eststo: qui reghdfe `X' foreign during after during_foreign after_foreign ///
 	during_expat after_expat div [aw = inverse_weight_1] if $sample_acquisitions, a($fixed_effects) cluster(frame_id)
 }
-esttab using "$outputdir/Regression/long_effect_1.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep($report after_foreign after_expat) noconstant nonote alignment(D{.}{.}{-1}) replace label
+esttab using "$outputdir\Regression\long_effect_1.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep($report after_foreign after_expat) noconstant nonote alignment(D{.}{.}{-1}) replace label
 eststo clear
 
 *Dynamics
 foreach X of varlist $outcomes_1 {
 	eststo: qui reghdfe `X' foreign after $dynamics [aw = inverse_weight_1] if $sample_acquisitions & (before |during), a($fixed_effects) cluster(frame_id)
 }
-esttab using "$outputdir/Regression/dynamic_effect_10.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(before_4 before_3 before_2 before_1 ///
+esttab using "$outputdir\Regression\dynamic_effect_10.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(before_4 before_3 before_2 before_1 ///
 during_0 during_1 during_2 during_3 during_4 during_5) ///
 noconstant nonote alignment(D{.}{.}{-1}) replace 
-esttab using "$outputdir/Regression/dynamic_effect_11.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(before_foreign_* during_foreign_*) ///
+esttab using "$outputdir\Regression\dynamic_effect_11.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(before_foreign_* during_foreign_*) ///
 noconstant nonote alignment(D{.}{.}{-1}) replace 
-esttab using "$outputdir/Regression/dynamic_effect_12.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(before_expat_* during_expat_*) ///
+esttab using "$outputdir\Regression\dynamic_effect_12.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(before_expat_* during_expat_*) ///
 noconstant nonote alignment(D{.}{.}{-1}) replace 
 eststo clear
 
@@ -54,7 +58,7 @@ eststo clear
 foreach X of varlist $outcomes_1 {
 	eststo: qui reghdfe `X' foreign during $switch_type [aw = inverse_weight_1] if $sample_acquisitions & (before | during), a($fixed_effects) cluster(frame_id)
 }
-esttab using "$outputdir/Regression/switch_effect_1.tex", r2 star(* .1 ** .05 *** .01) se b(3) noconstant nonote alignment(D{.}{.}{-1}) replace label ///
+esttab using "$outputdir\Regression\switch_effect_1.tex", r2 star(* .1 ** .05 *** .01) se b(3) noconstant nonote alignment(D{.}{.}{-1}) replace label ///
 keep(foreign $switch_type)
 eststo clear
 
@@ -124,22 +128,22 @@ foreach var in lnQ_foreign lnQ_expat lnQL_foreign lnQL_expat exporter_5_foreign 
 
 gen c_lnQL_expat_1 = c_lnQL_foreign + c_lnQL_expat
 
-save "$datadir/dynamics_figure.dta", replace
+save "$datadir\dynamics_figure.dta", replace
 
 foreach var in lnQ lnQL exporter_5 {
 
 	graph twoway (rcap `var'_foreign_low `var'_foreign_high event) (line c_`var'_foreign event), /// 
 	graphregion(color(white)) xlabel(-4(1)5) legend(off) xline(-0.5) xtitle("Event Time") ///
 	title("Foreign Hire") saving(`var'_gf)
-	*gr export "$outputdir/regression/gr_`var'_foreign.pdf", replace 
+	*gr export "$outputdir\regression\gr_`var'_foreign.pdf", replace 
 
 	graph twoway (rcap `var'_expat_low `var'_expat_high event) (line c_`var'_expat_ event), /// 
 	graphregion(color(white)) xlabel(-4(1)5) legend(off) xline(-0.5) xtitle("Event Time") ///
 	title("Expatriate") saving(`var'_gx)
-	*gr export "$outputdir/regression/gr_`var'_expat.pdf", replace 
+	*gr export "$outputdir\regression\gr_`var'_expat.pdf", replace 
 
 	gr combine `var'_gf.gph `var'_gx.gph, ycommon xsize(8)	
-	gr export "$outputdir/regression/gr_`var'.pdf", replace 
+	gr export "$outputdir\regression\gr_`var'.pdf", replace 
 	
 	}
 	
@@ -159,37 +163,37 @@ graph twoway (rcap lnQL_expat_low lnQL_expat_high event) (line c_lnQL_expat_ eve
 foreach X of varlist $outcomes_2 {
 	eststo: qui reghdfe `X' foreign [aw = inverse_weight_1] if $sample_acquisitions & (before | during), a($fixed_effects) cluster(frame_id)
 }
-esttab using "$outputdir/Regression/foreign_effect_2.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(foreign) noconstant nonote alignment(D{.}{.}{-1}) replace label
+esttab using "$outputdir\Regression\foreign_effect_2.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(foreign) noconstant nonote alignment(D{.}{.}{-1}) replace label
 eststo clear
 
 foreach X of varlist $outcomes_2 {
 	eststo: qui reghdfe `X' foreign during during_foreign during_expat [aw = inverse_weight_1] if $sample_acquisitions & (before | during), a($fixed_effects) cluster(frame_id)
 }
-esttab using "$outputdir/Regression/direct_effect_2.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep($report) noconstant nonote alignment(D{.}{.}{-1}) replace 
+esttab using "$outputdir\Regression\direct_effect_2.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep($report) noconstant nonote alignment(D{.}{.}{-1}) replace 
 eststo clear
 
 foreach X of varlist $outcomes_2 {
 	eststo: qui reghdfe `X' foreign during after during_foreign after_foreign ///
 	during_expat after_expat [aw = inverse_weight_1] if $sample_acquisitions, a($fixed_effects) cluster(frame_id)
 }
-esttab using "$outputdir/Regression/long_effect_2.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(foreign during* after*) noconstant nonote alignment(D{.}{.}{-1}) replace 
+esttab using "$outputdir\Regression\long_effect_2.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(foreign during* after*) noconstant nonote alignment(D{.}{.}{-1}) replace 
 eststo clear
 
 foreach X of varlist $outcomes_2 {
 	eststo: qui reghdfe `X' foreign DD $switch_type [aw = inverse_weight_1] if $sample_acquisitions, a($fixed_effects) cluster(frame_id)
 }
-esttab using "$outputdir/Regression/switch_effect_2.tex", r2 star(* .1 ** .05 *** .01) se b(3) noconstant nonote alignment(D{.}{.}{-1}) replace 
+esttab using "$outputdir\Regression\switch_effect_2.tex", r2 star(* .1 ** .05 *** .01) se b(3) noconstant nonote alignment(D{.}{.}{-1}) replace 
 eststo clear
 
 foreach X of varlist $outcomes_2 {
 	eststo: qui reghdfe `X' foreign after $dynamics [aw = inverse_weight_1] if $sample_acquisitions & tenure <6, a($fixed_effects) cluster(frame_id)
 }
-esttab using "$outputdir/Regression/dynamic_effect_20.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(before_4 before_3 before_2 before_1 ///
+esttab using "$outputdir\Regression\dynamic_effect_20.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(before_4 before_3 before_2 before_1 ///
 during_0 during_1 during_2 during_3 during_4 during_5) ///
 noconstant nonote alignment(D{.}{.}{-1}) replace 
-esttab using "$outputdir/Regression/dynamic_effect_21.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(before_foreign_* during_foreign_*) ///
+esttab using "$outputdir\Regression\dynamic_effect_21.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(before_foreign_* during_foreign_*) ///
 noconstant nonote alignment(D{.}{.}{-1}) replace 
-esttab using "$outputdir/Regression/dynamic_effect_22.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(before_expat_* during_expat_*) ///
+esttab using "$outputdir\Regression\dynamic_effect_22.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(before_expat_* during_expat_*) ///
 noconstant nonote alignment(D{.}{.}{-1}) replace
 eststo clear
 	
