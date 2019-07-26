@@ -36,14 +36,7 @@ gen `n' = 1
 bysort frame_id year: egen `N1' = sum(`n') if $sample_baseline
 gen inverse_weight = 1/`N1'
 
-* verify founders are not in analysis sample
-foreach X of var during* after* {
-	replace `X'=0 if founder==1
-}
-
 xtset firm_person year
-
-rename tfp_lp TFP
 
 *New age category variable
 gen age_cat_1 = .
@@ -92,6 +85,13 @@ gen byte after_foreign = after*foreign_hire
 gen byte before_foreign = before*foreign_hire
 
 bysort frame_id: egen ever_foreign_hire = max(foreign_hire)
+
+*Find the first CEOs hired by the foreign owner
+bysort frame_id: egen enter_year_first_foreign = min(enter_year) if foreign_hire 
+gen first_fhire = (enter_year_first_foreign == enter_year)
+gen during_first_fhire = first_fhire*during_foreign
+gen during_first_fhire_expat = first_fhire*during_expat
+
 
 
 *Dynamics
@@ -162,6 +162,10 @@ before_foreign_ED_1 before_foreign_ED_2 before_foreign_ED_3 before_foreign_ED_4 
 before_foreign_DE_1 before_foreign_DE_2 before_foreign_DE_3 before_foreign_DE_4 during_foreign_DE_* ///
 before_foreign_EE_1 before_foreign_EE_2 before_foreign_EE_3 before_foreign_EE_4 during_foreign_EE_*
 
+
+
+
+rename tfp_lp TFP
 
 label var age "Firm Age"
 labe var emp "Employment"

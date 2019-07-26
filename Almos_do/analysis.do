@@ -33,6 +33,13 @@ foreach X of varlist $outcomes_1 {
 esttab using "$outputdir\Regression\direct_effect_1_ten.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep($report) noconstant nonote alignment(D{.}{.}{-1}) label replace 
 eststo clear
 
+*Direct effect, difference between first hires and later ones
+foreach X of varlist $outcomes_1 {
+	eststo: qui reghdfe `X' foreign during during_foreign during_first_fhire during_expat during_first_fhire_expat [aw = inverse_weight] if $sample_acquisitions_1, a($fixed_effects) cluster(frame_id)
+}
+esttab using "$outputdir\Regression\direct_effect_1.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep($report) noconstant nonote alignment(D{.}{.}{-1}) label replace 
+eststo clear
+
 
 foreach X of varlist $outcomes_2 {
 	eststo: qui reghdfe `X' foreign during during_foreign during_expat [aw = inverse_weight] if $sample_acquisitions_1, a($fixed_effects) cluster(frame_id)
