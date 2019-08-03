@@ -3,24 +3,23 @@ use "$datadir\analysis_sample_bertarifa.dta", clear
 keep if brutto2 < .
 label var foreign "Foreign"
 
-gen low = 1 if voc | elem
-recode low (. = 0) if voc == 0 | elem == 0
+gen low = (voc | elem)
 
 gen lnW = ln(brutto2)
 
 *Composite weight
 
-egen person_firm_year_tag = tag(manager_id frame_id year)
-tempvar n x
-gen `n' = 1
-bysort frame_id year: egen N1 = sum(`n') if $sample_baseline_1 & person_firm_year_tag
-gen w = 1/N1
-bysort frame_id year: egen inverse_weight_1 = max(w)
-drop w N1
+	egen person_firm_year_tag = tag(manager_id frame_id year)
 
-gen x = inverse_weight_1*wght
-bysort frame_id manager_id year: egen weight_composite = max(x)
+	tempvar n x
+	gen `n' = 1
+	bysort frame_id year: egen N1 = sum(`n') if $sample_baseline_1 & person_firm_year_tag
+	gen w = 1/N1
+	bysort frame_id year: egen inverse_weight_1 = max(w)
+	drop w N1
 
+	gen x = inverse_weight_1*iwght
+	bysort frame_id manager_id year: egen weight_composite = max(x)
 
 
 foreach X of varlist univ high low  {

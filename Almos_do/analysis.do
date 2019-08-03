@@ -9,6 +9,14 @@ esttab i1 i2 i3 using "$outputdir\descriptives\firm_level_desc.tex", ///
 cell(mean(fmt(%9.2f)) sd(par fmt(%9.2f)) n) mtitle("Alw. DO" "FO not Expat" "FO & Expat") ///
 label replace
 
+*Selection of managers
+
+eststo: reghdfe ever_foreign_hire lnK lnQL exporter_5 [aw = inverse_weight] if $sample_acquisitions_1 & ever_foreign & !foreign, a(teaor08_2d year age_cat_1) cluster(frame_id)
+eststo: reghdfe ever_expat lnK lnQL exporter_5 [aw = inverse_weight] if $sample_acquisitions_1 & ever_foreign_hire & !foreign, a(teaor08_2d year age_cat_1) cluster(frame_id)
+
+esttab using "$outputdir\Regression\selection.tex", r2 star(* .1 ** .05 *** .01) se b(3) noconstant nonote alignment(D{.}{.}{-1}) label replace 
+eststo clear
+
 
 *********Regressions in the paper
 
@@ -41,14 +49,21 @@ esttab using "$outputdir\Regression\direct_effect_1.tex", r2 star(* .1 ** .05 **
 eststo clear
 
 
-foreach X of varlist $outcomes_2 {
+foreach X of varlist $outcomes_input {
 	eststo: qui reghdfe `X' foreign during during_foreign during_expat [aw = inverse_weight] if $sample_acquisitions_1, a($fixed_effects) cluster(frame_id)
 }
 esttab using "$outputdir\Regression\direct_effect_2.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep($report) noconstant nonote alignment(D{.}{.}{-1}) replace label
 eststo clear
 
+
+foreach X of varlist $outcomes_trade {
+	eststo: qui reghdfe `X' foreign during during_foreign during_expat [aw = inverse_weight] if $sample_acquisitions_1, a($fixed_effects) cluster(frame_id)
+}
+esttab using "$outputdir\Regression\direct_effect_trade.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep($report) noconstant nonote alignment(D{.}{.}{-1}) replace label
+eststo clear
+
 *Direct, long-term effects
-foreach X of varlist $outcomes_1 {
+foreach X of varlist $outcomes_perf {
 	eststo: qui reghdfe `X' foreign during after during_foreign after_foreign ///
 	during_expat after_expat div [aw = inverse_weight] if $sample_acquisitions, a($fixed_effects) cluster(frame_id)
 }
@@ -63,7 +78,7 @@ esttab using "$outputdir\Regression\long_effect_2.tex", r2 star(* .1 ** .05 *** 
 eststo clear
 
 *Types of switches
-foreach X of varlist $outcomes_1 {
+foreach X of varlist $outcomes_perf {
 	eststo: qui reghdfe `X' foreign $switch_type [aw = inverse_weight] if $sample_acquisitions_1, a($fixed_effects) cluster(frame_id)
 }
 esttab using "$outputdir\Regression\switch_effect_1.tex", r2 star(* .1 ** .05 *** .01) se b(3) noconstant nonote alignment(D{.}{.}{-1}) replace label ///
@@ -241,13 +256,13 @@ keep(foreign $switch_type)
 eststo clear
 
 
-foreach X of varlist $outcomes_2 {
+foreach X of varlist $outcomes_imputs {
 	eststo: qui reghdfe `X' foreign [aw = inverse_weight] if $sample_acquisitions & (before | during), a($fixed_effects) cluster(frame_id)
 }
 esttab using "$outputdir\Regression\foreign_effect_2.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep(foreign) noconstant nonote alignment(D{.}{.}{-1}) replace label
 eststo clear
 
-foreach X of varlist $outcomes_2 {
+foreach X of varlist $outcomes_inputs {
 	eststo: qui reghdfe `X' foreign during during_foreign during_expat [aw = inverse_weight] if $sample_acquisitions & (before | during), a($fixed_effects) cluster(frame_id)
 }
 esttab using "$outputdir\Regression\direct_effect_2.tex", r2 star(* .1 ** .05 *** .01) se b(3) keep($report) noconstant nonote alignment(D{.}{.}{-1}) replace 

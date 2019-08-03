@@ -26,7 +26,7 @@ global sample_ever_foreign $sample_acquisitions & (ever_foreign==1)
 global samples baseline acquisitions
 
 global outcomes_perf lnQ lnQL TFP 
-global outcomes_inputs lnK lnL lnKL lnML
+global outcomes_input lnK lnL lnKL lnMQ
 global outcomes_trade exporter_5 matimport capimport
 global fixed_effects firm_person teaor08_2d##year age_cat_1
 global report foreign during_foreign during_expat
@@ -49,7 +49,7 @@ replace age_cat_1 = 14 if age_cat > 30 & age_cat <= 40
 replace age_cat_1 = 15 if age_cat > 40 & age_cat < . 
 
 gen lnML = lnM - lnL
-
+gen lnMQ = lnM - lnQ
 *TFP
 
 bysort frame_id: egen teaor_mode = mode(teaor08_2d), maxmode
@@ -136,6 +136,11 @@ foreach X of varlist DD DE ED EE {
 	gen during_foreign_`X' = during_foreign*`X'
 }
 
+label var during_foreign_DD "Local-Local"
+label var during_foreign_DE "Local-Expat"
+label var during_foreign_ED "Expat-Local"
+label var during_foreign_EE "Expat-Expat"
+
 global switch_type during_foreign_DD during_foreign_ED during_foreign_DE during_foreign_EE
 				 
 *Types of switches dynamics
@@ -184,6 +189,11 @@ label var during_expat "Expatriate"
 label var after_foreign "Foreign Hired CEO Post"
 label var after_expat "Expatriate Post"
 label var exporter_5 "Exporter"
+label var matimport "Import mat."
+label var capimport "Import capital"
+
+label var ever_foreign_hire "Foreign hire"
+label var ever_expat "Expat"
 
 gen indic = .
 replace indic = 1 if !ever_foreign 
