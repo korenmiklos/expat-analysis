@@ -9,8 +9,8 @@ output/estimate_%.log: est_%.do $(ESTIMATOR)
 	$(STATA) estimate $(subst est_,,$(basename $<))
 output/descriptives.log: temp/analysis_sample.dta descriptives.do
 	$(STATA) descriptives 
-temp/analysis_sample.dta: temp/balance-small.dta temp/firm_ceo_panel.dta variables.do
-	$(STATA) variables
+temp/analysis_sample.dta: temp/balance-small.dta temp/firm_ceo_panel.dta create_analysis_sample.do
+	$(STATA) create_analysis_sample
 temp/firm_ceo_panel.dta: input/ceo-panel/ceo-panel.dta temp/balance-small.dta create_firm_panel.do
 	$(STATA) create_firm_panel
 temp/balance-small.dta: input/balance-small/balance-small.dta select_sample.do
