@@ -1,25 +1,8 @@
 clear all
 set more off
-use input/balance-small/balance-sheet-1992-2016-small
-
-collapse (firstnm) year, by(frame_id)
-drop year
-tempfile add
-save `add'
-
-use input/balance-small/balance_sheet80_14, clear
-keep if year<1992
-drop if frame_id==""
-merge m:1 frame_id using `add'
-keep if _merge==3
-count
-tempfile eighties
-save `eighties'
-
-use input/balance-small/balance-sheet-1992-2016-small, clear
-count
-append using `eighties'
-count
+use "input/balance-small/balance-small.dta"
+* proxy firm founding date with first balance sheet filed
+egen foundyear = min(year), by(frame_id)
 
 * limit sample before large merge
 *Függő változók készítése
@@ -48,10 +31,15 @@ ren fo3 foreign
 *foreign átalakítása 
 recode foreign (.=0)
 
-egen id = group(frame_id)
+* keep only numeric part of frame_id
+keep if substr(frame_id, 1, 2) == "ft"
+generate long frame_id_numeric = real(substr(frame_id, 3, 8))
+codebook frame_id*
+
+drop frame_id
 
 *foreign-at többször váltók kidobása
-xtset id year
+xtset frame_id_numeric year
 *lyukak miatt [n_1]
 *gen foreign_change=1 if l1.foreign==0&foreign==1
 *gen foreign_change_rev=1 if l1.foreign==1&foreign==0
@@ -68,8 +56,7 @@ count
 tempvar after
 gen `after' = r(N)
 scalar dropped_too_many_foreign_change = `before'-`after'
-di dropped_too_many_foreign_change
-*scalar dropped_too_many_foreign_change = r(N_drop)
+display dropped_too_many_foreign_change
 
 *divesztíció
 recode foreign_change_rev (.=0)
@@ -85,7 +72,7 @@ bys frame_id: egen byte greenfield=max(foreign_infirst)
 recode greenfield (.=0)
 
 * extrapolate capital stock
-xtset id year
+xtset frame_id year
 local condition  final_netgep==0 & !missing(L.final_netgep) & L.final_netgep>0
 count if `condition'
 scalar replaced_capital = r(N)
@@ -105,8 +92,6 @@ egen ind_year=group(ind year)
 *Manufacaturing dummy
 gen manufacturing=0
 replace manufacturing=1 if teaor08_1d=="C"
-
-
 
 *Életkor változó
 gen age=year-foundyear
@@ -133,4 +118,4 @@ di dropped_finance
 
 save_all_to_json
 drop __*
-save temp/balance-small, replace
+save "temp/balance-small.dta", replace
