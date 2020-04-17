@@ -11,8 +11,8 @@ output/descriptives.log: temp/analysis_sample.dta descriptives.do
 	$(STATA) descriptives 
 temp/analysis_sample.dta: temp/balance-small.dta temp/firm_ceo_panel.dta variables.do
 	$(STATA) variables
-temp/firm_ceo_panel.dta: temp/manager_panel.dta firm_panel.do fill_in_ceo.do
-	$(STATA) firm_panel
+temp/firm_ceo_panel.dta: input/ceo-panel/ceo-panel.dta temp/balance-small.dta create_firm_panel.do
+	$(STATA) create_firm_panel
 temp/balance-small.dta: input/balance-small/balance-small.dta select_sample.do
 	$(STATA) select_sample
 install:
