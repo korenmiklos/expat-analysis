@@ -3,8 +3,13 @@ clear all
 use "temp/firm_ceo_panel.dta"
 capture drop _*
 
-* NB: this is actual panel of CEO, so missing after period
+scalar T1 = 1988
+scalar T2 = 2018
+expand T2-T1+1
+bys frame_id manager_id job_spell: gen year = _n-1+T1
 
+tempfile expand
+save `expand', replace
 merge m:1 frame_id year using "temp/balance-small.dta", nogen keep(match)
 merge m:1 frame_id year using "temp/N_ceos.dta", nogen keep(match)
 * drop very large firms
@@ -15,16 +20,9 @@ tab total_CEOs
 drop if total_CEOs>15
 scalar dropped_too_many_CEOs = r(N_drop)
 
-egen ceo_span = max(1+tenure), by(frame_id manager_id job_spell)
-tab ceo_span
-egen industry_ceo_span = median(ceo_span), by(industry_mode)
-tab industry_ceo_span if fp_tag
-gen byte slow = industry_ceo_span >= 10
-tab industry_mode if slow
-
 * create sample splits based on data in founder years
 local continuous lnL lnKL lnQL
-local dummy exporter slow
+local dummy exporter
 foreach X of var `continuous' {
 	egen mean_`X' = mean(cond(spell==1,`X',.)), by(frame_id)
 	egen median_`X' = median(mean_`X'), by(industry_mode)
@@ -36,9 +34,6 @@ foreach X of var `dummy' {
 	gen byte H_`X' = mean_`X' > 0.5
 	tab H_`X'
 }
-gen byte H_early = job_begin<=2000
-gen byte H_young_firm = age<=10
-
 codebook frame_id
 
 *expat before 1990
@@ -53,25 +48,24 @@ egen first_year_expat_original = min(cond(expat==1,job_begin,.)), by(frame_id)
 egen first_year_foreign_original = min(cond(foreign==1,year,.)), by(frame_id)
 
 *foreign visszahúzása expatba, valaha expat-tal, de soha foreign-mal bíró cégek teljes kidobása
-replace foreign = 1 if (first_year_expat_original==(year-1)|first_year_expat_original==year)&foreign==0&ever_foreign==1
-egen first_year_foreign = min(cond(foreign==1,year,.)), by(frame_id)
-
-/*
-NB: do not change expat coding because it is hard to do at this stage. just drop remaining firms that are never foreign yet have expats.
+replace foreign = 1 if (first_year_expat_original == (year - 1) | first_year_expat_original == year) & foreign == 0 & ever_foreign == 1
+egen first_year_foreign = min(cond(foreign == 1, year, .)), by(frame_id)
 
 clonevar enter_year_original = job_begin
-replace job_begin = first_year_foreign_original if ((enter_year_original-2)<first_year_foreign_original)&expat==1&ever_foreign==1
-egen first_year_expat = min(cond(expat==1,job_begin,.)), by(frame_id)
-*/
+* NB: this was buggy, also replaced later expats
+* FIXME: do foreign/expat synchronization in firm_ceo_panel instead
+replace job_begin = first_year_foreign_original if (enter_year_original == first_year_foreign - 2) & expat == 1 & ever_foreign == 1
+egen first_year_expat = min(cond(expat == 1, job_begin, .)), by(frame_id)
 
-gen tenure_foreign = year-first_year_foreign
+gen tenure_foreign = year - first_year_foreign
 
 drop if ever_expat==1 & ever_foreign==0
 scalar dropped_do3_expat_firmyears = r(N_drop)
 
 * spell relation dummies
+gen tenure = year - job_begin
 gen byte before = tenure < 0
-gen byte during = tenure>=0
+gen byte during = tenure >= 0
 * NB: missing after years now
 gen byte after = 0
 
@@ -131,7 +125,7 @@ gen during_foreign = during*foreign_hire
 
 * zero out all treatment dummies for founders. they are alwyas just control
 foreach X of var before during after DD DE ED EE {
-	replace `X' = 0 if founder==1
+	replace `X' = 0 if manager_category == 1
 }
 
 *Cégév szerinti szűrés

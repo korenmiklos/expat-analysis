@@ -35,25 +35,21 @@ xtdescribe
 gen change = ceo != L.ceo 
 bysort company_manager (year): gen job_spell = sum(change)
 
-* first year of CEO and first year of spell
-egen job_begin = min(year), by(frame_id manager_id job_spell)
-
-generate int tenure = year - job_begin
-generate int overall_tenure = year - first_year_as_manager
-
 * count number of CEOs
 preserve
 	collapse (count) N_ceos = expat, by(frame_id year)
 	save temp/N_ceos, replace
 restore
 
+collapse (min) job_begin = year (max) job_end = year (firstnm) expat manager_category, by(frame_id manager_id job_spell)
+
 gen byte spell = 1
-bysort frame_id (job_begin manager_id year): replace spell =  cond(job_begin > job_begin[_n-1], spell[_n-1]+1, spell[_n-1]) if _n>1
+bysort frame_id (job_begin manager_id): replace spell =  cond(job_begin > job_begin[_n-1], spell[_n-1]+1, spell[_n-1]) if _n>1
 
 egen max_expat = max(expat), by(frame_id spell)
 tempvar lag_expat
 gen `lag_expat' = .
-bysort frame_id (job_begin manager_id year): replace `lag_expat' = max_expat[_n-1] if _n>1 & job_begin > job_begin[_n-1]
+bysort frame_id (job_begin manager_id): replace `lag_expat' = max_expat[_n-1] if _n>1 & job_begin > job_begin[_n-1]
 egen lag_expat = mean(`lag_expat'), by(frame_id spell)
 assert lag_expat==0 | lag_expat==1 | (missing(lag_expat) & spell==1)
 
