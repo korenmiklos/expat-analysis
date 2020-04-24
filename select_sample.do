@@ -73,14 +73,29 @@ recode greenfield (.=0)
 
 * extrapolate capital stock
 xtset frame_id year
-local condition  final_netgep==0 & !missing(L.final_netgep) & L.final_netgep>0
-count if `condition'
-scalar replaced_capital = r(N)
-replace final_netgep = L.final_netgep if `condition'
-gen lnK=ln(final_netgep)
-gen lnKL=lnK-lnL
-drop if missing(lnK)&year>1991
 
+inspect tanass
+tempvar gap 
+generate `gap' = missing(tanass) | (tanass <= 0)
+bysort frame_id (year): generate spell = sum(`gap' != `gap'[_n-1])
+
+egen gap_length = count(1), by(frame_id spell)
+egen max_spell = max(spell), by(frame_id)
+* if gap_length <= 2, interpolate tanass with geometric average
+bysort frame_id (year): replace tanass = sqrt(tanass[_n-1] * tanass[_n+1]) if gap_length==1 & `gap'==1
+bysort frame_id (year): replace tanass = tanass[_n-1]^0.67 * tanass[_n+2]^0.33 if gap_length==2 & `gap'==1 & `gap'[_n-1]==0
+bysort frame_id (year): replace tanass = tanass[_n-2]^0.33 * tanass[_n+1]^0.67 if gap_length==2 & `gap'==1 & `gap'[_n+1]==0
+* at either end, extrapolate for 1 year
+bysort frame_id (year): replace tanass = tanass[_n+1] if spell==1 & `gap'==1 & `gap'[_n+1]==0
+bysort frame_id (year): replace tanass = tanass[_n-1] if spell==max_spell & `gap'==1 & `gap'[_n-1]==0
+
+drop spell gap_length max_spell
+replace tanass = round(tanass)
+inspect tanass
+
+gen lnK = ln(tanass)
+gen lnKL = lnK - lnL
+drop if missing(lnK) & year>1991
 
 *Industry_year dummy
 egen industry_year = group(teaor08_2d year)

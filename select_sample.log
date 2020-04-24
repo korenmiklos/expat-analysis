@@ -1,0 +1,391 @@
+
+  ___  ____  ____  ____  ____ (R)
+ /__    /   ____/   /   ____/
+___/   /   /___/   /   /___/   15.1   Copyright 1985-2017 StataCorp LLC
+  Statistics/Data Analysis            StataCorp
+                                      4905 Lakeway Drive
+     MP - Parallel Edition            College Station, Texas 77845 USA
+                                      800-STATA-PC        http://www.stata.com
+                                      979-696-4600        stata@stata.com
+                                      979-696-4601 (fax)
+
+Single-user 2-core Stata perpetual license:
+       Serial number:  501506203290
+         Licensed to:  Miklos Koren
+                       CEU MicroData
+
+
+Notes:
+      1.  Stata is running in batch mode.
+      2.  Unicode is supported; see help unicode_advice.
+      3.  More than 2 billion observations are allowed; see help obs_advice.
+      4.  Maximum number of variables is set to 5000; see help set_maxvar.
+
+. do select_sample 
+
+. clear all
+
+. set more off
+
+. use "input/balance-small/balance-small.dta"
+
+. * proxy firm founding date with first balance sheet filed
+. egen foundyear = min(year), by(frame_id)
+
+. 
+. * limit sample before large merge
+. *Függő változók készítése
+. gen lnL=ln(emp)
+(2,724,285 missing values generated)
+
+. gen lnM=ln(ranyag)
+(822,429 missing values generated)
+
+. gen lnQ=ln(sales)
+(1,371,153 missing values generated)
+
+. gen lnQL=lnQ-lnL
+(2,972,398 missing values generated)
+
+. gen byte exporter = export>0&export!=.
+
+. gen exporter_5 = (export/sales > .05 & export < .)
+
+. *Átlagos létszám változó
+. bys frame_id: egen avg_emp = mean(emp)
+(76445 missing values generated)
+
+. *Mintavétel cégszintű változók alapján, cégév a modellek előtt
+. local sample (avg_emp>=20) //&!missing(lnL,lnQ,exporter)
+
+. count
+  7,918,729
+
+. tempvar before
+
+. gen `before' = r(N)
+
+. keep if `sample'
+(7,202,665 observations deleted)
+
+. count
+  716,064
+
+. tempvar after
+
+. gen `after' = r(N)
+
+. scalar dropped_size_or_missing = `before'-`after'
+
+. di dropped_size_or_missing
+7202665
+
+. *scalar dropped_size_or_missing = r(N_drop)
+. 
+. ren fo3 foreign
+
+. *foreign átalakítása 
+. recode foreign (.=0)
+(foreign: 72401 changes made)
+
+. 
+. * keep only numeric part of frame_id
+. keep if substr(frame_id, 1, 2) == "ft"
+(224,384 observations deleted)
+
+. generate long frame_id_numeric = real(substr(frame_id, 3, 8))
+
+. codebook frame_id*
+
+-------------------------------------------------------------------------------
+frame_id               Frame_id identify one firm. Only_originalid if not valid
+-------------------------------------------------------------------------------
+
+                  type:  string (str15), but longest is str10
+
+         unique values:  74,928                   missing "":  0/491,680
+
+              examples:  "ft10330535"
+                         "ft10891810"
+                         "ft11926245"
+                         "ft21941005"
+
+-------------------------------------------------------------------------------
+frame_id_numeric                                                    (unlabeled)
+-------------------------------------------------------------------------------
+
+                  type:  numeric (long)
+
+                 range:  [10000049,90620052]          units:  1
+         unique values:  74,928                   missing .:  0/491,680
+
+                  mean:   1.4e+07
+              std. dev:   6.7e+06
+
+           percentiles:        10%       25%       50%       75%       90%
+                           1.0e+07   1.0e+07   1.1e+07   1.4e+07   2.5e+07
+
+. 
+. drop frame_id
+
+. 
+. *foreign-at többször váltók kidobása
+. xtset frame_id_numeric year
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1980 to 2017, but with gaps
+                delta:  1 unit
+
+. *lyukak miatt [n_1]
+. *gen foreign_change=1 if l1.foreign==0&foreign==1
+. *gen foreign_change_rev=1 if l1.foreign==1&foreign==0
+. sort frame_id year
+
+. gen foreign_change=1 if foreign[_n-1]==0&foreign==1&frame_id[_n-1]==frame_id
+(487,385 missing values generated)
+
+. gen foreign_change_rev=1 if foreign[_n-1]==1&foreign==0&frame_id[_n-1]==frame
+> _id
+(488,206 missing values generated)
+
+. bys frame_id: egen foreign_change_total=total(foreign_change)
+
+. bys frame_id: egen foreign_change_rev_total=total(foreign_change_rev)
+
+. count
+  491,680
+
+. tempvar before
+
+. gen `before' = r(N)
+
+. drop if foreign_change_total>1|foreign_change_rev_total>1
+(11,433 observations deleted)
+
+. count
+  480,247
+
+. tempvar after
+
+. gen `after' = r(N)
+
+. scalar dropped_too_many_foreign_change = `before'-`after'
+
+. display dropped_too_many_foreign_change
+11433
+
+. 
+. *divesztíció
+. recode foreign_change_rev (.=0)
+(foreign_change_rev: 477719 changes made)
+
+. bys frame_id (year): gen divest=sum(foreign_change_rev)
+
+. replace divest=1 if divest>0
+(0 real changes made)
+
+. drop foreign_change foreign_change_rev foreign_change_total foreign_change_re
+> v_total
+
+. 
+. *Greenfield - foreign húzás után, de a sampling előtt
+. bys frame_id (year): gen relative_year=_n
+
+. gen foreign_infirst=1 if relative_year==1&foreign==1
+(470,484 missing values generated)
+
+. bys frame_id: egen byte greenfield=max(foreign_infirst)
+(413966 missing values generated)
+
+. 
+. recode greenfield (.=0)
+(greenfield: 413966 changes made)
+
+. 
+. * extrapolate capital stock
+. xtset frame_id year
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1980 to 2017, but with gaps
+                delta:  1 unit
+
+. 
+. inspect tanass
+
+tanass:  Tangible assets 1000HUF                Number of Observations
+--------------------------------       ---------------------------------------
+                                             Total      Integers   Nonintegers
+|  #                         Negative            4             4             -
+|  #                         Zero           60,884        60,884             -
+|  #                         Positive      404,039       404,029            10
+|  #                                   -----------   -----------   -----------
+|  #                         Total         464,927       464,917            10
+|  #   .   .   .   .         Missing        15,320
++----------------------                -----------
+-172           5.92e+09                    480,247
+(More than 99 unique values)
+
+. tempvar gap 
+
+. generate `gap' = missing(tanass) | (tanass <= 0)
+
+. bysort frame_id (year): generate spell = sum(`gap' != `gap'[_n-1])
+
+. 
+. egen gap_length = count(1), by(frame_id spell)
+
+. egen max_spell = max(spell), by(frame_id)
+
+. * if gap_length <= 2, interpolate tanass with geometric average
+. bysort frame_id (year): replace tanass = sqrt(tanass[_n-1] * tanass[_n+1]) if
+>  gap_length==1 & `gap'==1
+(24696 real changes made, 23329 to missing)
+
+. bysort frame_id (year): replace tanass = tanass[_n-1]^0.67 * tanass[_n+2]^0.3
+> 3 if gap_length==2 & `gap'==1 & `gap'[_n-1]==0
+(723 real changes made, 520 to missing)
+
+. bysort frame_id (year): replace tanass = tanass[_n-2]^0.33 * tanass[_n+1]^0.6
+> 7 if gap_length==2 & `gap'==1 & `gap'[_n+1]==0
+(1134 real changes made, 931 to missing)
+
+. * at either end, extrapolate for 1 year
+. bysort frame_id (year): replace tanass = tanass[_n+1] if spell==1 & `gap'==1 
+> & `gap'[_n+1]==0
+(8573 real changes made)
+
+. bysort frame_id (year): replace tanass = tanass[_n-1] if spell==max_spell & `
+> gap'==1 & `gap'[_n-1]==0
+(3604 real changes made)
+
+. 
+. drop spell gap_length max_spell
+
+. replace tanass = round(tanass)
+(1,772 real changes made)
+
+. inspect tanass
+
+tanass:  Tangible assets 1000HUF                Number of Observations
+--------------------------------       ---------------------------------------
+                                             Total      Integers   Nonintegers
+|  #                         Negative            3             3             -
+|  #                         Zero           34,076        34,076             -
+|  #                         Positive      417,989       417,988             1
+|  #                                   -----------   -----------   -----------
+|  #                         Total         452,068       452,067             1
+|  #   .   .   .   .         Missing        28,179
++----------------------                -----------
+-90            5.92e+09                    480,247
+(More than 99 unique values)
+
+. 
+. gen lnK = ln(tanass)
+(62,258 missing values generated)
+
+. gen lnKL = lnK - lnL
+(106,335 missing values generated)
+
+. drop if missing(lnK) & year>1991
+(61,753 observations deleted)
+
+. 
+. *Industry_year dummy
+. egen industry_year = group(teaor08_2d year)
+(124 missing values generated)
+
+. 
+. *Industry dummy
+. gen byte ind = inlist(teaor08_1d,"B","C","D","E")
+
+. egen ind_year=group(ind year)
+
+. 
+. *Manufacaturing dummy
+. gen manufacturing=0
+
+. replace manufacturing=1 if teaor08_1d=="C"
+(128,701 real changes made)
+
+. 
+. *Életkor változó
+. gen age=year-foundyear
+
+. 
+. clonevar age_cat = age
+
+. recode age_cat 20/24=20 25/29=25 30/39=30 40/49=40 50/max=50
+(age_cat: 38878 changes made)
+
+. tab age_cat
+
+    age_cat |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |     40,096        9.58        9.58
+          1 |     34,352        8.21       17.79
+          2 |     28,039        6.70       24.49
+          3 |     24,188        5.78       30.27
+          4 |     22,495        5.38       35.64
+          5 |     21,025        5.02       40.67
+          6 |     19,894        4.75       45.42
+          7 |     18,756        4.48       49.90
+          8 |     17,735        4.24       54.14
+          9 |     16,800        4.01       58.16
+         10 |     15,920        3.80       61.96
+         11 |     15,077        3.60       65.56
+         12 |     14,282        3.41       68.98
+         13 |     13,393        3.20       72.18
+         14 |     12,532        2.99       75.17
+         15 |     11,762        2.81       77.98
+         16 |     11,099        2.65       80.63
+         17 |     10,306        2.46       83.10
+         18 |      9,566        2.29       85.38
+         19 |      8,818        2.11       87.49
+         20 |     33,629        8.04       95.52
+         25 |     11,484        2.74       98.27
+         30 |      7,246        1.73      100.00
+------------+-----------------------------------
+      Total |    418,494      100.00
+
+. 
+. 
+. 
+. *Pénzügyi szektorban működő vállalatok kiszűrése
+. * break the tie when mode is not unique
+. bys frame_id: egen industry_mode=mode(teaor08_2d), minmode
+Warning: at least one group contains all missing values or contains multiple
+modes.  Generating missing values for the mode of these groups.  Use the
+missing, maxmode, minmode, or nummode() options to control this behavior.
+(124 missing values generated)
+
+. count
+  418,494
+
+. tempvar before
+
+. gen `before' = r(N)
+
+. drop if industry_mode==64|industry_mode==65|industry_mode==66
+(8,367 observations deleted)
+
+. count
+  410,127
+
+. tempvar after
+
+. gen `after' = r(N)
+
+. scalar dropped_finance = `before'-`after'
+
+. di dropped_finance
+8367
+
+. *scalar dropped_finance = r(N_drop)
+. 
+. save_all_to_json
+
+. drop __*
+
+. save "temp/balance-small.dta", replace
+file temp/balance-small.dta saved
+
+. 
+end of do-file
