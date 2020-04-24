@@ -24,24 +24,28 @@ replace expat=0 if job_begin<1990
 ***********************
 * time invariant vars *
 ***********************
+	egen first_year_expat = min(cond(expat==1,job_begin,.)), by(frame_id)
+	egen first_year_foreign_original = min(cond(foreign==1,year,.)), by(frame_id)
+	
+	* which of the two happened first?
+	generate manager_after_owner = first_year_expat - first_year_foreign_original
+	* event time relative to that
+	generate event_time = year - first_year_expat
+	
+	generate first_year_foreign = first_year_foreign_original
+	
+	* if foreign manager arrives up to 2 years before 1 year later than foreign owner, use foreign manager as arrival date. this is easier to implement
+	replace first_year_foreign = first_year_expat if inlist(manager_after_owner, -2, -1, 1)
+	
+	replace foreign = 1 if (manager_after_owner == -2) & inlist(event_time, 0, 1)
+	replace foreign = 1 if (manager_after_owner == -1) & inlist(event_time, 0)
+	replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
+
+	drop *_year_*_original event_time manager_after_owner
+
 	foreach X of var expat foreign {
 		egen ever_`X' = max(`X'==1), by(frame_id)
 	}
-
-	egen first_year_expat_original = min(cond(expat==1,job_begin,.)), by(frame_id)
-	egen first_year_foreign_original = min(cond(foreign==1,year,.)), by(frame_id)
-
-	*foreign visszahúzása expatba, valaha expat-tal, de soha foreign-mal bíró cégek teljes kidobása
-	replace foreign = 1 if (first_year_expat_original == (year - 1) | first_year_expat_original == year) & foreign == 0 & ever_foreign == 1
-	egen first_year_foreign = min(cond(foreign == 1, year, .)), by(frame_id)
-
-	clonevar enter_year_original = job_begin
-	* NB: this was buggy, also replaced later expats
-	* FIXME: do foreign/expat synchronization in firm_ceo_panel instead
-	replace job_begin = first_year_foreign_original if (enter_year_original == first_year_foreign - 2) & expat == 1 & ever_foreign == 1
-	egen first_year_expat = min(cond(expat == 1, job_begin, .)), by(frame_id)
-
-	drop *_year_*_original
 
 *******************************************
 * drop entire series of firms from sample *
