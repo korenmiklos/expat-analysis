@@ -33,9 +33,9 @@ Notes:
 . tempfile sample
 
 . save `sample', replace
-(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St62411.000001 no
+(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St75669.000001 no
 > t found)
-file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St62411.000001 saved
+file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St75669.000001 saved
 
 . 
 . use "temp/firm_ceo_panel.dta", clear
@@ -132,6 +132,11 @@ frame_id_numeric                                                    (unlabeled)
 (6,152 real changes made)
 
 . 
+.         * drop firms where expat arrives earlier than 2 years before owner
+.         drop if manager_after_owner < -2
+(12,274 observations deleted)
+
+.         
 .         drop *_year_*_original event_time manager_after_owner
 
 . 
@@ -158,46 +163,46 @@ frame_id_numeric                                                    (unlabeled)
 
  total_CEOs |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          1 |     94,500        7.63        7.63
-          2 |    200,789       16.21       23.84
-          3 |    206,358       16.66       40.49
-          4 |    170,692       13.78       54.27
-          5 |    130,415       10.53       64.80
-          6 |    100,809        8.14       72.94
-          7 |     82,085        6.63       79.56
-          8 |     59,342        4.79       84.35
-          9 |     42,875        3.46       87.81
-         10 |     32,899        2.66       90.47
-         11 |     21,827        1.76       92.23
-         12 |     18,553        1.50       93.73
-         13 |     13,139        1.06       94.79
-         14 |     14,702        1.19       95.98
+          1 |     94,332        7.69        7.69
+          2 |    200,125       16.32       24.01
+          3 |    205,262       16.73       40.74
+          4 |    169,031       13.78       54.52
+          5 |    128,906       10.51       65.03
+          6 |     99,591        8.12       73.15
+          7 |     81,455        6.64       79.79
+          8 |     57,716        4.71       84.50
+          9 |     42,089        3.43       87.93
+         10 |     32,569        2.66       90.59
+         11 |     20,877        1.70       92.29
+         12 |     17,349        1.41       93.70
+         13 |     13,139        1.07       94.77
+         14 |     14,702        1.20       95.97
          15 |      6,768        0.55       96.52
-         16 |      9,755        0.79       97.31
+         16 |      9,611        0.78       97.31
          17 |      6,519        0.53       97.84
          18 |      6,304        0.51       98.35
-         19 |      2,923        0.24       98.58
-         20 |      1,652        0.13       98.72
-         21 |      3,321        0.27       98.98
-         22 |        990        0.08       99.06
-         23 |      2,023        0.16       99.23
-         24 |        936        0.08       99.30
+         19 |      2,923        0.24       98.59
+         20 |      1,652        0.13       98.73
+         21 |      3,321        0.27       99.00
+         22 |        990        0.08       99.08
+         23 |      2,023        0.16       99.24
+         24 |        648        0.05       99.30
          25 |      1,025        0.08       99.38
          26 |        702        0.06       99.44
-         27 |        672        0.05       99.50
+         27 |        672        0.05       99.49
          33 |        792        0.06       99.56
-         34 |        945        0.08       99.64
-         39 |        507        0.04       99.68
+         34 |        945        0.08       99.63
+         39 |        507        0.04       99.67
          41 |      1,025        0.08       99.76
          42 |      1,134        0.09       99.85
          43 |        387        0.03       99.88
          56 |      1,456        0.12      100.00
 ------------+-----------------------------------
-      Total |  1,238,821      100.00
+      Total |  1,226,547      100.00
 
 . 
 .         drop if total_CEOs>15
-(43,068 observations deleted)
+(42,636 observations deleted)
 
 .         scalar dropped_too_many_CEOs = r(N_drop)
 
@@ -224,7 +229,7 @@ file temp/firm_year_expat.dta saved
 . 
 . * limit sample by event window
 . keep if tenure >= -5 & tenure <= 10
-(460,359 observations deleted)
+(455,373 observations deleted)
 
 . 
 . compress
@@ -234,7 +239,7 @@ file temp/firm_year_expat.dta saved
   variable ever_expat was float now byte
   variable ever_foreign was float now byte
   variable tenure was float now byte
-  (11,030,910 bytes saved)
+  (10,928,070 bytes saved)
 
 . save "temp/event_windows.dta", replace
 file temp/event_windows.dta saved

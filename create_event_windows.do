@@ -41,6 +41,9 @@ replace expat=0 if job_begin<1990
 	replace foreign = 1 if (manager_after_owner == -1) & inlist(event_time, 0)
 	replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
 
+	* drop firms where expat arrives earlier than 2 years before owner
+	drop if manager_after_owner < -2
+	
 	drop *_year_*_original event_time manager_after_owner
 
 	foreach X of var expat foreign {
