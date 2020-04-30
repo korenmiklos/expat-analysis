@@ -7,7 +7,7 @@ log using output/firm_panel, text replace
 use "temp/balance-small.dta"
 *Tempvars were created for some reason when I was closing the previous file
 *drop __* - deleted in select_sample
-collapse (max) firm_death=year, by(frame_id)
+collapse (min) firm_birth = year (max) firm_death = year, by(frame_id)
 tempfile sample
 save `sample', replace
 
@@ -41,7 +41,11 @@ preserve
 	save temp/N_ceos, replace
 restore
 
-collapse (min) job_begin = year (max) job_end = year (firstnm) expat manager_category, by(frame_id manager_id job_spell)
+collapse (min) job_begin = year (max) job_end = year (firstnm) expat manager_category firm_birth, by(frame_id manager_id job_spell)
+
+* if first managers arrive in year 1, extrapolate to year 0
+egen first_cohort = min(job_begin), by(frame_id)
+replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_begin == first_cohort)
 
 gen byte spell = 1
 bysort frame_id (job_begin manager_id): replace spell =  cond(job_begin > job_begin[_n-1], spell[_n-1]+1, spell[_n-1]) if _n>1

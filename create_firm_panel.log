@@ -35,21 +35,21 @@ Notes:
       name:  <unnamed>
        log:  /Users/koren/Google Drive/Research/expat/output/firm_panel.log
   log type:  text
- opened on:  29 Apr 2020, 13:59:36
+ opened on:  30 Apr 2020, 12:32:55
 
 . 
 . use "temp/balance-small.dta"
 
 . *Tempvars were created for some reason when I was closing the previous file
 . *drop __* - deleted in select_sample
-. collapse (max) firm_death=year, by(frame_id)
+. collapse (min) firm_birth = year (max) firm_death = year, by(frame_id)
 
 . tempfile sample
 
 . save `sample', replace
-(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St75665.000001 no
+(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St01761.000001 no
 > t found)
-file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St75665.000001 saved
+file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St01761.000001 saved
 
 . 
 . use "input/ceo-panel/ceo-panel.dta", clear
@@ -173,7 +173,15 @@ file temp/N_ceos.dta saved
 
 . 
 . collapse (min) job_begin = year (max) job_end = year (firstnm) expat manager_
-> category, by(frame_id manager_id job_spell)
+> category firm_birth, by(frame_id manager_id job_spell)
+
+. 
+. * if first managers arrive in year 1, extrapolate to year 0
+. egen first_cohort = min(job_begin), by(frame_id)
+
+. replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_
+> begin == first_cohort)
+(15,389 real changes made)
 
 . 
 . gen byte spell = 1
@@ -202,10 +210,11 @@ file temp/N_ceos.dta saved
 . 
 . compress
   variable job_spell was float now byte
+  variable first_cohort was float now int
   variable max_expat was float now byte
   variable __000000 was float now byte
   variable lag_expat was float now byte
-  (1,065,828 bytes saved)
+  (1,243,466 bytes saved)
 
 . save_all_to_json
 
@@ -216,7 +225,7 @@ file temp/firm_ceo_panel.dta saved
       name:  <unnamed>
        log:  /Users/koren/Google Drive/Research/expat/output/firm_panel.log
   log type:  text
- closed on:  29 Apr 2020, 14:00:00
+ closed on:  30 Apr 2020, 12:33:14
 -------------------------------------------------------------------------------
 
 . 

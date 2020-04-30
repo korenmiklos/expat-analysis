@@ -33,9 +33,9 @@ Notes:
 . tempfile sample
 
 . save `sample', replace
-(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St75669.000001 no
+(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St01768.000001 no
 > t found)
-file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St75669.000001 saved
+file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St01768.000001 saved
 
 . 
 . use "temp/firm_ceo_panel.dta", clear
@@ -83,14 +83,14 @@ frame_id_numeric                                                    (unlabeled)
 . 
 . *expat before 1990
 . replace expat=0 if job_begin<1990
-(2,833 real changes made)
+(3,165 real changes made)
 
 . 
 . ***********************
 . * time invariant vars *
 . ***********************
 .         egen first_year_expat = min(cond(expat==1,job_begin,.)), by(frame_id)
-(888311 missing values generated)
+(888796 missing values generated)
 
 .         egen first_year_foreign_original = min(cond(foreign==1,year,.)), by(f
 > rame_id)
@@ -100,11 +100,11 @@ frame_id_numeric                                                    (unlabeled)
 .         * which of the two happened first?
 .         generate manager_after_owner = first_year_expat - first_year_foreign_
 > original
-(917,499 missing values generated)
+(917,844 missing values generated)
 
 .         * event time relative to that
 .         generate event_time = year - first_year_expat
-(888,311 missing values generated)
+(888,796 missing values generated)
 
 .         
 .         generate first_year_foreign = first_year_foreign_original
@@ -116,25 +116,25 @@ frame_id_numeric                                                    (unlabeled)
 > t
 .         replace first_year_foreign = first_year_expat if inlist(manager_after
 > _owner, -2, -1, 1)
-(120,374 real changes made)
+(55,722 real changes made)
 
 .         
 .         replace foreign = 1 if (manager_after_owner == -2) & inlist(event_tim
 > e, 0, 1)
-(352 real changes made)
+(427 real changes made)
 
 .         replace foreign = 1 if (manager_after_owner == -1) & inlist(event_tim
 > e, 0)
-(387 real changes made)
+(669 real changes made)
 
 .         replace foreign = 0 if (manager_after_owner == +1) & inlist(event_tim
 > e, -1)
-(6,152 real changes made)
+(1,544 real changes made)
 
 . 
 .         * drop firms where expat arrives earlier than 2 years before owner
 .         drop if manager_after_owner < -2
-(12,274 observations deleted)
+(12,425 observations deleted)
 
 .         
 .         drop *_year_*_original event_time manager_after_owner
@@ -149,7 +149,7 @@ frame_id_numeric                                                    (unlabeled)
 . * drop entire series of firms from sample *
 . *******************************************
 .         drop if ever_expat==1 & ever_foreign==0
-(30,063 observations deleted)
+(29,285 observations deleted)
 
 .         scalar dropped_do3_expat_firmyears = r(N_drop)
 
@@ -163,21 +163,21 @@ frame_id_numeric                                                    (unlabeled)
 
  total_CEOs |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          1 |     94,332        7.69        7.69
-          2 |    200,125       16.32       24.01
-          3 |    205,262       16.73       40.74
-          4 |    169,031       13.78       54.52
-          5 |    128,906       10.51       65.03
-          6 |     99,591        8.12       73.15
-          7 |     81,455        6.64       79.79
-          8 |     57,716        4.71       84.50
-          9 |     42,089        3.43       87.93
-         10 |     32,569        2.66       90.59
+          1 |     94,373        7.69        7.69
+          2 |    200,139       16.31       24.00
+          3 |    205,352       16.73       40.73
+          4 |    169,287       13.79       54.53
+          5 |    129,256       10.53       65.06
+          6 |     99,675        8.12       73.18
+          7 |     81,455        6.64       79.82
+          8 |     57,508        4.69       84.51
+          9 |     42,089        3.43       87.94
+         10 |     32,569        2.65       90.59
          11 |     20,877        1.70       92.29
-         12 |     17,349        1.41       93.70
-         13 |     13,139        1.07       94.77
+         12 |     17,349        1.41       93.71
+         13 |     13,139        1.07       94.78
          14 |     14,702        1.20       95.97
-         15 |      6,768        0.55       96.52
+         15 |      6,768        0.55       96.53
          16 |      9,611        0.78       97.31
          17 |      6,519        0.53       97.84
          18 |      6,304        0.51       98.35
@@ -198,7 +198,7 @@ frame_id_numeric                                                    (unlabeled)
          43 |        387        0.03       99.88
          56 |      1,456        0.12      100.00
 ------------+-----------------------------------
-      Total |  1,226,547      100.00
+      Total |  1,227,174      100.00
 
 . 
 .         drop if total_CEOs>15
@@ -229,7 +229,7 @@ file temp/firm_year_expat.dta saved
 . 
 . * limit sample by event window
 . keep if tenure >= -5 & tenure <= 10
-(455,373 observations deleted)
+(460,728 observations deleted)
 
 . 
 . compress
@@ -239,7 +239,7 @@ file temp/firm_year_expat.dta saved
   variable ever_expat was float now byte
   variable ever_foreign was float now byte
   variable tenure was float now byte
-  (10,928,070 bytes saved)
+  (10,857,150 bytes saved)
 
 . save "temp/event_windows.dta", replace
 file temp/event_windows.dta saved
