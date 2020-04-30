@@ -9,16 +9,14 @@ output/estimate_%.log: est_%.do $(ESTIMATOR)
 	$(STATA) estimate $(subst est_,,$(basename $<))
 output/descriptives.log: temp/analysis_sample.dta descriptives.do
 	$(STATA) descriptives 
-temp/analysis_sample.dta: temp/balance-small.dta temp/firm_ceo_panel.dta variables.do
-	$(STATA) variables
-temp/firm_ceo_panel.dta: temp/manager_panel.dta firm_panel.do fill_in_ceo.do
-	$(STATA) firm_panel
-temp/balance-small.dta: input/balance-small/balance-sheet-1992-2016-small.dta select_sample.do
+temp/analysis_sample.dta: temp/balance-small.dta temp/event_windows.dta create_analysis_sample.do create_event_dummies.do
+	$(STATA) create_analysis_sample
+temp/event_windows.dta: temp/balance-small.dta temp/firm_ceo_panel.dta create_event_windows.do
+	$(STATA) create_event_windows
+temp/firm_ceo_panel.dta: input/ceo-panel/ceo-panel.dta temp/balance-small.dta create_firm_panel.do
+	$(STATA) create_firm_panel
+temp/balance-small.dta: input/balance-small/balance-small.dta select_sample.do
 	$(STATA) select_sample
-temp/manager_panel.dta: temp/managers.dta temp/positions.dta manager_panel.do 
-	$(STATA) manager_panel
-temp/managers.dta temp/positions.dta: input/manager_position/pos5.csv input/motherlode/manage.csv read_data.do
-	$(STATA) read_data
 install:
 	stata -b ssc install g538schemes, replace all
 tables: 
