@@ -5,6 +5,11 @@ global outputdir "C:\Users\Almos\Documents\Research\Expat\Expat_git\text"
 
 use "$datadir\analysis_sample.dta", clear
 
+*merge import data
+sort frame_id manager_id year
+merge 1:1 frame_id manager_id year using "$datadir\import_data.dta"
+drop _merge
+
 *Sampling
 scalar Tbefore = 4
 scalar Tduring = 6
@@ -13,23 +18,26 @@ scalar Tafter = 4
 gen byte analysis_window = (tenure>=-Tbefore-1)&(year-first_exit_year<=Tafter)
 gen byte analysis_window_1 = (tenure>=-Tbefore-1)&(year <= first_exit_year)
 
-global sample_baseline (analysis_window==1)
+global sample_baseline (analysis_window == 1)
 global sample_baseline_1 (analysis_window_1 == 1)
 
 global sample_manufacturing $sample_baseline & (manufacturing==1)
-global sample_acquisitions $sample_baseline & (greenfield==0)
-global sample_acquisitions_1 $sample_baseline_1 & (greenfield==0)
-global sample_1990s $sample_acquisitions & (enter_year>=1994 & enter_year<=1999)
-global sample_2000s $sample_acquisitions & (enter_year>=2000)
-global sample_ever_foreign $sample_acquisitions & (ever_foreign==1)
+global sample_acquisition $sample_baseline & (greenfield==0)
+global sample_acquisition_1 $sample_baseline_1 & (greenfield==0) & divest == 0
+global sample_1990s $sample_acquisition & (enter_year>=1994 & enter_year<=1999)
+global sample_2000s $sample_acquisition & (enter_year>=2000)
+global sample_ever_foreign $sample_acquisition & (ever_foreign==1)
 
 global samples baseline acquisitions
 
-global outcomes_perf lnQ lnQL TFP 
-global outcomes_input lnK lnL lnKL lnMQ
-global outcomes_trade exporter_5 matimport capimport
-global fixed_effects firm_person teaor08_2d##year age_cat_1
+global outcome_perf lnQ lnQL TFP_cd_corr 
+global outcome_input lnK lnL lnMQ
+global outcome_trade exporter_5 matimport capimport
+global fixed_effects firm_person teaor08_2d##year age
 global report foreign during_foreign during_expat
+global switch_type during_foreign_DD during_foreign_ED during_foreign_DE during_foreign_EE
+global switch_type_1 during_foreign_first during_expat_first during_DD_second  during_DE_second during_ED_second during_EE_second
+
 
 tempvar n N1
 gen `n' = 1
@@ -38,28 +46,27 @@ gen inverse_weight = 1/`N1'
 
 xtset firm_person year
 
-*New age category variable
-gen age_cat_1 = .
-
-replace age_cat_1 = age_cat if age_cat <= 10
-replace age_cat_1 = 11 if age_cat > 10 & age_cat <= 15
-replace age_cat_1 = 12 if age_cat > 15 & age_cat <= 20
-replace age_cat_1 = 13 if age_cat > 20 & age_cat <= 30
-replace age_cat_1 = 14 if age_cat > 30 & age_cat <= 40
-replace age_cat_1 = 15 if age_cat > 40 & age_cat < . 
 
 gen lnML = lnM - lnL
 gen lnMQ = lnM - lnQ
+
 *TFP
 
-bysort frame_id: egen teaor_mode = mode(teaor08_2d), maxmode
-recode teaor_mode (6 75 = .)
-gen lnVA = ln(sales-ranyag)
+*bysort frame_id: egen teaor_mode = mode(teaor08_2d), maxmode
+*recode teaor_mode (6 75 = .)
+*gen lnVA = ln(sales-ranyag)
+quietly tab year, gen(year_d)
+
+*Levinsohn-Petrin
+
+keep if $sample_acquisition_1
+egen x = tag(frame_id year)
+keep if x 
 
 levelsof teaor_mode, local(levels)
 foreach l of local levels {
   disp `l'
-  qui prodest lnVA if teaor_mode == `l' & firmyear_tag, ///
+  qui prodest lnVA if teaor_mode == `l', ///
             free(lnL) state(lnK) proxy(lnM)  ///
             met(lp) va att control (year_d*) id(firm_person) t(year) fsres(tfp_lp_`l')
 }
@@ -72,26 +79,92 @@ foreach l of local levels {
 		replace x = tfp_lp_`l' if x == .
 }
 
-bysort frame_id year: egen  tfp_lp = max(x)
+bysort frame_id year: egen  TFP_lp = max(x)
 
 drop tfp_lp_* x
 
+*Cobb-Douglas
+keep if $sample_acquisition_1
+egen x = tag(frame_id year)
+keep if x 
+
+
+recode teaor_mode (7 = .) (66 = .) (84 = .) (19 = .) (51 = .)
+levelsof teaor_mode, local(levels)
+foreach l of local levels {
+  disp `l'
+  qui reghdfe lnVA lnL lnK lnM [aw = inverse_weight] if teaor_mode == `l', a(firm_person year age_cat) resid
+  predict tfp_cd_`l', res
+  }
+
+
+gen  TFP_cd =  .
+levelsof teaor_mode, local(levels)
+foreach l of local levels {
+
+		qui replace TFP_cd = tfp_cd_`l' if TFP_cd == .
+}
+
+drop tfp_cd_*
+
+keep frame_id year TFP_cd
+sort frame_id year
+save "$datadir\temp", replace
+
+use "C:\Users\Almos\Documents\Research\Expat\Expat_git\temp\analysis_sample_t.dta", clear
+merge m:1 frame_id year using "$datadir\temp"
+
+gen TFP_cd_corr = TFP_cd
+replace TFP_cd_corr = . if TFP_cd < -1.66 | TFP_lp > 1.17
+
+*Firm growth
+gen sales_gr = lnQ - l.lnQ
+label var sales_gr "Sales Growth"
+
+* Foreign cleaning + Divestment dummy
+gen x = (foreign == 1 & l.foreign == 0 & f.foreign == 0)
+replace foreign = 0 if x
+replace first_year_foreign = . if x
+recode foreign (0 = 1) if l.foreign == 1 & year == 2015
+recode foreign (0 = 1) if l.foreign == 1 & year == 2016
+drop x
+bysort firm_person: egen x = max(year) if foreign
+bysort firm_person: egen last_year_foreign = max(x)
+gen divest = (last_year_foreign < year)
+drop x
+
+*Exporter cleaning
+recode exporter_5 (0 = 1) if l.exporter_5 == 1 & f.exporter_5 == 1
 
 *Managers hired by foreign owners
-
-*gen byte foreign_hire = (first_year_foreign <= enter_year)
-*gen during_foreign = during*foreign_hire
+drop foreign_hire during_foreign after_foreign before_foreign during_expat ever_foreign_hire
+gen byte foreign_hire = (first_year_foreign <= enter_year)
+gen during_foreign = during*foreign_hire
 gen byte after_foreign = after*foreign_hire
 gen byte before_foreign = before*foreign_hire
 
 bysort frame_id: egen ever_foreign_hire = max(foreign_hire)
 
-*Find the first CEOs hired by the foreign owner
-bysort frame_id: egen enter_year_first_foreign = min(enter_year) if foreign_hire 
-gen first_fhire = (enter_year_first_foreign == enter_year)
-gen during_first_fhire = first_fhire*during_foreign
-gen during_first_fhire_expat = first_fhire*during_expat
+gen during_expat = during_foreign*expat
 
+
+*First foreign manager
+bysort frame_id: egen enter_year_min = min(enter_year) if foreign & $sample_acquisition_1
+gen foreign_hire_first = (enter_year_min == enter_year & foreign)
+gen during_foreign_first = during_foreign*foreign_hire_first
+gen during_expat_first = during_foreign*foreign_hire_first*expat
+recode during_foreign_first during_expat_first (. = 0)
+
+*Later hires
+gen during_foreign_second = during_foreign
+replace during_foreign_second = 0 if during_foreign_first
+gen during_expat_second = during_expat
+replace during_expat_second = 0 if during_expat_first
+
+foreach X of varlist DD ED DE EE {
+	gen during_`X'_second = during_foreign_second*`X'
+	}
+	
 
 
 *Dynamics
@@ -141,7 +214,7 @@ label var during_foreign_DE "Local-Expat"
 label var during_foreign_ED "Expat-Local"
 label var during_foreign_EE "Expat-Expat"
 
-global switch_type during_foreign_DD during_foreign_ED during_foreign_DE during_foreign_EE
+
 				 
 *Types of switches dynamics
 
@@ -167,10 +240,8 @@ before_foreign_ED_1 before_foreign_ED_2 before_foreign_ED_3 before_foreign_ED_4 
 before_foreign_DE_1 before_foreign_DE_2 before_foreign_DE_3 before_foreign_DE_4 during_foreign_DE_* ///
 before_foreign_EE_1 before_foreign_EE_2 before_foreign_EE_3 before_foreign_EE_4 during_foreign_EE_*
 
-
-
-
-rename tfp_lp TFP
+gen Q_mill = sales14/1000000
+gen QL = sales14/emp*1000000
 
 label var age "Firm Age"
 labe var emp "Employment"
@@ -180,7 +251,10 @@ label var lnK "Capital"
 label var lnQL "Labor Prod."
 label var exporter "Exporter"
 label var lnQ "Output"
-label var TFP "TFP"
+label var lnM "Materials"
+label var TFP_lp "TFP"
+label var TFP_cd "TFP"
+label var TFP_cd_corr "TFP"
 
 label var foreign "Foreign Owned"
 label var during "Local Man."
@@ -195,15 +269,32 @@ label var capimport "Import capital"
 label var ever_foreign_hire "Foreign hire"
 label var ever_expat "Expat"
 
-gen indic = .
-replace indic = 1 if !ever_foreign 
-replace indic = 2 if ever_foreign & !ever_expat
-replace indic = 3 if ever_foreign & ever_expat
-
-label define firmtype 1 "Always Domestic" 2 "Foreign not Expat" 3 "Foreign & Expat"
-label values indic firmtype
+save "$datadir\analysis_sample_t.dta", replace
 
 
+*old stuff
 
+*For selection: previous year to foreign, first hires
+*redo when data issues are clarified
 
+gen foreign_first = 1 if tenure_foreign == 0
+recode foreign_first (. = 0)
 
+gen local_first = 0
+replace local_first = 1 if tenure_foreign == 0 & (during_foreign == 1 | f1.during_foreign == 1)
+recode local_first (. = 0)
+
+gen expat_first = 0
+replace expat_first = 1 if tenure_foreign == 0 & (during_expat == 1 | f1.during_expat == 1)
+recode expat_first (. = 0)
+
+bysort frame_id year: egen x = max(expat_first)
+bysort frame_id year: egen xx = max(local_first)
+
+sort firm_person year
+gen foreign_first_f = (f.tenure_foreign == 0)
+gen expat_first_f = f.x
+gen local_first_f = f.xx
+
+replace local_first_f = 0 if expat_first_f == 1
+drop x*
