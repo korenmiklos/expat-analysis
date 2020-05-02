@@ -31,7 +31,7 @@ Notes:
 . do "create_event_dummies.do"
 
 . gen tenure_foreign = year - first_year_foreign
-(478,256 missing values generated)
+(615,644 missing values generated)
 
 . 
 . gen byte before = tenure < 0
@@ -70,11 +70,11 @@ Notes:
   6.                 gen `Y'_`X' = (`X'==1)*`Y'
   7.         }
   8. }
-(2,317 real changes made)
+(3,068 real changes made)
 (0 real changes made)
-(792 real changes made)
+(1,178 real changes made)
 (0 real changes made)
-(7 real changes made)
+(0 real changes made)
 (0 real changes made)
 
 . gen fold_expat = expat==1 & tenure>`T'
@@ -101,18 +101,18 @@ Notes:
   6.         scalar N_i_`X' = r(N)
   7.         drop `tag'
   8. }
-  193,628
-  6,843
-  319,718
-  35,445
-  104,549
-  4,151
-  43,651
-  4,150
-  78,920
-  6,338
-  41,885
-  4,108
+  134,713
+  5,940
+  354,726
+  35,617
+  16,207
+  1,152
+  6,665
+  1,150
+  51,674
+  5,259
+  6,278
+  1,115
 
 . 
 . *Firm_tag
@@ -123,10 +123,10 @@ Notes:
 . 
 . *Foreign hire
 . gen byte foreign_hire = 1 if first_year_foreign <= job_begin
-(515,894 missing values generated)
+(667,269 missing values generated)
 
 . recode foreign_hire (. = 0)
-(foreign_hire: 515894 changes made)
+(foreign_hire: 667269 changes made)
 
 . gen during_foreign = during*foreign_hire
 
@@ -135,13 +135,13 @@ Notes:
 . foreach X of var before during after DD DE ED EE {
   2.         replace `X' = 0 if manager_category == 1
   3. }
-(17,418 real changes made)
-(186,441 real changes made)
+(16,894 real changes made)
+(187,166 real changes made)
 (0 real changes made)
-(45,471 real changes made)
-(1,100 real changes made)
-(626 real changes made)
-(1,435 real changes made)
+(49,708 real changes made)
+(77 real changes made)
+(140 real changes made)
+(46 real changes made)
 
 . 
 end of do-file
@@ -152,7 +152,7 @@ end of do-file
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
-    matched                           723,810  
+    matched                           810,427  
     -----------------------------------------
 
 . 
@@ -196,9 +196,8 @@ end of do-file
   variable age_cat was float now byte
   variable tanass was double now long
   variable jetok was double now long
-  variable export was double now long
   variable final_netgep was double now long
-  (90,476,250 bytes saved)
+  (98,061,667 bytes saved)
 
 . save "temp/analysis_sample.dta", replace
 file temp/analysis_sample.dta saved

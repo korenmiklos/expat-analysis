@@ -51,6 +51,8 @@ Notes:
 
 . gen exporter_5 = (export/sales > .05 & export < .)
 
+. * FIXME: interpolate small holes
+. 
 . *Átlagos létszám változó
 . bys frame_id: egen avg_emp = mean(emp)
 (76445 missing values generated)
@@ -88,6 +90,7 @@ Notes:
 . recode foreign (.=0)
 (foreign: 72401 changes made)
 
+. * FIXME: interpolate small holes
 . 
 . * keep only numeric part of frame_id
 . keep if substr(frame_id, 1, 2) == "ft"
@@ -287,6 +290,8 @@ tanass:  Tangible assets 1000HUF                Number of Observations
 . drop if missing(lnK) & year>1991
 (61,753 observations deleted)
 
+. 
+. * FIXME: estimate TFP here
 . 
 . *Industry_year dummy
 . egen industry_year = group(teaor08_2d year)

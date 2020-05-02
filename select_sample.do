@@ -12,6 +12,8 @@ gen lnQ=ln(sales)
 gen lnQL=lnQ-lnL
 gen byte exporter = export>0&export!=.
 gen exporter_5 = (export/sales > .05 & export < .)
+* FIXME: interpolate small holes
+
 *Átlagos létszám változó
 bys frame_id: egen avg_emp = mean(emp)
 *Mintavétel cégszintű változók alapján, cégév a modellek előtt
@@ -30,6 +32,7 @@ di dropped_size_or_missing
 ren fo3 foreign
 *foreign átalakítása 
 recode foreign (.=0)
+* FIXME: interpolate small holes
 
 * keep only numeric part of frame_id
 keep if substr(frame_id, 1, 2) == "ft"
@@ -96,6 +99,8 @@ inspect tanass
 gen lnK = ln(tanass)
 gen lnKL = lnK - lnL
 drop if missing(lnK) & year>1991
+
+* FIXME: estimate TFP here
 
 *Industry_year dummy
 egen industry_year = group(teaor08_2d year)
