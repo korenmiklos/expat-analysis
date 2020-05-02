@@ -1,0 +1,21 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{6}{D{.}{.}{-1}}}
+\hline\hline
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}&\multicolumn{1}{c}{(5)}&\multicolumn{1}{c}{(6)}\\
+                    &\multicolumn{1}{c}{univ}&\multicolumn{1}{c}{high}&\multicolumn{1}{c}{low}&\multicolumn{1}{c}{lnW}&\multicolumn{1}{c}{lnW}&\multicolumn{1}{c}{lnW}\\
+\hline
+Foreign             &       0.007\sym{*}  &      -0.007         &      -0.000         &       0.056\sym{**} &       0.029\sym{**} &       0.032\sym{***}\\
+                    &     (0.004)         &     (0.006)         &     (0.006)         &     (0.023)         &     (0.012)         &     (0.009)         \\
+[1em]
+during\_foreign      &       0.008\sym{**} &       0.000         &      -0.008         &       0.023         &       0.010         &       0.019\sym{*}  \\
+                    &     (0.004)         &     (0.006)         &     (0.006)         &     (0.018)         &     (0.012)         &     (0.011)         \\
+[1em]
+during\_expat        &       0.003         &      -0.012         &       0.009         &      -0.019         &       0.017         &      -0.009         \\
+                    &     (0.006)         &     (0.008)         &     (0.008)         &     (0.023)         &     (0.012)         &     (0.013)         \\
+\hline
+Observations        &     1671987         &     1671987         &     1672172         &      198180         &      524243         &      943707         \\
+\(R^{2}\)           &       0.154         &       0.137         &       0.205         &       0.865         &       0.893         &       0.928         \\
+\hline\hline
+\end{tabular}
+}
