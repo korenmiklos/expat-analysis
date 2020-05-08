@@ -781,3 +781,65 @@ during_foreign |   .1100595   .0317685     3.46   0.001     .0477895    .1723295
 
 ```
 There are 120,000 more observations, but during expat is no longer significant.
+
+# 2020-05-08
+## Check disappearing expats
+```
+. count if ever_expat_old & !greenfield_old 
+  658
+
+. keep if ever_expat_old & !greenfield_old 
+(2,373 observations deleted)
+
+. keep frame_id 
+
+. save expat_old
+file expat_old.dta saved
+
+. use temp/analysis_sample
+. generate frame_id = "ft"+string(frame_id_numeric, "%8.0f")
+. codebook frame_id  if ever_expat & !greenfield 
+
+-------------------------------------------------------------------------------------------------------
+frame_id                                                                                    (unlabeled)
+-------------------------------------------------------------------------------------------------------
+
+                  type:  string (str10)
+
+         unique values:  191                      missing "":  0/10,270
+
+              examples:  "ft10300703"
+                         "ft10550180"
+                         "ft11060084"
+                         "ft12113006"
+
+. keep  if ever_expat & !greenfield 
+(651,122 observations deleted)
+
+. keep frame_id 
+
+. duplicates drop
+
+Duplicates in terms of all variables
+
+(10,079 observations deleted)
+
+. merge 1:1 frame_id using "~/Downloads/expat_old.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                           683
+        from master                       108  (_merge==1)
+        from using                        575  (_merge==2)
+
+    matched                                83  (_merge==3)
+    -----------------------------------------
+
+. export delimited frame_id using "dropped-expat.csv" if _merge==2, novarnames replace
+(note: file dropped-expat.csv not found)
+file dropped-expat.csv saved
+
+. export delimited frame_id using "new-expat.csv" if _merge==1, novarnames replace
+(note: file new-expat.csv not found)
+file new-expat.csv saved
+```
