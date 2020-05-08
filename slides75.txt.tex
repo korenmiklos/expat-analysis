@@ -1,7 +1,7 @@
-\documentclass[aspectratio=169,compress,mathserif]{beamer}
+\documentclass[aspectratio=43,compress,mathserif]{beamer}
 \usepackage{tikz}
-
-\newcommand{\regressiontable}[1]{\input{output/regression/#1/table.tex}}
+\usepackage{dcolumn}
+\newcommand{\regressiontable}[1]{\input{text/regression/#1.tex}}
 
 \newcommand{\scaffolding}{\draw [->] (0,-0.5) --(14,-0.5);
 \draw[thick] (7,-0.5)--(10,-0.5);
@@ -162,9 +162,9 @@
 \title{Expatriate Managers and Firm Performance}
 
 \author{Miklós Koren\\
-CEU, MTA KRTK and CEPR\\
+CEU, KRTK and CEPR\\
 Álmos Telegdy\\
-MNB and MTA KRTK}
+MNB and Corvinus}
 % - Give the names in the same order as the appear in the paper.
 % - Use the \inst{?} command only if the authors have different
 %   affiliation.
@@ -504,7 +504,7 @@ MNB and MTA KRTK}
 
 
 \begin{frame}\frametitle{CEO succession}\hypertarget{CEO succession}{}
-\begin{tikzpicture}
+\begin{tikzpicture}[scale=0.75]
 \scaffolding
 \draw (2.5,-0.5) node[above=6pt, align=center] {Gyöngyi};
 \draw (5.5,-0.5) node[above=6pt, align=center] {Gábor};
@@ -522,9 +522,9 @@ MNB and MTA KRTK}
 
 
 \section{Descriptives}\hypertarget{Descriptives}{}
-\longfigure{shares_over_time}{Local and expat managers over time}
-\longfigure{CEO_type_by_age}{Founder CEOs are slowly replaced}
-\longfigure{CEO_N_histogram}{Firms sometimes have multiple CEOs}
+\widefigure{shares_over_time}{Local and expat managers over time}
+\widefigure{CEO_type_by_age}{Founder CEOs are slowly replaced}
+\widefigure{CEO_N_histogram}{Firms sometimes have multiple CEOs}
 \widefigure{CEO_N_histogram_by}{80 percent of firms have no expat CEO}
 \widefigure{CEO_tenure_histogram}{Expat CEOs leave somewhat earlier (median 3 v 4 years)}
 
@@ -568,7 +568,7 @@ MNB and MTA KRTK}
 
 
 \begin{frame}\frametitle{Manager-level event study}\hypertarget{Manager-level event study}{}
-\begin{tikzpicture}
+\begin{tikzpicture}[scale=0.75]
 \draw [->] (0,-0.5)--(10,-0.5);
 \foreach \x in {1,4,7,9}
 \draw(\x cm,3pt - 0.5cm) -- (\x cm, -3pt - 0.5cm);
@@ -580,7 +580,7 @@ MNB and MTA KRTK}
 
 
 \noindent
-\begin{tikzpicture}
+\begin{tikzpicture}[scale=0.75]
 \draw [->] (0,-0.5)--(13,-0.5);
 \foreach \x in {4,7,10,12}
 \draw(\x cm,3pt - 0.5cm) -- (\x cm, -3pt - 0.5cm);
@@ -596,6 +596,9 @@ MNB and MTA KRTK}
 
 
 \begin{frame}\frametitle{Estimating equation}\hypertarget{Estimating equation}{}
+% \alert{FIXME: update equation}
+
+
 $T_{im}\subset [1992,2016]$: tenure of CEO $m$ at firm $i$
 
 
@@ -642,7 +645,7 @@ Y_{imt} =
 
 
 \begin{frame}\frametitle{Specific skills}\hypertarget{Specific skills}{}
-\begin{tikzpicture}
+\begin{tikzpicture}[scale=0.75]
 \scaffolding
 \draw [red, very thick](0,0)--(7,0)--(7,3)--(10,3)--(10,0)--(14,0);
 \end{tikzpicture}
@@ -653,7 +656,7 @@ Y_{imt} =
 
 
 \begin{frame}\frametitle{Transferable skills}\hypertarget{Transferable skills}{}
-\begin{tikzpicture}
+\begin{tikzpicture}[scale=0.75]
 \scaffolding
 \draw [red, very thick](0,0)--(7,0)--(7,3)--(14,3);
 \end{tikzpicture}
@@ -664,7 +667,7 @@ Y_{imt} =
 
 
 \begin{frame}\frametitle{Reorganization}\hypertarget{Reorganization}{}
-\begin{tikzpicture}
+\begin{tikzpicture}[scale=0.75]
 \scaffolding
 \draw [red, very thick](0,0)--(4,0)--(4,1)--(7,1)--(7,2)--(10,2)--(10,3)--(14,3);
 \end{tikzpicture}
@@ -696,53 +699,32 @@ Y_{imt} =
 
 
 \section{Estimates}\hypertarget{Estimates}{}
-\begin{frame}\frametitle{Foreign firms are better in every respect (OLS estimates)}\hypertarget{Foreign firms are better in every respect (OLS estimates)}{}
-\regressiontable{baseline_OLS}
+
+
+\begin{frame}\frametitle{New managers are associated with higher scale of production and productivity}\hypertarget{New managers are associated with higher scale of production and productivity}{}
+\regressiontable{direct_effect_1}
 
 
 \end{frame}
 
 
 
-\begin{frame}\frametitle{Foreign takeover is associated with higher capital intensity, productivity and exporting (firm FE estimates)}\hypertarget{Foreign takeover is associated with higher capital intensity, productivity and exporting (firm FE estimates)}{}
-\regressiontable{baseline_FE}
+\begin{frame}\frametitle{The effect lasts after the CEO left the firm}\hypertarget{The effect lasts after the CEO left the firm}{}
+\regressiontable{long_effect_1}
 
 
 \end{frame}
 
 
 
-\begin{frame}\frametitle{Foreign takeover is associated with higher productivity (firm FE estimates on acquisition sample only)}\hypertarget{Foreign takeover is associated with higher productivity (firm FE estimates on acquisition sample only)}{}
-\regressiontable{acquisitions_FE}
-
-
-\end{frame}
-
-
-
-\begin{frame}\frametitle{Selection: Better, more global firms receive expat CEOs}\hypertarget{Selection: Better, more global firms receive expat CEOs}{}
-\regressiontable{selection}
+\begin{frame}\frametitle{The effect of local-expat manager sequences}\hypertarget{The effect of local-expat manager sequences}{}
+\regressiontable{switch_effect_1}
 
 
 
 
 \end{frame}
 
-
-
-\begin{frame}\frametitle{Manager-level estimates on acquisitions sample}\hypertarget{Manager-level estimates on acquisitions sample}{}
-\regressiontable{acquisitions}
-\end{frame}
-
-
-
-
-
-
-\longfigure{acquisitions_lnL_slope}{Local and expat managers reduce employment by same amount}
-\longfigure{acquisitions_lnKL_slope}{Capital intensity drops after first expat manager leaves}
-\longfigure{acquisitions_lnQL_slope}{Expat managers improve revenue per worker by 15--25 percent}
-\longfigure{acquisitions_exporter_slope}{Expat managers increase probability of exporting by 3pp}
 
 
 
@@ -750,12 +732,8 @@ Y_{imt} =
 
 
 \section{Event studies}\hypertarget{Event studies}{}
-\longfigure{lnL_event_study}{Expat managers come to somewhat faster growing firms}
-\longfigure{lnKL_event_study}{No significant changes in capital per worker}
-\longfigure{lnQL_event_study}{Expat managers have persistent effect on revenue per worker}
-\longfigure{exporter_event_study}{Expat managers have temporary effect on likelihood of exporting}
-
-
+\widefigure{lnQL_event_study}{Expat managers have persistent effect on revenue per worker}
+\widefigure{exporter_event_study}{Expat managers have temporary effect on likelihood of exporting}
 
 
 
@@ -790,13 +768,15 @@ Y_{imt} =
 
 
 
-\longfigure{lnL_tree}{All reorganization results in loss of employment}
-\longfigure{lnQL_tree}{Productivity effect of expats remains after they leave}
-\longfigure{exporter_tree}{Exporting effect of expats remains after they leave}
+\widefigure{lnL_tree}{All reorganization results in loss of employment}
+\widefigure{lnQL_tree}{Productivity effect of expats remains after they leave}
+\widefigure{exporter_tree}{Exporting effect of expats remains after they leave}
 
 
 \begin{frame}\frametitle{Expats help start exporting, but have limited effect on continuation}\hypertarget{Expats help start exporting, but have limited effect on continuation}{}
+{\small
 \regressiontable{exporter_heterogeneity}
+}
 
 
 \end{frame}
