@@ -1100,3 +1100,92 @@ Found a deduplication bug, fixed it, now:
 -----------+----------------------+----------
      Total |11,617,121  1,142,329 |12,759,450 
 ```
+
+```
+. codebook frame_id_numeric if expat & !greenfield 
+
+-------------------------------------------------------------------------------------------------------
+frame_id_numeric                                                                            (unlabeled)
+-------------------------------------------------------------------------------------------------------
+
+                  type:  numeric (long)
+
+                 range:  [10000599,52130634]          units:  1
+         unique values:  805                      missing .:  0/19,713
+
+                  mean:   1.2e+07
+              std. dev:   3.2e+06
+
+           percentiles:        10%       25%       50%       75%       90%
+                           1.0e+07   1.0e+07   1.1e+07   1.1e+07   1.3e+07
+
+. reghdfe lnQL foreign during during_foreign during_expat if (before | during ) & !greenfield & !divest
+>  , a(teaor08_2d##year frame_id_numeric##manager_id##job_spell age_cat) cluster(frame_id_numeric ) 
+(dropped 772 singleton observations)
+(MWFE estimator converged in 63 iterations)
+
+HDFE Linear regression                            Number of obs   =    392,911
+Absorbing 3 HDFE groups                           F(   4,  14985) =      16.98
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.8551
+                                                  Adj R-squared   =     0.8376
+                                                  Within R-sq.    =     0.0021
+Number of clusters (frame_id_numeric) =     14,986Root MSE        =     0.5894
+
+                    (Std. Err. adjusted for 14,986 clusters in frame_id_numeric)
+--------------------------------------------------------------------------------
+               |               Robust
+          lnQL |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+---------------+----------------------------------------------------------------
+       foreign |   .1300944   .0319562     4.07   0.000     .0674565    .1927324
+        during |    -.00721   .0063024    -1.14   0.253    -.0195634    .0051435
+during_foreign |   .0912732   .0301953     3.02   0.003     .0320866    .1504598
+  during_expat |   .0726678   .0330444     2.20   0.028     .0078967    .1374388
+         _cons |   8.737817   .0051292  1703.54   0.000     8.727763    8.747871
+--------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------------------------------------+
+                               Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------------------------------------+---------------------------------------|
+                           teaor08_2d#year |      2137           0        2137     |
+     frame_id_numeric#manager_id#job_spell |     40224       40224           0    *|
+                                   age_cat |        23           1          22     |
+-----------------------------------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+. reghdfe exporter foreign during during_foreign during_expat if (before | during ) & !greenfield & !di
+> vest , a(teaor08_2d##year frame_id_numeric##manager_id##job_spell age_cat) cluster(frame_id_numeric )
+>  
+(dropped 924 singleton observations)
+(MWFE estimator converged in 62 iterations)
+
+HDFE Linear regression                            Number of obs   =    421,218
+Absorbing 3 HDFE groups                           F(   4,  16802) =       8.56
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.7017
+                                                  Adj R-squared   =     0.6659
+                                                  Within R-sq.    =     0.0007
+Number of clusters (frame_id_numeric) =     16,803Root MSE        =     0.2711
+
+                    (Std. Err. adjusted for 16,803 clusters in frame_id_numeric)
+--------------------------------------------------------------------------------
+               |               Robust
+      exporter |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+---------------+----------------------------------------------------------------
+       foreign |   .0385324    .011251     3.42   0.001     .0164791    .0605856
+        during |   -.010146   .0025776    -3.94   0.000    -.0151984   -.0050937
+during_foreign |   .0225595   .0106527     2.12   0.034     .0016791    .0434399
+  during_expat |    .012806   .0128447     1.00   0.319    -.0123709    .0379829
+         _cons |   .3277783   .0020937   156.55   0.000     .3236744    .3318822
+--------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------------------------------------+
+                               Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------------------------------------+---------------------------------------|
+                           teaor08_2d#year |      2152           0        2152     |
+     frame_id_numeric#manager_id#job_spell |     42862       42862           0    *|
+                                   age_cat |        23           1          22     |
+-----------------------------------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+```
