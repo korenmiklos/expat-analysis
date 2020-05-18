@@ -8,8 +8,10 @@ egen foundyear = min(year), by(frame_id)
 *Függő változók készítése
 gen lnL=ln(emp)
 gen lnM=ln(ranyag)
+replace lnM = ln(ranyag8091) if year <= 1991
 gen lnQ=ln(sales)
 gen lnQL=lnQ-lnL
+gen lnMQ = lnM - lnQ
 gen byte exporter = export>0&export!=.
 gen exporter_5 = (export/sales > .05 & export < .)
 * FIXME: interpolate small holes
