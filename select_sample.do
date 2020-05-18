@@ -102,7 +102,28 @@ gen lnK = ln(tanass)
 gen lnKL = lnK - lnL
 drop if missing(lnK) & year>1991
 
-* FIXME: estimate TFP here
+*TFP (Cobb-Douglas)
+*FIXME: Replace CD with something fancy
+
+bysort frame_id: egen teaor_mode = mode(teaor08_2d), maxmode
+recode teaor_mode (6 75 = .) (7 = .) (66 = .) (84 = .) (19 = .) (51 = .)
+
+levelsof teaor_mode, local(levels)
+	foreach l of local levels {
+	disp `l'
+	qui reghdfe lnQ lnL lnK lnM if teaor_mode == `l', a(frame_id year foundyear) resid
+	predict tfp_cd_`l', res
+	}
+
+gen  TFP_cd =  .
+levelsof teaor_mode, local(levels)
+foreach l of local levels {
+
+		qui replace TFP_cd = tfp_cd_`l' if TFP_cd == .
+}
+
+drop tfp_cd_*
+
 
 *Industry_year dummy
 egen industry_year = group(teaor08_2d year)
