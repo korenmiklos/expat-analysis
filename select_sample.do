@@ -8,8 +8,10 @@ egen foundyear = min(year), by(frame_id)
 *Függő változók készítése
 gen lnL=ln(emp)
 gen lnM=ln(ranyag)
+replace lnM = ln(ranyag8091) if year <= 1991
 gen lnQ=ln(sales)
 gen lnQL=lnQ-lnL
+gen lnMQ = lnM - lnQ
 gen byte exporter = export>0&export!=.
 gen exporter_5 = (export/sales > .05 & export < .)
 * FIXME: interpolate small holes
@@ -100,7 +102,28 @@ gen lnK = ln(tanass)
 gen lnKL = lnK - lnL
 drop if missing(lnK) & year>1991
 
-* FIXME: estimate TFP here
+*TFP (Cobb-Douglas)
+*FIXME: Replace CD with something fancy
+
+bysort frame_id: egen teaor_mode = mode(teaor08_2d), maxmode
+recode teaor_mode (6 75 = .) (7 = .) (66 = .) (84 = .) (19 = .) (51 = .)
+
+levelsof teaor_mode, local(levels)
+	foreach l of local levels {
+	disp `l'
+	qui reghdfe lnQ lnL lnK lnM if teaor_mode == `l', a(frame_id year foundyear) resid
+	predict tfp_cd_`l', res
+	}
+
+gen  TFP_cd =  .
+levelsof teaor_mode, local(levels)
+foreach l of local levels {
+
+		qui replace TFP_cd = tfp_cd_`l' if TFP_cd == .
+}
+
+drop tfp_cd_*
+
 
 *Industry_year dummy
 egen industry_year = group(teaor08_2d year)
