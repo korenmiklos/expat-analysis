@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Google Drive/Research/expat/output/firm_panel.log
+       log:  /Users/koren/Tresorit/projects/expat/output/firm_panel.log
   log type:  text
- opened on:  13 May 2020, 19:04:28
+ opened on:  22 May 2020, 17:38:20
 
 . 
 . use "temp/balance-small.dta"
@@ -14,9 +14,9 @@
 . tempfile sample
 
 . save `sample', replace
-(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St56966.000001 no
+(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St35946.000001 no
 > t found)
-file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St56966.000001 saved
+file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St35946.000001 saved
 
 . 
 . use "input/ceo-panel/ceo-panel.dta", clear
@@ -191,7 +191,7 @@ file temp/firm_ceo_panel.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Google Drive/Research/expat/output/firm_panel.log
+       log:  /Users/koren/Tresorit/projects/expat/output/firm_panel.log
   log type:  text
- closed on:  13 May 2020, 19:04:50
+ closed on:  22 May 2020, 17:38:41
 -------------------------------------------------------------------------------

@@ -41,11 +41,17 @@ Notes:
 . gen lnM=ln(ranyag)
 (822,429 missing values generated)
 
+. replace lnM = ln(ranyag8091) if year <= 1991
+(106,895 real changes made)
+
 . gen lnQ=ln(sales)
 (1,371,153 missing values generated)
 
 . gen lnQL=lnQ-lnL
 (2,972,398 missing values generated)
+
+. gen lnMQ = lnM - lnQ
+(1,480,845 missing values generated)
 
 . gen byte exporter = export>0&export!=.
 
@@ -291,7 +297,193 @@ tanass:  Tangible assets 1000HUF                Number of Observations
 (61,753 observations deleted)
 
 . 
-. * FIXME: estimate TFP here
+. *TFP (Cobb-Douglas)
+. *FIXME: Replace CD with something fancy
+. 
+. bysort frame_id: egen teaor_mode = mode(teaor08_2d), maxmode
+Warning: at least one group contains all missing values or contains multiple
+modes.  Generating missing values for the mode of these groups.  Use the
+missing, maxmode, minmode, or nummode() options to control this behavior.
+(124 missing values generated)
+
+. recode teaor_mode (6 75 = .) (7 = .) (66 = .) (84 = .) (19 = .) (51 = .)
+(teaor_mode: 1986 changes made)
+
+. 
+. levelsof teaor_mode, local(levels)
+1 2 3 5 8 9 10 11 12 13 14 15 16 17 18 20 21 22 23 24 25 26 27 28 29 30 31 32 3
+> 3 35 36 37 38 39 41 42 43 45 46 47 49 50 52 53 55 56 64 65 68 69 70 71 72 73 
+> 74 77 78 79 80 81 82 85 86 87 88 90 91 92 93 94 95 96
+
+.         foreach l of local levels {
+  2.         disp `l'
+  3.         qui reghdfe lnQ lnL lnK lnM if teaor_mode == `l', a(frame_id year 
+> foundyear) resid
+  4.         predict tfp_cd_`l', res
+  5.         }
+1
+(373,648 missing values generated)
+2
+(417,538 missing values generated)
+3
+(417,786 missing values generated)
+5
+(418,283 missing values generated)
+8
+(417,415 missing values generated)
+9
+(418,392 missing values generated)
+10
+(400,257 missing values generated)
+11
+(416,263 missing values generated)
+12
+(418,349 missing values generated)
+13
+(414,135 missing values generated)
+14
+(408,199 missing values generated)
+15
+(414,384 missing values generated)
+16
+(413,340 missing values generated)
+17
+(416,275 missing values generated)
+18
+(414,868 missing values generated)
+20
+(415,796 missing values generated)
+21
+(417,587 missing values generated)
+22
+(410,247 missing values generated)
+23
+(413,758 missing values generated)
+24
+(416,298 missing values generated)
+25
+(399,612 missing values generated)
+26
+(412,356 missing values generated)
+27
+(413,966 missing values generated)
+28
+(407,974 missing values generated)
+29
+(414,929 missing values generated)
+30
+(417,895 missing values generated)
+31
+(413,870 missing values generated)
+32
+(416,485 missing values generated)
+33
+(417,453 missing values generated)
+35
+(416,034 missing values generated)
+36
+(415,709 missing values generated)
+37
+(418,101 missing values generated)
+38
+(415,403 missing values generated)
+39
+(417,711 missing values generated)
+41
+(407,864 missing values generated)
+42
+(406,726 missing values generated)
+43
+(406,711 missing values generated)
+45
+(407,424 missing values generated)
+46
+(388,300 missing values generated)
+47
+(392,666 missing values generated)
+49
+(408,886 missing values generated)
+50
+(418,228 missing values generated)
+52
+(413,638 missing values generated)
+53
+(418,029 missing values generated)
+55
+(414,340 missing values generated)
+56
+(410,437 missing values generated)
+64
+(414,822 missing values generated)
+65
+(417,963 missing values generated)
+68
+(409,598 missing values generated)
+69
+(417,163 missing values generated)
+70
+(415,634 missing values generated)
+71
+(412,638 missing values generated)
+72
+(416,866 missing values generated)
+73
+(416,958 missing values generated)
+74
+(417,662 missing values generated)
+77
+(417,164 missing values generated)
+78
+(415,261 missing values generated)
+79
+(417,482 missing values generated)
+80
+(414,979 missing values generated)
+81
+(412,883 missing values generated)
+82
+(415,307 missing values generated)
+85
+(417,030 missing values generated)
+86
+(416,107 missing values generated)
+87
+(417,786 missing values generated)
+88
+(417,707 missing values generated)
+90
+(417,785 missing values generated)
+91
+(418,148 missing values generated)
+92
+(418,095 missing values generated)
+93
+(417,150 missing values generated)
+94
+(418,207 missing values generated)
+95
+(417,436 missing values generated)
+96
+(415,756 missing values generated)
+
+. 
+. gen  TFP_cd =  .
+(418,494 missing values generated)
+
+. levelsof teaor_mode, local(levels)
+1 2 3 5 8 9 10 11 12 13 14 15 16 17 18 20 21 22 23 24 25 26 27 28 29 30 31 32 3
+> 3 35 36 37 38 39 41 42 43 45 46 47 49 50 52 53 55 56 64 65 68 69 70 71 72 73 
+> 74 77 78 79 80 81 82 85 86 87 88 90 91 92 93 94 95 96
+
+. foreach l of local levels {
+  2. 
+.                 qui replace TFP_cd = tfp_cd_`l' if TFP_cd == .
+  3. }
+
+. 
+. drop tfp_cd_*
+
+. 
 . 
 . *Industry_year dummy
 . egen industry_year = group(teaor08_2d year)
