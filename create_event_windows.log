@@ -33,9 +33,9 @@ Notes:
 . tempfile sample
 
 . save `sample', replace
-(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St56968.000001 no
+(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St35950.000001 no
 > t found)
-file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St56968.000001 saved
+file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St35950.000001 saved
 
 . 
 . use "temp/firm_ceo_panel.dta", clear
@@ -217,12 +217,62 @@ frame_id_numeric                                                    (unlabeled)
 . * save firm-year dummy of whether there is an expat at the firm
 . preserve
 
-.         collapse (max) max_expat = expat, by(frame_id year)
+.         generate byte change = (job_begin==year)
 
+.         generate N = 1
+
+.         collapse (sum) N (firstnm) foreign, by(frame_id year expat change)
+
+. 
+.         reshape wide N, i(frame_id year expat) j(change)
+(note: j = 0 1)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                   465126   ->  416073
+Number of variables                   6   ->       6
+j variable (2 values)            change   ->   (dropped)
+xij variables:
+                                      N   ->   N0 N1
+-----------------------------------------------------------------------------
+
+.         reshape wide N0 N1, i(frame_id year) j(expat)
+(note: j = 0 1)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                   416073   ->  369437
+Number of variables                   6   ->       7
+j variable (2 values)             expat   ->   (dropped)
+xij variables:
+                                     N0   ->   N00 N01
+                                     N1   ->   N10 N11
+-----------------------------------------------------------------------------
+
+.         mvencode N??, mv(0)
+         N00: 27409 missing values recoded
+         N10: 309122 missing values recoded
+         N01: 315411 missing values recoded
+         N11: 360680 missing values recoded
+
+.         
+.         generate new_expat = (N11>0)
+
+.         generate new_local = (N10>0)
+
+.         generate max_expat = (N11>0)|(N01>0)
+
+.         drop N??
+
+.         
 .         label variable max_expat "Firm has expat CEO (dummy)"
 
-.         save "temp/firm_year_expat.dta", replace
-file temp/firm_year_expat.dta saved
+.         label variable new_expat "Firm has new expat CEO (dummy)"
+
+.         label variable new_local "Firm has new local CEO (dummy)"
+
+.         save "temp/firm_year_panel.dta", replace
+file temp/firm_year_panel.dta saved
 
 . restore
 

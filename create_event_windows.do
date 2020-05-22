@@ -71,9 +71,23 @@ generate tenure = year - job_begin
 
 * save firm-year dummy of whether there is an expat at the firm
 preserve
-	collapse (max) max_expat = expat, by(frame_id year)
+	generate byte change = (job_begin==year)
+	generate N = 1
+	collapse (sum) N (firstnm) foreign, by(frame_id year expat change)
+
+	reshape wide N, i(frame_id year expat) j(change)
+	reshape wide N0 N1, i(frame_id year) j(expat)
+	mvencode N??, mv(0)
+	
+	generate new_expat = (N11>0)
+	generate new_local = (N10>0)
+	generate max_expat = (N11>0)|(N01>0)
+	drop N??
+	
 	label variable max_expat "Firm has expat CEO (dummy)"
-	save "temp/firm_year_expat.dta", replace
+	label variable new_expat "Firm has new expat CEO (dummy)"
+	label variable new_local "Firm has new local CEO (dummy)"
+	save "temp/firm_year_panel.dta", replace
 restore
 
 * limit sample by event window
