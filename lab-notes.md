@@ -1222,3 +1222,200 @@ ever_expat |         0          1 |     Total
 -----------+----------------------+----------
      Total |   313,366     36,350 |   349,716 
 ```
+
+Most owners hire 1-2 managers during their tenure. Foreign hire a bit more.
+```
+. bysort foreign: summarize num_managers_hired if otag, detail
+
+-------------------------------------------------------------------------------------------------------
+-> foreign = 0
+
+                     num_managers_hired
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            1              0       Obs              33,362
+25%            1              0       Sum of Wgt.      33,362
+
+50%            1                      Mean            1.56987
+                        Largest       Std. Dev.      1.225578
+75%            2             11
+90%            3             11       Variance       1.502042
+95%            4             12       Skewness       1.939803
+99%            6             12       Kurtosis       8.509304
+
+-------------------------------------------------------------------------------------------------------
+-> foreign = 1
+
+                     num_managers_hired
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs               7,322
+25%            1              0       Sum of Wgt.       7,322
+
+50%            1                      Mean           2.058454
+                        Largest       Std. Dev.      2.001126
+75%            3             12
+90%            5             12       Variance       4.004505
+95%            6             13       Skewness       1.693461
+99%            9             13       Kurtosis       6.123739
+
+. table owner_spell foreign if otag, c(mean num_managers_hired )
+
+------------------------------
+owner_spe | (firstnm) foreign 
+ll        |        0         1
+----------+-------------------
+        1 | 1.620921  2.390058
+        2 | .6643519  1.448843
+        3 | .8782051  .8451443
+        4 |           1.142857
+------------------------------
+. egen start_as_domestic = max((owner_spell==1) & !foreign), by(frame_id)
+
+. 
+. table owner_spell foreign if otag & start_as_domestic , c(mean num_managers_hired )
+
+------------------------------
+owner_spe | (firstnm) foreign 
+ll        |        0         1
+----------+-------------------
+        1 | 1.620921          
+        2 |           1.448843
+        3 | .8782051          
+        4 |           1.142857
+------------------------------
+```
+If managers in first year are not classified as new hired, than foreign owners are twice as likely to hire a new manager (hazard per year even 4 times as high).
+```
+. table owner_spell foreign if otag, c(mean num_managers_hired )
+
+------------------------------
+owner_spe | (firstnm) foreign 
+ll        |        0         1
+----------+-------------------
+        1 | .7196107  1.453197
+        2 | .6643519  1.448843
+        3 | .8782051  .8451443
+        4 |           1.142857
+------------------------------
+
+. table owner_spell foreign if otag & start_as_domestic , c(mean num_managers_hired )
+
+------------------------------
+owner_spe | (firstnm) foreign 
+ll        |        0         1
+----------+-------------------
+        1 | .7196107          
+        2 |           1.448843
+        3 | .8782051          
+        4 |           1.142857
+------------------------------
+
+. table owner_spell foreign if otag & start_as_domestic , c(mean num_years )
+
+------------------------------
+owner_spe | (firstnm) foreign 
+ll        |        0         1
+----------+-------------------
+        1 | 9.115323          
+        2 |            7.17018
+        3 | 6.533654          
+        4 |           7.142857
+------------------------------
+
+. table owner_spell foreign if otag & start_as_domestic , c(mean managers_per_year )
+
+------------------------------
+owner_spe | (firstnm) foreign 
+ll        |        0         1
+----------+-------------------
+        1 | .0638958          
+        2 |           .2511546
+        3 | .1896446          
+        4 |            .085873
+------------------------------
+
+. 
+```
+
+```
+. tabulate manager_spell foreign if start_as_domestic & owner_spell <= 2,
+
+manager_sp |   (firstnm) foreign
+       ell |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   167,024      3,099 |   170,123 
+         1 |    67,036      3,608 |    70,644 
+         2 |    27,089      2,592 |    29,681 
+         3 |    10,515      1,806 |    12,321 
+         4 |     4,279      1,040 |     5,319 
+         5 |     1,690        642 |     2,332 
+         6 |       644        403 |     1,047 
+         7 |       267        217 |       484 
+         8 |        99        107 |       206 
+         9 |        34         40 |        74 
+        10 |        14         10 |        24 
+        11 |         5          4 |         9 
+-----------+----------------------+----------
+     Total |   278,696     13,568 |   292,264 
+``` 
+
+Within each owner type: 60 percent of domestic owner-years before the takeover are with the founding CEO. 40 percent of firm-years are with second or more CEOs. After foreign takeovers, 30 percent of firm-years are with the manager inherited from previous owner, another 30 percent with the first hire of the foreign owner.
+
+```
+. tabulate within_owner_manager_spell  foreign if start_as_domestic & owner_spell <= 2, column
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+| column percentage |
++-------------------+
+
+within_own |
+er_manager |   (firstnm) foreign
+    _spell |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   167,024      4,131 |   171,155 
+           |     59.93      30.45 |     58.56 
+-----------+----------------------+----------
+         1 |    67,036      4,137 |    71,173 
+           |     24.05      30.49 |     24.35 
+-----------+----------------------+----------
+         2 |    27,089      2,296 |    29,385 
+           |      9.72      16.92 |     10.05 
+-----------+----------------------+----------
+         3 |    10,515      1,309 |    11,824 
+           |      3.77       9.65 |      4.05 
+-----------+----------------------+----------
+         4 |     4,279        715 |     4,994 
+           |      1.54       5.27 |      1.71 
+-----------+----------------------+----------
+         5 |     1,690        471 |     2,161 
+           |      0.61       3.47 |      0.74 
+-----------+----------------------+----------
+         6 |       644        285 |       929 
+           |      0.23       2.10 |      0.32 
+-----------+----------------------+----------
+         7 |       267        126 |       393 
+           |      0.10       0.93 |      0.13 
+-----------+----------------------+----------
+         8 |        99         61 |       160 
+           |      0.04       0.45 |      0.05 
+-----------+----------------------+----------
+         9 |        34         25 |        59 
+           |      0.01       0.18 |      0.02 
+-----------+----------------------+----------
+        10 |        14          8 |        22 
+           |      0.01       0.06 |      0.01 
+-----------+----------------------+----------
+        11 |         5          4 |         9 
+           |      0.00       0.03 |      0.00 
+-----------+----------------------+----------
+     Total |   278,696     13,568 |   292,264 
+           |    100.00     100.00 |    100.00 
+```
