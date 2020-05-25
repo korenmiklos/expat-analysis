@@ -33,9 +33,9 @@ Notes:
 . tempfile sample
 
 . save `sample', replace
-(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St35950.000001 no
+(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St41109.000001 no
 > t found)
-file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St35950.000001 saved
+file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St41109.000001 saved
 
 . 
 . use "temp/firm_ceo_panel.dta", clear
@@ -219,6 +219,9 @@ frame_id_numeric                                                    (unlabeled)
 
 .         generate byte change = (job_begin==year)
 
+.         keep if (year >= job_begin) & (year <= job_end)
+(809,396 observations deleted)
+
 .         generate N = 1
 
 .         collapse (sum) N (firstnm) foreign, by(frame_id year expat change)
@@ -229,7 +232,7 @@ frame_id_numeric                                                    (unlabeled)
 
 Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of obs.                   465126   ->  416073
+Number of obs.                   376545   ->  363907
 Number of variables                   6   ->       6
 j variable (2 values)            change   ->   (dropped)
 xij variables:
@@ -241,7 +244,7 @@ xij variables:
 
 Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of obs.                   416073   ->  369437
+Number of obs.                   363907   ->  349716
 Number of variables                   6   ->       7
 j variable (2 values)             expat   ->   (dropped)
 xij variables:
@@ -250,10 +253,10 @@ xij variables:
 -----------------------------------------------------------------------------
 
 .         mvencode N??, mv(0)
-         N00: 27409 missing values recoded
-         N10: 309122 missing values recoded
-         N01: 315411 missing values recoded
-         N11: 360680 missing values recoded
+         N00: 71848 missing values recoded
+         N10: 289401 missing values recoded
+         N01: 320111 missing values recoded
+         N11: 340959 missing values recoded
 
 .         
 .         generate new_expat = (N11>0)

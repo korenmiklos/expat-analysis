@@ -1189,3 +1189,36 @@ Absorbed degrees of freedom:
 -----------------------------------------------------------------------------------+
 * = FE nested within cluster; treated as redundant for DoF computation
 ```
+
+# 2020-05-25
+## Create firm-year panel
+There is no variation bacross years by `max_expat`?
+```
+. generate max_expat = (N11>0)|(N01>0)
+
+. 
+. egen ever_expat = max(max_expat ), by(frame_id_numeric )
+
+. tab ever_expat max_expat 
+
+           |       max_expat
+ever_expat |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   313,259          0 |   313,259 
+         1 |         0     56,178 |    56,178 
+-----------+----------------------+----------
+     Total |   313,259     56,178 |   369,437 
+
+```
+I left in all years, not just durings! Now it's good
+```
+. tab ever_expat max_expat 
+
+           |       max_expat
+ever_expat |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   296,051          0 |   296,051 
+         1 |    17,315     36,350 |    53,665 
+-----------+----------------------+----------
+     Total |   313,366     36,350 |   349,716 
+```

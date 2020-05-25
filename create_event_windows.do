@@ -72,6 +72,7 @@ generate tenure = year - job_begin
 * save firm-year dummy of whether there is an expat at the firm
 preserve
 	generate byte change = (job_begin==year)
+	keep if (year >= job_begin) & (year <= job_end)
 	generate N = 1
 	collapse (sum) N (firstnm) foreign, by(frame_id year expat change)
 
