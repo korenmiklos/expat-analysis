@@ -1,8 +1,8 @@
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Google Drive/Research/expat/output/firm_panel.log
+       log:  C:\Users\Almos\Documents\Research\Expat\Expat_git\output/firm_panel.log
   log type:  text
- opened on:   1 May 2020, 18:15:25
+ opened on:  18 May 2020, 15:59:12
 
 . 
 . use "temp/balance-small.dta"
@@ -14,9 +14,8 @@
 . tempfile sample
 
 . save `sample', replace
-(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St05059.000001 no
-> t found)
-file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St05059.000001 saved
+(note: file C:\Users\Almos\AppData\Local\Temp\ST_b14_000001.tmp not found)
+file C:\Users\Almos\AppData\Local\Temp\ST_b14_000001.tmp saved
 
 . 
 . use "input/ceo-panel/ceo-panel.dta", clear
@@ -30,11 +29,11 @@ file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St05059.000001 saved
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
-    matched                           608,869  
+    matched                           590,103  
     -----------------------------------------
 
 . drop if year>firm_death
-(104,165 observations deleted)
+(66,365 observations deleted)
 
 . 
 . * balance panel
@@ -46,52 +45,50 @@ file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St05059.000001 saved
                 delta:  1 unit
 
 . by company_manager: generate gap = year - year[_n-1] - 1
-(94,683 missing values generated)
+(93,857 missing values generated)
 
 . replace gap = 0 if missing(gap)
-(94,683 real changes made)
+(93,857 real changes made)
 
 . tabulate gap
 
         gap |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    500,168       99.10       99.10
-          1 |      1,691        0.34       99.44
-          2 |        768        0.15       99.59
-          3 |        560        0.11       99.70
-          4 |        366        0.07       99.77
-          5 |        308        0.06       99.83
-          6 |        182        0.04       99.87
-          7 |        153        0.03       99.90
-          8 |        115        0.02       99.92
-          9 |         90        0.02       99.94
-         10 |         71        0.01       99.95
-         11 |         41        0.01       99.96
-         12 |         43        0.01       99.97
-         13 |         33        0.01       99.98
-         14 |         22        0.00       99.98
-         15 |         25        0.00       99.99
-         16 |         13        0.00       99.99
-         17 |         15        0.00       99.99
-         18 |         10        0.00       99.99
-         19 |         10        0.00      100.00
-         20 |          9        0.00      100.00
-         21 |          1        0.00      100.00
-         22 |          2        0.00      100.00
+          0 |    519,233       99.14       99.14
+          1 |      1,774        0.34       99.48
+          2 |        787        0.15       99.63
+          3 |        538        0.10       99.73
+          4 |        355        0.07       99.80
+          5 |        300        0.06       99.86
+          6 |        169        0.03       99.89
+          7 |        135        0.03       99.91
+          8 |        103        0.02       99.93
+          9 |         89        0.02       99.95
+         10 |         60        0.01       99.96
+         11 |         45        0.01       99.97
+         12 |         39        0.01       99.98
+         13 |         32        0.01       99.98
+         14 |         22        0.00       99.99
+         15 |         18        0.00       99.99
+         16 |         11        0.00       99.99
+         17 |          9        0.00      100.00
+         18 |          6        0.00      100.00
+         19 |          5        0.00      100.00
+         20 |          3        0.00      100.00
          23 |          1        0.00      100.00
-         24 |          2        0.00      100.00
+         24 |          1        0.00      100.00
          25 |          2        0.00      100.00
-         26 |          3        0.00      100.00
+         26 |          1        0.00      100.00
 ------------+-----------------------------------
-      Total |    504,704      100.00
+      Total |    523,738      100.00
 
 . 
 . * fill in gap if only 1-year long
 . expand 1+(gap==1), generate(filled_in)
-(1,691 observations created)
+(1,774 observations created)
 
 . replace year = year - 1 if filled_in
-(1,691 real changes made)
+(1,774 real changes made)
 
 . xtset company_manager year
        panel variable:  company_manager (unbalanced)
@@ -100,29 +97,29 @@ file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St05059.000001 saved
 
 . xtdescribe
 
-company_manager:  1, 2, ..., 94683                           n =      94683
+company_manager:  1, 2, ..., 93857                           n =      93857
     year:  1988, 1989, ..., 2017                             T =         30
            Delta(year) = 1 unit
            Span(year)  = 30 periods
            (company_manager*year uniquely identifies each observation)
 
 Distribution of T_i:   min      5%     25%       50%       75%     95%     max
-                         1       1       1         3         7      19      30
+                         1       1       2         3         7      19      30
 
      Freq.  Percent    Cum. |  Pattern
  ---------------------------+--------------------------------
-     5662      5.98    5.98 |  .............................1
-     4029      4.26   10.24 |  ............................11
-     1664      1.76   11.99 |  ...........................111
-     1175      1.24   13.23 |  ....1.........................
-     1064      1.12   14.36 |  ............................1.
-     1059      1.12   15.48 |  ...11.........................
-     1002      1.06   16.53 |  .....1........................
-      963      1.02   17.55 |  .........................11111
-      948      1.00   18.55 |  ...................1..........
-    77117     81.45  100.00 | (other patterns)
+     6103      6.50    6.50 |  .............................1
+     4525      4.82   11.32 |  ............................11
+     1884      2.01   13.33 |  ...........................111
+     1102      1.17   14.51 |  ............................1.
+     1073      1.14   15.65 |  .........................11111
+      966      1.03   16.68 |  ..........................1111
+      966      1.03   17.71 |  ....1.........................
+      902      0.96   18.67 |  ....................1111111111
+      873      0.93   19.60 |  ........................111111
+    75463     80.40  100.00 | (other patterns)
  ---------------------------+--------------------------------
-    94683    100.00         |  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    93857    100.00         |  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 . 
 . * create contiguous spells
@@ -142,23 +139,23 @@ file temp/N_ceos.dta saved
 . restore
 
 . 
-. collapse (min) job_begin = year (max) job_end = year (firstnm) expat manager_
-> category firm_birth, by(frame_id manager_id job_spell)
+. collapse (min) job_begin = year (max) job_end = year (firstnm) expat manager_category firm_birth
+> , by(frame_id manager_id job_spell)
 
 . 
 . * if first managers arrive in year 1, extrapolate to year 0
 . egen first_cohort = min(job_begin), by(frame_id)
 
-. replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_
-> begin == first_cohort)
-(15,454 real changes made)
+. replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_begin == first_coho
+> rt)
+(16,222 real changes made)
 
 . 
 . gen byte spell = 1
 
-. bysort frame_id (job_begin manager_id): replace spell =  cond(job_begin > job
-> _begin[_n-1], spell[_n-1]+1, spell[_n-1]) if _n>1
-(47,912 real changes made)
+. bysort frame_id (job_begin manager_id): replace spell =  cond(job_begin > job_begin[_n-1], spell
+> [_n-1]+1, spell[_n-1]) if _n>1
+(47,863 real changes made)
 
 . 
 . egen max_expat = max(expat), by(frame_id spell)
@@ -166,14 +163,14 @@ file temp/N_ceos.dta saved
 . tempvar lag_expat
 
 . gen `lag_expat' = .
-(97,528 missing values generated)
+(96,588 missing values generated)
 
-. bysort frame_id (job_begin manager_id): replace `lag_expat' = max_expat[_n-1]
->  if _n>1 & job_begin > job_begin[_n-1]
-(35902 real changes made)
+. bysort frame_id (job_begin manager_id): replace `lag_expat' = max_expat[_n-1] if _n>1 & job_begi
+> n > job_begin[_n-1]
+(39012 real changes made)
 
 . egen lag_expat = mean(`lag_expat'), by(frame_id spell)
-(49616 missing values generated)
+(48,725 missing values generated)
 
 . assert lag_expat==0 | lag_expat==1 | (missing(lag_expat) & spell==1)
 
@@ -184,7 +181,7 @@ file temp/N_ceos.dta saved
   variable max_expat was float now byte
   variable __000000 was float now byte
   variable lag_expat was float now byte
-  (1,365,392 bytes saved)
+  (1,352,232 bytes saved)
 
 . save_all_to_json
 
@@ -193,7 +190,7 @@ file temp/firm_ceo_panel.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Google Drive/Research/expat/output/firm_panel.log
+       log:  C:\Users\Almos\Documents\Research\Expat\Expat_git\output/firm_panel.log
   log type:  text
- closed on:   1 May 2020, 18:15:45
--------------------------------------------------------------------------------
+ closed on:  18 May 2020, 15:59:32
+--------------------------------------------------------------------------------------------------
