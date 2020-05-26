@@ -1419,3 +1419,72 @@ er_manager |   (firstnm) foreign
      Total |   278,696     13,568 |   292,264 
            |    100.00     100.00 |    100.00 
 ```
+## How can domestic firms have any expat CEOs?
+```
+. table within_owner_manager_spell  foreign if start_as_domestic & owner_spell <= 2, c(mean max_expat )
+
+------------------------------
+within_ow |
+ner_manag | (firstnm) foreign 
+er_spell  |        0         1
+----------+-------------------
+        0 | .0000659   .006778
+        1 | .0002834  .4350979
+        2 | .0000369  .4751742
+        3 | .0003804  .5492743
+        4 |        0  .5398601
+        5 |        0  .5753716
+        6 |        0   .554386
+        7 |        0  .5873016
+        8 |        0   .557377
+        9 |        0       .32
+       10 |        0        .5
+       11 |        0        .5
+------------------------------
+
+. tabulate max_expat foreign  if start_as_domestic & owner_spell <= 2
+
+  Firm has |
+ expat CEO |   (firstnm) foreign
+   (dummy) |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   278,661      8,993 |   287,654 
+         1 |        35      4,575 |     4,610 
+-----------+----------------------+----------
+     Total |   278,696     13,568 |   292,264 
+
+. codebook frame_id_numeric  if max_expat==1 & foreign==0 & start_as_domestic & owner_spell <= 2
+
+-------------------------------------------------------------------------------------------------------
+frame_id_numeric                                                                            (unlabeled)
+-------------------------------------------------------------------------------------------------------
+
+                  type:  numeric (long)
+
+                 range:  [10108264,12394429]          units:  1
+         unique values:  5                        missing .:  0/35
+
+            tabulation:  Freq.  Value
+                             5  10108264
+                            12  10259669
+                             8  11169468
+                             9  11264783
+                             1  12394429
+
+```
+These firms might have foreign owners before our sample starts. So they are not purely domestic.
+```
+. l frame_id_numeric year foreign  if frame_id_numeric == 10259669 
+
+         +---------------------------+
+         | frame_~c   year   foreign |
+         |---------------------------|
+ 227994. | 10259669   1989         0 |
+ 227995. | 10259669   1990         1 |
+ 227996. | 10259669   1991         1 |
+ 227997. | 10259669   1992         0 |
+ 227998. | 10259669   1993         0 |
+```
+
+# 2020-05-26
+## Discuss firm-year panel
