@@ -1,8 +1,8 @@
---------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  C:\Users\Almos\Documents\Research\Expat\Expat_git\output/firm_panel.log
+       log:  /Users/koren/Tresorit/projects/expat/output/firm_panel.log
   log type:  text
- opened on:  18 May 2020, 15:59:12
+ opened on:  22 May 2020, 17:38:20
 
 . 
 . use "temp/balance-small.dta"
@@ -14,8 +14,9 @@
 . tempfile sample
 
 . save `sample', replace
-(note: file C:\Users\Almos\AppData\Local\Temp\ST_b14_000001.tmp not found)
-file C:\Users\Almos\AppData\Local\Temp\ST_b14_000001.tmp saved
+(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St35946.000001 no
+> t found)
+file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St35946.000001 saved
 
 . 
 . use "input/ceo-panel/ceo-panel.dta", clear
@@ -139,22 +140,22 @@ file temp/N_ceos.dta saved
 . restore
 
 . 
-. collapse (min) job_begin = year (max) job_end = year (firstnm) expat manager_category firm_birth
-> , by(frame_id manager_id job_spell)
+. collapse (min) job_begin = year (max) job_end = year (firstnm) expat manager_
+> category firm_birth, by(frame_id manager_id job_spell)
 
 . 
 . * if first managers arrive in year 1, extrapolate to year 0
 . egen first_cohort = min(job_begin), by(frame_id)
 
-. replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_begin == first_coho
-> rt)
+. replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_
+> begin == first_cohort)
 (16,222 real changes made)
 
 . 
 . gen byte spell = 1
 
-. bysort frame_id (job_begin manager_id): replace spell =  cond(job_begin > job_begin[_n-1], spell
-> [_n-1]+1, spell[_n-1]) if _n>1
+. bysort frame_id (job_begin manager_id): replace spell =  cond(job_begin > job
+> _begin[_n-1], spell[_n-1]+1, spell[_n-1]) if _n>1
 (47,863 real changes made)
 
 . 
@@ -165,12 +166,12 @@ file temp/N_ceos.dta saved
 . gen `lag_expat' = .
 (96,588 missing values generated)
 
-. bysort frame_id (job_begin manager_id): replace `lag_expat' = max_expat[_n-1] if _n>1 & job_begi
-> n > job_begin[_n-1]
+. bysort frame_id (job_begin manager_id): replace `lag_expat' = max_expat[_n-1]
+>  if _n>1 & job_begin > job_begin[_n-1]
 (39012 real changes made)
 
 . egen lag_expat = mean(`lag_expat'), by(frame_id spell)
-(48,725 missing values generated)
+(48725 missing values generated)
 
 . assert lag_expat==0 | lag_expat==1 | (missing(lag_expat) & spell==1)
 
@@ -190,7 +191,7 @@ file temp/firm_ceo_panel.dta saved
 
 . log close
       name:  <unnamed>
-       log:  C:\Users\Almos\Documents\Research\Expat\Expat_git\output/firm_panel.log
+       log:  /Users/koren/Tresorit/projects/expat/output/firm_panel.log
   log type:  text
- closed on:  18 May 2020, 15:59:32
---------------------------------------------------------------------------------------------------
+ closed on:  22 May 2020, 17:38:41
+-------------------------------------------------------------------------------

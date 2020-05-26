@@ -781,3 +781,710 @@ during_foreign |   .1100595   .0317685     3.46   0.001     .0477895    .1723295
 
 ```
 There are 120,000 more observations, but during expat is no longer significant.
+
+# 2020-05-08
+## Check disappearing expats
+```
+. count if ever_expat_old & !greenfield_old 
+  658
+
+. keep if ever_expat_old & !greenfield_old 
+(2,373 observations deleted)
+
+. keep frame_id 
+
+. save expat_old
+file expat_old.dta saved
+
+. use temp/analysis_sample
+. generate frame_id = "ft"+string(frame_id_numeric, "%8.0f")
+. codebook frame_id  if ever_expat & !greenfield 
+
+-------------------------------------------------------------------------------------------------------
+frame_id                                                                                    (unlabeled)
+-------------------------------------------------------------------------------------------------------
+
+                  type:  string (str10)
+
+         unique values:  191                      missing "":  0/10,270
+
+              examples:  "ft10300703"
+                         "ft10550180"
+                         "ft11060084"
+                         "ft12113006"
+
+. keep  if ever_expat & !greenfield 
+(651,122 observations deleted)
+
+. keep frame_id 
+
+. duplicates drop
+
+Duplicates in terms of all variables
+
+(10,079 observations deleted)
+
+. merge 1:1 frame_id using "~/Downloads/expat_old.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                           683
+        from master                       108  (_merge==1)
+        from using                        575  (_merge==2)
+
+    matched                                83  (_merge==3)
+    -----------------------------------------
+
+. export delimited frame_id using "dropped-expat.csv" if _merge==2, novarnames replace
+(note: file dropped-expat.csv not found)
+file dropped-expat.csv saved
+
+. export delimited frame_id using "new-expat.csv" if _merge==1, novarnames replace
+(note: file new-expat.csv not found)
+file new-expat.csv saved
+```
+
+# 2020-05-12
+## Check FB board members
+
+Those coming from `rovat_15` always get a zero on all position dummies? Make sure to drop them all.
+```
+. generate rovat = substr(source , 1, 2)
+
+. tab board rovat 
+
+           |         rovat
+     board |        13         15 |     Total
+-----------+----------------------+----------
+         0 |   199,402     22,756 |   222,158 
+         1 |     4,835          0 |     4,835 
+         2 |       837          0 |       837 
+-----------+----------------------+----------
+     Total |   205,074     22,756 |   227,830 
+
+
+. tab position rovat 
+
+           |         rovat
+  position |        13         15 |     Total
+-----------+----------------------+----------
+         0 |    82,713     22,756 |   105,469 
+         1 |   107,708          0 |   107,708 
+         2 |     8,376          0 |     8,376 
+         3 |     6,277          0 |     6,277 
+-----------+----------------------+----------
+     Total |   205,074     22,756 |   227,830 
+```
+
+Number of managers depends heavily on type of corporation.
+
+```
+. egen ft = tag(frame_id position)
+
+. egen N = count(board ), by(frame_id position )
+
+. table cf position if ft, c(mean N)
+
+---------------------------------------------------------------------------------
+                                         |                position               
+                                      cf |        0         1         2         3
+-----------------------------------------+---------------------------------------
+                                Vállalat | 6.428407                              
+                             Szövetkezet |  1.71868  1.038702  1.572306  1.169296
+                    Közkereseti társaság | 1.722034  1.657699  1.166667         1
+                 Gazdasági munkaközösség | 1.526674                              
+      Jogi személy felelősségvállalásáva |  1.52802                              
+                         Betéti társaság | 1.179467  1.194393  1.116438  1.142857
+                               Egyesülés | 1.542986                              
+                          Közös vállalat | 2.481013                              
+          Korlátolt felelősségű társaság |  1.38562  1.390881  2.089261  1.903042
+                        Részvénytársaság | 4.723701     1.044  5.310726  11.63636
+                              Egyéni cég |  1.04213                              
+    Külföldiek magyarországi közvetlen k | 1.112036                              
+                   Oktatói munkaközösség | 2.123288                              
+                      Közhasznú társaság | 1.117647                              
+               Erdőbirtokossági társulat | 1.466667                              
+                Vízgazdálkodási társulat |      1.6                              
+     Külföldi vállalkozás magyarországi  |        1                              
+                       Végrehajtói iroda |        1                              
+                Európai részvénytársaság |        1                              
+                     Európai szövetkezet |        1                              
+---------------------------------------------------------------------------------
+```
+
+There are still a lot of imputed CEOs.
+```
+. tabulate year imputed if ceo
+
+           |        imputed
+      year |         0          1 |     Total
+-----------+----------------------+----------
+      1988 |     9,770      6,628 |    16,398 
+      1989 |    12,683     10,308 |    22,991 
+      1990 |    25,857     26,252 |    52,109 
+      1991 |    54,936     37,613 |    92,549 
+      1992 |   103,775     43,236 |   147,011 
+      1993 |   144,854     42,572 |   187,426 
+      1994 |   184,015     41,396 |   225,411 
+      1995 |   215,296     39,996 |   255,292 
+      1996 |   250,045     38,369 |   288,414 
+      1997 |   283,349     36,982 |   320,331 
+      1998 |   321,275     36,021 |   357,296 
+      1999 |   345,831     33,084 |   378,915 
+      2000 |   375,108     27,793 |   402,901 
+      2001 |   404,458     22,470 |   426,928 
+      2002 |   425,276     20,766 |   446,042 
+      2003 |   444,270     19,541 |   463,811 
+      2004 |   470,618     17,682 |   488,300 
+      2005 |   489,829     16,396 |   506,225 
+      2006 |   508,335     15,493 |   523,828 
+      2007 |   515,213     14,852 |   530,065 
+      2008 |   553,316     13,433 |   566,749 
+      2009 |   580,298     12,229 |   592,527 
+      2010 |   597,325     10,774 |   608,099 
+      2011 |   607,627      8,145 |   615,772 
+      2012 |   608,679      7,891 |   616,570 
+      2013 |   616,782      8,259 |   625,041 
+      2014 |   622,130      8,198 |   630,328 
+      2015 |   617,930      7,416 |   625,346 
+      2016 |   596,898      7,148 |   604,046 
+      2017 |   576,017      6,740 |   582,757 
+      2018 |   553,620      6,357 |   559,977 
+-----------+----------------------+----------
+     Total |12,115,415    644,040 |12,759,455 
+```
+
+## Explore missing expats
+From Almos:
+```
+Régi adat:
+greenfield: 3259
+expat: 3027
+expat and greenfield: 2372
+
+Új adat:
+greenfield: 3815
+expat: 1152
+expat and greenfield: 934
+```
+
+```
+. use "/Users/koren/Documents/workspace/manager-db/output/manager-panel.dta", clear
+
+. egen ever_expat = max(expat), by(frame_id_numeric )
+
+. tabulate ever_expat 
+
+ ever_expat |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 | 11,467,639       83.16       83.16
+          1 |  2,322,742       16.84      100.00
+------------+-----------------------------------
+      Total | 13,790,381      100.00
+
+. codebook frame_id_numeric if ever_expat 
+
+-------------------------------------------------------------------------------------------------------
+frame_id_numeric                                                                            (unlabeled)
+-------------------------------------------------------------------------------------------------------
+
+                  type:  numeric (long)
+
+                 range:  [10000599,92457242]          units:  1
+         unique values:  144,760                  missing .:  0/2,322,742
+
+                  mean:   1.5e+07
+              std. dev:   5.6e+06
+
+           percentiles:        10%       25%       50%       75%       90%
+                           1.0e+07   1.1e+07   1.2e+07   2.0e+07   2.4e+07
+
+```
+
+# 2020-05-13
+## Check expat
+```
+. tab pos5  person_foreign 
+
+           |       (firstnm)
+           |    person_foreign
+      pos5 |         0          1 |     Total
+-----------+----------------------+----------
+         0 | 2,350,347    214,955 | 2,565,302 
+         1 | 9,674,525  1,073,766 |10,748,291 
+         2 |   444,557     23,218 |   467,775 
+         3 |   344,755     97,976 |   442,731 
+-----------+----------------------+----------
+     Total |12,814,184  1,409,915 |14,224,099 
+```
+In ceo-panel, this wasy way fewer. 
+
+```
+. tab year expat 
+
+           |         expat
+      year |         0          1 |     Total
+-----------+----------------------+----------
+      1988 |    15,503          0 |    15,503 
+      1989 |    21,958          9 |    21,967 
+      1990 |    50,416         43 |    50,459 
+      1991 |    89,139        161 |    89,300 
+      1992 |   138,146        541 |   138,687 
+      1993 |   172,145        566 |   172,711 
+      1994 |   203,705        697 |   204,402 
+      1995 |   228,355        685 |   229,040 
+      1996 |   256,740        720 |   257,460 
+      1997 |   283,804        823 |   284,627 
+      1998 |   315,379        986 |   316,365 
+      1999 |   334,024      1,013 |   335,037 
+      2000 |   355,054      1,227 |   356,281 
+      2001 |   376,892      1,154 |   378,046 
+      2002 |   396,556        988 |   397,544 
+      2003 |   414,356        989 |   415,345 
+      2004 |   437,318      1,128 |   438,446 
+      2005 |   453,512      1,166 |   454,678 
+      2006 |   470,458      1,245 |   471,703 
+      2007 |   478,236      1,081 |   479,317 
+      2008 |   514,169      1,464 |   515,633 
+      2009 |   541,152      1,493 |   542,645 
+      2010 |   559,785      1,629 |   561,414 
+      2011 |   569,351      1,988 |   571,339 
+      2012 |   571,721      1,328 |   573,049 
+      2013 |   580,206      1,110 |   581,316 
+      2014 |   584,229        988 |   585,217 
+      2015 |   578,705      1,392 |   580,097 
+      2016 |   560,967      1,430 |   562,397 
+      2017 |   542,504      1,956 |   544,460 
+      2018 |   522,636      6,652 |   529,288 
+-----------+----------------------+----------
+     Total |11,617,121     36,652 |11,653,773 
+```
+Found a deduplication bug, fixed it, now:
+```
+. tab year expat 
+
+           |         expat
+      year |         0          1 |     Total
+-----------+----------------------+----------
+      1988 |    15,503        895 |    16,398 
+      1989 |    21,958      1,033 |    22,991 
+      1990 |    50,416      1,693 |    52,109 
+      1991 |    89,139      3,410 |    92,549 
+      1992 |   138,146      8,865 |   147,011 
+      1993 |   172,145     15,281 |   187,426 
+      1994 |   203,705     21,706 |   225,411 
+      1995 |   228,355     26,937 |   255,292 
+      1996 |   256,740     31,674 |   288,414 
+      1997 |   283,804     36,527 |   320,331 
+      1998 |   315,379     41,917 |   357,296 
+      1999 |   334,024     44,891 |   378,915 
+      2000 |   355,054     47,847 |   402,901 
+      2001 |   376,892     50,036 |   426,928 
+      2002 |   396,556     49,486 |   446,042 
+      2003 |   414,356     49,455 |   463,811 
+      2004 |   437,318     50,982 |   488,300 
+      2005 |   453,512     52,713 |   506,225 
+      2006 |   470,458     53,370 |   523,828 
+      2007 |   478,236     51,829 |   530,065 
+      2008 |   514,169     52,580 |   566,749 
+      2009 |   541,152     51,375 |   592,527 
+      2010 |   559,785     48,314 |   608,099 
+      2011 |   569,351     46,421 |   615,772 
+      2012 |   571,721     44,848 |   616,569 
+      2013 |   580,206     44,834 |   625,040 
+      2014 |   584,229     46,098 |   630,327 
+      2015 |   578,705     46,640 |   625,345 
+      2016 |   560,967     43,078 |   604,045 
+      2017 |   542,504     40,253 |   582,757 
+      2018 |   522,636     37,341 |   559,977 
+-----------+----------------------+----------
+     Total |11,617,121  1,142,329 |12,759,450 
+```
+
+```
+. codebook frame_id_numeric if expat & !greenfield 
+
+-------------------------------------------------------------------------------------------------------
+frame_id_numeric                                                                            (unlabeled)
+-------------------------------------------------------------------------------------------------------
+
+                  type:  numeric (long)
+
+                 range:  [10000599,52130634]          units:  1
+         unique values:  805                      missing .:  0/19,713
+
+                  mean:   1.2e+07
+              std. dev:   3.2e+06
+
+           percentiles:        10%       25%       50%       75%       90%
+                           1.0e+07   1.0e+07   1.1e+07   1.1e+07   1.3e+07
+
+. reghdfe lnQL foreign during during_foreign during_expat if (before | during ) & !greenfield & !divest
+>  , a(teaor08_2d##year frame_id_numeric##manager_id##job_spell age_cat) cluster(frame_id_numeric ) 
+(dropped 772 singleton observations)
+(MWFE estimator converged in 63 iterations)
+
+HDFE Linear regression                            Number of obs   =    392,911
+Absorbing 3 HDFE groups                           F(   4,  14985) =      16.98
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.8551
+                                                  Adj R-squared   =     0.8376
+                                                  Within R-sq.    =     0.0021
+Number of clusters (frame_id_numeric) =     14,986Root MSE        =     0.5894
+
+                    (Std. Err. adjusted for 14,986 clusters in frame_id_numeric)
+--------------------------------------------------------------------------------
+               |               Robust
+          lnQL |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+---------------+----------------------------------------------------------------
+       foreign |   .1300944   .0319562     4.07   0.000     .0674565    .1927324
+        during |    -.00721   .0063024    -1.14   0.253    -.0195634    .0051435
+during_foreign |   .0912732   .0301953     3.02   0.003     .0320866    .1504598
+  during_expat |   .0726678   .0330444     2.20   0.028     .0078967    .1374388
+         _cons |   8.737817   .0051292  1703.54   0.000     8.727763    8.747871
+--------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------------------------------------+
+                               Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------------------------------------+---------------------------------------|
+                           teaor08_2d#year |      2137           0        2137     |
+     frame_id_numeric#manager_id#job_spell |     40224       40224           0    *|
+                                   age_cat |        23           1          22     |
+-----------------------------------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+. reghdfe exporter foreign during during_foreign during_expat if (before | during ) & !greenfield & !di
+> vest , a(teaor08_2d##year frame_id_numeric##manager_id##job_spell age_cat) cluster(frame_id_numeric )
+>  
+(dropped 924 singleton observations)
+(MWFE estimator converged in 62 iterations)
+
+HDFE Linear regression                            Number of obs   =    421,218
+Absorbing 3 HDFE groups                           F(   4,  16802) =       8.56
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.7017
+                                                  Adj R-squared   =     0.6659
+                                                  Within R-sq.    =     0.0007
+Number of clusters (frame_id_numeric) =     16,803Root MSE        =     0.2711
+
+                    (Std. Err. adjusted for 16,803 clusters in frame_id_numeric)
+--------------------------------------------------------------------------------
+               |               Robust
+      exporter |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+---------------+----------------------------------------------------------------
+       foreign |   .0385324    .011251     3.42   0.001     .0164791    .0605856
+        during |   -.010146   .0025776    -3.94   0.000    -.0151984   -.0050937
+during_foreign |   .0225595   .0106527     2.12   0.034     .0016791    .0434399
+  during_expat |    .012806   .0128447     1.00   0.319    -.0123709    .0379829
+         _cons |   .3277783   .0020937   156.55   0.000     .3236744    .3318822
+--------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------------------------------------+
+                               Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------------------------------------+---------------------------------------|
+                           teaor08_2d#year |      2152           0        2152     |
+     frame_id_numeric#manager_id#job_spell |     42862       42862           0    *|
+                                   age_cat |        23           1          22     |
+-----------------------------------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+```
+
+# 2020-05-25
+## Create firm-year panel
+There is no variation bacross years by `max_expat`?
+```
+. generate max_expat = (N11>0)|(N01>0)
+
+. 
+. egen ever_expat = max(max_expat ), by(frame_id_numeric )
+
+. tab ever_expat max_expat 
+
+           |       max_expat
+ever_expat |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   313,259          0 |   313,259 
+         1 |         0     56,178 |    56,178 
+-----------+----------------------+----------
+     Total |   313,259     56,178 |   369,437 
+
+```
+I left in all years, not just durings! Now it's good
+```
+. tab ever_expat max_expat 
+
+           |       max_expat
+ever_expat |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   296,051          0 |   296,051 
+         1 |    17,315     36,350 |    53,665 
+-----------+----------------------+----------
+     Total |   313,366     36,350 |   349,716 
+```
+
+Most owners hire 1-2 managers during their tenure. Foreign hire a bit more.
+```
+. bysort foreign: summarize num_managers_hired if otag, detail
+
+-------------------------------------------------------------------------------------------------------
+-> foreign = 0
+
+                     num_managers_hired
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            1              0       Obs              33,362
+25%            1              0       Sum of Wgt.      33,362
+
+50%            1                      Mean            1.56987
+                        Largest       Std. Dev.      1.225578
+75%            2             11
+90%            3             11       Variance       1.502042
+95%            4             12       Skewness       1.939803
+99%            6             12       Kurtosis       8.509304
+
+-------------------------------------------------------------------------------------------------------
+-> foreign = 1
+
+                     num_managers_hired
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs               7,322
+25%            1              0       Sum of Wgt.       7,322
+
+50%            1                      Mean           2.058454
+                        Largest       Std. Dev.      2.001126
+75%            3             12
+90%            5             12       Variance       4.004505
+95%            6             13       Skewness       1.693461
+99%            9             13       Kurtosis       6.123739
+
+. table owner_spell foreign if otag, c(mean num_managers_hired )
+
+------------------------------
+owner_spe | (firstnm) foreign 
+ll        |        0         1
+----------+-------------------
+        1 | 1.620921  2.390058
+        2 | .6643519  1.448843
+        3 | .8782051  .8451443
+        4 |           1.142857
+------------------------------
+. egen start_as_domestic = max((owner_spell==1) & !foreign), by(frame_id)
+
+. 
+. table owner_spell foreign if otag & start_as_domestic , c(mean num_managers_hired )
+
+------------------------------
+owner_spe | (firstnm) foreign 
+ll        |        0         1
+----------+-------------------
+        1 | 1.620921          
+        2 |           1.448843
+        3 | .8782051          
+        4 |           1.142857
+------------------------------
+```
+If managers in first year are not classified as new hired, than foreign owners are twice as likely to hire a new manager (hazard per year even 4 times as high).
+```
+. table owner_spell foreign if otag, c(mean num_managers_hired )
+
+------------------------------
+owner_spe | (firstnm) foreign 
+ll        |        0         1
+----------+-------------------
+        1 | .7196107  1.453197
+        2 | .6643519  1.448843
+        3 | .8782051  .8451443
+        4 |           1.142857
+------------------------------
+
+. table owner_spell foreign if otag & start_as_domestic , c(mean num_managers_hired )
+
+------------------------------
+owner_spe | (firstnm) foreign 
+ll        |        0         1
+----------+-------------------
+        1 | .7196107          
+        2 |           1.448843
+        3 | .8782051          
+        4 |           1.142857
+------------------------------
+
+. table owner_spell foreign if otag & start_as_domestic , c(mean num_years )
+
+------------------------------
+owner_spe | (firstnm) foreign 
+ll        |        0         1
+----------+-------------------
+        1 | 9.115323          
+        2 |            7.17018
+        3 | 6.533654          
+        4 |           7.142857
+------------------------------
+
+. table owner_spell foreign if otag & start_as_domestic , c(mean managers_per_year )
+
+------------------------------
+owner_spe | (firstnm) foreign 
+ll        |        0         1
+----------+-------------------
+        1 | .0638958          
+        2 |           .2511546
+        3 | .1896446          
+        4 |            .085873
+------------------------------
+
+. 
+```
+
+```
+. tabulate manager_spell foreign if start_as_domestic & owner_spell <= 2,
+
+manager_sp |   (firstnm) foreign
+       ell |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   167,024      3,099 |   170,123 
+         1 |    67,036      3,608 |    70,644 
+         2 |    27,089      2,592 |    29,681 
+         3 |    10,515      1,806 |    12,321 
+         4 |     4,279      1,040 |     5,319 
+         5 |     1,690        642 |     2,332 
+         6 |       644        403 |     1,047 
+         7 |       267        217 |       484 
+         8 |        99        107 |       206 
+         9 |        34         40 |        74 
+        10 |        14         10 |        24 
+        11 |         5          4 |         9 
+-----------+----------------------+----------
+     Total |   278,696     13,568 |   292,264 
+``` 
+
+Within each owner type: 60 percent of domestic owner-years before the takeover are with the founding CEO. 40 percent of firm-years are with second or more CEOs. After foreign takeovers, 30 percent of firm-years are with the manager inherited from previous owner, another 30 percent with the first hire of the foreign owner.
+
+```
+. tabulate within_owner_manager_spell  foreign if start_as_domestic & owner_spell <= 2, column
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+| column percentage |
++-------------------+
+
+within_own |
+er_manager |   (firstnm) foreign
+    _spell |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   167,024      4,131 |   171,155 
+           |     59.93      30.45 |     58.56 
+-----------+----------------------+----------
+         1 |    67,036      4,137 |    71,173 
+           |     24.05      30.49 |     24.35 
+-----------+----------------------+----------
+         2 |    27,089      2,296 |    29,385 
+           |      9.72      16.92 |     10.05 
+-----------+----------------------+----------
+         3 |    10,515      1,309 |    11,824 
+           |      3.77       9.65 |      4.05 
+-----------+----------------------+----------
+         4 |     4,279        715 |     4,994 
+           |      1.54       5.27 |      1.71 
+-----------+----------------------+----------
+         5 |     1,690        471 |     2,161 
+           |      0.61       3.47 |      0.74 
+-----------+----------------------+----------
+         6 |       644        285 |       929 
+           |      0.23       2.10 |      0.32 
+-----------+----------------------+----------
+         7 |       267        126 |       393 
+           |      0.10       0.93 |      0.13 
+-----------+----------------------+----------
+         8 |        99         61 |       160 
+           |      0.04       0.45 |      0.05 
+-----------+----------------------+----------
+         9 |        34         25 |        59 
+           |      0.01       0.18 |      0.02 
+-----------+----------------------+----------
+        10 |        14          8 |        22 
+           |      0.01       0.06 |      0.01 
+-----------+----------------------+----------
+        11 |         5          4 |         9 
+           |      0.00       0.03 |      0.00 
+-----------+----------------------+----------
+     Total |   278,696     13,568 |   292,264 
+           |    100.00     100.00 |    100.00 
+```
+## How can domestic firms have any expat CEOs?
+```
+. table within_owner_manager_spell  foreign if start_as_domestic & owner_spell <= 2, c(mean max_expat )
+
+------------------------------
+within_ow |
+ner_manag | (firstnm) foreign 
+er_spell  |        0         1
+----------+-------------------
+        0 | .0000659   .006778
+        1 | .0002834  .4350979
+        2 | .0000369  .4751742
+        3 | .0003804  .5492743
+        4 |        0  .5398601
+        5 |        0  .5753716
+        6 |        0   .554386
+        7 |        0  .5873016
+        8 |        0   .557377
+        9 |        0       .32
+       10 |        0        .5
+       11 |        0        .5
+------------------------------
+
+. tabulate max_expat foreign  if start_as_domestic & owner_spell <= 2
+
+  Firm has |
+ expat CEO |   (firstnm) foreign
+   (dummy) |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   278,661      8,993 |   287,654 
+         1 |        35      4,575 |     4,610 
+-----------+----------------------+----------
+     Total |   278,696     13,568 |   292,264 
+
+. codebook frame_id_numeric  if max_expat==1 & foreign==0 & start_as_domestic & owner_spell <= 2
+
+-------------------------------------------------------------------------------------------------------
+frame_id_numeric                                                                            (unlabeled)
+-------------------------------------------------------------------------------------------------------
+
+                  type:  numeric (long)
+
+                 range:  [10108264,12394429]          units:  1
+         unique values:  5                        missing .:  0/35
+
+            tabulation:  Freq.  Value
+                             5  10108264
+                            12  10259669
+                             8  11169468
+                             9  11264783
+                             1  12394429
+
+```
+These firms might have foreign owners before our sample starts. So they are not purely domestic.
+```
+. l frame_id_numeric year foreign  if frame_id_numeric == 10259669 
+
+         +---------------------------+
+         | frame_~c   year   foreign |
+         |---------------------------|
+ 227994. | 10259669   1989         0 |
+ 227995. | 10259669   1990         1 |
+ 227996. | 10259669   1991         1 |
+ 227997. | 10259669   1992         0 |
+ 227998. | 10259669   1993         0 |
+```
+
+# 2020-05-26
+## Discuss firm-year panel

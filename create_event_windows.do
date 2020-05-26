@@ -71,9 +71,7 @@ generate tenure = year - job_begin
 
 * save firm-year dummy of whether there is an expat at the firm
 preserve
-	collapse (max) max_expat = expat, by(frame_id year)
-	label variable max_expat "Firm has expat CEO (dummy)"
-	save "temp/firm_year_expat.dta", replace
+	do "create_firm_events.do"
 restore
 
 * limit sample by event window
