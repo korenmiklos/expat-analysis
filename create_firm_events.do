@@ -28,3 +28,7 @@ egen start_as_domestic = max((owner_spell==1) & (foreign==0)), by(frame_id)
 
 compress
 save "temp/firm_events.dta", replace
+
+merge 1:1 frame_id_numeric year using "temp/balance-small.dta", keep(match)
+
+save "temp/analysis_sample_firm.dta", replace
