@@ -1,3 +1,5 @@
+*cd C:\Users\Almos\Documents\Research\Expat\Expat_git
+
 clear all
 set more off
 use "input/balance-small/balance-small.dta"
@@ -14,7 +16,7 @@ gen lnQL=lnQ-lnL
 gen lnMQ = lnM - lnQ
 gen byte exporter = export>0&export!=.
 gen exporter_5 = (export/sales > .05 & export < .)
-* FIXME: interpolate small holes
+gen export_share = export/sales
 
 *Átlagos létszám változó
 bys frame_id: egen avg_emp = mean(emp)
@@ -162,3 +164,9 @@ di dropped_finance
 save_all_to_json
 drop __*
 save "temp/balance-small.dta", replace
+
+
+*Link the data with firm events
+merge 1:1 frame_id_numeric year using "temp/firm_events.dta", keep(match)
+tsset frame_id	year
+save "temp/analysis_sample_firm.dta", replace
