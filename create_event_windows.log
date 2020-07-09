@@ -20,7 +20,7 @@ Notes:
       3.  More than 2 billion observations are allowed; see help obs_advice.
       4.  Maximum number of variables is set to 5000; see help set_maxvar.
 
-. do create_event_windows 
+. do create_event_windows.do 
 
 . clear all
 
@@ -32,9 +32,9 @@ Notes:
 . tempfile sample
 
 . save `sample', replace
-(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St24433.000001 no
+(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St26527.000001 no
 > t found)
-file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St24433.000001 saved
+file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St26527.000001 saved
 
 . 
 . use "temp/firm_ceo_panel.dta", clear
@@ -377,14 +377,9 @@ xij variables:
 . 
 . egen start_as_domestic = max((owner_spell==1) & (foreign==0)), by(frame_id)
 
-. * only keep D, D-F, F-D, F, F-D-F owner spells
-. generate divest = cond(start_as_domestic == 1, owner_spell > 2, owner_spell >
->  3)
-
-. drop if divest
-(88 observations deleted)
-
-. drop divest
+. * only keep D, D-F owner spells
+. keep if start_as_domestic & owner_spell <= 2
+(1,692 observations deleted)
 
 . 
 . compress
@@ -399,7 +394,7 @@ xij variables:
   variable owner_spell was float now byte
   variable manager_spell was float now byte
   variable start_as_domestic was float now byte
-  (353,856 bytes saved)
+  (302,528 bytes saved)
 
 . save "temp/firm_events.dta", replace
 file temp/firm_events.dta saved

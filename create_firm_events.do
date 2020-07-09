@@ -1,5 +1,17 @@
 keep if (year >= job_begin) & (year <= job_end)
-generate byte change = (job_begin==year)
+
+* hired ceo since last observed year of firm
+tempvar last_year
+generate last_year = .
+forval t = 1985/2018 {
+	egen `last_year' = max(cond(year < `t', year, .)), by(frame_id)
+	replace last_year = `last_year' if year == `t'
+	drop `last_year'
+}
+egen first_year = min(year), by(frame_id)
+bysort frame_id (year): generate byte change = cond(first_year == year, 1, (job_begin <= year) & (job_begin > last_year))
+tabulate change
+
 generate N = 1
 collapse (sum) N (firstnm) foreign (max) change, by(frame_id year manager_category expat)
 egen hires_new_ceo = max(change), by(frame_id year)
@@ -24,11 +36,11 @@ bysort frame_id (year): generate owner_spell = sum(foreign != foreign[_n-1])
 bysort frame_id (year): generate manager_spell = sum(hires_new_ceo)
 * so that index start from 1
 replace manager_spell = 1 + manager_spell
+
 egen start_as_domestic = max((owner_spell==1) & (foreign==0)), by(frame_id)
+* only keep D, D-F owner spells
+keep if start_as_domestic & owner_spell <= 2
 
 compress
 save "temp/firm_events.dta", replace
 
-merge 1:1 frame_id_numeric year using "temp/balance-small.dta", keep(match)
-
-save "temp/analysis_sample_firm.dta", replace
