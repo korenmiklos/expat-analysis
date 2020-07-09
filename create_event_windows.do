@@ -8,7 +8,7 @@ save `sample', replace
 use "temp/firm_ceo_panel.dta", clear
 capture drop _*
 
-scalar T1 = 1988
+scalar T1 = 1985
 scalar T2 = 2018
 expand T2-T1+1
 bys frame_id manager_id job_spell: gen year = _n-1+T1

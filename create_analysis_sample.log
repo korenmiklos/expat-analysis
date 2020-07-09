@@ -1,7 +1,7 @@
 
   ___  ____  ____  ____  ____ (R)
  /__    /   ____/   /   ____/
-___/   /   /___/   /   /___/   15.1   Copyright 1985-2017 StataCorp LLC
+___/   /   /___/   /   /___/   16.1   Copyright 1985-2019 StataCorp LLC
   Statistics/Data Analysis            StataCorp
                                       4905 Lakeway Drive
      MP - Parallel Edition            College Station, Texas 77845 USA
@@ -10,10 +10,9 @@ ___/   /   /___/   /   /___/   15.1   Copyright 1985-2017 StataCorp LLC
                                       979-696-4601 (fax)
 
 Single-user 2-core Stata perpetual license:
-       Serial number:  501506203290
+       Serial number:  501606204617
          Licensed to:  Miklos Koren
                        CEU MicroData
-
 
 Notes:
       1.  Stata is running in batch mode.
@@ -25,126 +24,7 @@ Notes:
 
 . clear all
 
-. use "temp/event_windows.dta"
-
-. 
-. do "create_event_dummies.do"
-
-. gen tenure_foreign = year - first_year_foreign
-(527,622 missing values generated)
-
-. 
-. gen byte before = tenure < 0
-
-. gen byte during = tenure >= 0
-
-. * NB: missing after years now
-. gen byte after = 0
-
-. 
-. * spell-to-spell transition
-. gen byte DD = (lag_expat==0)&(expat==0)
-
-. gen byte DE = (lag_expat==0)&(expat==1)
-
-. gen byte ED = (lag_expat==1)&(expat==0)
-
-. gen byte EE = (lag_expat==1)&(expat==1)
-
-. 
-. * newly arriving CEOs
-. * FIXME: review these dummies
-. local T 4
-
-. gen byte domestic = (expat==0)
-
-. foreach X of var domestic expat DD DE ED EE {
-  2.         gen byte new_`X' = (tenure <=`T') & (tenure>=0) & (`X'==1)
-  3.         
-.         * new managers at foreign firms
-.         gen byte fnew_`X' = new_`X' & foreign==1
-  4.         * only include managers joining in years [-1,...) since foreign
-.         replace fnew_`X' = 0 if tenure > tenure_foreign+1
-  5. 
-.         foreach Y of var tenure before during after {
-  6.                 gen `Y'_`X' = (`X'==1)*`Y'
-  7.         }
-  8. }
-(2,648 real changes made)
-(0 real changes made)
-(957 real changes made)
-(0 real changes made)
-(11 real changes made)
-(0 real changes made)
-
-. gen fold_expat = expat==1 & tenure>`T'
-
-. gen byte new = new_domestic | new_expat
-
-. gen byte fnew = fnew_domestic | fnew_expat
-
-. 
-. *foreign_switch interakció létrehozása
-. gen byte foreign_new = foreign & new
-
-. 
-. ** do stats here
-. tempvar tag
-
-. foreach X of var foreign new expat new_expat fnew fnew_expat {
-  2.         count if `X'==1
-  3.         scalar N_it_`X' = r(N)
-  4.         
-.         * by firms
-.         egen `tag' = tag(frame_id `X')
-  5.         count if `X'==1 & `tag'==1
-  6.         scalar N_i_`X' = r(N)
-  7.         drop `tag'
-  8. }
-  206,392
-  6,946
-  348,623
-  36,140
-  110,361
-  4,282
-  45,925
-  4,280
-  83,794
-  6,465
-  44,047
-  4,241
-
-. 
-. *Firm_tag
-. egen firm_tag=tag(frame_id)
-
-. egen firm_person = group(frame_id manager_id)
-
-. 
-. *Foreign hire
-. gen byte foreign_hire = 1 if first_year_foreign <= job_begin
-(570,713 missing values generated)
-
-. recode foreign_hire (. = 0)
-(foreign_hire: 570713 changes made)
-
-. gen during_foreign = during*foreign_hire
-
-. 
-. * zero out all treatment dummies for founders. they are alwyas just control
-. foreach X of var before during after DD DE ED EE {
-  2.         replace `X' = 0 if manager_category == 1
-  3. }
-(16,511 real changes made)
-(192,013 real changes made)
-(0 real changes made)
-(46,794 real changes made)
-(1,170 real changes made)
-(683 real changes made)
-(1,546 real changes made)
-
-. 
-end of do-file
+. use "temp/firm_events.dta"
 
 . 
 . merge m:1 frame_id year using "temp/balance-small.dta", nogen keep(match)
@@ -152,39 +32,11 @@ end of do-file
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
-    matched                           791,677  
+    matched                            11,058  
     -----------------------------------------
 
 . 
 . compress
-  variable tenure_foreign was float now byte
-  variable tenure_domestic was float now byte
-  variable before_domestic was float now byte
-  variable during_domestic was float now byte
-  variable after_domestic was float now byte
-  variable tenure_expat was float now byte
-  variable before_expat was float now byte
-  variable during_expat was float now byte
-  variable after_expat was float now byte
-  variable tenure_DD was float now byte
-  variable before_DD was float now byte
-  variable during_DD was float now byte
-  variable after_DD was float now byte
-  variable tenure_DE was float now byte
-  variable before_DE was float now byte
-  variable during_DE was float now byte
-  variable after_DE was float now byte
-  variable tenure_ED was float now byte
-  variable before_ED was float now byte
-  variable during_ED was float now byte
-  variable after_ED was float now byte
-  variable tenure_EE was float now byte
-  variable before_EE was float now byte
-  variable during_EE was float now byte
-  variable after_EE was float now byte
-  variable fold_expat was float now byte
-  variable during_foreign was float now byte
-  variable foundyear was float now int
   variable exporter_5 was float now byte
   variable divest was float now byte
   variable relative_year was float now byte
@@ -192,13 +44,16 @@ end of do-file
   variable industry_year was float now int
   variable ind_year was float now byte
   variable manufacturing was float now byte
-  variable age was float now byte
+  variable age was float now int
   variable age_cat was float now byte
+  variable sales was double now long
   variable tanass was double now long
   variable jetok was double now long
   variable export was double now long
+  variable ranyag was double now long
+  variable immat was double now long
   variable final_netgep was double now long
-  (98,959,625 bytes saved)
+  (586,074 bytes saved)
 
 . save "temp/analysis_sample.dta", replace
 file temp/analysis_sample.dta saved

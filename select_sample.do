@@ -1,10 +1,11 @@
-*cd C:\Users\Almos\Documents\Research\Expat\Expat_git
-
 clear all
 set more off
 use "input/balance-small/balance-small.dta"
 * proxy firm founding date with first balance sheet filed
-egen foundyear = min(year), by(frame_id)
+tempvar foundyear
+egen `foundyear' = min(year), by(frame_id)
+replace foundyear = `foundyear' if missing(foundyear)
+drop `foundyear'
 
 * limit sample before large merge
 *Függő változók készítése
@@ -164,9 +165,3 @@ di dropped_finance
 save_all_to_json
 drop __*
 save "temp/balance-small.dta", replace
-
-
-*Link the data with firm events
-merge 1:1 frame_id_numeric year using "temp/firm_events.dta", keep(match)
-tsset frame_id	year
-save "temp/analysis_sample_firm.dta", replace

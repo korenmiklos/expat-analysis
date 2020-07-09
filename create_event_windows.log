@@ -1,7 +1,7 @@
 
   ___  ____  ____  ____  ____ (R)
  /__    /   ____/   /   ____/
-___/   /   /___/   /   /___/   15.1   Copyright 1985-2017 StataCorp LLC
+___/   /   /___/   /   /___/   16.1   Copyright 1985-2019 StataCorp LLC
   Statistics/Data Analysis            StataCorp
                                       4905 Lakeway Drive
      MP - Parallel Edition            College Station, Texas 77845 USA
@@ -10,10 +10,9 @@ ___/   /   /___/   /   /___/   15.1   Copyright 1985-2017 StataCorp LLC
                                       979-696-4601 (fax)
 
 Single-user 2-core Stata perpetual license:
-       Serial number:  501506203290
+       Serial number:  501606204617
          Licensed to:  Miklos Koren
                        CEU MicroData
-
 
 Notes:
       1.  Stata is running in batch mode.
@@ -33,9 +32,9 @@ Notes:
 . tempfile sample
 
 . save `sample', replace
-(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St41109.000001 no
+(note: file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St24433.000001 no
 > t found)
-file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St41109.000001 saved
+file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St24433.000001 saved
 
 . 
 . use "temp/firm_ceo_panel.dta", clear
@@ -43,12 +42,12 @@ file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St41109.000001 saved
 . capture drop _*
 
 . 
-. scalar T1 = 1988
+. scalar T1 = 1985
 
 . scalar T2 = 2018
 
 . expand T2-T1+1
-(2,897,640 observations created)
+(195,624 observations created)
 
 . bys frame_id manager_id job_spell: gen year = _n-1+T1
 
@@ -59,7 +58,7 @@ file /var/folders/w1/7d52g2y563517gpc7n0sv5_r0000gn/T//St41109.000001 saved
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
-    matched                         1,396,105  
+    matched                            98,897  
     -----------------------------------------
 
 . 
@@ -71,44 +70,44 @@ frame_id_numeric                                                    (unlabeled)
 
                   type:  numeric (long)
 
-                 range:  [10000049,90620052]          units:  1
-         unique values:  37,507                   missing .:  0/1,396,105
+                 range:  [10000850,54671371]          units:  1
+         unique values:  3,784                    missing .:  0/98,897
 
-                  mean:   1.3e+07
-              std. dev:   5.2e+06
+                  mean:   1.2e+07
+              std. dev:   4.7e+06
 
            percentiles:        10%       25%       50%       75%       90%
-                           1.0e+07   1.0e+07   1.1e+07   1.2e+07   1.5e+07
+                           1.0e+07   1.0e+07   1.0e+07   1.1e+07   1.4e+07
 
 . 
 . *expat before 1990
 . replace expat=0 if job_begin<1990
-(3,202 real changes made)
+(2,490 real changes made)
 
 . 
 . ***********************
 . * time invariant vars *
 . ***********************
 .         egen first_year_expat = min(cond(expat==1,job_begin,.)), by(frame_id)
-(979172 missing values generated)
+(85097 missing values generated)
 
 .         egen first_year_foreign_original = min(cond(foreign==1,year,.)), by(f
 > rame_id)
-(906090 missing values generated)
+(76563 missing values generated)
 
 .         
 .         * which of the two happened first?
 .         generate manager_after_owner = first_year_expat - first_year_foreign_
 > original
-(1,013,825 missing values generated)
+(86,421 missing values generated)
 
 .         * event time relative to that
 .         generate event_time = year - first_year_expat
-(979,172 missing values generated)
+(85,097 missing values generated)
 
 .         
 .         generate first_year_foreign = first_year_foreign_original
-(906,090 missing values generated)
+(76,563 missing values generated)
 
 .         
 .         * if foreign manager arrives up to 2 years before 1 year later than f
@@ -116,25 +115,25 @@ frame_id_numeric                                                    (unlabeled)
 > t
 .         replace first_year_foreign = first_year_expat if inlist(manager_after
 > _owner, -2, -1, 1)
-(64,708 real changes made)
+(1,762 real changes made)
 
 .         
 .         replace foreign = 1 if (manager_after_owner == -2) & inlist(event_tim
 > e, 0, 1)
-(541 real changes made)
+(12 real changes made)
 
 .         replace foreign = 1 if (manager_after_owner == -1) & inlist(event_tim
 > e, 0)
-(740 real changes made)
+(10 real changes made)
 
 .         replace foreign = 0 if (manager_after_owner == +1) & inlist(event_tim
 > e, -1)
-(1,760 real changes made)
+(56 real changes made)
 
 . 
 .         * drop firms where expat arrives earlier than 2 years before owner
 .         drop if manager_after_owner < -2
-(14,973 observations deleted)
+(0 observations deleted)
 
 .         
 .         drop *_year_*_original event_time manager_after_owner
@@ -149,7 +148,7 @@ frame_id_numeric                                                    (unlabeled)
 . * drop entire series of firms from sample *
 . *******************************************
 .         drop if ever_expat==1 & ever_foreign==0
-(34,900 observations deleted)
+(1,324 observations deleted)
 
 .         scalar dropped_do3_expat_firmyears = r(N_drop)
 
@@ -163,46 +162,30 @@ frame_id_numeric                                                    (unlabeled)
 
  total_CEOs |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          1 |     83,393        6.19        6.19
-          2 |    186,752       13.87       20.07
-          3 |    207,992       15.45       35.52
-          4 |    184,781       13.73       49.24
-          5 |    153,860       11.43       60.67
-          6 |    124,155        9.22       69.89
-          7 |     97,326        7.23       77.12
-          8 |     71,503        5.31       82.43
-          9 |     53,191        3.95       86.39
-         10 |     41,677        3.10       89.48
-         11 |     31,950        2.37       91.85
-         12 |     20,845        1.55       93.40
-         13 |     16,765        1.25       94.65
-         14 |     16,855        1.25       95.90
-         15 |      8,449        0.63       96.53
-         16 |      9,664        0.72       97.25
-         17 |      9,966        0.74       97.99
-         18 |      6,789        0.50       98.49
-         19 |      2,988        0.22       98.71
-         20 |      1,132        0.08       98.80
-         21 |      3,893        0.29       99.09
-         22 |        990        0.07       99.16
-         23 |      2,023        0.15       99.31
-         24 |        648        0.05       99.36
-         25 |      1,025        0.08       99.43
-         26 |        702        0.05       99.49
-         27 |        672        0.05       99.54
-         33 |        792        0.06       99.59
-         34 |        945        0.07       99.67
-         39 |        507        0.04       99.70
-         41 |      1,025        0.08       99.78
-         42 |      1,134        0.08       99.86
-         43 |        387        0.03       99.89
-         56 |      1,456        0.11      100.00
+          1 |     45,918       47.06       47.06
+          2 |     13,569       13.91       60.97
+          3 |     15,276       15.66       76.62
+          4 |      4,430        4.54       81.16
+          5 |      5,272        5.40       86.57
+          6 |      3,237        3.32       89.88
+          7 |      1,585        1.62       91.51
+          8 |      1,645        1.69       93.19
+          9 |      1,242        1.27       94.47
+         10 |      1,100        1.13       95.59
+         11 |        521        0.53       96.13
+         12 |        984        1.01       97.14
+         13 |        143        0.15       97.28
+         14 |        405        0.42       97.70
+         15 |        870        0.89       98.59
+         17 |        442        0.45       99.04
+         19 |        494        0.51       99.55
+         22 |        440        0.45      100.00
 ------------+-----------------------------------
-      Total |  1,346,232      100.00
+      Total |     97,573      100.00
 
 . 
 .         drop if total_CEOs>15
-(46,738 observations deleted)
+(1,376 observations deleted)
 
 .         scalar dropped_too_many_CEOs = r(N_drop)
 
@@ -217,72 +200,220 @@ frame_id_numeric                                                    (unlabeled)
 . * save firm-year dummy of whether there is an expat at the firm
 . preserve
 
-.         generate byte change = (job_begin==year)
+.         do "create_firm_events.do"
 
-.         keep if (year >= job_begin) & (year <= job_end)
-(809,396 observations deleted)
-
-.         generate N = 1
-
-.         collapse (sum) N (firstnm) foreign, by(frame_id year expat change)
+. keep if (year >= job_begin) & (year <= job_end)
+(80,978 observations deleted)
 
 . 
-.         reshape wide N, i(frame_id year expat) j(change)
-(note: j = 0 1)
+. * hired ceo since last observed year of firm
+. tempvar last_year
+
+. generate last_year = .
+(15,219 missing values generated)
+
+. forval t = 1985/2018 {
+  2.         egen `last_year' = max(cond(year < `t', year, .)), by(frame_id)
+  3.         replace last_year = `last_year' if year == `t'
+  4.         drop `last_year'
+  5. }
+(15219 missing values generated)
+(0 real changes made)
+(15219 missing values generated)
+(0 real changes made)
+(15219 missing values generated)
+(0 real changes made)
+(14924 missing values generated)
+(98 real changes made)
+(12239 missing values generated)
+(51 real changes made)
+(11824 missing values generated)
+(76 real changes made)
+(11078 missing values generated)
+(131 real changes made)
+(9635 missing values generated)
+(222 real changes made)
+(8102 missing values generated)
+(310 real changes made)
+(7079 missing values generated)
+(353 real changes made)
+(6244 missing values generated)
+(350 real changes made)
+(5902 missing values generated)
+(356 real changes made)
+(5253 missing values generated)
+(357 real changes made)
+(4740 missing values generated)
+(373 real changes made)
+(4224 missing values generated)
+(378 real changes made)
+(3723 missing values generated)
+(392 real changes made)
+(3281 missing values generated)
+(426 real changes made)
+(2889 missing values generated)
+(443 real changes made)
+(2525 missing values generated)
+(441 real changes made)
+(2341 missing values generated)
+(439 real changes made)
+(2154 missing values generated)
+(439 real changes made)
+(1929 missing values generated)
+(443 real changes made)
+(1682 missing values generated)
+(448 real changes made)
+(1524 missing values generated)
+(457 real changes made)
+(1354 missing values generated)
+(451 real changes made)
+(1206 missing values generated)
+(448 real changes made)
+(1147 missing values generated)
+(431 real changes made)
+(1063 missing values generated)
+(427 real changes made)
+(1027 missing values generated)
+(435 real changes made)
+(915 missing values generated)
+(430 real changes made)
+(821 missing values generated)
+(439 real changes made)
+(563 missing values generated)
+(490 real changes made)
+(283 missing values generated)
+(563 real changes made)
+(61 missing values generated)
+(655 real changes made)
+
+. egen first_year = min(year), by(frame_id)
+
+. bysort frame_id (year): generate byte change = cond(first_year == year, 1, (j
+> ob_begin <= year) & (job_begin > last_year))
+
+. tabulate change
+
+     change |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |     10,668       70.10       70.10
+          1 |      4,551       29.90      100.00
+------------+-----------------------------------
+      Total |     15,219      100.00
+
+. 
+. generate N = 1
+
+. collapse (sum) N (firstnm) foreign (max) change, by(frame_id year manager_cat
+> egory expat)
+
+. egen hires_new_ceo = max(change), by(frame_id year)
+
+. drop change
+
+. 
+. reshape wide N, i(frame_id year expat) j(manager_category)
+(note: j = 1 2 3)
 
 Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of obs.                   376545   ->  363907
-Number of variables                   6   ->       6
-j variable (2 values)            change   ->   (dropped)
+Number of obs.                    12477   ->   11591
+Number of variables                   7   ->       8
+j variable (3 values)  manager_category   ->   (dropped)
 xij variables:
-                                      N   ->   N0 N1
+                                      N   ->   N1 N2 N3
 -----------------------------------------------------------------------------
 
-.         reshape wide N0 N1, i(frame_id year) j(expat)
+. reshape wide N1 N2 N3, i(frame_id year) j(expat)
 (note: j = 0 1)
 
 Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of obs.                   363907   ->  349716
-Number of variables                   6   ->       7
+Number of obs.                    11591   ->   11146
+Number of variables                   8   ->      10
 j variable (2 values)             expat   ->   (dropped)
 xij variables:
-                                     N0   ->   N00 N01
                                      N1   ->   N10 N11
+                                     N2   ->   N20 N21
+                                     N3   ->   N30 N31
 -----------------------------------------------------------------------------
 
-.         mvencode N??, mv(0)
-         N00: 71848 missing values recoded
-         N10: 289401 missing values recoded
-         N01: 320111 missing values recoded
-         N11: 340959 missing values recoded
+. mvencode N??, mv(0)
+         N10: 7041 missing values recoded
+         N20: 10175 missing values recoded
+         N30: 5073 missing values recoded
+         N11: 10845 missing values recoded
+         N21: 11044 missing values recoded
+         N31: 10221 missing values recoded
 
-.         
-.         generate new_expat = (N11>0)
+. 
+. egen number_ceos = rsum(N??)
 
-.         generate new_local = (N10>0)
+. 
+. generate has_expat = (N11>0)|(N21>0)|(N31>0)
 
-.         generate max_expat = (N11>0)|(N01>0)
+. generate has_local = (N10>0)|(N20>0)|(N30>0)
 
-.         drop N??
+. generate has_founder = (N10>0)|(N11>0)
 
-.         
-.         label variable max_expat "Firm has expat CEO (dummy)"
+. generate has_insider = (N20>0)|(N21>0)
 
-.         label variable new_expat "Firm has new expat CEO (dummy)"
+. generate has_outsider = (N30>0)|(N31>0)
 
-.         label variable new_local "Firm has new local CEO (dummy)"
+. drop N??
 
-.         save "temp/firm_year_panel.dta", replace
-file temp/firm_year_panel.dta saved
+. 
+. * managers in first year not classified as new hires
+. bysort frame_id (year): replace hires_new_ceo = 0 if (_n==1)
+(2832 real changes made)
+
+. bysort frame_id (year): generate owner_spell = sum(foreign != foreign[_n-1])
+
+. bysort frame_id (year): generate manager_spell = sum(hires_new_ceo)
+
+. * so that index start from 1
+. replace manager_spell = 1 + manager_spell
+(11,146 real changes made)
+
+. 
+. egen start_as_domestic = max((owner_spell==1) & (foreign==0)), by(frame_id)
+
+. * only keep D, D-F, F-D, F, F-D-F owner spells
+. generate divest = cond(start_as_domestic == 1, owner_spell > 2, owner_spell >
+>  3)
+
+. drop if divest
+(88 observations deleted)
+
+. drop divest
+
+. 
+. compress
+  variable year was float now int
+  variable hires_new_ceo was float now byte
+  variable number_ceos was float now byte
+  variable has_expat was float now byte
+  variable has_local was float now byte
+  variable has_founder was float now byte
+  variable has_insider was float now byte
+  variable has_outsider was float now byte
+  variable owner_spell was float now byte
+  variable manager_spell was float now byte
+  variable start_as_domestic was float now byte
+  (353,856 bytes saved)
+
+. save "temp/firm_events.dta", replace
+file temp/firm_events.dta saved
+
+. 
+. 
+end of do-file
 
 . restore
 
 . 
 . * limit sample by event window
 . keep if tenure >= -5 & tenure <= 10
-(507,817 observations deleted)
+(44,300 observations deleted)
 
 . 
 . compress
@@ -292,7 +423,7 @@ file temp/firm_year_panel.dta saved
   variable ever_expat was float now byte
   variable ever_foreign was float now byte
   variable tenure was float now byte
-  (11,875,155 bytes saved)
+  (778,455 bytes saved)
 
 . save "temp/event_windows.dta", replace
 file temp/event_windows.dta saved
