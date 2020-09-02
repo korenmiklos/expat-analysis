@@ -1,6 +1,6 @@
 clear all
 set more off
-use "input/balance-small/balance-small.dta"
+use "input/merleg-expat/balance-small.dta"
 * proxy firm founding date with first balance sheet filed
 tempvar foundyear
 egen `foundyear' = min(year), by(frame_id)
