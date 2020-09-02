@@ -11,9 +11,8 @@ output/descriptives.log: temp/analysis_sample.dta descriptives.do
 	$(STATA) descriptives 
 temp/analysis_sample.dta: temp/balance-small.dta temp/firm_events.dta create_analysis_sample.do
 	$(STATA) create_analysis_sample
-temp/firm_events.dta: create_firm_events.do temp/event_windows.dta
-temp/event_windows.dta: temp/balance-small.dta temp/firm_ceo_panel.dta create_event_windows.do
-	$(STATA) create_event_windows
+temp/firm_events.dta: temp/balance-small.dta temp/firm_ceo_panel.dta create_firm_events.do
+	$(STATA) create_firm_events
 temp/firm_ceo_panel.dta: input/ceo-panel/ceo-panel.dta temp/balance-small.dta create_firm_panel.do
 	$(STATA) create_firm_panel
 temp/balance-small.dta: input/balance-small/balance-small.dta select_sample.do

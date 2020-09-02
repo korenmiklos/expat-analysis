@@ -50,13 +50,6 @@ replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_beg
 gen byte spell = 1
 bysort frame_id (job_begin manager_id): replace spell =  cond(job_begin > job_begin[_n-1], spell[_n-1]+1, spell[_n-1]) if _n>1
 
-egen max_expat = max(expat), by(frame_id spell)
-tempvar lag_expat
-gen `lag_expat' = .
-bysort frame_id (job_begin manager_id): replace `lag_expat' = max_expat[_n-1] if _n>1 & job_begin > job_begin[_n-1]
-egen lag_expat = mean(`lag_expat'), by(frame_id spell)
-assert lag_expat==0 | lag_expat==1 | (missing(lag_expat) & spell==1)
-
 compress
 save_all_to_json
 save "temp/firm_ceo_panel.dta", replace
