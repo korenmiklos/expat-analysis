@@ -67,12 +67,15 @@ forval t = 1985/2018 {
 }
 egen first_year = min(year), by(frame_id)
 bysort frame_id (year): generate byte change = cond(first_year == year, 1, (job_begin <= year) & (job_begin > last_year))
+generate byte fired = (job_end == year)
 tabulate change
+tabulate fired
 
 generate N = 1
-collapse (sum) N (firstnm) foreign (max) change, by(frame_id year manager_category expat)
+collapse (sum) N (firstnm) foreign (max) change fired, by(frame_id year manager_category expat)
 egen hires_new_ceo = max(change), by(frame_id year)
-drop change
+egen fires_ceo = max(fired), by(frame_id year)
+drop change fired
 
 reshape wide N, i(frame_id year expat) j(manager_category)
 reshape wide N1 N2 N3, i(frame_id year) j(expat)
@@ -89,8 +92,9 @@ drop N??
 
 * managers in first year not classified as new hires
 bysort frame_id (year): replace hires_new_ceo = 0 if (_n==1)
+bysort frame_id (year): replace fires_ceo = 0 if (_n==_N)
 bysort frame_id (year): generate owner_spell = sum(foreign != foreign[_n-1])
-bysort frame_id (year): generate manager_spell = sum(hires_new_ceo)
+bysort frame_id (year): generate manager_spell = sum(hires_new_ceo | fires_ceo)
 * so that index start from 1
 replace manager_spell = 1 + manager_spell
 
