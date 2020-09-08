@@ -67,7 +67,20 @@ forval t = 1985/2018 {
 }
 egen first_year = min(year), by(frame_id)
 bysort frame_id (year): generate byte change = cond(first_year == year, 1, (job_begin <= year) & (job_begin > last_year))
-generate byte fired = (job_end == year)
+
+tempvar next_year
+generate next_year = .
+forval t = 1985/2018 {
+	egen `next_year' = min(cond(year > `t', year, .)), by(frame_id)
+	replace next_year = `next_year' if year == `t'
+	drop `next_year'
+}
+
+*generate byte fired = (job_end == year)
+gen byte fired = ((job_end >= year) & (job_end < next_year))
+*bys frame_id (year): egen last_year_firm = max(year)
+*bys frame_id (year): generate byte fired = cond(job_end == year, 1, (last_year_firm == year) & (job_end > last_year_firm))
+*replace fired = 1 if ((last_year_firm == year) & (job_end > last_year_firm))
 tabulate change
 tabulate fired
 
