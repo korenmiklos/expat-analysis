@@ -7,13 +7,19 @@ egen `foundyear' = min(year), by(frame_id)
 replace foundyear = `foundyear' if missing(foundyear)
 drop `foundyear'
 
-* limit sample before large merge
-*Függő változók készítése
-gen lnL=ln(emp)
-gen lnM=ln(ranyag)
-replace lnM = ln(ranyag8091) if year <= 1991
-gen lnQ=ln(sales)
-gen lnQL=lnQ-lnL
+* deflate nominal values - FIXME: add ppi before 1992
+foreach x in sales export tanass jetok ranyag ranyag8091{
+	cap drop `x'_18
+	gen double `x'_18 = `x' / ppi18
+	replace `x'_18 = `x' if year < 1992 // FIXME: till ppi before 1992 is not filled up - just to not delete those rows because of missing ln dependent variables
+	}
+
+* creating dependent variables
+gen lnL = ln(emp)
+gen lnM = ln(ranyag_18)
+replace lnM = ln(ranyag8091_18) if year <= 1991
+gen lnQ = ln(sales_18)
+gen lnQL = lnQ-lnL
 gen lnMQ = lnM - lnQ
 gen byte exporter = export>0&export!=.
 *gen exporter_5 = (export/sales > .05 & export < .)
