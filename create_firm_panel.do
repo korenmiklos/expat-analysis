@@ -27,7 +27,7 @@ replace gap = 0 if missing(gap)
 tabulate gap
 
 * fill in gap if only 1-year long
-expand 1+(gap==1), generate(filled_in)
+expand 1 + (gap == 1), generate(filled_in) // FIXME OR QUESTION: maybe second year as well
 replace year = year - 1 if filled_in
 xtset company_manager_id year
 xtdescribe
