@@ -45,42 +45,28 @@ local sample ((avg_emp >= 20) & (industry_mode != 64 & industry_mode != 65 & ind
 drop if !`sample'
 scalar dropped_size_or_finance = r(N_drop)
 display dropped_size_or_finance
+
+* foreign fill 
+rename fo3 foreign
+tab year foreign, missing
+inspect foreign
+inspect jetok_18 if missing(foreign)
 recode foreign (.=0)
 
-
-*interpolate small holes
-replace foreign = 1 if l.foreign==1 & l2.foreign==1 & f.foreign==1 & f2.foreign==1
-replace foreign = 0 if l.foreign==0 & l2.foreign==0 & f.foreign==0 & f2.foreign==0
-bysort frame_id_numeric: egen minyear = min(year)
-bysort frame_id_numeric: egen maxyear = max(year)
-replace foreign = 1 if l.foreign==1 & f.foreign==1 & f2.foreign==1 & year==minyear+1
-replace foreign = 1 if l.foreign==1 & l2.foreign==1 & f.foreign==1 & year==minyear+1
-replace foreign = 0 if l.foreign==0 & f.foreign==0 & f2.foreign==0 & year==maxyear-1
-replace foreign = 0 if l.foreign==0 & l2.foreign==0 & f.foreign==0 & year==maxyear-1
-
-*lyukak miatt [n_1]
-*gen foreign_change=1 if l1.foreign==0&foreign==1
-*gen foreign_change_rev=1 if l1.foreign==1&foreign==0
-sort frame_id_numeric year
-gen foreign_change=1 if foreign[_n-1]==0&foreign==1&frame_id_numeric[_n-1]==frame_id_numeric
-gen foreign_change_rev=1 if foreign[_n-1]==1&foreign==0&frame_id_numeric[_n-1]==frame_id_numeric
-bys frame_id_numeric: egen foreign_change_total=total(foreign_change)
-bys frame_id_numeric: egen foreign_change_rev_total=total(foreign_change_rev)
-count
+* interpolate small holes
+tab foreign
 tempvar before
-gen `before' = r(N)
-drop if foreign_change_total>1|foreign_change_rev_total>1
-count
+bys foreign: egen `before' = count(1)
+sort frame_id_numeric year
+replace foreign = 1 if l.foreign == 1 & l2.foreign == 1 & f.foreign == 1 & f2.foreign == 1
+replace foreign = 0 if l.foreign == 0 & l2.foreign == 0 & f.foreign == 0 & f2.foreign == 0
+bys frame_id_numeric (year): egen minyear = min(year)
+bys frame_id_numeric (year): egen maxyear = max(year)
+replace foreign = 1 if l.foreign == 1 & f.foreign == 1 & f2.foreign == 1 & year == (minyear + 1)
+replace foreign = 1 if l.foreign == 1 & l2.foreign == 1 & f.foreign == 1 & year == (minyear + 1)
+replace foreign = 0 if l.foreign == 0 & f.foreign == 0 & f2.foreign == 0 & year == (maxyear - 1)
+replace foreign = 0 if l.foreign == 0 & l2.foreign == 0 & f.foreign == 0 & year == (maxyear - 1)
 tempvar after
-gen `after' = r(N)
-scalar dropped_too_many_foreign_change = `before'-`after'
-display dropped_too_many_foreign_change
-
-*divesztíció
-recode foreign_change_rev (.=0)
-bys frame_id_numeric (year): gen divest=sum(foreign_change_rev)
-replace divest=1 if divest>0
-drop foreign_change foreign_change_rev foreign_change_total foreign_change_rev_total
 
 *Greenfield - foreign húzás után, de a sampling előtt
 bys frame_id_numeric (year): gen relative_year=_n
