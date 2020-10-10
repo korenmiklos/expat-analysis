@@ -34,8 +34,6 @@ gen export_share = export_18 / sales
 gen exporter_5 = (export_share > .05 & export_share != .)
 replace exporter_5 = . if export_share == .
 
-ren fo3 foreign
-*foreign átalakítása 
 * limit sample before large merge - sampling based on firm-level variables, firm-year done later
 * average employment and financial firms deleted
 * break the tie when mode is not unique
