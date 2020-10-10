@@ -91,8 +91,11 @@ inspect tanass_18
 
 gen lnK = ln(tanass_18)
 gen lnKL = lnK - lnL
-drop if missing(lnK) & year>1991
 
+* firm-year deletions
+count if missing(lnK, lnQ, lnL, lnM, foreign) & year > 1991
+count if missing(lnK, lnQ, lnL, lnM, foreign)
+drop if missing(lnK, lnQ, lnL, lnM, foreign) // ASK: whether year condition needed
 
 * TFP (Cobb-Douglas)
 * FIXME: Replace CD with something fancy
