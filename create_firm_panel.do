@@ -45,6 +45,88 @@ keep frame_id_numeric manager_id job_spell year job_begin job_end expat founder 
 bys frame_id_numeric: egen first_cohort = min(job_begin)
 replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_begin == first_cohort)
 
+* NOTE: no collapse and expand --> there might be holes
+sort frame_id_numeric manager_id year
+count if frame_id_numeric == frame_id_numeric[_n-1] & manager_id == manager_id[_n-1] & year != (year[_n-1] + 1)
+
+* expat before 1990
+replace expat = 0 if job_begin < 1990
+
+***********************
+* time invariant vars and drop entire series of firms from sample *
+***********************
+	by frame_id_numeric: egen first_year_expat = min(cond(expat == 1, job_begin,.))
+	by frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.))
+	
+	* which of the two happened first?
+	generate manager_after_owner = first_year_expat - first_year_foreign
+	* event time relative to that
+	generate event_time = year - first_year_expat
+	
+	* if foreign manager arrives up to 2 years before 1 year later than foreign owner, use foreign manager as arrival date. this is easier to implement
+	replace foreign = 1 if (manager_after_owner == -2) & inlist(event_time, 0, 1)
+	replace foreign = 1 if (manager_after_owner == -1) & inlist(event_time, 0)
+	replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
+
+	* QUESTION: order of deletions (may be fine as all are firm level)
+	* drop firms where expat arrives earlier than 2 years before owner
+	drop if manager_after_owner < -2
+	
+	* ever expat and foreign created after foreign changes (drops were firm level before so should not mess with ever variables)
+	foreach X of var expat foreign {
+		by frame_id_numeric: egen ever_`X' = max(`X'==1)
+	}
+
+	* drop if there was an expat but was never foreign
+	drop if ever_expat == 1 & ever_foreign == 0
+	scalar dropped_do3_expat_firmyears = r(N_drop)
+	
+	* drop too many CEO-s - FIXME AND QUESTION: should be moved in the next file where spells are limited - but there cannot be created without manager level data
+	egen fp_tag = tag(frame_id_numeric manager_id) 
+	by frame_id_numeric: egen n_ceo_ever = sum(fp_tag)
+	drop if n_ceo > 15
+	scalar dropped_too_many_CEOs = r(N_drop)
+	drop fp_tag n_ceo_ever
+	
+* hired or fired ceo since last observed year of firm - * POSSIBLE FIXME: expat, owner, insider, outsider, founder - hire, fire combinations later
+tempvar previous_year
+generate previous_year = .
+forval t = 1985/2018 {
+	by frame_id_numeric: egen `previous_year' = max(cond(year < `t', year, .))
+	replace previous_year = `previous_year' if year == `t'
+	drop `previous_year'
+}
+
+by frame_id_numeric: egen first_year = min(year)
+bys frame_id_numeric (year): generate byte hire = cond(first_year == year, 1, (job_begin <= year) & (job_begin > previous_year))
+
+tempvar next_year
+generate next_year = .
+forval t = 1985/2018 {
+	by frame_id_numeric: egen `next_year' = min(cond(year > `t', year, .))
+	replace next_year = `next_year' if year == `t'
+	drop `next_year'
+}
+
+gen byte fire = ((job_end >= year) & (job_end < next_year))
+tabulate hire fire 
+
+* number of expats and locals
+bys frame_id_numeric year: egen n_expat = total(cond(expat, 1, 0)) // could be in collapse but local not
+bys frame_id_numeric year: egen n_local = total(cond(!expat, 1, 0))
+
+* create firm-year data
+collapse (sum) n_founder = founder n_insider = insider n_outsider = outsider (firstnm) n_expat n_local foreign ever_expat ever_foreign (count) n_ceo = expat (max) hire_ceo = hire fire_ceo = fire, by(frame_id_numeric year)
+
+* managers in first year not classified as new hires and in last year not classified as fired
+bys frame_id_numeric (year): replace hire_ceo = 0 if (_n==1)
+bys frame_id_numeric (year): replace fire_ceo = 0 if (_n==_N)
+bys frame_id_numeric (year): gen ceo_spell = sum(hire_ceo | fire_ceo) + 1 // so that index start from 1
+
+* create dummies from numbers
+foreach var in expat local founder insider outsider {
+	gen has_`var' = (n_`var' > 0)
+}
 
 compress
 save_all_to_json
