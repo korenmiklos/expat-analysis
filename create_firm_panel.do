@@ -4,10 +4,11 @@ clear all
 capture log close
 log using output/firm_panel, text replace
 
-use "temp/balance-small.dta"
-*Tempvars were created for some reason when I was closing the previous file
-*drop __* - deleted in select_sample
-collapse (min) firm_birth = year (max) firm_death = year, by(frame_id)
+* keep only sample from balance-small - NOTE: had to restructure as we have to keep foreign which is different in years - so no collapse this time
+use "temp/balance-small-clean.dta"
+by frame_id_numeric: egen firm_birth = min(year)
+by frame_id_numeric: egen firm_death = max(year)
+keep frame_id year firm_birth firm_death foreign
 tempfile sample
 save `sample', replace
 
