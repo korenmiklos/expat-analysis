@@ -11,7 +11,7 @@ collapse (min) firm_birth = year (max) firm_death = year, by(frame_id)
 tempfile sample
 save `sample', replace
 
-use "input/ceo-panel/ceo-panel.dta", clear
+use "input/ceo-panel/ceo-panel.dta", clear // QUESTION: what is owner
 rename person_id manager_id
 
 * only keep sample firms
@@ -52,5 +52,5 @@ bysort frame_id (job_begin manager_id): replace spell =  cond(job_begin > job_be
 
 compress
 save_all_to_json
-save "temp/firm_ceo_panel.dta", replace
+save "temp/firm_events.dta", replace
 log close
