@@ -36,8 +36,10 @@ xtdescribe
 gen change = ceo != L.ceo 
 bysort company_manager_id (year): gen job_spell = sum(change)
 
-
-collapse (min) job_begin = year (max) job_end = year (firstnm) expat manager_category firm_birth, by(frame_id manager_id job_spell)
+* create job begin and end for each manager spell
+bys frame_id_numeric manager_id job_spell: egen job_begin = min(year)
+bys frame_id_numeric manager_id job_spell: egen job_end = max(year)
+keep frame_id_numeric manager_id job_spell year job_begin job_end expat founder insider outsider firm_birth foreign
 
 * if first managers arrive in year 1, extrapolate to year 0
 egen first_cohort = min(job_begin), by(frame_id)
