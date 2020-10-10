@@ -20,21 +20,21 @@ merge m:1 frame_id_numeric year using `sample', keep(match) nogen
 count if first_year_of_firm == firm_birth // QUESTION: why not the same? - same for the last year
 
 * balance panel
-egen company_manager = group(frame_id manager_id)
-xtset company_manager year
-by company_manager: generate gap = year - year[_n-1] - 1
+egen company_manager_id = group(frame_id manager_id)
+xtset company_manager_id year
+by company_manager_id: generate gap = year - year[_n-1] - 1
 replace gap = 0 if missing(gap)
 tabulate gap
 
 * fill in gap if only 1-year long
 expand 1+(gap==1), generate(filled_in)
 replace year = year - 1 if filled_in
-xtset company_manager year
+xtset company_manager_id year
 xtdescribe
 
 * create contiguous spells
 gen change = ceo != L.ceo 
-bysort company_manager (year): gen job_spell = sum(change)
+bysort company_manager_id (year): gen job_spell = sum(change)
 
 * count number of CEOs
 preserve
