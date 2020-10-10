@@ -66,13 +66,6 @@ replace foreign = 0 if l.foreign == 0 & f.foreign == 0 & f2.foreign == 0 & year 
 replace foreign = 0 if l.foreign == 0 & l2.foreign == 0 & f.foreign == 0 & year == (maxyear - 1)
 tempvar after
 
-*Greenfield - foreign húzás után, de a sampling előtt
-bys frame_id_numeric (year): gen relative_year=_n
-gen foreign_infirst=1 if relative_year==1&foreign==1
-bys frame_id_numeric: egen byte greenfield=max(foreign_infirst)
-
-recode greenfield (.=0)
-
 * extrapolate capital stock
 xtset frame_id_numeric year
 
