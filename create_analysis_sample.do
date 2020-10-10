@@ -20,5 +20,10 @@ replace divest = 1 if divest > 0
 bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
 keep if start_as_domestic & owner_spell <= 2
 
+* check foreign end expat numbers
+egen firm_tag = tag(frame_id_numeric)
+count if ever_foreign & firm_tag
+count if ever_expat & firm_tag
+
 compress
 save "temp/analysis_sample.dta", replace
