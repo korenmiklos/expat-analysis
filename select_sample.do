@@ -34,23 +34,17 @@ gen export_share = export_18 / sales
 gen exporter_5 = (export_share > .05 & export_share != .)
 replace exporter_5 = . if export_share == .
 
-*Átlagos létszám változó
-bys frame_id: egen avg_emp = mean(emp)
-*Mintavétel cégszintű változók alapján, cégév a modellek előtt
-local sample (avg_emp>=20) //&!missing(lnL,lnQ,exporter)
-count
-tempvar before
-gen `before' = r(N)
-keep if `sample'
-count
-tempvar after
-gen `after' = r(N)
-scalar dropped_size_or_missing = `before'-`after'
-di dropped_size_or_missing
-*scalar dropped_size_or_missing = r(N_drop)
-
 ren fo3 foreign
 *foreign átalakítása 
+* limit sample before large merge - sampling based on firm-level variables, firm-year done later
+* average employment and financial firms deleted
+* break the tie when mode is not unique
+bys frame_id_numeric: egen avg_emp = mean(emp)
+bys frame_id_numeric: egen industry_mode = mode(teaor08_2d), minmode
+local sample ((avg_emp >= 20) & (industry_mode != 64 & industry_mode != 65 & industry_mode != 66))
+drop if !`sample'
+scalar dropped_size_or_finance = r(N_drop)
+display dropped_size_or_finance
 recode foreign (.=0)
 
 
@@ -161,22 +155,7 @@ gen age=year-foundyear
 clonevar age_cat = age
 recode age_cat 20/24=20 25/29=25 30/39=30 40/49=40 50/max=50
 tab age_cat
-
-
-
-*Pénzügyi szektorban működő vállalatok kiszűrése
-* break the tie when mode is not unique
-bys frame_id_numeric: egen industry_mode=mode(teaor08_2d), minmode
 count
-tempvar before
-gen `before' = r(N)
-drop if industry_mode==64|industry_mode==65|industry_mode==66
-count
-tempvar after
-gen `after' = r(N)
-scalar dropped_finance = `before'-`after'
-di dropped_finance
-*scalar dropped_finance = r(N_drop)
 
 save_all_to_json
 cap drop __*
