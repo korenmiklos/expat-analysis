@@ -36,11 +36,6 @@ xtdescribe
 gen change = ceo != L.ceo 
 bysort company_manager_id (year): gen job_spell = sum(change)
 
-* count number of CEOs
-preserve
-	collapse (count) N_ceos = expat, by(frame_id year)
-	save temp/N_ceos, replace
-restore
 
 collapse (min) job_begin = year (max) job_end = year (firstnm) expat manager_category firm_birth, by(frame_id manager_id job_spell)
 
