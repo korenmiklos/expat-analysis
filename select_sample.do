@@ -1,6 +1,14 @@
 clear all
 set more off
 use "input/merleg-expat/balance-small.dta"
+
+* keep only numeric part of frame_id
+keep if substr(frame_id, 1, 2) == "ft"
+generate long frame_id_numeric = real(substr(frame_id, 3, 8))
+codebook frame_id*
+drop frame_id
+xtset frame_id_numeric year
+
 * proxy firm founding date with first balance sheet filed
 tempvar foundyear
 egen `foundyear' = min(year), by(frame_id)
