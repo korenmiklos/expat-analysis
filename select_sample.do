@@ -175,5 +175,5 @@ di dropped_finance
 *scalar dropped_finance = r(N_drop)
 
 save_all_to_json
-drop __*
-save "temp/balance-small.dta", replace
+cap drop __*
+save "temp/balance-small-clean.dta", replace
