@@ -45,8 +45,6 @@ keep frame_id_numeric manager_id job_spell year job_begin job_end expat founder 
 bys frame_id_numeric: egen first_cohort = min(job_begin)
 replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_begin == first_cohort)
 
-gen byte spell = 1
-bysort frame_id (job_begin manager_id): replace spell =  cond(job_begin > job_begin[_n-1], spell[_n-1]+1, spell[_n-1]) if _n>1
 
 compress
 save_all_to_json
