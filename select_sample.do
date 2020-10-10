@@ -11,7 +11,7 @@ xtset frame_id_numeric year
 
 * proxy firm founding date with first balance sheet filed
 tempvar foundyear
-egen `foundyear' = min(year), by(frame_id)
+bys frame_id_numeric: egen `foundyear' = min(year)
 replace foundyear = `foundyear' if missing(foundyear)
 drop `foundyear'
 
