@@ -21,9 +21,8 @@ replace lnM = ln(ranyag8091_18) if year <= 1991
 gen lnQ = ln(sales_18)
 gen lnQL = lnQ-lnL
 gen lnMQ = lnM - lnQ
-gen byte exporter = export>0&export!=.
-*gen exporter_5 = (export/sales > .05 & export < .)
-gen export_share = export/sales
+gen byte exporter = export_18 > 0 & export_18 != .
+gen export_share = export_18 / sales
 gen exporter_5 = (export_share > .05 & export_share != .)
 replace exporter_5 = . if export_share == .
 
