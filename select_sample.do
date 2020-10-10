@@ -67,28 +67,26 @@ replace foreign = 0 if l.foreign == 0 & l2.foreign == 0 & f.foreign == 0 & year 
 tempvar after
 
 * extrapolate capital stock
-xtset frame_id_numeric year
-
-inspect tanass
+inspect tanass_18
 tempvar gap 
-generate `gap' = missing(tanass) | (tanass <= 0)
+generate `gap' = missing(tanass_18) | (tanass_18 <= 0)
 bysort frame_id_numeric (year): generate spell = sum(`gap' != `gap'[_n-1])
 
 egen gap_length = count(1), by(frame_id_numeric spell)
 egen max_spell = max(spell), by(frame_id_numeric)
 * if gap_length <= 2, interpolate tanass with geometric average
-bysort frame_id_numeric (year): replace tanass = sqrt(tanass[_n-1] * tanass[_n+1]) if gap_length==1 & `gap'==1
-bysort frame_id_numeric (year): replace tanass = tanass[_n-1]^0.67 * tanass[_n+2]^0.33 if gap_length==2 & `gap'==1 & `gap'[_n-1]==0
-bysort frame_id_numeric (year): replace tanass = tanass[_n-2]^0.33 * tanass[_n+1]^0.67 if gap_length==2 & `gap'==1 & `gap'[_n+1]==0
+bysort frame_id_numeric (year): replace tanass_18 = sqrt(tanass_18[_n-1] * tanass_18[_n+1]) if gap_length==1 & `gap'==1
+bysort frame_id_numeric (year): replace tanass_18 = tanass_18[_n-1]^0.67 * tanass_18[_n+2]^0.33 if gap_length==2 & `gap'==1 & `gap'[_n-1]==0
+bysort frame_id_numeric (year): replace tanass_18 = tanass_18[_n-2]^0.33 * tanass_18[_n+1]^0.67 if gap_length==2 & `gap'==1 & `gap'[_n+1]==0
 * at either end, extrapolate for 1 year
-bysort frame_id_numeric (year): replace tanass = tanass[_n+1] if spell==1 & `gap'==1 & `gap'[_n+1]==0
-bysort frame_id_numeric (year): replace tanass = tanass[_n-1] if spell==max_spell & `gap'==1 & `gap'[_n-1]==0
+bysort frame_id_numeric (year): replace tanass_18 = tanass_18[_n+1] if spell==1 & `gap'==1 & `gap'[_n+1]==0
+bysort frame_id_numeric (year): replace tanass_18 = tanass_18[_n-1] if spell==max_spell & `gap'==1 & `gap'[_n-1]==0
 
 drop spell gap_length max_spell
-replace tanass = round(tanass)
-inspect tanass
+replace tanass_18 = round(tanass_18)
+inspect tanass_18
 
-gen lnK = ln(tanass)
+gen lnK = ln(tanass_18)
 gen lnKL = lnK - lnL
 drop if missing(lnK) & year>1991
 
