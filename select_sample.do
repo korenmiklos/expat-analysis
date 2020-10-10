@@ -65,6 +65,9 @@ replace foreign = 1 if l.foreign == 1 & l2.foreign == 1 & f.foreign == 1 & year 
 replace foreign = 0 if l.foreign == 0 & f.foreign == 0 & f2.foreign == 0 & year == (maxyear - 1)
 replace foreign = 0 if l.foreign == 0 & l2.foreign == 0 & f.foreign == 0 & year == (maxyear - 1)
 tempvar after
+bys foreign: egen `after' = count(1)
+scalar foreign_interpolate = `before'-`after'
+display foreign_interpolate
 
 * extrapolate capital stock
 inspect tanass_18
