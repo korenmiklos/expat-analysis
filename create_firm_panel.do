@@ -16,8 +16,8 @@ use "input/ceo-panel/ceo-panel.dta", clear // QUESTION: what is owner
 rename person_id manager_id
 
 * only keep sample firms
-drop if year>firm_death
 merge m:1 frame_id_numeric year using `sample', keep(match) nogen
+count if first_year_of_firm == firm_birth // QUESTION: why not the same? - same for the last year
 
 * balance panel
 egen company_manager = group(frame_id manager_id)
