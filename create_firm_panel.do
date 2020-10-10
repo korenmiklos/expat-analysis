@@ -41,8 +41,8 @@ bys frame_id_numeric manager_id job_spell: egen job_begin = min(year)
 bys frame_id_numeric manager_id job_spell: egen job_end = max(year)
 keep frame_id_numeric manager_id job_spell year job_begin job_end expat founder insider outsider firm_birth foreign
 
-* if first managers arrive in year 1, extrapolate to year 0
-egen first_cohort = min(job_begin), by(frame_id)
+* if first managers arrive in year 1, extrapolate to year 0 - DROP SPELL
+bys frame_id_numeric: egen first_cohort = min(job_begin)
 replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_begin == first_cohort)
 
 gen byte spell = 1
