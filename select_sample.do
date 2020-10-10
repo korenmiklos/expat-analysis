@@ -117,24 +117,9 @@ foreach l of local levels {
 
 drop tfp_cd_*
 
-
-*Industry_year dummy
-egen industry_year = group(teaor08_2d year)
-
-*Industry dummy
-gen byte ind = inlist(teaor08_1d,"B","C","D","E")
-egen ind_year=group(ind year)
-
-*Manufacaturing dummy
-gen manufacturing=0
-replace manufacturing=1 if teaor08_1d=="C"
-
-*Életkor változó
-gen age=year-foundyear
-
-clonevar age_cat = age
-recode age_cat 20/24=20 25/29=25 30/39=30 40/49=40 50/max=50
-tab age_cat
+* industry dummy and age
+gen byte industrial_firm = inlist(teaor08_1d,"B","C","D","E")
+gen age = year - foundyear
 count
 
 save_all_to_json
