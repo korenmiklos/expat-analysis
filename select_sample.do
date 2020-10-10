@@ -45,15 +45,6 @@ ren fo3 foreign
 *foreign átalakítása 
 recode foreign (.=0)
 
-* keep only numeric part of frame_id
-keep if substr(frame_id, 1, 2) == "ft"
-generate long frame_id_numeric = real(substr(frame_id, 3, 8))
-codebook frame_id*
-
-drop frame_id
-
-*foreign-at többször váltók kidobása
-xtset frame_id_numeric year
 
 *interpolate small holes
 replace foreign = 1 if l.foreign==1 & l2.foreign==1 & f.foreign==1 & f2.foreign==1
