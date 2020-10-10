@@ -1,7 +1,8 @@
 clear all
-use "temp/firm_events.dta"
+use "temp/balance-small-clean.dta"
+drop foreign
 
-merge m:1 frame_id year using "temp/balance-small.dta", nogen keep(match)
+merge 1:1 frame_id year using "temp/firm_events.dta", nogen keep(match)
 
 compress
 save "temp/analysis_sample.dta", replace
