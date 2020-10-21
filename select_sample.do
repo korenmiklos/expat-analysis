@@ -9,11 +9,23 @@ codebook frame_id*
 drop frame_id
 xtset frame_id_numeric year
 
+* limit sample before large merge - sampling based on firm-level variables, firm-year done later
+* average employment and financial firms deleted
+* break the tie when mode is not unique
+bys frame_id_numeric: egen avg_emp = mean(emp)
+bys frame_id_numeric: egen industry_mode = mode(teaor08_2d), minmode
+local sample ((avg_emp >= 20) & (industry_mode != 64 & industry_mode != 65 & industry_mode != 66))
+drop if !`sample'
+scalar dropped_size_or_finance = r(N_drop)
+display dropped_size_or_finance
+
 * proxy firm founding date with first balance sheet filed
 tempvar foundyear
 bys frame_id_numeric: egen `foundyear' = min(year)
 replace foundyear = `foundyear' if missing(foundyear)
 drop `foundyear'
+
+
 
 * deflate nominal values - FIXME: add ppi before 1992
 foreach x in sales export tanass jetok ranyag ranyag8091{
@@ -34,15 +46,7 @@ gen export_share = export_18 / sales
 gen exporter_5 = (export_share > .05 & export_share != .)
 replace exporter_5 = . if export_share == .
 
-* limit sample before large merge - sampling based on firm-level variables, firm-year done later
-* average employment and financial firms deleted
-* break the tie when mode is not unique
-bys frame_id_numeric: egen avg_emp = mean(emp)
-bys frame_id_numeric: egen industry_mode = mode(teaor08_2d), minmode
-local sample ((avg_emp >= 20) & (industry_mode != 64 & industry_mode != 65 & industry_mode != 66))
-drop if !`sample'
-scalar dropped_size_or_finance = r(N_drop)
-display dropped_size_or_finance
+
 
 * foreign fill 
 rename fo3 foreign
