@@ -111,16 +111,21 @@ forval t = 1985/2018 {
 gen byte fire = ((job_end >= year) & (job_end < next_year))
 tabulate hire fire 
 
+gen hire_expat = hire * expat
+gen fire_expat = fire * expat
+
 * number of expats and locals
 bys frame_id_numeric year: egen n_expat = total(cond(expat, 1, 0)) // could be in collapse but local not
 bys frame_id_numeric year: egen n_local = total(cond(!expat, 1, 0))
 
 * create firm-year data
-collapse (sum) n_founder = founder n_insider = insider n_outsider = outsider (firstnm) n_expat n_local foreign ever_expat ever_foreign (count) n_ceo = expat (max) hire_ceo = hire fire_ceo = fire, by(frame_id_numeric year)
+collapse (sum) n_founder = founder n_insider = insider n_outsider = outsider (firstnm) n_expat n_local foreign ever_expat ever_foreign (count) n_ceo = expat (max) hire_ceo = hire fire_ceo = fire hire_expat fire_expat, by(frame_id_numeric year)
 
 * managers in first year not classified as new hires and in last year not classified as fired
 bys frame_id_numeric (year): replace hire_ceo = 0 if (_n==1)
 bys frame_id_numeric (year): replace fire_ceo = 0 if (_n==_N)
+bys frame_id_numeric (year): replace hire_expat = 0 if (_n==1)
+bys frame_id_numeric (year): replace fire_expat = 0 if (_n==_N)
 bys frame_id_numeric (year): gen ceo_spell = sum(hire_ceo | fire_ceo) + 1 // so that index start from 1
 
 * create dummies from numbers
