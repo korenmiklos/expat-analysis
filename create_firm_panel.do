@@ -39,7 +39,7 @@ bysort company_manager_id (year): gen job_spell = sum(change)
 * create job begin and end for each manager spell
 bys frame_id_numeric manager_id job_spell: egen job_begin = min(year)
 bys frame_id_numeric manager_id job_spell: egen job_end = max(year)
-keep frame_id_numeric manager_id job_spell year job_begin job_end expat founder insider outsider firm_birth foreign
+keep frame_id_numeric manager_id job_spell year job_begin job_end expat founder insider outsider firm_birth foreign country_code
 
 * if first managers arrive in year 1, extrapolate to year 0 - DROP SPELL
 bys frame_id_numeric: egen first_cohort = min(job_begin)
@@ -118,8 +118,19 @@ gen fire_expat = fire * expat
 bys frame_id_numeric year: egen n_expat = total(cond(expat, 1, 0)) // could be in collapse but local not
 bys frame_id_numeric year: egen n_local = total(cond(!expat, 1, 0))
 
+* checking whether the same manager can come from different countries
+sort frame_id_numeric manager_id year
+count if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == manager_id[_n-1]) & (country_code != country_code[_n-1]) & country_code != "" & country_code[_n-1] != ""
+
+* checking whether there are expats from multiple countries in a given year
+sort frame_id_numeric year manager_id
+count if (frame_id_numeric == frame_id_numeric[_n-1]) & (year == year[_n-1]) & country_code != "" & country_code[_n-1] != "" & n_expat > 1
+count if (frame_id_numeric == frame_id_numeric[_n-1]) & (year == year[_n-1]) & (country_code != country_code[_n-1]) & country_code != "" & country_code[_n-1] != "" & n_expat > 1
+count if (frame_id_numeric == frame_id_numeric[_n-1]) & (year == year[_n-1]) & (country_code == country_code[_n-1]) & country_code != "" & country_code[_n-1] != "" & n_expat > 1
+
 * create firm-year data
-collapse (sum) n_founder = founder n_insider = insider n_outsider = outsider (firstnm) n_expat n_local foreign ever_expat ever_foreign (count) n_ceo = expat (max) hire_ceo = hire fire_ceo = fire hire_expat fire_expat, by(frame_id_numeric year)
+* FIXME: country_code may be different within a firm-year
+collapse (sum) n_founder = founder n_insider = insider n_outsider = outsider (firstnm) n_expat n_local foreign ever_expat ever_foreign country_code (count) n_ceo = expat (max) hire_ceo = hire fire_ceo = fire hire_expat fire_expat, by(frame_id_numeric year)
 
 * managers in first year not classified as new hires and in last year not classified as fired
 bys frame_id_numeric (year): replace hire_ceo = 0 if (_n==1)
