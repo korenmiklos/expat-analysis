@@ -1,3 +1,5 @@
+*cd C:\Users\Almos\Documents\Research\Expat\Expat_git\expat-analysis
+
 use "temp\analysis_sample.dta", clear
 
 ******Event-time variable for foreign**************
