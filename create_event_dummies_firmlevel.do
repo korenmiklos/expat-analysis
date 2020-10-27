@@ -1,6 +1,22 @@
-use "temp/analysis_sample.dta", clear
+use "temp\analysis_sample.dta", clear
 
-*Foreign-hired ceo
+******Event-time variable for foreign**************
+sort frame_id_numeric year
+gen x = year if foreign==1 & foreign[_n-1]==0 
+bys frame_id_numeric: egen first_year_foreign=max(x)
+drop x
+gen time_foreign = year-first_year_foreign
+
+
+**Recompute spell using only hires
+rename ceo_spell ceo_spell_old
+bys frame_id_numeric: egen first_year_firm = min(year)
+gen x=hire_ceo
+replace x = 1 if first_year_firm==year 
+bys frame_id_numeric: gen ceo_spell=sum(x)
+drop x
+
+******Foreign-hired ceo***********
 bys frame_id_numeric: egen x = max(ceo_spell) if !foreign
 bys frame_id_numeric: egen last_ceo_spell_do = max(x)
 gen foreign_hire = (ceo_spell > last_ceo_spell_do)
@@ -8,6 +24,22 @@ replace foreign_hire = . if last_ceo_spell_do == .
 drop x*
 
 bys frame_id_numeric: egen ever_foreign_hire = max(foreign_hire)
+
+
+*******First, second etc ceos************
+
+gen ceo_spell_foreign = ceo_spell - last_ceo_spell_do
+replace ceo_spell_foreign = 0 if ceo_spell_foreign<0
+sum ceo_spell_foreign
+
+forval i=1/11 {
+	gen foreign_hire_`i' = (ceo_spell_foreign == `i')
+	gen has_expat_`i' = foreign_hire_`i'*has_expat
+}
+
+******Sequence of CEOs************
+
+	
 
 
 *Expat CEO alone
