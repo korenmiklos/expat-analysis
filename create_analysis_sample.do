@@ -25,5 +25,7 @@ egen firm_tag = tag(frame_id_numeric)
 count if ever_foreign & firm_tag
 count if ever_expat & firm_tag
 
+do "create_event_dummies_firmlevel.do"
+
 compress
 save "temp/analysis_sample.dta", replace

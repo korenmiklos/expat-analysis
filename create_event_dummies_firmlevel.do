@@ -1,6 +1,6 @@
 *cd C:\Users\Almos\Documents\Research\Expat\Expat_git\expat-analysis
 
-use "temp\analysis_sample.dta", clear
+*use "temp\analysis_sample.dta", clear
 tsset frame_id_numeric year
 
 *******Check number of ceos******************
@@ -80,23 +80,3 @@ gen x_EE = (foreign_hire_expat_2==1 & l.foreign_hire_expat_1==1)
 bys frame_id_numeric foreign_hire_expat_2: egen foreign_hire_EE_2 = max(x_EE)
 
 drop x* 
- 
-
-
-****Expat CEO alone************
-gen expat_alone = (has_expat == 1 & has_local == 0)
-
-
-
-
-*Regressions to try out the dummies (can be deleted later)
-
-reghdfe lnQL foreign foreign_hire has_expat, a(frame_id_numeric year##teaor08_2d) cluster(frame_id_numeric)
-
-reghdfe lnQL foreign foreign_hire_local_* foreign_hire_expat_*, a(frame_id_numeric year##teaor08_2d) cluster(frame_id_numeric)
-
-reghdfe lnQL foreign foreign_hire_local_1 foreign_hire_expat_1 foreign_hire_local_2 foreign_hire_expat_2 foreign_hire_local_3 foreign_hire_expat_3 foreign_hire_local_4plus foreign_hire_expat_4plus, a(frame_id_numeric year##teaor08_2d) cluster(frame_id_numeric)
-
-reghdfe lnQL foreign foreign_hire_local_1 foreign_hire_expat_1 foreign_hire_local_2 foreign_hire_expat_2 foreign_hire_local_3plus foreign_hire_expat_3plus, a(frame_id_numeric year##teaor08_2d) cluster(frame_id_numeric)
-
-reghdfe lnQL foreign foreign_hire_local_1 foreign_hire_expat_1 foreign_hire_LL_2 foreign_hire_EL_2 foreign_hire_LE_2 foreign_hire_EE_2 foreign_hire_local_3plus foreign_hire_expat_3plus, a(frame_id_numeric year##teaor08_2d) cluster(frame_id_numeric)
