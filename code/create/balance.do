@@ -33,7 +33,7 @@ drop `foundyear'
 
 
 * deflate nominal values - FIXME: add ppi before 1992
-foreach x in sales export tanass jetok ranyag ranyag8091{
+foreach x in sales export tanass jetok ranyag ranyag8091 immat {
 	cap drop `x'_18
 	gen double `x'_18 = `x' / ppi18
 	replace `x'_18 = `x' if year < 1992 // FIXME: till ppi before 1992 is not filled up - just to not delete those rows because of missing ln dependent variables
