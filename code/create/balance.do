@@ -100,6 +100,9 @@ inspect tanass_18
 
 gen lnK = ln(tanass_18)
 gen lnKL = lnK - lnL
+generate RperK = immat / (immat + tanass)
+replace RperK = 0 if RperK < 0 | missing(immat)
+label variable RperK "Share of immaterial assets [0,1]"
 
 * firm-year deletions
 count if missing(lnK, lnQ, lnL, lnM, foreign) & year > 1991

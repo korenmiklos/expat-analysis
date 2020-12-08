@@ -7,7 +7,7 @@ use "`here'/temp/analysis_sample.dta", clear
 egen industry_year = group(teaor08_1d year)
 egen last_before_acquisition = max(cond(time_foreign<0, time_foreign, .)), by(originalid)
 
-local explanatory lnL lnQL lnMQ exporter TFP_cd
+local explanatory lnL lnQL lnMQ exporter TFP_cd RperK
 local dummies industry_year
 
 * selection into foreign acquisition
