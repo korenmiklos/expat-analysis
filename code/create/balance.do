@@ -1,6 +1,11 @@
 clear all
 set more off
-use "input/merleg-expat/balance-small.dta"
+
+* find root folder
+here
+local here = r(here)
+
+use "`here'/input/merleg-expat/balance-small.dta"
 
 * keep only numeric part of frame_id
 keep if substr(frame_id, 1, 2) == "ft"
@@ -128,4 +133,4 @@ count
 
 save_all_to_json
 cap drop __*
-save "temp/balance-small-clean.dta", replace
+save "`here'/temp/balance-small-clean.dta", replace

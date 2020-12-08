@@ -2,17 +2,22 @@
 set more off
 clear all
 capture log close
-log using output/firm_panel, text replace
+
+* find root folder
+here
+local here = r(here)
+
+log using "`here'/output/firm_panel", text replace
 
 * keep only sample from balance-small - NOTE: had to restructure as we have to keep foreign which is different in years - so no collapse this time
-use "temp/balance-small-clean.dta"
+use "`here'/temp/balance-small-clean.dta"
 by frame_id_numeric: egen firm_birth = min(year)
 by frame_id_numeric: egen firm_death = max(year)
 keep frame_id year firm_birth firm_death foreign
 tempfile sample
 save `sample', replace
 
-use "input/ceo-panel/ceo-panel.dta", clear // QUESTION: what is owner
+use "`here'/input/ceo-panel/ceo-panel.dta", clear // QUESTION: what is owner
 rename person_id manager_id
 
 * only keep sample firms
@@ -188,5 +193,5 @@ count
 
 compress
 save_all_to_json
-save "temp/firm_events.dta", replace
+save "`here'/temp/firm_events.dta", replace
 log close

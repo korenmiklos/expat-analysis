@@ -1,6 +1,4 @@
-*cd C:\Users\Almos\Documents\Research\Expat\Expat_git\expat-analysis
 
-*use "temp\analysis_sample.dta", clear
 tsset frame_id_numeric year
 
 *******Check number of ceos******************
@@ -58,12 +56,6 @@ gen foreign_hire_expat_3plus = (ceo_spell_foreign > 2 & x_expat==1)
 
 drop x
 
-*Check the dummies
-
-*gen x = foreign - foreign_hire_local_1 - foreign_hire_local_2 - foreign_hire_local_3 - foreign_hire_local_4plus - foreign_hire_expat_1 - foreign_hire_expat_2 - foreign_hire_expat_3 - foreign_hire_expat_4plus
-
-*sum x if foreign_hire
-*drop x*
 
 **********Sequence of hires*********
 tsset frame_id_numeric year

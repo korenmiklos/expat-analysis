@@ -1,8 +1,12 @@
 clear all
-use "temp/balance-small-clean.dta"
+* find root folder
+here
+local here = r(here)
+
+use "`here'/temp/balance-small-clean.dta"
 drop foreign
 
-merge 1:1 frame_id year using "temp/firm_events.dta", nogen keep(match)
+merge 1:1 frame_id year using "`here'/temp/firm_events.dta", nogen keep(match)
 
 * many foreign changes deleted
 bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
@@ -25,7 +29,7 @@ egen firm_tag = tag(frame_id_numeric)
 count if ever_foreign & firm_tag
 count if ever_expat & firm_tag
 
-do "create_event_dummies_firmlevel.do"
+do "`here'/code/create/event_dummies_firmlevel.do"
 
 compress
-save "temp/analysis_sample.dta", replace
+save "`here'/temp/analysis_sample.dta", replace

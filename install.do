@@ -9,3 +9,7 @@ net install ftools, from("https://raw.githubusercontent.com/sergiocorreia/ftools
 
 *install estout
 capture ssc install estout
+
+* install here
+capture ado uninstall here
+net install here, from("https://raw.githubusercontent.com/korenmiklos/here/master/")
