@@ -1,3 +1,30 @@
+# 2020-12-08
+## Literatures to connect to
+1. Property rights
+  - More extreme form of control. Control will be at party who has more to lose from holdup.
+    - market -> relational -> vertical -> manager control
+  - This is mostly about selection. Who will get acquired? Does not typically discuss impact. 
+  - Needs data on parent company.
+
+2. Diff-in-diff effects of foreign ownership
+  - Identify the mechanism.
+
+Read:
+- Gibbons, Robert. 2005. “Four Formal(izable) Theories of the Firm?” Journal of Economic Behavior & Organization 58 (2): 200–245.
+- Aghion, Philippe, and Richard Holden. 2011. “Incomplete Contracts and the Theory of the Firm: What Have We Learned over the Past 25 Years?” The Journal of Economic Perspectives: A Journal of the American Economic Association 25 (2): 181–97.
+
+(Property rights explains why not one huge firm.)
+
+## Data to check
+- Easy to steal ("lack of investment in owner-specific")
+- Owner country code
+
+## Regressions
+1. Diff in diff
+2. Selection into acquisition
+3. Selection into new manager
+4. Selection into expat
+
 # 2020-04-17
 ## Updating input data to new manager-db
 Fixed input dependencies on `ceo-panel` and `balance-small`.
