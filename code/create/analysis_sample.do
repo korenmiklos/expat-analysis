@@ -31,5 +31,7 @@ count if ever_expat & firm_tag
 
 do "`here'/code/create/event_dummies_firmlevel.do"
 
+merge 1:1 originalid year using "input/fo3-owner-names/country_codes.dta", keep(match master) nogen
+
 compress
 save "`here'/temp/analysis_sample.dta", replace
