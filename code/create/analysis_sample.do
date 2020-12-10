@@ -39,5 +39,7 @@ egen industry_year = group(teaor08_1d year)
 egen last_before_acquisition = max(cond(time_foreign<0, time_foreign, .)), by(originalid)
 egen ever_same_country = max(country_same), by(originalid)
 
+do "`here'/code/create/countries.do"
+
 compress
 save "`here'/temp/analysis_sample.dta", replace

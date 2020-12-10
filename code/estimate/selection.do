@@ -3,7 +3,7 @@ local here = r(here)
 
 use "`here'/temp/analysis_sample.dta", clear
 
-local explanatory lnL exporter TFP_cd RperK
+local explanatory lnL exporter TFP_cd RperK ??
 local dummies teaor08_2d industry_year
 
 * selection into foreign acquisition
