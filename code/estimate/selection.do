@@ -3,13 +3,8 @@ local here = r(here)
 
 use "`here'/temp/analysis_sample.dta", clear
 
-* FIXME: define this in analysis_sample
-egen industry_year = group(teaor08_1d year)
-egen last_before_acquisition = max(cond(time_foreign<0, time_foreign, .)), by(originalid)
-egen ever_same_country = max(country_same), by(originalid)
-
 local explanatory lnL exporter TFP_cd RperK
-local dummies industry_year
+local dummies teaor08_2d industry_year
 
 * selection into foreign acquisition
 reghdfe ever_foreign `explanatory' if !foreign & owner_spell == 1, a(`dummies') cluster(originalid)
