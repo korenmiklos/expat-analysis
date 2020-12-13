@@ -38,6 +38,8 @@ replace country_same = 0 if (has_expat == 0) | (foreign == 0)
 egen industry_year = group(teaor08_1d year)
 egen last_before_acquisition = max(cond(time_foreign<0, time_foreign, .)), by(originalid)
 egen ever_same_country = max(country_same), by(originalid)
+* missing export means 0 export
+mvencode export exporter exporter_5, mv(0) override
 
 do "`here'/code/create/countries.do"
 
