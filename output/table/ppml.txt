@@ -1,0 +1,15 @@
+	(1)	(2)	(3)
+VARIABLES	sales	domestic_sales	export
+			
+foreign	0.0469	-0.00268	0.217**
+	(0.0755)	(0.0699)	(0.101)
+foreign_hire	0.0140	-0.0466	0.176*
+	(0.0702)	(0.0729)	(0.0944)
+has_expat	0.111**	0.133**	0.0595
+	(0.0495)	(0.0606)	(0.0574)
+Constant	15.66***	15.40***	15.55***
+	(0.0109)	(0.00812)	(0.0430)
+			
+Observations	262,417	262,400	153,289
+Robust standard errors in parentheses			
+*** p<0.01, ** p<0.05, * p<0.1			
