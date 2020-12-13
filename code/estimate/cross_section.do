@@ -6,7 +6,7 @@ use "`here'/temp/analysis_sample.dta", clear
 
 local LHS lnQ lnL lnQL lnKL TFP_cd exporter RperK
 local dummies teaor08_2d##year
-local treatments foreign foreign_hire has_expat country_same
+local treatments foreign foreign_hire has_expat
 
 local fmode replace
 foreach Y of var `LHS' {
