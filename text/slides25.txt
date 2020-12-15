@@ -1,0 +1,166 @@
+% ./preamble.tex
+
+= Motivation =
+
+== What are the boundaries of global firms? ===
+\begin{tikzpicture}
+\node (a) at (0,0) {arm's length};
+\node (b) at (3,0) {relational};
+\node (c) at (6,0) {acquisition};
+\node (d) at (9,0) {management};
+\graph { (a) -> (b) -> (c) -> (d)};
+\end{tikzpicture}
+
+== Foreign owned firms perform better than domestic firms ==
+- US: Doms and Jensen (1998)
+- UK: Griffith (1999)
+- Hungary, Romania, Russia, Ukraine: Brown, Earle, Telegdy (2006)
+- Indonesia: Arnold and Javorcik (2009)
+
+== Managers matter ==
+- Good management practices  increase  productivity  (Bloom  and  Van  Reenen  2010;  Bloom  et  al.  2012;  Bloom  et  al.  2014) and market access (Bloom et al. 2016). 
+- CEOs behaving like ``leaders" gradually improve firm performance. (Bandiera, Hansen, Prat and Sadun 2018)
+- Large increase  in  the  level  and  inequality  of  CEO  pay.  (Murphy  and  Zábojník  2004;  Gabaix  and  Landier  2008;  Tervio  2008; Frydman and Saks 2010)
+- Managers have persistent effects across firms on investment policy, R\&D, advertising, return on assets.  (Bertrand and Schoar 2003)
+- Sudden CEO death worsens firm performance. (Bennedsen, Pérez-González and Wolfenzon 2007) 
+- Managers having past export experience increase likelihood of exporting (Mion and Opromolla 2014; Mion, Opromolla and Sforza 2016) and importing (Bisztray, Koren and Szeidl 2018).
+
+
+== This paper ==
+- Compile new, unique data on which firm is run by which manager: Hungary, 1980--2018. 
+- Foreign owners improve firm performance by improving management.
+- Research design: 
+	- differences-in-differences comparing expat-managed firms to domestic managed firms before and after takeover
+	- controlling for domestic change in management
+
+== Contributions ==
+1. Linked firm-CEO data for the universe of corporations.
+2. Compare expat CEOs to local CEOs.
+
+= Data =
+
+== Data ==
+=== Hungarian Manager Database ===
+- coverage: universe of corporations, 1980--2018
+- CEO: highest officer of corporation as specified in corporate law.
+	- information: name, mother's name, address, tenure at firm
+- 1 million firms, 2 million CEOs, 5 million job spells
+
+=== Balance sheet data ===
+- coverage: universe of double entry firms, 1980--2018
+- information: sales, exports, employment, equipment, immaterials etc.
+
+== Names ==
+- We use manager names to infer 
+	1. CEO change
+	2. nationality
+	3. gender (not used today)
+- Foreign manager: firm representative with a non-Hungarian first name
+	- e.g. Eva Bauer v Bauer Éva
+	- but: George Soros v Soros György
+- Allow for misspelling, omitted middle name, missing data (jr, dr)
+
+== Sample ==
+- Exclude: 
+	- employing less than 20 people
+	- financial sector
+	- domestic firms with expat CEO
+	- greenfield FDI
+	- firms with more than 15 CEOs
+- Left with 24,500 firms
+
+= Descriptives =
+\longfigure{input/ceo-panel/fig/manager-type-by-year/fig.pdf}{The number of CEOs increased sharply until 2010}
+\longfigure{input/ceo-panel/fig/manager-type-by-age/fig.pdf}{The share of firms managed by founders gradually decreases with age}
+\longfigure{input/ceo-panel/fig/tenure-by-type-weighted/fig.pdf}{Founders stay longest at the firm}
+
+
+= Research design =
+
+= Estimates =
+== Foreign firms are better in every respect (OLS estimates) ==
+\regressiontable{baseline_OLS}
+
+== Foreign takeover is associated with higher capital intensity, productivity and exporting (firm FE estimates) ==
+\regressiontable{baseline_FE}
+
+== Foreign takeover is associated with higher productivity (firm FE estimates on acquisition sample only) ==
+\regressiontable{acquisitions_FE}
+
+== Selection: Better, more global firms receive expat CEOs ==
+\regressiontable{selection}
+
+
+== Manager-level estimates on acquisitions sample ==
+\regressiontable{acquisitions}
+== ==
+
+\longfigure{acquisitions_lnL_slope}{Local and expat managers reduce employment by same amount}
+\longfigure{acquisitions_lnKL_slope}{Capital intensity drops after first expat manager leaves}
+\longfigure{acquisitions_lnQL_slope}{Expat managers improve revenue per worker by 15--25 percent}
+\longfigure{acquisitions_exporter_slope}{Expat managers increase probability of exporting by 3pp}
+
+= Event studies =
+\longfigure{lnL_event_study}{Expat managers come to somewhat faster growing firms}
+\longfigure{lnKL_event_study}{No significant changes in capital per worker}
+\longfigure{lnQL_event_study}{Expat managers have persistent effect on revenue per worker}
+\longfigure{exporter_event_study}{Expat managers have temporary effect on likelihood of exporting}
+
+
+
+= Estimates from manager switches =
+
+== Estimating equation ==
+$X_{m}$: manager $m$ is expat 
+
+$X_{m-1}$: previous manager is expat 
+
+omit $t>T_{im}$ years
+
+\begin{multline*}
+Y_{imt} = 
+\sum_{j=0,1}\sum_{k=0,1} \beta_{jk} I(X_{m-1}=j)I(X_{m}=k)I(t\in T_{im})\\
++f(\text{age}_{it})
++\mu_{im} + \nu_{st} + \varepsilon_{imt}
+\end{multline*}
+
+== ==
+\longfigure{lnL_tree}{All reorganization results in loss of employment}
+\longfigure{lnQL_tree}{Productivity effect of expats remains after they leave}
+\longfigure{exporter_tree}{Exporting effect of expats remains after they leave}
+
+== Expats help start exporting, but have limited effect on continuation ==
+\regressiontable{exporter_heterogeneity}
+
+= Interpretation =
+== Interpretation ==
+Three alternative explanations
+
+1. Firm-specific skills
+	- no substantial heterogeneity with initial firm characteristics other than exporting
+2. General skills
+	- labor productivity improvement has persistent effect
+3. Reorganization
+	- effects of domestic change in management much smaller
+
+== Costs ==
+Why does not every firm hire a foreign manager?
+
+1. Wages are higher 
+2. Search costs are higher
+3. Match is less than perfect
+
+
+
+= Conclusions =
+== Conclusions ==
+- Firms with expat managers improve output per worker and enter export markets.
+- Patterns are consistent with a transferable skill interpretation:
+	- persistent reorganization
+	- technology transfer
+
+== Next steps ==
+- Improve identification with matching.
+- Explore complementarities of expat managers.
+- Explore management team and succession in expat firms.
+- Link to World Management Survey: how do management practices of expats differ?
