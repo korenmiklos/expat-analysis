@@ -1,8 +1,13 @@
 % ./preamble.tex
 
 = Motivation =
+== Motivation ==
+1. What are the boundaries of (global) firms?
+2. Foreign owned firms perform better than domestic firms
+3. Managers matter
 
-== What are the boundaries of global firms? ===
+
+== What are the boundaries of (global) firms? ===
 \begin{tikzpicture}
 \node (a) at (0,0) {arm's length};
 \node (b) at (3,0) {relational};
@@ -11,31 +16,33 @@
 \graph { (a) -> (b) -> (c) -> (d)};
 \end{tikzpicture}
 
-== Foreign owned firms perform better than domestic firms ==
-* US: Doms and Jensen (1998)
-* UK: Griffith (1999)
-* Hungary, Romania, Russia, Ukraine: Brown, Earle, Telegdy (2006)
-* Indonesia: Arnold and Javorcik (2009)
 
-== Managers matter ==
-* Good management practices  increase  productivity  (Bloom  and  Van  Reenen  2010;  Bloom  et  al.  2012;  Bloom  et  al.  2014) and market access (Bloom et al. 2016). 
-* CEOs behaving like ``leaders" gradually improve firm performance. (Bandiera, Hansen, Prat and Sadun 2018)
-* Large increase  in  the  level  and  inequality  of  CEO  pay.  (Murphy  and  Zábojník  2004;  Gabaix  and  Landier  2008;  Tervio  2008; Frydman and Saks 2010)
-* Managers have persistent effects across firms on investment policy, R\&D, advertising, return on assets.  (Bertrand and Schoar 2003)
-* Sudden CEO death worsens firm performance. (Bennedsen, Pérez-González and Wolfenzon 2007) 
-* Managers having past export experience increase likelihood of exporting (Mion and Opromolla 2014; Mion, Opromolla and Sforza 2016) and importing (Bisztray, Koren and Szeidl 2018).
+%% == Foreign owned firms perform better than domestic firms ==
+%% * US: Doms and Jensen (1998)
+%% * UK: Griffith (1999)
+%% * Hungary, Romania, Russia, Ukraine: Brown, Earle, Telegdy (2006)
+%% * Indonesia: Arnold and Javorcik (2009)
+%% 
+%% == Managers matter ==
+%% * Good management practices  increase  productivity  (Bloom  and  Van  Reenen  2010;  Bloom  et  al.  2012;  Bloom  et  al.  2014) and market access (Bloom et al. 2016). 
+%% * CEOs behaving like ``leaders" gradually improve firm performance. (Bandiera, Hansen, Prat and Sadun 2018)
+%% * Large increase  in  the  level  and  inequality  of  CEO  pay.  (Murphy  and  Zábojník  2004;  Gabaix  and  Landier  2008;  Tervio  2008; Frydman and Saks 2010)
+%% * Managers have persistent effects across firms on investment policy, R\&D, advertising, return on assets.  (Bertrand and Schoar 2003)
+%% * Sudden CEO death worsens firm performance. (Bennedsen, Pérez-González and Wolfenzon 2007) 
+%% * Managers having past export experience increase likelihood of exporting (Mion and Opromolla 2014; Mion, Opromolla and Sforza 2016) and importing (Bisztray, Koren and Szeidl 2018).
 
 
 == This paper ==
-* Compile new, unique data on which firm is run by which manager: Hungary, 1980--2018. 
-* Foreign owners improve firm performance by improving management.
-* Research design: 
-	- differences-in-differences comparing expat-managed firms to domestic managed firms before and after takeover
-	- controlling for domestic change in management
+* Compile new data on which firm is run by which manager: Hungary, 1980--2018. 
+* Measure different degrees of foreign control:
+	1. acquisition
+	2. replace CEO
+	3. hire expat CEO
+* Results:
+	* Exporters and low-productivity firms become more tightly controlled. 
+	* Firms with high immaterial capital receive local managers.
+	* Foreign controlled firms become more productive and more likely to export. 
 
-== Contributions ==
-1. Linked firm-CEO data for the universe of corporations.
-2. Compare expat CEOs to local CEOs.
 
 = Data =
 
@@ -131,33 +138,17 @@ $$
 
 = Interpretation =
 == Interpretation ==
-Three alternative explanations
-
-1. Firm-specific skills
-	- no substantial heterogeneity with initial firm characteristics other than exporting
-2. General skills
-	- labor productivity improvement has persistent effect
-3. Reorganization
-	- effects of domestic change in management much smaller
-
-== Costs ==
-Why does not every firm hire a foreign manager?
-
-1. Wages are higher 
-2. Search costs are higher
-3. Match is less than perfect
 
 
 
 = Conclusions =
 == Conclusions ==
-* Firms with expat managers improve output per worker and enter export markets.
-* Patterns are consistent with a transferable skill interpretation:
-	- persistent reorganization
-	- technology transfer
+* What are the boundaries of global firms? Past work has studied the causes and consequences of foreign acquisitions. 
+* We go one step deeper and ask when are managers also replaced. This arguably increases control over the acquired company. 
+* Using data on the universe of foreign acquisitions in Hungary, 1980-2018, we estimate that exporters and low-productivity firms become more tightly controlled. 
+* Foreign controlled firms become more productive and more likely to export. 
+* These facts help inform theories about the boundaries of global firms and about the role of managers in firm performance.
 
 == Next steps ==
-* Improve identification with matching.
-* Explore complementarities of expat managers.
-* Explore management team and succession in expat firms.
-* Link to World Management Survey: how do management practices of expats differ?
+* Collect data on parent firms.
+* Build an incomplete-contract model.
