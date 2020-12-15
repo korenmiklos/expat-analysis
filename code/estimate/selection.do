@@ -5,7 +5,7 @@ use "`here'/temp/analysis_sample.dta", clear
 
 local explanatory lnL exporter TFP_cd RperK ??
 local dummies teaor08_2d##year
-local options keep(lnL exporter TFP_cd RperK)
+local options keep(lnL exporter TFP_cd RperK) tex(frag)
 local sample1 !foreign & owner_spell == 1
 
 * selection into foreign acquisition
@@ -25,5 +25,5 @@ label define dc 0 "Domestic" 1 "Foreign owner" 2 "Foreign hire" 3 "Expat hire"
 label value degree_control dc
 
 tabulate degree_control
-oprobit degree_control `explanatory'  i.teaor08_2d#year if `sample1', vce(cluster originalid)
-outreg2 using "`here'/output/table/selection.tex", append `options'
+*oprobit degree_control `explanatory'  i.teaor08_2d#year if `sample1', vce(cluster originalid)
+*outreg2 using "`here'/output/table/selection.tex", append `options'
