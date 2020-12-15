@@ -75,59 +75,26 @@
 \longfigure{input/ceo-panel/fig/tenure-by-type-weighted/fig.pdf}{Founders stay longest at the firm}
 
 
-= Research design =
-
 = Estimates =
+
+== Degree of control ==
+\begin{tikzpicture}
+\node (a) [text width=1.5cm] at (0,0) {domestic (243,388) (22,761)};
+\node (b) [text width=1.5cm] at (3,0) {acquired (20,781) (1,770)};
+\node (c) [text width=1.5cm] at (6,0) {mgr replaced (15,784) (1,235)};
+\node (d) [text width=1.5cm] at (9,0) {expat hired (9,184) (654)};
+\graph { (a) -> (b) -> (c) -> (d)};
+\end{tikzpicture}
+
 == Foreign firms are better in every respect (OLS estimates) ==
-\regressiontable{baseline_OLS}
-
-== Foreign takeover is associated with higher capital intensity, productivity and exporting (firm FE estimates) ==
-\regressiontable{baseline_FE}
-
-== Foreign takeover is associated with higher productivity (firm FE estimates on acquisition sample only) ==
-\regressiontable{acquisitions_FE}
+\regressiontable{cross_section}
 
 == Selection: Better, more global firms receive expat CEOs ==
 \regressiontable{selection}
 
+== Foreign takeover is associated with higher capital intensity, productivity and exporting (firm FE estimates) ==
+\regressiontable{diffindiff}
 
-== Manager-level estimates on acquisitions sample ==
-\regressiontable{acquisitions}
-== ==
-
-\longfigure{acquisitions_lnL_slope}{Local and expat managers reduce employment by same amount}
-\longfigure{acquisitions_lnKL_slope}{Capital intensity drops after first expat manager leaves}
-\longfigure{acquisitions_lnQL_slope}{Expat managers improve revenue per worker by 15--25 percent}
-\longfigure{acquisitions_exporter_slope}{Expat managers increase probability of exporting by 3pp}
-
-= Event studies =
-\longfigure{lnL_event_study}{Expat managers come to somewhat faster growing firms}
-\longfigure{lnKL_event_study}{No significant changes in capital per worker}
-\longfigure{lnQL_event_study}{Expat managers have persistent effect on revenue per worker}
-\longfigure{exporter_event_study}{Expat managers have temporary effect on likelihood of exporting}
-
-
-
-= Estimates from manager switches =
-
-== Estimating equation ==
-$X_{m}$: manager $m$ is expat 
-
-$X_{m-1}$: previous manager is expat 
-
-omit $t>T_{im}$ years
-
-\begin{multline*}
-Y_{imt} = 
-\sum_{j=0,1}\sum_{k=0,1} \beta_{jk} I(X_{m-1}=j)I(X_{m}=k)I(t\in T_{im})\\
-+f(\text{age}_{it})
-+\mu_{im} + \nu_{st} + \varepsilon_{imt}
-\end{multline*}
-
-== ==
-\longfigure{lnL_tree}{All reorganization results in loss of employment}
-\longfigure{lnQL_tree}{Productivity effect of expats remains after they leave}
-\longfigure{exporter_tree}{Exporting effect of expats remains after they leave}
 
 == Expats help start exporting, but have limited effect on continuation ==
 \regressiontable{exporter_heterogeneity}
