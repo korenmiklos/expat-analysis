@@ -16,11 +16,6 @@ foreach Y of var `LHS' {
 }
 
 * PPML for domestic and export sales
-* FIXME: move this in balance-small
-replace export = 0 if missing(export)
-generate domestic_sales = sales - export
-replace domestic_sales = 0 if domestic_sales < 0 | missing(domestic_sales)
-
 local fmode replace
 foreach Y of var sales domestic_sales export {
 	ppmlhdfe `Y' `treatments', a(`dummies') cluster(originalid)

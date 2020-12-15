@@ -134,6 +134,11 @@ gen byte industrial_firm = inlist(teaor08_1d,"B","C","D","E")
 gen age = year - foundyear
 count
 
+* missing export means 0 export
+mvencode export exporter exporter_5, mv(0) override
+generate domestic_sales = sales - export
+replace domestic_sales = 0 if domestic_sales < 0 | missing(domestic_sales)
+
 save_all_to_json
 cap drop __*
 save "`here'/temp/balance-small-clean.dta", replace
