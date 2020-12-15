@@ -35,7 +35,7 @@ Notes:
 
 . local dummies teaor08_2d##year
 
-. local options keep(lnL exporter TFP_cd RperK)
+. local options keep(lnL exporter TFP_cd RperK) tex(frag) dec(3)
 
 . local sample1 !foreign & owner_spell == 1
 
@@ -43,42 +43,42 @@ Notes:
 . * selection into foreign acquisition
 . reghdfe ever_foreign `explanatory' if `sample1', a(`dummies') cluster(origina
 > lid)
-(dropped 71 singleton observations)
+(dropped 70 singleton observations)
 (MWFE estimator converged in 1 iterations)
 
-HDFE Linear regression                            Number of obs   =    250,450
-Absorbing 1 HDFE group                            F(  12,  23549) =    1252.80
+HDFE Linear regression                            Number of obs   =    161,429
+Absorbing 1 HDFE group                            F(  12,  14546) =     770.49
 Statistics robust to heteroskedasticity           Prob > F        =     0.0000
-                                                  R-squared       =     0.1080
-                                                  Adj R-squared   =     0.1006
-                                                  Within R-sq.    =     0.0684
-Number of clusters (originalid) =     23,550      Root MSE        =     0.1792
+                                                  R-squared       =     0.1234
+                                                  Adj R-squared   =     0.1121
+                                                  Within R-sq.    =     0.0701
+Number of clusters (originalid) =     14,547      Root MSE        =     0.2032
 
-                        (Std. Err. adjusted for 23,550 clusters in originalid)
+                        (Std. Err. adjusted for 14,547 clusters in originalid)
 ------------------------------------------------------------------------------
              |               Robust
 ever_foreign |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         lnL |   .0048767    .000994     4.91   0.000     .0029285    .0068249
-    exporter |   .0202743   .0025012     8.11   0.000     .0153718    .0251767
-      TFP_cd |  -.0030816   .0014973    -2.06   0.040    -.0060165   -.0001468
-       RperK |   .0262348    .007677     3.42   0.001     .0111873    .0412822
-          DE |   .8663325   .0271959    31.86   0.000     .8130267    .9196383
-          AT |    .836019   .0427052    19.58   0.000      .752314    .9197239
-          CH |   .8582824   .0436818    19.65   0.000     .7726632    .9439015
-          NL |   .7765838   .0723687    10.73   0.000     .6347365    .9184311
-          FR |   .9204314    .008677   106.08   0.000     .9034239    .9374388
-          GB |   .8968189    .033031    27.15   0.000     .8320761    .9615618
-          IT |   .7483303   .1223704     6.12   0.000     .5084764    .9881843
-          US |   .8134711   .0609905    13.34   0.000     .6939257    .9330165
-       _cons |   .0104063    .003573     2.91   0.004     .0034029    .0174096
+         lnL |    .004148   .0012909     3.21   0.001     .0016177    .0066784
+    exporter |    .028998   .0036758     7.89   0.000     .0217929    .0362031
+      TFP_cd |  -.0032184   .0019249    -1.67   0.095    -.0069914    .0005546
+       RperK |   .0287713   .0102293     2.81   0.005     .0087205     .048822
+          DE |   .8504725   .0309435    27.48   0.000     .7898193    .9111256
+          AT |   .8154866   .0456245    17.87   0.000     .7260567    .9049165
+          CH |   .8408776   .0467531    17.99   0.000     .7492356    .9325196
+          NL |   .7757115   .0728327    10.65   0.000     .6329502    .9184727
+          FR |   .8963909   .0111481    80.41   0.000     .8745391    .9182426
+          GB |   .8788297   .0391633    22.44   0.000     .8020647    .9555947
+          IT |   .7300096   .1376006     5.31   0.000     .4602949    .9997242
+          US |   .8067365   .0616397    13.09   0.000     .6859149    .9275581
+       _cons |   .0209995    .004833     4.35   0.000     .0115263    .0304728
 ------------------------------------------------------------------------------
 
 Absorbed degrees of freedom:
 -----------------------------------------------------------+
        Absorbed FE | Categories  - Redundant  = Num. Coefs |
 -------------------+---------------------------------------|
-   teaor08_2d#year |      2064           0        2064     |
+   teaor08_2d#year |      2052           0        2052     |
 -----------------------------------------------------------+
 
 . outreg2 using "`here'/output/table/selection.tex", replace `options'
@@ -89,42 +89,42 @@ dir : seeout
 . * selection into manager hire
 . reghdfe ever_foreign_hire `explanatory' if ever_foreign & `sample1', a(`dummi
 > es') cluster(originalid)
-(dropped 381 singleton observations)
+(dropped 395 singleton observations)
 (MWFE estimator converged in 1 iterations)
 
-HDFE Linear regression                            Number of obs   =      8,919
-Absorbing 1 HDFE group                            F(  12,   1657) =       2.48
-Statistics robust to heteroskedasticity           Prob > F        =     0.0032
-                                                  R-squared       =     0.1276
-                                                  Adj R-squared   =     0.0085
-                                                  Within R-sq.    =     0.0110
-Number of clusters (originalid) =      1,658      Root MSE        =     0.4709
+HDFE Linear regression                            Number of obs   =      7,512
+Absorbing 1 HDFE group                            F(  12,   1364) =       2.25
+Statistics robust to heteroskedasticity           Prob > F        =     0.0082
+                                                  R-squared       =     0.1420
+                                                  Adj R-squared   =     0.0098
+                                                  Within R-sq.    =     0.0104
+Number of clusters (originalid) =      1,365      Root MSE        =     0.4374
 
-                         (Std. Err. adjusted for 1,658 clusters in originalid)
+                         (Std. Err. adjusted for 1,365 clusters in originalid)
 ------------------------------------------------------------------------------
              |               Robust
 ever_forei~e |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         lnL |   .0031139   .0104535     0.30   0.766    -.0173897    .0236174
-    exporter |   .0695497   .0297324     2.34   0.019     .0112326    .1278668
-      TFP_cd |  -.0400191   .0178596    -2.24   0.025    -.0750489   -.0049893
-       RperK |   .1742673   .0946657     1.84   0.066    -.0114097    .3599443
-          DE |   .0453977   .0615291     0.74   0.461    -.0752852    .1660806
-          AT |   .0561002   .0763588     0.73   0.463    -.0936697      .20587
-          CH |   .0972877   .1295428     0.75   0.453    -.1567971    .3513725
-          NL |   .0639544   .1127894     0.57   0.571    -.1572703    .2851791
-          FR |   .1976393   .1268216     1.56   0.119    -.0511081    .4463868
-          GB |   .1967092   .1145894     1.72   0.086     -.028046    .4214644
-          IT |   .1979205   .0720062     2.75   0.006     .0566877    .3391533
-          US |   .0477585   .0849948     0.56   0.574      -.11895    .2144669
-       _cons |   .6068622   .0434206    13.98   0.000     .5216972    .6920271
+         lnL |  -.0152142   .0109109    -1.39   0.163    -.0366181    .0061897
+    exporter |   .0638312   .0315364     2.02   0.043      .001966    .1256963
+      TFP_cd |  -.0317697    .020407    -1.56   0.120    -.0718022    .0082628
+       RperK |   .0535053   .0911193     0.59   0.557    -.1252439    .2322545
+          DE |   .1001286   .0567383     1.76   0.078    -.0111752    .2114323
+          AT |   .0612381   .0792614     0.77   0.440    -.0942492    .2167255
+          CH |    .040965   .1351411     0.30   0.762     -.224142     .306072
+          NL |   .1021876   .1039496     0.98   0.326    -.1017307    .3061059
+          FR |   .2494149   .0787418     3.17   0.002     .0949467    .4038831
+          GB |   .1622372   .0836498     1.94   0.053     -.001859    .3263334
+          IT |   .0973749   .0658759     1.48   0.140    -.0318541    .2266039
+          US |  -.0161045   .0849723    -0.19   0.850    -.1827951    .1505862
+       _cons |   .7602037   .0444089    17.12   0.000     .6730866    .8473208
 ------------------------------------------------------------------------------
 
 Absorbed degrees of freedom:
 -----------------------------------------------------------+
        Absorbed FE | Categories  - Redundant  = Num. Coefs |
 -------------------+---------------------------------------|
-   teaor08_2d#year |      1060           0        1060     |
+   teaor08_2d#year |       992           0         992     |
 -----------------------------------------------------------+
 
 . outreg2 using "`here'/output/table/selection.tex", append `options'
@@ -135,42 +135,42 @@ dir : seeout
 . * selection into expat hire
 . reghdfe ever_expat `explanatory' if ever_foreign & ever_foreign_hire & `sampl
 > e1', a(`dummies') cluster(originalid)
-(dropped 386 singleton observations)
+(dropped 409 singleton observations)
 (MWFE estimator converged in 1 iterations)
 
-HDFE Linear regression                            Number of obs   =      5,769
-Absorbing 1 HDFE group                            F(  12,   1127) =       8.23
+HDFE Linear regression                            Number of obs   =      5,438
+Absorbing 1 HDFE group                            F(  12,   1047) =       9.04
 Statistics robust to heteroskedasticity           Prob > F        =     0.0000
-                                                  R-squared       =     0.2365
-                                                  Adj R-squared   =     0.0931
-                                                  Within R-sq.    =     0.0320
-Number of clusters (originalid) =      1,128      Root MSE        =     0.4758
+                                                  R-squared       =     0.2398
+                                                  Adj R-squared   =     0.0933
+                                                  Within R-sq.    =     0.0333
+Number of clusters (originalid) =      1,048      Root MSE        =     0.4758
 
-                         (Std. Err. adjusted for 1,128 clusters in originalid)
+                         (Std. Err. adjusted for 1,048 clusters in originalid)
 ------------------------------------------------------------------------------
              |               Robust
   ever_expat |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         lnL |  -.0193146   .0124905    -1.55   0.122    -.0438219    .0051926
-    exporter |    .066459   .0360534     1.84   0.066    -.0042804    .1371984
-      TFP_cd |   .0114532   .0265227     0.43   0.666    -.0405862    .0634927
-       RperK |  -.2226763   .0929495    -2.40   0.017    -.4050499   -.0403027
-          DE |   .1813211   .0813189     2.23   0.026     .0217676    .3408745
-          AT |   .2046055   .0730653     2.80   0.005     .0612461    .3479649
-          CH |   .2709052   .1634143     1.66   0.098    -.0497253    .5915358
-          NL |   .1639914   .1574743     1.04   0.298    -.1449844    .4729672
-          FR |   .4290494   .0693952     6.18   0.000     .2928911    .5652078
-          GB |    .528795   .1116316     4.74   0.000     .3097658    .7478242
-          IT |   .0967468   .1787977     0.54   0.589     -.254067    .4475606
-          US |  -.1962952   .1395533    -1.41   0.160    -.4701086    .0775182
-       _cons |   .5134124   .0518752     9.90   0.000     .4116295    .6151953
+         lnL |  -.0172035   .0130492    -1.32   0.188     -.042809     .008402
+    exporter |   .0769817   .0375475     2.05   0.041     .0033049    .1506586
+      TFP_cd |   .0065809   .0292604     0.22   0.822    -.0508349    .0639967
+       RperK |  -.2463455   .0944934    -2.61   0.009    -.4317635   -.0609274
+          DE |   .1737681   .0850358     2.04   0.041     .0069082    .3406281
+          AT |   .2039246   .0757854     2.69   0.007      .055216    .3526333
+          CH |   .2694826   .1676476     1.61   0.108    -.0594809     .598446
+          NL |   .1610561   .1569322     1.03   0.305    -.1468813    .4689935
+          FR |     .46215   .0644736     7.17   0.000     .3356379    .5886622
+          GB |   .5119691   .1220764     4.19   0.000     .2724269    .7515113
+          IT |   .1214492   .1905408     0.64   0.524    -.2524361    .4953344
+          US |  -.1886246   .1426628    -1.32   0.186    -.4685621     .091313
+       _cons |   .5033621   .0545748     9.22   0.000     .3962737    .6104506
 ------------------------------------------------------------------------------
 
 Absorbed degrees of freedom:
 -----------------------------------------------------------+
        Absorbed FE | Categories  - Redundant  = Num. Coefs |
 -------------------+---------------------------------------|
-   teaor08_2d#year |       901           0         901     |
+   teaor08_2d#year |       867           0         867     |
 -----------------------------------------------------------+
 
 . outreg2 using "`here'/output/table/selection.tex", append `options'
@@ -191,269 +191,15 @@ dir : seeout
 degree_contro |
             l |      Freq.     Percent        Cum.
 --------------+-----------------------------------
-     Domestic |    243,388       92.13       92.13
-Foreign owner |      4,909        1.86       93.99
- Foreign hire |      6,776        2.57       96.56
-   Expat hire |      9,096        3.44      100.00
+     Domestic |    154,710       89.38       89.38
+Foreign owner |      3,107        1.80       91.18
+ Foreign hire |      6,437        3.72       94.90
+   Expat hire |      8,831        5.10      100.00
 --------------+-----------------------------------
-        Total |    264,169      100.00
+        Total |    173,085      100.00
 
-. oprobit degree_control `explanatory'  i.teaor08_2d#year if `sample1', vce(clu
-> ster originalid)
-
-note: 5.teaor08_2d#1988.year identifies no observations in the sample
-note: 5.teaor08_2d#1989.year identifies no observations in the sample
-note: 5.teaor08_2d#1990.year identifies no observations in the sample
-note: 6.teaor08_2d#1988.year identifies no observations in the sample
-note: 6.teaor08_2d#1989.year identifies no observations in the sample
-note: 6.teaor08_2d#1990.year identifies no observations in the sample
-note: 6.teaor08_2d#1991.year identifies no observations in the sample
-note: 6.teaor08_2d#1992.year identifies no observations in the sample
-note: 6.teaor08_2d#2004.year identifies no observations in the sample
-note: 6.teaor08_2d#2005.year identifies no observations in the sample
-note: 6.teaor08_2d#2006.year identifies no observations in the sample
-note: 6.teaor08_2d#2007.year identifies no observations in the sample
-note: 6.teaor08_2d#2008.year identifies no observations in the sample
-note: 6.teaor08_2d#2009.year identifies no observations in the sample
-note: 6.teaor08_2d#2010.year identifies no observations in the sample
-note: 6.teaor08_2d#2011.year identifies no observations in the sample
-note: 6.teaor08_2d#2012.year identifies no observations in the sample
-note: 6.teaor08_2d#2013.year identifies no observations in the sample
-note: 6.teaor08_2d#2014.year identifies no observations in the sample
-note: 6.teaor08_2d#2015.year identifies no observations in the sample
-note: 6.teaor08_2d#2016.year identifies no observations in the sample
-note: 6.teaor08_2d#2017.year identifies no observations in the sample
-note: 6.teaor08_2d#2018.year identifies no observations in the sample
-note: 7.teaor08_2d#1988.year identifies no observations in the sample
-note: 7.teaor08_2d#1989.year identifies no observations in the sample
-note: 7.teaor08_2d#1990.year identifies no observations in the sample
-note: 7.teaor08_2d#1991.year identifies no observations in the sample
-note: 7.teaor08_2d#1993.year identifies no observations in the sample
-note: 7.teaor08_2d#1994.year identifies no observations in the sample
-note: 7.teaor08_2d#1995.year identifies no observations in the sample
-note: 7.teaor08_2d#1997.year identifies no observations in the sample
-note: 7.teaor08_2d#1999.year identifies no observations in the sample
-note: 7.teaor08_2d#2000.year identifies no observations in the sample
-note: 7.teaor08_2d#2001.year identifies no observations in the sample
-note: 7.teaor08_2d#2002.year identifies no observations in the sample
-note: 7.teaor08_2d#2003.year identifies no observations in the sample
-note: 7.teaor08_2d#2004.year identifies no observations in the sample
-note: 7.teaor08_2d#2008.year identifies no observations in the sample
-note: 7.teaor08_2d#2009.year identifies no observations in the sample
-note: 7.teaor08_2d#2010.year identifies no observations in the sample
-note: 7.teaor08_2d#2011.year identifies no observations in the sample
-note: 7.teaor08_2d#2012.year identifies no observations in the sample
-note: 7.teaor08_2d#2013.year identifies no observations in the sample
-note: 7.teaor08_2d#2014.year identifies no observations in the sample
-note: 7.teaor08_2d#2015.year identifies no observations in the sample
-note: 7.teaor08_2d#2016.year identifies no observations in the sample
-note: 7.teaor08_2d#2017.year identifies no observations in the sample
-note: 7.teaor08_2d#2018.year identifies no observations in the sample
-note: 9.teaor08_2d#1988.year identifies no observations in the sample
-note: 9.teaor08_2d#1989.year identifies no observations in the sample
-note: 9.teaor08_2d#1990.year identifies no observations in the sample
-note: 9.teaor08_2d#1991.year identifies no observations in the sample
-note: 9.teaor08_2d#1992.year identifies no observations in the sample
-note: 9.teaor08_2d#1993.year identifies no observations in the sample
-note: 9.teaor08_2d#1994.year identifies no observations in the sample
-note: 9.teaor08_2d#1995.year identifies no observations in the sample
-note: 9.teaor08_2d#1996.year identifies no observations in the sample
-note: 9.teaor08_2d#1997.year identifies no observations in the sample
-note: 9.teaor08_2d#1998.year identifies no observations in the sample
-note: 9.teaor08_2d#2001.year identifies no observations in the sample
-note: 9.teaor08_2d#2002.year identifies no observations in the sample
-note: 9.teaor08_2d#2003.year identifies no observations in the sample
-note: 9.teaor08_2d#2005.year identifies no observations in the sample
-note: 9.teaor08_2d#2006.year identifies no observations in the sample
-note: 12.teaor08_2d#1988.year identifies no observations in the sample
-note: 12.teaor08_2d#1989.year identifies no observations in the sample
-note: 12.teaor08_2d#1990.year identifies no observations in the sample
-note: 12.teaor08_2d#1993.year identifies no observations in the sample
-note: 12.teaor08_2d#1994.year identifies no observations in the sample
-note: 12.teaor08_2d#1995.year identifies no observations in the sample
-note: 12.teaor08_2d#2001.year identifies no observations in the sample
-note: 12.teaor08_2d#2002.year identifies no observations in the sample
-note: 12.teaor08_2d#2003.year identifies no observations in the sample
-note: 12.teaor08_2d#2004.year identifies no observations in the sample
-note: 12.teaor08_2d#2005.year identifies no observations in the sample
-note: 12.teaor08_2d#2006.year identifies no observations in the sample
-note: 12.teaor08_2d#2007.year identifies no observations in the sample
-note: 12.teaor08_2d#2008.year identifies no observations in the sample
-note: 12.teaor08_2d#2011.year identifies no observations in the sample
-note: 12.teaor08_2d#2012.year identifies no observations in the sample
-note: 12.teaor08_2d#2013.year identifies no observations in the sample
-note: 12.teaor08_2d#2014.year identifies no observations in the sample
-note: 12.teaor08_2d#2015.year identifies no observations in the sample
-note: 12.teaor08_2d#2016.year identifies no observations in the sample
-note: 12.teaor08_2d#2017.year identifies no observations in the sample
-note: 12.teaor08_2d#2018.year identifies no observations in the sample
-note: 21.teaor08_2d#1988.year identifies no observations in the sample
-note: 30.teaor08_2d#1988.year identifies no observations in the sample
-note: 30.teaor08_2d#1989.year identifies no observations in the sample
-note: 37.teaor08_2d#1988.year identifies no observations in the sample
-note: 37.teaor08_2d#1989.year identifies no observations in the sample
-note: 37.teaor08_2d#1990.year identifies no observations in the sample
-note: 37.teaor08_2d#1991.year identifies no observations in the sample
-note: 38.teaor08_2d#1988.year identifies no observations in the sample
-note: 39.teaor08_2d#1988.year identifies no observations in the sample
-note: 39.teaor08_2d#1989.year identifies no observations in the sample
-note: 51.teaor08_2d#1988.year identifies no observations in the sample
-note: 51.teaor08_2d#1989.year identifies no observations in the sample
-note: 51.teaor08_2d#1990.year identifies no observations in the sample
-note: 51.teaor08_2d#1991.year identifies no observations in the sample
-note: 51.teaor08_2d#1992.year identifies no observations in the sample
-note: 51.teaor08_2d#1993.year identifies no observations in the sample
-note: 51.teaor08_2d#1994.year identifies no observations in the sample
-note: 51.teaor08_2d#1995.year identifies no observations in the sample
-note: 51.teaor08_2d#1998.year identifies no observations in the sample
-note: 51.teaor08_2d#1999.year identifies no observations in the sample
-note: 51.teaor08_2d#2000.year identifies no observations in the sample
-note: 51.teaor08_2d#2001.year identifies no observations in the sample
-note: 51.teaor08_2d#2005.year identifies no observations in the sample
-note: 51.teaor08_2d#2006.year identifies no observations in the sample
-note: 51.teaor08_2d#2007.year identifies no observations in the sample
-note: 51.teaor08_2d#2008.year identifies no observations in the sample
-note: 51.teaor08_2d#2009.year identifies no observations in the sample
-note: 51.teaor08_2d#2010.year identifies no observations in the sample
-note: 51.teaor08_2d#2011.year identifies no observations in the sample
-note: 51.teaor08_2d#2012.year identifies no observations in the sample
-note: 51.teaor08_2d#2013.year identifies no observations in the sample
-note: 51.teaor08_2d#2014.year identifies no observations in the sample
-note: 51.teaor08_2d#2015.year identifies no observations in the sample
-note: 51.teaor08_2d#2016.year identifies no observations in the sample
-note: 51.teaor08_2d#2017.year identifies no observations in the sample
-note: 51.teaor08_2d#2018.year identifies no observations in the sample
-note: 53.teaor08_2d#1988.year identifies no observations in the sample
-note: 53.teaor08_2d#1989.year identifies no observations in the sample
-note: 53.teaor08_2d#1990.year identifies no observations in the sample
-note: 53.teaor08_2d#1991.year identifies no observations in the sample
-note: 53.teaor08_2d#1992.year identifies no observations in the sample
-note: 55.teaor08_2d#1988.year identifies no observations in the sample
-note: 55.teaor08_2d#1989.year identifies no observations in the sample
-note: 64.teaor08_2d#1988.year identifies no observations in the sample
-note: 64.teaor08_2d#1989.year identifies no observations in the sample
-note: 64.teaor08_2d#1990.year identifies no observations in the sample
-note: 64.teaor08_2d#1991.year identifies no observations in the sample
-note: 64.teaor08_2d#2004.year identifies no observations in the sample
-note: 66.teaor08_2d#1988.year identifies no observations in the sample
-note: 66.teaor08_2d#1989.year identifies no observations in the sample
-note: 66.teaor08_2d#1990.year identifies no observations in the sample
-note: 66.teaor08_2d#1991.year identifies no observations in the sample
-note: 66.teaor08_2d#1993.year identifies no observations in the sample
-note: 66.teaor08_2d#1994.year identifies no observations in the sample
-note: 66.teaor08_2d#1996.year identifies no observations in the sample
-note: 66.teaor08_2d#1997.year identifies no observations in the sample
-note: 66.teaor08_2d#2004.year identifies no observations in the sample
-note: 66.teaor08_2d#2006.year identifies no observations in the sample
-note: 66.teaor08_2d#2018.year identifies no observations in the sample
-note: 69.teaor08_2d#1988.year identifies no observations in the sample
-note: 69.teaor08_2d#1989.year identifies no observations in the sample
-note: 69.teaor08_2d#1990.year identifies no observations in the sample
-note: 72.teaor08_2d#1988.year identifies no observations in the sample
-note: 72.teaor08_2d#1989.year identifies no observations in the sample
-note: 72.teaor08_2d#1990.year identifies no observations in the sample
-note: 72.teaor08_2d#1991.year identifies no observations in the sample
-note: 73.teaor08_2d#1988.year identifies no observations in the sample
-note: 73.teaor08_2d#1989.year identifies no observations in the sample
-note: 73.teaor08_2d#1990.year identifies no observations in the sample
-note: 74.teaor08_2d#1988.year identifies no observations in the sample
-note: 74.teaor08_2d#1989.year identifies no observations in the sample
-note: 74.teaor08_2d#1990.year identifies no observations in the sample
-note: 74.teaor08_2d#1991.year identifies no observations in the sample
-note: 75.teaor08_2d#1988.year identifies no observations in the sample
-note: 75.teaor08_2d#1989.year identifies no observations in the sample
-note: 75.teaor08_2d#2003.year identifies no observations in the sample
-note: 75.teaor08_2d#2004.year identifies no observations in the sample
-note: 75.teaor08_2d#2005.year identifies no observations in the sample
-note: 75.teaor08_2d#2006.year identifies no observations in the sample
-note: 75.teaor08_2d#2007.year identifies no observations in the sample
-note: 75.teaor08_2d#2008.year identifies no observations in the sample
-note: 75.teaor08_2d#2009.year identifies no observations in the sample
-note: 75.teaor08_2d#2010.year identifies no observations in the sample
-note: 75.teaor08_2d#2011.year identifies no observations in the sample
-note: 75.teaor08_2d#2012.year identifies no observations in the sample
-note: 75.teaor08_2d#2013.year identifies no observations in the sample
-note: 75.teaor08_2d#2014.year identifies no observations in the sample
-note: 75.teaor08_2d#2015.year identifies no observations in the sample
-note: 75.teaor08_2d#2016.year identifies no observations in the sample
-note: 75.teaor08_2d#2017.year identifies no observations in the sample
-note: 75.teaor08_2d#2018.year identifies no observations in the sample
-note: 78.teaor08_2d#1988.year identifies no observations in the sample
-note: 78.teaor08_2d#1989.year identifies no observations in the sample
-note: 78.teaor08_2d#1990.year identifies no observations in the sample
-note: 80.teaor08_2d#1988.year identifies no observations in the sample
-note: 80.teaor08_2d#1989.year identifies no observations in the sample
-note: 80.teaor08_2d#1990.year identifies no observations in the sample
-note: 80.teaor08_2d#1991.year identifies no observations in the sample
-note: 82.teaor08_2d#1989.year identifies no observations in the sample
-note: 84.teaor08_2d#1988.year identifies no observations in the sample
-note: 84.teaor08_2d#1989.year identifies no observations in the sample
-note: 84.teaor08_2d#1990.year identifies no observations in the sample
-note: 84.teaor08_2d#1991.year identifies no observations in the sample
-note: 84.teaor08_2d#1992.year identifies no observations in the sample
-note: 84.teaor08_2d#1993.year identifies no observations in the sample
-note: 84.teaor08_2d#1994.year identifies no observations in the sample
-note: 84.teaor08_2d#1995.year identifies no observations in the sample
-note: 84.teaor08_2d#1996.year identifies no observations in the sample
-note: 84.teaor08_2d#1997.year identifies no observations in the sample
-note: 84.teaor08_2d#1998.year identifies no observations in the sample
-note: 84.teaor08_2d#1999.year identifies no observations in the sample
-note: 84.teaor08_2d#2000.year identifies no observations in the sample
-note: 84.teaor08_2d#2001.year identifies no observations in the sample
-note: 85.teaor08_2d#1988.year identifies no observations in the sample
-note: 85.teaor08_2d#1989.year identifies no observations in the sample
-note: 85.teaor08_2d#1990.year identifies no observations in the sample
-note: 86.teaor08_2d#1988.year identifies no observations in the sample
-note: 86.teaor08_2d#1989.year identifies no observations in the sample
-note: 86.teaor08_2d#1990.year identifies no observations in the sample
-note: 86.teaor08_2d#1991.year identifies no observations in the sample
-note: 87.teaor08_2d#1988.year identifies no observations in the sample
-note: 87.teaor08_2d#1989.year identifies no observations in the sample
-note: 87.teaor08_2d#1990.year identifies no observations in the sample
-note: 87.teaor08_2d#1991.year identifies no observations in the sample
-note: 87.teaor08_2d#1992.year identifies no observations in the sample
-note: 87.teaor08_2d#1993.year identifies no observations in the sample
-note: 88.teaor08_2d#1988.year identifies no observations in the sample
-note: 88.teaor08_2d#1989.year identifies no observations in the sample
-note: 88.teaor08_2d#1990.year identifies no observations in the sample
-note: 88.teaor08_2d#1991.year identifies no observations in the sample
-note: 88.teaor08_2d#1992.year identifies no observations in the sample
-note: 88.teaor08_2d#1993.year identifies no observations in the sample
-note: 88.teaor08_2d#1994.year identifies no observations in the sample
-note: 90.teaor08_2d#1988.year identifies no observations in the sample
-note: 90.teaor08_2d#1989.year identifies no observations in the sample
-note: 90.teaor08_2d#1990.year identifies no observations in the sample
-note: 90.teaor08_2d#1991.year identifies no observations in the sample
-note: 91.teaor08_2d#1988.year identifies no observations in the sample
-note: 91.teaor08_2d#1989.year identifies no observations in the sample
-note: 91.teaor08_2d#1990.year identifies no observations in the sample
-note: 91.teaor08_2d#1991.year identifies no observations in the sample
-note: 91.teaor08_2d#1992.year identifies no observations in the sample
-note: 91.teaor08_2d#1993.year identifies no observations in the sample
-note: 91.teaor08_2d#1994.year identifies no observations in the sample
-note: 92.teaor08_2d#1988.year identifies no observations in the sample
-note: 92.teaor08_2d#1989.year identifies no observations in the sample
-note: 92.teaor08_2d#1990.year identifies no observations in the sample
-note: 92.teaor08_2d#1991.year identifies no observations in the sample
-note: 92.teaor08_2d#1992.year identifies no observations in the sample
-note: 92.teaor08_2d#1993.year identifies no observations in the sample
-note: 92.teaor08_2d#1994.year identifies no observations in the sample
-note: 92.teaor08_2d#1995.year identifies no observations in the sample
-note: 92.teaor08_2d#1996.year identifies no observations in the sample
-note: 92.teaor08_2d#1997.year identifies no observations in the sample
-note: 93.teaor08_2d#1988.year identifies no observations in the sample
-note: 93.teaor08_2d#1989.year identifies no observations in the sample
-note: 93.teaor08_2d#1990.year identifies no observations in the sample
-note: 94.teaor08_2d#1988.year identifies no observations in the sample
-note: 94.teaor08_2d#1989.year identifies no observations in the sample
-note: 94.teaor08_2d#1990.year identifies no observations in the sample
-note: 94.teaor08_2d#1992.year identifies no observations in the sample
-note: 94.teaor08_2d#1993.year identifies no observations in the sample
-note: 94.teaor08_2d#1994.year identifies no observations in the sample
-note: 94.teaor08_2d#1995.year identifies no observations in the sample
-note: 94.teaor08_2d#1996.year identifies no observations in the sample
-note: 94.teaor08_2d#1997.year identifies no observations in the sample
-Iteration 0:   log pseudolikelihood = -49961.852  
-Iteration 1:   log pseudolikelihood =  -43931.93  
-Iteration 2:   log pseudolikelihood = -43372.259  
-Iteration 3:   log pseudolikelihood = -43305.008  
+. *oprobit degree_control `explanatory'  i.teaor08_2d#year if `sample1', vce(cl
+> uster originalid)
+. *outreg2 using "`here'/output/table/selection.tex", append `options'
+. 
+end of do-file
