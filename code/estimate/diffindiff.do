@@ -16,11 +16,3 @@ foreach Y of var `LHS' {
 	local fmode append
 }
 
-* PPML for domestic and export sales
-local fmode replace
-foreach Y of var sales domestic_sales export {
-	ppmlhdfe `Y' `treatments', a(`dummies') cluster(originalid)
-	outreg2 using "`here'/output/table/ppml.tex", `fmode' `options'
-	local fmode append
-}
-
