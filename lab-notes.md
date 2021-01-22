@@ -1660,3 +1660,6 @@ R-squared 0.561 0.482 0.561 0.660 0.580 0.713
 Ind-year FE YES YES YES YES YES YES
 Firm FE YES YES YES YES YES YES
 ```
+
+The effects are driven by expats who are from the same country as the owners (and as markets).
+

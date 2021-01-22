@@ -1,12 +1,14 @@
 	(1)	(2)
 VARIABLES	Start	Continue
 		
-foreign	0.021	-0.002
+foreign	0.020	-0.002
 	(0.024)	(0.018)
-foreign_hire	0.014	0.022
+foreign_hire	0.013	0.022
 	(0.029)	(0.020)
-has_expat	0.129**	0.013
-	(0.051)	(0.019)
+has_expat	0.109**	0.015
+	(0.054)	(0.021)
+country_same	0.051	-0.007
+	(0.052)	(0.021)
 		
 Observations	63,280	26,588
 R-squared	0.362	0.382

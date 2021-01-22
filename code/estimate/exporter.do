@@ -5,7 +5,7 @@ local here = r(here)
 use "`here'/temp/analysis_sample.dta", clear
 
 local dummies originalid teaor08_2d##year
-local treatments foreign foreign_hire has_expat
+local treatments foreign foreign_hire has_expat country_same
 local options keep(`treatments') tex(frag) dec(3)  nocons nonotes addtext(Ind-year FE, YES, Firm FE, YES)
 
 local sample1 L.exporter == 0 

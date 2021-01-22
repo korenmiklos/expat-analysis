@@ -8,7 +8,7 @@ local main lnL lnQL TFP_cd RperK
 local trade export_same_country import_capital_same_country import_material_same_country export_other_country import_capital_other_country import_material_other_country
 
 local dummies teaor08_2d##year
-local treatments foreign foreign_hire has_expat
+local treatments foreign foreign_hire has_expat country_same
 local options keep(`treatments') tex(frag) dec(3)  nocons nonotes addtext(Ind-year FE, YES)
 
 foreach table in main trade {
