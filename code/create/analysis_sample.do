@@ -54,6 +54,8 @@ keep originalid year export?? import?? import_capital?? import_material?? owner?
 drop exporter
 
 reshape long export import import_capital import_material owner manager, i(originalid year) j(country) string
+* only use top countries, drop "rest of the world"
+drop if country == "XX"
 merge m:1 originalid year using `fy', keep(match) nogen
 
 compress
