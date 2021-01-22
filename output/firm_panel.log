@@ -1,14 +1,13 @@
---------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  C:\Users\Almos\Documents\Research\Expat\Expat_git\expat-analysis\output/firm_panel.lo
-> g
+       log:  /Users/koren/Tresorit/projects/expat//output/firm_panel.log
   log type:  text
- opened on:  21 Oct 2020, 17:28:50
+ opened on:  22 Jan 2021, 10:30:16
 
 . 
-. * keep only sample from balance-small - NOTE: had to restructure as we have to keep foreign whic
-> h is different in years - so no collapse this time
-. use "temp/balance-small-clean.dta"
+. * keep only sample from balance-small - NOTE: had to restructure as we have t
+> o keep foreign which is different in years - so no collapse this time
+. use "`here'/temp/balance-small-clean.dta"
 
 . by frame_id_numeric: egen firm_birth = min(year)
 
@@ -19,11 +18,12 @@
 . tempfile sample
 
 . save `sample', replace
-(note: file C:\Users\Almos\AppData\Local\Temp\ST_165c_000001.tmp not found)
-file C:\Users\Almos\AppData\Local\Temp\ST_165c_000001.tmp saved
+(note: file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St14123.000001 no
+> t found)
+file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St14123.000001 saved
 
 . 
-. use "input/ceo-panel/ceo-panel.dta", clear // QUESTION: what is owner
+. use "`here'/input/ceo-panel/ceo-panel.dta", clear // QUESTION: what is owner
 
 . rename person_id manager_id
 
@@ -37,8 +37,8 @@ file C:\Users\Almos\AppData\Local\Temp\ST_165c_000001.tmp saved
     matched                           484,550  
     -----------------------------------------
 
-. count if first_year_of_firm == firm_birth // QUESTION: why not the same? - same for the last yea
-> r
+. count if first_year_of_firm == firm_birth // QUESTION: why not the same? - sa
+> me for the last year
   235,424
 
 . 
@@ -88,7 +88,8 @@ file C:\Users\Almos\AppData\Local\Temp\ST_165c_000001.tmp saved
 
 . 
 . * fill in gap if only 1-year long
-. expand 1 + (gap == 1), generate(filled_in) // FIXME OR QUESTION: maybe second year as well
+. expand 1 + (gap == 1), generate(filled_in) // FIXME OR QUESTION: maybe second
+>  year as well
 (4,718 observations created)
 
 . replace year = year - 1 if filled_in
@@ -137,23 +138,23 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
 
 . bys frame_id_numeric manager_id job_spell: egen job_end = max(year)
 
-. keep frame_id_numeric manager_id job_spell year job_begin job_end expat founder insider outsider
->  firm_birth foreign
+. keep frame_id_numeric manager_id job_spell year job_begin job_end expat found
+> er insider outsider firm_birth foreign country_code
 
 . 
 . * if first managers arrive in year 1, extrapolate to year 0 - DROP SPELL
 . bys frame_id_numeric: egen first_cohort = min(job_begin)
 
-. replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_begin == first_coho
-> rt)
+. replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_
+> begin == first_cohort)
 (36,744 real changes made)
 
 . 
 . * NOTE: no collapse and expand --> there might be holes
 . sort frame_id_numeric manager_id year
 
-. count if frame_id_numeric == frame_id_numeric[_n-1] & manager_id == manager_id[_n-1] & year != (
-> year[_n-1] + 1)
+. count if frame_id_numeric == frame_id_numeric[_n-1] & manager_id == manager_i
+> d[_n-1] & year != (year[_n-1] + 1)
   3,514
 
 . 
@@ -165,11 +166,13 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
 . ***********************
 . * time invariant vars and drop entire series of firms from sample *
 . ***********************
-.         by frame_id_numeric: egen first_year_expat = min(cond(expat == 1, job_begin,.))
-(373,409 missing values generated)
+.         by frame_id_numeric: egen first_year_expat = min(cond(expat == 1, job
+> _begin,.))
+(373409 missing values generated)
 
-.         by frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.))
-(347,822 missing values generated)
+.         by frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1,
+>  year,.))
+(347822 missing values generated)
 
 .         
 .         * which of the two happened first?
@@ -181,15 +184,19 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
 (373,409 missing values generated)
 
 .         
-.         * if foreign manager arrives up to 2 years before 1 year later than foreign owner, use f
-> oreign manager as arrival date. this is easier to implement
-.         replace foreign = 1 if (manager_after_owner == -2) & inlist(event_time, 0, 1)
+.         * if foreign manager arrives up to 2 years before 1 year later than f
+> oreign owner, use foreign manager as arrival date. this is easier to implemen
+> t
+.         replace foreign = 1 if (manager_after_owner == -2) & inlist(event_tim
+> e, 0, 1)
 (206 real changes made)
 
-.         replace foreign = 1 if (manager_after_owner == -1) & inlist(event_time, 0)
+.         replace foreign = 1 if (manager_after_owner == -1) & inlist(event_tim
+> e, 0)
 (184 real changes made)
 
-.         replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
+.         replace foreign = 0 if (manager_after_owner == +1) & inlist(event_tim
+> e, -1)
 (326 real changes made)
 
 . 
@@ -199,8 +206,8 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
 (3,840 observations deleted)
 
 .         
-.         * ever expat and foreign created after foreign changes (drops were firm level before so 
-> should not mess with ever variables)
+.         * ever expat and foreign created after foreign changes (drops were fi
+> rm level before so should not mess with ever variables)
 .         foreach X of var expat foreign {
   2.                 by frame_id_numeric: egen ever_`X' = max(`X'==1)
   3.         }
@@ -213,8 +220,9 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
 .         scalar dropped_do3_expat_firmyears = r(N_drop)
 
 .         
-.         * drop too many CEO-s - FIXME AND QUESTION: should be moved in the next file where spell
-> s are limited - but there cannot be created without manager level data
+.         * drop too many CEO-s - FIXME AND QUESTION: should be moved in the ne
+> xt file where spells are limited - but there cannot be created without manage
+> r level data
 .         egen fp_tag = tag(frame_id_numeric manager_id) 
 
 .         by frame_id_numeric: egen n_ceo_ever = sum(fp_tag)
@@ -227,81 +235,82 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
 .         drop fp_tag n_ceo_ever
 
 .         
-. * hired or fired ceo since last observed year of firm - * POSSIBLE FIXME: expat, owner, insider,
->  outsider, founder - hire, fire combinations later
+. * hired or fired ceo since last observed year of firm - * POSSIBLE FIXME: exp
+> at, owner, insider, outsider, founder - hire, fire combinations later
 . tempvar previous_year
 
 . generate previous_year = .
 (467,602 missing values generated)
 
 . forval t = 1985/2018 {
-  2.         by frame_id_numeric: egen `previous_year' = max(cond(year < `t', year, .))
+  2.         by frame_id_numeric: egen `previous_year' = max(cond(year < `t', y
+> ear, .))
   3.         replace previous_year = `previous_year' if year == `t'
   4.         drop `previous_year'
   5. }
-(467,602 missing values generated)
+(467602 missing values generated)
 (0 real changes made)
-(467,602 missing values generated)
+(467602 missing values generated)
 (0 real changes made)
-(467,602 missing values generated)
+(467602 missing values generated)
 (0 real changes made)
-(467,602 missing values generated)
+(467602 missing values generated)
 (0 real changes made)
-(431,259 missing values generated)
+(431259 missing values generated)
 (1,994 real changes made)
-(430,088 missing values generated)
+(430088 missing values generated)
 (2,088 real changes made)
-(393,434 missing values generated)
+(393434 missing values generated)
 (4,495 real changes made)
-(354,181 missing values generated)
+(354181 missing values generated)
 (6,711 real changes made)
-(290,082 missing values generated)
+(290082 missing values generated)
 (9,889 real changes made)
-(242,039 missing values generated)
+(242039 missing values generated)
 (11,871 real changes made)
-(207,926 missing values generated)
+(207926 missing values generated)
 (12,924 real changes made)
-(184,892 missing values generated)
+(184892 missing values generated)
 (13,423 real changes made)
-(162,247 missing values generated)
+(162247 missing values generated)
 (14,087 real changes made)
-(137,836 missing values generated)
+(137836 missing values generated)
 (15,066 real changes made)
-(120,323 missing values generated)
+(120323 missing values generated)
 (15,533 real changes made)
-(107,101 missing values generated)
+(107101 missing values generated)
 (15,771 real changes made)
-(92,179 missing values generated)
+(92179 missing values generated)
 (16,179 real changes made)
-(79,071 missing values generated)
+(79071 missing values generated)
 (16,539 real changes made)
-(67,702 missing values generated)
+(67702 missing values generated)
 (16,721 real changes made)
-(59,487 missing values generated)
+(59487 missing values generated)
 (17,018 real changes made)
-(51,613 missing values generated)
+(51613 missing values generated)
 (17,215 real changes made)
-(44,177 missing values generated)
+(44177 missing values generated)
 (17,356 real changes made)
-(36,970 missing values generated)
+(36970 missing values generated)
 (17,467 real changes made)
-(31,051 missing values generated)
+(31051 missing values generated)
 (18,123 real changes made)
-(24,954 missing values generated)
+(24954 missing values generated)
 (17,895 real changes made)
-(20,106 missing values generated)
+(20106 missing values generated)
 (17,772 real changes made)
-(15,686 missing values generated)
+(15686 missing values generated)
 (17,669 real changes made)
-(11,749 missing values generated)
+(11749 missing values generated)
 (17,569 real changes made)
-(8,719 missing values generated)
+(8719 missing values generated)
 (17,577 real changes made)
-(5,946 missing values generated)
+(5946 missing values generated)
 (17,263 real changes made)
-(3,766 missing values generated)
+(3766 missing values generated)
 (16,484 real changes made)
-(2,150 missing values generated)
+(2150 missing values generated)
 (16,279 real changes made)
 (970 missing values generated)
 (16,250 real changes made)
@@ -311,8 +320,8 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
 . 
 . by frame_id_numeric: egen first_year = min(year)
 
-. bys frame_id_numeric (year): generate byte hire = cond(first_year == year, 1, (job_begin <= year
-> ) & (job_begin > previous_year))
+. bys frame_id_numeric (year): generate byte hire = cond(first_year == year, 1,
+>  (job_begin <= year) & (job_begin > previous_year))
 
 . 
 . tempvar next_year
@@ -321,7 +330,8 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
 (467,602 missing values generated)
 
 . forval t = 1985/2018 {
-  2.         by frame_id_numeric: egen `next_year' = min(cond(year > `t', year, .))
+  2.         by frame_id_numeric: egen `next_year' = min(cond(year > `t', year,
+>  .))
   3.         replace next_year = `next_year' if year == `t'
   4.         drop `next_year'
   5. }
@@ -336,59 +346,59 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
 (4,603 real changes made)
 (742 missing values generated)
 (6,946 real changes made)
-(3,500 missing values generated)
+(3500 missing values generated)
 (10,148 real changes made)
-(6,703 missing values generated)
+(6703 missing values generated)
 (11,882 real changes made)
-(10,228 missing values generated)
+(10228 missing values generated)
 (13,063 real changes made)
-(13,848 missing values generated)
+(13848 missing values generated)
 (13,504 real changes made)
-(17,697 missing values generated)
+(17697 missing values generated)
 (14,124 real changes made)
-(21,678 missing values generated)
+(21678 missing values generated)
 (14,911 real changes made)
-(25,872 missing values generated)
+(25872 missing values generated)
 (15,579 real changes made)
-(31,758 missing values generated)
+(31758 missing values generated)
 (15,638 real changes made)
-(36,882 missing values generated)
+(36882 missing values generated)
 (16,180 real changes made)
-(41,968 missing values generated)
+(41968 missing values generated)
 (16,503 real changes made)
-(47,798 missing values generated)
+(47798 missing values generated)
 (16,747 real changes made)
-(54,087 missing values generated)
+(54087 missing values generated)
 (16,759 real changes made)
-(61,036 missing values generated)
+(61036 missing values generated)
 (17,038 real changes made)
-(67,936 missing values generated)
+(67936 missing values generated)
 (17,176 real changes made)
-(75,860 missing values generated)
+(75860 missing values generated)
 (17,280 real changes made)
-(84,021 missing values generated)
+(84021 missing values generated)
 (17,329 real changes made)
-(93,731 missing values generated)
+(93731 missing values generated)
 (17,848 real changes made)
-(103,027 missing values generated)
+(103027 missing values generated)
 (17,654 real changes made)
-(111,759 missing values generated)
+(111759 missing values generated)
 (17,582 real changes made)
-(120,625 missing values generated)
+(120625 missing values generated)
 (17,532 real changes made)
-(128,332 missing values generated)
+(128332 missing values generated)
 (17,409 real changes made)
-(139,082 missing values generated)
+(139082 missing values generated)
 (17,289 real changes made)
-(155,696 missing values generated)
+(155696 missing values generated)
 (16,583 real changes made)
-(165,929 missing values generated)
+(165929 missing values generated)
 (16,208 real changes made)
-(174,832 missing values generated)
+(174832 missing values generated)
 (16,068 real changes made)
-(190,261 missing values generated)
+(190261 missing values generated)
 (15,611 real changes made)
-(467,602 missing values generated)
+(467602 missing values generated)
 (0 real changes made)
 
 . 
@@ -405,28 +415,503 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
      Total |   388,107     79,495 |   467,602 
 
 . 
+. gen hire_expat = hire * expat
+
+. gen fire_expat = fire * expat
+
+. 
 . * number of expats and locals
-. bys frame_id_numeric year: egen n_expat = total(cond(expat, 1, 0)) // could be in collapse but l
-> ocal not
+. bys frame_id_numeric year: egen n_expat = total(cond(expat, 1, 0)) // could b
+> e in collapse but local not
 
 . bys frame_id_numeric year: egen n_local = total(cond(!expat, 1, 0))
 
 . 
-. * create firm-year data
-. collapse (sum) n_founder = founder n_insider = insider n_outsider = outsider (firstnm) n_expat n
-> _local foreign ever_expat ever_foreign (count) n_ceo = expat (max) hire_ceo = hire fire_ceo = fi
-> re, by(frame_id_numeric year)
+. * checking whether the same manager can come from different countries
+. sort frame_id_numeric manager_id year
+
+. count if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == manage
+> r_id[_n-1]) & (country_code != country_code[_n-1]) & country_code != "" & cou
+> ntry_code[_n-1] != ""
+  178
+
+. count if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == manage
+> r_id[_n-1]) & (country_code != country_code[_n-1]) & country_code == "" & cou
+> ntry_code[_n-1] != ""
+  616
+
+. *browse if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == mana
+> ger_id[_n-1]) & (country_code != country_code[_n-1]) & country_code != "" & c
+> ountry_code[_n-1] != ""
+. *browse if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == mana
+> ger_id[_n-1]) & (country_code != country_code[_n-1]) & country_code == "" & c
+> ountry_code[_n-1] != ""
+. 
+. * same manager with multiple countries changed to mode country
+. tab country_code expat, missing
+
+country_co |         expat
+        de |         0          1 |     Total
+-----------+----------------------+----------
+           |   414,986      7,839 |   422,825 
+        AE |         0         30 |        30 
+        AL |         0          3 |         3 
+        AM |         0          5 |         5 
+        AR |         0         16 |        16 
+        AT |        19      8,572 |     8,591 
+        AU |         0         81 |        81 
+        AZ |         0          1 |         1 
+        BA |         0          3 |         3 
+        BE |         0      1,092 |     1,092 
+        BG |         0         30 |        30 
+        BR |         0         31 |        31 
+        BS |         0          5 |         5 
+        BY |         0         15 |        15 
+        CA |         0        142 |       142 
+        CH |         0      2,070 |     2,070 
+        CN |         0        219 |       219 
+        CR |         0          1 |         1 
+        CS |         0          2 |         2 
+        CY |         0         54 |        54 
+        CZ |         0        985 |       985 
+        DE |         6     13,614 |    13,620 
+        DK |         0        228 |       228 
+        DM |         0          9 |         9 
+        EE |         0          5 |         5 
+        EG |         0          7 |         7 
+        ES |         0        695 |       695 
+        FI |         0        235 |       235 
+        FR |         0      2,019 |     2,019 
+        GB |         0      1,656 |     1,656 
+        GD |         0          3 |         3 
+        GE |         0         37 |        37 
+        GI |         0          2 |         2 
+        GR |         0         45 |        45 
+        GY |         0         14 |        14 
+        HK |         0          6 |         6 
+        HN |         0          3 |         3 
+        HR |         0        125 |       125 
+        HU |        47          0 |        47 
+        ID |         0          3 |         3 
+        IE |         0        212 |       212 
+        IL |         0        629 |       629 
+        IN |         0         96 |        96 
+        IR |         0         55 |        55 
+        IS |         0         29 |        29 
+        IT |         0      4,167 |     4,167 
+        JP |         0        712 |       712 
+        KN |         0          9 |         9 
+        KP |         0          1 |         1 
+        KR |         0        116 |       116 
+        KZ |         0          1 |         1 
+        LA |         0          2 |         2 
+        LB |         0          3 |         3 
+        LI |         0         12 |        12 
+        LT |         0         12 |        12 
+        LU |         0        129 |       129 
+        LV |         0          1 |         1 
+        MA |         0         13 |        13 
+        MC |         0         22 |        22 
+        MD |         0          2 |         2 
+        MN |         0          4 |         4 
+        MO |         0          4 |         4 
+        MT |         0         13 |        13 
+        MX |         0          8 |         8 
+        MY |         0         16 |        16 
+        NC |         0         10 |        10 
+        NE |         0          3 |         3 
+        NG |         0          8 |         8 
+        NL |         0      1,428 |     1,428 
+        NO |         0         46 |        46 
+        NZ |         0         18 |        18 
+        OM |         0          4 |         4 
+        PE |         0          2 |         2 
+        PH |         0         16 |        16 
+        PL |         0        587 |       587 
+        PT |         0        107 |       107 
+        RO |         0        218 |       218 
+        RS |         0        225 |       225 
+        RU |         0        128 |       128 
+        SC |         0          5 |         5 
+        SE |         0        506 |       506 
+        SG |         0         45 |        45 
+        SI |         0         49 |        49 
+        SK |         0        460 |       460 
+        SL |         0         12 |        12 
+        SM |         0          2 |         2 
+        SN |         0          3 |         3 
+        SO |         0          7 |         7 
+        SR |         0         32 |        32 
+        SV |         0         13 |        13 
+        SY |         0          2 |         2 
+        TH |         0         46 |        46 
+        TN |         0         14 |        14 
+        TR |         0        143 |       143 
+        TT |         0          5 |         5 
+        TW |         0         21 |        21 
+        UA |         0        159 |       159 
+        US |         0      1,952 |     1,952 
+        UY |         0          3 |         3 
+        VA |         0          7 |         7 
+        VE |         0          3 |         3 
+        VN |         0         73 |        73 
+        ZA |         0         12 |        12 
+-----------+----------------------+----------
+     Total |   415,058     52,544 |   467,602 
+
+. bys frame_id_numeric manager_id: egen country_code_fill = mode(country_code),
+>  minmode
+Warning: at least one group contains all missing values or contains multiple
+modes.  Generating missing values for the mode of these groups.  Use the
+missing, maxmode, minmode, or nummode() options to control this behavior.
+(419013 missing values generated)
+
+. tab country_code_fill expat, missing
+
+country_co |         expat
+   de_fill |         0          1 |     Total
+-----------+----------------------+----------
+           |   414,922      4,091 |   419,013 
+        AE |         0         29 |        29 
+        AM |         0          5 |         5 
+        AR |         0         16 |        16 
+        AT |        19      9,176 |     9,195 
+        AU |         0         75 |        75 
+        AZ |         0          1 |         1 
+        BA |         0          3 |         3 
+        BE |         0      1,225 |     1,225 
+        BG |         0         35 |        35 
+        BR |         0         43 |        43 
+        BS |         0          5 |         5 
+        BY |         0         49 |        49 
+        CA |         0        162 |       162 
+        CH |         0      2,220 |     2,220 
+        CN |         0        251 |       251 
+        CR |         0          1 |         1 
+        CS |         0          2 |         2 
+        CY |         0         60 |        60 
+        CZ |         0      1,028 |     1,028 
+        DE |        16     14,552 |    14,568 
+        DK |         0        249 |       249 
+        DM |         0          9 |         9 
+        EE |         0          5 |         5 
+        EG |         0          9 |         9 
+        ES |         0        727 |       727 
+        FI |         0        259 |       259 
+        FR |         0      2,183 |     2,183 
+        GB |         0      1,780 |     1,780 
+        GD |         0          4 |         4 
+        GE |         0         67 |        67 
+        GR |         0         51 |        51 
+        GY |         0         16 |        16 
+        HK |         0          9 |         9 
+        HN |         0          3 |         3 
+        HR |         0        140 |       140 
+        HU |       101          0 |       101 
+        ID |         0          3 |         3 
+        IE |         0        207 |       207 
+        IL |         0        686 |       686 
+        IN |         0        141 |       141 
+        IR |         0         69 |        69 
+        IS |         0         42 |        42 
+        IT |         0      4,574 |     4,574 
+        JP |         0        749 |       749 
+        KN |         0          9 |         9 
+        KP |         0          1 |         1 
+        KR |         0        121 |       121 
+        KZ |         0          1 |         1 
+        LA |         0          5 |         5 
+        LB |         0          3 |         3 
+        LI |         0         18 |        18 
+        LT |         0         12 |        12 
+        LU |         0        133 |       133 
+        LV |         0          4 |         4 
+        MA |         0         17 |        17 
+        MC |         0         26 |        26 
+        MD |         0          4 |         4 
+        MN |         0          9 |         9 
+        MO |         0          4 |         4 
+        MT |         0         19 |        19 
+        MX |         0          8 |         8 
+        MY |         0         14 |        14 
+        NC |         0         10 |        10 
+        NE |         0          4 |         4 
+        NG |         0          9 |         9 
+        NL |         0      1,511 |     1,511 
+        NO |         0         48 |        48 
+        NZ |         0         25 |        25 
+        OM |         0          4 |         4 
+        PE |         0          5 |         5 
+        PH |         0         19 |        19 
+        PL |         0        628 |       628 
+        PT |         0        110 |       110 
+        RO |         0        249 |       249 
+        RS |         0        373 |       373 
+        RU |         0        143 |       143 
+        SC |         0          5 |         5 
+        SE |         0        529 |       529 
+        SG |         0         47 |        47 
+        SI |         0         51 |        51 
+        SK |         0        526 |       526 
+        SL |         0          9 |         9 
+        SM |         0          2 |         2 
+        SN |         0          4 |         4 
+        SO |         0          7 |         7 
+        SR |         0         37 |        37 
+        SV |         0         16 |        16 
+        SY |         0          2 |         2 
+        TH |         0         47 |        47 
+        TN |         0         14 |        14 
+        TR |         0        214 |       214 
+        TT |         0          5 |         5 
+        TW |         0         18 |        18 
+        UA |         0        209 |       209 
+        US |         0      2,073 |     2,073 
+        UY |         0          3 |         3 
+        VA |         0          7 |         7 
+        VN |         0        148 |       148 
+        ZA |         0         14 |        14 
+-----------+----------------------+----------
+     Total |   415,058     52,544 |   467,602 
 
 . 
-. * managers in first year not classified as new hires and in last year not classified as fired
+. * same manager with multiple countries changed to mode country
+. bys manager_id: egen country_code_fill_manager = mode(country_code), minmode
+Warning: at least one group contains all missing values or contains multiple
+modes.  Generating missing values for the mode of these groups.  Use the
+missing, maxmode, minmode, or nummode() options to control this behavior.
+(418631 missing values generated)
+
+. tab country_code_fill_manager expat, missing
+
+country_co |
+de_fill_ma |         expat
+     nager |         0          1 |     Total
+-----------+----------------------+----------
+           |   414,886      3,745 |   418,631 
+        AE |         0         41 |        41 
+        AM |         0          5 |         5 
+        AR |         0         16 |        16 
+        AT |        21      9,243 |     9,264 
+        AU |         0         66 |        66 
+        AZ |         0          1 |         1 
+        BA |         0          3 |         3 
+        BE |         0      1,259 |     1,259 
+        BG |         0         35 |        35 
+        BR |         0         40 |        40 
+        BS |         0          5 |         5 
+        BY |         0         49 |        49 
+        CA |         0        162 |       162 
+        CH |         1      2,207 |     2,208 
+        CN |         0        255 |       255 
+        CR |         0          1 |         1 
+        CS |         0          2 |         2 
+        CY |         0         60 |        60 
+        CZ |         0      1,028 |     1,028 
+        DE |        16     14,669 |    14,685 
+        DK |         0        249 |       249 
+        DM |         0          9 |         9 
+        EE |         0          5 |         5 
+        EG |         0         11 |        11 
+        ES |         0        727 |       727 
+        FI |         0        259 |       259 
+        FR |         2      2,188 |     2,190 
+        GB |         0      1,787 |     1,787 
+        GD |         0          4 |         4 
+        GE |         0         71 |        71 
+        GR |         0         54 |        54 
+        GY |         0         16 |        16 
+        HK |         0          9 |         9 
+        HN |         0          3 |         3 
+        HR |         0        143 |       143 
+        HU |       123          0 |       123 
+        ID |         0          3 |         3 
+        IE |         0        213 |       213 
+        IL |         0        719 |       719 
+        IN |         0        148 |       148 
+        IR |         0         72 |        72 
+        IS |         0         39 |        39 
+        IT |         0      4,595 |     4,595 
+        JP |         0        751 |       751 
+        KN |         0          9 |         9 
+        KP |         0          1 |         1 
+        KR |         0        121 |       121 
+        KZ |         0          1 |         1 
+        LA |         0          5 |         5 
+        LB |         0          3 |         3 
+        LI |         0         18 |        18 
+        LT |         0         12 |        12 
+        LU |         0        133 |       133 
+        LV |         0          8 |         8 
+        MA |         0         17 |        17 
+        MC |         0         26 |        26 
+        MD |         0          4 |         4 
+        MN |         0          9 |         9 
+        MO |         0          4 |         4 
+        MT |         0         19 |        19 
+        MX |         0          8 |         8 
+        MY |         0         14 |        14 
+        NC |         0         10 |        10 
+        NE |         0          4 |         4 
+        NG |         0          9 |         9 
+        NL |         0      1,536 |     1,536 
+        NO |         0         48 |        48 
+        NZ |         0         25 |        25 
+        OM |         0          8 |         8 
+        PE |         0          6 |         6 
+        PH |         0         19 |        19 
+        PL |         0        629 |       629 
+        PT |         0        110 |       110 
+        RO |         0        249 |       249 
+        RS |         0        375 |       375 
+        RU |         6        143 |       149 
+        SC |         0          5 |         5 
+        SE |         3        530 |       533 
+        SG |         0         47 |        47 
+        SI |         0         51 |        51 
+        SK |         0        538 |       538 
+        SL |         0          9 |         9 
+        SM |         0          2 |         2 
+        SN |         0          4 |         4 
+        SO |         0          7 |         7 
+        SR |         0         37 |        37 
+        SV |         0         16 |        16 
+        SY |         0          2 |         2 
+        TH |         0         47 |        47 
+        TN |         0         14 |        14 
+        TR |         0        214 |       214 
+        TW |         0         18 |        18 
+        UA |         0        206 |       206 
+        US |         0      2,072 |     2,072 
+        UY |         0          3 |         3 
+        VA |         0          7 |         7 
+        VN |         0        151 |       151 
+        ZA |         0         14 |        14 
+-----------+----------------------+----------
+     Total |   415,058     52,544 |   467,602 
+
+. 
+. * checking whether the same manager can come from different countries after m
+> ode change
+. sort frame_id_numeric manager_id year
+
+. count if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == manage
+> r_id[_n-1]) & (country_code_fill != country_code_fill[_n-1]) & country_code_f
+> ill != "" & country_code_fill[_n-1] != ""
+  0
+
+. count if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == manage
+> r_id[_n-1]) & (country_code_fill != country_code_fill[_n-1]) & country_code_f
+> ill == "" & country_code_fill[_n-1] != ""
+  0
+
+. 
+. * checking whether there are expats from multiple countries in a given year
+. sort frame_id_numeric year manager_id
+
+. count if (frame_id_numeric == frame_id_numeric[_n-1]) & (year == year[_n-1]) 
+> & country_code_fill != "" & country_code_fill[_n-1] != "" & n_expat > 1
+  13,173
+
+. count if (frame_id_numeric == frame_id_numeric[_n-1]) & (year == year[_n-1]) 
+> & (country_code_fill != country_code_fill[_n-1]) & country_code_fill != "" & 
+> country_code_fill[_n-1] != "" & n_expat > 1
+  3,259
+
+. count if (frame_id_numeric == frame_id_numeric[_n-1]) & (year == year[_n-1]) 
+> & (country_code_fill == country_code_fill[_n-1]) & country_code_fill != "" & 
+> country_code_fill[_n-1] != "" & n_expat > 1
+  9,914
+
+. count
+  467,602
+
+. 
+. * adding all country codes for one firm-year into one variable
+. preserve
+
+. duplicates drop frame_id_numeric year country_code_fill, force
+
+Duplicates in terms of frame_id_numeric year country_code_fill
+
+(120,410 observations deleted)
+
+. replace country_code_fill = "missing" if country_code_fill == ""
+variable country_code_fill was str2 now str7
+(309,180 real changes made)
+
+. 
+. forval i = 1/4 {
+  2.         bys frame_id_numeric year: gen country_`i' = country_code_fill[`i'
+> ]
+  3. }
+(311,735 missing values generated)
+(343,969 missing values generated)
+(347,008 missing values generated)
+
+. 
+. gen country_all = country_1 + "," +country_2  + "," +country_3
+
+. replace country_all = subinstr(country_all,",,","",.)
+(311,735 real changes made)
+
+. replace country_all = substr(country_all, 1, length(country_all) - 1) if subs
+> tr(country_all, -1, 1) ==  ","
+(32,234 real changes made)
+
+. 
+. duplicates drop frame_id_numeric year, force
+
+Duplicates in terms of frame_id_numeric year
+
+(18,281 observations deleted)
+
+. 
+. tempfile countries
+
+. save `countries'
+file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St14123.000003 saved
+
+. restore
+
+. 
+. merge m:1 frame_id_numeric year using `countries', nogen keepusing(country_al
+> l)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           467,602  
+    -----------------------------------------
+
+. count
+  467,602
+
+. 
+. * create firm-year data
+. * FIXME: country_code may be different within a firm-year
+. collapse (sum) n_founder = founder n_insider = insider n_outsider = outsider 
+> (firstnm) n_expat n_local foreign ever_expat ever_foreign country_code = coun
+> try_all (count) n_ceo = expat (max) hire_ceo = hire fire_ceo = fire hire_expa
+> t fire_expat, by(frame_id_numeric year)
+
+. 
+. * managers in first year not classified as new hires and in last year not cla
+> ssified as fired
 . bys frame_id_numeric (year): replace hire_ceo = 0 if (_n==1)
 (27,193 real changes made)
 
 . bys frame_id_numeric (year): replace fire_ceo = 0 if (_n==_N)
 (27,193 real changes made)
 
-. bys frame_id_numeric (year): gen ceo_spell = sum(hire_ceo | fire_ceo) + 1 // so that index start
->  from 1
+. bys frame_id_numeric (year): replace hire_expat = 0 if (_n==1)
+(2694 real changes made)
+
+. bys frame_id_numeric (year): replace fire_expat = 0 if (_n==_N)
+(2810 real changes made)
+
+. bys frame_id_numeric (year): gen ceo_spell = sum(hire_ceo | fire_ceo) + 1 // 
+> so that index start from 1
 
 . 
 . * create dummies from numbers
@@ -435,12 +920,18 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
   3. }
 
 . 
+. count
+  328,911
+
+. 
 . compress
   variable n_expat was float now byte
   variable n_local was float now byte
   variable ever_expat was float now byte
   variable ever_foreign was float now byte
   variable n_ceo was long now byte
+  variable hire_expat was float now byte
+  variable fire_expat was float now byte
   variable ceo_spell was float now byte
   variable has_expat was float now byte
   variable has_local was float now byte
@@ -450,18 +941,16 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
   variable n_founder was double now byte
   variable n_insider was double now byte
   variable n_outsider was double now byte
-  (17,761,194 bytes saved)
+  (19,734,660 bytes saved)
 
 . save_all_to_json
 
-. save "temp/firm_events.dta", replace
-(note: file temp/firm_events.dta not found)
-file temp/firm_events.dta saved
+. save "`here'/temp/firm_events.dta", replace
+file /Users/koren/Tresorit/projects/expat//temp/firm_events.dta saved
 
 . log close
       name:  <unnamed>
-       log:  C:\Users\Almos\Documents\Research\Expat\Expat_git\expat-analysis\output/firm_panel.lo
-> g
+       log:  /Users/koren/Tresorit/projects/expat//output/firm_panel.log
   log type:  text
- closed on:  21 Oct 2020, 17:30:17
---------------------------------------------------------------------------------------------------
+ closed on:  22 Jan 2021, 10:32:04
+-------------------------------------------------------------------------------

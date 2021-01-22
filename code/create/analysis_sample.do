@@ -41,5 +41,7 @@ egen ever_same_country = max(country_same), by(originalid)
 
 do "`here'/code/create/countries.do"
 
+keep if year >= 1992 & year <= 2003
+
 compress
 save "`here'/temp/analysis_sample.dta", replace
