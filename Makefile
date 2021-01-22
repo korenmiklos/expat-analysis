@@ -17,6 +17,8 @@ temp/firm_events.dta: input/ceo-panel/ceo-panel.dta temp/balance-small-clean.dta
 	$(STATA) code/create/firm_panel.do
 temp/balance-small-clean.dta: input/merleg-expat/balance-small.dta code/create/balance.do
 	$(STATA) code/create/balance.do
+temp/trade.dta: input/trade-firm-panel/trade-country-firm.dta temp/balance-small-clean.dta code/create/trade.do
+	$(STATA) code/create/trade.do
 install:
 	$(STATA) install.do
 tables: 
