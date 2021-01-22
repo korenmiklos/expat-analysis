@@ -39,26 +39,22 @@ egen industry_year = group(teaor08_1d year)
 egen last_before_acquisition = max(cond(time_foreign<0, time_foreign, .)), by(originalid)
 egen ever_same_country = max(country_same), by(originalid)
 
-do "`here'/code/create/countries.do"
-
 keep if year >= 1992 & year <= 2003
 
 rename export export_sales
+
+tempfile fy
+save `fy', replace
+
+do "`here'/code/create/countries.do"
 merge 1:1 originalid year using "temp/trade.dta", keep(master match) nogen
 mvencode export* import*, mv(0) override
 
-local countries DE AT CH NL FR GB IT US
-local variables export import import_capital import_material
-foreach X in `variables' {
-	generate byte `X'_same_country = 0
-	generate byte `X'_other_country = 0
-	foreach cnt in `countries' {
-		replace `X'_same_country = 1 if (`cnt'==1) & (`X'`cnt'==1)
-		replace `X'_other_country = 1 if (`cnt'==0) & (`X'`cnt'==1)
-		drop `X'`cnt'
-	}
-	replace `X'_other_country = 1 if (`X'XX==1)
-	drop `X'XX
-}
+keep originalid year export?? import?? import_capital?? import_material?? owner?? manager??
+drop exporter
+
+reshape long export import import_capital import_material owner manager, i(originalid year) j(country) string
+merge m:1 originalid year using `fy', keep(match) nogen
+
 compress
-save "`here'/temp/analysis_sample.dta", replace
+save "`here'/temp/analysis_sample_dyadic.dta", replace
