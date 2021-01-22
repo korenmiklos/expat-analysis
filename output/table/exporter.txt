@@ -7,10 +7,8 @@ foreign_hire	-0.010	0.032**
 	(0.015)	(0.013)
 has_expat	0.059**	-0.008
 	(0.024)	(0.011)
-Constant	0.062***	0.870***
-	(0.000)	(0.001)
 		
 Observations	159,353	71,100
 R-squared	0.284	0.345
-Robust standard errors in parentheses		
-*** p<0.01, ** p<0.05, * p<0.1		
+Ind-year FE	YES	YES
+Firm FE	YES	YES

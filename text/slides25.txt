@@ -2,12 +2,14 @@
 
 = Motivation =
 == Motivation ==
+Why and how do firms produce abroad?
+
 1. What are the boundaries of (global) firms?
 2. Foreign owned firms perform better than domestic firms
 3. Managers matter
 
 
-== What are the boundaries of (global) firms? ===
+== What are the boundaries of (global) firms? ==
 \begin{tikzpicture}
 \node (a) at (0,0) {arm's length};
 \node (b) at (3,0) {relational};
@@ -35,13 +37,13 @@
 == This paper ==
 * Compile new data on which firm is run by which manager: Hungary, 1980--2018. 
 * Measure different degrees of foreign control:
-	1. acquisition
-	2. replace CEO
-	3. hire expat CEO
+    1. acquisition
+    2. replace CEO
+    3. hire expat CEO
 * Results:
-	* Exporters and low-productivity firms become more tightly controlled. 
-	* Firms with high immaterial capital receive local managers.
-	* Foreign controlled firms become more productive and more likely to export. 
+    * Exporters and low-productivity firms become more tightly controlled. 
+    * Firms with high immaterial capital receive local managers.
+    * Foreign controlled firms become more productive and more likely to export. 
 
 
 = Data =
@@ -50,7 +52,7 @@
 === Hungarian Manager Database ===
 * coverage: universe of corporations, 1980--2018
 * CEO: highest officer of corporation as specified in corporate law.
-	- information: name, mother's name, address, tenure at firm
+    - information: name, mother's name, address, tenure at firm
 * 1 million firms, 2 million CEOs, 5 million job spells
 
 === Balance sheet data ===
@@ -59,22 +61,22 @@
 
 == Names ==
 * We use manager names to infer 
-	1. CEO change
-	2. nationality
-	3. gender (not used today)
+    1. CEO change
+    2. nationality
+    3. gender (not used today)
 * Foreign manager: firm representative with a non-Hungarian first name
-	- e.g. Eva Bauer v Bauer Éva
-	- but: George Soros v Soros György
+    - e.g. Eva Bauer v Bauer Éva
+    - but: George Soros v Soros György
 * Allow for misspelling, omitted middle name, missing data (jr, dr)
 
 == Sample ==
-* Exclude: 
-	- employing less than 20 people
-	- financial sector
-	- domestic firms with expat CEO
-	- greenfield FDI
-	- firms with more than 15 CEOs
-* Left with 24,500 firms
+- Exclude: 
+    - employing less than 20 people
+    - financial sector
+    - domestic firms with expat CEO
+    - greenfield FDI
+    - firms with more than 15 CEOs
+- Left with 24,500 firms
 
 = Descriptives =
 \longfigure{input/ceo-panel/fig/manager-type-by-year/fig.pdf}{The number of CEOs increased sharply until 2010}
@@ -97,7 +99,7 @@
 * '''foreign''': firm has majority foreign owner
 * '''foreign\_hire''': firm has a manager hired by foreign owner
 * '''has\_expat''': firm has an expat manager
-* '''CONTROL${}^k$''': on of the three ($k=1,2,3$)
+* '''CONTROL${}^k$''': one of the three ($k=1,2,3$)
 * '''lnL''': log employment
 * '''lnQL''': log output per worker
 * '''TFP\_cd''': TFP (simple Cobb--Douglas)
@@ -130,21 +132,16 @@ $$
 == Positive selection on exports, negative on TFP ==
 \regressiontable{selection}
 
-== Hiring an expat is associated with productivity and exporting ==
+== Hiring an expat is associated with increased productivity and exporting ==
 \regressiontable{diffindiff}
 
 == Expats help start exporting, but have no effect on continuation ==
 \regressiontable{exporter}
 
-= Interpretation =
-== Interpretation ==
-
-
-
 = Conclusions =
 == Conclusions ==
-* What are the boundaries of global firms? Past work has studied the causes and consequences of foreign acquisitions. 
-* We go one step deeper and ask when are managers also replaced. This arguably increases control over the acquired company. 
+* What are the causes and consequences of foreign acquisitions?
+* We ask when managers are also replaced.
 * Using data on the universe of foreign acquisitions in Hungary, 1980-2018, we estimate that exporters and low-productivity firms become more tightly controlled. 
 * Foreign controlled firms become more productive and more likely to export. 
 * These facts help inform theories about the boundaries of global firms and about the role of managers in firm performance.

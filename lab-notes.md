@@ -1563,3 +1563,26 @@ After bugfix, there are 89,000 changes.
       Total |      1,945      100.00
 
 ```
+
+# 2020-12-15
+Notes from presentation
+
+18:53:09   From Peter Schott : If a foreign firm does both greenfield and acquisition, would it be included? is that rare?
+18:53:48   From Álmos Telegdy : We include firms that start as domestic, and then are acquired by a foreign entity. 
+18:54:38   From Álmos Telegdy : It does happen that greenfield firms are divested and acquired again (so they are foreign acquisitions), but this is quite uncommon. 
+18:57:27   From Dalia Marin : do you have the countries from which the foreign managers are coming?
+18:58:50   From Álmos Telegdy : We have that for some managers, and they seem to come usually from the country of the parent company.
+18:59:42   From Peter Schott : are the laborprod, TFP results driven by the addition of lots of capital to the acquired firm?
+18:59:47   From Robert : Can you control for capital input?
+19:00:22   From Álmos Telegdy : In TFP regressions we control for L,K,M.
+19:01:02   From Robert : But not in the labour productivity regressions?
+19:01:12   From Álmos Telegdy : Capital is actually not related to the change of the manager. 
+19:01:24   From Álmos Telegdy : Not in labor productivity.
+19:03:46   From Aksel Erbahar : Does importing play a role? The country imported from might want to install a manager that understands the imported inputs (especially if they are customized)
+19:05:20   From Claudia Steinwender : can you distinguish between exports to the HQ (or country of the owner) versus overall exports? do both increase?
+19:05:37   From Álmos Telegdy : Good point. What we see is that importing increases with expat managers. But we should check for selection into having an expat as well. 
+19:06:01   From Álmos Telegdy : We cannot distinguish between the two kinds of export.
+
+What is the effect of the country of origin?  ERRE TÉNYLEG KONTROLLÁLUNK????
+The country of origin may matter for selection into expat. WE MAY WANT TO RUN THIS WITHOUT INDUSTRY EFFECTS (OR LOOK AT INDUSTRY SELECTION).
+How trade relations change? 
