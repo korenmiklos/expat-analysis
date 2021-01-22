@@ -51,12 +51,14 @@ local countries DE AT CH NL FR GB IT US
 local variables export import import_capital import_material
 foreach X in `variables' {
 	generate byte `X'_same_country = 0
+	generate byte `X'_other_country = 0
 	foreach cnt in `countries' {
 		replace `X'_same_country = 1 if (`cnt'==1) & (`X'`cnt'==1)
+		replace `X'_other_country = 1 if (`cnt'==0) & (`X'`cnt'==1)
 		drop `X'`cnt'
 	}
+	replace `X'_other_country = 1 if (`X'XX==1)
 	drop `X'XX
-	generate byte `X'_other_country = `X' & !`X'_same_country
 }
 compress
 save "`here'/temp/analysis_sample.dta", replace
