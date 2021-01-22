@@ -1,0 +1,13 @@
+	(1)	(2)	(3)	(4)	(5)	(6)
+VARIABLES	exporter	import_capital	import_material	export_same_country	import_capital_same_country	import_material_same_country
+						
+foreign	0.242***	0.283***	0.300***	0.103***	0.092***	0.142***
+	(0.020)	(0.022)	(0.021)	(0.015)	(0.012)	(0.017)
+foreign_hire	0.025	0.009	0.014	-0.004	0.002	-0.007
+	(0.029)	(0.031)	(0.029)	(0.020)	(0.017)	(0.022)
+has_expat	0.075**	0.182***	0.090***	0.097***	0.142***	0.141***
+	(0.030)	(0.032)	(0.030)	(0.023)	(0.023)	(0.025)
+						
+Observations	114,036	114,036	114,036	114,036	114,036	114,036
+R-squared	0.212	0.125	0.210	0.133	0.150	0.175
+Ind-year FE	YES	YES	YES	YES	YES	YES
