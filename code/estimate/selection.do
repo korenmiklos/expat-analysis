@@ -3,9 +3,9 @@ local here = r(here)
 
 use "`here'/temp/analysis_sample.dta", clear
 
-local explanatory lnL exporter import_capital import_material TFP_cd RperK ??
+local explanatory lnL exporter import_capital import_material export_same_country import_capital_same_country import_material_same_country TFP_cd RperK ??
 local dummies teaor08_2d##year
-local options keep(lnL exporter import_capital import_material TFP_cd RperK) tex(frag) dec(3) nocons nonotes addtext(Ind-year FE, YES)
+local options keep(lnL exporter import_capital import_material export_same_country import_capital_same_country import_material_same_country TFP_cd RperK) tex(frag) dec(3) nocons nonotes addtext(Ind-year FE, YES)
 local sample1 !foreign & owner_spell == 1
 
 * selection into foreign acquisition

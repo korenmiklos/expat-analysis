@@ -47,5 +47,15 @@ rename export export_sales
 merge 1:1 originalid year using "temp/trade.dta", keep(master match) nogen
 mvencode export* import*, mv(0) override
 
+local countries DE AT CH NL FR GB IT US
+local variables export import_capital import_material
+foreach X in `variables' {
+	generate byte `X'_same_country = 0
+	foreach cnt in `countries' {
+		replace `X'_same_country = 1 if (`cnt'==1) & (`X'`cnt'==1)
+		drop `X'`cnt'
+	}
+	drop `X'XX
+}
 compress
 save "`here'/temp/analysis_sample.dta", replace
