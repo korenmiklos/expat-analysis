@@ -1586,3 +1586,44 @@ Notes from presentation
 What is the effect of the country of origin?  ERRE TÉNYLEG KONTROLLÁLUNK????
 The country of origin may matter for selection into expat. WE MAY WANT TO RUN THIS WITHOUT INDUSTRY EFFECTS (OR LOOK AT INDUSTRY SELECTION).
 How trade relations change? 
+
+# 2021-01-22
+## Check sample 1992-2003
+Before add trade dummies, check all existing results for this sample. #62
+
+Diff-in-diff changes: expats expand employment fast.
+```
+  (1) (2) (3) (4) (5)
+VARIABLES lnL lnQL  TFP_cd  exporter  RperK
+          
+foreign 0.039 0.121***  0.050***  0.010 0.012***
+  (0.035) (0.025) (0.011) (0.017) (0.003)
+foreign_hire  -0.077  0.146***  0.021 -0.002  0.008
+  (0.060) (0.043) (0.023) (0.022) (0.005)
+has_expat 0.145** -0.011  0.003 0.052** -0.016***
+  (0.068) (0.049) (0.026) (0.026) (0.006)
+          
+Observations  111,829 111,829 111,705 111,829 111,386
+R-squared 0.778 0.848 0.328 0.722 0.441
+Ind-year FE YES YES YES YES YES
+Firm FE YES YES YES YES YES
+```
+
+Selection equation is very similar to before
+```
+  (1) (2) (3)
+VARIABLES ever_foreign  ever_foreign_hire ever_expat
+      
+lnL 0.010***  0.007 -0.016
+  (0.002) (0.012) (0.014)
+exporter  0.030***  0.052 0.073*
+  (0.004) (0.032) (0.041)
+TFP_cd  -0.003  -0.048* 0.028
+  (0.003) (0.028) (0.041)
+RperK 0.046***  0.152 -0.242*
+  (0.015) (0.119) (0.127)
+      
+Observations  108,933 5,839 3,883
+R-squared 0.095 0.112 0.207
+Ind-year FE YES YES YES
+```
