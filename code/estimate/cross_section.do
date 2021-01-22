@@ -5,7 +5,7 @@ local here = r(here)
 use "`here'/temp/analysis_sample.dta", clear
 
 local main lnL lnQL TFP_cd RperK
-local trade exporter import_capital import_material export_same_country import_capital_same_country import_material_same_country
+local trade export_same_country import_capital_same_country import_material_same_country export_other_country import_capital_other_country import_material_other_country
 
 local dummies teaor08_2d##year
 local treatments foreign foreign_hire has_expat

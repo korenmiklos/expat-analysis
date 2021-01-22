@@ -48,7 +48,7 @@ merge 1:1 originalid year using "temp/trade.dta", keep(master match) nogen
 mvencode export* import*, mv(0) override
 
 local countries DE AT CH NL FR GB IT US
-local variables export import_capital import_material
+local variables export import import_capital import_material
 foreach X in `variables' {
 	generate byte `X'_same_country = 0
 	foreach cnt in `countries' {
@@ -56,6 +56,7 @@ foreach X in `variables' {
 		drop `X'`cnt'
 	}
 	drop `X'XX
+	generate byte `X'_other_country = `X' & !`X'_same_country
 }
 compress
 save "`here'/temp/analysis_sample.dta", replace

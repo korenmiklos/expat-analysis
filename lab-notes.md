@@ -1642,3 +1642,21 @@ foreign_hire  -0.077  0.146***  0.021 0.008 -0.002  -0.022  -0.028  0.012 -0.004
 has_expat 0.145** -0.011  0.003 -0.016*** 0.052** 0.103***  0.050** 0.054***  0.086***  0.076***
   (0.068) (0.049) (0.026) (0.006) (0.026) (0.028) (0.024) (0.021) (0.020) (0.024)
 ```
+
+Expat has no effect on trade with other countries
+```
+  (1) (2) (3) (4) (5) (6)
+VARIABLES export_same_country import_capital_same_country import_material_same_country  export_other_country  import_capital_other_country  import_material_other_country
+            
+foreign 0.038***  0.042***  0.049***  -0.003  0.035** 0.006
+  (0.011) (0.011) (0.014) (0.018) (0.016) (0.019)
+foreign_hire  0.012 -0.004  0.022 -0.019  -0.017  -0.050*
+  (0.014) (0.014) (0.017) (0.024) (0.025) (0.026)
+has_expat 0.054***  0.086***  0.076***  -0.025  0.017 -0.026
+  (0.021) (0.020) (0.024) (0.030) (0.029) (0.030)
+            
+Observations  111,829 111,829 111,829 111,829 111,829 111,829
+R-squared 0.561 0.482 0.561 0.660 0.580 0.713
+Ind-year FE YES YES YES YES YES YES
+Firm FE YES YES YES YES YES YES
+```
