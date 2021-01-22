@@ -43,5 +43,9 @@ do "`here'/code/create/countries.do"
 
 keep if year >= 1992 & year <= 2003
 
+rename export export_sales
+merge 1:1 originalid year using "temp/trade.dta", keep(master match) nogen
+mvencode export* import*, mv(0) override
+
 compress
 save "`here'/temp/analysis_sample.dta", replace
