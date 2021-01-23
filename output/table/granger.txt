@@ -1,15 +1,17 @@
-	(1)	(2)	(3)
-VARIABLES	Downer	Dmanager	Dtrade
-			
-Lmanager	0.106***		0.083**
-	(0.020)		(0.037)
-Ltrade	0.002***	0.001***	
-	(0.000)	(0.000)	
-Lowner		0.036***	0.084***
-		(0.004)	(0.014)
-			
-Observations	1,001,513	1,005,293	835,817
-R-squared	0.366	0.389	0.495
-Firm-year FE	YES	YES	YES
-Country-year FE	YES	YES	YES
-Firm-country FE	YES	YES	YES
+	(1)	(2)	(3)	(4)
+VARIABLES	Downer	Dmanager	Dexport	Dimport
+				
+Lmanager	0.106***		0.051***	0.074**
+	(0.020)		(0.017)	(0.033)
+Lexport	0.004***	0.001***		0.066***
+	(0.001)	(0.000)		(0.003)
+Limport	0.001***	0.001***	0.032***	
+	(0.000)	(0.000)	(0.001)	
+Lowner		0.036***	0.060***	0.071***
+		(0.004)	(0.009)	(0.012)
+				
+Observations	1,001,513	1,005,293	930,471	861,285
+R-squared	0.366	0.389	0.439	0.491
+Firm-year FE	YES	YES	YES	YES
+Country-year FE	YES	YES	YES	YES
+Firm-country FE	YES	YES	YES	YES
