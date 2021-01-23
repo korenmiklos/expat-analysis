@@ -9,7 +9,7 @@ generate byte both = owner & manager
 local dummies originalid##year cc##year originalid##cc
 local treatments Lowner Lmanager
 local outcomes export import import_capital import_material
-local options keep(`treatments') tex(frag) dec(3)  nocons nonotes addtext(Firm-year FE, YES, Country-year FE, YES)
+local options keep(`treatments') tex(frag) dec(3)  nocons nonotes addtext(Firm-year FE, YES, Country-year FE, YES, Firm-country FE, YES)
 
 local fmode replace
 foreach Y of var `outcomes' {
