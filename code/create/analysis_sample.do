@@ -54,6 +54,7 @@ keep originalid year export?? import?? import_capital?? import_material?? owner?
 drop exporter
 
 reshape long export import import_capital import_material owner manager, i(originalid year) j(country) string
+do "`here'/code/create/lags.do" export import import_capital import_material owner manager
 merge m:1 originalid year using `fy', keep(match) nogen
 
 compress
