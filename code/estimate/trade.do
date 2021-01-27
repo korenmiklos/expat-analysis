@@ -3,8 +3,6 @@ here
 local here = r(here)
 
 use "`here'/temp/analysis_sample_dyadic.dta", clear
-egen cc = group(country)
-generate byte both = owner & manager
 
 local dummies originalid##year cc##year originalid##cc
 local treatments Lowner Lmanager

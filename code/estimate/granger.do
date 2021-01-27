@@ -3,7 +3,6 @@ here
 local here = r(here)
 
 use "`here'/temp/analysis_sample_dyadic.dta", clear
-egen cc = group(country)
 
 generate Ltrade = Lexport | Limport
 generate Dtrade = Dexport | Dimport

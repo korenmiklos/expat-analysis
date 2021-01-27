@@ -1,4 +1,4 @@
-local vars `1' `2' `3' `4' `5' `6'
+local vars `1' `2' `3' `4' `5' `6' `7' `8' `9'
 
 tempvar first_yes
 foreach X of var `vars' {

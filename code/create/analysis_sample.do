@@ -54,8 +54,12 @@ keep originalid year export?? import?? import_capital?? import_material?? owner?
 drop exporter
 
 reshape long export import import_capital import_material owner manager, i(originalid year) j(country) string
-do "`here'/code/create/lags.do" export import import_capital import_material owner manager
+
+generate byte both = owner & manager
+generate byte either = owner | manager
+do "`here'/code/create/lags.do" export import import_capital import_material owner manager both either
 merge m:1 originalid year using `fy', keep(match) nogen
 
+egen cc = group(country)
 compress
 save "`here'/temp/analysis_sample_dyadic.dta", replace
