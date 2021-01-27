@@ -1663,3 +1663,12 @@ Firm FE YES YES YES YES YES YES
 
 The effects are driven by expats who are from the same country as the owners (and as markets).
 
+# 2021-01-26
+## New title and abstract
+Foreign Owners and Managers Help Firms Enter Foreign Markets
+
+Most businesses do not engage in foreign trade even though it is associated with positive outcomes such as increased demand, quality upgrading and improved productivity. Small firms do not trade at all, or only trade with a few countries. This suggests that the fixed costs of trading are large. There is, however, little direct evidence on the sources of these fixed costs.
+
+We show that foreign owners and managers facilitate access to their specific home country. We use Hungarian administrative data on the addresses of owners and managers involved in foreign acquisitions in 1992-2003, together with the customs filings of these companies, to study how the direction of trade changes after acquisition and the replacement of management. 
+
+Comparing different markets within the same firm, we find that foreign owners and managers increase the hazard of starting to trade with their home country relative to any other country. The effects are quantitatively large and robust across specification. Our results suggest that information asymmetry is a key part of market access costs. We propose to reevaluate the impact of trade liberalization on firms in light of these findings. 
