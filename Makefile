@@ -18,7 +18,7 @@ temp/firm_events.dta: input/ceo-panel/ceo-panel.dta temp/balance-small-clean.dta
 temp/balance-small-clean.dta: input/merleg-expat/balance-small.dta code/create/balance.do
 	$(STATA) code/create/balance.do
 install:
-	$(STATA) install.do
+	$(STATA) code/util/install.do
 tables: 
 	python3 ~/Dropbox/projects/py/oak/oak.py -p id -c output -o output .
 	rm -rf output/regression/_*

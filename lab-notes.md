@@ -1586,3 +1586,103 @@ Notes from presentation
 What is the effect of the country of origin?  ERRE TÉNYLEG KONTROLLÁLUNK????
 The country of origin may matter for selection into expat. WE MAY WANT TO RUN THIS WITHOUT INDUSTRY EFFECTS (OR LOOK AT INDUSTRY SELECTION).
 How trade relations change? 
+
+# 2021-01-22
+## Check sample 1992-2003
+Before add trade dummies, check all existing results for this sample. #62
+
+Diff-in-diff changes: expats expand employment fast.
+```
+  (1) (2) (3) (4) (5)
+VARIABLES lnL lnQL  TFP_cd  exporter  RperK
+          
+foreign 0.039 0.121***  0.050***  0.010 0.012***
+  (0.035) (0.025) (0.011) (0.017) (0.003)
+foreign_hire  -0.077  0.146***  0.021 -0.002  0.008
+  (0.060) (0.043) (0.023) (0.022) (0.005)
+has_expat 0.145** -0.011  0.003 0.052** -0.016***
+  (0.068) (0.049) (0.026) (0.026) (0.006)
+          
+Observations  111,829 111,829 111,705 111,829 111,386
+R-squared 0.778 0.848 0.328 0.722 0.441
+Ind-year FE YES YES YES YES YES
+Firm FE YES YES YES YES YES
+```
+
+Selection equation is very similar to before
+```
+  (1) (2) (3)
+VARIABLES ever_foreign  ever_foreign_hire ever_expat
+      
+lnL 0.010***  0.007 -0.016
+  (0.002) (0.012) (0.014)
+exporter  0.030***  0.052 0.073*
+  (0.004) (0.032) (0.041)
+TFP_cd  -0.003  -0.048* 0.028
+  (0.003) (0.028) (0.041)
+RperK 0.046***  0.152 -0.242*
+  (0.015) (0.119) (0.127)
+      
+Observations  108,933 5,839 3,883
+R-squared 0.095 0.112 0.207
+Ind-year FE YES YES YES
+```
+
+## Interpret new trade dummies
+
+Expat has an effect on trading with same country, stronger than trading with other country.
+```
+  (1) (2) (3) (4) (5) (6) (7) (8) (9) (10)
+VARIABLES lnL lnQL  TFP_cd  RperK exporter  import_capital  import_material export_same_country import_capital_same_country import_material_same_country
+                    
+foreign 0.039 0.121***  0.050***  0.012***  0.010 0.077***  0.055***  0.038***  0.042***  0.049***
+  (0.035) (0.025) (0.011) (0.003) (0.017) (0.016) (0.015) (0.011) (0.011) (0.014)
+foreign_hire  -0.077  0.146***  0.021 0.008 -0.002  -0.022  -0.028  0.012 -0.004  0.022
+  (0.060) (0.043) (0.023) (0.005) (0.022) (0.024) (0.022) (0.014) (0.014) (0.017)
+has_expat 0.145** -0.011  0.003 -0.016*** 0.052** 0.103***  0.050** 0.054***  0.086***  0.076***
+  (0.068) (0.049) (0.026) (0.006) (0.026) (0.028) (0.024) (0.021) (0.020) (0.024)
+```
+
+Expat has no effect on trade with other countries
+```
+  (1) (2) (3) (4) (5) (6)
+VARIABLES export_same_country import_capital_same_country import_material_same_country  export_other_country  import_capital_other_country  import_material_other_country
+            
+foreign 0.038***  0.042***  0.049***  -0.003  0.035** 0.006
+  (0.011) (0.011) (0.014) (0.018) (0.016) (0.019)
+foreign_hire  0.012 -0.004  0.022 -0.019  -0.017  -0.050*
+  (0.014) (0.014) (0.017) (0.024) (0.025) (0.026)
+has_expat 0.054***  0.086***  0.076***  -0.025  0.017 -0.026
+  (0.021) (0.020) (0.024) (0.030) (0.029) (0.030)
+            
+Observations  111,829 111,829 111,829 111,829 111,829 111,829
+R-squared 0.561 0.482 0.561 0.660 0.580 0.713
+Ind-year FE YES YES YES YES YES YES
+Firm FE YES YES YES YES YES YES
+```
+
+The effects are driven by expats who are from the same country as the owners (and as markets).
+
+# 2021-01-26
+## New title and abstract
+Foreign Owners and Managers Help Firms Enter Foreign Markets
+
+Most businesses do not engage in foreign trade even though it is associated with positive outcomes such as increased demand, quality upgrading and improved productivity. Small firms do not trade at all, or only trade with a few countries. This suggests that the fixed costs of trading are large. There is, however, little direct evidence on the sources of these fixed costs.
+
+We show that foreign owners and managers facilitate access to their specific home country. We use Hungarian administrative data on the addresses of owners and managers involved in foreign acquisitions in 1992-2003, together with the customs filings of these companies, to study how the direction of trade changes after acquisition and the replacement of management. 
+
+Comparing different markets within the same firm, we find that foreign owners and managers increase the hazard of starting to trade with their home country relative to any other country. The effects are quantitatively large and robust across specification. Our results suggest that information asymmetry is a key part of market access costs. We propose to reevaluate the impact of trade liberalization on firms in light of these findings. 
+
+# 2021-01-27
+## Clean up folder
+# Suggestions
+- Do not mix spells with very different length.
+- In transition matrix, report entry and exit, too.
+
+# Nice to have
+- Split sample by type of takeover: is parent in same industry as target?
+  - use zephyr?
+  - use amadeus combined with complex
+- Match manager name to offeneregister.de and study experience of expat manager.
+- report: nonexporters are better switched to exporting by expat
+- young firms for lnQL? 
