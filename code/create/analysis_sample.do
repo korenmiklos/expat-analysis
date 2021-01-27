@@ -60,6 +60,8 @@ generate byte either = owner | manager
 do "`here'/code/create/lags.do" export import import_capital import_material owner manager both either
 merge m:1 originalid year using `fy', keep(match) nogen
 
+* exclude control firms
+keep if ever_foreign
 egen cc = group(country)
 compress
 save "`here'/temp/analysis_sample_dyadic.dta", replace
