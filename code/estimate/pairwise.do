@@ -3,9 +3,10 @@ here
 local here = r(here)
 
 use "`here'/temp/analysis_sample_dyadic.dta", clear
+drop if country == "XX"
 
 local dummies originalid##year current_market##year originalid##current_market
-local treatments Lowner Lmanager
+local treatments Leither
 local countries : char _dta[countries]
 local options keep(`treatments') tex(frag) dec(3)  nocons nonotes addtext(Firm-year FE, YES, Country-year FE, YES, Firm-country FE, YES)
 
