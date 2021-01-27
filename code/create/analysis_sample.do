@@ -60,6 +60,12 @@ generate byte either = owner | manager
 do "`here'/code/create/lags.do" export import import_capital import_material owner manager both either
 merge m:1 originalid year using `fy', keep(match) nogen
 
+merge m:1 country using "`here'/temp/gravity.dta", keep(master match) nogen
+generate ln_distance = ln(dist)
+foreach X of var ln_distance German English contig {
+	generate X`X' = Leither * `X'
+}
+
 egen cc = group(country)
 compress
 save "`here'/temp/analysis_sample_dyadic.dta", replace
