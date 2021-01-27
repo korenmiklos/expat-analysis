@@ -21,6 +21,8 @@ temp/balance-small-clean.dta: input/merleg-expat/balance-small.dta code/create/b
 	$(STATA) code/create/balance.do
 temp/trade.dta: input/trade-firm-panel/trade-country-firm.dta temp/balance-small-clean.dta code/create/trade.do
 	$(STATA) code/create/trade.do
+temp/gravity.dta: code/create/gravity.do input/cepii-geodist/geodist.dta
+	$(STATA) $<
 install:
 	$(STATA) code/util/install.do
 tables: 
