@@ -1,6 +1,6 @@
 clear all
 
-local countries DE AT CH NL FR GB IT US
+local countries DE AT CH NL FR GB IT US BE CZ DK ES FI IL PL RO RU SE SK UA BG GR HR SI 
 local variables export import import_capital import_material
 
 * find root folder

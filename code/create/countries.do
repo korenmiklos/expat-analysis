@@ -1,4 +1,4 @@
-local countries DE AT CH NL FR GB IT US
+local countries DE AT CH NL FR GB IT US BE CZ DK ES FI IL PL RO RU SE SK UA BG GR HR SI 
 
 foreach country in `countries' `offshore' {
 	generate byte owner`country' = (strpos(country_all_owner, "`country'") > 0) & !missing(country_all_owner)
