@@ -3,7 +3,6 @@ here
 local here = r(here)
 
 use "`here'/temp/analysis_sample_dyadic.dta", clear
-drop if country == "XX"
 
 local dummies originalid##year current_market##year originalid##current_market
 local treatments Leither
@@ -15,6 +14,7 @@ foreach country in `countries' {
 	preserve
 	* merge all other countries
 	generate byte current_market = (country=="`country'")
+	keep if country == "XX" | country == "`country'"
 	collapse (max) `treatments' Dexport Lexport, by(originalid current_market year) 
 	* hazard of entering this market
 	reghdfe Dexport `treatments' if Lexport==0, a(`dummies') cluster(originalid)
