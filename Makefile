@@ -26,7 +26,7 @@ temp/balance-small-clean.dta: input/merleg-expat/balance-small.dta code/create/b
 temp/trade.dta: input/trade-firm-panel/trade-country-firm.dta temp/balance-small-clean.dta code/create/trade.do
 	$(STATA) code/create/trade.do
 install:
-	$(STATA) install.do
+	$(STATA) code/util/install.do
 tables: 
 	python3 ~/Dropbox/projects/py/oak/oak.py -p id -c output -o output .
 	rm -rf output/regression/_*
