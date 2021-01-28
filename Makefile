@@ -3,7 +3,7 @@ ESTIMATOR = temp/analysis_sample.dta estimate.do regram.do
 .PHONY: all
 SPECS = descriptive manager_level heterogeneity event_study switch selection
 
-all: output/table/selection.tex output/table/diffindiff.tex output/table/cross_section.tex output/table/exporter.tex
+all: output/table/selection.tex output/table/diffindiff.tex output/table/cross_section.tex output/table/exporter.tex output/table/dummies.tex
 
 output/table/%.tex: code/estimate/%.do temp/analysis_sample.dta
 	$(STATA) $<
