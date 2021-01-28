@@ -55,9 +55,13 @@ drop exporter
 
 reshape long export import import_capital import_material owner manager, i(originalid year) j(country) string
 
+* different combinations of owners and managers
 generate byte both = owner & manager
 generate byte either = owner | manager
-do "`here'/code/create/lags.do" export import import_capital import_material owner manager both either
+generate byte only_owner = owner & !manager
+generate byte only_manager = manager & !owner
+
+do "`here'/code/create/lags.do" export import import_capital import_material owner manager both either only_owner only_manager
 merge m:1 originalid year using `fy', keep(match) nogen
 
 merge m:1 country using "`here'/temp/gravity.dta", keep(master match) nogen

@@ -7,7 +7,7 @@ use "`here'/temp/analysis_sample_dyadic.dta", clear
 keep if ever_foreign
 
 local dummies originalid##year cc##year originalid##cc
-local treatments Lowner Lmanager
+local treatments Lonly_owner Lonly_manager Lboth
 local outcomes export import import_capital import_material
 local options keep(`treatments') tex(frag) dec(3)  nocons nonotes addtext(Firm-year FE, YES, Country-year FE, YES, Firm-country FE, YES)
 
