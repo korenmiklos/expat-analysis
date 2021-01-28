@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/koren/Tresorit/projects/expat//output/firm_panel.log
   log type:  text
- opened on:  22 Jan 2021, 10:30:16
+ opened on:  28 Jan 2021, 17:48:36
 
 . 
 . * keep only sample from balance-small - NOTE: had to restructure as we have t
@@ -18,9 +18,9 @@
 . tempfile sample
 
 . save `sample', replace
-(note: file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St14123.000001 no
+(note: file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St20460.000001 no
 > t found)
-file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St14123.000001 saved
+file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St20460.000001 saved
 
 . 
 . use "`here'/input/ceo-panel/ceo-panel.dta", clear // QUESTION: what is owner
@@ -427,473 +427,12 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
 . bys frame_id_numeric year: egen n_local = total(cond(!expat, 1, 0))
 
 . 
-. * checking whether the same manager can come from different countries
-. sort frame_id_numeric manager_id year
-
-. count if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == manage
-> r_id[_n-1]) & (country_code != country_code[_n-1]) & country_code != "" & cou
-> ntry_code[_n-1] != ""
-  178
-
-. count if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == manage
-> r_id[_n-1]) & (country_code != country_code[_n-1]) & country_code == "" & cou
-> ntry_code[_n-1] != ""
-  616
-
-. *browse if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == mana
-> ger_id[_n-1]) & (country_code != country_code[_n-1]) & country_code != "" & c
-> ountry_code[_n-1] != ""
-. *browse if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == mana
-> ger_id[_n-1]) & (country_code != country_code[_n-1]) & country_code == "" & c
-> ountry_code[_n-1] != ""
-. 
-. * same manager with multiple countries changed to mode country
-. tab country_code expat, missing
-
-country_co |         expat
-        de |         0          1 |     Total
------------+----------------------+----------
-           |   414,986      7,839 |   422,825 
-        AE |         0         30 |        30 
-        AL |         0          3 |         3 
-        AM |         0          5 |         5 
-        AR |         0         16 |        16 
-        AT |        19      8,572 |     8,591 
-        AU |         0         81 |        81 
-        AZ |         0          1 |         1 
-        BA |         0          3 |         3 
-        BE |         0      1,092 |     1,092 
-        BG |         0         30 |        30 
-        BR |         0         31 |        31 
-        BS |         0          5 |         5 
-        BY |         0         15 |        15 
-        CA |         0        142 |       142 
-        CH |         0      2,070 |     2,070 
-        CN |         0        219 |       219 
-        CR |         0          1 |         1 
-        CS |         0          2 |         2 
-        CY |         0         54 |        54 
-        CZ |         0        985 |       985 
-        DE |         6     13,614 |    13,620 
-        DK |         0        228 |       228 
-        DM |         0          9 |         9 
-        EE |         0          5 |         5 
-        EG |         0          7 |         7 
-        ES |         0        695 |       695 
-        FI |         0        235 |       235 
-        FR |         0      2,019 |     2,019 
-        GB |         0      1,656 |     1,656 
-        GD |         0          3 |         3 
-        GE |         0         37 |        37 
-        GI |         0          2 |         2 
-        GR |         0         45 |        45 
-        GY |         0         14 |        14 
-        HK |         0          6 |         6 
-        HN |         0          3 |         3 
-        HR |         0        125 |       125 
-        HU |        47          0 |        47 
-        ID |         0          3 |         3 
-        IE |         0        212 |       212 
-        IL |         0        629 |       629 
-        IN |         0         96 |        96 
-        IR |         0         55 |        55 
-        IS |         0         29 |        29 
-        IT |         0      4,167 |     4,167 
-        JP |         0        712 |       712 
-        KN |         0          9 |         9 
-        KP |         0          1 |         1 
-        KR |         0        116 |       116 
-        KZ |         0          1 |         1 
-        LA |         0          2 |         2 
-        LB |         0          3 |         3 
-        LI |         0         12 |        12 
-        LT |         0         12 |        12 
-        LU |         0        129 |       129 
-        LV |         0          1 |         1 
-        MA |         0         13 |        13 
-        MC |         0         22 |        22 
-        MD |         0          2 |         2 
-        MN |         0          4 |         4 
-        MO |         0          4 |         4 
-        MT |         0         13 |        13 
-        MX |         0          8 |         8 
-        MY |         0         16 |        16 
-        NC |         0         10 |        10 
-        NE |         0          3 |         3 
-        NG |         0          8 |         8 
-        NL |         0      1,428 |     1,428 
-        NO |         0         46 |        46 
-        NZ |         0         18 |        18 
-        OM |         0          4 |         4 
-        PE |         0          2 |         2 
-        PH |         0         16 |        16 
-        PL |         0        587 |       587 
-        PT |         0        107 |       107 
-        RO |         0        218 |       218 
-        RS |         0        225 |       225 
-        RU |         0        128 |       128 
-        SC |         0          5 |         5 
-        SE |         0        506 |       506 
-        SG |         0         45 |        45 
-        SI |         0         49 |        49 
-        SK |         0        460 |       460 
-        SL |         0         12 |        12 
-        SM |         0          2 |         2 
-        SN |         0          3 |         3 
-        SO |         0          7 |         7 
-        SR |         0         32 |        32 
-        SV |         0         13 |        13 
-        SY |         0          2 |         2 
-        TH |         0         46 |        46 
-        TN |         0         14 |        14 
-        TR |         0        143 |       143 
-        TT |         0          5 |         5 
-        TW |         0         21 |        21 
-        UA |         0        159 |       159 
-        US |         0      1,952 |     1,952 
-        UY |         0          3 |         3 
-        VA |         0          7 |         7 
-        VE |         0          3 |         3 
-        VN |         0         73 |        73 
-        ZA |         0         12 |        12 
------------+----------------------+----------
-     Total |   415,058     52,544 |   467,602 
-
-. bys frame_id_numeric manager_id: egen country_code_fill = mode(country_code),
->  minmode
-Warning: at least one group contains all missing values or contains multiple
-modes.  Generating missing values for the mode of these groups.  Use the
-missing, maxmode, minmode, or nummode() options to control this behavior.
-(419013 missing values generated)
-
-. tab country_code_fill expat, missing
-
-country_co |         expat
-   de_fill |         0          1 |     Total
------------+----------------------+----------
-           |   414,922      4,091 |   419,013 
-        AE |         0         29 |        29 
-        AM |         0          5 |         5 
-        AR |         0         16 |        16 
-        AT |        19      9,176 |     9,195 
-        AU |         0         75 |        75 
-        AZ |         0          1 |         1 
-        BA |         0          3 |         3 
-        BE |         0      1,225 |     1,225 
-        BG |         0         35 |        35 
-        BR |         0         43 |        43 
-        BS |         0          5 |         5 
-        BY |         0         49 |        49 
-        CA |         0        162 |       162 
-        CH |         0      2,220 |     2,220 
-        CN |         0        251 |       251 
-        CR |         0          1 |         1 
-        CS |         0          2 |         2 
-        CY |         0         60 |        60 
-        CZ |         0      1,028 |     1,028 
-        DE |        16     14,552 |    14,568 
-        DK |         0        249 |       249 
-        DM |         0          9 |         9 
-        EE |         0          5 |         5 
-        EG |         0          9 |         9 
-        ES |         0        727 |       727 
-        FI |         0        259 |       259 
-        FR |         0      2,183 |     2,183 
-        GB |         0      1,780 |     1,780 
-        GD |         0          4 |         4 
-        GE |         0         67 |        67 
-        GR |         0         51 |        51 
-        GY |         0         16 |        16 
-        HK |         0          9 |         9 
-        HN |         0          3 |         3 
-        HR |         0        140 |       140 
-        HU |       101          0 |       101 
-        ID |         0          3 |         3 
-        IE |         0        207 |       207 
-        IL |         0        686 |       686 
-        IN |         0        141 |       141 
-        IR |         0         69 |        69 
-        IS |         0         42 |        42 
-        IT |         0      4,574 |     4,574 
-        JP |         0        749 |       749 
-        KN |         0          9 |         9 
-        KP |         0          1 |         1 
-        KR |         0        121 |       121 
-        KZ |         0          1 |         1 
-        LA |         0          5 |         5 
-        LB |         0          3 |         3 
-        LI |         0         18 |        18 
-        LT |         0         12 |        12 
-        LU |         0        133 |       133 
-        LV |         0          4 |         4 
-        MA |         0         17 |        17 
-        MC |         0         26 |        26 
-        MD |         0          4 |         4 
-        MN |         0          9 |         9 
-        MO |         0          4 |         4 
-        MT |         0         19 |        19 
-        MX |         0          8 |         8 
-        MY |         0         14 |        14 
-        NC |         0         10 |        10 
-        NE |         0          4 |         4 
-        NG |         0          9 |         9 
-        NL |         0      1,511 |     1,511 
-        NO |         0         48 |        48 
-        NZ |         0         25 |        25 
-        OM |         0          4 |         4 
-        PE |         0          5 |         5 
-        PH |         0         19 |        19 
-        PL |         0        628 |       628 
-        PT |         0        110 |       110 
-        RO |         0        249 |       249 
-        RS |         0        373 |       373 
-        RU |         0        143 |       143 
-        SC |         0          5 |         5 
-        SE |         0        529 |       529 
-        SG |         0         47 |        47 
-        SI |         0         51 |        51 
-        SK |         0        526 |       526 
-        SL |         0          9 |         9 
-        SM |         0          2 |         2 
-        SN |         0          4 |         4 
-        SO |         0          7 |         7 
-        SR |         0         37 |        37 
-        SV |         0         16 |        16 
-        SY |         0          2 |         2 
-        TH |         0         47 |        47 
-        TN |         0         14 |        14 
-        TR |         0        214 |       214 
-        TT |         0          5 |         5 
-        TW |         0         18 |        18 
-        UA |         0        209 |       209 
-        US |         0      2,073 |     2,073 
-        UY |         0          3 |         3 
-        VA |         0          7 |         7 
-        VN |         0        148 |       148 
-        ZA |         0         14 |        14 
------------+----------------------+----------
-     Total |   415,058     52,544 |   467,602 
-
-. 
-. * same manager with multiple countries changed to mode country
-. bys manager_id: egen country_code_fill_manager = mode(country_code), minmode
-Warning: at least one group contains all missing values or contains multiple
-modes.  Generating missing values for the mode of these groups.  Use the
-missing, maxmode, minmode, or nummode() options to control this behavior.
-(418631 missing values generated)
-
-. tab country_code_fill_manager expat, missing
-
-country_co |
-de_fill_ma |         expat
-     nager |         0          1 |     Total
------------+----------------------+----------
-           |   414,886      3,745 |   418,631 
-        AE |         0         41 |        41 
-        AM |         0          5 |         5 
-        AR |         0         16 |        16 
-        AT |        21      9,243 |     9,264 
-        AU |         0         66 |        66 
-        AZ |         0          1 |         1 
-        BA |         0          3 |         3 
-        BE |         0      1,259 |     1,259 
-        BG |         0         35 |        35 
-        BR |         0         40 |        40 
-        BS |         0          5 |         5 
-        BY |         0         49 |        49 
-        CA |         0        162 |       162 
-        CH |         1      2,207 |     2,208 
-        CN |         0        255 |       255 
-        CR |         0          1 |         1 
-        CS |         0          2 |         2 
-        CY |         0         60 |        60 
-        CZ |         0      1,028 |     1,028 
-        DE |        16     14,669 |    14,685 
-        DK |         0        249 |       249 
-        DM |         0          9 |         9 
-        EE |         0          5 |         5 
-        EG |         0         11 |        11 
-        ES |         0        727 |       727 
-        FI |         0        259 |       259 
-        FR |         2      2,188 |     2,190 
-        GB |         0      1,787 |     1,787 
-        GD |         0          4 |         4 
-        GE |         0         71 |        71 
-        GR |         0         54 |        54 
-        GY |         0         16 |        16 
-        HK |         0          9 |         9 
-        HN |         0          3 |         3 
-        HR |         0        143 |       143 
-        HU |       123          0 |       123 
-        ID |         0          3 |         3 
-        IE |         0        213 |       213 
-        IL |         0        719 |       719 
-        IN |         0        148 |       148 
-        IR |         0         72 |        72 
-        IS |         0         39 |        39 
-        IT |         0      4,595 |     4,595 
-        JP |         0        751 |       751 
-        KN |         0          9 |         9 
-        KP |         0          1 |         1 
-        KR |         0        121 |       121 
-        KZ |         0          1 |         1 
-        LA |         0          5 |         5 
-        LB |         0          3 |         3 
-        LI |         0         18 |        18 
-        LT |         0         12 |        12 
-        LU |         0        133 |       133 
-        LV |         0          8 |         8 
-        MA |         0         17 |        17 
-        MC |         0         26 |        26 
-        MD |         0          4 |         4 
-        MN |         0          9 |         9 
-        MO |         0          4 |         4 
-        MT |         0         19 |        19 
-        MX |         0          8 |         8 
-        MY |         0         14 |        14 
-        NC |         0         10 |        10 
-        NE |         0          4 |         4 
-        NG |         0          9 |         9 
-        NL |         0      1,536 |     1,536 
-        NO |         0         48 |        48 
-        NZ |         0         25 |        25 
-        OM |         0          8 |         8 
-        PE |         0          6 |         6 
-        PH |         0         19 |        19 
-        PL |         0        629 |       629 
-        PT |         0        110 |       110 
-        RO |         0        249 |       249 
-        RS |         0        375 |       375 
-        RU |         6        143 |       149 
-        SC |         0          5 |         5 
-        SE |         3        530 |       533 
-        SG |         0         47 |        47 
-        SI |         0         51 |        51 
-        SK |         0        538 |       538 
-        SL |         0          9 |         9 
-        SM |         0          2 |         2 
-        SN |         0          4 |         4 
-        SO |         0          7 |         7 
-        SR |         0         37 |        37 
-        SV |         0         16 |        16 
-        SY |         0          2 |         2 
-        TH |         0         47 |        47 
-        TN |         0         14 |        14 
-        TR |         0        214 |       214 
-        TW |         0         18 |        18 
-        UA |         0        206 |       206 
-        US |         0      2,072 |     2,072 
-        UY |         0          3 |         3 
-        VA |         0          7 |         7 
-        VN |         0        151 |       151 
-        ZA |         0         14 |        14 
------------+----------------------+----------
-     Total |   415,058     52,544 |   467,602 
-
-. 
-. * checking whether the same manager can come from different countries after m
-> ode change
-. sort frame_id_numeric manager_id year
-
-. count if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == manage
-> r_id[_n-1]) & (country_code_fill != country_code_fill[_n-1]) & country_code_f
-> ill != "" & country_code_fill[_n-1] != ""
-  0
-
-. count if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == manage
-> r_id[_n-1]) & (country_code_fill != country_code_fill[_n-1]) & country_code_f
-> ill == "" & country_code_fill[_n-1] != ""
-  0
-
-. 
-. * checking whether there are expats from multiple countries in a given year
-. sort frame_id_numeric year manager_id
-
-. count if (frame_id_numeric == frame_id_numeric[_n-1]) & (year == year[_n-1]) 
-> & country_code_fill != "" & country_code_fill[_n-1] != "" & n_expat > 1
-  13,173
-
-. count if (frame_id_numeric == frame_id_numeric[_n-1]) & (year == year[_n-1]) 
-> & (country_code_fill != country_code_fill[_n-1]) & country_code_fill != "" & 
-> country_code_fill[_n-1] != "" & n_expat > 1
-  3,259
-
-. count if (frame_id_numeric == frame_id_numeric[_n-1]) & (year == year[_n-1]) 
-> & (country_code_fill == country_code_fill[_n-1]) & country_code_fill != "" & 
-> country_code_fill[_n-1] != "" & n_expat > 1
-  9,914
-
-. count
-  467,602
-
-. 
-. * adding all country codes for one firm-year into one variable
-. preserve
-
-. duplicates drop frame_id_numeric year country_code_fill, force
-
-Duplicates in terms of frame_id_numeric year country_code_fill
-
-(120,410 observations deleted)
-
-. replace country_code_fill = "missing" if country_code_fill == ""
-variable country_code_fill was str2 now str7
-(309,180 real changes made)
-
-. 
-. forval i = 1/4 {
-  2.         bys frame_id_numeric year: gen country_`i' = country_code_fill[`i'
-> ]
-  3. }
-(311,735 missing values generated)
-(343,969 missing values generated)
-(347,008 missing values generated)
-
-. 
-. gen country_all = country_1 + "," +country_2  + "," +country_3
-
-. replace country_all = subinstr(country_all,",,","",.)
-(311,735 real changes made)
-
-. replace country_all = substr(country_all, 1, length(country_all) - 1) if subs
-> tr(country_all, -1, 1) ==  ","
-(32,234 real changes made)
-
-. 
-. duplicates drop frame_id_numeric year, force
-
-Duplicates in terms of frame_id_numeric year
-
-(18,281 observations deleted)
-
-. 
-. tempfile countries
-
-. save `countries'
-file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St14123.000003 saved
-
-. restore
-
-. 
-. merge m:1 frame_id_numeric year using `countries', nogen keepusing(country_al
-> l)
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                             0
-    matched                           467,602  
-    -----------------------------------------
-
-. count
-  467,602
-
-. 
 . * create firm-year data
 . * FIXME: country_code may be different within a firm-year
 . collapse (sum) n_founder = founder n_insider = insider n_outsider = outsider 
-> (firstnm) n_expat n_local foreign ever_expat ever_foreign country_code = coun
-> try_all (count) n_ceo = expat (max) hire_ceo = hire fire_ceo = fire hire_expa
-> t fire_expat, by(frame_id_numeric year)
+> (firstnm) n_expat n_local foreign ever_expat ever_foreign (count) n_ceo = exp
+> at (max) hire_ceo = hire fire_ceo = fire hire_expat fire_expat, by(frame_id_n
+> umeric year)
 
 . 
 . * managers in first year not classified as new hires and in last year not cla
@@ -920,6 +459,40 @@ file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St14123.000003 saved
   3. }
 
 . 
+. * merge on manager_countries
+. merge 1:1 frame_id_numeric year using "`here'/temp/manager_country.dta", keep
+> (master match) nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                       293,224
+        from master                   293,224  
+        from using                          0  
+
+    matched                            35,687  
+    -----------------------------------------
+
+. tabulate has_expat if missing(country_list)
+
+  has_expat |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    291,525       99.42       99.42
+          1 |      1,699        0.58      100.00
+------------+-----------------------------------
+      Total |    293,224      100.00
+
+. tabulate has_expat if !missing(country_list)
+
+  has_expat |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |         29        0.08        0.08
+          1 |     35,658       99.92      100.00
+------------+-----------------------------------
+      Total |     35,687      100.00
+
+. rename country_list country_all_manager
+
+. 
 . count
   328,911
 
@@ -941,9 +514,8 @@ file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St14123.000003 saved
   variable n_founder was double now byte
   variable n_insider was double now byte
   variable n_outsider was double now byte
-  (19,734,660 bytes saved)
-
-. save_all_to_json
+  variable country_all_manager was str15 now str12
+  (20,721,393 bytes saved)
 
 . save "`here'/temp/firm_events.dta", replace
 file /Users/koren/Tresorit/projects/expat//temp/firm_events.dta saved
@@ -952,5 +524,5 @@ file /Users/koren/Tresorit/projects/expat//temp/firm_events.dta saved
       name:  <unnamed>
        log:  /Users/koren/Tresorit/projects/expat//output/firm_panel.log
   log type:  text
- closed on:  22 Jan 2021, 10:32:04
+ closed on:  28 Jan 2021, 17:50:05
 -------------------------------------------------------------------------------
