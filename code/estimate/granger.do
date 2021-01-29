@@ -3,8 +3,6 @@ here
 local here = r(here)
 
 use "`here'/temp/analysis_sample_dyadic.dta", clear
-* exclude control firms
-keep if ever_foreign
 
 generate Ltrade = Lexport | Limport
 generate Dtrade = Dexport | Dimport

@@ -1,15 +1,15 @@
 	(1)	(2)	(3)	(4)
 VARIABLES	Dexport	Dimport	Dimport_capital	Dimport_material
 				
-Lonly_owner	0.039***	0.042***	0.041***	0.037***
-	(0.004)	(0.006)	(0.005)	(0.005)
-Lonly_manager	0.054***	0.085***	0.085***	0.076***
+Lonly_owner	0.047***	0.070***	0.059***	0.058***
+	(0.004)	(0.005)	(0.004)	(0.004)
+Lonly_manager	0.062***	0.104***	0.100***	0.093***
 	(0.008)	(0.013)	(0.011)	(0.012)
-Lboth	0.135***	0.154***	0.163***	0.149***
+Lboth	0.144***	0.174***	0.179***	0.166***
 	(0.010)	(0.018)	(0.014)	(0.015)
 				
-Observations	624,240	565,750	627,915	585,199
-R-squared	0.377	0.388	0.360	0.381
+Observations	3,079,069	2,959,340	3,109,652	3,005,183
+R-squared	0.364	0.375	0.348	0.370
 Firm-year FE	YES	YES	YES	YES
 Country-year FE	YES	YES	YES	YES
 Firm-country FE	YES	YES	YES	YES

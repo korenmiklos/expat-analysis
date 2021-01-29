@@ -3,8 +3,6 @@ here
 local here = r(here)
 
 use "`here'/temp/analysis_sample_dyadic.dta", clear
-* exclude control firms
-keep if ever_foreign
 
 local dummies originalid##year cc##year originalid##cc
 local treatments Lonly_owner Lonly_manager Lboth
