@@ -20,9 +20,10 @@ display dropped_too_many_foreign_change
 bys frame_id_numeric (year): gen divest = sum(cond(owner_spell != owner_spell[_n-1] & foreign == 0 & _n != 1, 1, 0))
 replace divest = 1 if divest > 0
 
-* only keep D, D-F owner spells
+* only keep D, F, D-F owner spells
 bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
-keep if start_as_domestic & owner_spell <= 2
+* exclude F-D divestments but keep greenfield
+keep if (start_as_domestic & owner_spell <= 2) | (!start_as_domestic & owner_spell == 1)
 
 * check foreign end expat numbers
 egen firm_tag = tag(frame_id_numeric)
