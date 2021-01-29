@@ -31,13 +31,11 @@ count if ever_expat & firm_tag
 
 do "`here'/code/create/event_dummies_firmlevel.do"
 
-merge 1:1 originalid year using "input/fo3-owner-names/country_codes.dta", keep(match master) nogen
-* "same country" only applies to expats at foreign firms
-replace country_same = 0 if (has_expat == 0) | (foreign == 0)
+merge 1:1 frame_id_numeric year using "input/owner-country/owner-country-panel.dta", keep(match master) nogen
+rename country_list country_all_owner
 
 egen industry_year = group(teaor08_1d year)
 egen last_before_acquisition = max(cond(time_foreign<0, time_foreign, .)), by(originalid)
-egen ever_same_country = max(country_same), by(originalid)
 
 keep if year >= 1992 & year <= 2003
 
