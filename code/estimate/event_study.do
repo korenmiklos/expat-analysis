@@ -8,7 +8,7 @@ keep if ever_foreign == 1
 local T1 95
 local T2 105
 
-foreach X of var Lowner Lmanager {
+foreach X of var only_owner only_manager both {
 	egen int ft_`X' = min(cond(`X', year, .)), by(originalid cc)
 	generate et_`X' = 100 + year - ft_`X'
 	forvalues t = `T1'/`T2' {
@@ -23,7 +23,7 @@ foreach X of var Lowner Lmanager {
 }
 
 local dummies originalid##year cc##year originalid##cc
-local treatments Lowner_* Lmanager_*
+local treatments only_owner_* only_manager_* both_*
 local outcomes export import_capital import_material
 local options keep(`treatments') tex(frag) dec(3)  nocons nonotes addtext(Firm-year FE, YES, Country-year FE, YES, Firm-country FE, YES)
 
