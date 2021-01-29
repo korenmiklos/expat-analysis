@@ -13,7 +13,7 @@ output/estimate_%.log: est_%.do $(ESTIMATOR)
 	$(STATA) estimate $(subst est_,,$(basename $<))
 output/descriptives.log: temp/analysis_sample.dta descriptives.do
 	$(STATA) descriptives 
-temp/analysis_sample_dyadic.dta: input/fo3-owner-names/country_codes.dta temp/balance-small-clean.dta temp/trade.dta temp/firm_events.dta code/create/analysis_sample.do code/create/event_dummies_firmlevel.do code/create/countries.do code/create/lags.do
+temp/analysis_sample_dyadic.dta: input/fo3-owner-names/country_codes.dta temp/balance-small-clean.dta temp/trade.dta temp/firm_events.dta code/create/analysis_sample.do code/create/event_dummies_firmlevel.do code/create/countries.do code/create/lags.do temp/gravity.dta
 	$(STATA) code/create/analysis_sample.do
 temp/firm_events.dta: input/ceo-panel/ceo-panel.dta temp/balance-small-clean.dta code/create/firm_panel.do temp/manager_country.dta
 	$(STATA) code/create/firm_panel.do
