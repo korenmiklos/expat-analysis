@@ -3,6 +3,8 @@ here
 local here = r(here)
 
 use "`here'/temp/analysis_sample_dyadic.dta", clear
+* only keep private owners
+keep if owner_org == 0 | missing(owner_org)
 
 local dummies originalid##year cc##year originalid##cc
 local treatments Lonly_owner Lonly_manager Lboth
