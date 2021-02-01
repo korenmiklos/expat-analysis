@@ -8,14 +8,12 @@ generate byte Dtrade = Dexport | Dimport
 
 local dummies originalid##year cc##year originalid##cc
 local interactions ever_foreign_hire ever_expat
-local treatments Lonly_owner Lonly_manager Lboth
-local options tex(frag) dec(3)  nocons nonotes addtext(Firm-year FE, YES, Country-year FE, YES, Firm-country FE, YES)
+local treatments Lowner Lboth
+local options tex(frag) dec(3) nocons nonotes addtext(Firm-year FE, YES, Country-year FE, YES, Firm-country FE, YES)
 
 local fmode replace
 foreach Z of var `interactions' {
-	foreach X of var `treatments' {
-		generate byte `Z'_`X' = `Z' * `X'
-	}
+	generate byte `Z'_owner = `Z' * Lowner
 }
 foreach Z of var `interactions' {
 	* hazard of entering this market
