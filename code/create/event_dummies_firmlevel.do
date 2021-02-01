@@ -27,8 +27,8 @@ drop x
 ******Foreign-hired ceo***********
 bys frame_id_numeric: egen x = max(ceo_spell_hire) if !foreign
 bys frame_id_numeric: egen last_ceo_spell_do = max(x)
-gen foreign_hire = (ceo_spell_hire > last_ceo_spell_do)
-replace foreign_hire = . if last_ceo_spell_do == .
+* allow for greenfield firms for whom last_ceo_spell_do == .
+generate byte foreign_hire = (ceo_spell_hire > last_ceo_spell_do) | missing(last_ceo_spell_do)
 drop x*
 
 bys frame_id_numeric: egen ever_foreign_hire = max(foreign_hire)
