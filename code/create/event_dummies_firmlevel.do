@@ -19,14 +19,17 @@ tempvar t_year
 gen `t_year' = year if foreign==1 & foreign[_n-1]==0 
 bys frame_id_numeric: egen first_year_foreign=max(`t_year')
 gen time_foreign = year-first_year_foreign
+replace time_foreign=. if foreign==0 & time_foreign>0
 
-forval i=1/5 {
+forval i=0/5 {
 	
 	gen foreign_e`i'=(time_foreign==-`i')
 	gen foreigne`i'=(time_foreign==`i')
 
 	}
-gen foreigne0=(time_foreign==0)
+
+replace foreigne5=1 if time_foreign>5 & time_foreign<.
+drop foreign_e0
 
 order foreign_e5 foreign_e4 foreign_e3 foreign_e2 foreign_e1 foreigne0 foreigne1 foreigne2 foreigne3 foreigne4 foreigne5, a(time_foreign) 
 
@@ -93,6 +96,7 @@ tsset frame_id_numeric year
 gen `t_EE' = (foreign_hire_expat_2==1 & l.foreign_hire_expat_1==1)
 bys frame_id_numeric foreign_hire_expat_2: egen foreign_hire_EE_2 = max(`t_EE')
 
+
 ***********Event time dummies for foreign_hire, expat************
 sort frame_id_numeric year
 foreach mantype in hire_local hire_expat `X' {
@@ -103,19 +107,19 @@ foreach mantype in hire_local hire_expat `X' {
 	bys frame_id_numeric: egen `t_year_max'=max(`t_year')
 	gen time_foreign_`mantype' = year-`t_year_max'
 	*Make the variable 0 when the manager leaves
-	replace time_foreign_`mantype'=0 if foreign_`mantype'_1==0 & time_foreign_`mantype'>0
-}
+	replace time_foreign_`mantype'=. if foreign_`mantype'_1==0 & time_foreign_`mantype'>0
 
-forval i=1/5 {
+
+forval i=0/5 {
 	
-	gen foreign_hire_local_1_e`i'=(time_foreign_hire_local==-`i')
-	gen foreign_hire_local_1e`i'=(time_foreign_hire_local==`i')
+	gen foreign_`mantype'_1_e`i'=(time_foreign_`mantype'==-`i')
+	gen foreign_`mantype'_1e`i'=(time_foreign_`mantype'==`i')
 
-	gen foreign_hire_expat_1_e`i'=(time_foreign_hire_expat==-`i')
-	gen foreign_hire_expat_1e`i'=(time_foreign_hire_expat==`i')
 	}
-gen foreign_hire_local_1e0=(time_foreign_hire_local==0 & foreign_hire_local_1==1)
-gen foreign_hire_expat_1e0=(time_foreign_hire_expat==0 & foreign_hire_expat_1==1)
+
+replace foreign_`mantype'_1e5=1 if time_foreign_`mantype'>5 & time_foreign_`mantype'<.
+drop foreign_`mantype'_1_e0
+}
 
 order foreign_hire_local_1_e5 foreign_hire_local_1_e4 foreign_hire_local_1_e3 foreign_hire_local_1_e2 foreign_hire_local_1_e1 foreign_hire_local_1e0 foreign_hire_local_1e1 foreign_hire_local_1e2 foreign_hire_local_1e3 foreign_hire_local_1e4 foreign_hire_local_1e5 foreign_hire_expat_1_e5 foreign_hire_expat_1_e4 foreign_hire_expat_1_e3 foreign_hire_expat_1_e2 foreign_hire_expat_1_e1 foreign_hire_expat_1e0 foreign_hire_expat_1e1 foreign_hire_expat_1e2 foreign_hire_expat_1e3 foreign_hire_expat_1e4 foreign_hire_expat_1e5, a(time_foreign_hire_expat)
 
