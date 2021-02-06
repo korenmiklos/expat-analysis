@@ -35,12 +35,13 @@ generate byte manager_country_4 = (Lmanager==1) & (link==4) & !owner_country_4
 local dummies originalid##year cc##teaor08_2d##year originalid##cc
 local outcomes export import
 local treatments *er_country_? *er_language_? 
-local options tex(frag) dec(3) nocons nonotes addtext(Firm-year FE, YES, Country-sector-year FE, YES, Firm-country FE, YES)
+local options tex(frag) dec(3) nocons nonotes addstat(Mean, r(mean)) addtext(Firm-year FE, YES, Country-sector-year FE, YES, Firm-country FE, YES)
 
 local fmode replace
 foreach Y of var `outcomes' {
 	* hazard of entering this market
 	reghdfe D`Y' `treatments' if L`Y'==0, a(`dummies') cluster(originalid)
+	summarize D`Y' if e(sample), meanonly
 	outreg2 using "`here'/output/table/heterogeneity.tex", `fmode' `options'
 	local fmode append
 }
@@ -49,6 +50,7 @@ keep if owner_org == 0
 foreach Y of var `outcomes' {
 	* hazard of entering this market
 	reghdfe D`Y' `treatments' if L`Y'==0, a(`dummies') cluster(originalid)
+	summarize D`Y' if e(sample), meanonly
 	outreg2 using "`here'/output/table/heterogeneity.tex", `fmode' `options'
 	local fmode append
 }

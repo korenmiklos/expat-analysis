@@ -15,12 +15,13 @@ local manager Lowner Lexport Limport
 local export Lowner Lmanager Limport
 local import Lowner Lmanager Lexport
 
-local options keep(`treatments') tex(frag) dec(3)  nocons nonotes addtext(Firm-year FE, YES, Country-year FE, YES, Firm-country FE, YES)
+local options keep(`treatments') tex(frag) dec(3)  nocons nonotes addstat(Mean, r(mean)) addtext(Firm-year FE, YES, Country-year FE, YES, Firm-country FE, YES)
 
 local fmode replace
 foreach Y in `outcomes' {
 	* hazard of entering this market
 	reghdfe D`Y' ``Y'' if L`Y'==0, a(`dummies') cluster(originalid)
+	summarize D`Y' if e(sample), meanonly
 	outreg2 using "`here'/output/table/granger.tex", `fmode' `options' ctitle(`title`sample'')
 	local fmode append
 }
