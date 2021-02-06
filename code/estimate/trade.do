@@ -3,6 +3,8 @@ here
 local here = r(here)
 
 use "`here'/temp/analysis_sample_dyadic.dta", clear
+* only keep [-3,3] window around acquisition
+keep if (time_foreign >= -3 & time_foreign <=3) | missing(time_foreign)
 
 local dummies originalid##year cc##teaor08_2d##year originalid##cc
 local treatments Lonly_owner Lonly_manager Lboth
