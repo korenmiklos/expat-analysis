@@ -5,6 +5,7 @@ local here = r(here)
 
 use "`here'/temp/balance-small-clean.dta"
 drop foreign
+keep frame_id_numeric year originalid teaor08_1d teaor08_2d
 
 merge 1:1 frame_id year using "`here'/temp/firm_events.dta", nogen keep(match)
 
@@ -40,8 +41,6 @@ egen last_before_acquisition = max(cond(time_foreign<0, time_foreign, .)), by(or
 
 keep if year >= 1992 & year <= 2003
 
-rename export export_sales
-
 tempfile fy
 save `fy', replace
 
@@ -50,7 +49,6 @@ merge 1:1 originalid year using "temp/trade.dta", keep(master match) nogen
 mvencode export* import*, mv(0) override
 
 keep originalid year export?? import?? import_capital?? import_material?? owner?? manager??
-drop exporter
 
 reshape long export import import_capital import_material owner manager, i(originalid year) j(country) string
 

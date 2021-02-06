@@ -6,9 +6,6 @@ bys frame_id_numeric: egen max_n_ceo = max(n_ceo)
 bys frame_id_numeric: egen min_n_ceo = min(n_ceo)
 gen diff = max_n_ceo-min_n_ceo
 
-reghdfe n_ceo foreign has_expat lnL, a(teaor08_2d##year) cluster(frame_id_numeric)
-
-
 ******Event-time variable for foreign**************
 sort frame_id_numeric year
 gen x = year if foreign==1 & foreign[_n-1]==0 
