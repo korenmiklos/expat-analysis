@@ -44,4 +44,11 @@ foreach Y of var `outcomes' {
 	outreg2 using "`here'/output/table/heterogeneity.tex", `fmode' `options'
 	local fmode append
 }
-
+* rerun for private firms only
+keep if owner_org == 0
+foreach Y of var `outcomes' {
+	* hazard of entering this market
+	reghdfe D`Y' `treatments' if L`Y'==0, a(`dummies') cluster(originalid)
+	outreg2 using "`here'/output/table/heterogeneity.tex", `fmode' `options'
+	local fmode append
+}
