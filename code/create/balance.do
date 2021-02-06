@@ -139,6 +139,5 @@ mvencode export exporter exporter_5, mv(0) override
 generate domestic_sales = sales - export
 replace domestic_sales = 0 if domestic_sales < 0 | missing(domestic_sales)
 
-save_all_to_json
 cap drop __*
 save "`here'/temp/balance-small-clean.dta", replace
