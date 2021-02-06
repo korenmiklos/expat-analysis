@@ -7,23 +7,35 @@ do "`here'/code/util/same_language.do"
 
 generate byte Ltrade = Lexport | Limport
 generate byte Dtrade = Dexport | Dimport
-generate byte only_SL_manager = same_language_manager & !same_language_owner
+
+egen ever_sl_hire = max(same_language_owner & same_language_manager), by(originalid)
+egen ever_sc_hire = max(both), by(originalid)
+
+* five types of firms
+generate byte link = 0
+replace link = 1 if ever_foreign
+replace link = 2 if ever_foreign_hire
+replace link = 3 if ever_expat
+replace link = 4 if ever_sl_hire
+replace link = 5 if ever_sc_hire
+
+tabulate link ever_foreign_hire
+
+* estimate separate same country and same language effects for each type
+forvalues i = 1/5 {
+	generate byte same_country_`i' = (Lowner==1) & (link==`i')
+	generate byte same_language_`i' = (same_language_owner==1) & (link==`i') & !same_country_`i'
+}
 
 local dummies originalid##year cc##teaor08_2d##year originalid##cc
-local treatments Lowner Lboth
+local outcomes export import
+local treatments same_country_? same_language_?
 local options tex(frag) dec(3) nocons nonotes addtext(Firm-year FE, YES, Country-sector-year FE, YES, Firm-country FE, YES)
 
 local fmode replace
-* hazard of entering this market
-reghdfe Dtrade Lonly_manager Lonly_owner Lboth if Ltrade==0, a(`dummies') cluster(originalid)
-outreg2 using "`here'/output/table/heterogeneity.tex", `fmode' `options' ctitle(Baseline)
-local fmode append
-
-reghdfe Dtrade Lonly_manager Lonly_owner Lboth if Ltrade==0 & owner_org==0, a(`dummies') cluster(originalid)
-outreg2 using "`here'/output/table/heterogeneity.tex", `fmode' `options' ctitle(Private owner)
-
-reghdfe Dtrade Lonly_manager only_SL_manager same_language_owner Lonly_owner Lboth if Ltrade==0, a(`dummies') cluster(originalid)
-outreg2 using "`here'/output/table/heterogeneity.tex", `fmode' `options' ctitle(Same language)
-
-reghdfe Dtrade Lonly_manager only_SL_manager if Ltrade==0 & same_language_owner==0, a(`dummies') cluster(originalid)
-outreg2 using "`here'/output/table/heterogeneity.tex", `fmode' `options' ctitle(No related owner)
+foreach Y of var `outcomes' {
+	* hazard of entering this market
+	reghdfe D`Y' `treatments' if L`Y'==0, a(`dummies') cluster(originalid)
+	outreg2 using "`here'/output/table/heterogeneity.tex", `fmode' `options'
+	local fmode append
+}
