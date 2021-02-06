@@ -3,7 +3,6 @@ here
 local here = r(here)
 
 use "`here'/temp/analysis_sample_dyadic.dta", clear
-keep if ever_foreign == 1
 
 do "`here'/code/util/same_language.do"
 
