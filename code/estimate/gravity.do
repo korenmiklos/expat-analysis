@@ -5,11 +5,9 @@ local here = r(here)
 use "`here'/temp/analysis_sample_dyadic.dta", clear
 drop if country == "XX"
 
-generate byte Xsmctry = Leither * smctry
-
 local dummies originalid##year cc##year originalid##cc
-local treatments Leither Xsmctry Xcontig
-local outcomes export import import_capital import_material
+local treatments Lowner* Lmanager* 
+local outcomes export import 
 local options keep(`treatments') tex(frag) dec(3)  nocons nonotes addtext(Firm-year FE, YES, Country-year FE, YES, Firm-country FE, YES)
 
 local fmode replace

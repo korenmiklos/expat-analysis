@@ -1,15 +1,21 @@
-	(1)	(2)	(3)	(4)
-VARIABLES	Dexport	Dimport	Dimport_capital	Dimport_material
-				
-Leither	0.053***	0.078***	0.075***	0.067***
-	(0.007)	(0.011)	(0.009)	(0.009)
-Xsmctry	0.039	0.048	0.048	0.003
-	(0.044)	(0.060)	(0.043)	(0.054)
-Xcontig	-0.032	-0.070	-0.063	-0.023
-	(0.043)	(0.058)	(0.041)	(0.052)
-				
-Observations	2,580,444	2,508,285	2,608,444	2,537,683
-R-squared	0.356	0.369	0.340	0.364
-Firm-year FE	YES	YES	YES	YES
-Country-year FE	YES	YES	YES	YES
-Firm-country FE	YES	YES	YES	YES
+	(1)	(2)
+VARIABLES	Dexport	Dimport
+		
+Lowner	0.067***	0.088***
+	(0.005)	(0.007)
+Lowner_contig	0.008***	0.021***
+	(0.002)	(0.002)
+Lowner_comlang	0.005***	0.020***
+	(0.002)	(0.003)
+Lmanager	0.103***	0.133***
+	(0.008)	(0.013)
+Lmanager_contig	0.016***	0.032***
+	(0.002)	(0.003)
+Lmanager_comlang	-0.000	0.012***
+	(0.003)	(0.004)
+		
+Observations	2,965,887	2,853,780
+R-squared	0.365	0.375
+Firm-year FE	YES	YES
+Country-year FE	YES	YES
+Firm-country FE	YES	YES

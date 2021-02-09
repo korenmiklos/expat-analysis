@@ -50,7 +50,32 @@ mvencode export* import*, mv(0) override
 
 keep originalid year export?? import?? import_capital?? import_material?? owner?? manager??
 
-reshape long export import import_capital import_material owner manager, i(originalid year) j(country) string
+* only reshape trade so that we can compute distance measures between where owners are from and where this firm is trading
+reshape long export import import_capital import_material, i(originalid year) j(country) string
+local vars distance contig comlang
+levelsof country
+local countries = r(levels)
+foreach role in owner manager {
+	* do long reshape manually
+	generate byte `role' = 0
+	foreach country in `countries' {
+		generate str2 iso2_o = "`country'" if `role'`country' == 1
+		merge m:1 iso2_o country using "`here'/temp/gravity.dta", keep(master match) nogen
+		foreach X of var `vars' {
+			rename `X' `role'_`X'`country'
+		}
+		drop iso2_o
+		* turn on dummy of owner/manager is from the same country
+		replace `role' = 1 if (`role'`country' == 1) & (country == "`country'")
+	}
+	* find the closest owner/manager in all dimensions
+	egen byte `role'_contig = rmax(`role'_contig??)
+	egen byte `role'_comlang = rmax(`role'_comlang??)
+	egen `role'_distance = rmin(`role'_distance??)
+	drop *`role'??
+}
+* if no foreign managers, replace distance variables with 0 - these are soaked up in the firm-country fixed effects
+mvencode *er_contig *er_comlang *er_distance, mv(0) override
 
 * different combinations of owners and managers
 generate byte both = owner & manager
@@ -58,14 +83,9 @@ generate byte either = owner | manager
 generate byte only_owner = owner & !manager
 generate byte only_manager = manager & !owner
 
-do "`here'/code/create/lags.do" export import import_capital import_material owner manager both either only_owner only_manager
+* FIXME: how to lag non-dummies?
+do "`here'/code/create/lags.do" export import import_capital import_material owner manager both either only_owner only_manager owner_contig owner_comlang manager_contig manager_comlang
 merge m:1 originalid year using `fy', keep(match) nogen
-
-merge m:1 country using "`here'/temp/gravity.dta", keep(master match) nogen
-generate ln_distance = ln(dist)
-foreach X of var ln_distance German English contig {
-	generate X`X' = Leither * `X'
-}
 
 egen cc = group(country)
 compress

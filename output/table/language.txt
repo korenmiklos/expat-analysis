@@ -1,17 +1,17 @@
 	(1)	(2)	(3)	(4)
 VARIABLES	Dexport	Dimport	Dimport_capital	Dimport_material
 				
-Lowner	0.046***	0.049***	0.051***	0.042***
+Lowner	0.054***	0.068***	0.064***	0.059***
 	(0.004)	(0.005)	(0.004)	(0.004)
-Lmanager	0.086***	0.090***	0.104***	0.092***
+Lmanager	0.097***	0.116***	0.122***	0.116***
 	(0.007)	(0.011)	(0.009)	(0.010)
-same_language_owner	0.014***	0.035***	0.024***	0.029***
-	(0.002)	(0.003)	(0.002)	(0.003)
-same_language_manager	0.015***	0.040***	0.027***	0.037***
-	(0.002)	(0.004)	(0.003)	(0.004)
+Lowner_comlang	0.006***	0.025***	0.016***	0.020***
+	(0.002)	(0.003)	(0.002)	(0.002)
+Lmanager_comlang	0.007***	0.025***	0.015***	0.027***
+	(0.002)	(0.003)	(0.003)	(0.003)
 				
 Observations	3,078,308	2,958,484	3,108,909	3,004,354
-R-squared	0.374	0.388	0.359	0.382
+R-squared	0.374	0.387	0.359	0.382
 Firm-year FE	YES	YES	YES	YES
 Country-sector-year FE	YES	YES	YES	YES
 Firm-country FE	YES	YES	YES	YES

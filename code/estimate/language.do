@@ -3,10 +3,9 @@ here
 local here = r(here)
 
 use "`here'/temp/analysis_sample_dyadic.dta", clear
-do "`here'/code/util/same_language.do"
 
 local dummies originalid##year cc##teaor08_2d##year originalid##cc
-local treatments Lowner Lmanager same_language_owner same_language_manager
+local treatments Lowner Lmanager Lowner_comlang Lmanager_comlang
 local outcomes export import import_capital import_material
 local options keep(`treatments') tex(frag) dec(3)  nocons nonotes addstat(Mean, r(mean)) addtext(Firm-year FE, YES, Country-sector-year FE, YES, Firm-country FE, YES)
 
