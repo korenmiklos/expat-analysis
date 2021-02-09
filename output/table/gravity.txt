@@ -1,18 +1,22 @@
 	(1)	(2)
 VARIABLES	Dexport	Dimport
 		
-Lowner	0.067***	0.088***
-	(0.005)	(0.007)
-Lowner_contig	0.008***	0.021***
-	(0.002)	(0.002)
+Lowner	0.058***	0.078***
+	(0.005)	(0.008)
+Lowner_contig	0.003	0.015***
+	(0.002)	(0.003)
 Lowner_comlang	0.005***	0.020***
 	(0.002)	(0.003)
-Lmanager	0.103***	0.133***
-	(0.008)	(0.013)
-Lmanager_contig	0.016***	0.032***
-	(0.002)	(0.003)
-Lmanager_comlang	-0.000	0.012***
+Lowner_distance	-0.005***	-0.005***
+	(0.001)	(0.001)
+Lmanager	0.093***	0.145***
+	(0.008)	(0.014)
+Lmanager_contig	0.010***	0.039***
+	(0.002)	(0.004)
+Lmanager_comlang	0.000	0.011***
 	(0.003)	(0.004)
+Lmanager_distance	-0.005***	0.006***
+	(0.001)	(0.002)
 		
 Observations	2,965,887	2,853,780
 R-squared	0.365	0.375

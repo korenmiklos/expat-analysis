@@ -7,10 +7,6 @@ all: output/table/language.tex output/table/granger.tex output/table/trade.tex o
 extra:  output/table/pairwise.tex output/table/gravity.tex
 output/table/%.tex: code/estimate/%.do temp/analysis_sample_dyadic.dta
 	$(STATA) $<
-output/table/%_main.tex: code/estimate/%.do temp/analysis_sample.dta
-	$(STATA) $<
-output/estimate_%.log: est_%.do $(ESTIMATOR)
-	$(STATA) estimate $(subst est_,,$(basename $<))
 output/descriptives.log: temp/analysis_sample.dta descriptives.do
 	$(STATA) descriptives 
 temp/analysis_sample_dyadic.dta: input/owner-country/owner-country-panel.dta temp/balance-small-clean.dta temp/trade.dta temp/firm_events.dta code/create/analysis_sample.do code/create/event_dummies_firmlevel.do code/create/countries.do code/create/lags.do temp/gravity.dta

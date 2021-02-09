@@ -72,7 +72,7 @@ foreach role in owner manager {
 	egen byte `role'_contig = rmax(`role'_contig??)
 	egen byte `role'_comlang = rmax(`role'_comlang??)
 	egen `role'_distance = rmin(`role'_distance??)
-	drop *`role'??
+	drop *`role'?? `role'_contig?? `role'_comlang?? `role'_distance??
 }
 * if no foreign managers, replace distance variables with 0 - these are soaked up in the firm-country fixed effects
 mvencode *er_contig *er_comlang *er_distance, mv(0) override
@@ -83,8 +83,19 @@ generate byte either = owner | manager
 generate byte only_owner = owner & !manager
 generate byte only_manager = manager & !owner
 
-* FIXME: how to lag non-dummies?
 do "`here'/code/create/lags.do" export import import_capital import_material owner manager both either only_owner only_manager owner_contig owner_comlang manager_contig manager_comlang
+* lag distance
+tempvar mindist
+foreach role in owner manager {
+	generate L`role'_distance = 0
+	forvalues t = 1992/2003 {
+		egen `mindist' = min(cond(`role'_distance!=0 & year < `t', `role'_distance, .)), by(originalid country)
+		replace L`role'_distance = `mindist' if year == `t' & !missing(`mindist')
+		drop `mindist'
+	}
+	mvencode L`role'_distance, mv(0) override
+}
+
 merge m:1 originalid year using `fy', keep(match) nogen
 
 egen cc = group(country)

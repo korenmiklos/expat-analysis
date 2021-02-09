@@ -10,8 +10,10 @@ local treatments Lowner* Lmanager*
 local outcomes export import 
 local options keep(`treatments') tex(frag) dec(3)  nocons nonotes addtext(Firm-year FE, YES, Country-year FE, YES, Firm-country FE, YES)
 
+keep `treatments' ?export ?import originalid cc year 
+
 local fmode replace
-foreach Y of var `outcomes' {
+foreach Y in `outcomes' {
 	* hazard of entering this market
 	reghdfe D`Y' `treatments' if L`Y'==0, a(`dummies') cluster(originalid)
 	outreg2 using "`here'/output/table/gravity.tex", `fmode' `options' ctitle(`title`sample'')
