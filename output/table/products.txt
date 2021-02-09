@@ -1,0 +1,16 @@
+	(1)	(2)	(3)	(4)	(5)	(6)
+VARIABLES	Dexport_rauch	Dexport_nonrauch	Dexport_consumer	Dimport_rauch	Dimport_nonrauch	Dimport_consumer
+						
+Lonly_owner	0.012***	0.040***	0.016***	0.021***	0.066***	0.036***
+	(0.002)	(0.003)	(0.002)	(0.002)	(0.005)	(0.003)
+Lonly_manager	0.012***	0.066***	0.019***	0.015***	0.107***	0.056***
+	(0.003)	(0.008)	(0.004)	(0.004)	(0.014)	(0.007)
+Lboth	0.020***	0.146***	0.040***	0.021***	0.195***	0.103***
+	(0.003)	(0.010)	(0.004)	(0.004)	(0.017)	(0.007)
+						
+Observations	3,185,489	3,077,454	3,169,399	3,129,116	2,994,762	3,164,933
+R-squared	0.482	0.376	0.390	0.490	0.383	0.370
+Firm-year FE	YES	YES	YES	YES	YES	YES
+Country-sector-year FE	YES	YES	YES	YES	YES	YES
+Firm-country FE	YES	YES	YES	YES	YES	YES
+Mean	0.00134	0.00739	0.00299	0.00226	0.0107	0.00335

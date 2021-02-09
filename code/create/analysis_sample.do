@@ -48,10 +48,10 @@ do "`here'/code/create/countries.do"
 merge 1:1 originalid year using "temp/trade.dta", keep(master match) nogen
 mvencode export* import*, mv(0) override
 
-keep originalid year export?? import?? import_capital?? import_material?? owner?? manager??
+keep originalid year export?? export_rauch?? export_nonrauch?? export_consumer?? import?? import_rauch?? import_nonrauch?? import_consumer?? import_capital?? import_material?? owner?? manager??
 
 * only reshape trade so that we can compute distance measures between where owners are from and where this firm is trading
-reshape long export import import_capital import_material, i(originalid year) j(country) string
+reshape long export export_rauch export_nonrauch export_consumer import import_rauch import_nonrauch import_consumer import_capital import_material, i(originalid year) j(country) string
 local vars distance contig comlang
 levelsof country
 local countries = r(levels)
