@@ -1,7 +1,7 @@
 clear all
 
 local countries DE AT CH NL FR GB IT US BE CZ DK ES FI IL PL RO RU SE SK UA BG GR HR SI 
-local variables export import import_capital import_material
+local variables export export_rauch export_nonrauch export_consumer import import_rauch import_nonrauch import_consumer import_capital import_material
 
 * find root folder
 here
@@ -16,6 +16,9 @@ save `ppi', replace
 
 use "`here'/input/trade-firm-panel/trade-country-firm.dta", clear
 merge m:1 originalid year using `ppi', keep(match) nogenerate
+
+generate export_nonrauch = export - export_rauch
+generate import_nonrauch = import - import_rauch
 
 foreach X of var `variables' {
 	* create dummy if greater than 1m Ft
