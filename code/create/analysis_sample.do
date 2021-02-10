@@ -37,7 +37,7 @@ merge 1:1 frame_id_numeric year using "input/owner-country/owner-country-panel.d
 rename country_list country_all_owner
 
 egen industry_year = group(teaor08_1d year)
-egen last_before_acquisition = max(cond(time_foreign<0, time_foreign, .)), by(originalid)
+egen last_before_acquisition = max(cond(time_foreign<0, time_foreign, .)), by(frame_id_numeric)
 
 keep if year >= 1992 & year <= 2003
 
@@ -48,10 +48,10 @@ do "`here'/code/create/countries.do"
 merge 1:1 originalid year using "temp/trade.dta", keep(master match) nogen
 mvencode export* import*, mv(0) override
 
-keep originalid year export?? export_rauch?? export_nonrauch?? export_consumer?? import?? import_rauch?? import_nonrauch?? import_consumer?? import_capital?? import_material?? owner?? manager??
+keep frame_id_numeric year export?? export_rauch?? export_nonrauch?? export_consumer?? import?? import_rauch?? import_nonrauch?? import_consumer?? import_capital?? import_material?? owner?? manager??
 
 * only reshape trade so that we can compute distance measures between where owners are from and where this firm is trading
-reshape long export export_rauch export_nonrauch export_consumer import import_rauch import_nonrauch import_consumer import_capital import_material, i(originalid year) j(country) string
+reshape long export export_rauch export_nonrauch export_consumer import import_rauch import_nonrauch import_consumer import_capital import_material, i(frame_id_numeric year) j(country) string
 local vars distance contig comlang
 levelsof country
 local countries = r(levels)
@@ -89,14 +89,14 @@ tempvar mindist
 foreach role in owner manager {
 	generate L`role'_distance = 0
 	forvalues t = 1992/2003 {
-		egen `mindist' = min(cond(`role'_distance!=0 & year < `t', `role'_distance, .)), by(originalid country)
+		egen `mindist' = min(cond(`role'_distance!=0 & year < `t', `role'_distance, .)), by(frame_id_numeric country)
 		replace L`role'_distance = `mindist' if year == `t' & !missing(`mindist')
 		drop `mindist'
 	}
 	mvencode L`role'_distance, mv(0) override
 }
 
-merge m:1 originalid year using `fy', keep(match) nogen
+merge m:1 frame_id_numeric year using `fy', keep(match) nogen
 
 egen cc = group(country)
 compress
