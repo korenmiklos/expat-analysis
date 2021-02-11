@@ -13,10 +13,10 @@ foreach X of var only_owner only_manager both {
 	forvalues t = `T1'/`T2' {
 		generate byte `X'_`t' = (time_foreign+100==`t')*ever_`X'
 	}
-	* drop t as reference period
-	drop `X'_100
+	* drop t-5 as reference period
+	drop `X'_95
 	* winsorize
-	replace `X'_`T1' = 1 if (time_foreign+100 < `T1') & ever_`X'
+	*replace `X'_`T1' = 1 if (time_foreign+100 < `T1') & ever_`X'
 	replace `X'_`T2' = 1 if (time_foreign+100 > `T2') & !missing(time_foreign+100) & ever_`X'
 }
 
