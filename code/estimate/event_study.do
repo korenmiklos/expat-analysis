@@ -10,14 +10,16 @@ local T2 105
 
 foreach X of var only_owner only_manager both {
 	egen byte ever_`X' = max(`X'), by(frame_id_numeric cc)
+	egen int ft_`X' = min(cond(`X', year, .)), by(originalid cc)
+	generate et_`X' = 100 + year - ft_`X'
 	forvalues t = `T1'/`T2' {
-		generate byte `X'_`t' = (time_foreign+100==`t')*ever_`X'
+		generate byte `X'_`t' = (et_`X'==`t')
 	}
 	* drop t-5 as reference period
 	drop `X'_95
 	* winsorize
-	*replace `X'_`T1' = 1 if (time_foreign+100 < `T1') & ever_`X'
 	replace `X'_`T2' = 1 if (time_foreign+100 > `T2') & !missing(time_foreign+100) & ever_`X'
+	drop ft_* et_*
 }
 
 local dummies frame_id_numeric##year cc##year frame_id_numeric##cc
