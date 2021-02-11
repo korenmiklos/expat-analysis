@@ -10,7 +10,7 @@ local outcomes export import
 local products rauch nonrauch consumer
 local options keep(`treatments') tex(frag) dec(3)  nocons nonotes addstat(Mean, r(mean)) addtext(Firm-year FE, YES, Country-year FE, YES, Firm-country FE, YES)
 
-keep originalid year country cc teaor08_2d `treatments' *export* *import*
+keep frame_id_numeric year country cc teaor08_2d `treatments' *export* *import*
 do "`here'/code/create/lags.do" export_rauch export_nonrauch export_consumer import_rauch import_nonrauch import_consumer
 
 local fmode replace
