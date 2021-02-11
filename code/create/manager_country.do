@@ -23,6 +23,9 @@ drop if missing(country_code)
 collapse (max) expat, by(frame_id_numeric year country_code)
 drop expat
 
+* convert YU country codes
+do "`here'/code/util/yugoslavia.do"
+
 * adding all country codes for one firm-year into one variable
 generate str country_list = ""
 levelsof country_code

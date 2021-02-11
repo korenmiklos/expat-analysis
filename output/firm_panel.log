@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/koren/Documents/workspace/expat//output/firm_panel.log
   log type:  text
- opened on:   9 Feb 2021, 13:39:33
+ opened on:  11 Feb 2021, 14:20:23
 
 . 
 . * keep only sample from balance-small - NOTE: had to restructure as we have t
@@ -18,9 +18,9 @@
 . tempfile sample
 
 . save `sample', replace
-(note: file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St04209.000001 no
+(note: file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St11422.000001 no
 > t found)
-file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St04209.000001 saved
+file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St11422.000001 saved
 
 . 
 . use "`here'/input/ceo-panel/ceo-panel.dta", clear // QUESTION: what is owner
@@ -518,13 +518,11 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
   (20,721,393 bytes saved)
 
 . save "`here'/temp/firm_events.dta", replace
-(note: file /Users/koren/Documents/workspace/expat//temp/firm_events.dta not fo
-> und)
 file /Users/koren/Documents/workspace/expat//temp/firm_events.dta saved
 
 . log close
       name:  <unnamed>
        log:  /Users/koren/Documents/workspace/expat//output/firm_panel.log
   log type:  text
- closed on:   9 Feb 2021, 13:41:00
+ closed on:  11 Feb 2021, 14:21:53
 -------------------------------------------------------------------------------
