@@ -4,6 +4,7 @@ local here = r(here)
 
 use "`here'/temp/analysis_sample_dyadic.dta", clear
 generate byte Lmanager_HUN = (has_expat==0) & (Lmanager==1)
+drop if country == "XX"
 
 local dummies frame_id_numeric##year cc##year frame_id_numeric##cc
 local treatments Lowner Lmanager Lowner_comlang Lmanager_comlang Lmanager_HUN

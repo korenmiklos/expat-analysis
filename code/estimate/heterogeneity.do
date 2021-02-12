@@ -34,6 +34,8 @@ local outcomes export import
 local treatments owner_country_? owner_related_? manager_related_3 manager_unrelated_3
 local options tex(frag) dec(3) nocons nonotes addstat(Mean, r(mean)) addtext(Firm-year FE, YES, Country-year FE, YES, Firm-country FE, YES)
 
+* only drop ROW here after variables have been defined
+drop if country == "XX"
 local fmode replace
 foreach Y of var `outcomes' {
 	* hazard of entering this market

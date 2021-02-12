@@ -3,7 +3,7 @@ here
 local here = r(here)
 
 use "`here'/temp/analysis_sample_dyadic.dta", clear
-keep if ever_foreign == 1
+drop if country == "XX"
 
 local T1 95
 local T2 105

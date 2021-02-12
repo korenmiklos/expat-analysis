@@ -3,6 +3,7 @@ here
 local here = r(here)
 
 use "`here'/temp/analysis_sample_dyadic.dta", clear
+drop if country == "XX"
 
 local dummies frame_id_numeric##year cc##year frame_id_numeric##cc
 local treatments Lonly_owner Lonly_manager Lboth
