@@ -7,8 +7,9 @@ drop if country == "XX"
 
 local T1 95
 local T2 105
+local treatment_type owner manager
 
-foreach X of var only_owner only_manager both {
+foreach X of var `treatment_type' {
 	egen byte ever_`X' = max(`X'), by(frame_id_numeric cc)
 	egen int ft_`X' = min(cond(`X', year, .)), by(originalid cc)
 	generate et_`X' = 100 + year - ft_`X'
@@ -23,13 +24,12 @@ foreach X of var only_owner only_manager both {
 }
 
 local dummies frame_id_numeric##year cc##year frame_id_numeric##cc
-local treatments only_owner_* only_manager_* both_*
-local outcomes export import_capital import_material
+local treatments owner_96-owner_105 manager_96-manager_105
+local outcomes export import
 local options keep(`treatments') tex(frag) dec(3)  nocons nonotes addstat(Mean, r(mean)) addtext(Firm-year FE, YES, Country-year FE, YES, Firm-country FE, YES)
 
 local fmode replace
 
-local treatment_type only_owner only_manager both
 tempname graph
 postfile `graph' b se str20(outcome treatment) t using "`here'/temp/event_study_graph.dta", replace
 
@@ -65,9 +65,8 @@ gen upper = b + 1.96 * se
 
 levelsof outcome, local(levels)
 foreach outcome of local levels { 
-	twoway (rarea lower upper t if outcome == "`outcome'" & treatment == "only_owner", color(red%30)) (line b t if outcome == "`outcome'" & treatment == "only_owner", color(red)) ///
-	(rarea lower upper t if outcome == "`outcome'" & treatment == "only_manager", color(blue%30)) (line b t if outcome == "`outcome'" & treatment == "only_manager", color(blue)) ///
-	(rarea lower upper t if outcome == "`outcome'" & treatment == "both", color(green%30)) (line b t if outcome == "`outcome'" & treatment == "both", color(green)), ///
-	yline(0, lcolor(black) lpattern(dash)) graphregion(color(white)) xtitle("year") legend(order(2 "Only owner" 4 "Only manager" 6 "Both")) title("`outcome'")
+	twoway (rarea lower upper t if outcome == "`outcome'" & treatment == "owner", color(red%30)) (line b t if outcome == "`outcome'" & treatment == "owner", color(red)) ///
+	(rarea lower upper t if outcome == "`outcome'" & treatment == "manager", color(blue%30)) (line b t if outcome == "`outcome'" & treatment == "manager", color(blue)) ///
+	, yline(0, lcolor(black) lpattern(dash)) graphregion(color(white)) xtitle("year") legend(order(2 "Owner" 4 "Manager")) title("`outcome'")
 	graph export "`here'/output/figure/event_study_`outcome'.png", replace
 }
