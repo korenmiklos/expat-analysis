@@ -13,3 +13,6 @@ capture ssc install estout
 * install here
 capture ado uninstall here
 net install here, from("https://raw.githubusercontent.com/korenmiklos/here/master/")
+
+*install coefplot
+capture ssc install coefplot

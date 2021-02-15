@@ -26,8 +26,6 @@ foreach Y in `outcomes' {
 	}
 }
 
-ssc install coefplot
-
 coefplot export_rauch, bylabel("Export - rauch") || export_nonrauch, bylabel("Export - nonrauch") || export_consumer, bylabel("Export - consumer") || import_rauch, bylabel("Import - rauch") || import_nonrauch, bylabel("Import - nonrauch") || import_consumer, bylabel("Import - consumer") ||,  drop(_cons) coeflabel(Lonly_owner = "Only owner" Lonly_manager = "Only manager" Lboth = "Both") xline(0, lcolor(black) lpattern(dash)) subtitle(, lcolor(white) fcolor(white)) levels(95) xlabel(0(0.05)0.25) byopts(graphregion(col(white)) bgcol(white) title("Products", color(black)))
 
 graph export "`here'/output/figure/coefplot_products.png", replace
