@@ -138,6 +138,46 @@ $$
 == Expats help start exporting, but have no effect on continuation ==
 \regressiontable{exporter}
 
+== Market entry hazard regressions ==
+For each firm-year, take 24 major partner countries. What is the hazard of starting to export/import to/from that country?
+
+$$
+\Pr(X_{ict}=1|X_{ict-1}=0) = 
+\alpha_{ic} + \mu_{ct} + \nu_{it} 
++ \beta_o \text{OWNER}_{ict} 
++ \beta_m \text{MANAGER}_{ict} 
++ u_{ict}
+$$
+
+== Firms start trading with the country of their owner/manager ==
+\regressiontable{trade}
+
+== Causality runs both ways ==
+\regressiontable{granger}
+
+== Results robust across product categories ==
+\regressiontable{products}
+
+== Firms start trading with the *gravity partners* of their owner/manager ==
+\regressiontable{gravity}
+
+== Ethnicity/language of manager matters *in addition* to her country ==
+\regressiontable{language}
+
+== XXXX ==
+\regressiontable{heterogeneity}
+
+
+= Discussion =
+== Discussion ==
+Two preferred explanations:
+
+=== Vertical integration ===
+Foreign owner takes over firm to export/import within own business network.
+
+=== Business networks ===
+Managers help connect different firms within their business network.
+
 = Conclusions =
 == Conclusions ==
 * What are the causes and consequences of foreign acquisitions?
