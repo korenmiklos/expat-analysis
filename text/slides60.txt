@@ -144,10 +144,16 @@ For each firm-year, take 24 major partner countries. What is the hazard of start
 $$
 \Pr(X_{ict}=1|X_{ict-1}=0) = 
 \alpha_{ic} + \mu_{ct} + \nu_{it} 
+$$
+$$
 + \beta_o \text{OWNER}_{ict} 
 + \beta_m \text{MANAGER}_{ict} 
 + u_{ict}
 $$
+
+* firm-country FE: suitability of firm to market
+* country-time FE: business conditions in market
+* firm-year FE: reorganization, any firm-wide change
 
 == Firms start trading with the country of their owner/manager ==
 \regressiontable{trade}
@@ -155,17 +161,22 @@ $$
 == Causality runs both ways ==
 \regressiontable{granger}
 
+== ==
+\longfigure{output/figure/event_study_export.png}{Large and permanent effects on exports}
+\longfigure{output/figure/event_study_import.png}{Large and persistent effects on imports}
+
+
 == Results robust across product categories ==
 \regressiontable{products}
 
-== Firms start trading with the *gravity partners* of their owner/manager ==
+== Firms start trading with the \emph{gravity partners} of their owner/manager ==
 \regressiontable{gravity}
 
-== Ethnicity/language of manager matters *in addition* to her country ==
+== Ethnicity/language of manager matters \emph{in addition} to her country ==
 \regressiontable{language}
 
-== XXXX ==
-\regressiontable{heterogeneity}
+== Owner has an effect in \emph{typical manager countries}, but actual managers matter more ==
+\regressiontable{placebo}
 
 
 = Discussion =
