@@ -18,7 +18,6 @@ tab country_code_fill_manager expat, missing
 replace country_code = country_code_fill if missing(country_code) & !missing(country_code_fill)
 replace country_code = country_code_fill_manager if missing(country_code) & !missing(country_code_fill_manager)
 
-keep if expat
 drop if missing(country_code)
 collapse (max) expat, by(frame_id_numeric year country_code)
 drop expat

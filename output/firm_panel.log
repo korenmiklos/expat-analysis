@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /srv/sandbox/koren/expat//output/firm_panel.log
+       log:  /Users/koren/Documents/workspace/expat//output/firm_panel.log
   log type:  text
- opened on:  11 Feb 2021, 17:39:05
+ opened on:  15 Feb 2021, 10:08:10
 
 . 
 . * keep only sample from balance-small - NOTE: had to restructure as we have t
@@ -18,8 +18,9 @@
 . tempfile sample
 
 . save `sample', replace
-(note: file /srv/sandbox/koren/tmp/St1036799.000001 not found)
-file /srv/sandbox/koren/tmp/St1036799.000001 saved
+(note: file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St24373.000001 no
+> t found)
+file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St24373.000001 saved
 
 . 
 . use "`here'/input/ceo-panel/ceo-panel.dta", clear // QUESTION: what is owner
@@ -167,11 +168,11 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
 . ***********************
 .         by frame_id_numeric: egen first_year_expat = min(cond(expat == 1, job
 > _begin,.))
-(373,409 missing values generated)
+(373409 missing values generated)
 
 .         by frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1,
 >  year,.))
-(347,822 missing values generated)
+(347822 missing values generated)
 
 .         
 .         * which of the two happened first?
@@ -247,69 +248,69 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
   3.         replace previous_year = `previous_year' if year == `t'
   4.         drop `previous_year'
   5. }
-(467,602 missing values generated)
+(467602 missing values generated)
 (0 real changes made)
-(467,602 missing values generated)
+(467602 missing values generated)
 (0 real changes made)
-(467,602 missing values generated)
+(467602 missing values generated)
 (0 real changes made)
-(467,602 missing values generated)
+(467602 missing values generated)
 (0 real changes made)
-(431,259 missing values generated)
+(431259 missing values generated)
 (1,994 real changes made)
-(430,088 missing values generated)
+(430088 missing values generated)
 (2,088 real changes made)
-(393,434 missing values generated)
+(393434 missing values generated)
 (4,495 real changes made)
-(354,181 missing values generated)
+(354181 missing values generated)
 (6,711 real changes made)
-(290,082 missing values generated)
+(290082 missing values generated)
 (9,889 real changes made)
-(242,039 missing values generated)
+(242039 missing values generated)
 (11,871 real changes made)
-(207,926 missing values generated)
+(207926 missing values generated)
 (12,924 real changes made)
-(184,892 missing values generated)
+(184892 missing values generated)
 (13,423 real changes made)
-(162,247 missing values generated)
+(162247 missing values generated)
 (14,087 real changes made)
-(137,836 missing values generated)
+(137836 missing values generated)
 (15,066 real changes made)
-(120,323 missing values generated)
+(120323 missing values generated)
 (15,533 real changes made)
-(107,101 missing values generated)
+(107101 missing values generated)
 (15,771 real changes made)
-(92,179 missing values generated)
+(92179 missing values generated)
 (16,179 real changes made)
-(79,071 missing values generated)
+(79071 missing values generated)
 (16,539 real changes made)
-(67,702 missing values generated)
+(67702 missing values generated)
 (16,721 real changes made)
-(59,487 missing values generated)
+(59487 missing values generated)
 (17,018 real changes made)
-(51,613 missing values generated)
+(51613 missing values generated)
 (17,215 real changes made)
-(44,177 missing values generated)
+(44177 missing values generated)
 (17,356 real changes made)
-(36,970 missing values generated)
+(36970 missing values generated)
 (17,467 real changes made)
-(31,051 missing values generated)
+(31051 missing values generated)
 (18,123 real changes made)
-(24,954 missing values generated)
+(24954 missing values generated)
 (17,895 real changes made)
-(20,106 missing values generated)
+(20106 missing values generated)
 (17,772 real changes made)
-(15,686 missing values generated)
+(15686 missing values generated)
 (17,669 real changes made)
-(11,749 missing values generated)
+(11749 missing values generated)
 (17,569 real changes made)
-(8,719 missing values generated)
+(8719 missing values generated)
 (17,577 real changes made)
-(5,946 missing values generated)
+(5946 missing values generated)
 (17,263 real changes made)
-(3,766 missing values generated)
+(3766 missing values generated)
 (16,484 real changes made)
-(2,150 missing values generated)
+(2150 missing values generated)
 (16,279 real changes made)
 (970 missing values generated)
 (16,250 real changes made)
@@ -345,59 +346,59 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
 (4,603 real changes made)
 (742 missing values generated)
 (6,946 real changes made)
-(3,500 missing values generated)
+(3500 missing values generated)
 (10,148 real changes made)
-(6,703 missing values generated)
+(6703 missing values generated)
 (11,882 real changes made)
-(10,228 missing values generated)
+(10228 missing values generated)
 (13,063 real changes made)
-(13,848 missing values generated)
+(13848 missing values generated)
 (13,504 real changes made)
-(17,697 missing values generated)
+(17697 missing values generated)
 (14,124 real changes made)
-(21,678 missing values generated)
+(21678 missing values generated)
 (14,911 real changes made)
-(25,872 missing values generated)
+(25872 missing values generated)
 (15,579 real changes made)
-(31,758 missing values generated)
+(31758 missing values generated)
 (15,638 real changes made)
-(36,882 missing values generated)
+(36882 missing values generated)
 (16,180 real changes made)
-(41,968 missing values generated)
+(41968 missing values generated)
 (16,503 real changes made)
-(47,798 missing values generated)
+(47798 missing values generated)
 (16,747 real changes made)
-(54,087 missing values generated)
+(54087 missing values generated)
 (16,759 real changes made)
-(61,036 missing values generated)
+(61036 missing values generated)
 (17,038 real changes made)
-(67,936 missing values generated)
+(67936 missing values generated)
 (17,176 real changes made)
-(75,860 missing values generated)
+(75860 missing values generated)
 (17,280 real changes made)
-(84,021 missing values generated)
+(84021 missing values generated)
 (17,329 real changes made)
-(93,731 missing values generated)
+(93731 missing values generated)
 (17,848 real changes made)
-(103,027 missing values generated)
+(103027 missing values generated)
 (17,654 real changes made)
-(111,759 missing values generated)
+(111759 missing values generated)
 (17,582 real changes made)
-(120,625 missing values generated)
+(120625 missing values generated)
 (17,532 real changes made)
-(128,332 missing values generated)
+(128332 missing values generated)
 (17,409 real changes made)
-(139,082 missing values generated)
+(139082 missing values generated)
 (17,289 real changes made)
-(155,696 missing values generated)
+(155696 missing values generated)
 (16,583 real changes made)
-(165,929 missing values generated)
+(165929 missing values generated)
 (16,208 real changes made)
-(174,832 missing values generated)
+(174832 missing values generated)
 (16,068 real changes made)
-(190,261 missing values generated)
+(190261 missing values generated)
 (15,611 real changes made)
-(467,602 missing values generated)
+(467602 missing values generated)
 (0 real changes made)
 
 . 
@@ -443,10 +444,10 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
 (27,193 real changes made)
 
 . bys frame_id_numeric (year): replace hire_expat = 0 if (_n==1)
-(2,694 real changes made)
+(2694 real changes made)
 
 . bys frame_id_numeric (year): replace fire_expat = 0 if (_n==_N)
-(2,810 real changes made)
+(2810 real changes made)
 
 . bys frame_id_numeric (year): gen ceo_spell = sum(hire_ceo | fire_ceo) + 1 // 
 > so that index start from 1
@@ -464,30 +465,30 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                       293,224
-        from master                   293,224  
+    not matched                       292,558
+        from master                   292,558  
         from using                          0  
 
-    matched                            35,687  
+    matched                            36,353  
     -----------------------------------------
 
 . tabulate has_expat if missing(country_list)
 
   has_expat |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    291,525       99.42       99.42
-          1 |      1,699        0.58      100.00
+          0 |    290,872       99.42       99.42
+          1 |      1,686        0.58      100.00
 ------------+-----------------------------------
-      Total |    293,224      100.00
+      Total |    292,558      100.00
 
 . tabulate has_expat if !missing(country_list)
 
   has_expat |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |         29        0.08        0.08
-          1 |     35,658       99.92      100.00
+          0 |        682        1.88        1.88
+          1 |     35,671       98.12      100.00
 ------------+-----------------------------------
-      Total |     35,687      100.00
+      Total |     36,353      100.00
 
 . rename country_list country_all_manager
 
@@ -517,11 +518,11 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
   (20,721,393 bytes saved)
 
 . save "`here'/temp/firm_events.dta", replace
-file /srv/sandbox/koren/expat//temp/firm_events.dta saved
+file /Users/koren/Documents/workspace/expat//temp/firm_events.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /srv/sandbox/koren/expat//output/firm_panel.log
+       log:  /Users/koren/Documents/workspace/expat//output/firm_panel.log
   log type:  text
- closed on:  11 Feb 2021, 17:40:16
+ closed on:  15 Feb 2021, 10:09:43
 -------------------------------------------------------------------------------
