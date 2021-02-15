@@ -27,14 +27,12 @@ replace iso639 = "sv" if inlist(iso639, "no")
 replace iso639 = "vi" if inlist(iso639, "th")
 * flag non-expats as hungarian
 replace iso639 = "hu" if expat == 0
-
-do "`here'/code/util/language.do" country_code
-
+* NB: remove country-related languages
 levelsof iso639
 local languages = r(levels)
 foreach lang in `languages' {
 	* add language inferred from name
-	replace cnt_`lang' = 1 if (iso639 == "`lang'")
+	generate byte cnt_`lang' = (iso639 == "`lang'")
 }
 
 collapse (max) expat cnt_??, by(frame_id_numeric year country_code)
