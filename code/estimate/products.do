@@ -19,9 +19,15 @@ foreach Y in `outcomes' {
 	foreach p in `products' {
 		* hazard of entering this market
 		reghdfe D`Y'_`p' `treatments' if L`Y'_`p'==0, a(`dummies') cluster(frame_id_numeric)
+		estimates store `Y'_`p'
 		summarize D`Y'_`p' if e(sample), meanonly
 		outreg2 using "`here'/output/table/products.tex", `fmode' `options' ctitle(`title`sample'')
 		local fmode append
 	}
 }
 
+ssc install coefplot
+
+coefplot export_rauch, bylabel("Export - rauch") || export_nonrauch, bylabel("Export - nonrauch") || export_consumer, bylabel("Export - consumer") || import_rauch, bylabel("Import - rauch") || import_nonrauch, bylabel("Import - nonrauch") || import_consumer, bylabel("Import - consumer") ||,  drop(_cons) coeflabel(Lonly_owner = "Only owner" Lonly_manager = "Only manager" Lboth = "Both") xline(0, lcolor(black) lpattern(dash)) subtitle(, lcolor(white) fcolor(white)) levels(95) xlabel(0(0.05)0.25) byopts(graphregion(col(white)) bgcol(white) title("Products", color(black)))
+
+graph export "`here'/output/figure/coefplot_products.png", replace
