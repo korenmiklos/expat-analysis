@@ -1,0 +1,30 @@
+args country_code
+* code countries by their primary? language
+generate byte cnt_hu = inlist(`country_code', "HU")
+generate byte cnt_ar = inlist(`country_code', "DZ", "TD", "EG", "IQ", "JO", "KW", "LB", "MA", "OM")
+replace cnt_ar = 1 if inlist(`country_code', "SA", "SO", "SD", "SY", "TN", "AE", "YE", "QA", "PS")
+generate byte cnt_de = inlist(`country_code', "AT", "DE", "CH")
+generate byte cnt_el = inlist(`country_code', "GR")
+generate byte cnt_en = inlist(`country_code', "GB", "IE", "US")
+generate byte cnt_es = inlist(`country_code', "ES")
+generate byte cnt_fi = inlist(`country_code', "FI")
+generate byte cnt_fr = inlist(`country_code', "BE", "CH", "FR", "LU")
+generate byte cnt_he = inlist(`country_code', "IL")
+generate byte cnt_hi = inlist(`country_code', "IN")
+generate byte cnt_it = inlist(`country_code', "IT")
+generate byte cnt_ja = inlist(`country_code', "JP")
+generate byte cnt_ko = inlist(`country_code', "KR")
+generate byte cnt_nl = inlist(`country_code', "BE", "NL")
+generate byte cnt_pl = inlist(`country_code', "PL")
+generate byte cnt_pt = inlist(`country_code', "PT")
+generate byte cnt_ro = inlist(`country_code', "RO")
+generate byte cnt_ru = inlist(`country_code', "BG", "LT", "RU", "UA")
+generate byte cnt_sk = inlist(`country_code', "CZ", "SK")
+generate byte cnt_sr = inlist(`country_code', "RS", "HR", "YU", "CS", "ME")
+generate byte cnt_sv = inlist(`country_code', "SE", "NO", "DK")
+generate byte cnt_tr = inlist(`country_code', "TR")
+generate byte cnt_vi = inlist(`country_code', "VN", "TH")
+generate byte cnt_zh = inlist(`country_code', "CN")
+
+
+

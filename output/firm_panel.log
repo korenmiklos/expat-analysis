@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/koren/Documents/workspace/expat//output/firm_panel.log
   log type:  text
- opened on:  15 Feb 2021, 10:08:10
+ opened on:  15 Feb 2021, 12:36:01
 
 . 
 . * keep only sample from balance-small - NOTE: had to restructure as we have t
@@ -18,9 +18,9 @@
 . tempfile sample
 
 . save `sample', replace
-(note: file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St24373.000001 no
+(note: file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St24660.000001 no
 > t found)
-file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St24373.000001 saved
+file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St24660.000001 saved
 
 . 
 . use "`here'/input/ceo-panel/ceo-panel.dta", clear // QUESTION: what is owner
@@ -492,6 +492,8 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
 
 . rename country_list country_all_manager
 
+. rename language_list lang_all_manager
+
 . 
 . count
   328,911
@@ -514,8 +516,9 @@ Distribution of T_i:   min      5%     25%       50%       75%     95%     max
   variable n_founder was double now byte
   variable n_insider was double now byte
   variable n_outsider was double now byte
+  variable lang_all_manager was str15 now str12
   variable country_all_manager was str15 now str12
-  (20,721,393 bytes saved)
+  (21,708,126 bytes saved)
 
 . save "`here'/temp/firm_events.dta", replace
 file /Users/koren/Documents/workspace/expat//temp/firm_events.dta saved
@@ -524,5 +527,5 @@ file /Users/koren/Documents/workspace/expat//temp/firm_events.dta saved
       name:  <unnamed>
        log:  /Users/koren/Documents/workspace/expat//output/firm_panel.log
   log type:  text
- closed on:  15 Feb 2021, 10:09:43
+ closed on:  15 Feb 2021, 12:37:37
 -------------------------------------------------------------------------------

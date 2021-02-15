@@ -19,11 +19,40 @@ replace country_code = country_code_fill if missing(country_code) & !missing(cou
 replace country_code = country_code_fill_manager if missing(country_code) & !missing(country_code_fill_manager)
 
 drop if missing(country_code)
-collapse (max) expat, by(frame_id_numeric year country_code)
+* merge some easy-to-mix languages
+replace iso639 = "sk" if iso639 == "cs"
+replace iso639 = "ru" if inlist(iso639, "bg", "uk", "sq")
+replace iso639 = "sr" if inlist(iso639, "hr")
+replace iso639 = "sv" if inlist(iso639, "no")
+replace iso639 = "vi" if inlist(iso639, "th")
+* flag non-expats as hungarian
+replace iso639 = "hu" if expat == 0
+
+do "`here'/code/util/language.do" country_code
+
+levelsof iso639
+local languages = r(levels)
+foreach lang in `languages' {
+	* add language inferred from name
+	replace cnt_`lang' = 1 if (iso639 == "`lang'")
+}
+
+collapse (max) expat cnt_??, by(frame_id_numeric year country_code)
 drop expat
 
 * convert YU country codes
 do "`here'/code/util/yugoslavia.do"
+
+* adding all language codes for one firm-year into one variable
+generate str language_list = ""
+foreach language of var cnt_?? {
+	local lng = substr("`language'", 5, 2)
+	display "`lng'"
+	tempvar cnt
+	egen `cnt' = max(`language'), by(frame_id_numeric year)
+	replace language_list = language_list + "`lng'," if `cnt' == 1
+	drop `cnt'
+}
 
 * adding all country codes for one firm-year into one variable
 generate str country_list = ""
@@ -38,7 +67,7 @@ foreach country in `countries' {
 }
 bysort frame_id_numeric year: generate keep = (_n==1)
 keep if keep
-keep frame_id_numeric year country_list
+keep frame_id_numeric year country_list language_list
 
 compress
 save "`here'/temp/manager_country.dta", replace

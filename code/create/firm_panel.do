@@ -144,6 +144,7 @@ merge 1:1 frame_id_numeric year using "`here'/temp/manager_country.dta", keep(ma
 tabulate has_expat if missing(country_list)
 tabulate has_expat if !missing(country_list)
 rename country_list country_all_manager
+rename language_list lang_all_manager
 
 count
 

@@ -48,14 +48,14 @@ do "`here'/code/create/countries.do"
 merge 1:1 originalid year using "temp/trade.dta", keep(master match) nogen
 mvencode export* import*, mv(0) override
 
-keep frame_id_numeric year export?? export_rauch?? export_nonrauch?? export_consumer?? import?? import_rauch?? import_nonrauch?? import_consumer?? import_capital?? import_material?? owner?? manager??
+keep frame_id_numeric year export?? export_rauch?? export_nonrauch?? export_consumer?? import?? import_rauch?? import_nonrauch?? import_consumer?? import_capital?? import_material?? owner?? manager?? language??
 
 * only reshape trade so that we can compute distance measures between where owners are from and where this firm is trading
 reshape long export export_rauch export_nonrauch export_consumer import import_rauch import_nonrauch import_consumer import_capital import_material, i(frame_id_numeric year) j(country) string
 local vars distance contig comlang
 levelsof country
 local countries = r(levels)
-foreach role in owner manager {
+foreach role in owner manager language {
 	* do long reshape manually
 	generate byte `role' = 0
 	foreach country in `countries' {
@@ -74,6 +74,7 @@ foreach role in owner manager {
 	egen `role'_distance = rmin(`role'_distance??)
 	drop *`role'?? `role'_contig?? `role'_comlang?? `role'_distance??
 }
+drop language_*
 * if no foreign managers, replace distance variables with 0 - these are soaked up in the firm-country fixed effects
 mvencode *er_contig *er_comlang *er_distance, mv(0) override
 
@@ -83,7 +84,7 @@ generate byte either = owner | manager
 generate byte only_owner = owner & !manager
 generate byte only_manager = manager & !owner
 
-do "`here'/code/create/lags.do" export import import_capital import_material owner manager both either only_owner only_manager owner_contig owner_comlang manager_contig manager_comlang
+do "`here'/code/create/lags.do" export import import_capital import_material owner manager language both either only_owner only_manager owner_contig owner_comlang manager_contig manager_comlang
 * lag distance
 tempvar mindist
 foreach role in owner manager {
