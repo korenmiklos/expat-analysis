@@ -1,25 +1,18 @@
-	(1)	(2)
-VARIABLES	Dexport	Dimport
-		
-Lowner	0.056***	0.074***
-	(0.005)	(0.008)
-Lowner_contig	0.004**	0.014***
-	(0.002)	(0.002)
-Lowner_comlang	0.004**	0.015***
-	(0.002)	(0.003)
-Lowner_distance	-0.004***	-0.005***
-	(0.001)	(0.001)
-Lmanager	0.099***	0.147***
-	(0.008)	(0.013)
-Lmanager_contig	0.009***	0.030***
-	(0.002)	(0.003)
-Lmanager_comlang	0.003	0.014***
-	(0.003)	(0.003)
-Lmanager_distance	-0.005***	0.004***
-	(0.001)	(0.002)
-		
-Observations	2,948,035	2,863,535
-R-squared	0.375	0.379
-Firm-year FE	YES	YES
-Country-year FE	YES	YES
-Firm-country FE	YES	YES
+		(1)	(2)
+VARIABLES	LABELS	export	import
+			
+Lowner	Owner (same country)	0.064***	0.084***
+		(0.005)	(0.007)
+Lowner_contig	neighbor country	0.009***	0.020***
+		(0.002)	(0.002)
+Lowner_comlang	common languange	0.003*	0.014***
+		(0.002)	(0.003)
+Lmanager	Manager (same country)	0.109***	0.139***
+		(0.008)	(0.013)
+Lmanager_contig	neighbor country	0.015***	0.025***
+		(0.002)	(0.003)
+Lmanager_comlang	common languange	0.002	0.014***
+		(0.003)	(0.003)
+			
+Observations		2,948,035	2,863,535
+Mean outcome		0.00728	0.0104
