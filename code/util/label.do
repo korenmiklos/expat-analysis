@@ -1,0 +1,5 @@
+label variable Lowner "Owner"
+label variable Lmanager "Manager"
+label variable Lonly_owner "Only owner"
+label variable Lonly_manager "Only manager"
+label variable Lboth "Both"

@@ -2,23 +2,24 @@ clear all
 here
 local here = r(here)
 
-use "`here'/temp/analysis_sample_dyadic.dta", clear
+do "`here'/code/estimate/header.do"
 drop if country == "XX"
 
-local dummies frame_id_numeric##year cc##year frame_id_numeric##cc
-local outcomes export import 
-local options keep(`treatments') tex(frag) dec(3)  nocons nonotes addstat(Mean, r(mean)) addtext(Firm-year FE, YES, Country-year FE, YES, Firm-country FE, YES)
+local Y1 export
+local Y2 import
+local Y3 `Y1'
+local Y4 `Y2'
+local X1 Lowner Lmanager
+local X2 `X1'
+local X3 Lonly_owner Lonly_manager Lboth
+local X4 `X3'
 
 local fmode replace
-foreach Y of var `outcomes' {
+forvalues i = 1/4 {
 	* hazard of entering this market
-	reghdfe D`Y' Lowner Lmanager if L`Y'==0, a(`dummies') cluster(frame_id_numeric)
-	summarize D`Y' if e(sample), meanonly
-	outreg2 using "`here'/output/table/trade.tex", `fmode' `options' ctitle(`title`sample'')
+	reghdfe D`Y`i'' `X`i'' if L`Y`i''==0, a($dummies) cluster(frame_id_numeric)
+	summarize D`Y`i'' if e(sample), meanonly
+	outreg2 using "`here'/output/table/trade.tex", `fmode' $options ctitle(`Y`i'')
 	local fmode append
-
-	reghdfe D`Y' Lowner owner Lmanager manager `treatments' if L`Y'==0, a(`dummies') cluster(frame_id_numeric)
-	summarize D`Y' if e(sample), meanonly
-	outreg2 using "`here'/output/table/trade.tex", `fmode' `options' ctitle(`title`sample'')
 }
 

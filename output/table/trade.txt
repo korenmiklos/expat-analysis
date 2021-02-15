@@ -1,18 +1,16 @@
-	(1)	(2)	(3)	(4)
-VARIABLES	Dexport	Dexport	Dimport	Dimport
-				
-Lowner	0.062***	0.061***	0.081***	0.079***
-	(0.005)	(0.005)	(0.007)	(0.007)
-owner		0.006		0.010
-		(0.005)		(0.008)
-Lmanager	0.108***	0.107***	0.138***	0.135***
-	(0.008)	(0.008)	(0.013)	(0.013)
-manager		0.012		0.045***
-		(0.008)		(0.015)
-				
-Observations	2,948,058	2,948,058	2,863,556	2,863,556
-R-squared	0.375	0.375	0.378	0.378
-Firm-year FE	YES	YES	YES	YES
-Country-year FE	YES	YES	YES	YES
-Firm-country FE	YES	YES	YES	YES
-Mean	0.00728	0.00728	0.0104	0.0104
+		(1)	(2)	(3)	(4)
+VARIABLES	LABELS	export	import	export	import
+					
+Lonly_owner	Only owner			0.048***	0.071***
+				(0.005)	(0.007)
+Lonly_manager	Only manager			0.074***	0.096***
+				(0.009)	(0.015)
+Lboth	Both			0.155***	0.216***
+				(0.012)	(0.021)
+Lowner	Owner	0.063***	0.082***		
+		(0.005)	(0.007)		
+Lmanager	Manager	0.107***	0.136***		
+		(0.008)	(0.013)		
+					
+Observations		2,948,035	2,863,535	2,948,035	2,863,535
+Mean outcome		0.00728	0.0104	0.00728	0.0104
