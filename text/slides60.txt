@@ -91,9 +91,10 @@ Why and how do firms produce abroad?
 - Left with ?? firms
 
 == Shape of data ==
-\texttt{firm,manager,from,to\\
-123456,Gyöngyi,1992-01-01,1996-12-31\\
-123456,Gábor,1997-01-01,1999-12-31}
+\texttt{firm,manager,country,from,to\\
+123456,Gyöngyi,HU,1992-01-01,1996-12-31\\
+123456,Gábor,HU,1997-01-01,1999-12-31\\
+123456,Greta,DE,2000-01-01,2003-03-31}
 
 == Data cleaning ==
 1. Convert names to numerical IDs
@@ -221,6 +222,8 @@ Year & DE & AT & IT \\
 \longfigure{output/figure/event_study_export.png}{Large and permanent effects on exports}
 \longfigure{output/figure/event_study_import.png}{Large and persistent effects on imports}
 \longfigure{output/figure/coefplot_products.png}{Results robust across product categories}
+\longfigure{output/figure/TE_owner.png}{...and countries}
+\longfigure{output/figure/TE_manager.png}{...and countries}
 
 %% FIXME: Rauch = differentiated
 
@@ -229,6 +232,7 @@ Year & DE & AT & IT \\
 
 == Causality runs both ways ==
 \regressiontable{granger}
+
 
 == Two stories ==
 
