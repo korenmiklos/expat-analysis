@@ -257,13 +257,20 @@ Managers help connect different firms within their business network.
 \regressiontable{gravity}
 
 == Inferring ethnicity from name ==
-\begin{tabular}{ll|cc|cc}
-&& \multicolumn{2}{c}{DE} & \multicolumn{2}{c}{IT} \\
-Address & Name & country & language & country & language\\
+\begin{tabular}{lll|ccc}
+Address & Name & Partner & \texttt{count} & \texttt{lang} & \texttt{ethn} \\
 \hline
-DE & Klaudia Wolf & 1 & 1 & 0 & 0\\
-DE & Enrico Mazzanti & 1 & 1 & 0 & 1\\
-IT & Fioretta Luchesi & 0 & 0 & 1 & 1
+DE & Klaudia Wolf & DE & 1 & 1 & 1\\
+DE & Klaudia Wolf & AT & 0 & 1 & 1\\
+DE & Klaudia Wolf & IT & 0 & 0 & 0\\
+\hline
+DE & Enrico Mazzanti & DE & 1 & 1 & 1\\
+DE & Enrico Mazzanti & AT & 0 & 1 & 0\\
+DE & Enrico Mazzanti & IT & 0 & 0 & 1\\
+\hline
+IT & Fioretta Luchesi & DE & 0 & 0 & 0 \\
+IT & Fioretta Luchesi & AT & 0 & 0 & 0 \\
+IT & Fioretta Luchesi & IT & 1 & 1 & 1 
 \end{tabular}
 
 Assume: conditional on address, ethnicity only correlated with business network.

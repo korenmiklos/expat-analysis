@@ -5,6 +5,8 @@ local here = r(here)
 do "`here'/code/estimate/header.do"
 * everyone assumed to speak the language of their own country, even if ethnic minority
 replace Llanguage = 1 if Lmanager
+replace Lmanager_comlang = 1 if Lmanager
+replace Lowner_comlang = 1 if Lowner
 drop if country == "XX"
 
 do "`here'/code/create/lags.do" import_consumer export_rauch export_nonrauch import_rauch import_nonrauch
