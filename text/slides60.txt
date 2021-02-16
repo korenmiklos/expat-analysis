@@ -45,6 +45,11 @@ Why and how do firms produce abroad?
     * Firms with high immaterial capital receive local managers.
     * Foreign controlled firms become more productive and more likely to export. 
 
+
+== Literature ==
+- Migration and trade. Mostly exploiting regional variation.
+- Manager experience and trade. 
+
 == Outline (for self) ==
 9. Explain name based design 
 10. Language 
@@ -245,19 +250,46 @@ Managers help connect different firms within their business network.
 == Two stories ==
 - They are not exclusive. (Vertical integration is an extreme form of business network.)
 - There is (indirect) evidence for both.
-
+    - Common: more trade with countries expected to be in business network.
+    - Distinct: ethnicity matter in addition to address.
 
 == Firms start trading with the \emph{gravity partners} of their owner/manager ==
 \regressiontable{gravity}
 
-== Ethnicity/language of manager matters \emph{in addition} to her country ==
+== Inferring ethnicity from name ==
+\begin{tabular}{ll|cc|cc}
+&& \multicolumn{2}{c}{DE} & \multicolumn{2}{c}{IT} \\
+Address & Name & country & language & country & language\\
+\hline
+DE & Klaudia Wolf & 1 & 1 & 0 & 0\\
+DE & Enrico Mazzanti & 1 & 1 & 0 & 1\\
+IT & Fioretta Luchesi & 0 & 0 & 1 & 1
+\end{tabular}
+
+Assume: conditional on address, ethnicity only correlated with business network.
+
+== Ethnicity of manager matters \emph{in addition} to her country ==
 \regressiontable{language}
 
 == Owner has an effect in \emph{typical manager countries}, but actual managers matter more ==
 \regressiontable{placebo}
 
-
 = Discussion =
+== Why managers matter ==
+Three broader implications:
+1. Trade within "business networks" larger than previously thought.
+2. Entry into new trade markets is inelastic.
+3. Experience with existing partners leads to preferential attachment. (????)
+
+== Business network trade ==
+== Inelastic market entry ==
+== Preferential attachment ==
+
+
+- Bernard, Moxnes and Ulltveit-Moe (2018) and Bernard, Moxnes and Saito (2019): negative degree assortativity
+- Chaney (2014, 2018)
+- Sugita et al (2017)
+
 
 = Conclusions =
 == Conclusions ==
