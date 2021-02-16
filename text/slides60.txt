@@ -2,60 +2,20 @@
 
 = Motivation =
 == Motivation ==
-Why and how do firms produce abroad?
-
-1. What are the boundaries of (global) firms?
-2. Foreign owned firms perform better than domestic firms
-3. Managers matter
-
-
-== What are the boundaries of (global) firms? ==
-\begin{tikzpicture}
-\node (a) at (0,0) {arm's length};
-\node (b) at (3,0) {relational};
-\node (c) at (6,0) {acquisition};
-\node (d) at (9,0) {management};
-\graph { (a) -> (b) -> (c) -> (d)};
-\end{tikzpicture}
-
-
-%% == Foreign owned firms perform better than domestic firms ==
-%% * US: Doms and Jensen (1998)
-%% * UK: Griffith (1999)
-%% * Hungary, Romania, Russia, Ukraine: Brown, Earle, Telegdy (2006)
-%% * Indonesia: Arnold and Javorcik (2009)
-%% 
-%% == Managers matter ==
-%% * Good management practices  increase  productivity  (Bloom  and  Van  Reenen  2010;  Bloom  et  al.  2012;  Bloom  et  al.  2014) and market access (Bloom et al. 2016). 
-%% * CEOs behaving like ``leaders" gradually improve firm performance. (Bandiera, Hansen, Prat and Sadun 2018)
-%% * Large increase  in  the  level  and  inequality  of  CEO  pay.  (Murphy  and  Zábojník  2004;  Gabaix  and  Landier  2008;  Tervio  2008; Frydman and Saks 2010)
-%% * Managers have persistent effects across firms on investment policy, R\&D, advertising, return on assets.  (Bertrand and Schoar 2003)
-%% * Sudden CEO death worsens firm performance. (Bennedsen, Pérez-González and Wolfenzon 2007) 
-%% * Managers having past export experience increase likelihood of exporting (Mion and Opromolla 2014; Mion, Opromolla and Sforza 2016) and importing (Bisztray, Koren and Szeidl 2018).
-
+1. What are the firm-level barriers to trade? Given the large estimated benefits of exporting and importing, fixed costs must be large.
+2. Two sets of evidence suggest large role for personal connections.
+    * Immigrant networks are key determinants of ''regional'' trade patterns (Rauch 1999+).
+    * Face-to-face links facilitate formation of buyer-supplier links (Bermard, Moxnes and Saito 2019, Cai and Szeidl 2018+).
 
 == This paper ==
 * Compile new data on which firm is run by which manager: Hungary, 1980--2018. 
-* Measure different degrees of foreign control:
-    1. acquisition
-    2. replace CEO
-    3. hire expat CEO
+    * owner address (country)
+    * manager address (country)
+    * manager ethnicity 
+* Provide firm-market-level evidence on how trade patterns change after foreign acquisition and change of management.
 * Results:
-    * Exporters and low-productivity firms become more tightly controlled. 
-    * Firms with high immaterial capital receive local managers.
-    * Foreign controlled firms become more productive and more likely to export. 
+    * XXXXXXXXXXXXXX
 
-
-== Literature ==
-- Migration and trade. Mostly exploiting regional variation.
-- Manager experience and trade. 
-
-== Outline (for self) ==
-11. Explain placebo
-12. Placebo
-13. Do these separately for products?
-14. Give magnitudes 
-15. Why matters 
 
 = Data =
 
@@ -78,12 +38,31 @@ Why and how do firms produce abroad?
 == Names ==
 * We use manager names to infer 
     1. CEO change
-    2. nationality
+    2. ethnicity
     3. gender (not used today)
 * Foreign manager: firm representative with a non-Hungarian first name
     - e.g. Eva Bauer v Bauer Éva
     - but: George Soros v Soros György
 * Allow for misspelling, omitted middle name, missing data (jr, dr)
+
+== Shape of data ==
+\texttt{firm,manager,country,from,to\\
+123456,Szilágyi Erika,HU,1992-01-01,1996-12-31\\
+123456,Pálffy György,HU,1997-01-01,1999-12-31\\
+123456,Greta Schröder,DE,2000-01-01,2003-03-31}
+
+== Data cleaning ==
+1. Convert names to numerical IDs
+2. Infer Hungarian ethnicity from name
+3. Classify everyone else as foreign
+4. Clean up time interval and position description
+5. Create annual panel for June 21
+6. In progress: Infer ethnicity (other than Hungarian) from name
+
+= Descriptives =
+\longfigure{input/ceo-panel/fig/manager-type-by-year/fig.pdf}{The number of CEOs increased sharply until 2010}
+\longfigure{input/ceo-panel/fig/manager-type-by-age/fig.pdf}{The share of firms managed by founders gradually decreases with age}
+\longfigure{input/ceo-panel/fig/tenure-by-type-weighted/fig.pdf}{Founders stay longest at the firm}
 
 == Sample ==
 - Exclude: 
@@ -91,99 +70,19 @@ Why and how do firms produce abroad?
     - financial sector
     - domestic firms with expat CEO
     - firms with more than 15 CEOs
-- Left with ?? firms
+- Left with 20,000 firms
 
-== Shape of data ==
-\texttt{firm,manager,country,from,to\\
-123456,Gyöngyi,HU,1992-01-01,1996-12-31\\
-123456,Gábor,HU,1997-01-01,1999-12-31\\
-123456,Greta,DE,2000-01-01,2003-03-31}
-
-== Data cleaning ==
-1. Convert names to numerical IDs
-    - normalization
-    - Levenshtein distance of name components
-    - stricter matching across firms (not used today)
-    - more liberal matching within firm
-2. Infer Hungarian nationality from name
-    - given name in closed list of admissible Hungarian names
-3. Classify everyone else as foreign
-    - remove firms
-    - but: weird typos with limited supporting information
-4. Clean up time interval and position description
-5. Create annual panel for June 21
-
-== CEO succession ==
+== Degree of foreign involvement ==
 \begin{tikzpicture}
-\scaffolding
-\draw (2.5,-0.5) node[above=6pt, align=center] {Gyöngyi};
-\draw (5.5,-0.5) node[above=6pt, align=center] {Gábor};
-\draw (8.5,-0.5) node[above=6pt, align=center] {Greta};
-\draw (11.5,-0.5) node[above=6pt, align=center] {Gergely};
+\node (a) [text width=1.5cm] at (0,0) {domestic owner (100,000) (15,500)};
+\node (b) [text width=1.5cm] at (2.5,0) {foreign owner (31,600) (4,600)};
+\node (c) [text width=1.5cm] at (5.0,0) {mgr replaced (25,800) (3,800)};
+\node (d) [text width=1.5cm] at (7.5,0) {expat hired (20,000) (2,600)};
+\node (e) [text width=1.5cm] at (10,0) {mgr same-cnt (12,900) (1,800)};
+\graph { (a) -> (b) -> (c) -> (d) -> (e)};
 \end{tikzpicture}
 
-
-= Descriptives =
-\longfigure{input/ceo-panel/fig/manager-type-by-year/fig.pdf}{The number of CEOs increased sharply until 2010}
-\longfigure{input/ceo-panel/fig/manager-type-by-age/fig.pdf}{The share of firms managed by founders gradually decreases with age}
-\longfigure{input/ceo-panel/fig/tenure-by-type-weighted/fig.pdf}{Founders stay longest at the firm}
-
-
-= Estimates =
-
-== Degree of control ==
-\begin{tikzpicture}
-\node (a) [text width=1.5cm] at (0,0) {domestic (243,388) (22,761)};
-\node (b) [text width=1.5cm] at (3,0) {acquired (20,781) (1,770)};
-\node (c) [text width=1.5cm] at (6,0) {mgr replaced (15,784) (1,235)};
-\node (d) [text width=1.5cm] at (9,0) {expat hired (9,184) (654)};
-\graph { (a) -> (b) -> (c) -> (d)};
-\end{tikzpicture}
-
-== Variables ==
-* '''foreign''': firm has majority foreign owner
-* '''foreign\_hire''': firm has a manager hired by foreign owner
-* '''has\_expat''': firm has an expat manager
-* '''CONTROL${}^k$''': one of the three ($k=1,2,3$)
-* '''lnL''': log employment
-* '''lnQL''': log output per worker
-* '''TFP\_cd''': TFP (simple Cobb--Douglas)
-* '''exporter''': firm has positive exports
-* '''RperK''': share of immaterial assets in total [0,1]
-
-
-== Estimating equations ==
-=== Bernard-Jensen ===
-Sample: domestic firms and acquisitions
-$$
-Y_{ist} = \mu_{st} + \sum_{k=1}^3 \beta_k \text{CONTROL}_{it}^k + u_{ist}
-$$
-
-=== Selection ===
-Sample: $\text{CONTROL}_{i}^{k-1} = 1$, years before acquisition
-$$
-\text{CONTROL}_{i}^k = \mu_{st} + \gamma X_{it}  + u_{ist}
-$$
-
-=== Diff-in-diff ===
-Sample: domestic firms and acquisitions
-$$
-Y_{ist} = \alpha_i + \mu_{st} + \sum_{k=1}^3 \beta_k \text{CONTROL}_{it}^k + u_{ist}
-$$
-
-== Foreign firms are better in most respects ==
-\regressiontable{cross_section}
-
-== Positive selection on exports, negative on TFP ==
-\regressiontable{selection}
-
-== Hiring an expat is associated with increased productivity and exporting ==
-\regressiontable{diffindiff}
-
-== Expats help start exporting, but have no effect on continuation ==
-\regressiontable{exporter}
-== ==
-
+= Firm-country dyadic design =
 == Market entry hazard regressions ==
 For each firm-year, take 24 major partner countries. What is the hazard of starting to export/import to/from that country?
 
@@ -201,23 +100,6 @@ $$
 - country-time FE: business conditions in market
 - firm-year FE: reorganization, any firm-wide change
 
-== Dyadic design ==
-\begin{tabular}{l|c|c|c}
-Year & DE & AT & IT \\
-\hline
-1993 & 0 & 0 & 0\\
-1994 & 1 & 0 & 0\\
-\end{tabular}
-
-becomes
-
-\begin{tabular}{l|c|c|c}
-Year & DE & AT & IT \\
-\hline
-1993 & 0 & 0 & 0\\
-1994 & 0.66 & -0.33 & -0.33 \\
-\end{tabular}
-
 == Firms start trading with the country of their owner/manager ==
 \regressiontable{trade}
 
@@ -233,23 +115,35 @@ Year & DE & AT & IT \\
 == Effects persist after owner/manager leaves ==
 \regressiontable{dynamics}
 
-== Causality runs both ways ==
-\regressiontable{granger}
+== Effects are large ==
+=== Fixed costs ==
+Relative to fixed-cost estimates in Halpern, Koren and Szeidl (2015), effects are equivalent to \$12-14,000 drop in fixed costs ''per year''.
 
+\begin{tabular}{l|cc}
+Scenario & Import hazard & Fixed cost \\
+\hline
+Average firm & 0.010 & \$15,000\\
+Only owner & 0.081 & \$2,300\\
+Only manager & 0.106 & \$1,700\\
+Both & 0.226 & \$600
+\end{tabular}
+
+=== Trade experience premia ===
+Mion, Opromolla and Sforza (2016) estimate a 0.01--0.04 increase in hazard after manager with relevant export experience joins. Bisztray, Koren and Szeidl (2018) estimiate 0.002--0.005 peer effects in importing.
 
 == Two stories ==
 
 === Vertical integration ===
-Foreign owner takes over firm to export/import within own business network.
+Foreign owner takes over firm to export/import within own supply chain.
 
 === Business network ===
 Managers help connect different firms within their business network.
 
 == Two stories ==
-- They are not exclusive. (Vertical integration is an extreme form of business network.)
-- There is (indirect) evidence for both.
-    - Common: more trade with countries expected to be in business network.
-    - Distinct: ethnicity matters in addition to address.
+* They are not exclusive. (Vertical integration is an extreme form of business network.)
+* There is (indirect) evidence for both.
+    * Common: more trade with countries expected to be in business network.
+    * Distinct: ethnicity matters in addition to address.
 
 == Firms start trading with the \emph{gravity partners} of their owner/manager ==
 \regressiontable{gravity}
@@ -317,3 +211,40 @@ Three broader implications:
 == Next steps ==
 * Collect data on parent firms.
 * Build an incomplete-contract model.
+
+
+= Appendix =
+== Estimating equations ==
+=== Bernard-Jensen ===
+Sample: domestic firms and acquisitions
+$$
+Y_{ist} = \mu_{st} + \sum_{k=1}^3 \beta_k \text{CONTROL}_{it}^k + u_{ist}
+$$
+
+=== Selection ===
+Sample: $\text{CONTROL}_{i}^{k-1} = 1$, years before acquisition
+$$
+\text{CONTROL}_{i}^k = \mu_{st} + \gamma X_{it}  + u_{ist}
+$$
+
+=== Diff-in-diff ===
+Sample: domestic firms and acquisitions
+$$
+Y_{ist} = \alpha_i + \mu_{st} + \sum_{k=1}^3 \beta_k \text{CONTROL}_{it}^k + u_{ist}
+$$
+
+== Foreign firms are better in most respects ==
+\regressiontable{cross_section}
+
+== Positive selection on exports, negative on TFP ==
+\regressiontable{selection}
+
+== Hiring an expat is associated with increased productivity and exporting ==
+\regressiontable{diffindiff}
+
+== Expats help start exporting, but have no effect on continuation ==
+\regressiontable{exporter}
+
+== Causality runs both ways ==
+\regressiontable{granger}
+
