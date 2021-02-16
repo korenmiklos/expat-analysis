@@ -3,17 +3,22 @@ here
 local here = r(here)
 
 do "`here'/code/estimate/header.do"
+
+egen other_language = max(Llanguage), by(frame_id_numeric year)
+egen ever_language = max(Llanguage), by(frame_id_numeric)
+* immigrants might have different effect
+generate byte immigrant = Lmanager & !Llanguage & other_language
 * everyone assumed to speak the language of their own country, even if ethnic minority
 replace Llanguage = 1 if Lmanager
 replace Lmanager_comlang = 1 if Lmanager
 replace Lowner_comlang = 1 if Lowner
 drop if country == "XX"
+keep if ever_language | !ever_foreign_hire
 
 do "`here'/code/create/lags.do" import_consumer export_rauch export_nonrauch import_rauch import_nonrauch
 
-local outcomes export_rauch export_nonrauch import_rauch import_nonrauch
-local X Lowner Lowner_comlang Lmanager Lmanager_comlang Llanguage
-
+local outcomes export import_consumer import_capital import_material
+local X Lowner Lowner_comlang Lmanager Lmanager_comlang Llanguage immigrant
 
 label variable Lowner "Owner (country)"
 label variable Lmanager "Manager (country)"

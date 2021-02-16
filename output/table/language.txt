@@ -1,16 +1,18 @@
 		(1)	(2)	(3)	(4)
-VARIABLES	LABELS	export_rauch	export_nonrauch	import_rauch	import_nonrauch
+VARIABLES	LABELS	export	import_consumer	import_capital	import_material
 					
-Lowner	Owner (country)	0.018***	0.059***	0.017***	0.063***
-		(0.002)	(0.005)	(0.003)	(0.007)
-Lowner_comlang	(language)	0.001*	0.007***	0.007***	0.026***
-		(0.001)	(0.002)	(0.001)	(0.002)
-Lmanager	Manager (country)	0.011***	0.081***	0.004	0.091***
-		(0.004)	(0.011)	(0.006)	(0.017)
-Lmanager_comlang	(language)	0.002*	0.011***	0.008***	0.026***
-		(0.001)	(0.002)	(0.001)	(0.003)
-Llanguage	(ethnicity)	0.001	0.014*	0.002	0.030**
-		(0.003)	(0.008)	(0.004)	(0.013)
+Lowner	Owner (country)	0.034***	0.034***	0.042***	0.027***
+		(0.008)	(0.006)	(0.008)	(0.008)
+Lowner_comlang	(language)	0.006*	0.003	0.007***	0.014***
+		(0.003)	(0.002)	(0.002)	(0.003)
+Lmanager	Manager (country)	0.053**	0.048***	0.063**	0.044
+		(0.021)	(0.015)	(0.027)	(0.028)
+Lmanager_comlang	(language)	-0.001	0.004	0.012*	0.012*
+		(0.007)	(0.004)	(0.006)	(0.007)
+Llanguage	(ethnicity)	0.019**	0.010	0.038***	0.035***
+		(0.009)	(0.006)	(0.011)	(0.012)
+immigrant	immigrant	0.036	0.001	-0.029	-0.070*
+		(0.063)	(0.037)	(0.050)	(0.039)
 					
-Observations		3,070,659	2,971,369	3,016,113	2,893,481
-Mean outcome		0.00127	0.00701	0.00218	0.0102
+Observations		2,445,846	2,520,785	2,500,873	2,445,120
+Mean outcome		0.00538	0.00207	0.00307	0.00550
