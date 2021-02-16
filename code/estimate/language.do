@@ -7,23 +7,24 @@ do "`here'/code/estimate/header.do"
 replace Llanguage = 1 if Lmanager
 drop if country == "XX"
 
-do "`here'/code/create/lags.do" import_consumer
+do "`here'/code/create/lags.do" import_consumer export_rauch export_nonrauch import_rauch import_nonrauch
 
-local Y1 export
-local Y2 import_consumer
-local Y3 import_capital
-local Y4 import_material
+local outcomes export_rauch export_nonrauch import_rauch import_nonrauch
 local X Lowner Lowner_comlang Lmanager Lmanager_comlang Llanguage
 
-label variable Lowner "Owner from same country"
-label variable Lmanager "Manager from same country"
+
+label variable Lowner "Owner (country)"
+label variable Lmanager "Manager (country)"
+label variable Lowner_comlang "(language)"
+label variable Lmanager_comlang "(language)"
+label variable Llanguage "(ethnicity)"
 
 local fmode replace
-forvalues i = 1/4 {
+foreach Y in `outcomes' {
 	* hazard of entering this market
-	reghdfe D`Y`i'' `X' if L`Y`i''==0, a($dummies) cluster(frame_id_numeric)
-	summarize D`Y`i'' if e(sample), meanonly
-	outreg2 using "`here'/output/table/language.tex", `fmode' $options ctitle(`Y`i'')
+	reghdfe D`Y' `X' if L`Y'==0, a($dummies) cluster(frame_id_numeric)
+	summarize D`Y' if e(sample), meanonly
+	outreg2 using "`here'/output/table/language.tex", `fmode' $options ctitle(`Y')
 	local fmode append
 }
 
