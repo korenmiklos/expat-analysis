@@ -279,7 +279,12 @@ Conditional on address, ethnicity only correlated with business network.
 
 == Placebo design ==
 - Some owner-manager county pairs arrive more frequently together. E.g., DE-AT, US-DE, US-GB.
-- Do these countries receive more trade *even in absence of manager*?
+
+=== Placebo for manager network ===
+Do these countries receive more trade ''even in absence of manager''?
+
+=== Placebo for vertical integration ===
+Do managers matter when firm is ''privately owned''?
 
 == Owner has an effect in \emph{typical manager countries}, but actual managers matter more ==
 \regressiontable{placebo}
