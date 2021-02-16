@@ -249,7 +249,7 @@ Managers help connect different firms within their business network.
 - They are not exclusive. (Vertical integration is an extreme form of business network.)
 - There is (indirect) evidence for both.
     - Common: more trade with countries expected to be in business network.
-    - Distinct: ethnicity matter in addition to address.
+    - Distinct: ethnicity matters in addition to address.
 
 == Firms start trading with the \emph{gravity partners} of their owner/manager ==
 \regressiontable{gravity}
@@ -262,7 +262,7 @@ DE & Klaudia Wolf & DE & 1 & 1 & 1\\
 DE & Klaudia Wolf & AT & 0 & 1 & 1\\
 DE & Klaudia Wolf & IT & 0 & 0 & 0\\
 \hline
-DE & Enrico Mazzanti & DE & 1 & 1 & 1\\
+DE & Enrico Mazzanti & DE & 1 & 1 & 0\\
 DE & Enrico Mazzanti & AT & 0 & 1 & 0\\
 DE & Enrico Mazzanti & IT & 0 & 0 & 1\\
 \hline
@@ -271,10 +271,15 @@ IT & Fioretta Luchesi & AT & 0 & 0 & 0 \\
 IT & Fioretta Luchesi & IT & 1 & 1 & 1 
 \end{tabular}
 
-Assume: conditional on address, ethnicity only correlated with business network.
+=== Assumption ===
+Conditional on address, ethnicity only correlated with business network.
 
 == Ethnicity of manager matters \emph{in addition} to her country ==
 \regressiontable{language}
+
+== Placebo design ==
+- Some owner-manager county pairs arrive more frequently together. E.g., DE-AT, US-DE, US-GB.
+- Do these countries receive more trade *even in absence of manager*?
 
 == Owner has an effect in \emph{typical manager countries}, but actual managers matter more ==
 \regressiontable{placebo}
