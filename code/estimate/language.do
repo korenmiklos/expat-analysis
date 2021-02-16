@@ -23,12 +23,18 @@ label variable Lowner_comlang "(language)"
 label variable Lmanager_comlang "(language)"
 label variable Llanguage "(ethnicity)"
 
+label variable Dexport "export"
+label variable Dimport_consumer "I_consumer"
+label variable Dimport_capital "I_capital"
+label variable Dimport_material "I_material"
+
 local fmode replace
 foreach Y in `outcomes' {
+	local lbl : variable label D`Y'
 	* hazard of entering this market
 	reghdfe D`Y' `X' if L`Y'==0, a($dummies) cluster(frame_id_numeric)
 	summarize D`Y' if e(sample), meanonly
-	outreg2 using "`here'/output/table/language.tex", `fmode' $options ctitle(`Y')
+	outreg2 using "`here'/output/table/language.tex", `fmode' $options ctitle(`lbl')
 	local fmode append
 }
 
