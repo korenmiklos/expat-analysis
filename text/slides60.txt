@@ -4,8 +4,8 @@
 == Motivation ==
 1. What are the firm-level barriers to trade? Given the large estimated benefits of exporting and importing, fixed costs must be large.
 2. Two sets of evidence suggest large role for personal connections.
-    * Immigrant networks are key determinants of ''regional'' trade patterns (Rauch 1999+).
-    * Face-to-face links facilitate formation of buyer-supplier links (Bermard, Moxnes and Saito 2019, Cai and Szeidl 2018+).
+    * Immigrant networks are key determinants of ''regional'' trade patterns (Rauch 1999...)
+    * Face-to-face links facilitate formation of buyer-supplier links (Bernard, Moxnes and Saito 2019, Cai and Szeidl 2018...)
 
 == This paper ==
 * Compile new data on which firm is run by which manager: Hungary, 1980--2018. 
@@ -14,8 +14,14 @@
     * manager ethnicity 
 * Provide firm-market-level evidence on how trade patterns change after foreign acquisition and change of management.
 * Results:
-    * XXXXXXXXXXXXXX
+    * Country, language and ethnicity of manager strongly predict starting to export/import.
+    * Magnitudes defy "easy" explanations.
+    * Evidence consistent with a "professional network" effect.
 
+== Outline ==
+1. Data
+2. Facts
+3. Speculations
 
 = Data =
 
@@ -41,8 +47,8 @@
     2. ethnicity
     3. gender (not used today)
 * Foreign manager: firm representative with a non-Hungarian first name
-    - e.g. Eva Bauer v Bauer Éva
-    - but: George Soros v Soros György
+    1. e.g. Eva Bauer v Bauer Éva
+    2. but: George Soros v Soros György
 * Allow for misspelling, omitted middle name, missing data (jr, dr)
 
 == Shape of data ==
@@ -74,12 +80,13 @@
 
 == Degree of foreign involvement ==
 \begin{tikzpicture}
-\node (a) [text width=1.5cm] at (0,0) {domestic owner (100,000) (15,500)};
+\node (a) at (0,0) {};
+\node (aprime) [text width=1.5cm] at (2.5,2.5) {domestic owner (100,000) (15,500)};
 \node (b) [text width=1.5cm] at (2.5,0) {foreign owner (31,600) (4,600)};
 \node (c) [text width=1.5cm] at (5.0,0) {mgr replaced (25,800) (3,800)};
 \node (d) [text width=1.5cm] at (7.5,0) {expat hired (20,000) (2,600)};
 \node (e) [text width=1.5cm] at (10,0) {mgr same-cnt (12,900) (1,800)};
-\graph { (a) -> (b) -> (c) -> (d) -> (e)};
+\graph { (a) -> (b) -> (c) -> (d) -> (e) (a) -> (aprime)};
 \end{tikzpicture}
 
 = Firm-country dyadic design =
@@ -99,6 +106,9 @@ $$
 - firm-country FE: suitability of firm to market
 - country-time FE: business conditions in market
 - firm-year FE: reorganization, any firm-wide change
+
+== Partner countries ==
+Austria, Belgium, Bulgaria, Croatia, Czech Republic, Denmark, France, Finland, Germany, Greece, Israel, Italy, Netherlands, Poland, Romania, Russia, Slovakia, Slovenia, Spain, Sweden, Switzerland, UK, Ukraine, US
 
 == Firms start trading with the country of their owner/manager ==
 \regressiontable{trade}
@@ -136,13 +146,13 @@ Mion, Opromolla and Sforza (2016) estimate a 0.01--0.04 increase in hazard after
 === Vertical integration ===
 Foreign owner takes over firm to export/import within own supply chain.
 
-=== Business network ===
-Managers help connect different firms within their business network.
+=== Professional network ===
+Managers help connect different firms within their professional network.
 
 == Two stories ==
-* They are not exclusive. (Vertical integration is an extreme form of business network.)
+* They are not exclusive. 
 * There is (indirect) evidence for both.
-    * Common: more trade with countries expected to be in business network.
+    * Common: more trade with countries expected to be in supply chain / professional network.
     * Distinct: ethnicity matters in addition to address.
 
 == Firms start trading with the \emph{gravity partners} of their owner/manager ==
@@ -166,7 +176,7 @@ IT & Fioretta Luchesi & IT & 1 & 1 & 1
 \end{tabular}
 
 === Assumption ===
-Conditional on address, ethnicity only correlated with business network.
+Conditional on address, ethnicity only correlated with professional network.
 
 == Ethnicity of manager matters \emph{in addition} to her country ==
 \regressiontable{language}
@@ -186,31 +196,31 @@ Do managers matter when firm is ''privately owned''?
 = Discussion =
 == Why managers matter ==
 Three broader implications:
-1. Trade within "business networks" larger than previously thought.
+1. Trade within "supply chains" larger than previously thought.
 2. Entry into new trade markets is inelastic.
-3. Experience with existing partners leads to preferential attachment. (????)
+3. Experience with existing partners leads to preferential attachment.
 
 == Business network trade ==
+* Contrary to evidence from US, investment in Hungary leads to large increases in trade with home region.
+
 == Inelastic market entry ==
+* If professional networks are hard to build, extensive margin of trade is less responsive.
+* Competitiveness leads to higher manager wages, not more entry.
+* Complementarity of trade and migration policies.
+
 == Preferential attachment ==
-
-
-- Bernard, Moxnes and Ulltveit-Moe (2018) and Bernard, Moxnes and Saito (2019): negative degree assortativity
-- Eaton et al (2011), Chaney (2014, 2018): trade partners are "friends of friends"
-- Sugita et al (2017)
-
+* It may be easier to trade with friends of friends.
+* We (will) highlight a mechanism for why that is.
 
 = Conclusions =
 == Conclusions ==
-* What are the causes and consequences of foreign acquisitions?
-* We ask when managers are also replaced.
-* Using data on the universe of foreign acquisitions in Hungary, 1980-2018, we estimate that exporters and low-productivity firms become more tightly controlled. 
-* Foreign controlled firms become more productive and more likely to export. 
-* These facts help inform theories about the boundaries of global firms and about the role of managers in firm performance.
+* We find firm-level evidence that the nationality and ethnicity of owners and managers matters for the direction of trade.
+* Whatever the specific mechanism, we need to model markets and individuals jointly.
 
 == Next steps ==
 * Collect data on parent firms.
-* Build an incomplete-contract model.
+* Explore personal network of managers.
+* Match similar data for Germany.
 
 
 = Appendix =
