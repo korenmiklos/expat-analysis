@@ -6,11 +6,11 @@ do "`here'/code/estimate/header.do"
 drop if country == "XX"
 
 label variable Lowner "Owner (same country)"
-label variable Lowner_contig  "  neighbor country"
-label variable Lowner_comlang "  common languange"
+label variable Lowner_contig  "(neighbor country)"
+label variable Lowner_comlang "(common languange)"
 label variable Lmanager "Manager (same country)"
-label variable Lmanager_contig  "  neighbor country"
-label variable Lmanager_comlang "  common languange"
+label variable Lmanager_contig  "(neighbor country)"
+label variable Lmanager_comlang "(common languange)"
 
 local outcomes export import 
 local treatments Lowner Lowner_contig Lowner_comlang Lmanager Lmanager_contig Lmanager_comlang
