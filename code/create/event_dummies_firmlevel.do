@@ -1,8 +1,9 @@
+*cd C:\Users\Almos\Documents\Research\Expat\Expat_git\expat-analysis
+*clear all
+*here
+*local here = r(here)
 
-cd C:\Users\Almos\Documents\Research\Expat\Expat_git\expat-analysis
-local here = r(here)
-
-use "`here'/temp/analysis_sample.dta", clear
+*use "`here'/temp/analysis_sample.dta", clear
 
 tsset frame_id_numeric year
 
