@@ -37,7 +37,7 @@ order foreign_e5 foreign_e4 foreign_e3 foreign_e2 foreign_e1 foreigne0 foreigne1
 **Recompute spell using only hires
 bys frame_id_numeric: egen first_year_firm = min(year)
 tempvar t_hire
-gen `t_hire'=hire_ceo
+gen `t_hire'=hire
 replace `t_hire' = 1 if first_year_firm==year 
 bys frame_id_numeric: gen ceo_spell_hire=sum(`t_hire')
 
@@ -54,7 +54,7 @@ bys frame_id_numeric: egen ever_foreign_hire = max(foreign_hire)
 
 **********Insider vs. outsider local CEO***************
 tempvar fh_ins
-gen `fh_ins'=(foreign_hire==1 & has_insider==1 & hire_ceo==1)
+gen `fh_ins'=(foreign_hire==1 & has_insider==1 & hire==1)
 bysort frame_id_numeric ceo_spell_hire: egen foreign_hire_insider=max(`fh_ins') 
 
 
