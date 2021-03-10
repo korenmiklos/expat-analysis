@@ -123,59 +123,9 @@ gen fire_expat = fire * expat
 bys frame_id_numeric year: egen n_expat = total(cond(expat, 1, 0)) // could be in collapse but local not
 bys frame_id_numeric year: egen n_local = total(cond(!expat, 1, 0))
 
-* checking whether the same manager can come from different countries
-sort frame_id_numeric manager_id year
-count if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == manager_id[_n-1]) & (country_code != country_code[_n-1]) & country_code != "" & country_code[_n-1] != ""
-count if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == manager_id[_n-1]) & (country_code != country_code[_n-1]) & country_code == "" & country_code[_n-1] != ""
-*browse if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == manager_id[_n-1]) & (country_code != country_code[_n-1]) & country_code != "" & country_code[_n-1] != ""
-*browse if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == manager_id[_n-1]) & (country_code != country_code[_n-1]) & country_code == "" & country_code[_n-1] != ""
-
-* same manager with multiple countries changed to mode country
-tab country_code expat, missing
-bys frame_id_numeric manager_id: egen country_code_fill = mode(country_code), minmode
-tab country_code_fill expat, missing
-
-* same manager with multiple countries changed to mode country
-bys manager_id: egen country_code_fill_manager = mode(country_code), minmode
-tab country_code_fill_manager expat, missing
-
-* checking whether the same manager can come from different countries after mode change
-sort frame_id_numeric manager_id year
-count if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == manager_id[_n-1]) & (country_code_fill != country_code_fill[_n-1]) & country_code_fill != "" & country_code_fill[_n-1] != ""
-count if (frame_id_numeric == frame_id_numeric[_n-1]) & (manager_id == manager_id[_n-1]) & (country_code_fill != country_code_fill[_n-1]) & country_code_fill == "" & country_code_fill[_n-1] != ""
-
-* checking whether there are expats from multiple countries in a given year
-sort frame_id_numeric year manager_id
-count if (frame_id_numeric == frame_id_numeric[_n-1]) & (year == year[_n-1]) & country_code_fill != "" & country_code_fill[_n-1] != "" & n_expat > 1
-count if (frame_id_numeric == frame_id_numeric[_n-1]) & (year == year[_n-1]) & (country_code_fill != country_code_fill[_n-1]) & country_code_fill != "" & country_code_fill[_n-1] != "" & n_expat > 1
-count if (frame_id_numeric == frame_id_numeric[_n-1]) & (year == year[_n-1]) & (country_code_fill == country_code_fill[_n-1]) & country_code_fill != "" & country_code_fill[_n-1] != "" & n_expat > 1
-count
-
-* adding all country codes for one firm-year into one variable
-preserve
-duplicates drop frame_id_numeric year country_code_fill, force
-replace country_code_fill = "missing" if country_code_fill == ""
-
-forval i = 1/4 {
-	bys frame_id_numeric year: gen country_`i' = country_code_fill[`i']
-}
-
-gen country_all = country_1 + "," +country_2  + "," +country_3
-replace country_all = subinstr(country_all,",,","",.)
-replace country_all = substr(country_all, 1, length(country_all) - 1) if substr(country_all, -1, 1) ==  ","
-
-duplicates drop frame_id_numeric year, force
-
-tempfile countries
-save `countries'
-restore
-
-merge m:1 frame_id_numeric year using `countries', nogen keepusing(country_all)
-count
-
 * create firm-year data
 * FIXME: country_code may be different within a firm-year
-collapse (sum) n_founder = founder n_insider = insider n_outsider = outsider (firstnm) n_expat n_local foreign ever_expat ever_foreign country_code = country_all (count) n_ceo = expat (max) hire_ceo = hire fire_ceo = fire hire_expat fire_expat, by(frame_id_numeric year)
+collapse (sum) n_founder = founder n_insider = insider n_outsider = outsider (firstnm) n_expat n_local foreign ever_expat ever_foreign (count) n_ceo = expat (max) hire_ceo = hire fire_ceo = fire hire_expat fire_expat, by(frame_id_numeric year)
 
 * managers in first year not classified as new hires and in last year not classified as fired
 bys frame_id_numeric (year): replace hire_ceo = 0 if (_n==1)
@@ -189,9 +139,16 @@ foreach var in expat local founder insider outsider {
 	gen has_`var' = (n_`var' > 0)
 }
 
+* merge on manager_countries
+merge 1:1 frame_id_numeric year using "`here'/temp/manager_country.dta", keep(master match) nogen
+tabulate has_expat if missing(country_list)
+tabulate has_expat if !missing(country_list)
+rename country_list country_all_manager
+rename language_list lang_all_manager
+
 count
 
 compress
-save_all_to_json
+*save_all_to_json
 save "`here'/temp/firm_events.dta", replace
 log close
