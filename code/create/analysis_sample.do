@@ -8,6 +8,9 @@ drop foreign
 
 merge 1:1 frame_id year using "`here'/temp/firm_events.dta", nogen keep(match)
 
+rename foreign_ceo foreign
+rename ever_foreign_ceo ever_foreign
+
 * many foreign changes deleted
 bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
 bys frame_id_numeric (year): egen owner_spell_total = total(foreign != foreign[_n-1])
@@ -27,7 +30,8 @@ keep if start_as_domestic & owner_spell <= 2
 * check foreign end expat numbers
 egen firm_tag = tag(frame_id_numeric)
 count if ever_foreign & firm_tag
-count if ever_expat & firm_tag
+count if ever_expat_ceo & firm_tag
+count if ever_expat_nceo & firm_tag
 
 do "`here'/code/create/event_dummies_firmlevel.do"
 
