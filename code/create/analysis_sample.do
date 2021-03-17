@@ -10,6 +10,7 @@ merge 1:1 frame_id year using "`here'/temp/firm_events.dta", nogen keep(match)
 
 rename foreign_ceo foreign
 rename ever_foreign_ceo ever_foreign
+drop foreign_nceo ever_foreign_nceo
 
 * many foreign changes deleted
 bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
@@ -33,17 +34,17 @@ count if ever_foreign & firm_tag
 count if ever_expat_ceo & firm_tag
 count if ever_expat_nceo & firm_tag
 
-do "`here'/code/create/event_dummies_firmlevel.do"
+*do "`here'/code/create/event_dummies_firmlevel.do"
 
-merge 1:1 originalid year using "input/fo3-owner-names/country_codes.dta", keep(match master) nogen
+*merge 1:1 originalid year using "input/fo3-owner-names/country_codes.dta", keep(match master) nogen
 * "same country" only applies to expats at foreign firms
-replace country_same = 0 if (has_expat == 0) | (foreign == 0)
+*replace country_same = 0 if (has_expat == 0) | (foreign == 0)
 
 egen industry_year = group(teaor08_1d year)
-egen last_before_acquisition = max(cond(time_foreign<0, time_foreign, .)), by(originalid)
-egen ever_same_country = max(country_same), by(originalid)
+*egen last_before_acquisition = max(cond(time_foreign<0, time_foreign, .)), by(originalid)
+*egen ever_same_country = max(country_same), by(originalid)
 
-do "`here'/code/create/countries.do"
+*do "`here'/code/create/countries.do"
 
 compress
 save "`here'/temp/analysis_sample.dta", replace
