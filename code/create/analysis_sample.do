@@ -12,6 +12,9 @@ rename foreign_ceo foreign
 rename ever_foreign_ceo ever_foreign
 drop foreign_nceo ever_foreign_nceo
 
+*nceo overriden to have zeros
+mvencode *_nceo, mv(0) override
+
 * many foreign changes deleted
 bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
 bys frame_id_numeric (year): egen owner_spell_total = total(foreign != foreign[_n-1])
