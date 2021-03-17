@@ -34,6 +34,13 @@ count if ever_foreign & firm_tag
 count if ever_expat_ceo & firm_tag
 count if ever_expat_nceo & firm_tag
 
+count if has_expat_nceo == 1
+count if has_expat_nceo == 1 & foreign == 0
+count if has_expat_ceo == 1
+count if has_expat_ceo == 1 & foreign == 0 // FIXME - should be 0
+count if ever_expat_nceo == 1 & ever_foreign == 0
+count if ever_expat_ceo == 1 & ever_foreign == 0
+
 *do "`here'/code/create/event_dummies_firmlevel.do"
 
 *merge 1:1 originalid year using "input/fo3-owner-names/country_codes.dta", keep(match master) nogen
