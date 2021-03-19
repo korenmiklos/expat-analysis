@@ -17,6 +17,15 @@ keep frame_id year firm_birth firm_death foreign
 tempfile sample
 save `sample', replace
 
+* count expats in do - asterisk used
+*use "`here'/input/ceo-panel/ceo-panel.dta", clear // QUESTION: what is owner
+*rename person_id manager_id
+*merge m:1 frame_id_numeric year using `sample', keep(match) nogen
+*bys frame_id_numeric: egen ever_expat = max(expat == 1)
+*bys frame_id_numeri: egen ever_foreign = max(foreign == 1)
+*egen firm_tag = tag(frame_id_numeric)
+*count if ever_expat == 1 & ever_foreign == 0 & firm_tag == 1
+
 foreach type in ceo nceo {
 	use "`here'/input/`type'-panel/`type'-panel.dta", clear // QUESTION: what is owner
 	rename person_id manager_id
