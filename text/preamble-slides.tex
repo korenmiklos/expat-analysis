@@ -1,0 +1,41 @@
+\usepackage{pgfpages}
+\setbeameroption{hide notes}
+
+% CEU style guide
+% https://www.ceu.edu/sites/default/files/attachment/article/13110/ceugraphicsstandardsguideapril2015.pdf
+\definecolor{CEUblue}{RGB}{0,152,195}
+\definecolor{CEUorange}{RGB}{234,96,118}
+
+
+% colors: white text on 90% black background
+\setbeamercolor{normal text}{fg=black,bg=white}
+
+% light blue as a highlight color
+\setbeamercolor*{structure}{fg=CEUblue}
+\setbeamercolor{section title}{fg=CEUorange}
+\setbeamercolor{alerted text}{use=structure,fg=CEUorange}
+\setbeamercolor*{palette primary}{use=structure,fg=structure.fg}
+\setbeamercolor*{palette secondary}{use=structure,fg=structure.fg!95!black}
+\setbeamercolor*{palette tertiary}{use=structure,fg=structure.fg!90!black}
+\setbeamercolor*{palette quaternary}{use=structure,fg=structure.fg!95!black,bg=black!80}
+
+\setbeamercolor*{framesubtitle}{fg=white}
+
+
+% use system fonts: here, Gill Sans
+\usefonttheme{professionalfonts}
+\setbeamerfont{quote}{shape=\upshape}
+
+% eliminate silly beamer navigation line at bottom of slides
+\setbeamertemplate{navigation symbols}{}
+
+% ensure text jusfication
+\usepackage{ragged2e}
+\justifying
+
+% pandoc makes 2nd-lever headers into blocks, and this ensures justification
+% in blocks too
+\addtobeamertemplate{block begin}{}{\justifying}
+
+\input{macros.tex}
+
