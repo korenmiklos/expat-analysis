@@ -64,7 +64,7 @@ gen lower = b - 1.96 * se
 gen upper = b + 1.96 * se
 
 local CEUblue "0 152 195"
-local CEUorange "234 96 118"
+local CEUorange "222 0 123"
 
 levelsof outcome, local(levels)
 foreach outcome of local levels { 
