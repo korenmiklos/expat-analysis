@@ -63,10 +63,13 @@ replace t = t - 100
 gen lower = b - 1.96 * se
 gen upper = b + 1.96 * se
 
+local CEUblue "0 152 195"
+local CEUorange "234 96 118"
+
 levelsof outcome, local(levels)
 foreach outcome of local levels { 
-	twoway (rarea lower upper t if outcome == "`outcome'" & treatment == "owner", color(red%30)) (line b t if outcome == "`outcome'" & treatment == "owner", color(red)) ///
-	(rarea lower upper t if outcome == "`outcome'" & treatment == "manager", color(blue%30)) (line b t if outcome == "`outcome'" & treatment == "manager", color(blue)) ///
+	twoway (rarea lower upper t if outcome == "`outcome'" & treatment == "owner", color("`CEUorange'%30")) (line b t if outcome == "`outcome'" & treatment == "owner", color("`CEUorange'")) ///
+	(rarea lower upper t if outcome == "`outcome'" & treatment == "manager", color("`CEUblue'%30")) (line b t if outcome == "`outcome'" & treatment == "manager", color("`CEUblue'")) ///
 	, yline(0, lcolor(black) lpattern(dash)) graphregion(color(white)) xtitle("year") legend(order(2 "Owner" 4 "Manager")) title("`outcome'")
 	graph export "`here'/output/figure/event_study_`outcome'.png", replace
 }
