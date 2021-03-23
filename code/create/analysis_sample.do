@@ -56,5 +56,10 @@ egen industry_year = group(teaor08_1d year)
 
 *do "`here'/code/create/countries.do"
 
+*for descriptives (number of firms and firm-years in final data)
+codebook frame_id_numeric
+count if firm_tag
+count
+
 compress
 save "`here'/temp/analysis_sample.dta", replace

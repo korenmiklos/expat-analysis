@@ -29,6 +29,13 @@ save `sample', replace
 foreach type in ceo nceo {
 	use "`here'/input/`type'-panel/`type'-panel.dta", clear // QUESTION: what is owner
 	rename person_id manager_id
+	
+	*for descriptives (number of ceo-s and nceo-s in original data, number of ceo and nceo job-spells in original data)
+	count
+	egen company_manager_id = group(frame_id_numeric manager_id)
+	codebook manager_id
+	codebook company_manager_id
+	drop company_manager_id
 
 	* only keep sample firms
 	merge m:1 frame_id_numeric year using `sample', keep(match) nogen
@@ -132,6 +139,10 @@ foreach type in ceo nceo {
 	* number of expats and locals
 	bys frame_id_numeric year: egen n_expat_`type' = total(cond(expat, 1, 0)) // could be in collapse but local not
 	bys frame_id_numeric year: egen n_local_`type' = total(cond(!expat, 1, 0))
+	
+	*for descriptives (number of ceo-s and nceo-s in final data, number of ceo and nceo job-spells in final data) - part I
+	tempfile raw_`type'
+	save `raw_`type''
 
 	* create firm-year data
 	* FIXME: country_code may be different within a firm-year
@@ -151,6 +162,16 @@ foreach type in ceo nceo {
 	
 	tempfile manager_`type'
 	save `manager_`type''
+}
+
+*for descriptives (number of ceo-s and nceo-s in final data, number of ceo and nceo job-spells in final data) - part II
+foreach type in ceo nceo {
+	use "`here'/temp/balance-small-clean.dta", clear
+	merge 1:m frame_id_numeric year using `raw_`type'', nogen keep(match) keepusing(manager_id)
+	count
+	egen company_manager_id = group(frame_id_numeric manager_id)
+	codebook manager_id
+	codebook company_manager_id 
 }
 
 use `manager_ceo'
