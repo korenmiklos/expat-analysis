@@ -71,5 +71,6 @@ save "`here'/temp/analysis_sample.dta", replace
 *	count
 *	egen company_manager_id = group(frame_id_numeric manager_id)
 *	codebook manager_id
-*	codebook company_manager_id 
+*	codebook company_manager_id
+*	save "`here'/temp/analysis_sample_manager_`type'.dta", replace
 *}
