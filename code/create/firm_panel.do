@@ -141,9 +141,10 @@ foreach type in ceo nceo {
 	bys frame_id_numeric year: egen n_local_`type' = total(cond(!expat, 1, 0))
 	
 	*for descriptives (number of ceo-s and nceo-s in final data, number of ceo and nceo job-spells in final data) - part I
-	tempfile raw_`type'
-	save `raw_`type''
-
+	*tempfile raw_`type'
+	*save `raw_`type''
+	save "`here'/temp/raw_`type'.dta", replace
+	
 	* create firm-year data
 	* FIXME: country_code may be different within a firm-year
 	collapse (sum) n_founder_`type' = founder n_insider_`type' = insider n_outsider_`type' = outsider (firstnm) n_expat_`type' n_local_`type' foreign_`type' = foreign ever_expat_`type' ever_foreign_`type' (count) n_`type' = expat (max) hire_`type' = hire fire_`type' = fire hire_expat_`type' fire_expat_`type', by(frame_id_numeric year)
@@ -165,14 +166,14 @@ foreach type in ceo nceo {
 }
 
 *for descriptives (number of ceo-s and nceo-s in final data, number of ceo and nceo job-spells in final data) - part II
-foreach type in ceo nceo {
-	use "`here'/temp/balance-small-clean.dta", clear
-	merge 1:m frame_id_numeric year using `raw_`type'', nogen keep(match) keepusing(manager_id)
-	count
-	egen company_manager_id = group(frame_id_numeric manager_id)
-	codebook manager_id
-	codebook company_manager_id 
-}
+*foreach type in ceo nceo {
+*	use "`here'/temp/balance-small-clean.dta", clear
+*	merge 1:m frame_id_numeric year using `raw_`type'', nogen keep(match) keepusing(manager_id)
+*	count
+*	egen company_manager_id = group(frame_id_numeric manager_id)
+*	codebook manager_id
+*	codebook company_manager_id 
+*}
 
 use `manager_ceo'
 
