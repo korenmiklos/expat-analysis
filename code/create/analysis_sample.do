@@ -65,12 +65,12 @@ compress
 save "`here'/temp/analysis_sample.dta", replace
 
 *for descriptives (number of ceo-s and nceo-s in final data, number of ceo and nceo job-spells in final data) - part III
-*foreach type in ceo nceo {
-*	use "`here'/temp/analysis_sample.dta", clear
-*	merge 1:m frame_id_numeric year using "`here'/temp/raw_`type'.dta", nogen keep(match) keepusing(manager_id)
-*	count
-*	egen company_manager_id = group(frame_id_numeric manager_id)
-*	codebook manager_id
-*	codebook company_manager_id
-*	save "`here'/temp/analysis_sample_manager_`type'.dta", replace
-*}
+foreach type in ceo nceo {
+	use "`here'/temp/analysis_sample.dta", clear
+	merge 1:m frame_id_numeric year using "`here'/temp/raw_`type'.dta", nogen keep(match)
+	count
+	egen company_manager_id = group(frame_id_numeric manager_id)
+	codebook manager_id
+	codebook company_manager_id
+	save "`here'/temp/analysis_sample_manager_`type'.dta", replace
+}
