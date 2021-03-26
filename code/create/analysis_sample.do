@@ -29,7 +29,7 @@ replace divest = 1 if divest > 0
 
 * only keep D, D-F owner spells
 bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
-keep if start_as_domestic & owner_spell <= 2
+keep if start_as_domestic //& owner_spell <= 2
 
 * check foreign end expat numbers
 egen firm_tag = tag(frame_id_numeric)
