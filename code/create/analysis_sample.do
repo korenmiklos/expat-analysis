@@ -61,16 +61,23 @@ codebook frame_id_numeric
 count if firm_tag
 count
 
-* calculating firm life - part IV
-bys frame_id: gen year_all = _N
-*bys frame_id: egen ever_foreign = max(foreign)
-*egen firm_tag_new = tag(frame_id)
-sum year_all if ever_foreign == 0 & firm_tag
-sum year_all if ever_foreign == 1 & firm_tag
-drop year_all // firm_tag ever_foreign
+* calculating time_foreign
+sort frame_id_numeric year
+tempvar t_year
+gen `t_year' = year if foreign == 1 & foreign[_n-1] == 0 
+bys frame_id_numeric: egen first_year_foreign = max(`t_year')
+gen time_foreign = year - first_year_foreign
+replace time_foreign = . if foreign == 0 & time_foreign > 0
+tab time_foreign
+drop first_year_foreign `t_year' time_foreign
 
 compress
 save "`here'/temp/analysis_sample.dta", replace
+
+* frame_id_numeric codes for ever_foreign
+*keep if ever_foreign
+*duplicates drop frame_id_numeric year, force
+*save "`here'/temp/ever_foreign.dta", replace
 
 *for descriptives (number of ceo-s and nceo-s in final data, number of ceo and nceo job-spells in final data) - part III
 *foreach type in ceo nceo {

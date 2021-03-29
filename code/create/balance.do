@@ -14,13 +14,20 @@ codebook frame_id*
 drop frame_id
 xtset frame_id_numeric year
 
-* calculating firm life - part I
-bys frame_id: gen year_all = _N
-bys frame_id: egen ever_fo3 = max(fo3)
-egen firm_tag = tag(frame_id)
-sum year_all if ever_fo3 == 0 & firm_tag
-sum year_all if ever_fo3 == 1 & firm_tag
-drop year_all firm_tag ever_fo3
+* calculating time_foreign - part I
+*count
+*sort frame_id_numeric year
+*merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign)
+*clonevar foreign_check = fo3
+*recode foreign_check (. = 0)
+*tempvar t_year
+*gen `t_year' = year if foreign_check == 1 & foreign_check[_n-1] == 0 
+*bys frame_id_numeric: egen first_year_foreign = max(`t_year')
+*gen time_foreign = year - first_year_foreign
+*replace time_foreign = . if foreign_check == 0 & time_foreign > 0
+*tab time_foreign if _merge == 3
+*drop time_foreign foreign_check first_year_foreign `t_year' _merge ever_foreign
+*count
 
 * limit sample before large merge - sampling based on firm-level variables, firm-year done later
 * average employment and financial firms deleted
@@ -31,14 +38,6 @@ local sample ((avg_emp >= 20) & (industry_mode != 64 & industry_mode != 65 & ind
 drop if !`sample'
 scalar dropped_size_or_finance = r(N_drop)
 display dropped_size_or_finance
-
-* calculating firm life - part II
-bys frame_id: gen year_all = _N
-bys frame_id: egen ever_fo3 = max(fo3)
-egen firm_tag = tag(frame_id)
-sum year_all if ever_fo3 == 0 & firm_tag
-sum year_all if ever_fo3 == 1 & firm_tag
-drop year_all firm_tag ever_fo3
 
 * proxy firm founding date with first balance sheet filed
 tempvar foundyear
@@ -151,13 +150,18 @@ mvencode export exporter exporter_5, mv(0) override
 generate domestic_sales = sales - export
 replace domestic_sales = 0 if domestic_sales < 0 | missing(domestic_sales)
 
-* calculating firm life - part III
-bys frame_id: gen year_all = _N
-bys frame_id: egen ever_foreign = max(foreign)
-egen firm_tag = tag(frame_id)
-sum year_all if ever_foreign == 0 & firm_tag
-sum year_all if ever_foreign == 1 & firm_tag
-drop year_all firm_tag ever_foreign
+* calculating time_foreign - part II
+*count
+*sort frame_id_numeric year
+*merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign)
+*tempvar t_year
+*gen `t_year' = year if foreign == 1 & foreign[_n-1] == 0 
+*bys frame_id_numeric: egen first_year_foreign = max(`t_year')
+*gen time_foreign = year - first_year_foreign
+*replace time_foreign = . if foreign == 0 & time_foreign > 0
+*tab time_foreign if _merge == 3
+*drop time_foreign first_year_foreign `t_year' _merge ever_foreign
+*count
 
 save_all_to_json
 cap drop __*
