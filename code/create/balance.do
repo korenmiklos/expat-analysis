@@ -14,6 +14,14 @@ codebook frame_id*
 drop frame_id
 xtset frame_id_numeric year
 
+* calculating firm life - part I
+bys frame_id: gen year_all = _N
+bys frame_id: egen ever_fo3 = max(fo3)
+egen firm_tag = tag(frame_id)
+sum year_all if ever_fo3 == 0 & firm_tag
+sum year_all if ever_fo3 == 1 & firm_tag
+drop year_all firm_tag ever_fo3
+
 * limit sample before large merge - sampling based on firm-level variables, firm-year done later
 * average employment and financial firms deleted
 * break the tie when mode is not unique
@@ -24,13 +32,19 @@ drop if !`sample'
 scalar dropped_size_or_finance = r(N_drop)
 display dropped_size_or_finance
 
+* calculating firm life - part II
+bys frame_id: gen year_all = _N
+bys frame_id: egen ever_fo3 = max(fo3)
+egen firm_tag = tag(frame_id)
+sum year_all if ever_fo3 == 0 & firm_tag
+sum year_all if ever_fo3 == 1 & firm_tag
+drop year_all firm_tag ever_fo3
+
 * proxy firm founding date with first balance sheet filed
 tempvar foundyear
 bys frame_id_numeric: egen `foundyear' = min(year)
 replace foundyear = `foundyear' if missing(foundyear)
 drop `foundyear'
-
-
 
 * deflate nominal values - FIXME: add ppi before 1992
 foreach x in sales export tanass jetok ranyag ranyag8091 immat {
@@ -50,8 +64,6 @@ gen byte exporter = export_18 > 0 & export_18 != .
 gen export_share = export_18 / sales
 gen exporter_5 = (export_share > .05 & export_share != .)
 replace exporter_5 = . if export_share == .
-
-
 
 * foreign fill 
 rename fo3 foreign
@@ -138,6 +150,14 @@ count
 mvencode export exporter exporter_5, mv(0) override
 generate domestic_sales = sales - export
 replace domestic_sales = 0 if domestic_sales < 0 | missing(domestic_sales)
+
+* calculating firm life - part III
+bys frame_id: gen year_all = _N
+bys frame_id: egen ever_foreign = max(foreign)
+egen firm_tag = tag(frame_id)
+sum year_all if ever_foreign == 0 & firm_tag
+sum year_all if ever_foreign == 1 & firm_tag
+drop year_all firm_tag ever_foreign
 
 save_all_to_json
 cap drop __*
