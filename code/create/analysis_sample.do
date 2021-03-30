@@ -44,48 +44,15 @@ count if has_expat_ceo == 1 & foreign == 0 // FIXME - should be 0
 count if ever_expat_nceo == 1 & ever_foreign == 0
 count if ever_expat_ceo == 1 & ever_foreign == 0
 
-*do "`here'/code/create/event_dummies_firmlevel.do"
-
-*merge 1:1 originalid year using "input/fo3-owner-names/country_codes.dta", keep(match master) nogen
-* "same country" only applies to expats at foreign firms
-*replace country_same = 0 if (has_expat == 0) | (foreign == 0)
+do "`here'/code/create/event_dummies_firmlevel.do"
 
 egen industry_year = group(teaor08_1d year)
-*egen last_before_acquisition = max(cond(time_foreign<0, time_foreign, .)), by(originalid)
-*egen ever_same_country = max(country_same), by(originalid)
-
-*do "`here'/code/create/countries.do"
 
 *for descriptives (number of firms and firm-years in final data)
 codebook frame_id_numeric
 count if firm_tag
 count
 
-* calculating time_foreign
-sort frame_id_numeric year
-tempvar t_year
-gen `t_year' = year if foreign == 1 & foreign[_n-1] == 0 
-bys frame_id_numeric: egen first_year_foreign = max(`t_year')
-gen time_foreign = year - first_year_foreign
-replace time_foreign = . if foreign == 0 & time_foreign > 0
-tab time_foreign
-drop first_year_foreign `t_year' time_foreign
-
 compress
 save "`here'/temp/analysis_sample.dta", replace
 
-* frame_id_numeric codes for ever_foreign
-*keep if ever_foreign
-*duplicates drop frame_id_numeric year, force
-*save "`here'/temp/ever_foreign.dta", replace
-
-*for descriptives (number of ceo-s and nceo-s in final data, number of ceo and nceo job-spells in final data) - part III
-*foreach type in ceo nceo {
-*	use "`here'/temp/analysis_sample.dta", clear
-*	merge 1:m frame_id_numeric year using "`here'/temp/raw_`type'.dta", nogen keep(match)
-*	count
-*	egen company_manager_id = group(frame_id_numeric manager_id)
-*	codebook manager_id
-*	codebook company_manager_id
-*	save "`here'/temp/analysis_sample_manager_`type'.dta", replace
-*}

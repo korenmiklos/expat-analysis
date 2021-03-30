@@ -12,7 +12,7 @@ bys frame_id_numeric: egen max_n_ceo = max(n_ceo)
 bys frame_id_numeric: egen min_n_ceo = min(n_ceo)
 gen diff = max_n_ceo-min_n_ceo
 
-reghdfe n_ceo foreign has_expat lnL, a(teaor08_2d##year) cluster(frame_id_numeric)
+reghdfe n_ceo foreign has_expat_ceo lnL, a(teaor08_2d##year) cluster(frame_id_numeric)
 
 ******Event-time variable foreign**************
 sort frame_id_numeric year
@@ -54,12 +54,12 @@ bys frame_id_numeric: egen ever_foreign_hire = max(foreign_hire)
 
 **********Insider vs. outsider local CEO***************
 tempvar fh_ins
-gen `fh_ins'=(foreign_hire==1 & has_insider==1 & hire_ceo==1)
+gen `fh_ins'=(foreign_hire==1 & has_insider_ceo==1 & hire_ceo==1)
 bysort frame_id_numeric ceo_spell_hire: egen foreign_hire_insider=max(`fh_ins') 
 
 
 *****expat alone
-gen expat_alone = (has_expat & !has_local)
+gen expat_alone = (has_expat_ceo & !has_local_ceo)
 
 *******First, second etc ceos************
 
@@ -67,7 +67,7 @@ gen ceo_spell_foreign = ceo_spell_hire - last_ceo_spell_do
 replace ceo_spell_foreign = 0 if ceo_spell_foreign<0
 
 tempvar t_expat
-bys frame_id_numeric ceo_spell_foreign: egen `t_expat' = max(hire_expat)
+bys frame_id_numeric ceo_spell_foreign: egen `t_expat' = max(hire_expat_ceo)
 
 forval i=1/11 {
 	gen foreign_hire_local_`i' = (ceo_spell_foreign == `i' & `t_expat'==0)
