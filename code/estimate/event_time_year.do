@@ -63,6 +63,6 @@ gen frequency_rel = frequency / frequency0 * 100
 sort type year time_event
 
 foreach file in balance clean analysis {
-	twoway (line frequency_rel time_event if year == 1995 & type == "`file'", color(red)) (line frequency_rel time_event if year == 2000 & type == "`file'", color(green)) (line frequency_rel time_event if year == 2005 & type == "`file'", color(blue)) (line frequency_rel time_event if year == 2010 & type == "`file'", color(orange)), title("Time events for all companies", color(black)) xtitle("Time event") ytitle("") xlabel(-5(1)5) legend(order(1 "1995" 2 "2000" 3 "2005" 4 "2010")) graphregion(color(white))
+	twoway (line frequency_rel time_event if year == 1995 & type == "`file'", color(red)) (line frequency_rel time_event if year == 2000 & type == "`file'", color(green)) (line frequency_rel time_event if year == 2005 & type == "`file'", color(blue)) (line frequency_rel time_event if year == 2010 & type == "`file'", color(orange)), title("Time events for all companies - `file'", color(black)) xtitle("Time event") ytitle("") xlabel(-5(1)5) legend(order(1 "1995" 2 "2000" 3 "2005" 4 "2010")) graphregion(color(white))
 	graph export "`here'/output/figure/event_time_year_`file'.png", replace
 }
