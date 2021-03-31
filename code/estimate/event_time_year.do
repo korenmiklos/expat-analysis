@@ -29,10 +29,15 @@ use "`here'/temp/analysis_sample.dta", clear
 tempfile analysis
 save `analysis'
 
+use "`here'/temp/analysis_sample.dta", clear
+keep if ever_foreign
+tempfile analysis
+save `analysis-foreign'
+
 tempname graph
 postfile `graph' time_event frequency year str20(type) using "`here'/temp/event_time_year.dta", replace
 
-foreach file in balance clean analysis {
+foreach file in balance clean analysis analysis-foreign {
 	forval i = 1995(5)2010 {
 		use ``file'', clear
 		bys frame_id_numeric: egen firm_exist = max(cond(year == `i',1,0))
@@ -62,7 +67,7 @@ gen frequency_rel = frequency / frequency0 * 100
 
 sort type year time_event
 
-foreach file in balance clean analysis {
+foreach file in balance clean analysis analysis-foreign {
 	twoway (line frequency_rel time_event if year == 1995 & type == "`file'", color(red)) (line frequency_rel time_event if year == 2000 & type == "`file'", color(green)) (line frequency_rel time_event if year == 2005 & type == "`file'", color(blue)) (line frequency_rel time_event if year == 2010 & type == "`file'", color(orange)), title("Time events for all companies - `file'", color(black)) xtitle("Time event") ytitle("") xlabel(-5(1)5) legend(order(1 "1995" 2 "2000" 3 "2005" 4 "2010")) graphregion(color(white))
 	graph export "`here'/output/figure/event_time_year_`file'.png", replace
 }
