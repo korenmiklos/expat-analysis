@@ -12,6 +12,19 @@ rename foreign_ceo foreign
 rename ever_foreign_ceo ever_foreign
 drop foreign_nceo ever_foreign_nceo
 
+egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
+generate time_foreign = year - first_year_foreign
+gen foreign_0 = (time_foreign == 0)
+gen foreign_1 = (time_foreign == 1)
+gen count = 1
+
+sort frame_id_numeric year
+gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+gen hole = (x > 2 & x != .)
+
+tabstat foreign foreign_0 foreign_1 count hole, stat(sum) save
+mat total = r(StatTotal)
+
 *nceo overriden to have zeros
 mvencode *_nceo, mv(0) override
 
@@ -23,13 +36,29 @@ drop if owner_spell_total > 3 // FIXME: doublecheck the length of spells
 scalar dropped_too_many_foreign_change = r(N_drop)
 display dropped_too_many_foreign_change
 
+drop hole x
+sort frame_id_numeric year
+gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+gen hole = (x > 2 & x != .)
+
+tabstat foreign foreign_0 foreign_1 count hole, stat(sum) save
+mat total = (total \ r(StatTotal))
+
 * divestiture
 bys frame_id_numeric (year): gen divest = sum(cond(owner_spell != owner_spell[_n-1] & foreign == 0 & _n != 1, 1, 0))
 replace divest = 1 if divest > 0
 
 * only keep D, D-F owner spells
 bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
-keep if start_as_domestic //& owner_spell <= 2
+keep if start_as_domestic & owner_spell <= 2
+
+drop hole x
+sort frame_id_numeric year
+gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+gen hole = (x > 2 & x != .)
+
+tabstat foreign foreign_0 foreign_1 count hole, stat(sum) save
+mat total = (total \ r(StatTotal))
 
 * check foreign end expat numbers
 egen firm_tag = tag(frame_id_numeric)
@@ -66,12 +95,15 @@ count
 
 preserve
 sort frame_id_numeric year
-egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
-generate time_foreign = year - first_year_foreign
 contract time_foreign
 gen type = "analysis"
 save "`here'/temp/event_time_foreign_analysis.dta", replace
 restore
+
+mata : mat_total_analysis = st_matrix("total")
+mata: mata matsave "temp/matrix-analysis" mat_total_analysis, replace
+
+drop first_year_foreign time_foreign foreign_0 foreign_1 count hole x
 
 count
 
