@@ -8,6 +8,10 @@ drop foreign
 
 merge 1:1 frame_id year using "`here'/temp/firm_events.dta", nogen keep(match)
 
+* not so elegant
+merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign) keep(1 3) gen(filter)
+drop ever_foreign
+
 rename foreign_ceo foreign
 rename ever_foreign_ceo ever_foreign
 drop foreign_nceo ever_foreign_nceo
@@ -20,10 +24,13 @@ gen count = 1
 
 sort frame_id_numeric year
 gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-gen hole = (x > 2 & x != .)
+gen hole2 = (x > 2 & x != .)
+gen hole1 = (x > 1 & x != .)
 
-tabstat foreign foreign_0 foreign_1 count hole, stat(sum) save
+tabstat foreign foreign_0 foreign_1 count hole1 hole2, stat(sum) save
 mat total = r(StatTotal)
+tabstat foreign foreign_0 foreign_1 count hole1 hole2 if filter == 3, stat(sum) save
+mat total = (total \ r(StatTotal))
 
 *nceo overriden to have zeros
 mvencode *_nceo, mv(0) override
@@ -42,12 +49,15 @@ generate time_foreign = year - first_year_foreign
 gen foreign_0 = (time_foreign == 0)
 gen foreign_1 = (time_foreign == 1)
 
-drop hole x
+drop hole* x
 sort frame_id_numeric year
 gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-gen hole = (x > 2 & x != .)
+gen hole2 = (x > 2 & x != .)
+gen hole1 = (x > 1 & x != .)
 
-tabstat foreign foreign_0 foreign_1 count hole, stat(sum) save
+tabstat foreign foreign_0 foreign_1 count hole1 hole2, stat(sum) save
+mat total = (total \ r(StatTotal))
+tabstat foreign foreign_0 foreign_1 count hole1 hole2 if filter == 3, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 * divestiture
@@ -64,12 +74,15 @@ generate time_foreign = year - first_year_foreign
 gen foreign_0 = (time_foreign == 0)
 gen foreign_1 = (time_foreign == 1)
 
-drop hole x
+drop hole* x
 sort frame_id_numeric year
 gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-gen hole = (x > 2 & x != .)
+gen hole2 = (x > 2 & x != .)
+gen hole1 = (x > 1 & x != .)
 
-tabstat foreign foreign_0 foreign_1 count hole, stat(sum) save
+tabstat foreign foreign_0 foreign_1 count hole1 hole2, stat(sum) save
+mat total = (total \ r(StatTotal))
+tabstat foreign foreign_0 foreign_1 count hole1 hole2 if filter == 3, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 mat list total
@@ -117,7 +130,7 @@ restore
 mata : mat_total_analysis = st_matrix("total")
 mata: mata matsave "temp/matrix-analysis" mat_total_analysis, replace
 
-drop first_year_foreign time_foreign foreign_0 foreign_1 count hole x
+drop time_foreign foreign_0 foreign_1 count hole* x
 
 count
 
