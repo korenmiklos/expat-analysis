@@ -193,81 +193,27 @@ count if missing(lnK, lnQ, lnL, lnM, foreign)
 *drop if missing(lnK, lnQ, lnL, lnM, foreign) // ASK: whether year condition needed
 *count
 
-drop if missing(lnK)
+foreach var in lnK lnQ lnL lnM {
 
-drop first_year_foreign time_foreign foreign_0 foreign_1
-egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
-generate time_foreign = year - first_year_foreign
-gen foreign_0 = (time_foreign == 0)
-gen foreign_1 = (time_foreign == 1)
+	drop if missing(`var')
 
-drop hole* x
-sort frame_id_numeric year
-gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-gen hole2 = (x > 2 & x != .)
-gen hole1 = (x > 1 & x != .)
+	drop first_year_foreign time_foreign foreign_0 foreign_1
+	egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
+	generate time_foreign = year - first_year_foreign
+	gen foreign_0 = (time_foreign == 0)
+	gen foreign_1 = (time_foreign == 1)
 
-tabstat foreign foreign_0 foreign_1 count hole1 hole2, stat(sum) save
-mat total = (total \ r(StatTotal))
-tabstat foreign foreign_0 foreign_1 count hole1 hole2 if ever_foreign == 1, stat(sum) save
-mat total = (total \ r(StatTotal))
+	drop hole* x
+	sort frame_id_numeric year
+	gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+	gen hole2 = (x > 2 & x != .)
+	gen hole1 = (x > 1 & x != .)
 
-drop if missing(lnQ)
-
-drop first_year_foreign time_foreign foreign_0 foreign_1
-egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
-generate time_foreign = year - first_year_foreign
-gen foreign_0 = (time_foreign == 0)
-gen foreign_1 = (time_foreign == 1)
-
-drop hole* x
-sort frame_id_numeric year
-gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-gen hole2 = (x > 2 & x != .)
-gen hole1 = (x > 1 & x != .)
-
-tabstat foreign foreign_0 foreign_1 count hole1 hole2, stat(sum) save
-mat total = (total \ r(StatTotal))
-tabstat foreign foreign_0 foreign_1 count hole1 hole2 if ever_foreign == 1, stat(sum) save
-mat total = (total \ r(StatTotal))
-
-drop if missing(lnL)
-
-drop first_year_foreign time_foreign foreign_0 foreign_1
-egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
-generate time_foreign = year - first_year_foreign
-gen foreign_0 = (time_foreign == 0)
-gen foreign_1 = (time_foreign == 1)
-
-drop hole* x
-sort frame_id_numeric year
-gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-gen hole2 = (x > 2 & x != .)
-gen hole1 = (x > 1 & x != .)
-
-tabstat foreign foreign_0 foreign_1 count hole1 hole2, stat(sum) save
-mat total = (total \ r(StatTotal))
-tabstat foreign foreign_0 foreign_1 count hole1 hole2 if ever_foreign == 1, stat(sum) save
-mat total = (total \ r(StatTotal))
-
-drop if missing(lnM)
-
-drop first_year_foreign time_foreign foreign_0 foreign_1
-egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
-generate time_foreign = year - first_year_foreign
-gen foreign_0 = (time_foreign == 0)
-gen foreign_1 = (time_foreign == 1)
-
-drop hole* x
-sort frame_id_numeric year
-gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-gen hole2 = (x > 2 & x != .)
-gen hole1 = (x > 1 & x != .)
-
-tabstat foreign foreign_0 foreign_1 count hole1 hole2, stat(sum) save
-mat total = (total \ r(StatTotal))
-tabstat foreign foreign_0 foreign_1 count hole1 hole2 if ever_foreign == 1, stat(sum) save
-mat total = (total \ r(StatTotal))
+	tabstat foreign foreign_0 foreign_1 count hole1 hole2, stat(sum) save
+	mat total = (total \ r(StatTotal))
+	tabstat foreign foreign_0 foreign_1 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+	mat total = (total \ r(StatTotal))
+}
 
 *drop if missing(foreign)
 *tabstat foreign foreign_0 foreign_1 count, stat(sum) save
