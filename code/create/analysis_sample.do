@@ -3,6 +3,8 @@ clear all
 here
 local here = r(here)
 
+log using "`here'/output/analysis_sample", text replace
+
 use "`here'/temp/balance-small-clean.dta"
 drop foreign
 
@@ -13,7 +15,7 @@ gen hole1_before = (x_before > 1 & x_before != .)
 
 merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(match) nogen
 *merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(1 3) //nogen
-*merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(1) //nogen
+*merge 1:1 frame_id year using "`here'/temp/firm_events.dta"
 
 sort frame_id_numeric year
 gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
@@ -157,6 +159,7 @@ count
 
 compress
 save "`here'/temp/analysis_sample.dta", replace
+log close
 
 * frame_id_numeric codes for ever_foreign
 *keep if ever_foreign

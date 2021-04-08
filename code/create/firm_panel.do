@@ -48,13 +48,18 @@ foreach type in ceo nceo {
 	replace gap = 0 if missing(gap)
 	tabulate gap
 
-	* fill in gap if only 1-year long
-	expand 1 + (gap == 1), generate(filled_in) // FIXME OR QUESTION: maybe second year as well
-	replace year = year - 1 if filled_in
-	xtset company_manager_id year
-	xtdescribe
+	* fill in gap if only 1 or 2-year long
+	forval i = 1(1)2 {
+		sort company_manager_id year
+		expand 1 + `i' if gap == `i', generate(filled_in_`i') // FIXME OR QUESTION: maybe second year as well
+		replace year = year - `i' if filled_in_`i'
+		tab filled_in_`i'
+	}
+	
+	bys company_manager_id year: replace year = year + _n - 1 if filled_in_2
 
 	* create contiguous spells
+	xtset company_manager_id year
 	gen change = ceo != L.ceo // intuition: should be ok in both files (possible FIXME)
 	bysort company_manager_id (year): gen job_spell = sum(change)
 
