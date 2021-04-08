@@ -49,14 +49,18 @@ foreach type in ceo nceo {
 	tabulate gap
 
 	* fill in gap if only 1 or 2-year long
-	forval i = 1(1)2 {
-		sort company_manager_id year
-		expand 1 + `i' if gap == `i', generate(filled_in_`i') // FIXME OR QUESTION: maybe second year as well
-		replace year = year - `i' if filled_in_`i'
-		tab filled_in_`i'
-	}
 	
-	bys company_manager_id year: replace year = year + _n - 1 if filled_in_2
+	*forval i = 1(1)2 {
+	*	sort company_manager_id year
+	*	expand 1 + `i' if gap == `i', generate(filled_in_`i') // FIXME OR QUESTION: maybe second year as well
+	*	replace year = year - `i' if filled_in_`i'
+	*	tab filled_in_`i'
+	*}
+	
+	*bys company_manager_id year: replace year = year + _n - 1 if filled_in_2
+	
+	expand 1 + (gap == 1), generate(filled_in)
+	replace year = year - 1 if filled_in
 
 	* create contiguous spells
 	xtset company_manager_id year
