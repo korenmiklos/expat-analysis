@@ -5,6 +5,8 @@ set more off
 here
 local here = r(here)
 
+log using "`here'/output/balance", text replace
+
 use "`here'/input/merleg-expat/balance-small.dta"
 
 * keep only numeric part of frame_id
@@ -53,8 +55,12 @@ restore
 
 egen first_year_foreign = min(cond(fo3==1, year, .)), by(frame_id_numeric)
 generate time_foreign = year - first_year_foreign
-gen foreign_0 = (time_foreign == 0)
-gen foreign_1 = (time_foreign == 1)
+forval i = 0/3 {
+	gen foreign`i' = (time_foreign == `i')
+}
+forval i = 1/3 {
+	gen foreign_`i' = (time_foreign == -`i')
+}
 gen count = 1
 
 sort frame_id_numeric year
@@ -62,9 +68,9 @@ gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
 gen hole2 = (x > 2 & x != .)
 gen hole1 = (x > 1 & x != .)
 
-tabstat fo3 foreign_0 foreign_1 count hole1 hole2, stat(sum) save
+tabstat fo3 foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 mat total = r(StatTotal)
-tabstat fo3 foreign_0 foreign_1 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+tabstat fo3 foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 bys frame_id_numeric: egen avg_emp = mean(emp)
@@ -74,11 +80,15 @@ drop if !`sample'
 scalar dropped_size_or_finance = r(N_drop)
 display dropped_size_or_finance
 
-drop first_year_foreign time_foreign foreign_0 foreign_1
+drop first_year_foreign time_foreign foreign_* foreign?
 egen first_year_foreign = min(cond(fo3==1, year, .)), by(frame_id_numeric)
 generate time_foreign = year - first_year_foreign
-gen foreign_0 = (time_foreign == 0)
-gen foreign_1 = (time_foreign == 1)
+forval i = 0/3 {
+	gen foreign`i' = (time_foreign == `i')
+}
+forval i = 1/3 {
+	gen foreign_`i' = (time_foreign == -`i')
+}
 
 drop hole* x
 sort frame_id_numeric year
@@ -86,9 +96,9 @@ gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
 gen hole2 = (x > 2 & x != .)
 gen hole1 = (x > 1 & x != .)
 
-tabstat fo3 foreign_0 foreign_1 count hole1 hole2, stat(sum) save
+tabstat fo3 foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 mat total = (total \ r(StatTotal))
-tabstat fo3 foreign_0 foreign_1 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+tabstat fo3 foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 * proxy firm founding date with first balance sheet filed
@@ -144,11 +154,15 @@ bys foreign: egen `after' = count(1)
 scalar foreign_interpolate = `before'-`after'
 display foreign_interpolate
 
-drop first_year_foreign time_foreign foreign_0 foreign_1
+drop first_year_foreign time_foreign foreign_* foreign?
 egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
 generate time_foreign = year - first_year_foreign
-gen foreign_0 = (time_foreign == 0)
-gen foreign_1 = (time_foreign == 1)
+forval i = 0/3 {
+	gen foreign`i' = (time_foreign == `i')
+}
+forval i = 1/3 {
+	gen foreign_`i' = (time_foreign == -`i')
+}
 
 drop hole* x
 sort frame_id_numeric year
@@ -156,9 +170,9 @@ gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
 gen hole2 = (x > 2 & x != .)
 gen hole1 = (x > 1 & x != .)
 
-tabstat foreign foreign_0 foreign_1 count hole1 hole2, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 mat total = (total \ r(StatTotal))
-tabstat foreign foreign_0 foreign_1 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 * extrapolate capital stock
@@ -197,11 +211,15 @@ foreach var in lnK lnQ lnL lnM {
 
 	drop if missing(`var')
 
-	drop first_year_foreign time_foreign foreign_0 foreign_1
+	drop first_year_foreign time_foreign foreign_* foreign?
 	egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
 	generate time_foreign = year - first_year_foreign
-	gen foreign_0 = (time_foreign == 0)
-	gen foreign_1 = (time_foreign == 1)
+	forval i = 0/3 {
+		gen foreign`i' = (time_foreign == `i')
+	}
+	forval i = 1/3 {
+		gen foreign_`i' = (time_foreign == -`i')
+	}
 
 	drop hole* x
 	sort frame_id_numeric year
@@ -209,9 +227,9 @@ foreach var in lnK lnQ lnL lnM {
 	gen hole2 = (x > 2 & x != .)
 	gen hole1 = (x > 1 & x != .)
 
-	tabstat foreign foreign_0 foreign_1 count hole1 hole2, stat(sum) save
+	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 	mat total = (total \ r(StatTotal))
-	tabstat foreign foreign_0 foreign_1 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
 	mat total = (total \ r(StatTotal))
 }
 
@@ -219,7 +237,7 @@ foreach var in lnK lnQ lnL lnM {
 *tabstat foreign foreign_0 foreign_1 count, stat(sum) save
 *mat total = (total \ r(StatTotal))
 
-drop first_year_foreign time_foreign foreign_0 foreign_1 count hole* x
+drop first_year_foreign time_foreign foreign_* foreign? count hole* x
 mat list total
 count
 
@@ -284,3 +302,4 @@ mata: mata matsave "temp/matrix-balance" mat_total_balance, replace
 save_all_to_json
 cap drop __*
 save "`here'/temp/balance-small-clean.dta", replace
+log close

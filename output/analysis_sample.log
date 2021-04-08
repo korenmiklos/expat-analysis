@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- opened on:   8 Apr 2021, 14:25:29
+ opened on:   8 Apr 2021, 15:04:51
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -110,9 +110,13 @@ hole1_after |      Freq.     Percent        Cum.
 . generate time_foreign = year - first_year_foreign
 (243,388 missing values generated)
 
-. gen foreign_0 = (time_foreign == 0)
+. forval i = 0/3 {
+  2.         gen foreign`i' = (time_foreign == `i')
+  3. }
 
-. gen foreign_1 = (time_foreign == 1)
+. forval i = 1/3 {
+  2.         gen foreign_`i' = (time_foreign == -`i')
+  3. }
 
 . gen count = 1
 
@@ -127,21 +131,21 @@ hole1_after |      Freq.     Percent        Cum.
 . gen hole1 = (x > 1 & x != .)
 
 . 
-. tabstat foreign foreign_0 foreign_1 count hole1 hole2, stat(sum) save
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 
-   stats |   foreign  foreig~0  foreig~1     count     hole1     hole2
----------+------------------------------------------------------------
-     sum |     61755      6184      5562    326659      5467      2250
-----------------------------------------------------------------------
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+---------+--------------------------------------------------------------------------------------------------------------
+     sum |     61755      1056      1228      1612      6184      5562      5184      4810    326659      5467      2250
+------------------------------------------------------------------------------------------------------------------------
 
 . mat total = r(StatTotal)
 
-. tabstat foreign foreign_0 foreign_1 count hole1 hole2 if filter == 3, stat(sum) save
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if filter == 3, stat(sum) save
 
-   stats |   foreign  foreig~0  foreig~1     count     hole1     hole2
----------+------------------------------------------------------------
-     sum |     11402      1611      1357     24010       566       270
-----------------------------------------------------------------------
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+---------+--------------------------------------------------------------------------------------------------------------
+     sum |     11402       981      1133      1479      1611      1357      1220      1087     24010       566       270
+------------------------------------------------------------------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
 
@@ -182,7 +186,7 @@ has_out~nceo: 297402 missing values recoded
 4728
 
 . 
-. drop first_year_foreign time_foreign foreign_0 foreign_1
+. drop first_year_foreign time_foreign foreign_* foreign?
 
 . egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
 (243,388 missing values generated)
@@ -190,9 +194,13 @@ has_out~nceo: 297402 missing values recoded
 . generate time_foreign = year - first_year_foreign
 (243,388 missing values generated)
 
-. gen foreign_0 = (time_foreign == 0)
+. forval i = 0/3 {
+  2.         gen foreign`i' = (time_foreign == `i')
+  3. }
 
-. gen foreign_1 = (time_foreign == 1)
+. forval i = 1/3 {
+  2.         gen foreign_`i' = (time_foreign == -`i')
+  3. }
 
 . 
 . drop hole* x
@@ -207,21 +215,21 @@ has_out~nceo: 297402 missing values recoded
 . gen hole1 = (x > 1 & x != .)
 
 . 
-. tabstat foreign foreign_0 foreign_1 count hole1 hole2, stat(sum) save
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 
-   stats |   foreign  foreig~0  foreig~1     count     hole1     hole2
----------+------------------------------------------------------------
-     sum |     59178      5937      5323    321931      5353      2202
-----------------------------------------------------------------------
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+---------+--------------------------------------------------------------------------------------------------------------
+     sum |     59178       981      1133      1479      5937      5323      4948      4578    321931      5353      2202
+------------------------------------------------------------------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
 
-. tabstat foreign foreign_0 foreign_1 count hole1 hole2 if filter == 3, stat(sum) save
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if filter == 3, stat(sum) save
 
-   stats |   foreign  foreig~0  foreig~1     count     hole1     hole2
----------+------------------------------------------------------------
-     sum |     11402      1611      1357     24010       566       270
-----------------------------------------------------------------------
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+---------+--------------------------------------------------------------------------------------------------------------
+     sum |     11402       981      1133      1479      1611      1357      1220      1087     24010       566       270
+------------------------------------------------------------------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
 
@@ -240,7 +248,7 @@ has_out~nceo: 297402 missing values recoded
 (57,762 observations deleted)
 
 . 
-. drop first_year_foreign time_foreign foreign_0 foreign_1
+. drop first_year_foreign time_foreign foreign_* foreign?
 
 . egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
 (243,388 missing values generated)
@@ -248,9 +256,13 @@ has_out~nceo: 297402 missing values recoded
 . generate time_foreign = year - first_year_foreign
 (243,388 missing values generated)
 
-. gen foreign_0 = (time_foreign == 0)
+. forval i = 0/3 {
+  2.         gen foreign`i' = (time_foreign == `i')
+  3. }
 
-. gen foreign_1 = (time_foreign == 1)
+. forval i = 1/3 {
+  2.         gen foreign_`i' = (time_foreign == -`i')
+  3. }
 
 . 
 . drop hole* x
@@ -265,35 +277,35 @@ has_out~nceo: 297402 missing values recoded
 . gen hole1 = (x > 1 & x != .)
 
 . 
-. tabstat foreign foreign_0 foreign_1 count hole1 hole2, stat(sum) save
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 
-   stats |   foreign  foreig~0  foreig~1     count     hole1     hole2
----------+------------------------------------------------------------
-     sum |     11402      1611      1334    264169      4404      1842
-----------------------------------------------------------------------
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+---------+--------------------------------------------------------------------------------------------------------------
+     sum |     11402       981      1133      1479      1611      1334      1094       901    264169      4404      1842
+------------------------------------------------------------------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
 
-. tabstat foreign foreign_0 foreign_1 count hole1 hole2 if filter == 3, stat(sum) save
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if filter == 3, stat(sum) save
 
-   stats |   foreign  foreig~0  foreig~1     count     hole1     hole2
----------+------------------------------------------------------------
-     sum |     11402      1611      1334     20781       480       228
-----------------------------------------------------------------------
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+---------+--------------------------------------------------------------------------------------------------------------
+     sum |     11402       981      1133      1479      1611      1334      1094       901     20781       480       228
+------------------------------------------------------------------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
 
 . 
 . mat list total
 
-total[6,6]
-       foreign  foreign_0  foreign_1      count      hole1      hole2
-sum      61755       6184       5562     326659       5467       2250
-sum      11402       1611       1357      24010        566        270
-sum      59178       5937       5323     321931       5353       2202
-sum      11402       1611       1357      24010        566        270
-sum      11402       1611       1334     264169       4404       1842
-sum      11402       1611       1334      20781        480        228
+total[6,11]
+       foreign  foreign_3  foreign_2  foreign_1   foreign0   foreign1   foreign2   foreign3      count      hole1      hole2
+sum      61755       1056       1228       1612       6184       5562       5184       4810     326659       5467       2250
+sum      11402        981       1133       1479       1611       1357       1220       1087      24010        566        270
+sum      59178        981       1133       1479       5937       5323       4948       4578     321931       5353       2202
+sum      11402        981       1133       1479       1611       1357       1220       1087      24010        566        270
+sum      11402        981       1133       1479       1611       1334       1094        901     264169       4404       1842
+sum      11402        981       1133       1479       1611       1334       1094        901      20781        480        228
 
 . 
 . * check foreign end expat numbers
@@ -388,11 +400,11 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/event
 . mata : mat_total_analysis = st_matrix("total")
 
 . mata: mata matsave "temp/matrix-analysis" mat_total_analysis, replace
-(saving mat_total_analysis[6,6])
+(saving mat_total_analysis[6,11])
 file temp/matrix-analysis.mmat saved
 
 . 
-. drop time_foreign foreign_0 foreign_1 count hole* x
+. drop first_year_foreign time_foreign foreign_* foreign? count hole* x
 
 . 
 . count
@@ -408,7 +420,6 @@ file temp/matrix-analysis.mmat saved
   variable owner_spell_total was float now byte
   variable divest was float now byte
   variable start_as_domestic was float now byte
-  variable first_year_foreign was float now int
   variable industry_year was float now int
   variable jetok was double now long
   variable export was double now long
@@ -416,7 +427,7 @@ file temp/matrix-analysis.mmat saved
   variable final_netgep was double now long
   variable ranyag8091_18 was double now long
   variable country_all_ceo was str12 now str9
-  (12,680,112 bytes saved)
+  (12,151,774 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
 file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/analysis_sample.dta saved
@@ -425,5 +436,5 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/analy
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- closed on:   8 Apr 2021, 14:25:38
+ closed on:   8 Apr 2021, 15:05:00
 --------------------------------------------------------------------------------------------------------------------------------------------------------------

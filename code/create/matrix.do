@@ -1,11 +1,18 @@
 clear all
+set more off
+
+* find root folder
+here
+local here = r(here)
+
+log using "`here'/output/matrix", text replace
 
 foreach file in balance analysis {
 	clear all
 	mata: mata matuse "temp/matrix-`file'", replace
 	mata: st_matrix("total_`file'", mat_total_`file')
 
-	matrix colnames total_`file' = "foreign" "foreign_0" "foreign_1" "count" "hole1" "hole2"
+	matrix colnames total_`file' = "foreign" "foreign_3" "foreign_2" "foreign_1" "foreign0" "foreign1" "foreign2" "foreign3" "count" "hole1" "hole2"
 	*No option to save row names as variables as svmat - https://www.stata.com/statalist/archive/2007-07/msg00477.html
 
 	matrix list total_`file'
@@ -39,7 +46,8 @@ forval i = 2(2)20 {
 label define type_label 1 "all" 2 "analysis sample ever foreign"
 label values type type_label
 
-export delimited using "temp/foreign_drop", replace
+export delimited using "output/foreign_drop", replace
+log close
 
 *rename foreign data1
 *rename foreign_0 data2
