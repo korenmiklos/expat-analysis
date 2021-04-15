@@ -5,6 +5,8 @@ set more off
 here
 local here = r(here)
 
+log using "`here'/output/balance", text replace
+
 use "`here'/input/merleg-expat/balance-small.dta"
 
 * keep only numeric part of frame_id
@@ -14,10 +16,14 @@ codebook frame_id*
 drop frame_id
 xtset frame_id_numeric year
 
+merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign) keep(1 3) nogen
+
 * calculating time_foreign - part I
-*count
-*sort frame_id_numeric year
-*merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign)
+count
+
+preserve
+sort frame_id_numeric year
+merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign)
 *clonevar foreign_check = fo3
 *recode foreign_check (. = 0)
 *tempvar t_year
@@ -25,19 +31,75 @@ xtset frame_id_numeric year
 *bys frame_id_numeric: egen first_year_foreign = max(`t_year')
 *gen time_foreign = year - first_year_foreign
 *replace time_foreign = . if foreign_check == 0 & time_foreign > 0
-*tab time_foreign if _merge == 3
-*drop time_foreign foreign_check first_year_foreign `t_year' _merge ever_foreign
-*count
+egen first_year_foreign = min(cond(fo3==1, year, .)), by(frame_id_numeric)
+generate time_foreign = year - first_year_foreign
+*egen there_in_1995 = min(cond(year==1995, year, .)), by(frame_id_numeric )
+*generate time_foreign = year - there_in_1995
+contract time_foreign if _merge == 3
+gen type = "balance"
+save "`here'/temp/event_time_foreign_balance.dta", replace
+restore
+
+preserve
+sort frame_id_numeric year
+egen first_year_foreign = min(cond(fo3==1, year, .)), by(frame_id_numeric)
+generate time_foreign = year - first_year_foreign
+contract time_foreign
+gen type = "balance-all"
+save "`here'/temp/event_time_all_balance.dta", replace
+restore
 
 * limit sample before large merge - sampling based on firm-level variables, firm-year done later
 * average employment and financial firms deleted
 * break the tie when mode is not unique
+
+egen first_year_foreign = min(cond(fo3==1, year, .)), by(frame_id_numeric)
+generate time_foreign = year - first_year_foreign
+forval i = 0/3 {
+	gen foreign`i' = (time_foreign == `i')
+}
+forval i = 1/3 {
+	gen foreign_`i' = (time_foreign == -`i')
+}
+gen count = 1
+
+sort frame_id_numeric year
+gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+gen hole2 = (x > 2 & x != .)
+gen hole1 = (x > 1 & x != .)
+
+tabstat fo3 foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+mat total = r(StatTotal)
+tabstat fo3 foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+mat total = (total \ r(StatTotal))
+
 bys frame_id_numeric: egen avg_emp = mean(emp)
 bys frame_id_numeric: egen industry_mode = mode(teaor08_2d), minmode
 local sample ((avg_emp >= 20) & (industry_mode != 64 & industry_mode != 65 & industry_mode != 66))
 drop if !`sample'
 scalar dropped_size_or_finance = r(N_drop)
 display dropped_size_or_finance
+
+drop first_year_foreign time_foreign foreign_* foreign?
+egen first_year_foreign = min(cond(fo3==1, year, .)), by(frame_id_numeric)
+generate time_foreign = year - first_year_foreign
+forval i = 0/3 {
+	gen foreign`i' = (time_foreign == `i')
+}
+forval i = 1/3 {
+	gen foreign_`i' = (time_foreign == -`i')
+}
+
+drop hole* x
+sort frame_id_numeric year
+gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+gen hole2 = (x > 2 & x != .)
+gen hole1 = (x > 1 & x != .)
+
+tabstat fo3 foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+mat total = (total \ r(StatTotal))
+tabstat fo3 foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+mat total = (total \ r(StatTotal))
 
 * proxy firm founding date with first balance sheet filed
 tempvar foundyear
@@ -71,6 +133,9 @@ inspect foreign
 inspect jetok_18 if missing(foreign)
 recode foreign (.=0)
 
+*tabstat foreign foreign_0 foreign_1 count, stat(sum) save
+*mat total = (total \ r(StatTotal))
+
 * interpolate small holes
 tab foreign
 tempvar before
@@ -88,6 +153,27 @@ tempvar after
 bys foreign: egen `after' = count(1)
 scalar foreign_interpolate = `before'-`after'
 display foreign_interpolate
+
+drop first_year_foreign time_foreign foreign_* foreign?
+egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
+generate time_foreign = year - first_year_foreign
+forval i = 0/3 {
+	gen foreign`i' = (time_foreign == `i')
+}
+forval i = 1/3 {
+	gen foreign_`i' = (time_foreign == -`i')
+}
+
+drop hole* x
+sort frame_id_numeric year
+gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+gen hole2 = (x > 2 & x != .)
+gen hole1 = (x > 1 & x != .)
+
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+mat total = (total \ r(StatTotal))
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+mat total = (total \ r(StatTotal))
 
 * extrapolate capital stock
 inspect tanass_18
@@ -118,7 +204,42 @@ label variable RperK "Share of immaterial assets [0,1]"
 * firm-year deletions
 count if missing(lnK, lnQ, lnL, lnM, foreign) & year > 1991
 count if missing(lnK, lnQ, lnL, lnM, foreign)
-drop if missing(lnK, lnQ, lnL, lnM, foreign) // ASK: whether year condition needed
+*drop if missing(lnK, lnQ, lnL, lnM, foreign) // ASK: whether year condition needed
+*count
+
+foreach var in lnK lnQ lnL lnM {
+
+	drop if missing(`var')
+
+	drop first_year_foreign time_foreign foreign_* foreign?
+	egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
+	generate time_foreign = year - first_year_foreign
+	forval i = 0/3 {
+		gen foreign`i' = (time_foreign == `i')
+	}
+	forval i = 1/3 {
+		gen foreign_`i' = (time_foreign == -`i')
+	}
+
+	drop hole* x
+	sort frame_id_numeric year
+	gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+	gen hole2 = (x > 2 & x != .)
+	gen hole1 = (x > 1 & x != .)
+
+	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+	mat total = (total \ r(StatTotal))
+	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+	mat total = (total \ r(StatTotal))
+}
+
+*drop if missing(foreign)
+*tabstat foreign foreign_0 foreign_1 count, stat(sum) save
+*mat total = (total \ r(StatTotal))
+
+drop first_year_foreign time_foreign foreign_* foreign? count hole* x
+mat list total
+count
 
 * TFP (Cobb-Douglas)
 * FIXME: Replace CD with something fancy
@@ -151,18 +272,34 @@ generate domestic_sales = sales - export
 replace domestic_sales = 0 if domestic_sales < 0 | missing(domestic_sales)
 
 * calculating time_foreign - part II
-*count
-*sort frame_id_numeric year
-*merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign)
-*tempvar t_year
-*gen `t_year' = year if foreign == 1 & foreign[_n-1] == 0 
-*bys frame_id_numeric: egen first_year_foreign = max(`t_year')
-*gen time_foreign = year - first_year_foreign
-*replace time_foreign = . if foreign == 0 & time_foreign > 0
-*tab time_foreign if _merge == 3
-*drop time_foreign first_year_foreign `t_year' _merge ever_foreign
-*count
+count
+
+preserve
+sort frame_id_numeric year
+merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign)
+egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
+generate time_foreign = year - first_year_foreign
+contract time_foreign if _merge == 3
+gen type = "clean"
+save "`here'/temp/event_time_foreign_clean.dta", replace
+restore
+
+preserve
+sort frame_id_numeric year
+egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
+generate time_foreign = year - first_year_foreign
+contract time_foreign
+gen type = "clean-all"
+save "`here'/temp/event_time_all_clean.dta", replace
+restore
+
+count
+
+matrix rownames total = "beginning" "sampling" "interpolating fo3 holes" "missing lnK" "missing lnQ" "missing lnL" "missing lnM"
+mata : mat_total_balance = st_matrix("total")
+mata: mata matsave "temp/matrix-balance" mat_total_balance, replace
 
 save_all_to_json
 cap drop __*
 save "`here'/temp/balance-small-clean.dta", replace
+log close
