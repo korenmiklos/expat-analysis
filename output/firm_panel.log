@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/firm_panel.log
   log type:  text
- opened on:  22 Apr 2021, 20:33:25
+ opened on:  22 Apr 2021, 22:22:20
 
 . 
 . * keep only sample from balance-small - NOTE: had to restructure as we have to keep foreign which is different in years - so no collapse this time
@@ -17,8 +17,8 @@
 . tempfile sample
 
 . save `sample', replace
-(note: file /srv/sandbox/zavecz/St3159502.000001 not found)
-file /srv/sandbox/zavecz/St3159502.000001 saved
+(note: file /srv/sandbox/zavecz/St3190620.000001 not found)
+file /srv/sandbox/zavecz/St3190620.000001 saved
 
 . 
 . * count expats in do - asterisk used
@@ -216,209 +216,209 @@ company_manager_id                                                              
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
-    matched                           394,349  
+    matched                           417,692  
     -----------------------------------------
-  184,398
+  197,935
        panel variable:  company_manager_id (unbalanced)
         time variable:  year, 1988 to 2018, but with gaps
                 delta:  1 unit
-(62,629 missing values generated)
-(62,629 real changes made)
+(67,551 missing values generated)
+(67,551 real changes made)
 
         gap |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    387,588       98.29       98.29
-          1 |      3,852        0.98       99.26
-          2 |      1,015        0.26       99.52
-          3 |        575        0.15       99.67
-          4 |        354        0.09       99.76
-          5 |        291        0.07       99.83
-          6 |        175        0.04       99.87
-          7 |        121        0.03       99.90
-          8 |         90        0.02       99.93
-          9 |         73        0.02       99.95
-         10 |         52        0.01       99.96
-         11 |         44        0.01       99.97
-         12 |         31        0.01       99.98
+          0 |    410,574       98.30       98.30
+          1 |      4,047        0.97       99.26
+          2 |      1,083        0.26       99.52
+          3 |        605        0.14       99.67
+          4 |        371        0.09       99.76
+          5 |        303        0.07       99.83
+          6 |        186        0.04       99.87
+          7 |        126        0.03       99.90
+          8 |         93        0.02       99.93
+          9 |         78        0.02       99.95
+         10 |         58        0.01       99.96
+         11 |         45        0.01       99.97
+         12 |         32        0.01       99.98
          13 |         23        0.01       99.98
-         14 |         23        0.01       99.99
+         14 |         24        0.01       99.99
          15 |         12        0.00       99.99
-         16 |         11        0.00      100.00
-         17 |          6        0.00      100.00
+         16 |         11        0.00       99.99
+         17 |          7        0.00      100.00
          18 |          5        0.00      100.00
-         19 |          3        0.00      100.00
+         19 |          4        0.00      100.00
          20 |          3        0.00      100.00
          22 |          1        0.00      100.00
          24 |          1        0.00      100.00
 ------------+-----------------------------------
-      Total |    394,349      100.00
-(3,852 observations created)
-(3,852 real changes made)
+      Total |    417,692      100.00
+(4,047 observations created)
+(4,047 real changes made)
        panel variable:  company_manager_id (unbalanced)
         time variable:  year, 1988 to 2018, but with gaps
                 delta:  1 unit
-(31,232 real changes made)
-  2,909
-(60 real changes made)
-(359,469 missing values generated)
-(346,182 missing values generated)
-(369,362 missing values generated)
-(359,469 missing values generated)
-(192 real changes made)
-(173 real changes made)
-(176 real changes made)
-(3,663 observations deleted)
-(9,898 observations deleted)
-(2,022 observations deleted)
-(382,618 missing values generated)
-(382,618 missing values generated)
+(34,632 real changes made)
+  3,071
+(43 real changes made)
+(359,572 missing values generated)
+(346,927 missing values generated)
+(369,740 missing values generated)
+(359,572 missing values generated)
+(57 real changes made)
+(39 real changes made)
+(11 real changes made)
+(3,631 observations deleted)
+(10,168 observations deleted)
+(3,301 observations deleted)
+(404,639 missing values generated)
+(404,639 missing values generated)
 (0 real changes made)
-(382,618 missing values generated)
+(404,639 missing values generated)
 (0 real changes made)
-(382,618 missing values generated)
+(404,639 missing values generated)
 (0 real changes made)
-(382,618 missing values generated)
+(404,639 missing values generated)
 (0 real changes made)
-(346,275 missing values generated)
-(1,994 real changes made)
-(345,104 missing values generated)
-(2,088 real changes made)
-(312,046 missing values generated)
-(4,319 real changes made)
-(279,809 missing values generated)
-(6,209 real changes made)
-(225,780 missing values generated)
-(8,853 real changes made)
-(185,503 missing values generated)
-(10,413 real changes made)
-(158,670 missing values generated)
-(11,114 real changes made)
-(140,594 missing values generated)
-(11,402 real changes made)
-(122,745 missing values generated)
-(11,831 real changes made)
-(103,084 missing values generated)
-(12,541 real changes made)
-(89,215 missing values generated)
-(12,846 real changes made)
-(79,488 missing values generated)
-(12,933 real changes made)
-(67,900 missing values generated)
-(13,209 real changes made)
-(58,053 missing values generated)
-(13,485 real changes made)
-(49,591 missing values generated)
-(13,612 real changes made)
-(43,040 missing values generated)
-(13,841 real changes made)
-(37,087 missing values generated)
-(13,940 real changes made)
-(31,945 missing values generated)
-(14,003 real changes made)
-(26,800 missing values generated)
-(14,133 real changes made)
-(23,082 missing values generated)
-(14,612 real changes made)
-(19,051 missing values generated)
-(14,380 real changes made)
-(15,594 missing values generated)
-(14,210 real changes made)
-(12,347 missing values generated)
-(14,048 real changes made)
-(9,259 missing values generated)
-(13,943 real changes made)
-(7,048 missing values generated)
-(13,920 real changes made)
-(4,761 missing values generated)
-(13,665 real changes made)
-(2,923 missing values generated)
-(12,930 real changes made)
-(1,639 missing values generated)
-(12,751 real changes made)
-(763 missing values generated)
-(12,710 real changes made)
-(214 missing values generated)
-(12,499 real changes made)
-(382,618 missing values generated)
+(368,348 missing values generated)
+(1,993 real changes made)
+(367,186 missing values generated)
+(2,084 real changes made)
+(334,777 missing values generated)
+(4,277 real changes made)
+(301,793 missing values generated)
+(6,217 real changes made)
+(246,461 missing values generated)
+(8,920 real changes made)
+(204,047 missing values generated)
+(10,610 real changes made)
+(174,779 missing values generated)
+(11,418 real changes made)
+(155,007 missing values generated)
+(11,813 real changes made)
+(135,494 missing values generated)
+(12,322 real changes made)
+(114,378 missing values generated)
+(13,125 real changes made)
+(99,321 missing values generated)
+(13,501 real changes made)
+(88,571 missing values generated)
+(13,632 real changes made)
+(75,831 missing values generated)
+(13,957 real changes made)
+(64,897 missing values generated)
+(14,277 real changes made)
+(55,661 missing values generated)
+(14,435 real changes made)
+(48,632 missing values generated)
+(14,694 real changes made)
+(42,128 missing values generated)
+(14,797 real changes made)
+(36,098 missing values generated)
+(14,911 real changes made)
+(30,084 missing values generated)
+(15,071 real changes made)
+(25,561 missing values generated)
+(15,623 real changes made)
+(20,870 missing values generated)
+(15,382 real changes made)
+(16,999 missing values generated)
+(15,205 real changes made)
+(13,358 missing values generated)
+(15,058 real changes made)
+(10,062 missing values generated)
+(14,955 real changes made)
+(7,504 missing values generated)
+(14,949 real changes made)
+(5,072 missing values generated)
+(14,676 real changes made)
+(3,184 missing values generated)
+(13,942 real changes made)
+(1,825 missing values generated)
+(13,734 real changes made)
+(829 missing values generated)
+(13,705 real changes made)
+(236 missing values generated)
+(13,429 real changes made)
+(404,639 missing values generated)
 (0 real changes made)
 (0 real changes made)
 (0 real changes made)
 (5 missing values generated)
-(2,013 real changes made)
+(2,011 real changes made)
 (15 missing values generated)
-(2,095 real changes made)
+(2,093 real changes made)
 (80 missing values generated)
-(4,434 real changes made)
-(736 missing values generated)
-(6,426 real changes made)
-(3,429 missing values generated)
-(9,098 real changes made)
-(6,538 missing values generated)
-(10,437 real changes made)
-(9,884 missing values generated)
-(11,259 real changes made)
-(13,211 missing values generated)
-(11,482 real changes made)
-(16,776 missing values generated)
-(11,871 real changes made)
-(20,417 missing values generated)
-(12,417 real changes made)
-(24,186 missing values generated)
-(12,884 real changes made)
-(29,410 missing values generated)
-(12,805 real changes made)
-(33,960 missing values generated)
-(13,175 real changes made)
-(38,305 missing values generated)
-(13,418 real changes made)
-(43,159 missing values generated)
-(13,606 real changes made)
-(48,646 missing values generated)
-(13,590 real changes made)
-(54,597 missing values generated)
-(13,801 real changes made)
-(60,423 missing values generated)
-(13,858 real changes made)
-(67,174 missing values generated)
-(13,856 real changes made)
-(74,042 missing values generated)
-(13,885 real changes made)
-(82,356 missing values generated)
-(14,281 real changes made)
-(90,430 missing values generated)
-(14,092 real changes made)
-(97,898 missing values generated)
-(14,003 real changes made)
-(105,379 missing values generated)
-(13,904 real changes made)
-(111,883 missing values generated)
-(13,755 real changes made)
-(120,959 missing values generated)
-(13,663 real changes made)
-(136,232 missing values generated)
-(13,028 real changes made)
-(144,714 missing values generated)
-(12,694 real changes made)
-(151,686 missing values generated)
-(12,556 real changes made)
-(160,946 missing values generated)
-(12,388 real changes made)
-(382,618 missing values generated)
+(4,384 real changes made)
+(728 missing values generated)
+(6,421 real changes made)
+(3,428 missing values generated)
+(9,170 real changes made)
+(6,533 missing values generated)
+(10,643 real changes made)
+(9,916 missing values generated)
+(11,572 real changes made)
+(13,269 missing values generated)
+(11,880 real changes made)
+(16,861 missing values generated)
+(12,380 real changes made)
+(20,548 missing values generated)
+(12,987 real changes made)
+(24,369 missing values generated)
+(13,538 real changes made)
+(29,732 missing values generated)
+(13,508 real changes made)
+(34,393 missing values generated)
+(13,933 real changes made)
+(38,871 missing values generated)
+(14,215 real changes made)
+(43,961 missing values generated)
+(14,426 real changes made)
+(49,592 missing values generated)
+(14,442 real changes made)
+(55,754 missing values generated)
+(14,671 real changes made)
+(61,811 missing values generated)
+(14,747 real changes made)
+(68,862 missing values generated)
+(14,811 real changes made)
+(76,061 missing values generated)
+(14,885 real changes made)
+(84,708 missing values generated)
+(15,316 real changes made)
+(93,122 missing values generated)
+(15,099 real changes made)
+(100,990 missing values generated)
+(15,006 real changes made)
+(108,828 missing values generated)
+(14,911 real changes made)
+(115,643 missing values generated)
+(14,796 real changes made)
+(125,048 missing values generated)
+(14,692 real changes made)
+(140,519 missing values generated)
+(14,030 real changes made)
+(149,521 missing values generated)
+(13,686 real changes made)
+(157,255 missing values generated)
+(13,540 real changes made)
+(168,035 missing values generated)
+(13,308 real changes made)
+(404,639 missing values generated)
 (0 real changes made)
 
            |         fire
       hire |         0          1 |     Total
 -----------+----------------------+----------
-         0 |   271,142     49,307 |   320,449 
-         1 |    49,307     12,862 |    62,169 
+         0 |   284,963     52,876 |   337,839 
+         1 |    52,876     13,924 |    66,800 
 -----------+----------------------+----------
-     Total |   320,449     62,169 |   382,618 
+     Total |   337,839     66,800 |   404,639 
 file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/raw_ceo.dta saved
-(23,121 real changes made)
-(23,121 real changes made)
-(296 real changes made)
-(649 real changes made)
-file /srv/sandbox/zavecz/St3159502.000002 saved
+(24,114 real changes made)
+(24,114 real changes made)
+(1208 real changes made)
+(1402 real changes made)
+file /srv/sandbox/zavecz/St3190620.000002 saved
   286,313
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -454,127 +454,128 @@ company_manager_id                                                              
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
-    matched                           116,536  
+    matched                           119,937  
     -----------------------------------------
-  30,789
+  32,366
        panel variable:  company_manager_id (unbalanced)
         time variable:  year, 1988 to 2018, but with gaps
                 delta:  1 unit
-(27,265 missing values generated)
-(27,265 real changes made)
+(28,255 missing values generated)
+(28,255 real changes made)
 
         gap |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    114,664       98.39       98.39
-          1 |        889        0.76       99.16
-          2 |        336        0.29       99.44
-          3 |        196        0.17       99.61
-          4 |        149        0.13       99.74
+          0 |    117,994       98.38       98.38
+          1 |        919        0.77       99.15
+          2 |        359        0.30       99.45
+          3 |        209        0.17       99.62
+          4 |        150        0.13       99.74
           5 |         95        0.08       99.82
-          6 |         57        0.05       99.87
+          6 |         58        0.05       99.87
           7 |         43        0.04       99.91
           8 |         33        0.03       99.94
-          9 |         22        0.02       99.96
-         10 |         18        0.02       99.97
+          9 |         23        0.02       99.95
+         10 |         19        0.02       99.97
          11 |          8        0.01       99.98
          12 |          7        0.01       99.98
          13 |          4        0.00       99.99
          14 |          3        0.00       99.99
          15 |          4        0.00       99.99
-         16 |          3        0.00      100.00
+         16 |          3        0.00       99.99
          17 |          3        0.00      100.00
+         19 |          1        0.00      100.00
          22 |          1        0.00      100.00
          24 |          1        0.00      100.00
 ------------+-----------------------------------
-      Total |    116,536      100.00
-(889 observations created)
-(889 real changes made)
+      Total |    119,937      100.00
+(919 observations created)
+(919 real changes made)
        panel variable:  company_manager_id (unbalanced)
         time variable:  year, 1988 to 2018, but with gaps
                 delta:  1 unit
-(7,565 real changes made)
-  983
+(7,945 real changes made)
+  1,024
 (0 real changes made)
-(86,692 missing values generated)
-(87,137 missing values generated)
-(98,024 missing values generated)
-(86,692 missing values generated)
-(36 real changes made)
-(16 real changes made)
-(107 real changes made)
-(2,482 observations deleted)
-(11,332 observations deleted)
-(38,185 observations deleted)
-(65,426 missing values generated)
-(65,426 missing values generated)
+(88,681 missing values generated)
+(87,484 missing values generated)
+(100,027 missing values generated)
+(88,681 missing values generated)
+(38 real changes made)
+(17 real changes made)
+(95 real changes made)
+(2,496 observations deleted)
+(11,346 observations deleted)
+(39,279 observations deleted)
+(67,735 missing values generated)
+(67,735 missing values generated)
 (0 real changes made)
-(65,426 missing values generated)
+(67,735 missing values generated)
 (0 real changes made)
-(65,426 missing values generated)
+(67,735 missing values generated)
 (0 real changes made)
-(65,426 missing values generated)
+(67,735 missing values generated)
 (0 real changes made)
-(56,922 missing values generated)
+(59,231 missing values generated)
 (1,000 real changes made)
-(56,459 missing values generated)
+(58,768 missing values generated)
 (1,040 real changes made)
-(52,876 missing values generated)
-(1,500 real changes made)
-(49,788 missing values generated)
-(1,693 real changes made)
-(46,036 missing values generated)
-(1,308 real changes made)
-(40,319 missing values generated)
-(1,639 real changes made)
-(36,464 missing values generated)
-(1,834 real changes made)
-(34,637 missing values generated)
-(1,808 real changes made)
-(33,696 missing values generated)
-(1,656 real changes made)
-(32,477 missing values generated)
-(1,570 real changes made)
-(31,432 missing values generated)
-(1,488 real changes made)
-(28,875 missing values generated)
-(1,499 real changes made)
-(26,575 missing values generated)
-(1,529 real changes made)
-(24,333 missing values generated)
-(1,595 real changes made)
-(22,916 missing values generated)
-(1,653 real changes made)
-(21,178 missing values generated)
-(1,874 real changes made)
-(15,290 missing values generated)
-(2,400 real changes made)
-(12,322 missing values generated)
-(2,454 real changes made)
-(10,173 missing values generated)
-(2,229 real changes made)
-(8,561 missing values generated)
-(2,327 real changes made)
-(6,795 missing values generated)
-(2,539 real changes made)
-(5,415 missing values generated)
-(2,562 real changes made)
-(4,384 missing values generated)
-(2,353 real changes made)
-(3,364 missing values generated)
-(2,373 real changes made)
-(2,723 missing values generated)
-(2,351 real changes made)
-(1,981 missing values generated)
-(2,381 real changes made)
-(1,231 missing values generated)
-(1,991 real changes made)
-(759 missing values generated)
-(1,935 real changes made)
-(307 missing values generated)
-(1,980 real changes made)
-(99 missing values generated)
-(1,956 real changes made)
-(65,426 missing values generated)
+(55,203 missing values generated)
+(1,498 real changes made)
+(52,089 missing values generated)
+(1,692 real changes made)
+(48,445 missing values generated)
+(1,301 real changes made)
+(42,717 missing values generated)
+(1,631 real changes made)
+(38,706 missing values generated)
+(1,837 real changes made)
+(36,850 missing values generated)
+(1,814 real changes made)
+(35,884 missing values generated)
+(1,676 real changes made)
+(34,677 missing values generated)
+(1,580 real changes made)
+(33,599 missing values generated)
+(1,502 real changes made)
+(30,907 missing values generated)
+(1,521 real changes made)
+(28,333 missing values generated)
+(1,566 real changes made)
+(25,901 missing values generated)
+(1,648 real changes made)
+(24,342 missing values generated)
+(1,720 real changes made)
+(22,427 missing values generated)
+(1,953 real changes made)
+(16,438 missing values generated)
+(2,480 real changes made)
+(13,361 missing values generated)
+(2,530 real changes made)
+(11,098 missing values generated)
+(2,316 real changes made)
+(9,325 missing values generated)
+(2,419 real changes made)
+(7,459 missing values generated)
+(2,644 real changes made)
+(5,922 missing values generated)
+(2,674 real changes made)
+(4,831 missing values generated)
+(2,465 real changes made)
+(3,718 missing values generated)
+(2,497 real changes made)
+(2,969 missing values generated)
+(2,484 real changes made)
+(2,145 missing values generated)
+(2,515 real changes made)
+(1,362 missing values generated)
+(2,118 real changes made)
+(825 missing values generated)
+(2,083 real changes made)
+(333 missing values generated)
+(2,132 real changes made)
+(108 missing values generated)
+(2,091 real changes made)
+(67,735 missing values generated)
 (0 real changes made)
 (0 real changes made)
 (0 real changes made)
@@ -583,77 +584,77 @@ company_manager_id                                                              
 (31 missing values generated)
 (1,042 real changes made)
 (108 missing values generated)
-(1,535 real changes made)
+(1,533 real changes made)
 (806 missing values generated)
 (1,788 real changes made)
 (3,782 missing values generated)
-(1,419 real changes made)
-(4,504 missing values generated)
-(1,679 real changes made)
-(5,291 missing values generated)
-(1,872 real changes made)
-(5,905 missing values generated)
-(1,854 real changes made)
+(1,411 real changes made)
+(4,505 missing values generated)
+(1,673 real changes made)
+(5,287 missing values generated)
+(1,869 real changes made)
+(5,903 missing values generated)
+(1,863 real changes made)
 (6,918 missing values generated)
-(1,734 real changes made)
-(8,135 missing values generated)
-(1,596 real changes made)
-(9,080 missing values generated)
-(1,554 real changes made)
-(10,473 missing values generated)
-(1,560 real changes made)
-(11,758 missing values generated)
-(1,546 real changes made)
-(12,934 missing values generated)
-(1,622 real changes made)
-(13,982 missing values generated)
-(1,619 real changes made)
-(16,495 missing values generated)
-(1,559 real changes made)
-(18,826 missing values generated)
-(2,294 real changes made)
-(20,413 missing values generated)
-(2,495 real changes made)
-(22,397 missing values generated)
-(2,402 real changes made)
-(23,891 missing values generated)
-(2,210 real changes made)
-(24,966 missing values generated)
-(2,399 real changes made)
-(26,964 missing values generated)
-(2,499 real changes made)
-(29,826 missing values generated)
-(2,381 real changes made)
-(31,462 missing values generated)
-(2,301 real changes made)
-(33,044 missing values generated)
-(2,328 real changes made)
-(34,421 missing values generated)
-(2,319 real changes made)
-(40,113 missing values generated)
-(1,945 real changes made)
-(42,109 missing values generated)
-(1,899 real changes made)
-(43,739 missing values generated)
-(1,925 real changes made)
-(45,428 missing values generated)
-(1,891 real changes made)
-(65,426 missing values generated)
+(1,750 real changes made)
+(8,152 missing values generated)
+(1,610 real changes made)
+(9,101 missing values generated)
+(1,569 real changes made)
+(10,503 missing values generated)
+(1,586 real changes made)
+(11,817 missing values generated)
+(1,583 real changes made)
+(13,020 missing values generated)
+(1,676 real changes made)
+(14,085 missing values generated)
+(1,681 real changes made)
+(16,645 missing values generated)
+(1,643 real changes made)
+(19,022 missing values generated)
+(2,384 real changes made)
+(20,669 missing values generated)
+(2,573 real changes made)
+(22,665 missing values generated)
+(2,489 real changes made)
+(24,230 missing values generated)
+(2,303 real changes made)
+(25,326 missing values generated)
+(2,505 real changes made)
+(27,321 missing values generated)
+(2,610 real changes made)
+(30,274 missing values generated)
+(2,491 real changes made)
+(31,960 missing values generated)
+(2,423 real changes made)
+(33,543 missing values generated)
+(2,467 real changes made)
+(35,048 missing values generated)
+(2,451 real changes made)
+(40,821 missing values generated)
+(2,068 real changes made)
+(43,005 missing values generated)
+(2,035 real changes made)
+(44,762 missing values generated)
+(2,070 real changes made)
+(46,627 missing values generated)
+(2,024 real changes made)
+(67,735 missing values generated)
 (0 real changes made)
 
            |         fire
       hire |         0          1 |     Total
 -----------+----------------------+----------
-         0 |    38,138     11,983 |    50,121 
-         1 |    11,983      3,322 |    15,305 
+         0 |    39,269     12,465 |    51,734 
+         1 |    12,465      3,536 |    16,001 
 -----------+----------------------+----------
-     Total |    50,121     15,305 |    65,426 
+     Total |    51,734     16,001 |    67,735 
 file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/raw_nceo.dta saved
-(4,618 real changes made)
-(4,618 real changes made)
-(83 real changes made)
-(124 real changes made)
-file /srv/sandbox/zavecz/St3159502.000003 saved
+(4,914 real changes made)
+(4,914 real changes made)
+(147 real changes made)
+(190 real changes made)
+file /srv/sandbox/zavecz/St3190620.000003 saved
 
 . 
 . *for descriptives (number of ceo-s and nceo-s in final data, number of ceo and nceo job-spells in final data) - part II
@@ -674,11 +675,11 @@ file /srv/sandbox/zavecz/St3159502.000003 saved
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                       269,560
-        from master                   269,560  
+    not matched                       272,000
+        from master                   272,000  
         from using                          0  
 
-    matched                             7,445  
+    matched                            17,300  
     -----------------------------------------
 
 . tabulate has_expat_ceo if missing(country_list)
@@ -686,20 +687,20 @@ file /srv/sandbox/zavecz/St3159502.000003 saved
 has_expat_c |
          eo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    269,022       99.80       99.80
-          1 |        538        0.20      100.00
+          0 |    271,211       99.71       99.71
+          1 |        789        0.29      100.00
 ------------+-----------------------------------
-      Total |    269,560      100.00
+      Total |    272,000      100.00
 
 . tabulate has_expat_ceo if !missing(country_list)
 
 has_expat_c |
          eo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        584        7.84        7.84
-          1 |      6,861       92.16      100.00
+          0 |        585        3.38        3.38
+          1 |     16,715       96.62      100.00
 ------------+-----------------------------------
-      Total |      7,445      100.00
+      Total |     17,300      100.00
 
 . rename country_list country_all_ceo
 
@@ -711,16 +712,16 @@ has_expat_c |
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                       253,947
-        from master                   253,947  
+    not matched                       264,639
+        from master                   264,639  
         from using                          0  
 
-    matched                            23,058  
+    matched                            24,661  
     -----------------------------------------
 
 . 
 . count
-  277,005
+  289,300
 
 . 
 . compress
@@ -756,9 +757,8 @@ has_expat_c |
   variable n_founder_nceo was double now byte
   variable n_insider_nceo was double now byte
   variable n_outsider_nceo was double now byte
-  variable lang_all_ceo was str9 now str6
-  variable country_all_ceo was str15 now str9
-  (35,733,645 bytes saved)
+  variable country_all_ceo was str15 now str12
+  (35,583,900 bytes saved)
 
 . *save_all_to_json
 . save "`here'/temp/firm_events.dta", replace
@@ -768,5 +768,5 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/firm_
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/firm_panel.log
   log type:  text
- closed on:  22 Apr 2021, 20:34:26
+ closed on:  22 Apr 2021, 22:23:16
 --------------------------------------------------------------------------------------------------------------------------------------------------------------

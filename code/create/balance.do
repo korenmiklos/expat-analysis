@@ -56,6 +56,47 @@ inspect foreign
 *inspect jetok_18 if missing(foreign)
 recode foreign (.=0)
 
+* interpolate small holes
+tab foreign
+tempvar before
+bys foreign: egen `before' = count(1)
+sort frame_id_numeric year
+replace foreign = 1 if l.foreign == 1 & l2.foreign == 1 & f.foreign == 1 & f2.foreign == 1
+replace foreign = 0 if l.foreign == 0 & l2.foreign == 0 & f.foreign == 0 & f2.foreign == 0
+bys frame_id_numeric (year): egen minyear = min(year)
+bys frame_id_numeric (year): egen maxyear = max(year)
+replace foreign = 1 if l.foreign == 1 & f.foreign == 1 & f2.foreign == 1 & year == (minyear + 1)
+replace foreign = 1 if l.foreign == 1 & l2.foreign == 1 & f.foreign == 1 & year == (minyear + 1)
+replace foreign = 0 if l.foreign == 0 & f.foreign == 0 & f2.foreign == 0 & year == (maxyear - 1)
+replace foreign = 0 if l.foreign == 0 & l2.foreign == 0 & f.foreign == 0 & year == (maxyear - 1)
+tempvar after
+bys foreign: egen `after' = count(1)
+scalar foreign_interpolate = `before'-`after'
+display foreign_interpolate
+
+* foreign change
+preserve
+use "`here'/input/ceo-panel/ceo-panel.dta", clear
+* expat is changed if job_begin < 1990 in firm_panel.do, not here
+bys frame_id_numeric: egen first_year_expat = min(cond(expat == 1, year,.))
+duplicates drop frame_id_numeric, force
+tempfile expat
+save `expat'
+restore
+
+merge m:1 frame_id_numeric using `expat', keepusing(first_year_expat) keep(1 3) nogen
+
+bys frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.))
+		
+generate manager_after_owner = first_year_expat - first_year_foreign
+generate event_time = year - first_year_expat
+
+replace foreign = 1 if (manager_after_owner == -2) & inlist(event_time, 0, 1)
+replace foreign = 1 if (manager_after_owner == -1) & inlist(event_time, 0)
+replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
+
+drop manager_after_owner event_time first_year_expat
+
 * drop greenfield
 bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
 bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
@@ -66,7 +107,6 @@ drop owner_spell start_as_domestic
 * average employment and financial firms deleted
 * break the tie when mode is not unique
 
-egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
 generate time_foreign = year - first_year_foreign
 forval i = 0/3 {
 	gen foreign`i' = (time_foreign == `i')
@@ -131,24 +171,6 @@ replace exporter_5 = . if export_share == .
 
 *tabstat foreign foreign_0 foreign_1 count, stat(sum) save
 *mat total = (total \ r(StatTotal))
-
-* interpolate small holes
-tab foreign
-tempvar before
-bys foreign: egen `before' = count(1)
-sort frame_id_numeric year
-replace foreign = 1 if l.foreign == 1 & l2.foreign == 1 & f.foreign == 1 & f2.foreign == 1
-replace foreign = 0 if l.foreign == 0 & l2.foreign == 0 & f.foreign == 0 & f2.foreign == 0
-bys frame_id_numeric (year): egen minyear = min(year)
-bys frame_id_numeric (year): egen maxyear = max(year)
-replace foreign = 1 if l.foreign == 1 & f.foreign == 1 & f2.foreign == 1 & year == (minyear + 1)
-replace foreign = 1 if l.foreign == 1 & l2.foreign == 1 & f.foreign == 1 & year == (minyear + 1)
-replace foreign = 0 if l.foreign == 0 & f.foreign == 0 & f2.foreign == 0 & year == (maxyear - 1)
-replace foreign = 0 if l.foreign == 0 & l2.foreign == 0 & f.foreign == 0 & year == (maxyear - 1)
-tempvar after
-bys foreign: egen `after' = count(1)
-scalar foreign_interpolate = `before'-`after'
-display foreign_interpolate
 
 drop hole* x
 sort frame_id_numeric year
