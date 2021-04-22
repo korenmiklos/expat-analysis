@@ -126,16 +126,6 @@ codebook frame_id_numeric
 count if firm_tag
 count
 
-* calculating time_foreign
-count
-
-preserve
-sort frame_id_numeric year
-contract time_foreign
-gen type = "analysis"
-save "`here'/temp/event_time_foreign_analysis.dta", replace
-restore
-
 mata : mat_total_analysis = st_matrix("total")
 mata: mata matsave "temp/matrix-analysis" mat_total_analysis, replace
 

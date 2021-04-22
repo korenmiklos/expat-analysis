@@ -18,37 +18,6 @@ xtset frame_id_numeric year
 
 merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign) keep(1 3) nogen
 
-* calculating time_foreign - part I
-count
-
-preserve
-sort frame_id_numeric year
-merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign)
-*clonevar foreign_check = fo3
-*recode foreign_check (. = 0)
-*tempvar t_year
-*gen `t_year' = year if foreign_check == 1 & foreign_check[_n-1] == 0 
-*bys frame_id_numeric: egen first_year_foreign = max(`t_year')
-*gen time_foreign = year - first_year_foreign
-*replace time_foreign = . if foreign_check == 0 & time_foreign > 0
-egen first_year_foreign = min(cond(fo3==1, year, .)), by(frame_id_numeric)
-generate time_foreign = year - first_year_foreign
-*egen there_in_1995 = min(cond(year==1995, year, .)), by(frame_id_numeric )
-*generate time_foreign = year - there_in_1995
-contract time_foreign if _merge == 3
-gen type = "balance"
-save "`here'/temp/event_time_foreign_balance.dta", replace
-restore
-
-preserve
-sort frame_id_numeric year
-egen first_year_foreign = min(cond(fo3==1, year, .)), by(frame_id_numeric)
-generate time_foreign = year - first_year_foreign
-contract time_foreign
-gen type = "balance-all"
-save "`here'/temp/event_time_all_balance.dta", replace
-restore
-
 * foreign fill 
 rename fo3 foreign
 tab year foreign, missing
@@ -268,30 +237,6 @@ count
 mvencode export exporter exporter_5, mv(0) override
 generate domestic_sales = sales - export
 replace domestic_sales = 0 if domestic_sales < 0 | missing(domestic_sales)
-
-* calculating time_foreign - part II
-count
-
-preserve
-sort frame_id_numeric year
-merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign)
-drop first_year_foreign time_foreign
-egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
-generate time_foreign = year - first_year_foreign
-contract time_foreign if _merge == 3
-gen type = "clean"
-save "`here'/temp/event_time_foreign_clean.dta", replace
-restore
-
-preserve
-sort frame_id_numeric year
-drop first_year_foreign time_foreign
-egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
-generate time_foreign = year - first_year_foreign
-contract time_foreign
-gen type = "clean-all"
-save "`here'/temp/event_time_all_clean.dta", replace
-restore
 
 count
 
