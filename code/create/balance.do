@@ -49,11 +49,24 @@ gen type = "balance-all"
 save "`here'/temp/event_time_all_balance.dta", replace
 restore
 
+* foreign fill 
+rename fo3 foreign
+tab year foreign, missing
+inspect foreign
+*inspect jetok_18 if missing(foreign)
+recode foreign (.=0)
+
+* drop greenfield
+bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
+bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
+keep if start_as_domestic
+drop owner_spell start_as_domestic
+
 * limit sample before large merge - sampling based on firm-level variables, firm-year done later
 * average employment and financial firms deleted
 * break the tie when mode is not unique
 
-egen first_year_foreign = min(cond(fo3==1, year, .)), by(frame_id_numeric)
+egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
 generate time_foreign = year - first_year_foreign
 forval i = 0/3 {
 	gen foreign`i' = (time_foreign == `i')
@@ -68,9 +81,9 @@ gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
 gen hole2 = (x > 2 & x != .)
 gen hole1 = (x > 1 & x != .)
 
-tabstat fo3 foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 mat total = r(StatTotal)
-tabstat fo3 foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 bys frame_id_numeric: egen avg_emp = mean(emp)
@@ -86,9 +99,9 @@ gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
 gen hole2 = (x > 2 & x != .)
 gen hole1 = (x > 1 & x != .)
 
-tabstat fo3 foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 mat total = (total \ r(StatTotal))
-tabstat fo3 foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 * proxy firm founding date with first balance sheet filed
@@ -115,13 +128,6 @@ gen byte exporter = export_18 > 0 & export_18 != .
 gen export_share = export_18 / sales
 gen exporter_5 = (export_share > .05 & export_share != .)
 replace exporter_5 = . if export_share == .
-
-* foreign fill 
-rename fo3 foreign
-tab year foreign, missing
-inspect foreign
-inspect jetok_18 if missing(foreign)
-recode foreign (.=0)
 
 *tabstat foreign foreign_0 foreign_1 count, stat(sum) save
 *mat total = (total \ r(StatTotal))

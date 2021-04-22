@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/balance.log
   log type:  text
- opened on:  22 Apr 2021, 13:33:22
+ opened on:  22 Apr 2021, 20:29:48
 
 . 
 . use "`here'/input/merleg-expat/balance-small.dta"
@@ -129,11 +129,93 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/event
 . restore
 
 . 
+. * foreign fill 
+. rename fo3 foreign
+
+. tab year foreign, missing
+
+           |     Foreign owned dummy with
+      Year |   ultimate owners from Complex
+ 1992-2018 |         0          1          . |     Total
+-----------+---------------------------------+----------
+      1980 |         0          0      2,666 |     2,666 
+      1981 |         0          0      2,695 |     2,695 
+      1982 |         0          0      2,695 |     2,695 
+      1983 |         0          0      2,705 |     2,705 
+      1984 |         0          0      2,711 |     2,711 
+      1985 |         0          0      3,025 |     3,025 
+      1986 |         0          0      3,178 |     3,178 
+      1987 |         0          0      3,402 |     3,402 
+      1988 |         0          0      3,806 |     3,806 
+      1989 |         0          0      6,891 |     6,891 
+      1990 |         0      1,679     14,378 |    16,057 
+      1991 |         0      3,728     25,969 |    29,697 
+      1992 |    84,899     10,011          0 |    94,910 
+      1993 |   103,631     14,078          0 |   117,709 
+      1994 |   128,807     18,254          0 |   147,061 
+      1995 |   144,108     19,995          0 |   164,103 
+      1996 |   167,988     21,162          0 |   189,150 
+      1997 |   186,967     22,034          0 |   209,001 
+      1998 |   210,212     23,688          0 |   233,900 
+      1999 |   219,705     23,467          0 |   243,172 
+      2000 |   239,695     24,729          0 |   264,424 
+      2001 |   259,359     25,584          0 |   284,943 
+      2002 |   258,488     26,424          0 |   284,912 
+      2003 |   263,329     26,801          0 |   290,130 
+      2004 |   276,167     27,390          0 |   303,557 
+      2005 |   283,478     27,036          0 |   310,514 
+      2006 |   290,840     27,049          0 |   317,889 
+      2007 |   299,264     28,884          0 |   328,148 
+      2008 |   313,604     31,085          0 |   344,689 
+      2009 |   320,696     31,396          0 |   352,092 
+      2010 |   333,480     31,385          0 |   364,865 
+      2011 |   350,082     31,666          0 |   381,748 
+      2012 |   346,207     29,911          0 |   376,118 
+      2013 |   383,551     28,980          0 |   412,531 
+      2014 |   375,024     26,893          0 |   401,917 
+      2015 |   382,703     24,633          0 |   407,336 
+      2016 |   381,180     23,793          0 |   404,973 
+      2017 |   375,365     22,528          0 |   397,893 
+      2018 |   363,988     19,895          0 |   383,883 
+-----------+---------------------------------+----------
+     Total | 7,342,817    674,158     74,121 | 8,091,096 
+
+. inspect foreign
+
+foreign:  Foreign owned dummy with ultim        Number of Observations
+-------------------------------------------------------------------------------
+                                             Total      Integers   Nonintegers
+|  #                         Negative            -             -             -
+|  #                         Zero        7,342,817     7,342,817             -
+|  #                         Positive      674,158       674,158             -
+|  #                                   -----------   -----------   -----------
+|  #                         Total       8,016,975     8,016,975             -
+|  #   .                     Missing        74,121
++----------------------                -----------
+0                     1                  8,091,096
+   (2 unique values)
+
+. *inspect jetok_18 if missing(foreign)
+. recode foreign (.=0)
+(foreign: 74121 changes made)
+
+. 
+. * drop greenfield
+. bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
+
+. bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
+
+. keep if start_as_domestic
+(733,042 observations deleted)
+
+. drop owner_spell start_as_domestic
+
+. 
 . * limit sample before large merge - sampling based on firm-level variables, firm-year done later
 . * average employment and financial firms deleted
 . * break the tie when mode is not unique
 . 
-. egen first_year_foreign = min(cond(fo3==1, year, .)), by(frame_id_numeric)
+. egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
 (7,034,606 missing values generated)
 
 . generate time_foreign = year - first_year_foreign
@@ -153,49 +235,49 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/event
 . sort frame_id_numeric year
 
 . gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-(912,852 missing values generated)
+(820,227 missing values generated)
 
 . gen hole2 = (x > 2 & x != .)
 
 . gen hole1 = (x > 1 & x != .)
 
 . 
-. tabstat fo3 foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 
-   stats |       fo3  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
 ---------+--------------------------------------------------------------------------------------------------------------
-     sum |    674158     13658     18219     26753    120823    100633     86713     75521   8091096    150760     75217
+     sum |    136193     13658     18219     26753     28198     22552     19529     17135   7358054    137796     70466
 ------------------------------------------------------------------------------------------------------------------------
 
 . mat total = r(StatTotal)
 
-. tabstat fo3 foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
 
-   stats |       fo3  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
 ---------+--------------------------------------------------------------------------------------------------------------
-     sum |     11559       958      1119      1363      1459      1334      1229      1119     24010       155        28
+     sum |     10225       958      1119      1363      1404      1228      1112      1004     22297       145        27
 ------------------------------------------------------------------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
 
 . 
 . bys frame_id_numeric: egen avg_emp = mean(emp)
-(97,361 missing values generated)
+(86,354 missing values generated)
 
 . bys frame_id_numeric: egen industry_mode = mode(teaor08_2d), minmode
 Warning: at least one group contains all missing values or contains multiple modes.  Generating missing values for the mode of these groups.  Use the missing,
 maxmode, minmode, or nummode() options to control this behavior.
-(1,375 missing values generated)
+(1,251 missing values generated)
 
 . local sample ((avg_emp >= 20) & (industry_mode != 64 & industry_mode != 65 & industry_mode != 66))
 
 . drop if !`sample'
-(7,574,213 observations deleted)
+(6,913,440 observations deleted)
 
 . scalar dropped_size_or_finance = r(N_drop)
 
 . display dropped_size_or_finance
-7574213
+6913440
 
 . 
 . drop hole* x
@@ -203,27 +285,27 @@ maxmode, minmode, or nummode() options to control this behavior.
 . sort frame_id_numeric year
 
 . gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-(77,906 missing values generated)
+(68,151 missing values generated)
 
 . gen hole2 = (x > 2 & x != .)
 
 . gen hole1 = (x > 1 & x != .)
 
 . 
-. tabstat fo3 foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 
-   stats |       fo3  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
 ---------+--------------------------------------------------------------------------------------------------------------
-     sum |     86160      1686      2138      3065     12903      9777      7668      6403    516883      3887      1326
+     sum |     23664      1686      2138      3065      3148      2612      2278      2069    444614      3361      1214
 ------------------------------------------------------------------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
 
-. tabstat fo3 foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
 
-   stats |       fo3  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
 ---------+--------------------------------------------------------------------------------------------------------------
-     sum |     11559       958      1119      1363      1459      1334      1229      1119     24010       155        28
+     sum |     10225       958      1119      1363      1404      1228      1112      1004     22297       145        27
 ------------------------------------------------------------------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
@@ -247,135 +329,50 @@ maxmode, minmode, or nummode() options to control this behavior.
   4.         replace `x'_18 = `x' if year < 1992 // FIXME: till ppi before 1992 is not filled up - just to not delete those rows because of missing ln depende
 > nt variables
   5.         }
-(51,011 missing values generated)
-(43,392 real changes made)
-(240,752 missing values generated)
-(43,392 real changes made)
-(59,523 missing values generated)
-(43,392 real changes made)
-(44,975 missing values generated)
-(43,392 real changes made)
-(51,103 missing values generated)
+(48,800 missing values generated)
+(42,628 real changes made)
+(220,980 missing values generated)
+(42,628 real changes made)
+(56,219 missing values generated)
+(42,628 real changes made)
+(44,015 missing values generated)
+(42,628 real changes made)
+(49,488 missing values generated)
 (0 real changes made)
-(516,883 missing values generated)
-(43,392 real changes made)
-(163,145 missing values generated)
+(444,614 missing values generated)
+(42,628 real changes made)
+(148,680 missing values generated)
 (0 real changes made)
 
 . 
 . * creating dependent variables
 . gen lnL = ln(emp)
-(119,068 missing values generated)
+(104,600 missing values generated)
 
 . gen lnM = ln(ranyag_18)
-(67,936 missing values generated)
+(64,354 missing values generated)
 
 . replace lnM = ln(ranyag8091_18) if year <= 1991
-(43,064 real changes made)
+(42,323 real changes made)
 
 . gen lnQ = ln(sales_18)
-(58,755 missing values generated)
+(50,006 missing values generated)
 
 . gen lnQL = lnQ-lnL
-(122,110 missing values generated)
+(107,107 missing values generated)
 
 . gen lnMQ = lnM - lnQ
-(63,048 missing values generated)
+(54,010 missing values generated)
 
 . gen byte exporter = export_18 > 0 & export_18 != .
 
 . gen export_share = export_18 / sales
-(205,502 missing values generated)
+(184,722 missing values generated)
 
 . gen exporter_5 = (export_share > .05 & export_share != .)
 
 . replace exporter_5 = . if export_share == .
-(205,502 real changes made, 205,502 to missing)
-
-. 
-. * foreign fill 
-. rename fo3 foreign
-
-. tab year foreign, missing
-
-           |     Foreign owned dummy with
-      Year |   ultimate owners from Complex
- 1992-2018 |         0          1          . |     Total
------------+---------------------------------+----------
-      1980 |         0          0      2,635 |     2,635 
-      1981 |         0          0      2,660 |     2,660 
-      1982 |         0          0      2,660 |     2,660 
-      1983 |         0          0      2,667 |     2,667 
-      1984 |         0          0      2,669 |     2,669 
-      1985 |         0          0      2,902 |     2,902 
-      1986 |         0          0      2,994 |     2,994 
-      1987 |         0          0      3,124 |     3,124 
-      1988 |         0          0      3,300 |     3,300 
-      1989 |         0          0      4,077 |     4,077 
-      1990 |         0        355      5,444 |     5,799 
-      1991 |         0        704      7,201 |     7,905 
-      1992 |    10,872      1,295          0 |    12,167 
-      1993 |    11,095      1,755          0 |    12,850 
-      1994 |    11,187      1,992          0 |    13,179 
-      1995 |    11,082      2,184          0 |    13,266 
-      1996 |    11,190      2,297          0 |    13,487 
-      1997 |    11,334      2,457          0 |    13,791 
-      1998 |    11,569      2,625          0 |    14,194 
-      1999 |    11,579      2,777          0 |    14,356 
-      2000 |    11,711      2,878          0 |    14,589 
-      2001 |    11,869      2,946          0 |    14,815 
-      2002 |    11,983      2,971          0 |    14,954 
-      2003 |    12,022      2,925          0 |    14,947 
-      2004 |    12,111      2,967          0 |    15,078 
-      2005 |    13,076      3,305          0 |    16,381 
-      2006 |    13,166      3,302          0 |    16,468 
-      2007 |    12,931      3,454          0 |    16,385 
-      2008 |    12,169      3,463          0 |    15,632 
-      2009 |    11,964      3,477          0 |    15,441 
-      2010 |    11,786      3,412          0 |    15,198 
-      2011 |    11,990      3,492          0 |    15,482 
-      2012 |    11,525      3,417          0 |    14,942 
-      2013 |    16,333      3,412          0 |    19,745 
-      2014 |    14,368      3,019          0 |    17,387 
-      2015 |    18,983      4,146          0 |    23,129 
-      2016 |    23,962      4,697          0 |    28,659 
-      2017 |    29,948      5,461          0 |    35,409 
-      2018 |    36,585      4,975          0 |    41,560 
------------+---------------------------------+----------
-     Total |   388,390     86,160     42,333 |   516,883 
-
-. inspect foreign
-
-foreign:  Foreign owned dummy with ultim        Number of Observations
--------------------------------------------------------------------------------
-                                             Total      Integers   Nonintegers
-|  #                         Negative            -             -             -
-|  #                         Zero          388,390       388,390             -
-|  #                         Positive       86,160        86,160             -
-|  #                                   -----------   -----------   -----------
-|  #                         Total         474,550       474,550             -
-|  #   #                     Missing        42,333
-+----------------------                -----------
-0                     1                    516,883
-   (2 unique values)
-
-. inspect jetok_18 if missing(foreign)
-
-jetok_18:                                       Number of Observations
------------                            ---------------------------------------
-                                             Total      Integers   Nonintegers
-|  #                         Negative            -             -             -
-|  #                         Zero              945           945             -
-|  #                         Positive       41,388        41,388             -
-|  #                                   -----------   -----------   -----------
-|  #                         Total          42,333        42,333             -
-|  #   .   .   .   .         Missing             -
-+----------------------                -----------
-0              9.76e+07                     42,333
-(More than 99 unique values)
-
-. recode foreign (.=0)
-(foreign: 42333 changes made)
+(184,722 real changes made, 184,722 to missing)
 
 . 
 . *tabstat foreign foreign_0 foreign_1 count, stat(sum) save
@@ -391,10 +388,10 @@ owned dummy |
 owners from |
     Complex |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    430,723       83.33       83.33
-          1 |     86,160       16.67      100.00
+          0 |    420,950       94.68       94.68
+          1 |     23,664        5.32      100.00
 ------------+-----------------------------------
-      Total |    516,883      100.00
+      Total |    444,614      100.00
 
 . tempvar before
 
@@ -403,17 +400,17 @@ owners from |
 . sort frame_id_numeric year
 
 . replace foreign = 1 if l.foreign == 1 & l2.foreign == 1 & f.foreign == 1 & f2.foreign == 1
-(210 real changes made)
+(80 real changes made)
 
 . replace foreign = 0 if l.foreign == 0 & l2.foreign == 0 & f.foreign == 0 & f2.foreign == 0
-(149 real changes made)
+(138 real changes made)
 
 . bys frame_id_numeric (year): egen minyear = min(year)
 
 . bys frame_id_numeric (year): egen maxyear = max(year)
 
 . replace foreign = 1 if l.foreign == 1 & f.foreign == 1 & f2.foreign == 1 & year == (minyear + 1)
-(31 real changes made)
+(0 real changes made)
 
 . replace foreign = 1 if l.foreign == 1 & l2.foreign == 1 & f.foreign == 1 & year == (minyear + 1)
 (0 real changes made)
@@ -422,7 +419,7 @@ owners from |
 (0 real changes made)
 
 . replace foreign = 0 if l.foreign == 0 & l2.foreign == 0 & f.foreign == 0 & year == (maxyear - 1)
-(30 real changes made)
+(29 real changes made)
 
 . tempvar after
 
@@ -431,7 +428,7 @@ owners from |
 . scalar foreign_interpolate = `before'-`after'
 
 . display foreign_interpolate
-62
+-87
 
 . 
 . drop hole* x
@@ -439,7 +436,7 @@ owners from |
 . sort frame_id_numeric year
 
 . gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-(77,906 missing values generated)
+(68,151 missing values generated)
 
 . gen hole2 = (x > 2 & x != .)
 
@@ -450,7 +447,7 @@ owners from |
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
 ---------+--------------------------------------------------------------------------------------------------------------
-     sum |     86222      1686      2138      3065     12903      9777      7668      6403    516883      3887      1326
+     sum |     23577      1686      2138      3065      3148      2612      2278      2069    444614      3361      1214
 ------------------------------------------------------------------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
@@ -459,7 +456,7 @@ owners from |
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
 ---------+--------------------------------------------------------------------------------------------------------------
-     sum |     11574       958      1119      1363      1459      1334      1229      1119     24010       155        28
+     sum |     10236       958      1119      1363      1404      1228      1112      1004     22297       145        27
 ------------------------------------------------------------------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
@@ -472,13 +469,13 @@ tanass_18:                                      Number of Observations
 ------------                           ---------------------------------------
                                              Total      Integers   Nonintegers
 |  #                         Negative            4             1             3
-|  #                         Zero           71,901        71,901             -
-|  #                         Positive      428,847        65,036       363,811
+|  #                         Zero           63,442        63,442             -
+|  #                         Positive      367,577        61,316       306,261
 |  #                                   -----------   -----------   -----------
-|  #                         Total         500,752       136,938       363,814
-|  #   .   .   .   .         Missing        16,131
+|  #                         Total         431,023       124,759       306,264
+|  #   .   .   .   .         Missing        13,591
 +----------------------                -----------
--800.3072      6.09e+09                    516,883
+-800.3072      6.09e+09                    444,614
 (More than 99 unique values)
 
 . tempvar gap 
@@ -494,26 +491,26 @@ tanass_18:                                      Number of Observations
 
 . * if gap_length <= 2, interpolate tanass with geometric average
 . bysort frame_id_numeric (year): replace tanass_18 = sqrt(tanass_18[_n-1] * tanass_18[_n+1]) if gap_length==1 & `gap'==1
-(23516 real changes made, 22025 to missing)
+(20856 real changes made, 19586 to missing)
 
 . bysort frame_id_numeric (year): replace tanass_18 = tanass_18[_n-1]^0.67 * tanass_18[_n+2]^0.33 if gap_length==2 & `gap'==1 & `gap'[_n-1]==0
-(860 real changes made, 638 to missing)
+(748 real changes made, 555 to missing)
 
 . bysort frame_id_numeric (year): replace tanass_18 = tanass_18[_n-2]^0.33 * tanass_18[_n+1]^0.67 if gap_length==2 & `gap'==1 & `gap'[_n+1]==0
-(1618 real changes made, 1396 to missing)
+(1481 real changes made, 1288 to missing)
 
 . * at either end, extrapolate for 1 year
 . bysort frame_id_numeric (year): replace tanass_18 = tanass_18[_n+1] if spell==1 & `gap'==1 & `gap'[_n+1]==0
-(10041 real changes made)
+(8774 real changes made)
 
 . bysort frame_id_numeric (year): replace tanass_18 = tanass_18[_n-1] if spell==max_spell & `gap'==1 & `gap'[_n-1]==0
-(4038 real changes made)
+(3491 real changes made)
 
 . 
 . drop spell gap_length max_spell
 
 . replace tanass_18 = round(tanass_18)
-(377,373 real changes made)
+(317,926 real changes made)
 
 . inspect tanass_18
 
@@ -521,37 +518,37 @@ tanass_18:                                      Number of Observations
 ------------                           ---------------------------------------
                                              Total      Integers   Nonintegers
 |  #                         Negative            2             2             -
-|  #                         Zero           45,373        45,373             -
-|  #                         Positive      444,861       444,851            10
+|  #                         Zero           39,869        39,869             -
+|  #                         Positive      381,498       381,488            10
 |  #                                   -----------   -----------   -----------
-|  #                         Total         490,236       490,226            10
-|  #   .   .   .   .         Missing        26,647
+|  #                         Total         421,369       421,359            10
+|  #   .   .   .   .         Missing        23,245
 +----------------------                -----------
--60            6.09e+09                    516,883
+-60            6.09e+09                    444,614
 (More than 99 unique values)
 
 . 
 . gen lnK = ln(tanass_18)
-(72,022 missing values generated)
+(63,116 missing values generated)
 
 . gen lnKL = lnK - lnL
-(125,488 missing values generated)
+(110,095 missing values generated)
 
 . generate RperK = immat / (immat + tanass)
-(227,902 missing values generated)
+(205,766 missing values generated)
 
 . replace RperK = 0 if RperK < 0 | missing(immat)
-(162,147 real changes made)
+(147,777 real changes made)
 
 . label variable RperK "Share of immaterial assets [0,1]"
 
 . 
 . * firm-year deletions
 . count if missing(lnK, lnQ, lnL, lnM, foreign) & year > 1991
-  127,828
+  112,025
 
 . count if missing(lnK, lnQ, lnL, lnM, foreign)
-  130,470
+  114,497
 
 . *drop if missing(lnK, lnQ, lnL, lnM, foreign) // ASK: whether year condition needed
 . *count
@@ -571,53 +568,53 @@ tanass_18:                                      Number of Observations
  10.         tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
  11.         mat total = (total \ r(StatTotal))
  12. }
-(72,022 observations deleted)
-(44,049 missing values generated)
+(63,116 observations deleted)
+(38,402 missing values generated)
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
 ---------+--------------------------------------------------------------------------------------------------------------
-     sum |     77068      1626      1987      2678      8145      7471      6622      5939    444861      3321      1073
+     sum |     22685      1626      1987      2678      2771      2447      2199      2020    381498      2843       959
 ------------------------------------------------------------------------------------------------------------------------
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
 ---------+--------------------------------------------------------------------------------------------------------------
-     sum |     11574       958      1119      1363      1459      1334      1229      1119     24010       172        46
+     sum |     10236       958      1119      1363      1404      1228      1112      1004     22297       162        45
 ------------------------------------------------------------------------------------------------------------------------
-(19,160 observations deleted)
-(40,858 missing values generated)
+(15,998 observations deleted)
+(35,610 missing values generated)
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
 ---------+--------------------------------------------------------------------------------------------------------------
-     sum |     73786      1580      1895      2417      6338      6896      6338      5788    425701      3859      1183
-------------------------------------------------------------------------------------------------------------------------
-
-   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
----------+--------------------------------------------------------------------------------------------------------------
-     sum |     11574       958      1119      1363      1459      1334      1229      1119     24010       227        66
-------------------------------------------------------------------------------------------------------------------------
-(36,561 observations deleted)
-(28,705 missing values generated)
-
-   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
----------+--------------------------------------------------------------------------------------------------------------
-     sum |     69710      1501      1776      2136      4936      5926      5778      5493    389140      4734      1390
+     sum |     22258      1580      1895      2417      2628      2364      2161      1985    365500      3306      1047
 ------------------------------------------------------------------------------------------------------------------------
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
 ---------+--------------------------------------------------------------------------------------------------------------
-     sum |     11574       958      1119      1363      1459      1334      1229      1119     24010       350       111
+     sum |     10236       958      1119      1363      1404      1228      1112      1004     22297       216        65
 ------------------------------------------------------------------------------------------------------------------------
-(2,727 observations deleted)
-(28,692 missing values generated)
+(32,836 observations deleted)
+(24,457 missing values generated)
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
 ---------+--------------------------------------------------------------------------------------------------------------
-     sum |     69468      1499      1772      2125      4918      5913      5770      5483    386413      4927      1444
+     sum |     21549      1501      1776      2136      2447      2256      2086      1940    332664      4046      1215
 ------------------------------------------------------------------------------------------------------------------------
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
 ---------+--------------------------------------------------------------------------------------------------------------
-     sum |     11574       958      1119      1363      1459      1334      1229      1119     24010       364       115
+     sum |     10236       958      1119      1363      1404      1228      1112      1004     22297       333       108
+------------------------------------------------------------------------------------------------------------------------
+(2,547 observations deleted)
+(24,445 missing values generated)
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+---------+--------------------------------------------------------------------------------------------------------------
+     sum |     21435      1499      1772      2125      2437      2247      2083      1935    330117      4222      1265
+------------------------------------------------------------------------------------------------------------------------
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+---------+--------------------------------------------------------------------------------------------------------------
+     sum |     10236       958      1119      1363      1404      1228      1112      1004     22297       347       112
 ------------------------------------------------------------------------------------------------------------------------
 
 . 
@@ -630,30 +627,30 @@ tanass_18:                                      Number of Observations
 . mat list total
 
 total[14,11]
-           fo3  foreign_3  foreign_2  foreign_1   foreign0   foreign1   foreign2   foreign3      count      hole1      hole2
-sum     674158      13658      18219      26753     120823     100633      86713      75521    8091096     150760      75217
-sum      11559        958       1119       1363       1459       1334       1229       1119      24010        155         28
-sum      86160       1686       2138       3065      12903       9777       7668       6403     516883       3887       1326
-sum      11559        958       1119       1363       1459       1334       1229       1119      24010        155         28
-sum      86222       1686       2138       3065      12903       9777       7668       6403     516883       3887       1326
-sum      11574        958       1119       1363       1459       1334       1229       1119      24010        155         28
-sum      77068       1626       1987       2678       8145       7471       6622       5939     444861       3321       1073
-sum      11574        958       1119       1363       1459       1334       1229       1119      24010        172         46
-sum      73786       1580       1895       2417       6338       6896       6338       5788     425701       3859       1183
-sum      11574        958       1119       1363       1459       1334       1229       1119      24010        227         66
-sum      69710       1501       1776       2136       4936       5926       5778       5493     389140       4734       1390
-sum      11574        958       1119       1363       1459       1334       1229       1119      24010        350        111
-sum      69468       1499       1772       2125       4918       5913       5770       5483     386413       4927       1444
-sum      11574        958       1119       1363       1459       1334       1229       1119      24010        364        115
+       foreign  foreign_3  foreign_2  foreign_1   foreign0   foreign1   foreign2   foreign3      count      hole1      hole2
+sum     136193      13658      18219      26753      28198      22552      19529      17135    7358054     137796      70466
+sum      10225        958       1119       1363       1404       1228       1112       1004      22297        145         27
+sum      23664       1686       2138       3065       3148       2612       2278       2069     444614       3361       1214
+sum      10225        958       1119       1363       1404       1228       1112       1004      22297        145         27
+sum      23577       1686       2138       3065       3148       2612       2278       2069     444614       3361       1214
+sum      10236        958       1119       1363       1404       1228       1112       1004      22297        145         27
+sum      22685       1626       1987       2678       2771       2447       2199       2020     381498       2843        959
+sum      10236        958       1119       1363       1404       1228       1112       1004      22297        162         45
+sum      22258       1580       1895       2417       2628       2364       2161       1985     365500       3306       1047
+sum      10236        958       1119       1363       1404       1228       1112       1004      22297        216         65
+sum      21549       1501       1776       2136       2447       2256       2086       1940     332664       4046       1215
+sum      10236        958       1119       1363       1404       1228       1112       1004      22297        333        108
+sum      21435       1499       1772       2125       2437       2247       2083       1935     330117       4222       1265
+sum      10236        958       1119       1363       1404       1228       1112       1004      22297        347        112
 
 . count
-  386,413
+  330,117
 
 . 
 . * TFP (Cobb-Douglas)
 . * FIXME: Replace CD with something fancy
 . recode industry_mode (6 75 7 66 84 19 51 = .)
-(industry_mode: 595 changes made)
+(industry_mode: 417 changes made)
 
 . 
 . levelsof industry_mode, local(levels)
@@ -666,149 +663,149 @@ sum      11574        958       1119       1363       1459       1334       1229
   4.         predict tfp_cd_`l', res
   5.         }
 1
-(340,173 missing values generated)
+(285,074 missing values generated)
 2
-(385,385 missing values generated)
+(329,095 missing values generated)
 3
-(385,712 missing values generated)
+(329,416 missing values generated)
 5
-(386,147 missing values generated)
+(329,881 missing values generated)
 8
-(385,171 missing values generated)
+(329,112 missing values generated)
 9
-(386,280 missing values generated)
+(330,019 missing values generated)
 10
-(366,510 missing values generated)
+(312,582 missing values generated)
 11
-(383,978 missing values generated)
+(328,198 missing values generated)
 12
-(386,263 missing values generated)
+(330,031 missing values generated)
 13
-(381,766 missing values generated)
+(326,665 missing values generated)
 14
-(375,824 missing values generated)
+(320,997 missing values generated)
 15
-(382,063 missing values generated)
+(326,916 missing values generated)
 16
-(380,949 missing values generated)
+(325,475 missing values generated)
 17
-(383,900 missing values generated)
+(328,280 missing values generated)
 18
-(382,602 missing values generated)
+(326,796 missing values generated)
 20
-(383,391 missing values generated)
+(327,689 missing values generated)
 21
-(385,403 missing values generated)
+(329,332 missing values generated)
 22
-(377,347 missing values generated)
+(324,091 missing values generated)
 23
-(381,160 missing values generated)
+(326,107 missing values generated)
 24
-(384,024 missing values generated)
+(328,308 missing values generated)
 25
-(365,920 missing values generated)
+(313,568 missing values generated)
 26
-(379,706 missing values generated)
+(325,797 missing values generated)
 27
-(381,555 missing values generated)
+(326,877 missing values generated)
 28
-(375,206 missing values generated)
+(321,440 missing values generated)
 29
-(382,708 missing values generated)
+(328,235 missing values generated)
 30
-(385,718 missing values generated)
+(329,584 missing values generated)
 31
-(381,423 missing values generated)
+(325,563 missing values generated)
 32
-(384,276 missing values generated)
+(328,557 missing values generated)
 33
-(385,192 missing values generated)
+(329,072 missing values generated)
 35
-(383,598 missing values generated)
+(327,565 missing values generated)
 36
-(383,576 missing values generated)
+(327,294 missing values generated)
 37
-(385,967 missing values generated)
+(329,707 missing values generated)
 38
-(382,856 missing values generated)
+(327,002 missing values generated)
 39
-(385,558 missing values generated)
+(329,360 missing values generated)
 41
-(374,694 missing values generated)
+(318,972 missing values generated)
 42
-(374,174 missing values generated)
+(318,484 missing values generated)
 43
-(374,608 missing values generated)
+(318,989 missing values generated)
 45
-(374,532 missing values generated)
+(319,634 missing values generated)
 46
-(353,783 missing values generated)
+(305,588 missing values generated)
 47
-(359,312 missing values generated)
+(305,629 missing values generated)
 49
-(375,847 missing values generated)
+(320,537 missing values generated)
 50
-(386,143 missing values generated)
+(329,854 missing values generated)
 52
-(381,212 missing values generated)
+(326,335 missing values generated)
 53
-(385,887 missing values generated)
+(329,651 missing values generated)
 55
-(381,710 missing values generated)
+(326,100 missing values generated)
 56
-(377,513 missing values generated)
+(322,047 missing values generated)
 68
-(376,909 missing values generated)
+(321,644 missing values generated)
 69
-(384,955 missing values generated)
+(329,182 missing values generated)
 70
-(383,294 missing values generated)
+(327,903 missing values generated)
 71
-(380,331 missing values generated)
+(324,948 missing values generated)
 72
-(384,692 missing values generated)
+(328,752 missing values generated)
 73
-(384,806 missing values generated)
+(329,171 missing values generated)
 74
-(385,510 missing values generated)
+(329,396 missing values generated)
 77
-(385,094 missing values generated)
+(329,049 missing values generated)
 78
-(382,993 missing values generated)
+(327,054 missing values generated)
 79
-(385,293 missing values generated)
+(329,151 missing values generated)
 80
-(382,647 missing values generated)
+(326,547 missing values generated)
 81
-(380,526 missing values generated)
+(324,654 missing values generated)
 82
-(383,058 missing values generated)
+(327,375 missing values generated)
 85
-(384,853 missing values generated)
+(328,648 missing values generated)
 86
-(383,810 missing values generated)
+(327,779 missing values generated)
 87
-(385,659 missing values generated)
+(329,375 missing values generated)
 88
-(385,635 missing values generated)
+(329,339 missing values generated)
 90
-(385,638 missing values generated)
+(329,350 missing values generated)
 91
-(386,035 missing values generated)
+(329,752 missing values generated)
 92
-(385,957 missing values generated)
+(329,790 missing values generated)
 93
-(384,898 missing values generated)
+(328,678 missing values generated)
 94
-(386,118 missing values generated)
+(329,822 missing values generated)
 95
-(385,366 missing values generated)
+(329,164 missing values generated)
 96
-(383,619 missing values generated)
+(327,650 missing values generated)
 
 . 
 . gen  TFP_cd =  .
-(386,413 missing values generated)
+(330,117 missing values generated)
 
 . levelsof industry_mode, local(levels)
 1 2 3 5 8 9 10 11 12 13 14 15 16 17 18 20 21 22 23 24 25 26 27 28 29 30 31 32 33 35 36 37 38 39 41 42 43 45 46 47 49 50 52 53 55 56 68 69 70 71 72 73 74 77 78
@@ -829,13 +826,13 @@ sum      11574        958       1119       1363       1459       1334       1229
 . gen age = year - foundyear
 
 . count
-  386,413
+  330,117
 
 . 
 . * missing export means 0 export
 . mvencode export exporter exporter_5, mv(0) override
-      export: 92993 missing values recoded
-  exporter_5: 92993 missing values recoded
+      export: 85593 missing values recoded
+  exporter_5: 85593 missing values recoded
 
 . generate domestic_sales = sales - export
 
@@ -845,7 +842,7 @@ sum      11574        958       1119       1363       1459       1334       1229
 . 
 . * calculating time_foreign - part II
 . count
-  386,413
+  330,117
 
 . 
 . preserve
@@ -856,20 +853,20 @@ sum      11574        958       1119       1363       1459       1334       1229
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                       362,403
-        from master                   362,403  (_merge==1)
-        from using                          0  (_merge==2)
+    not matched                       309,533
+        from master                   307,820  (_merge==1)
+        from using                      1,713  (_merge==2)
 
-    matched                            24,010  (_merge==3)
+    matched                            22,297  (_merge==3)
     -----------------------------------------
 
 . drop first_year_foreign time_foreign
 
 . egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
-(290,013 missing values generated)
+(290,824 missing values generated)
 
 . generate time_foreign = year - first_year_foreign
-(290,013 missing values generated)
+(290,824 missing values generated)
 
 . contract time_foreign if _merge == 3
 
@@ -888,10 +885,10 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/event
 . drop first_year_foreign time_foreign
 
 . egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
-(290,013 missing values generated)
+(289,111 missing values generated)
 
 . generate time_foreign = year - first_year_foreign
-(290,013 missing values generated)
+(289,111 missing values generated)
 
 . contract time_foreign
 
@@ -904,7 +901,7 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/event
 
 . 
 . count
-  386,413
+  330,117
 
 . 
 . matrix rownames total = "beginning" "sampling" "interpolating fo3 holes" "missing lnK" "missing lnQ" "missing lnL" "missing lnM"
@@ -927,5 +924,5 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/balan
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/balance.log
   log type:  text
- closed on:  22 Apr 2021, 13:36:01
+ closed on:  22 Apr 2021, 20:32:23
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
