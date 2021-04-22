@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/matrix.log
   log type:  text
- opened on:  22 Apr 2021, 13:47:22
+ opened on:  23 Apr 2021, 00:14:23
 
 . 
 . foreach file in balance analysis {
@@ -10,7 +10,7 @@
   3.         mata: mata matuse "temp/matrix-`file'", replace
   4.         mata: st_matrix("total_`file'", mat_total_`file')
   5. 
-.         matrix colnames total_`file' = "foreign" "foreign_3" "foreign_2" "foreign_1" "foreign0" "foreign1" "foreign2" "foreign3" "count" "hole1" "hole2"
+.         matrix colnames total_`file' = "foreign" "foreign_3" "foreign_2" "foreign_1" "foreign0" "foreign1" "foreign2" "foreign3" "count"
   6.         *No option to save row names as variables as svmat - https://www.stata.com/statalist/archive/2007-07/msg00477.html
 . 
 .         matrix list total_`file'
@@ -20,42 +20,42 @@
 .         tempfile `file'
   9.         save ``file''
  10. }
-(loading mat_total_balance[14,11])
+(loading mat_total_balance[14,9])
 
-total_balance[14,11]
-       foreign  foreign_3  foreign_2  foreign_1   foreign0   foreign1   foreign2   foreign3      count      hole1      hole2
- r1     674158      13658      18219      26753     120823     100633      86713      75521    8091096     150760      75217
- r2      11559        958       1119       1363       1459       1334       1229       1119      24010        155         28
- r3      86160       1686       2138       3065      12903       9777       7668       6403     516883       3887       1326
- r4      11559        958       1119       1363       1459       1334       1229       1119      24010        155         28
- r5      86222       1686       2138       3065      12903       9777       7668       6403     516883       3887       1326
- r6      11574        958       1119       1363       1459       1334       1229       1119      24010        155         28
- r7      77068       1626       1987       2678       8145       7471       6622       5939     444861       3321       1073
- r8      11574        958       1119       1363       1459       1334       1229       1119      24010        172         46
- r9      73786       1580       1895       2417       6338       6896       6338       5788     425701       3859       1183
-r10      11574        958       1119       1363       1459       1334       1229       1119      24010        227         66
-r11      69710       1501       1776       2136       4936       5926       5778       5493     389140       4734       1390
-r12      11574        958       1119       1363       1459       1334       1229       1119      24010        350        111
-r13      69468       1499       1772       2125       4918       5913       5770       5483     386413       4927       1444
-r14      11574        958       1119       1363       1459       1334       1229       1119      24010        364        115
+total_balance[14,9]
+       foreign  foreign_3  foreign_2  foreign_1   foreign0   foreign1   foreign2   foreign3      count
+ r1     647084      12859      17142      25675     119746      99537      85840      74805    8091096
+ r2      11411        973       1126       1365       1459       1328       1219       1106      24010
+ r3     264632      12859      16563      23515      53370      43750      37287      32329    7550376
+ r4      10705        973       1125       1364       1457       1275       1152       1039      23062
+ r5      37696       1600       1994       2816       6184       4727       3732       3159     463618
+ r6      10705        973       1125       1364       1457       1275       1152       1039      23062
+ r7      35429       1544       1862       2471       4081       3706       3297       2965     397190
+ r8      10705        973       1125       1364       1457       1275       1152       1039      23062
+ r9      34639       1504       1781       2234       3198       3457       3189       2894     380014
+r10      10705        973       1125       1364       1457       1275       1152       1039      23062
+r11      33237       1439       1677       1990       2672       3056       2942       2755     346072
+r12      10705        973       1125       1364       1457       1275       1152       1039      23062
+r13      33086       1437       1673       1981       2662       3046       2938       2749     343474
+r14      10705        973       1125       1364       1457       1275       1152       1039      23062
 number of observations will be reset to 14
 Press any key to continue, or Break to abort
 number of observations (_N) was 0, now 14
-file /srv/sandbox/zavecz/St3078428.000001 saved
-(loading mat_total_analysis[6,11])
+file /srv/sandbox/zavecz/St3190620.000001 saved
+(loading mat_total_analysis[6,9])
 
-total_analysis[6,11]
-      foreign  foreign_3  foreign_2  foreign_1   foreign0   foreign1   foreign2   foreign3      count      hole1      hole2
-r1      61755       1155       1387       1712       3831       5394       5285       5003     326659       5467       2250
-r2      11402        958       1119       1363       1459       1334       1229       1119      24010        566        270
-r3      59178       1084       1298       1589       3646       5164       5051       4778     321931       5353       2202
-r4      11402        958       1119       1363       1459       1334       1229       1119      24010        566        270
-r5      11402       1084       1263       1493       1539       1456       1257       1074     264169       4404       1842
-r6      11402        958       1119       1363       1459       1322       1113        944      20781        480        228
+total_analysis[6,9]
+      foreign  foreign_3  foreign_2  foreign_1   foreign0   foreign1   foreign2   foreign3      count
+r1      29043       1113       1313       1593       1998       2728       2643       2455     287315
+r2      10713        972       1124       1363       1456       1275       1151       1039      23052
+r3      27246       1042       1224       1473       1852       2561       2476       2295     283929
+r4      10713        972       1124       1363       1456       1275       1151       1039      23052
+r5      10754       1042       1198       1421       1459       1262       1040        873     262433
+r6      10682        972       1123       1362       1455       1262       1033        861      19905
 number of observations will be reset to 6
 Press any key to continue, or Break to abort
 number of observations (_N) was 0, now 6
-file /srv/sandbox/zavecz/St3078428.000002 saved
+file /srv/sandbox/zavecz/St3190620.000002 saved
 
 . 
 . use `balance', clear
@@ -80,8 +80,8 @@ file /srv/sandbox/zavecz/St3078428.000002 saved
 (1 real change made)
 
 . 
-. label define when_label 1 "beginning" 3 "sampling" 5 "fo3 holes" 7 "missing lnK" 9 "missing lnQ" 11 "missing lnL" 13 "missing lnM" 15 "manager merge" 17 "ma
-> ny foreign changes" 19 "D, D-F kept"
+. label define when_label 1 "beginning after interpolating fo3 holes and fo3 expanded" 3 "greenfield dropped (balance)" 5 "sampling" 7 "missing lnK" 9 "missin
+> g lnQ" 11 "missing lnL" 13 "missing lnM" 15 "manager merge" 17 "many foreign changes" 19 "D, D-F kept"
 
 . label values when when_label
 
@@ -130,5 +130,5 @@ file output/foreign_drop.csv saved
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/matrix.log
   log type:  text
- closed on:  22 Apr 2021, 13:47:23
+ closed on:  23 Apr 2021, 00:14:24
 --------------------------------------------------------------------------------------------------------------------------------------------------------------

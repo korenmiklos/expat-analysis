@@ -56,7 +56,7 @@ restore
 merge m:1 frame_id_numeric using `expat', keepusing(first_year_expat) keep(1 3) nogen
 
 bys frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.))
-		
+	
 generate manager_after_owner = first_year_expat - first_year_foreign
 generate event_time = year - first_year_expat
 
@@ -65,16 +65,6 @@ replace foreign = 1 if (manager_after_owner == -1) & inlist(event_time, 0)
 replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
 
 drop manager_after_owner event_time first_year_expat
-
-* drop greenfield
-bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
-bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
-keep if start_as_domestic
-drop owner_spell start_as_domestic
-
-* limit sample before large merge - sampling based on firm-level variables, firm-year done later
-* average employment and financial firms deleted
-* break the tie when mode is not unique
 
 generate time_foreign = year - first_year_foreign
 forval i = 0/3 {
@@ -85,15 +75,31 @@ forval i = 1/3 {
 }
 gen count = 1
 
-sort frame_id_numeric year
-gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-gen hole2 = (x > 2 & x != .)
-gen hole1 = (x > 1 & x != .)
+*sort frame_id_numeric year
+*gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+*gen hole2 = (x > 2 & x != .)
+*gen hole1 = (x > 1 & x != .)
 
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+*tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count, stat(sum) save
 mat total = r(StatTotal)
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count if ever_foreign == 1, stat(sum) save
 mat total = (total \ r(StatTotal))
+
+* drop greenfield
+bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
+bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
+keep if start_as_domestic
+drop owner_spell start_as_domestic
+
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count, stat(sum) save
+mat total = (total \ r(StatTotal))
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count if ever_foreign == 1, stat(sum) save
+mat total = (total \ r(StatTotal))
+
+* limit sample before large merge - sampling based on firm-level variables, firm-year done later
+* average employment and financial firms deleted
+* break the tie when mode is not unique
 
 bys frame_id_numeric: egen avg_emp = mean(emp)
 bys frame_id_numeric: egen industry_mode = mode(teaor08_2d), minmode
@@ -102,15 +108,9 @@ drop if !`sample'
 scalar dropped_size_or_finance = r(N_drop)
 display dropped_size_or_finance
 
-drop hole* x
-sort frame_id_numeric year
-gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-gen hole2 = (x > 2 & x != .)
-gen hole1 = (x > 1 & x != .)
-
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count, stat(sum) save
 mat total = (total \ r(StatTotal))
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count if ever_foreign == 1, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 * proxy firm founding date with first balance sheet filed
@@ -148,20 +148,6 @@ gen export_share = export_18 / sales
 gen exporter_5 = (export_share > .05 & export_share != .)
 replace exporter_5 = . if export_share == .
 
-*tabstat foreign foreign_0 foreign_1 count, stat(sum) save
-*mat total = (total \ r(StatTotal))
-
-drop hole* x
-sort frame_id_numeric year
-gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-gen hole2 = (x > 2 & x != .)
-gen hole1 = (x > 1 & x != .)
-
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
-mat total = (total \ r(StatTotal))
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
-mat total = (total \ r(StatTotal))
-
 * extrapolate capital stock
 inspect tanass_18
 tempvar gap 
@@ -198,15 +184,9 @@ foreach var in lnK lnQ lnL lnM {
 
 	drop if missing(`var')
 
-	drop hole* x
-	sort frame_id_numeric year
-	gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-	gen hole2 = (x > 2 & x != .)
-	gen hole1 = (x > 1 & x != .)
-
-	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count, stat(sum) save
 	mat total = (total \ r(StatTotal))
-	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count if ever_foreign == 1, stat(sum) save
 	mat total = (total \ r(StatTotal))
 }
 
@@ -214,7 +194,7 @@ foreach var in lnK lnQ lnL lnM {
 *tabstat foreign foreign_0 foreign_1 count, stat(sum) save
 *mat total = (total \ r(StatTotal))
 
-drop count hole* x
+*drop hole* x
 mat list total
 count
 
@@ -241,7 +221,6 @@ drop tfp_cd_*
 * industry dummy and age
 gen byte industrial_firm = inlist(teaor08_1d,"B","C","D","E")
 gen age = year - foundyear
-count
 
 * missing export means 0 export
 mvencode export exporter exporter_5, mv(0) override
@@ -250,7 +229,7 @@ replace domestic_sales = 0 if domestic_sales < 0 | missing(domestic_sales)
 
 count
 
-matrix rownames total = "beginning" "sampling" "interpolating fo3 holes" "missing lnK" "missing lnQ" "missing lnL" "missing lnM"
+matrix rownames total = "beginning" "greenfield dropped" "sampling" "missing lnK" "missing lnQ" "missing lnL" "missing lnM"
 mata : mat_total_balance = st_matrix("total")
 mata: mata matsave "temp/matrix-balance" mat_total_balance, replace
 

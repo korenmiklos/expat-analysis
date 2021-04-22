@@ -12,7 +12,7 @@ foreach file in balance analysis {
 	mata: mata matuse "temp/matrix-`file'", replace
 	mata: st_matrix("total_`file'", mat_total_`file')
 
-	matrix colnames total_`file' = "foreign" "foreign_3" "foreign_2" "foreign_1" "foreign0" "foreign1" "foreign2" "foreign3" "count" "hole1" "hole2"
+	matrix colnames total_`file' = "foreign" "foreign_3" "foreign_2" "foreign_1" "foreign0" "foreign1" "foreign2" "foreign3" "count"
 	*No option to save row names as variables as svmat - https://www.stata.com/statalist/archive/2007-07/msg00477.html
 
 	matrix list total_`file'
@@ -31,7 +31,7 @@ forval i = 2(2)20 {
 	replace when = when - 1 if when == `i'
 }
 
-label define when_label 1 "beginning" 3 "sampling" 5 "fo3 holes" 7 "missing lnK" 9 "missing lnQ" 11 "missing lnL" 13 "missing lnM" 15 "manager merge" 17 "many foreign changes" 19 "D, D-F kept"
+label define when_label 1 "beginning after interpolating fo3 holes and fo3 expanded" 3 "greenfield dropped (balance)" 5 "sampling" 7 "missing lnK" 9 "missing lnQ" 11 "missing lnL" 13 "missing lnM" 15 "manager merge" 17 "many foreign changes" 19 "D, D-F kept"
 label values when when_label
 
 gen type = _n
