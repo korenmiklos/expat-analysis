@@ -39,14 +39,6 @@ rename foreign_ceo foreign
 rename ever_foreign_ceo ever_foreign
 drop foreign_nceo ever_foreign_nceo
 
-egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
-generate time_foreign = year - first_year_foreign
-forval i = 0/3 {
-	gen foreign`i' = (time_foreign == `i')
-}
-forval i = 1/3 {
-	gen foreign_`i' = (time_foreign == -`i')
-}
 gen count = 1
 
 sort frame_id_numeric year
@@ -70,16 +62,6 @@ drop if owner_spell_total > 3 // FIXME: doublecheck the length of spells
 scalar dropped_too_many_foreign_change = r(N_drop)
 display dropped_too_many_foreign_change
 
-drop first_year_foreign time_foreign foreign_* foreign?
-egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
-generate time_foreign = year - first_year_foreign
-forval i = 0/3 {
-	gen foreign`i' = (time_foreign == `i')
-}
-forval i = 1/3 {
-	gen foreign_`i' = (time_foreign == -`i')
-}
-
 drop hole* x
 sort frame_id_numeric year
 gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
@@ -98,16 +80,6 @@ replace divest = 1 if divest > 0
 * only keep D, D-F owner spells
 bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
 keep if start_as_domestic & owner_spell <= 2
-
-drop first_year_foreign time_foreign foreign_* foreign?
-egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
-generate time_foreign = year - first_year_foreign
-forval i = 0/3 {
-	gen foreign`i' = (time_foreign == `i')
-}
-forval i = 1/3 {
-	gen foreign_`i' = (time_foreign == -`i')
-}
 
 drop hole* x
 sort frame_id_numeric year

@@ -80,16 +80,6 @@ drop if !`sample'
 scalar dropped_size_or_finance = r(N_drop)
 display dropped_size_or_finance
 
-drop first_year_foreign time_foreign foreign_* foreign?
-egen first_year_foreign = min(cond(fo3==1, year, .)), by(frame_id_numeric)
-generate time_foreign = year - first_year_foreign
-forval i = 0/3 {
-	gen foreign`i' = (time_foreign == `i')
-}
-forval i = 1/3 {
-	gen foreign_`i' = (time_foreign == -`i')
-}
-
 drop hole* x
 sort frame_id_numeric year
 gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
@@ -154,16 +144,6 @@ bys foreign: egen `after' = count(1)
 scalar foreign_interpolate = `before'-`after'
 display foreign_interpolate
 
-drop first_year_foreign time_foreign foreign_* foreign?
-egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
-generate time_foreign = year - first_year_foreign
-forval i = 0/3 {
-	gen foreign`i' = (time_foreign == `i')
-}
-forval i = 1/3 {
-	gen foreign_`i' = (time_foreign == -`i')
-}
-
 drop hole* x
 sort frame_id_numeric year
 gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
@@ -211,16 +191,6 @@ foreach var in lnK lnQ lnL lnM {
 
 	drop if missing(`var')
 
-	drop first_year_foreign time_foreign foreign_* foreign?
-	egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
-	generate time_foreign = year - first_year_foreign
-	forval i = 0/3 {
-		gen foreign`i' = (time_foreign == `i')
-	}
-	forval i = 1/3 {
-		gen foreign_`i' = (time_foreign == -`i')
-	}
-
 	drop hole* x
 	sort frame_id_numeric year
 	gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
@@ -237,7 +207,7 @@ foreach var in lnK lnQ lnL lnM {
 *tabstat foreign foreign_0 foreign_1 count, stat(sum) save
 *mat total = (total \ r(StatTotal))
 
-drop first_year_foreign time_foreign foreign_* foreign? count hole* x
+drop count hole* x
 mat list total
 count
 
@@ -277,6 +247,7 @@ count
 preserve
 sort frame_id_numeric year
 merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign)
+drop first_year_foreign time_foreign
 egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
 generate time_foreign = year - first_year_foreign
 contract time_foreign if _merge == 3
@@ -286,6 +257,7 @@ restore
 
 preserve
 sort frame_id_numeric year
+drop first_year_foreign time_foreign
 egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric)
 generate time_foreign = year - first_year_foreign
 contract time_foreign
