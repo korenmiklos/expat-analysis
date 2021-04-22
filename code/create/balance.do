@@ -124,10 +124,20 @@ foreach x in sales export tanass jetok ranyag ranyag8091 immat {
 	cap drop `x'_18
 	gen double `x'_18 = `x' / ppi18
 	replace `x'_18 = `x' if year < 1992 // FIXME: till ppi before 1992 is not filled up - just to not delete those rows because of missing ln dependent variables
-	}
+}
+
+* change emp
+sort frame_id_numeric year
+
+clonevar emp_clean = emp
+replace emp_clean = . if (emp[_n-1] > 5 | emp[_n +1] > 5) & emp == 0
+corr emp emp_clean
+
+gen emp_add = emp_clean + 1
 
 * creating dependent variables
 gen lnL = ln(emp)
+gen lnL_add = ln(emp_add)
 gen lnM = ln(ranyag_18)
 replace lnM = ln(ranyag8091_18) if year <= 1991
 gen lnQ = ln(sales_18)

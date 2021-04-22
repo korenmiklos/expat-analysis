@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/balance.log
   log type:  text
- opened on:  22 Apr 2021, 22:34:16
+ opened on:  22 Apr 2021, 23:01:38
 
 . 
 . use "`here'/input/merleg-expat/balance-small.dta"
@@ -372,7 +372,7 @@ maxmode, minmode, or nummode() options to control this behavior.
   3.         gen double `x'_18 = `x' / ppi18
   4.         replace `x'_18 = `x' if year < 1992 // FIXME: till ppi before 1992 is not filled up - just to not delete those rows because of missing ln depende
 > nt variables
-  5.         }
+  5. }
 (49,293 missing values generated)
 (42,648 real changes made)
 (227,217 missing values generated)
@@ -389,9 +389,36 @@ maxmode, minmode, or nummode() options to control this behavior.
 (0 real changes made)
 
 . 
+. * change emp
+. sort frame_id_numeric year
+
+. 
+. clonevar emp_clean = emp
+(98,331 missing values generated)
+
+. replace emp_clean = . if (emp[_n-1] > 5 | emp[_n +1] > 5) & emp == 0
+(6,805 real changes made, 6,805 to missing)
+
+. corr emp emp_clean
+(obs=358,482)
+
+             |      emp emp_cl~n
+-------------+------------------
+         emp |   1.0000
+   emp_clean |   1.0000   1.0000
+
+
+. 
+. gen emp_add = emp_clean + 1
+(105,136 missing values generated)
+
+. 
 . * creating dependent variables
 . gen lnL = ln(emp)
 (109,895 missing values generated)
+
+. gen lnL_add = ln(emp_add)
+(105,136 missing values generated)
 
 . gen lnM = ln(ranyag_18)
 (65,506 missing values generated)
@@ -855,5 +882,5 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/balan
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/balance.log
   log type:  text
- closed on:  22 Apr 2021, 22:38:10
+ closed on:  22 Apr 2021, 23:04:59
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
