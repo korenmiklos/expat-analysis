@@ -39,9 +39,10 @@ rename foreign_ceo foreign
 rename ever_foreign_ceo ever_foreign
 drop foreign_nceo ever_foreign_nceo
 
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count, stat(sum) save
+do "code/create/calc_hole.do"
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 mat total = r(StatTotal)
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count if filter == 3, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if filter == 3, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 *nceo overriden to have zeros
@@ -55,9 +56,10 @@ drop if owner_spell_total > 3 // FIXME: doublecheck the length of spells
 scalar dropped_too_many_foreign_change = r(N_drop)
 display dropped_too_many_foreign_change
 
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count, stat(sum) save
+do "code/create/calc_hole.do"
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 mat total = (total \ r(StatTotal))
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count if filter == 3, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if filter == 3, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 * divestiture
@@ -70,9 +72,10 @@ bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign
 keep if start_as_domestic
 keep if owner_spell <= 2
 
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count, stat(sum) save
+do "code/create/calc_hole.do"
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 mat total = (total \ r(StatTotal))
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count if filter == 3, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if filter == 3, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 mat list total
@@ -110,7 +113,7 @@ count
 mata : mat_total_analysis = st_matrix("total")
 mata: mata matsave "temp/matrix-analysis" mat_total_analysis, replace
 
-drop first_year_foreign time_foreign foreign_* foreign? count
+drop first_year_foreign time_foreign foreign_* foreign? count hole* x
 
 bys frame_id_numeric: egen first_year_foreign_new = min(cond(foreign == 1, year,.))
 generate time_foreign_new = year - first_year_foreign_new

@@ -12,7 +12,7 @@ foreach file in balance analysis {
 	mata: mata matuse "temp/matrix-`file'", replace
 	mata: st_matrix("total_`file'", mat_total_`file')
 
-	matrix colnames total_`file' = "foreign" "foreign_3" "foreign_2" "foreign_1" "foreign0" "foreign1" "foreign2" "foreign3" "count"
+	matrix colnames total_`file' = "foreign" "foreign_3" "foreign_2" "foreign_1" "foreign0" "foreign1" "foreign2" "foreign3" "count" "hole1" "hole2"
 	*No option to save row names as variables as svmat - https://www.stata.com/statalist/archive/2007-07/msg00477.html
 
 	matrix list total_`file'

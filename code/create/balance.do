@@ -75,15 +75,10 @@ forval i = 1/3 {
 }
 gen count = 1
 
-*sort frame_id_numeric year
-*gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-*gen hole2 = (x > 2 & x != .)
-*gen hole1 = (x > 1 & x != .)
-
-*tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count, stat(sum) save
+do "code/create/calc_hole.do"
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 mat total = r(StatTotal)
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count if ever_foreign == 1, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 * drop greenfield
@@ -92,9 +87,10 @@ bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign
 keep if start_as_domestic
 drop owner_spell start_as_domestic
 
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count, stat(sum) save
+do "code/create/calc_hole.do"
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 mat total = (total \ r(StatTotal))
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count if ever_foreign == 1, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 * limit sample before large merge - sampling based on firm-level variables, firm-year done later
@@ -108,9 +104,10 @@ drop if !`sample'
 scalar dropped_size_or_finance = r(N_drop)
 display dropped_size_or_finance
 
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count, stat(sum) save
+do "code/create/calc_hole.do"
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 mat total = (total \ r(StatTotal))
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count if ever_foreign == 1, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 * proxy firm founding date with first balance sheet filed
@@ -183,10 +180,11 @@ count if missing(lnK, lnQ, lnL, lnM, foreign)
 foreach var in lnK lnQ lnL lnM {
 
 	drop if missing(`var')
-
-	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count, stat(sum) save
+	
+	do "code/create/calc_hole.do"
+	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
 	mat total = (total \ r(StatTotal))
-	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count if ever_foreign == 1, stat(sum) save
+	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
 	mat total = (total \ r(StatTotal))
 }
 
@@ -232,6 +230,7 @@ count
 matrix rownames total = "beginning" "greenfield dropped" "sampling" "missing lnK" "missing lnQ" "missing lnL" "missing lnM"
 mata : mat_total_balance = st_matrix("total")
 mata: mata matsave "temp/matrix-balance" mat_total_balance, replace
+drop hole* x
 
 save_all_to_json
 cap drop __*

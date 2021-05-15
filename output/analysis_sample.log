@@ -1,9 +1,8 @@
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//o
-> utput/analysis_sample.log
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- opened on:  15 May 2021, 10:18:58
+ opened on:  15 May 2021, 11:13:23
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -13,32 +12,29 @@
 . 
 . sort frame_id_numeric year
 
-. gen x_before = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1
-> ]
-(25,486 missing values generated)
+. gen x_before = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+(25,488 missing values generated)
 
 . gen hole2_before = (x_before > 2 & x_before != .)
 
 . gen hole1_before = (x_before > 1 & x_before != .)
 
 . 
-. merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(match) noge
-> n
+. merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(match) nogen
 
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
-    matched                           299,131  
+    matched                           299,188  
     -----------------------------------------
 
-. *merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(1 3) //nog
-> en
+. *merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(1 3) //nogen
 . *merge 1:1 frame_id year using "`here'/temp/firm_events.dta"
 . 
 . sort frame_id_numeric year
 
 . gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-(24,134 missing values generated)
+(24,136 missing values generated)
 
 . gen hole2_after = (x_after > 2 & x_after != .)
 
@@ -53,32 +49,32 @@
 hole2_befor |
           e |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    297,954       99.61       99.61
+          0 |    298,011       99.61       99.61
           1 |      1,177        0.39      100.00
 ------------+-----------------------------------
-      Total |    299,131      100.00
+      Total |    299,188      100.00
 
 hole1_befor |
           e |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    295,217       98.69       98.69
+          0 |    295,274       98.69       98.69
           1 |      3,914        1.31      100.00
 ------------+-----------------------------------
-      Total |    299,131      100.00
+      Total |    299,188      100.00
 
 hole2_after |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    297,843       99.57       99.57
+          0 |    297,900       99.57       99.57
           1 |      1,288        0.43      100.00
 ------------+-----------------------------------
-      Total |    299,131      100.00
+      Total |    299,188      100.00
 
 hole1_after |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    295,143       98.67       98.67
-          1 |      3,988        1.33      100.00
+          0 |    295,199       98.67       98.67
+          1 |      3,989        1.33      100.00
 ------------+-----------------------------------
-      Total |    299,131      100.00
+      Total |    299,188      100.00
 
 . 
 . *tab _merge
@@ -87,13 +83,12 @@ hole1_after |      Freq.     Percent        Cum.
 
 . 
 . * not so elegant
-. merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusi
-> ng(ever_foreign) keep(1 3) gen(filter)
+. merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign) keep(1 3) gen(filter)
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                       276,106
-        from master                   276,106  (filter==1)
+    not matched                       276,163
+        from master                   276,163  (filter==1)
         from using                          0  (filter==2)
 
     matched                            23,025  (filter==3)
@@ -109,63 +104,66 @@ hole1_after |      Freq.     Percent        Cum.
 . drop foreign_nceo ever_foreign_nceo
 
 . 
-. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 fore
-> ign3 count, stat(sum) save
+. do "code/create/calc_hole.do"
 
-   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1
----------+------------------------------------------------------------
-     sum |     30036      1161      1354      1635      2058      2790
-----------------------------------------------------------------------
+. cap drop hole* x
 
-   stats |  foreign2  foreign3     count
----------+------------------------------
-     sum |      2692      2509    299131
-----------------------------------------
+. sort frame_id_numeric year
+
+. gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+(24,136 missing values generated)
+
+. gen hole2 = (x > 2 & x != .)
+
+. gen hole1 = (x > 1 & x != .)
+
+. 
+end of do-file
+
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+---------+--------------------------------------------------------------------------------------------------------------
+     sum |     30083      1161      1354      1635      2060      2792      2694      2511    299188      3989      1288
+------------------------------------------------------------------------------------------------------------------------
 
 . mat total = r(StatTotal)
 
-. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 fore
-> ign3 count if filter == 3, stat(sum) save
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if filter == 3, stat(sum) save
 
-   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1
----------+------------------------------------------------------------
-     sum |     10701       971      1122      1361      1454      1274
-----------------------------------------------------------------------
-
-   stats |  foreign2  foreign3     count
----------+------------------------------
-     sum |      1149      1038     23025
-----------------------------------------
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+---------+--------------------------------------------------------------------------------------------------------------
+     sum |     10702       971      1122      1361      1454      1274      1149      1038     23025       408       154
+------------------------------------------------------------------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
 
 . 
 . *nceo overriden to have zeros
 . mvencode *_nceo, mv(0) override
-n_found~nceo: 271214 missing values recoded
-n_insid~nceo: 271214 missing values recoded
-n_outsi~nceo: 271214 missing values recoded
-n_expat_nceo: 271214 missing values recoded
-n_local_nceo: 271214 missing values recoded
-ever_ex~nceo: 271214 missing values recoded
-      n_nceo: 271214 missing values recoded
-   hire_nceo: 271214 missing values recoded
-   fire_nceo: 271214 missing values recoded
-hire_ex~nceo: 271214 missing values recoded
-fire_ex~nceo: 271214 missing values recoded
-ceo_spe~nceo: 271214 missing values recoded
-has_exp~nceo: 271214 missing values recoded
-has_loc~nceo: 271214 missing values recoded
-has_fou~nceo: 271214 missing values recoded
-has_ins~nceo: 271214 missing values recoded
-has_out~nceo: 271214 missing values recoded
+n_found~nceo: 271238 missing values recoded
+n_insid~nceo: 271238 missing values recoded
+n_outsi~nceo: 271238 missing values recoded
+n_expat_nceo: 271238 missing values recoded
+n_local_nceo: 271238 missing values recoded
+ever_ex~nceo: 271238 missing values recoded
+      n_nceo: 271238 missing values recoded
+   hire_nceo: 271238 missing values recoded
+   fire_nceo: 271238 missing values recoded
+hire_ex~nceo: 271238 missing values recoded
+fire_ex~nceo: 271238 missing values recoded
+ceo_spe~nceo: 271238 missing values recoded
+has_exp~nceo: 271238 missing values recoded
+has_loc~nceo: 271238 missing values recoded
+has_fou~nceo: 271238 missing values recoded
+has_ins~nceo: 271238 missing values recoded
+has_out~nceo: 271238 missing values recoded
 
 . 
 . * many foreign changes deleted
 . bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
 
-. bys frame_id_numeric (year): egen owner_spell_total = total(foreign != foreig
-> n[_n-1])
+. bys frame_id_numeric (year): egen owner_spell_total = total(foreign != foreign[_n-1])
 
 . 
 . drop if owner_spell_total > 3 // FIXME: doublecheck the length of spells
@@ -177,106 +175,104 @@ has_out~nceo: 271214 missing values recoded
 3654
 
 . 
-. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 fore
-> ign3 count, stat(sum) save
+. do "code/create/calc_hole.do"
 
-   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1
----------+------------------------------------------------------------
-     sum |     28104      1081      1255      1507      1904      2615
-----------------------------------------------------------------------
+. cap drop hole* x
 
-   stats |  foreign2  foreign3     count
----------+------------------------------
-     sum |      2517      2338    295477
-----------------------------------------
+. sort frame_id_numeric year
+
+. gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+(23,955 missing values generated)
+
+. gen hole2 = (x > 2 & x != .)
+
+. gen hole1 = (x > 1 & x != .)
+
+. 
+end of do-file
+
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+---------+--------------------------------------------------------------------------------------------------------------
+     sum |     28154      1081      1255      1507      1906      2617      2519      2340    295534      3923      1267
+------------------------------------------------------------------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
 
-. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 fore
-> ign3 count if filter == 3, stat(sum) save
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if filter == 3, stat(sum) save
 
-   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1
----------+------------------------------------------------------------
-     sum |     10679       967      1118      1357      1451      1272
-----------------------------------------------------------------------
-
-   stats |  foreign2  foreign3     count
----------+------------------------------
-     sum |      1147      1036     22979
-----------------------------------------
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+---------+--------------------------------------------------------------------------------------------------------------
+     sum |     10680       967      1118      1357      1451      1272      1147      1036     22979       406       153
+------------------------------------------------------------------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
 
 . 
 . * divestiture
-. bys frame_id_numeric (year): gen divest = sum(cond(owner_spell != owner_spell
-> [_n-1] & foreign == 0 & _n != 1, 1, 0))
+. bys frame_id_numeric (year): gen divest = sum(cond(owner_spell != owner_spell[_n-1] & foreign == 0 & _n != 1, 1, 0))
 
 . replace divest = 1 if divest > 0
 (0 real changes made)
 
 . 
 . * only keep D, D-F owner spells
-. bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (fore
-> ign == 0))
+. bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
 
 . *keep if start_as_domestic & owner_spell <= 2
 . keep if start_as_domestic
-(18,436 observations deleted)
+(18,493 observations deleted)
 
 . keep if owner_spell <= 2
-(3,257 observations deleted)
+(3,256 observations deleted)
 
 . 
-. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 fore
-> ign3 count, stat(sum) save
+. do "code/create/calc_hole.do"
 
-   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1
----------+------------------------------------------------------------
-     sum |     11559      1081      1232      1457      1517      1325
-----------------------------------------------------------------------
+. cap drop hole* x
 
-   stats |  foreign2  foreign3     count
----------+------------------------------
-     sum |      1090       919    273784
-----------------------------------------
+. sort frame_id_numeric year
+
+. gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+(22,465 missing values generated)
+
+. gen hole2 = (x > 2 & x != .)
+
+. gen hole1 = (x > 1 & x != .)
+
+. 
+end of do-file
+
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+---------+--------------------------------------------------------------------------------------------------------------
+     sum |     11560      1081      1232      1457      1517      1325      1090       920    273785      3596      1157
+------------------------------------------------------------------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
 
-. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 fore
-> ign3 count if filter == 3, stat(sum) save
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if filter == 3, stat(sum) save
 
-   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1
----------+------------------------------------------------------------
-     sum |     10679       967      1118      1357      1451      1262
-----------------------------------------------------------------------
-
-   stats |  foreign2  foreign3     count
----------+------------------------------
-     sum |      1030       858     19868
-----------------------------------------
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2
+---------+--------------------------------------------------------------------------------------------------------------
+     sum |     10680       967      1118      1357      1451      1262      1030       859     19869       344       127
+------------------------------------------------------------------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
 
 . 
 . mat list total
 
-total[6,9]
-       foreign  foreign_3  foreign_2  foreign_1   foreign0   foreign1
-sum      30036       1161       1354       1635       2058       2790
-sum      10701        971       1122       1361       1454       1274
-sum      28104       1081       1255       1507       1904       2615
-sum      10679        967       1118       1357       1451       1272
-sum      11559       1081       1232       1457       1517       1325
-sum      10679        967       1118       1357       1451       1262
-
-      foreign2   foreign3      count
-sum       2692       2509     299131
-sum       1149       1038      23025
-sum       2517       2338     295477
-sum       1147       1036      22979
-sum       1090        919     273784
-sum       1030        858      19868
+total[6,11]
+       foreign  foreign_3  foreign_2  foreign_1   foreign0   foreign1   foreign2   foreign3      count      hole1      hole2
+sum      30083       1161       1354       1635       2060       2792       2694       2511     299188       3989       1288
+sum      10702        971       1122       1361       1454       1274       1149       1038      23025        408        154
+sum      28154       1081       1255       1507       1906       2617       2519       2340     295534       3923       1267
+sum      10680        967       1118       1357       1451       1272       1147       1036      22979        406        153
+sum      11560       1081       1232       1457       1517       1325       1090        920     273785       3596       1157
+sum      10680        967       1118       1357       1451       1262       1030        859      19869        344        127
 
 . 
 . * check foreign end expat numbers
@@ -313,15 +309,13 @@ sum       1030        858      19868
 . 
 . *do "`here'/code/create/event_dummies_firmlevel.do"
 . 
-. *merge 1:1 originalid year using "input/fo3-owner-names/country_codes.dta", k
-> eep(match master) nogen
+. *merge 1:1 originalid year using "input/fo3-owner-names/country_codes.dta", keep(match master) nogen
 . * "same country" only applies to expats at foreign firms
 . *replace country_same = 0 if (has_expat == 0) | (foreign == 0)
 . 
 . egen industry_year = group(teaor08_1d year)
 
-. *egen last_before_acquisition = max(cond(time_foreign<0, time_foreign, .)), b
-> y(originalid)
+. *egen last_before_acquisition = max(cond(time_foreign<0, time_foreign, .)), by(originalid)
 . *egen ever_same_country = max(country_same), by(originalid)
 . 
 . *do "`here'/code/create/countries.do"
@@ -329,14 +323,14 @@ sum       1030        858      19868
 . *for descriptives (number of firms and firm-years in final data)
 . codebook frame_id_numeric
 
--------------------------------------------------------------------------------
-frame_id_numeric                                                    (unlabeled)
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+frame_id_numeric                                                                                                                                   (unlabeled)
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
 
                   type:  numeric (long)
 
                  range:  [10000049,90620052]          units:  1
-         unique values:  22,465                   missing .:  0/273,784
+         unique values:  22,465                   missing .:  0/273,785
 
                   mean:   1.3e+07
               std. dev:   6.5e+06
@@ -348,21 +342,20 @@ frame_id_numeric                                                    (unlabeled)
   22,465
 
 . count
-  273,784
+  273,785
 
 . 
 . mata : mat_total_analysis = st_matrix("total")
 
 . mata: mata matsave "temp/matrix-analysis" mat_total_analysis, replace
-(saving mat_total_analysis[6,9])
+(saving mat_total_analysis[6,11])
 file temp/matrix-analysis.mmat saved
 
 . 
-. drop first_year_foreign time_foreign foreign_* foreign? count
+. drop first_year_foreign time_foreign foreign_* foreign? count hole* x
 
 . 
-. bys frame_id_numeric: egen first_year_foreign_new = min(cond(foreign == 1, ye
-> ar,.))
+. bys frame_id_numeric: egen first_year_foreign_new = min(cond(foreign == 1, year,.))
 (252,722 missing values generated)
 
 . generate time_foreign_new = year - first_year_foreign_new
@@ -392,16 +385,14 @@ file temp/matrix-analysis.mmat saved
   variable final_netgep was double now long
   variable ranyag8091_18 was double now long
   variable country_all_ceo was str12 now str9
-  (12,594,064 bytes saved)
+  (12,594,110 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
-file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/anal
-> ysis_sample.dta saved
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/analysis_sample.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//o
-> utput/analysis_sample.log
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- closed on:  15 May 2021, 10:19:04
--------------------------------------------------------------------------------
+ closed on:  15 May 2021, 11:13:33
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
