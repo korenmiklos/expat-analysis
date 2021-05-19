@@ -17,8 +17,8 @@ local X4 `X3'
 local fmode replace
 forvalues i = 1/4 {
 	* hazard of entering this market
-	reghdfe D`Y`i'' `X`i'' if L`Y`i''==0, a($dummies) cluster(frame_id_numeric)
-	summarize D`Y`i'' if e(sample), meanonly
+	reghdfe `Y`i'' `X`i'', a($dummies) cluster(frame_id_numeric)
+	summarize `Y`i'' if e(sample), meanonly
 	outreg2 using "`here'/output/table/trade.tex", `fmode' $options ctitle(`Y`i'')
 	local fmode append
 }
