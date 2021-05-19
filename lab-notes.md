@@ -1998,3 +1998,219 @@ country_cod |
 ------------+-----------------------------------
       Total |  1,142,329      100.00
 ```
+
+# 2021-05-19
+## Check staggered entry of managers
+```
+. egen first_year_manager = min(cond(manager==1, year, .)), by(frame_id_numeric country)
+(3289221 missing values generated)
+
+. tabulate first_year_manager 
+
+first_year_ |
+    manager |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1992 |      3,640       17.60       17.60
+       1993 |      2,496       12.07       29.67
+       1994 |      2,280       11.03       40.70
+       1995 |      1,929        9.33       50.03
+       1996 |      1,721        8.32       58.35
+       1997 |      1,610        7.79       66.13
+       1998 |      1,590        7.69       73.82
+       1999 |      1,422        6.88       80.70
+       2000 |      1,286        6.22       86.92
+       2001 |      1,034        5.00       91.92
+       2002 |      1,020        4.93       96.85
+       2003 |        651        3.15      100.00
+------------+-----------------------------------
+      Total |     20,679      100.00
+
+. table year, c(mean Lmanager)
+
+--------------------------
+Year      |
+1992-2018 | mean(Lmanager)
+----------+---------------
+     1992 |              0
+     1993 |        .001504
+     1994 |        .002336
+     1995 |        .003125
+     1996 |        .003658
+     1997 |         .00415
+     1998 |         .00461
+     1999 |        .005045
+     2000 |        .005419
+     2001 |        .005832
+     2002 |        .006009
+     2003 |        .006308
+--------------------------
+```
+
+## Try csdid
+```
+. egen i = group(frame_id_numeric country )
+
+. mvencode first_year_manager, mv(0)
+first_year~r: 3289221 missing values recoded
+
+. csdid export foreign, ivar(i) time(year) gvar(first_year_manager) method(reg)
+Time variable can only have 2 values in the working sample
+--Break--
+r(1);
+```
+
+### Alternative versions
+
+```
+. reghdfe export foreign manager if inlist(first_year_manager, 0, 1993) & inlist(year, 1992, 1994), a(i year) 
+(dropped 146895 singleton observations)
+(MWFE estimator converged in 2 iterations)
+
+HDFE Linear regression                            Number of obs   =    316,804
+Absorbing 2 HDFE groups                           F(   2, 158399) =      30.37
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7333
+                                                  Adj R-squared   =     0.4665
+                                                  Within R-sq.    =     0.0004
+                                                  Root MSE        =     0.1331
+
+------------------------------------------------------------------------------
+      export |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     foreign |   .0242483   .0036201     6.70   0.000      .017153    .0313436
+     manager |   .1045987   .0290878     3.60   0.000     .0475871    .1616102
+       _cons |   .0313433   .0005081    61.68   0.000     .0303474    .0323393
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+           i |    158402           0      158402     |
+        year |         2           1           1     |
+--
+```
+
+First-difference estimator is the same:
+```
+. xtset i year
+       panel variable:  i (unbalanced)
+        time variable:  year, 1992 to 2003, but with gaps
+                delta:  1 unit
+
+. generate d2_export = export - L2.export
+(991,150 missing values generated)
+
+. generate d2_foreign = foreign - L2.foreign
+(991,150 missing values generated)
+
+. generate d2_manager = manager - L2.manager
+(991,150 missing values generated)
+
+. reghdfe d2_export d2_foreign d2_manager if inlist(first_year_manager, 0, 1993) & inlist(year, 1994), a(year) 
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =    158,402
+Absorbing 1 HDFE group                            F(   2, 158399) =      30.37
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.0004
+                                                  Adj R-squared   =     0.0004
+                                                  Within R-sq.    =     0.0004
+                                                  Root MSE        =     0.1882
+
+------------------------------------------------------------------------------
+   d2_export |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  d2_foreign |   .0242483   .0036201     6.70   0.000      .017153    .0313436
+  d2_manager |   .1045987   .0290878     3.60   0.000     .0475871    .1616102
+       _cons |   .0029021    .000477     6.08   0.000     .0019672    .0038371
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+        year |         1           0           1     |
+-----------------------------------------------------+
+
+```
+Can control for differences in country trends:
+```
+. reghdfe d2_export d2_foreign d2_manager if inlist(first_year_manager, 0, 1993) & inlist(year, 1994), a(country year) 
+(MWFE estimator converged in 2 iterations)
+
+HDFE Linear regression                            Number of obs   =    158,402
+Absorbing 2 HDFE groups                           F(   2, 158375) =      32.06
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.0068
+                                                  Adj R-squared   =     0.0066
+                                                  Within R-sq.    =     0.0004
+                                                  Root MSE        =     0.1876
+
+------------------------------------------------------------------------------
+   d2_export |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  d2_foreign |   .0240202   .0036088     6.66   0.000      .016947    .0310934
+  d2_manager |   .1178869   .0290155     4.06   0.000     .0610171    .1747566
+       _cons |   .0029026   .0004755     6.10   0.000     .0019706    .0038346
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     country |        25           0          25     |
+        year |         1           1           0     |
+-----------------------------------------------------+
+```
+or even firm fixed effect:
+```
+. reghdfe d2_export d2_manager if inlist(first_year_manager, 0, 1993) & inlist(year, 1994), a(frame_id_numeric country year) 
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =    158,402
+Absorbing 3 HDFE groups                           F(   1, 152012) =       9.55
+                                                  Prob > F        =     0.0020
+                                                  R-squared       =     0.1060
+                                                  Adj R-squared   =     0.0684
+                                                  Within R-sq.    =     0.0001
+                                                  Root MSE        =     0.1817
+
+------------------------------------------------------------------------------
+   d2_export |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  d2_manager |   .0885173   .0286383     3.09   0.002     .0323867    .1446478
+       _cons |   .0033288   .0004565     7.29   0.000      .002434    .0042235
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+----------------------------------------------------------+
+      Absorbed FE | Categories  - Redundant  = Num. Coefs |
+------------------+---------------------------------------|
+ frame_id_numeric |      6365           0        6365     |
+          country |        25           1          24     |
+             year |         1           1           0    ?|
+----------------------------------------------------------+
+? = number of redundant parameters may be higher
+```
+Can add not-yet-treated to the controls:
+```
+. reghdfe d2_export d2_manager if (inlist(first_year_manager, 0, 1993) | first_year_manager > 1994) & inlist(year, 1994), a(frame_id_numeric country
+>  year) 
+(MWFE estimator converged in 3 iterations)
+
+HDFE Linear regression                            Number of obs   =    158,720
+Absorbing 3 HDFE groups                           F(   1, 152330) =       9.21
+                                                  Prob > F        =     0.0024
+                                                  R-squared       =     0.1056
+                                                  Adj R-squared   =     0.0681
+                                                  Within R-sq.    =     0.0001
+                                                  Root MSE        =     0.1823
+
+------------------------------------------------------------------------------
+   d2_export |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  d2_manager |   .0872117   .0287302     3.04   0.002      .030901    .1435224
+       _cons |   .0034232   .0004576     7.48   0.000     .0025264    .0043201
+------------------------------------------------------------------------------
+```
