@@ -2214,3 +2214,17 @@ Absorbing 3 HDFE groups                           F(   1, 152330) =       9.21
        _cons |   .0034232   .0004576     7.48   0.000     .0025264    .0043201
 ------------------------------------------------------------------------------
 ```
+
+## Rewrite csadid.ado
+```
+.  csadid export foreign, treatment(manager) absorb(frame_id_numeric )
+       panel variable:  i (unbalanced)
+        time variable:  year, 1992 to 2003, but with gaps
+                delta:  1 unit
+
+. summarize ATT_gt if manager 
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      ATT_gt |      8,119   -.0155202    .0963486  -.2140384   .1495977
+```
