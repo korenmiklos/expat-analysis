@@ -37,7 +37,7 @@ program csadid, eclass
 			quietly replace `post' = (`time' == `t')
 			quietly replace `tr' = (`group'==`g') & `post'
 			if (`g'!=`t') {
-				* display "Group: `g', time: `t'"
+				*display "Group: `g', time: `t'"
 				capture reghdfe `y' `tr' `xvar' ///
 					if `touse' & ((`group'==`g') ///
 						| missing(`group')) ///
@@ -47,7 +47,7 @@ program csadid, eclass
 					matrix `b' = nullmat(`b'), e(b)[1,1]
 					matrix `v' = nullmat(`v'), e(V)[1,1]
 					local eqname `eqname' g`g'
-					local colname `colname'  t_`g'_`t'
+					local colname `colname'  L`t'.`treatment'
 				}
 			}
 		}
