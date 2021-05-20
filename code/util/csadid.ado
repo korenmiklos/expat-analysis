@@ -1,5 +1,5 @@
 program csadid, eclass
-	syntax varlist [if] [in], treatment(varname) [absorb(varlist)]
+	syntax varlist [if] [in], treatment(varname) [absorb(varlist)] [notyet]
 	marksample touse
 	** First determine outcome and xvars
 	gettoken y xvar:varlist	
@@ -36,19 +36,25 @@ program csadid, eclass
 		foreach t in `ts' {
 			quietly replace `post' = (`time' == `t')
 			quietly replace `tr' = (`group'==`g') & `post'
+			if ("`tyet'"=="") {
+				* never treated
+				local condition ((`group'==`g') | missing(`group')) & inlist(`time', `g', `t')
+			}
+			else {
+				* not yet treated
+				local condition ((`group'==`g') | missing(`group') | (`group' >= max(`g', `t'))) & inlist(`time', `g', `t')
+			}
 			if (`g'!=`t') {
 				*display "Group: `g', time: `t'"
 				capture reghdfe `y' `tr' `xvar' ///
-					if `touse' & ((`group'==`g') ///
-						| missing(`group')) ///
-						& inlist(`time', `g', `t') ///
+					if `touse' & `condition' ///
 						, absorb(`a')
 				if (_rc==0) {
 					matrix `b' = nullmat(`b'), e(b)[1,1]
 					matrix `v' = nullmat(`v'), e(V)[1,1]
 					mata: st_local("leadlag", lead_lag(`g', `t'))
-					local eqname `eqname' g`g'
-					local colname `colname'  `leadlag'.`treatment'
+					local eqname `eqname' `treatment'_`g'
+					local colname `colname'  `leadlag'.`y'
 				}
 			}
 		}
