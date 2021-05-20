@@ -3,6 +3,7 @@ clear all
 here
 local here = r(here)
 
+cap log close
 log using "`here'/output/analysis_sample", text replace
 
 use "`here'/temp/balance-small-clean.dta"
@@ -13,23 +14,43 @@ gen x_before = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
 gen hole2_before = (x_before > 2 & x_before != .)
 gen hole1_before = (x_before > 1 & x_before != .)
 
+foreach var of varlist hole* {
+	tab `var'
+}
+
+drop x_before hole*
+
 merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(match) nogen
 *merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(1 3) //nogen
 *merge 1:1 frame_id year using "`here'/temp/firm_events.dta"
 
 sort frame_id_numeric year
 gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-gen hole2_after = (x_after > 2 & x_after != .)
-gen hole1_after = (x_after > 1 & x_after != .)
+gen hole2_after_m = (x_after > 2 & x_after != .)
+gen hole1_after_m = (x_after > 1 & x_after != .)
 
 foreach var of varlist hole* {
 	tab `var'
-	*tab `var' _merge
 }
 
 *tab _merge
 
-drop x_after x_before hole*
+drop x_after hole*
+
+preserve
+use "`here'/temp/balance-small-clean.dta", clear
+drop foreign
+merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(1 3)
+sort frame_id_numeric year
+gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+gen hole2_after_mm = (x_after > 2 & x_after != .)
+gen hole1_after_mm = (x_after > 1 & x_after != .)
+
+foreach var of varlist hole* {
+	tab `var'
+}
+drop x_after hole*
+restore
 
 * not so elegant
 merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign) keep(1 3) gen(filter)
@@ -82,6 +103,8 @@ mat list total
 
 * check foreign end expat numbers
 egen firm_tag = tag(frame_id_numeric)
+
+count if ever_foreign
 count if ever_foreign & firm_tag
 count if ever_expat_ceo & firm_tag
 count if ever_expat_nceo & firm_tag

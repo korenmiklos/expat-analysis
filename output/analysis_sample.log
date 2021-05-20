@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- opened on:  15 May 2021, 11:13:23
+ opened on:  20 May 2021, 19:05:11
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -18,6 +18,30 @@
 . gen hole2_before = (x_before > 2 & x_before != .)
 
 . gen hole1_before = (x_before > 1 & x_before != .)
+
+. 
+. foreach var of varlist hole* {
+  2.         tab `var'
+  3. }
+
+hole2_befor |
+          e |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    342,220       99.62       99.62
+          1 |      1,312        0.38      100.00
+------------+-----------------------------------
+      Total |    343,532      100.00
+
+hole1_befor |
+          e |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    339,153       98.73       98.73
+          1 |      4,379        1.27      100.00
+------------+-----------------------------------
+      Total |    343,532      100.00
+
+. 
+. drop x_before hole*
 
 . 
 . merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(match) nogen
@@ -36,40 +60,25 @@
 . gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
 (24,136 missing values generated)
 
-. gen hole2_after = (x_after > 2 & x_after != .)
+. gen hole2_after_m = (x_after > 2 & x_after != .)
 
-. gen hole1_after = (x_after > 1 & x_after != .)
+. gen hole1_after_m = (x_after > 1 & x_after != .)
 
 . 
 . foreach var of varlist hole* {
   2.         tab `var'
-  3.         *tab `var' _merge
-. }
+  3. }
 
-hole2_befor |
-          e |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |    298,011       99.61       99.61
-          1 |      1,177        0.39      100.00
-------------+-----------------------------------
-      Total |    299,188      100.00
-
-hole1_befor |
-          e |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |    295,274       98.69       98.69
-          1 |      3,914        1.31      100.00
-------------+-----------------------------------
-      Total |    299,188      100.00
-
-hole2_after |      Freq.     Percent        Cum.
+hole2_after |
+         _m |      Freq.     Percent        Cum.
 ------------+-----------------------------------
           0 |    297,900       99.57       99.57
           1 |      1,288        0.43      100.00
 ------------+-----------------------------------
       Total |    299,188      100.00
 
-hole1_after |      Freq.     Percent        Cum.
+hole1_after |
+         _m |      Freq.     Percent        Cum.
 ------------+-----------------------------------
           0 |    295,199       98.67       98.67
           1 |      3,989        1.33      100.00
@@ -79,7 +88,59 @@ hole1_after |      Freq.     Percent        Cum.
 . 
 . *tab _merge
 . 
-. drop x_after x_before hole*
+. drop x_after hole*
+
+. 
+. preserve
+
+. use "`here'/temp/balance-small-clean.dta", clear
+
+. drop foreign
+
+. merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(1 3)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                        44,344
+        from master                    44,344  (_merge==1)
+        from using                          0  (_merge==2)
+
+    matched                           299,188  (_merge==3)
+    -----------------------------------------
+
+. sort frame_id_numeric year
+
+. gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+(25,488 missing values generated)
+
+. gen hole2_after_mm = (x_after > 2 & x_after != .)
+
+. gen hole1_after_mm = (x_after > 1 & x_after != .)
+
+. 
+. foreach var of varlist hole* {
+  2.         tab `var'
+  3. }
+
+hole2_after |
+        _mm |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    342,220       99.62       99.62
+          1 |      1,312        0.38      100.00
+------------+-----------------------------------
+      Total |    343,532      100.00
+
+hole1_after |
+        _mm |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    339,153       98.73       98.73
+          1 |      4,379        1.27      100.00
+------------+-----------------------------------
+      Total |    343,532      100.00
+
+. drop x_after hole*
+
+. restore
 
 . 
 . * not so elegant
@@ -278,6 +339,10 @@ sum      10680        967       1118       1357       1451       1262       1030
 . * check foreign end expat numbers
 . egen firm_tag = tag(frame_id_numeric)
 
+. 
+. count if ever_foreign
+  21,063
+
 . count if ever_foreign & firm_tag
   1,537
 
@@ -394,5 +459,5 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/analy
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- closed on:  15 May 2021, 11:13:33
+ closed on:  20 May 2021, 19:05:23
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
