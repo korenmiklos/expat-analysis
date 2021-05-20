@@ -46,8 +46,9 @@ program csadid, eclass
 				if (_rc==0) {
 					matrix `b' = nullmat(`b'), e(b)[1,1]
 					matrix `v' = nullmat(`v'), e(V)[1,1]
+					mata: st_local("leadlag", lead_lag(`g', `t'))
 					local eqname `eqname' g`g'
-					local colname `colname'  L`t'.`treatment'
+					local colname `colname'  `leadlag'.`treatment'
 				}
 			}
 		}
@@ -66,4 +67,16 @@ program csadid, eclass
 	display "Callaway Sant'Anna (2021)"
 	ereturn display
 
+end
+
+mata:
+string scalar lead_lag(real scalar g, real scalar t)
+{
+	if (t > g) {
+		return("F" + strofreal(t - g))
+	}
+	else {
+		return("L" + strofreal(g - t))
+	}
+}
 end
