@@ -1,5 +1,5 @@
 program attgt, eclass
-	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [notyet] [debug]
+	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 2)] [post(integer 2)] [notyet] [debug]
 	marksample touse
 	** First determine outcome and xvars
 	gettoken y xvar:varlist	
@@ -9,7 +9,6 @@ program attgt, eclass
 		local aggregate gt
 	}
 	assert inlist("`aggregate'", "gt", "g", "t", "ge", "e", "att")
-
 	* read panel structure
 	xtset
 	local i = r(panelvar)
@@ -38,10 +37,6 @@ program attgt, eclass
 	quietly levelsof `group' if `touse', local(gs)
 	quietly levelsof `time' if `touse', local(ts)
 
-	quietly generate `u' = .
-
-	timer clear
-	timer on 1
 	* create design matrix
 	foreach g in `gs' {
 		foreach t in `ts' {
@@ -73,47 +68,72 @@ program attgt, eclass
 		}
 	}
 
-	foreach g in `gs' {
-		foreach t in `ts' {
-		if (`g'!=`t') & (`g'>`min_time') {
-
-			timer on 2
-			mata: sum_product("tr", "`y' `treated_`g'_`t''")
-			mata: sum_product("co", "`y' `control_`g'_`t''")
-
-			quietly replace `u' = `y' - `co' if `treated_`g'_`t'' & `touse'
-
-			if ("`debug'"!="") {
-				tabulate `treated_`g'_`t'', missing
-				tabulate `control_`g'_`t'', missing
-				display "Control growth: `co'"
-				display `tr' - `co'
+	if ("`aggregate'"=="e") {
+		forvalues enumeric = -`pre'/`post' {
+			mata: st_local("e", minus(`enumeric'))
+			display "`e' `enumeric'"
+			tempvar wte_`e' wce_`e'
+			quietly generate `wte_`e'' = 0
+			quietly generate `wce_`e'' = 0
+			foreach g in `gs' {
+				foreach t in `ts' {
+				if (`g'!=`t') & (`g'>`min_time') {
+					quietly replace `wte_`e'' = `wte_`e'' + `treated_`g'_`t'' if `t'-`g'==`enumeric' & !missing(`treated_`g'_`t'') & `touse'
+					quietly replace `wce_`e'' = `wce_`e'' + `control_`g'_`t'' if `t'-`g'==`enumeric' & !missing(`control_`g'_`t'') & `touse'
+				}
+				}
 			}
-			matrix `att' = `tr' - `co'
-			timer off 2
-			matrix `b' = nullmat(`b'), `att'
-			matrix `v' = nullmat(`v'), 0.0
-			mata: st_local("leadlag", lead_lag(`g', `t'))
-			local eqname `eqname' `treatment'_`g'
-			local colname `colname'  `leadlag'.`y'
+		if ("`debug'"!="") {
+			display "`e'"
+			tabulate `wte_`e'', missing
+			tabulate `wce_`e'', missing
 		}
 		}
 	}
+	if ("`aggregate'"=="gt") {
+			foreach g in `gs' {
+				foreach t in `ts' {
+				if (`g'!=`t') & (`g'>`min_time') {
+					local tweights `tweights' treated_`g'_`t'
+					local cweights `cweights' control_`g'_`t'
+				}
+				}
+			}
+	}
+
+
+	* aggregate across known weights
+	quietly generate `u' = .
+	local nw : word count `tweights'
+	forvalues n = 1/`nw' {
+		local tw : word `n' of `tweights'
+		local cw : word `n' of `cweights'
+
+		mata: sum_product("tr", "`y' ``tw''")
+		mata: sum_product("co", "`y' ``cw''")
+
+		* error term under null is needed for wild bootstrap
+		quietly replace `u' = `y' - `co' if ``tw'' >0 & !missing(``tw'') & `touse'
+
+		matrix `att' = `tr' - `co'
+
+		matrix `b' = nullmat(`b'), `att'
+		matrix `v' = nullmat(`v'), 0.0
+		local colname `colname' `tw'
+	}
 	matrix `v' = diag(`v')
 	matrix colname `b' = `colname'
-	matrix coleq   `b' = `eqname'
+	*matrix coleq   `b' = `eqname'
 	matrix colname `v' = `colname'
-	matrix coleq   `v' = `eqname'
+	*matrix coleq   `v' = `eqname'
 	matrix rowname `v' = `colname'
-	matrix roweq   `v' = `eqname'
+	*matrix roweq   `v' = `eqname'
 
 	ereturn post `b' `v'
 	ereturn local cmd csadid
 	ereturn local cmdline csadid `0'
 	display "Callaway Sant'Anna (2021)"
 	ereturn display
-	timer off 1
-	timer list
 
 end
 
@@ -126,6 +146,16 @@ string scalar lead_lag(real scalar g, real scalar t)
 	else {
 		return("L" + strofreal(g - t))
 	}
+}
+
+string scalar minus(real scalar t)
+{
+	if (t >= 0) {
+		return(strofreal(t))
+	}
+	else {
+		return("m" + strofreal(-t))
+	} 
 }
 
 void sum_product(string scalar output, string matrix vars)
