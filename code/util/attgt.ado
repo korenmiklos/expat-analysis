@@ -61,14 +61,21 @@ program attgt, eclass
 				local control (missing(`group') | (`group' >= max(`g', `t'))) & (`timing')
 			}
 			quietly count if `treated' & `touse'
-			local n_treated = r(N)
+			local n_treated = r(N)/2
 			quietly count if `control' & `touse'
-			local n_control = r(N)
+			local n_control = r(N)/2
 			local n_`g'_`t' = `n_treated'
 
 			tempvar treated_`g'_`t' control_`g'_`t'
-			quietly generate `treated_`g'_`t'' = cond(`time'==`t', +2/`n_treated', -2/`n_treated') if `treated' & `touse'
-			quietly generate `control_`g'_`t'' = cond(`time'==`t', +2/`n_control', -2/`n_control') if `control' & `touse'
+			quietly generate `treated_`g'_`t'' = cond(`time'==`t', +1/`n_treated', -1/`n_treated') if `treated' & `touse'
+			quietly generate `control_`g'_`t'' = cond(`time'==`t', +1/`n_control', -1/`n_control') if `control' & `touse'
+		}
+		}
+	}
+
+	foreach g in `gs' {
+		foreach t in `ts' {
+		if (`g'!=`t') & (`g'>`min_time') {
 
 			timer on 2
 			mata: sum_product("tr", "`y' `treated_`g'_`t''")
