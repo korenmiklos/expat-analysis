@@ -19,7 +19,7 @@ program attgt, eclass
 	markout `touse' `i' `time' `treatment'
 
 	tempvar group _alty_ _y_ flip
-	tempname b v att
+	tempname b v att co tr _tr_
 	quietly egen `group' = min(cond(`treatment', `time'-1, .)) if `touse', by(`i')
 	quietly summarize `time'
 	local min_time = r(min)
@@ -114,8 +114,8 @@ program attgt, eclass
 		local tw : word `n' of `tweights'
 		local cw : word `n' of `cweights'
 
-		mata: sum_product("co", "`y' ``cw''")
-		mata: sum_product("tr", "`y' ``tw''")
+		mata: st_numscalar("`co'", sum_product("`y' ``cw''"))
+		mata: st_numscalar("`tr'", sum_product("`y' ``tw''"))
 		matrix `att' = `tr' - `co'
 
 		* wild bootstrap with Rademacher weights requires flipping the error term
@@ -125,7 +125,7 @@ program attgt, eclass
 		forvalues i = 1/`B' {
 			quietly replace `flip' = cond(uniform()<0.5, 1, 0) if `touse' & !missing(`u')
 			quietly replace `_y_' = cond(`flip', `_alty_', `y') if `touse' & !missing(`u')
-			mata: sum_product("_tr_", "`_y_' ``tw''")
+			mata: st_numscalar("`_tr_'", sum_product("`_y_' ``tw''"))
 			display "`=`_tr_'-`co''"
 		}
 
@@ -170,10 +170,18 @@ string scalar minus(real scalar t)
 	} 
 }
 
-void sum_product(string scalar output, string matrix vars)
+real scalar sum_product(string matrix vars)
+{
+	X = 0
+	st_view(X, ., vars, 0)
+	return(colsum(X[1...,1] :* X[1...,2]))
+}
+
+void bs_sum_product(string scalar output, string matrix vars)
 {
 	X = 0
 	st_view(X, ., vars, 0)
 	st_local(output, strofreal(colsum(X[1...,1] :* X[1...,2])))
 }
+
 end
