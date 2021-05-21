@@ -52,6 +52,20 @@ foreach var of varlist hole* {
 drop x_after hole*
 restore
 
+preserve
+use "`here'/temp/balance-small-clean.dta", clear
+merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(2 3)
+sort frame_id_numeric year
+gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+gen hole2_after_um = (x_after > 2 & x_after != .)
+gen hole1_after_um = (x_after > 1 & x_after != .)
+
+foreach var of varlist hole* {
+	tab `var'
+}
+drop x_after hole*
+restore
+
 * not so elegant
 merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign) keep(1 3) gen(filter)
 drop ever_foreign

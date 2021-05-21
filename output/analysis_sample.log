@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- opened on:  20 May 2021, 19:05:11
+ opened on:  21 May 2021, 17:10:57
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -137,6 +137,56 @@ hole1_after |
           1 |      4,379        1.27      100.00
 ------------+-----------------------------------
       Total |    343,532      100.00
+
+. drop x_after hole*
+
+. restore
+
+. 
+. preserve
+
+. use "`here'/temp/balance-small-clean.dta", clear
+
+. merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(2 3)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                         2,077
+        from master                         0  (_merge==1)
+        from using                      2,077  (_merge==2)
+
+    matched                           299,188  (_merge==3)
+    -----------------------------------------
+
+. sort frame_id_numeric year
+
+. gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+(24,136 missing values generated)
+
+. gen hole2_after_um = (x_after > 2 & x_after != .)
+
+. gen hole1_after_um = (x_after > 1 & x_after != .)
+
+. 
+. foreach var of varlist hole* {
+  2.         tab `var'
+  3. }
+
+hole2_after |
+        _um |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    299,977       99.57       99.57
+          1 |      1,288        0.43      100.00
+------------+-----------------------------------
+      Total |    301,265      100.00
+
+hole1_after |
+        _um |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    299,353       99.37       99.37
+          1 |      1,912        0.63      100.00
+------------+-----------------------------------
+      Total |    301,265      100.00
 
 . drop x_after hole*
 
@@ -459,5 +509,5 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/analy
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- closed on:  20 May 2021, 19:05:23
+ closed on:  21 May 2021, 17:11:13
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
