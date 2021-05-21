@@ -5,7 +5,7 @@ program attgt, eclass
 	gettoken y xvar:varlist	
 
 	* boostrap
-	local B 20
+	local B 199
 
 	* read method of aggregation
 	if ("`aggregate'"=="") {
@@ -185,7 +185,7 @@ real scalar bs_variance(string matrix vars, real scalar B)
 			Y[n,1] = X[n, 1..2][flip[n]]
 		}
 
-		theta[i, 1] = mean(Y, X[1..., 3])
+		theta[i, 1] = colsum(Y :* X[1..., 3])
 	}
 	return((variance(theta))[1,1])
 }
