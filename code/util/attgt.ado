@@ -19,7 +19,7 @@ program attgt, eclass
 	markout `touse' `i' `time' `treatment'
 
 	tempvar group _alty_ _y_ flip
-	tempname b v att co tr _tr_
+	tempname b V v att co tr _tr_
 	quietly egen `group' = min(cond(`treatment', `time'-1, .)) if `touse', by(`i')
 	quietly summarize `time'
 	local min_time = r(min)
@@ -122,26 +122,20 @@ program attgt, eclass
 		quietly replace `_alty_' = 2*`tr' - `y' if ``tw'' >0 & !missing(``tw'') & `touse'
 
 		* try iid wild bootstrsap
-		forvalues i = 1/`B' {
-			quietly replace `flip' = cond(uniform()<0.5, 1, 0) if `touse' & !missing(`u')
-			quietly replace `_y_' = cond(`flip', `_alty_', `y') if `touse' & !missing(`u')
-			mata: st_numscalar("`_tr_'", sum_product("`_y_' ``tw''"))
-			display "`=`_tr_'-`co''"
-		}
-
+		mata: st_numscalar("`v'", bs_variance("`y' `_alty_' ``tw''", `B'))
 		matrix `b' = nullmat(`b'), `att'
-		matrix `v' = nullmat(`v'), 0.0
+		matrix `V' = nullmat(`V'), `v'
 		local colname `colname' `tw'
 	}
-	matrix `v' = diag(`v')
+	matrix `V' = diag(`V')
 	matrix colname `b' = `colname'
 	*matrix coleq   `b' = `eqname'
-	matrix colname `v' = `colname'
+	matrix colname `V' = `colname'
 	*matrix coleq   `v' = `eqname'
-	matrix rowname `v' = `colname'
+	matrix rowname `V' = `colname'
 	*matrix roweq   `v' = `eqname'
 
-	ereturn post `b' `v'
+	ereturn post `b' `V'
 	ereturn local cmd csadid
 	ereturn local cmdline csadid `0'
 	display "Callaway Sant'Anna (2021)"
@@ -177,11 +171,23 @@ real scalar sum_product(string matrix vars)
 	return(colsum(X[1...,1] :* X[1...,2]))
 }
 
-void bs_sum_product(string scalar output, string matrix vars)
+real scalar bs_variance(string matrix vars, real scalar B)
 {
 	X = 0
 	st_view(X, ., vars, 0)
-	st_local(output, strofreal(colsum(X[1...,1] :* X[1...,2])))
+	N = rows(X)
+	Y = J(N, 1, 0)
+	theta = J(B, 1, .)
+	for (i=1; i<=B; i++) {
+		flip = rdiscrete(N, 1, (0.5, 0.5))
+
+		for (n=1; n<=N; n++) {
+			Y[n,1] = X[n, 1..2][flip[n]]
+		}
+
+		theta[i, 1] = mean(Y, X[1..., 3])
+	}
+	return((variance(theta))[1,1])
 }
 
 end
