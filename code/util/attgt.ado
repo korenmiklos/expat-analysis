@@ -4,6 +4,9 @@ program attgt, eclass
 	** First determine outcome and xvars
 	gettoken y xvar:varlist	
 
+	* boostrap
+	local B 20
+
 	* read method of aggregation
 	if ("`aggregate'"=="") {
 		local aggregate gt
@@ -15,7 +18,7 @@ program attgt, eclass
 	local time = r(timevar)
 	markout `touse' `i' `time' `treatment'
 
-	tempvar group u
+	tempvar group u _y_ flip
 	tempname b v att
 	quietly egen `group' = min(cond(`treatment', `time'-1, .)) if `touse', by(`i')
 	quietly summarize `time'
@@ -104,18 +107,28 @@ program attgt, eclass
 
 	* aggregate across known weights
 	quietly generate `u' = .
+	quietly generate `_y_' = .
+	quietly generate byte `flip' = 0
 	local nw : word count `tweights'
 	forvalues n = 1/`nw' {
 		local tw : word `n' of `tweights'
 		local cw : word `n' of `cweights'
 
-		mata: sum_product("tr", "`y' ``tw''")
 		mata: sum_product("co", "`y' ``cw''")
 
 		* error term under null is needed for wild bootstrap
-		quietly replace `u' = `y' - `co' if ``tw'' >0 & !missing(``tw'') & `touse'
+		quietly replace `u' = (`y' - `co') if ``tw'' >0 & !missing(``tw'') & `touse'
 
+		mata: sum_product("tr", "`y' ``tw''")
 		matrix `att' = `tr' - `co'
+
+		* try iid wild bootstrsap
+		forvalues i = 1/`B' {
+			quietly replace `flip' = cond(uniform()<0.5, 2, 0) if `touse' & !missing(`u')
+			quietly replace `_y_' = cond(`flip', `y' - 2*`u', `y') if `touse' & !missing(`u')
+			mata: sum_product("_tr_", "`_y_' ``tw''")
+			display "`=`_tr_'-`co''"
+		}
 
 		matrix `b' = nullmat(`b'), `att'
 		matrix `v' = nullmat(`v'), 0.0
