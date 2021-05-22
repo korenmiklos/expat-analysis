@@ -1,11 +1,11 @@
 program attgt, eclass
-	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 2)] [post(integer 2)] [notyet] [debug]
+	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 2)] [post(integer 2)] [reps(int 199)] [notyet] [debug] [cluster(varname)]
 	marksample touse
 	** First determine outcome and xvars
 	gettoken y xvar:varlist	
 
 	* boostrap
-	local B 199
+	local B `reps'
 
 	* read method of aggregation
 	if ("`aggregate'"=="") {
@@ -122,7 +122,12 @@ program attgt, eclass
 		quietly replace `_alty_' = 2*`tr' - `y' if ``tw'' >0 & !missing(``tw'') & `touse'
 
 		* try iid wild bootstrsap
-		mata: st_numscalar("`v'", bs_variance("`y' `_alty_' ``tw''", `B'))
+		if ("`cluster'"=="")  {
+			mata: st_numscalar("`v'", bs_variance("`y' `_alty_' ``tw''", `B', 0))
+		}
+		else {
+			mata: st_numscalar("`v'", bs_variance("`y' `_alty_' ``tw'' `cluster'", `B', 1))
+		}
 		matrix `b' = nullmat(`b'), `att'
 		matrix `V' = nullmat(`V'), `v'
 		local colname `colname' `tw'
@@ -171,23 +176,45 @@ real scalar sum_product(string matrix vars)
 	return(colsum(X[1...,1] :* X[1...,2]))
 }
 
-real scalar bs_variance(string matrix vars, real scalar B)
+real scalar bs_variance(string matrix vars, real scalar B, real scalar cluster)
 {
 	X = 0
 	st_view(X, ., vars, 0)
 	N = rows(X)
 	Y = J(N, 1, 0)
 	theta = J(B, 1, .)
+
+	if (cluster==1) {
+		group = recode(X[1..., 4])
+		K = max(group)
+	}
+	else {
+		group = 1::N
+		K = N
+	}
+
 	for (i=1; i<=B; i++) {
-		flip = rdiscrete(N, 1, (0.5, 0.5))
+		flip = rdiscrete(K, 1, (0.5, 0.5))
 
 		for (n=1; n<=N; n++) {
-			Y[n,1] = X[n, 1..2][flip[n]]
+			Y[n,1] = X[n, 1..2][flip[group[n]]]
 		}
 
 		theta[i, 1] = colsum(Y :* X[1..., 3])
 	}
 	return((variance(theta))[1,1])
+}
+
+real vector recode(real vector x)
+{
+	N = rows(x)
+	levelsof = uniqrows(x)
+	G = rows(levelsof)
+	output = J(N, 1, 0)
+	for (n=1; n<=N; n++) {
+		output[n] = min(select(levelsof, levelsof :== x[n]))
+	}
+	return(output)
 }
 
 end
