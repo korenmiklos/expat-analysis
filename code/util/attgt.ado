@@ -119,15 +119,12 @@ program attgt, eclass
 		matrix `att' = `tr' - `co'
 
 		* wild bootstrap with Rademacher weights requires flipping the error term
-		quietly replace `_alty_' = 2*`tr' - `y' if ``tw'' >0 & !missing(``tw'') & `touse'
+		* we only have a cumulate error term here, requires cluster at ivar level
+		quietly replace `_y_' = cond(``tw''>0, `y' - `tr', `y') if ``tw'' !=0 & !missing(``tw'') & `touse'
+		quietly replace `_alty_' = cond(``tw''>0, `tr' - `y', -`y') if ``tw'' !=0 & !missing(``tw'') & `touse'
 
 		* try iid wild bootstrsap
-		if ("`cluster'"=="")  {
-			mata: st_numscalar("`v'", bs_variance("`y' `_alty_' ``tw''", `B', 0))
-		}
-		else {
-			mata: st_numscalar("`v'", bs_variance("`y' `_alty_' ``tw'' `cluster'", `B', 1))
-		}
+		mata: st_numscalar("`v'", bs_variance("`_y_' `_alty_' ``tw'' `i'", `B', 1))
 		matrix `b' = nullmat(`b'), `att'
 		matrix `V' = nullmat(`V'), `v'
 		local colname `colname' `tw'
