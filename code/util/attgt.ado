@@ -12,11 +12,29 @@ program attgt, eclass
 		local aggregate gt
 	}
 	assert inlist("`aggregate'", "gt", "g", "t", "ge", "e", "att")
+
 	* read panel structure
 	xtset
 	local i = r(panelvar)
 	local time = r(timevar)
 	markout `touse' `i' `time' `treatment'
+
+	* test that cluster embeds ivar
+	if ("`cluster'"!="") {
+		tempvar g1 g2
+		tempname max1 max2
+		quietly egen `g1' = group(`i')
+		quietly summarize `g1'
+		scalar `max1' = r(max)
+		quietly egen `g2' = group(`i' `cluster')
+		quietly summarize `g2'
+		scalar `max2' = r(max)
+		assert `max2'==`max1'
+		drop `g1' `g2'
+	}
+	else {
+		local cluster `i'
+	}
 
 	tempvar group _alty_ _y_ flip
 	tempname b V v att co tr _tr_
@@ -124,7 +142,7 @@ program attgt, eclass
 		quietly replace `_alty_' = cond(``tw''>0, `tr' - `y', -`y') if ``tw'' !=0 & !missing(``tw'') & `touse'
 
 		* try iid wild bootstrsap
-		mata: st_numscalar("`v'", bs_variance("`_y_' `_alty_' ``tw'' `i'", `B', 1))
+		mata: st_numscalar("`v'", bs_variance("`_y_' `_alty_' ``tw'' `cluster'", `B', 1))
 		matrix `b' = nullmat(`b'), `att'
 		matrix `V' = nullmat(`V'), `v'
 		local colname `colname' `tw'
