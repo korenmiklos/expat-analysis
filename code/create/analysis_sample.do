@@ -150,7 +150,7 @@ count
 mata : mat_total_analysis = st_matrix("total")
 mata: mata matsave "temp/matrix-analysis" mat_total_analysis, replace
 
-drop first_year_foreign time_foreign foreign_* foreign? count hole* x
+drop first_year_foreign time_foreign foreign_* foreign? count x
 
 bys frame_id_numeric: egen first_year_foreign_new = min(cond(foreign == 1, year,.))
 generate time_foreign_new = year - first_year_foreign_new
@@ -163,9 +163,22 @@ save "`here'/temp/analysis_sample.dta", replace
 log close
 
 * frame_id_numeric codes for ever_foreign
-*keep if ever_foreign
-*duplicates drop frame_id_numeric year, force
-*save "`here'/temp/ever_foreign.dta", replace
+preserve
+keep if ever_foreign
+duplicates drop frame_id_numeric year, force
+save "`here'/temp/ever_foreign.dta", replace
+restore
+
+* create holes id list
+preserve
+keep if hole1 == 1 & ever_foreign == 1
+keep originalid frame_id_numeric year
+count
+save "`here'/temp/holes_ever_foreign.dta", replace
+set seed 123
+sample 20, count
+export delimited using "`here'/temp/holes_sample.csv", replace
+restore
 
 *for descriptives (number of ceo-s and nceo-s in final data, number of ceo and nceo job-spells in final data) - part III
 *foreach type in ceo nceo {
