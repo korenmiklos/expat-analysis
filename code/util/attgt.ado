@@ -232,4 +232,48 @@ real vector recode(real vector x)
 	return(output)
 }
 
+real matrix build_index(real vector ivar, real vector tvar)
+{
+	N = rows(uniqrows(ivar))
+	T = rows(uniqrows(tvar))
+	it = ivar, tvar
+
+	index = J(N, T, 0)
+	for (i=1; i<=N; i++) {
+		for (t=1; t<=T; t++) {
+			index[i, t] = min(select(it, (it[., 1] :== i) :& (it[., 2] :== t)))
+		}
+	}
+	return(index)
+}
+
+real vector gt_difference(real vector X, real scalar g, real scalar t, real matrix index)
+{
+	N = rows(index)
+	Y = J(rows(X), 1, .)
+	for (i=1; i<=N; i++) {
+		Y[index[i, t]] = X[index[i, t]] - X[index[i, g]]
+	}
+	return(Y)
+}
+
+void difference_baseline(string scalar vars)
+{
+	xvar = 1
+	ivar = 2
+	tvar = 3
+	gvar = 4
+
+	real matrix X
+	st_view(X, ., vars, 0)
+	N = rows(X)
+
+	index = build_index(X[., ivar], X[., tvar])
+	groups = X[., gvar]
+
+	for (i=1; i<=N; i++) {
+		g = groups[i]
+	}
+}
+
 end
