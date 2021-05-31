@@ -5,6 +5,7 @@ set more off
 here
 local here = r(here)
 
+cap log close
 log using "`here'/output/balance", text replace
 
 use "`here'/input/merleg-expat/balance-small.dta"
@@ -76,9 +77,9 @@ forval i = 1/3 {
 gen count = 1
 
 do "code/create/calc_hole.do"
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
 mat total = r(StatTotal)
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if ever_foreign == 1, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 * drop greenfield
@@ -88,9 +89,9 @@ keep if start_as_domestic
 drop owner_spell start_as_domestic
 
 do "code/create/calc_hole.do"
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
 mat total = (total \ r(StatTotal))
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if ever_foreign == 1, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 * limit sample before large merge - sampling based on firm-level variables, firm-year done later
@@ -105,9 +106,9 @@ scalar dropped_size_or_finance = r(N_drop)
 display dropped_size_or_finance
 
 do "code/create/calc_hole.do"
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
 mat total = (total \ r(StatTotal))
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if ever_foreign == 1, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 * proxy firm founding date with first balance sheet filed
@@ -182,9 +183,9 @@ foreach var in lnK lnQ lnL lnM {
 	drop if missing(`var')
 	
 	do "code/create/calc_hole.do"
-	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
 	mat total = (total \ r(StatTotal))
-	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if ever_foreign == 1, stat(sum) save
+	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if ever_foreign == 1, stat(sum) save
 	mat total = (total \ r(StatTotal))
 }
 

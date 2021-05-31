@@ -11,6 +11,7 @@ drop foreign
 
 sort frame_id_numeric year
 gen x_before = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+gen hole10_before = (x_before > 10 & x_before != .)
 gen hole2_before = (x_before > 2 & x_before != .)
 gen hole1_before = (x_before > 1 & x_before != .)
 
@@ -26,6 +27,7 @@ merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(match) nogen
 
 sort frame_id_numeric year
 gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+gen hole10_after_m = (x_after > 10 & x_after != .)
 gen hole2_after_m = (x_after > 2 & x_after != .)
 gen hole1_after_m = (x_after > 1 & x_after != .)
 
@@ -43,6 +45,7 @@ drop foreign
 merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(1 3)
 sort frame_id_numeric year
 gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+gen hole10_after_mm = (x_after > 10 & x_after != .)
 gen hole2_after_mm = (x_after > 2 & x_after != .)
 gen hole1_after_mm = (x_after > 1 & x_after != .)
 
@@ -57,6 +60,7 @@ use "`here'/temp/balance-small-clean.dta", clear
 merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(2 3)
 sort frame_id_numeric year
 gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+gen hole10_after_um = (x_after > 10 & x_after != .)
 gen hole2_after_um = (x_after > 2 & x_after != .)
 gen hole1_after_um = (x_after > 1 & x_after != .)
 
@@ -75,9 +79,9 @@ rename ever_foreign_ceo ever_foreign
 drop foreign_nceo ever_foreign_nceo
 
 do "code/create/calc_hole.do"
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
 mat total = r(StatTotal)
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if filter == 3, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if filter == 3, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 *nceo overriden to have zeros
@@ -92,9 +96,9 @@ scalar dropped_too_many_foreign_change = r(N_drop)
 display dropped_too_many_foreign_change
 
 do "code/create/calc_hole.do"
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
 mat total = (total \ r(StatTotal))
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if filter == 3, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if filter == 3, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 * divestiture
@@ -108,9 +112,9 @@ keep if start_as_domestic
 keep if owner_spell <= 2
 
 do "code/create/calc_hole.do"
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
 mat total = (total \ r(StatTotal))
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole1 hole2 if filter == 3, stat(sum) save
+tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if filter == 3, stat(sum) save
 mat total = (total \ r(StatTotal))
 
 mat list total

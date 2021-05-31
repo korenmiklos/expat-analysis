@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/firm_panel.log
   log type:  text
- opened on:  26 May 2021, 17:53:57
+ opened on:  31 May 2021, 10:37:06
 
 . 
 . * keep only sample from balance-small - NOTE: had to restructure as we have to keep foreign which is different in years - so no collapse this time
@@ -17,8 +17,8 @@
 . tempfile sample
 
 . save `sample', replace
-(note: file /srv/sandbox/zavecz/St05719.000001 not found)
-file /srv/sandbox/zavecz/St05719.000001 saved
+(note: file /srv/sandbox/zavecz/St1249358.000001 not found)
+file /srv/sandbox/zavecz/St1249358.000001 saved
 
 . 
 . * count expats in do - asterisk used
@@ -420,7 +420,7 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/raw_c
 (25,400 real changes made)
 (1227 real changes made)
 (1397 real changes made)
-file /srv/sandbox/zavecz/St05719.000002 saved
+file /srv/sandbox/zavecz/St1249358.000002 saved
   288,033
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -656,7 +656,7 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/raw_n
 (5,128 real changes made)
 (148 real changes made)
 (188 real changes made)
-file /srv/sandbox/zavecz/St05719.000003 saved
+file /srv/sandbox/zavecz/St1249358.000003 saved
 
 . 
 . *for descriptives (number of ceo-s and nceo-s in final data, number of ceo and nceo job-spells in final data) - part II
@@ -770,5 +770,5 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/firm_
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/firm_panel.log
   log type:  text
- closed on:  26 May 2021, 17:55:04
+ closed on:  31 May 2021, 10:38:10
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
