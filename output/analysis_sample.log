@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- opened on:  31 May 2021, 10:38:17
+ opened on:  31 May 2021, 10:45:20
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -238,11 +238,11 @@ hole1_after |
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                       280,857
-        from master                   280,857  (filter==1)
+    not matched                       280,858
+        from master                   280,858  (filter==1)
         from using                          0  (filter==2)
 
-    matched                            21,706  (filter==3)
+    matched                            21,705  (filter==3)
     -----------------------------------------
 
 . drop ever_foreign
@@ -289,7 +289,7 @@ end of do-file
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
 ---------+--------------------------------------------------------------------------------------------------------------------------------------------
-     sum |     11898      1022      1156      1399      1498      1310      1085       919     21706       362       138        81        51        34
+     sum |     11898      1022      1156      1399      1498      1309      1085       919     21705       362       138        81        51        34
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    stats |     hole6     hole7     hole8     hole9    hole10
@@ -370,7 +370,7 @@ end of do-file
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
 ---------+--------------------------------------------------------------------------------------------------------------------------------------------
-     sum |     11898      1022      1156      1399      1498      1310      1085       919     21706       362       138        81        51        34
+     sum |     11898      1022      1156      1399      1498      1309      1085       919     21705       362       138        81        51        34
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    stats |     hole6     hole7     hole8     hole9    hole10
@@ -449,9 +449,9 @@ end of do-file
 total[6,19]
        foreign  foreign_3  foreign_2  foreign_1   foreign0   foreign1   foreign2   foreign3      count      hole1      hole2      hole3      hole4      hole5
 sum      30721       1188       1362       1647       2096       2796       2697       2518     302563       3760       1277        723        474        306
-sum      11898       1022       1156       1399       1498       1310       1085        919      21706        362        138         81         51         34
+sum      11898       1022       1156       1399       1498       1309       1085        919      21705        362        138         81         51         34
 sum      29170       1116       1275       1530       1956       2639       2540       2364     299371       3707       1260        712        469        302
-sum      11898       1022       1156       1399       1498       1310       1085        919      21706        362        138         81         51         34
+sum      11898       1022       1156       1399       1498       1309       1085        919      21705        362        138         81         51         34
 sum      11898       1116       1254       1482       1532       1309       1088        925     277116       3383       1153        650        422        268
 sum      11898       1022       1156       1399       1498       1309       1085        919      21705        362        138         81         51         34
 
@@ -596,5 +596,5 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/analy
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- closed on:  31 May 2021, 10:38:35
+ closed on:  31 May 2021, 10:45:36
 --------------------------------------------------------------------------------------------------------------------------------------------------------------

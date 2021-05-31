@@ -168,20 +168,31 @@ log close
 
 * frame_id_numeric codes for ever_foreign
 preserve
-keep if ever_foreign
-duplicates drop frame_id_numeric year, force
+	keep if ever_foreign
+	duplicates drop frame_id_numeric year, force
 save "`here'/temp/ever_foreign.dta", replace
 restore
 
 * create holes id list
 preserve
-keep if hole1 == 1 & ever_foreign == 1
-keep originalid frame_id_numeric year
-count
-save "`here'/temp/holes_ever_foreign.dta", replace
-set seed 123
-sample 20, count
-export delimited using "`here'/temp/holes_sample.csv", replace
+	keep if hole1 == 1 & ever_foreign == 1
+	keep originalid frame_id_numeric year
+	count
+	save "`here'/temp/holes_ever_foreign.dta", replace
+	set seed 123
+	sample 20, count
+	export delimited using "`here'/temp/holes_sample.csv", replace
+restore
+
+* create holes id list in time_foreign == 1 (should time_foreign be created here?)
+preserve
+	bys frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.))
+	generate time_foreign = year - first_year_foreign
+	tab time_foreign if hole1 == 1 & ever_foreign == 1
+	keep if hole1 == 1 & ever_foreign == 1 & time_foreign == -1
+	keep originalid frame_id_numeric year
+	count
+	save "`here'/temp/holes_ever_foreign_event.dta", replace
 restore
 
 *for descriptives (number of ceo-s and nceo-s in final data, number of ceo and nceo job-spells in final data) - part III
