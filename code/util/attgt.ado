@@ -148,12 +148,13 @@ program attgt, eclass
 		matrix `att' = `tr' - `co'
 
 		* wild bootstrap with Rademacher weights requires flipping the error term
-		* we only have a cumulate error term here, requires cluster at ivar level
 		quietly replace `_y_' = cond(``tw''>0, `y' - `tr', `y') if ``tw'' !=0 & !missing(``tw'') & `touse'
 		quietly replace `_alty_' = cond(``tw''>0, `tr' - `y', -`y') if ``tw'' !=0 & !missing(``tw'') & `touse'
+		quietly replace `_y_' = cond(``cw''>0, `y' - `co', `y') if ``cw'' !=0 & !missing(``cw'') & `touse'
+		quietly replace `_alty_' = cond(``cw''>0, `co' - `y', -`y') if ``cw'' !=0 & !missing(``cw'') & `touse'
 
 		set seed 4399
-		mata: st_numscalar("`v'", bs_variance("`_y_' `_alty_' ``tw'' `cluster'", `B', 1))
+		mata: st_numscalar("`v'", bs_variance("`_y_' `_alty_' ``tw'' ``cw'' `cluster'", `B', 1))
 		matrix `b' = nullmat(`b'), `att'
 		matrix `V' = nullmat(`V'), `v'
 		local colname `colname' `tw'
@@ -211,7 +212,7 @@ real scalar bs_variance(string matrix vars, real scalar B, real scalar cluster)
 	theta = J(B, 1, .)
 
 	if (cluster==1) {
-		group = recode(X[1..., 4])
+		group = recode(X[1..., 5])
 		K = max(group)
 	}
 	else {
@@ -226,7 +227,7 @@ real scalar bs_variance(string matrix vars, real scalar B, real scalar cluster)
 			Y[n,1] = X[n, 1..2][flip[group[n]]]
 		}
 
-		theta[i, 1] = colsum(Y :* X[1..., 3])
+		theta[i, 1] = colsum(Y :* X[1..., 3]) - colsum(Y :* X[1..., 4])
 	}
 	return((variance(theta))[1,1])
 }
