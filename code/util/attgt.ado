@@ -39,7 +39,7 @@ program attgt, eclass
 	tempvar group _alty_ _y_ flip
 	tempname b V v att co tr _tr_
 	quietly egen `group' = min(cond(`treatment', `time'-1, .)) if `touse', by(`i')
-	quietly summarize `time'
+	quietly summarize `time' if `touse'
 	local min_time = r(min)
 	local max_time = r(max)
 	
@@ -49,6 +49,7 @@ program attgt, eclass
 
 	* FIXME: check that g = min_time is not used as control
 	* create design matrix
+	display "Generating weights..."
 	foreach g in `gs' {
 		foreach t in `ts' {
 		if (`g'!=`t') & (`g'>`min_time') {
@@ -147,6 +148,8 @@ program attgt, eclass
 	forvalues n = 1/`nw' {
 		local tw : word `n' of `tweights'
 		local cw : word `n' of `cweights'
+
+		display "Estimating `tw'"
 
 		mata: st_numscalar("`co'", sum_product("`y' ``cw''"))
 		mata: st_numscalar("`tr'", sum_product("`y' ``tw''"))
