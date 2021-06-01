@@ -36,11 +36,20 @@ program attgt, eclass
 		local cluster `i'
 	}
 
+	egen ivar = group(`i')
+	egen tvar = group(`time')
+	egen gvar = min(cond(`treatment', tvar-1, .)) if `touse', by(`i')
+	replace gvar = 0 if missing(gvar)
+
+	generate _y_ = .
+	mata: difference_baseline("_y_ `y' ivar tvar gvar")
+	BRK
+
 	tempvar group _alty_ _y_ flip
 	tempname b V v att co tr _tr_
-	quietly egen `group' = min(cond(`treatment', `time'-1, .)) if `touse', by(`i')
 	quietly summarize `time'
 	local min_time = r(min)
+	local max_time = r(max)
 	
 	* build fixed effects to include
 	* user fixed effects have to be interacted with `post'
@@ -55,9 +64,10 @@ program attgt, eclass
 	}
 
 	* estimate ATT(g,t) as eq 2.6 in https://pedrohcgs.github.io/files/Callaway_SantAnna_2020.pdf
-	quietly levelsof `group' if `touse', local(gs)
+	quietly levelsof `group' if `touse' & `group' > `min_time', local(gs)
 	quietly levelsof `time' if `touse', local(ts)
 
+	* FIXME: check that g = min_time is not used as control
 	* create design matrix
 	foreach g in `gs' {
 		foreach t in `ts' {
@@ -74,7 +84,8 @@ program attgt, eclass
 			}
 			else {
 				* not yet treated
-				local control (missing(`group') | (`group' >= max(`g', `t'))) & (`timing')
+				* QUESTION: > or >=
+				local control (missing(`group') | (`group' > max(`g', `t'))) & (`timing')
 			}
 			quietly count if `treated' & `touse'
 			local n_treated = r(N)/2
@@ -90,25 +101,42 @@ program attgt, eclass
 	}
 
 	if ("`aggregate'"=="e") {
-		forvalues enumeric = -`pre'/`post' {
-			mata: st_local("e", minus(`enumeric'))
-			display "`e' `enumeric'"
+		forvalues e = 1/`pre' {
+			tempvar wte_m`e' wce_m`e'
+			quietly generate `wte_m`e'' = 0
+			quietly generate `wce_m`e'' = 0
+			foreach g in `gs' {
+				local t = `g' - `e'
+				if (`t' >= `min_time') {
+					* FIXME: it is not simple addition of weights!
+					quietly replace `wte_m`e'' = `wte_m`e'' + `treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
+					quietly replace `wce_m`e'' = `wce_m`e'' + `control_`g'_`t'' if !missing(`control_`g'_`t'') & `touse'
+				}
+			}
+			local tweights `tweights' wte_m`e'
+			local cweights `cweights' wce_m`e'
+		}
+		forvalues e = 1/`post' {
 			tempvar wte_`e' wce_`e'
 			quietly generate `wte_`e'' = 0
 			quietly generate `wce_`e'' = 0
 			foreach g in `gs' {
-				foreach t in `ts' {
-				if (`g'!=`t') & (`g'>`min_time') {
-					quietly replace `wte_`e'' = `wte_`e'' + `treated_`g'_`t'' if `t'-`g'==`enumeric' & !missing(`treated_`g'_`t'') & `touse'
-					quietly replace `wce_`e'' = `wce_`e'' + `control_`g'_`t'' if `t'-`g'==`enumeric' & !missing(`control_`g'_`t'') & `touse'
-				}
+				local t = `g' + `e'
+				if (`t' <= `max_time') {
+					quietly replace `wte_`e'' = `wte_`e'' + `treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
+					quietly replace `wce_`e'' = `wce_`e'' + `control_`g'_`t'' if !missing(`control_`g'_`t'') & `touse'
 				}
 			}
+			local tweights `tweights' wte_`e'
+			local cweights `cweights' wce_`e'
+		}
 		if ("`debug'"!="") {
-			display "`e'"
+			display "Lag 1"
+			tabulate `wte_m`e'', missing
+			tabulate `wce_m`e'', missing
+			display "Lead 1"
 			tabulate `wte_`e'', missing
 			tabulate `wce_`e'', missing
-		}
 		}
 	}
 	if ("`aggregate'"=="gt") {
@@ -234,45 +262,55 @@ real vector recode(real vector x)
 
 real matrix build_index(real vector ivar, real vector tvar)
 {
-	N = rows(uniqrows(ivar))
-	T = rows(uniqrows(tvar))
-	it = ivar, tvar
+	N = colmax(ivar)
+	T = colmax(tvar)
 
 	index = J(N, T, 0)
 	for (i=1; i<=N; i++) {
 		for (t=1; t<=T; t++) {
-			index[i, t] = min(select(it, (it[., 1] :== i) :& (it[., 2] :== t)))
+			loc = selectindex((ivar :== i) :& (tvar :== t))
+			if (rows(loc) & cols(loc)) {
+				index[i, t] = loc[1]
+			}
 		}
 	}
 	return(index)
 }
 
-real vector gt_difference(real vector X, real scalar g, real scalar t, real matrix index)
-{
-	N = rows(index)
-	Y = J(rows(X), 1, .)
-	for (i=1; i<=N; i++) {
-		Y[index[i, t]] = X[index[i, t]] - X[index[i, g]]
-	}
-	return(Y)
-}
-
 void difference_baseline(string scalar vars)
 {
-	xvar = 1
-	ivar = 2
-	tvar = 3
-	gvar = 4
+	real matrix YX
+	st_view(YX, ., vars)
 
-	real matrix X
-	st_view(X, ., vars, 0)
-	N = rows(X)
+	ivar = YX[., 3]
+	tvar = YX[., 4]
+	gvar = YX[., 5]
 
-	index = build_index(X[., ivar], X[., tvar])
-	groups = X[., gvar]
+	T = colmax(tvar)
+	N = colmax(ivar)
+
+	index = build_index(ivar, tvar)
+	printf("503,7 = %f", index[503,7])
 
 	for (i=1; i<=N; i++) {
-		g = groups[i]
+		for (g=1; g<=T; g++) {
+			if (index[i, g] > 0) {
+				baseline = YX[index[i, g], 2]
+			}
+			else {
+				baseline = .
+			}
+			for (t=1; t<=T; t++) {
+				if (index[i, t] > 0) {
+					gg = gvar[index[i, t]]
+					if (gg > 0) {
+						if (index[i, gg] > 0) {
+							YX[index[i, t], 1] = YX[index[i, t], 2] - YX[index[i, gg], 2]
+						}
+					}
+				}
+			}
+		}
 	}
 }
 
