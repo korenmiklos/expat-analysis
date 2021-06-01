@@ -36,33 +36,13 @@ program attgt, eclass
 		local cluster `i'
 	}
 
-	egen ivar = group(`i')
-	egen tvar = group(`time')
-	egen gvar = min(cond(`treatment', tvar-1, .)) if `touse', by(`i')
-	replace gvar = 0 if missing(gvar)
-
-	generate _y_ = .
-	mata: difference_baseline("_y_ `y' ivar tvar gvar")
-	BRK
-
 	tempvar group _alty_ _y_ flip
 	tempname b V v att co tr _tr_
+	quietly egen `group' = min(cond(`treatment', `time'-1, .)) if `touse', by(`i')
 	quietly summarize `time'
 	local min_time = r(min)
 	local max_time = r(max)
 	
-	* build fixed effects to include
-	* user fixed effects have to be interacted with `post'
-	local a i
-	if ("`absorb'"!="") {
-		foreach word in `absorb' {
-			local a "`a' `post'##`word'"
-		}
-	}
-	else {
-		local a `i' `post'
-	}
-
 	* estimate ATT(g,t) as eq 2.6 in https://pedrohcgs.github.io/files/Callaway_SantAnna_2020.pdf
 	quietly levelsof `group' if `touse' & `group' > `min_time', local(gs)
 	quietly levelsof `time' if `touse', local(ts)
@@ -101,32 +81,40 @@ program attgt, eclass
 	}
 
 	if ("`aggregate'"=="e") {
-		forvalues e = 1/`pre' {
+		tempname n_e
+		forvalues e = `pre'(-1)1 {
+			scalar `n_e' = 0
 			tempvar wte_m`e' wce_m`e'
 			quietly generate `wte_m`e'' = 0
 			quietly generate `wce_m`e'' = 0
 			foreach g in `gs' {
 				local t = `g' - `e'
 				if (`t' >= `min_time') {
-					* FIXME: it is not simple addition of weights!
-					quietly replace `wte_m`e'' = `wte_m`e'' + `treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
-					quietly replace `wce_m`e'' = `wce_m`e'' + `control_`g'_`t'' if !missing(`control_`g'_`t'') & `touse'
+					quietly replace `wte_m`e'' = `wte_m`e'' + `n_`g'_`t''*`treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
+					quietly replace `wce_m`e'' = `wce_m`e'' + `n_`g'_`t''*`control_`g'_`t'' if !missing(`control_`g'_`t'') & `touse'
+					scalar `n_e' = `n_e' + `n_`g'_`t''
 				}
 			}
+			quietly replace `wte_m`e'' = `wte_m`e'' / `n_e' 
+			quietly replace `wce_m`e'' = `wce_m`e'' / `n_e' 
 			local tweights `tweights' wte_m`e'
 			local cweights `cweights' wce_m`e'
 		}
 		forvalues e = 1/`post' {
+			scalar `n_e' = 0
 			tempvar wte_`e' wce_`e'
 			quietly generate `wte_`e'' = 0
 			quietly generate `wce_`e'' = 0
 			foreach g in `gs' {
 				local t = `g' + `e'
 				if (`t' <= `max_time') {
-					quietly replace `wte_`e'' = `wte_`e'' + `treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
-					quietly replace `wce_`e'' = `wce_`e'' + `control_`g'_`t'' if !missing(`control_`g'_`t'') & `touse'
+					quietly replace `wte_`e'' = `wte_`e'' + `n_`g'_`t''*`treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
+					quietly replace `wce_`e'' = `wce_`e'' + `n_`g'_`t''*`control_`g'_`t'' if !missing(`control_`g'_`t'') & `touse'
+					scalar `n_e' = `n_e' + `n_`g'_`t''
 				}
 			}
+			quietly replace `wte_`e'' = `wte_`e'' / `n_e' 
+			quietly replace `wce_`e'' = `wce_`e'' / `n_e' 
 			local tweights `tweights' wte_`e'
 			local cweights `cweights' wce_`e'
 		}
