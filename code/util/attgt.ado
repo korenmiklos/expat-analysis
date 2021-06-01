@@ -85,47 +85,39 @@ program attgt, eclass
 		tempname n_e
 		forvalues e = `pre'(-1)1 {
 			scalar `n_e' = 0
-			tempvar wte_m`e' wce_m`e'
-			quietly generate `wte_m`e'' = 0
+			tempvar event_m`e' wce_m`e'
+			quietly generate `event_m`e'' = 0
 			quietly generate `wce_m`e'' = 0
 			foreach g in `gs' {
 				local t = `g' - `e'
 				if (`t' >= `min_time') {
-					quietly replace `wte_m`e'' = `wte_m`e'' + `n_`g'_`t''*`treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
+					quietly replace `event_m`e'' = `event_m`e'' + `n_`g'_`t''*`treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
 					quietly replace `wce_m`e'' = `wce_m`e'' + `n_`g'_`t''*`control_`g'_`t'' if !missing(`control_`g'_`t'') & `touse'
 					scalar `n_e' = `n_e' + `n_`g'_`t''
 				}
 			}
-			quietly replace `wte_m`e'' = `wte_m`e'' / `n_e' 
+			quietly replace `event_m`e'' = `event_m`e'' / `n_e' 
 			quietly replace `wce_m`e'' = `wce_m`e'' / `n_e' 
-			local tweights `tweights' wte_m`e'
+			local tweights `tweights' event_m`e'
 			local cweights `cweights' wce_m`e'
 		}
 		forvalues e = 1/`post' {
 			scalar `n_e' = 0
-			tempvar wte_`e' wce_`e'
-			quietly generate `wte_`e'' = 0
+			tempvar event_`e' wce_`e'
+			quietly generate `event_`e'' = 0
 			quietly generate `wce_`e'' = 0
 			foreach g in `gs' {
 				local t = `g' + `e'
 				if (`t' <= `max_time') {
-					quietly replace `wte_`e'' = `wte_`e'' + `n_`g'_`t''*`treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
+					quietly replace `event_`e'' = `event_`e'' + `n_`g'_`t''*`treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
 					quietly replace `wce_`e'' = `wce_`e'' + `n_`g'_`t''*`control_`g'_`t'' if !missing(`control_`g'_`t'') & `touse'
 					scalar `n_e' = `n_e' + `n_`g'_`t''
 				}
 			}
-			quietly replace `wte_`e'' = `wte_`e'' / `n_e' 
+			quietly replace `event_`e'' = `event_`e'' / `n_e' 
 			quietly replace `wce_`e'' = `wce_`e'' / `n_e' 
-			local tweights `tweights' wte_`e'
+			local tweights `tweights' event_`e'
 			local cweights `cweights' wce_`e'
-		}
-		if ("`debug'"!="") {
-			display "Lag 1"
-			tabulate `wte_m`e'', missing
-			tabulate `wce_m`e'', missing
-			display "Lead 1"
-			tabulate `wte_`e'', missing
-			tabulate `wce_`e'', missing
 		}
 	}
 	if ("`aggregate'"=="gt") {
@@ -160,7 +152,7 @@ program attgt, eclass
 		quietly replace `_y_' = cond(``tw''>0, `y' - `tr', `y') if ``tw'' !=0 & !missing(``tw'') & `touse'
 		quietly replace `_alty_' = cond(``tw''>0, `tr' - `y', -`y') if ``tw'' !=0 & !missing(``tw'') & `touse'
 
-		* try iid wild bootstrsap
+		set seed 4399
 		mata: st_numscalar("`v'", bs_variance("`_y_' `_alty_' ``tw'' `cluster'", `B', 1))
 		matrix `b' = nullmat(`b'), `att'
 		matrix `V' = nullmat(`V'), `v'
