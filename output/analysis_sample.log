@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- opened on:  31 May 2021, 10:45:20
+ opened on:   3 Jun 2021, 19:55:53
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -13,7 +13,7 @@
 . sort frame_id_numeric year
 
 . gen x_before = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-(27,387 missing values generated)
+(27,389 missing values generated)
 
 . gen hole10_before = (x_before > 10 & x_before != .)
 
@@ -26,29 +26,36 @@
   2.         tab `var'
   3. }
 
+     hole10 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    364,308       99.99       99.99
+          1 |         31        0.01      100.00
+------------+-----------------------------------
+      Total |    364,339      100.00
+
 hole10_befo |
          re |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    357,928       99.98       99.98
-          1 |         56        0.02      100.00
+          0 |    364,308       99.99       99.99
+          1 |         31        0.01      100.00
 ------------+-----------------------------------
-      Total |    357,984      100.00
+      Total |    364,339      100.00
 
 hole2_befor |
           e |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    356,681       99.64       99.64
-          1 |      1,303        0.36      100.00
+          0 |    363,189       99.68       99.68
+          1 |      1,150        0.32      100.00
 ------------+-----------------------------------
-      Total |    357,984      100.00
+      Total |    364,339      100.00
 
 hole1_befor |
           e |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    353,821       98.84       98.84
-          1 |      4,163        1.16      100.00
+          0 |    360,144       98.85       98.85
+          1 |      4,195        1.15      100.00
 ------------+-----------------------------------
-      Total |    357,984      100.00
+      Total |    364,339      100.00
 
 . 
 . drop x_before hole*
@@ -59,7 +66,7 @@ hole1_befor |
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
-    matched                           302,563  
+    matched                           307,760  
     -----------------------------------------
 
 . *merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(1 3) //nogen
@@ -68,7 +75,7 @@ hole1_befor |
 . sort frame_id_numeric year
 
 . gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-(25,400 missing values generated)
+(25,405 missing values generated)
 
 . gen hole10_after_m = (x_after > 10 & x_after != .)
 
@@ -81,29 +88,47 @@ hole1_befor |
   2.         tab `var'
   3. }
 
+  (firstnm) |
+hole10_bala |
+        nce |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    307,733       99.99       99.99
+          1 |         27        0.01      100.00
+------------+-----------------------------------
+      Total |    307,760      100.00
+
+  (firstnm) |
+hole10_bala |
+        nce |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |     28,460      100.00      100.00
+          1 |          1        0.00      100.00
+------------+-----------------------------------
+      Total |     28,461      100.00
+
 hole10_afte |
         r_m |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    302,496       99.98       99.98
-          1 |         67        0.02      100.00
+          0 |    307,716       99.99       99.99
+          1 |         44        0.01      100.00
 ------------+-----------------------------------
-      Total |    302,563      100.00
+      Total |    307,760      100.00
 
 hole2_after |
          _m |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    301,286       99.58       99.58
-          1 |      1,277        0.42      100.00
+          0 |    306,594       99.62       99.62
+          1 |      1,166        0.38      100.00
 ------------+-----------------------------------
-      Total |    302,563      100.00
+      Total |    307,760      100.00
 
 hole1_after |
          _m |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    298,803       98.76       98.76
-          1 |      3,760        1.24      100.00
+          0 |    303,959       98.76       98.76
+          1 |      3,801        1.24      100.00
 ------------+-----------------------------------
-      Total |    302,563      100.00
+      Total |    307,760      100.00
 
 . 
 . *tab _merge
@@ -121,17 +146,17 @@ hole1_after |
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                        55,421
-        from master                    55,421  (_merge==1)
+    not matched                        56,579
+        from master                    56,579  (_merge==1)
         from using                          0  (_merge==2)
 
-    matched                           302,563  (_merge==3)
+    matched                           307,760  (_merge==3)
     -----------------------------------------
 
 . sort frame_id_numeric year
 
 . gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-(27,387 missing values generated)
+(27,389 missing values generated)
 
 . gen hole10_after_mm = (x_after > 10 & x_after != .)
 
@@ -144,29 +169,54 @@ hole1_after |
   2.         tab `var'
   3. }
 
+     hole10 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    364,308       99.99       99.99
+          1 |         31        0.01      100.00
+------------+-----------------------------------
+      Total |    364,339      100.00
+
+  (firstnm) |
+hole10_bala |
+        nce |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    307,733       99.99       99.99
+          1 |         27        0.01      100.00
+------------+-----------------------------------
+      Total |    307,760      100.00
+
+  (firstnm) |
+hole10_bala |
+        nce |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |     28,460      100.00      100.00
+          1 |          1        0.00      100.00
+------------+-----------------------------------
+      Total |     28,461      100.00
+
 hole10_afte |
        r_mm |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    357,928       99.98       99.98
-          1 |         56        0.02      100.00
+          0 |    364,308       99.99       99.99
+          1 |         31        0.01      100.00
 ------------+-----------------------------------
-      Total |    357,984      100.00
+      Total |    364,339      100.00
 
 hole2_after |
         _mm |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    356,681       99.64       99.64
-          1 |      1,303        0.36      100.00
+          0 |    363,189       99.68       99.68
+          1 |      1,150        0.32      100.00
 ------------+-----------------------------------
-      Total |    357,984      100.00
+      Total |    364,339      100.00
 
 hole1_after |
         _mm |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    353,821       98.84       98.84
-          1 |      4,163        1.16      100.00
+          0 |    360,144       98.85       98.85
+          1 |      4,195        1.15      100.00
 ------------+-----------------------------------
-      Total |    357,984      100.00
+      Total |    364,339      100.00
 
 . drop x_after hole*
 
@@ -181,17 +231,17 @@ hole1_after |
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                         1,917
+    not matched                         2,056
         from master                         0  (_merge==1)
-        from using                      1,917  (_merge==2)
+        from using                      2,056  (_merge==2)
 
-    matched                           302,563  (_merge==3)
+    matched                           307,760  (_merge==3)
     -----------------------------------------
 
 . sort frame_id_numeric year
 
 . gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-(25,400 missing values generated)
+(25,405 missing values generated)
 
 . gen hole10_after_um = (x_after > 10 & x_after != .)
 
@@ -204,29 +254,54 @@ hole1_after |
   2.         tab `var'
   3. }
 
+     hole10 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    307,733       99.99       99.99
+          1 |         27        0.01      100.00
+------------+-----------------------------------
+      Total |    307,760      100.00
+
+  (firstnm) |
+hole10_bala |
+        nce |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    309,789       99.99       99.99
+          1 |         27        0.01      100.00
+------------+-----------------------------------
+      Total |    309,816      100.00
+
+  (firstnm) |
+hole10_bala |
+        nce |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |     28,550      100.00      100.00
+          1 |          1        0.00      100.00
+------------+-----------------------------------
+      Total |     28,551      100.00
+
 hole10_afte |
        r_um |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    304,413       99.98       99.98
-          1 |         67        0.02      100.00
+          0 |    309,772       99.99       99.99
+          1 |         44        0.01      100.00
 ------------+-----------------------------------
-      Total |    304,480      100.00
+      Total |    309,816      100.00
 
 hole2_after |
         _um |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    303,203       99.58       99.58
-          1 |      1,277        0.42      100.00
+          0 |    308,650       99.62       99.62
+          1 |      1,166        0.38      100.00
 ------------+-----------------------------------
-      Total |    304,480      100.00
+      Total |    309,816      100.00
 
 hole1_after |
         _um |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    302,637       99.39       99.39
-          1 |      1,843        0.61      100.00
+          0 |    308,071       99.44       99.44
+          1 |      1,745        0.56      100.00
 ------------+-----------------------------------
-      Total |    304,480      100.00
+      Total |    309,816      100.00
 
 . drop x_after hole*
 
@@ -238,11 +313,11 @@ hole1_after |
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                       280,858
-        from master                   280,858  (filter==1)
+    not matched                       285,203
+        from master                   285,203  (filter==1)
         from using                          0  (filter==2)
 
-    matched                            21,705  (filter==3)
+    matched                            22,557  (filter==3)
     -----------------------------------------
 
 . drop ever_foreign
@@ -262,7 +337,7 @@ hole1_after |
 . sort frame_id_numeric year
 
 . gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-(25,400 missing values generated)
+(25,405 missing values generated)
 
 . forval i = 1(1)10 {
   2.         gen hole`i' = (x > `i' & x != .)
@@ -275,12 +350,12 @@ end of do-file
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
 ---------+--------------------------------------------------------------------------------------------------------------------------------------------
-     sum |     30721      1188      1362      1647      2096      2796      2697      2518    302563      3760      1277       723       474       306
+     sum |     31183      1206      1388      1699      2139      2873      2736      2548    307760      3801      1166       669       433       269
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    stats |     hole6     hole7     hole8     hole9    hole10
 ---------+--------------------------------------------------
-     sum |       211       159       117        89        67
+     sum |       178       133        96        68        44
 ------------------------------------------------------------
 
 . mat total = r(StatTotal)
@@ -289,12 +364,12 @@ end of do-file
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
 ---------+--------------------------------------------------------------------------------------------------------------------------------------------
-     sum |     11898      1022      1156      1399      1498      1309      1085       919     21705       362       138        81        51        34
+     sum |     12430      1043      1187      1443      1550      1353      1119       944     22557       373       122        75        48        30
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    stats |     hole6     hole7     hole8     hole9    hole10
 ---------+--------------------------------------------------
-     sum |        21        16        13        11         7
+     sum |        18        14        11        10         7
 ------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
@@ -302,23 +377,23 @@ end of do-file
 . 
 . *nceo overriden to have zeros
 . mvencode *_nceo, mv(0) override
-n_found~nceo: 274359 missing values recoded
-n_insid~nceo: 274359 missing values recoded
-n_outsi~nceo: 274359 missing values recoded
-n_expat_nceo: 274359 missing values recoded
-n_local_nceo: 274359 missing values recoded
-ever_ex~nceo: 274359 missing values recoded
-      n_nceo: 274359 missing values recoded
-   hire_nceo: 274359 missing values recoded
-   fire_nceo: 274359 missing values recoded
-hire_ex~nceo: 274359 missing values recoded
-fire_ex~nceo: 274359 missing values recoded
-ceo_spe~nceo: 274359 missing values recoded
-has_exp~nceo: 274359 missing values recoded
-has_loc~nceo: 274359 missing values recoded
-has_fou~nceo: 274359 missing values recoded
-has_ins~nceo: 274359 missing values recoded
-has_out~nceo: 274359 missing values recoded
+n_found~nceo: 279299 missing values recoded
+n_insid~nceo: 279299 missing values recoded
+n_outsi~nceo: 279299 missing values recoded
+n_expat_nceo: 279299 missing values recoded
+n_local_nceo: 279299 missing values recoded
+ever_ex~nceo: 279299 missing values recoded
+      n_nceo: 279299 missing values recoded
+   hire_nceo: 279299 missing values recoded
+   fire_nceo: 279299 missing values recoded
+hire_ex~nceo: 279299 missing values recoded
+fire_ex~nceo: 279299 missing values recoded
+ceo_spe~nceo: 279299 missing values recoded
+has_exp~nceo: 279299 missing values recoded
+has_loc~nceo: 279299 missing values recoded
+has_fou~nceo: 279299 missing values recoded
+has_ins~nceo: 279299 missing values recoded
+has_out~nceo: 279299 missing values recoded
 
 . 
 . * many foreign changes deleted
@@ -328,12 +403,12 @@ has_out~nceo: 274359 missing values recoded
 
 . 
 . drop if owner_spell_total > 3 // FIXME: doublecheck the length of spells
-(3,192 observations deleted)
+(3,387 observations deleted)
 
 . scalar dropped_too_many_foreign_change = r(N_drop)
 
 . display dropped_too_many_foreign_change
-3192
+3387
 
 . 
 . do "code/create/calc_hole.do"
@@ -343,7 +418,7 @@ has_out~nceo: 274359 missing values recoded
 . sort frame_id_numeric year
 
 . gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-(25,237 missing values generated)
+(25,234 missing values generated)
 
 . forval i = 1(1)10 {
   2.         gen hole`i' = (x > `i' & x != .)
@@ -356,12 +431,12 @@ end of do-file
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
 ---------+--------------------------------------------------------------------------------------------------------------------------------------------
-     sum |     29170      1116      1275      1530      1956      2639      2540      2364    299371      3707      1260       712       469       302
+     sum |     29543      1130      1296      1571      1991      2707      2568      2382    304373      3749      1151       660       430       266
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    stats |     hole6     hole7     hole8     hole9    hole10
 ---------+--------------------------------------------------
-     sum |       207       156       116        88        66
+     sum |       175       131        95        67        43
 ------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
@@ -370,12 +445,12 @@ end of do-file
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
 ---------+--------------------------------------------------------------------------------------------------------------------------------------------
-     sum |     11898      1022      1156      1399      1498      1309      1085       919     21705       362       138        81        51        34
+     sum |     12430      1043      1187      1443      1550      1353      1119       944     22557       373       122        75        48        30
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    stats |     hole6     hole7     hole8     hole9    hole10
 ---------+--------------------------------------------------
-     sum |        21        16        13        11         7
+     sum |        18        14        11        10         7
 ------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
@@ -393,10 +468,10 @@ end of do-file
 
 . *keep if start_as_domestic & owner_spell <= 2
 . keep if start_as_domestic
-(19,138 observations deleted)
+(18,934 observations deleted)
 
 . keep if owner_spell <= 2
-(3,117 observations deleted)
+(3,267 observations deleted)
 
 . 
 . do "code/create/calc_hole.do"
@@ -406,7 +481,7 @@ end of do-file
 . sort frame_id_numeric year
 
 . gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-(23,692 missing values generated)
+(23,717 missing values generated)
 
 . forval i = 1(1)10 {
   2.         gen hole`i' = (x > `i' & x != .)
@@ -419,12 +494,12 @@ end of do-file
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
 ---------+--------------------------------------------------------------------------------------------------------------------------------------------
-     sum |     11898      1116      1254      1482      1532      1309      1088       925    277116      3383      1153       650       422       268
+     sum |     12431      1130      1276      1522      1582      1354      1121       947    282172      3413      1045       597       381       233
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    stats |     hole6     hole7     hole8     hole9    hole10
 ---------+--------------------------------------------------
-     sum |       186       141       106        79        59
+     sum |       156       119        87        60        40
 ------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
@@ -433,12 +508,12 @@ end of do-file
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
 ---------+--------------------------------------------------------------------------------------------------------------------------------------------
-     sum |     11898      1022      1156      1399      1498      1309      1085       919     21705       362       138        81        51        34
+     sum |     12430      1043      1187      1443      1550      1353      1119       944     22557       373       122        75        48        30
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    stats |     hole6     hole7     hole8     hole9    hole10
 ---------+--------------------------------------------------
-     sum |        21        16        13        11         7
+     sum |        18        14        11        10         7
 ------------------------------------------------------------
 
 . mat total = (total \ r(StatTotal))
@@ -448,20 +523,20 @@ end of do-file
 
 total[6,19]
        foreign  foreign_3  foreign_2  foreign_1   foreign0   foreign1   foreign2   foreign3      count      hole1      hole2      hole3      hole4      hole5
-sum      30721       1188       1362       1647       2096       2796       2697       2518     302563       3760       1277        723        474        306
-sum      11898       1022       1156       1399       1498       1309       1085        919      21705        362        138         81         51         34
-sum      29170       1116       1275       1530       1956       2639       2540       2364     299371       3707       1260        712        469        302
-sum      11898       1022       1156       1399       1498       1309       1085        919      21705        362        138         81         51         34
-sum      11898       1116       1254       1482       1532       1309       1088        925     277116       3383       1153        650        422        268
-sum      11898       1022       1156       1399       1498       1309       1085        919      21705        362        138         81         51         34
+sum      31183       1206       1388       1699       2139       2873       2736       2548     307760       3801       1166        669        433        269
+sum      12430       1043       1187       1443       1550       1353       1119        944      22557        373        122         75         48         30
+sum      29543       1130       1296       1571       1991       2707       2568       2382     304373       3749       1151        660        430        266
+sum      12430       1043       1187       1443       1550       1353       1119        944      22557        373        122         75         48         30
+sum      12431       1130       1276       1522       1582       1354       1121        947     282172       3413       1045        597        381        233
+sum      12430       1043       1187       1443       1550       1353       1119        944      22557        373        122         75         48         30
 
          hole6      hole7      hole8      hole9     hole10
-sum        211        159        117         89         67
-sum         21         16         13         11          7
-sum        207        156        116         88         66
-sum         21         16         13         11          7
-sum        186        141        106         79         59
-sum         21         16         13         11          7
+sum        178        133         96         68         44
+sum         18         14         11         10          7
+sum        175        131         95         67         43
+sum         18         14         11         10          7
+sum        156        119         87         60         40
+sum         18         14         11         10          7
 
 . 
 . * check foreign end expat numbers
@@ -469,29 +544,29 @@ sum         21         16         13         11          7
 
 . 
 . count if ever_foreign
-  21,705
+  22,558
 
 . count if ever_foreign & firm_tag
-  1,550
+  1,588
 
 . count if ever_expat_ceo & firm_tag
-  545
+  564
 
 . count if ever_expat_nceo & firm_tag
-  11
+  12
 
 . 
 . count if has_expat_nceo == 1
-  337
+  345
 
 . count if has_expat_nceo == 1 & foreign == 0
-  13
+  14
 
 . count if has_expat_ceo == 1
-  3,997
+  4,214
 
 . count if has_expat_ceo == 1 & foreign == 0 // FIXME - should be 0
-  1
+  0
 
 . count if ever_expat_nceo == 1 & ever_foreign == 0
   10
@@ -523,19 +598,19 @@ frame_id_numeric                                                                
                   type:  numeric (long)
 
                  range:  [10000049,74849574]          units:  1
-         unique values:  23,692                   missing .:  0/277,116
+         unique values:  23,717                   missing .:  0/282,172
 
                   mean:   1.3e+07
-              std. dev:   6.4e+06
+              std. dev:   6.3e+06
 
            percentiles:        10%       25%       50%       75%       90%
                            1.0e+07   1.0e+07   1.1e+07   1.2e+07   2.1e+07
 
 . count if firm_tag
-  23,692
+  23,717
 
 . count
-  277,116
+  282,172
 
 . 
 . mata : mat_total_analysis = st_matrix("total")
@@ -549,15 +624,15 @@ file temp/matrix-analysis.mmat saved
 
 . 
 . bys frame_id_numeric: egen first_year_foreign_new = min(cond(foreign == 1, year,.))
-(255,411 missing values generated)
+(259,614 missing values generated)
 
 . generate time_foreign_new = year - first_year_foreign_new
-(255,411 missing values generated)
+(259,614 missing values generated)
 
 . gen foreign0_new = (time_foreign_new == 0)
 
 . count if foreign0_new == 1
-  1,550
+  1,588
 
 . drop *new
 
@@ -587,7 +662,7 @@ file temp/matrix-analysis.mmat saved
   variable immat was double now long
   variable final_netgep was double now long
   variable country_all_ceo was str12 now str9
-  (19,952,352 bytes saved)
+  (20,316,384 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
 file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/analysis_sample.dta saved
@@ -596,5 +671,5 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/analy
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- closed on:  31 May 2021, 10:45:36
+ closed on:   3 Jun 2021, 19:56:10
 --------------------------------------------------------------------------------------------------------------------------------------------------------------

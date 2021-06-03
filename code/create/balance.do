@@ -19,6 +19,15 @@ xtset frame_id_numeric year
 
 merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign) keep(1 3) nogen
 
+do "code/create/emp_clean"
+count
+count if emp == emp_cl & emp != .
+count if emp != emp_cl & emp != . & emp_cl != .
+count if emp != emp_cl & emp != .
+count if emp != emp_cl & emp_cl != .
+gen emp_add = emp_cl + 1
+corr emp emp_cl emp_add
+
 * foreign fill 
 rename fo3 foreign
 tab year foreign, missing
@@ -125,17 +134,17 @@ foreach x in sales export tanass jetok ranyag ranyag8091 immat {
 }
 
 * change emp
-sort frame_id_numeric year
+*sort frame_id_numeric year
 
-clonevar emp_clean = emp
-replace emp_clean = . if (emp[_n-1] > 5 | emp[_n +1] > 5) & emp == 0
-corr emp emp_clean
+*clonevar emp_clean = emp
+*replace emp_clean = . if (emp[_n-1] > 5 | emp[_n +1] > 5) & emp == 0
+*corr emp emp_clean
 
-gen emp_add = emp_clean + 1
+*gen emp_add = emp_clean + 1
 
 * creating dependent variables
-gen lnL = ln(emp)
-gen lnL_add = ln(emp_add)
+gen lnL = ln(emp_add)
+*gen lnL_add = ln(emp_add)
 gen lnM = ln(ranyag_18)
 replace lnM = ln(ranyag8091_18) if year <= 1991
 gen lnQ = ln(sales_18)
