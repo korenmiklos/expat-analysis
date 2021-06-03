@@ -13,7 +13,8 @@ log using "`here'/output/firm_panel", text replace
 use "`here'/temp/balance-small-clean.dta"
 by frame_id_numeric: egen firm_birth = min(year)
 by frame_id_numeric: egen firm_death = max(year)
-keep frame_id year firm_birth firm_death foreign
+keep frame_id year firm_birth firm_death foreign hole10
+rename hole10 hole10_balance
 tempfile sample
 save `sample', replace
 
@@ -70,7 +71,7 @@ foreach type in ceo nceo {
 	* create job begin and end for each manager spell
 	bys frame_id_numeric manager_id job_spell: egen job_begin = min(year)
 	bys frame_id_numeric manager_id job_spell: egen job_end = max(year)
-	keep frame_id_numeric manager_id job_spell year job_begin job_end expat founder insider outsider firm_birth foreign country_code
+	keep frame_id_numeric manager_id job_spell year job_begin job_end expat founder insider outsider firm_birth foreign country_code hole10_balance
 
 	* if first managers arrive in year 1, extrapolate to year 0 - DROP SPELL
 	bys frame_id_numeric: egen first_cohort = min(job_begin)
@@ -156,7 +157,7 @@ foreach type in ceo nceo {
 	
 	* create firm-year data
 	* FIXME: country_code may be different within a firm-year
-	collapse (sum) n_founder_`type' = founder n_insider_`type' = insider n_outsider_`type' = outsider (firstnm) n_expat_`type' n_local_`type' foreign_`type' = foreign ever_expat_`type' ever_foreign_`type' (count) n_`type' = expat (max) hire_`type' = hire fire_`type' = fire hire_expat_`type' fire_expat_`type', by(frame_id_numeric year)
+	collapse (sum) n_founder_`type' = founder n_insider_`type' = insider n_outsider_`type' = outsider (firstnm) n_expat_`type' n_local_`type' foreign_`type' = foreign ever_expat_`type' ever_foreign_`type' hole10_balance_`type' = hole10_balance (count) n_`type' = expat (max) hire_`type' = hire fire_`type' = fire hire_expat_`type' fire_expat_`type', by(frame_id_numeric year)
 
 	* managers in first year not classified as new hires and in last year not classified as fired
 	bys frame_id_numeric (year): replace hire_`type' = 0 if (_n==1)
@@ -200,4 +201,24 @@ count
 compress
 *save_all_to_json
 save "`here'/temp/firm_events.dta", replace
+
+preserve
+	sort frame_id_numeric year
+	gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+	gen hole10 = (x > 10 & x != .)
+	tab hole10 hole10_balance_ceo
+	*keep if hole10
+	keep if hole10 & !hole10_balance_ceo
+	set seed 123
+	*sample 10, count
+	sample 5, count
+	rename year year_hole
+	*keep frame_id_numeric year_hole hole10 hole10_balance_ceo
+	keep frame_id_numeric year_hole
+	*save "`here'/temp/holes_manager_sample", replace
+	*export delimited using "`here'/temp/holes_manager_sample.csv", replace
+	save "`here'/temp/holes_manager_sample_unique", replace
+	export delimited using "`here'/temp/holes_manager_sample_unique.csv", replace
+restore
+
 log close

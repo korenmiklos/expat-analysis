@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/firm_panel.log
   log type:  text
- opened on:  31 May 2021, 10:37:06
+ opened on:   2 Jun 2021, 18:05:11
 
 . 
 . * keep only sample from balance-small - NOTE: had to restructure as we have to keep foreign which is different in years - so no collapse this time
@@ -12,13 +12,15 @@
 
 . by frame_id_numeric: egen firm_death = max(year)
 
-. keep frame_id year firm_birth firm_death foreign
+. keep frame_id year firm_birth firm_death foreign hole10
+
+. rename hole10 hole10_balance
 
 . tempfile sample
 
 . save `sample', replace
-(note: file /srv/sandbox/zavecz/St1249358.000001 not found)
-file /srv/sandbox/zavecz/St1249358.000001 saved
+(note: file /srv/sandbox/zavecz/St1879821.000001 not found)
+file /srv/sandbox/zavecz/St1879821.000001 saved
 
 . 
 . * count expats in do - asterisk used
@@ -74,7 +76,7 @@ file /srv/sandbox/zavecz/St1249358.000001 saved
 .         * create job begin and end for each manager spell
 .         bys frame_id_numeric manager_id job_spell: egen job_begin = min(year)
  22.         bys frame_id_numeric manager_id job_spell: egen job_end = max(year)
- 23.         keep frame_id_numeric manager_id job_spell year job_begin job_end expat founder insider outsider firm_birth foreign country_code
+ 23.         keep frame_id_numeric manager_id job_spell year job_begin job_end expat founder insider outsider firm_birth foreign country_code hole10_balance
  24. 
 .         * if first managers arrive in year 1, extrapolate to year 0 - DROP SPELL
 .         bys frame_id_numeric: egen first_cohort = min(job_begin)
@@ -163,8 +165,8 @@ file /srv/sandbox/zavecz/St1249358.000001 saved
 .         * create firm-year data
 .         * FIXME: country_code may be different within a firm-year
 .         collapse (sum) n_founder_`type' = founder n_insider_`type' = insider n_outsider_`type' = outsider (firstnm) n_expat_`type' n_local_`type' foreign_`t
-> ype' = foreign ever_expat_`type' ever_foreign_`type' (count) n_`type' = expat (max) hire_`type' = hire fire_`type' = fire hire_expat_`type' fire_expat_`type
-> ', by(frame_id_numeric year)
+> ype' = foreign ever_expat_`type' ever_foreign_`type' hole10_balance_`type' = hole10_balance (count) n_`type' = expat (max) hire_`type' = hire fire_`type' = 
+> fire hire_expat_`type' fire_expat_`type', by(frame_id_numeric year)
  71. 
 .         * managers in first year not classified as new hires and in last year not classified as fired
 .         bys frame_id_numeric (year): replace hire_`type' = 0 if (_n==1)
@@ -420,7 +422,7 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/raw_c
 (25,400 real changes made)
 (1227 real changes made)
 (1397 real changes made)
-file /srv/sandbox/zavecz/St1249358.000002 saved
+file /srv/sandbox/zavecz/St1879821.000002 saved
   288,033
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -656,7 +658,7 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/raw_n
 (5,128 real changes made)
 (148 real changes made)
 (188 real changes made)
-file /srv/sandbox/zavecz/St1249358.000003 saved
+file /srv/sandbox/zavecz/St1879821.000003 saved
 
 . 
 . *for descriptives (number of ceo-s and nceo-s in final data, number of ceo and nceo job-spells in final data) - part II
@@ -731,6 +733,7 @@ has_expat_c |
   variable n_local_ceo was float now byte
   variable ever_expat_ceo was float now byte
   variable ever_foreign_ceo was float now byte
+  variable hole10_balance_ceo was float now byte
   variable n_ceo was long now byte
   variable hire_expat_ceo was float now byte
   variable fire_expat_ceo was float now byte
@@ -744,6 +747,7 @@ has_expat_c |
   variable n_local_nceo was float now byte
   variable ever_expat_nceo was float now byte
   variable ever_foreign_nceo was float now byte
+  variable hole10_balance_nceo was float now byte
   variable n_nceo was long now byte
   variable hire_expat_nceo was float now byte
   variable fire_expat_nceo was float now byte
@@ -760,15 +764,64 @@ has_expat_c |
   variable n_insider_nceo was double now byte
   variable n_outsider_nceo was double now byte
   variable country_all_ceo was str15 now str12
-  (37,451,040 bytes saved)
+  (39,277,920 bytes saved)
 
 . *save_all_to_json
 . save "`here'/temp/firm_events.dta", replace
 file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/firm_events.dta saved
 
+. 
+. preserve
+
+.         sort frame_id_numeric year
+
+.         gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+(25,400 missing values generated)
+
+.         gen hole10 = (x > 10 & x != .)
+
+.         tab hole10 hole10_balance_ceo
+
+           |       (firstnm)
+           |    hole10_balance
+    hole10 |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   304,406          7 |   304,413 
+         1 |        21         46 |        67 
+-----------+----------------------+----------
+     Total |   304,427         53 |   304,480 
+
+.         *keep if hole10
+.         keep if hole10 & !hole10_balance_ceo
+(304,459 observations deleted)
+
+.         set seed 123
+
+.         *sample 10, count
+.         sample 5, count
+(16 observations deleted)
+
+.         rename year year_hole
+
+.         *keep frame_id_numeric year_hole hole10 hole10_balance_ceo
+.         keep frame_id_numeric year_hole
+
+.         *save "`here'/temp/holes_manager_sample", replace
+.         *export delimited using "`here'/temp/holes_manager_sample.csv", replace
+.         save "`here'/temp/holes_manager_sample_unique", replace
+(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/holes_manager_sample_unique.dta not found)
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/holes_manager_sample_unique.dta saved
+
+.         export delimited using "`here'/temp/holes_manager_sample_unique.csv", replace
+(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/holes_manager_sample_unique.csv not found)
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/holes_manager_sample_unique.csv saved
+
+. restore
+
+. 
 . log close
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/firm_panel.log
   log type:  text
- closed on:  31 May 2021, 10:38:10
+ closed on:   2 Jun 2021, 18:07:11
 --------------------------------------------------------------------------------------------------------------------------------------------------------------

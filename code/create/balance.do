@@ -231,7 +231,8 @@ count
 matrix rownames total = "beginning" "greenfield dropped" "sampling" "missing lnK" "missing lnQ" "missing lnL" "missing lnM"
 mata : mat_total_balance = st_matrix("total")
 mata: mata matsave "temp/matrix-balance" mat_total_balance, replace
-drop hole* x
+drop hole? x
+tab hole10
 
 save_all_to_json
 cap drop __*
