@@ -11,7 +11,7 @@ program attgt, eclass
 	if ("`aggregate'"=="") {
 		local aggregate gt
 	}
-	assert inlist("`aggregate'", "gt", "g", "t", "ge", "e", "att")
+	assert inlist("`aggregate'", "gt", "e", "att")
 
 	* read panel structure
 	xtset
@@ -161,15 +161,15 @@ program attgt, eclass
 	}
 	matrix `V' = diag(`V')
 	matrix colname `b' = `colname'
-	*matrix coleq   `b' = `eqname'
+	matrix coleq   `b' = `y'
 	matrix colname `V' = `colname'
-	*matrix coleq   `v' = `eqname'
+	matrix coleq   `V' = `y'
 	matrix rowname `V' = `colname'
-	*matrix roweq   `v' = `eqname'
+	matrix roweq   `V' = `y'
 
 	ereturn post `b' `V'
-	ereturn local cmd csadid
-	ereturn local cmdline csadid `0'
+	ereturn local cmd attgt
+	ereturn local cmdline attgt `0'
 	display "Callaway Sant'Anna (2021)"
 	ereturn display
 
