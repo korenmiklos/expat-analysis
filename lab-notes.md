@@ -3061,3 +3061,81 @@ Callaway Sant'Anna (2021)
      event_5 |   .0302095    .033302     0.91   0.364    -.0350611    .0954802
 ------------------------------------------------------------------------------
 ```
+
+# 2021-06-04
+## Implement att
+```
+. attgt lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(has_expat_ceo ) aggregate(att)
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1988 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating att
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQL         |
+         att |   .2270268    .047694     4.76   0.000     .1335483    .3205053
+------------------------------------------------------------------------------
+
+. attgt lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(foreign ) aggregate(att) reps(50)
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1988 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating att
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQL         |
+         att |   .1448863   .0242845     5.97   0.000     .0972896     .192483
+------------------------------------------------------------------------------
+
+. attgt lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(foreign_hire ) aggregate(att) reps(50)
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1988 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating att
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQL         |
+         att |   .1574648   .0354046     4.45   0.000     .0880732    .2268565
+------------------------------------------------------------------------------
+
+. attgt lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(has_expat_ceo ) aggregate(e) pre(3) post(6) r
+> eps(50)
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1988 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating event_m3
+Estimating event_m2
+Estimating event_m1
+Estimating event_1
+Estimating event_2
+Estimating event_3
+Estimating event_4
+Estimating event_5
+Estimating event_6
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQL         |
+    event_m3 |   .0439256   .0559961     0.78   0.433    -.0658248     .153676
+    event_m2 |   .0567715    .039594     1.43   0.152    -.0208313    .1343743
+    event_m1 |  -.0016242   .0269028    -0.06   0.952    -.0543528    .0511043
+     event_1 |   .1157186     .04367     2.65   0.008     .0301269    .2013103
+     event_2 |   .2348289   .0583469     4.02   0.000      .120471    .3491868
+     event_3 |    .291681   .0688352     4.24   0.000     .1567664    .4265956
+     event_4 |   .3455067   .0735155     4.70   0.000      .201419    .4895943
+     event_5 |   .4164837   .0911845     4.57   0.000     .2377653     .595202
+     event_6 |   .4113804   .1114671     3.69   0.000     .1929089    .6298518
+------------------------------------------------------------------------------
+
+```
