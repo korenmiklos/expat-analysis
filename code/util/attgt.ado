@@ -1,8 +1,6 @@
 program attgt, eclass
 	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 2)] [post(integer 2)] [reps(int 199)] [notyet] [debug] [cluster(varname)]
 	marksample touse
-	** First determine outcome and xvars
-	gettoken y xvar:varlist	
 
 	* boostrap
 	local B `reps'
@@ -130,6 +128,26 @@ program attgt, eclass
 				}
 			}
 	}
+	if ("`aggregate'"=="att") {
+			tempname n
+			tempvar att control
+			quietly generate `att' = 0
+			quietly generate `control' = 0
+			scalar `n' = 0
+			foreach g in `gs' {
+				foreach t in `ts' {
+				if (`g'!=`t') & (`g'>`min_time') {
+					quietly replace `att' = `att' + `n_`g'_`t''*`treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
+					quietly replace `control' = `control' + `n_`g'_`t''*`control_`g'_`t'' if !missing(`control_`g'_`t'') & `touse'
+					scalar `n' = `n' + `n_`g'_`t''
+				}
+				}
+			}
+			quietly replace `att' = `att' / `n' 
+			quietly replace `control' = `control' / `n' 
+			local tweights att
+			local cweights control
+	}
 
 
 	* aggregate across known weights
@@ -137,35 +155,41 @@ program attgt, eclass
 	quietly generate `_y_' = .
 	quietly generate byte `flip' = 0
 	local nw : word count `tweights'
-	forvalues n = 1/`nw' {
-		local tw : word `n' of `tweights'
-		local cw : word `n' of `cweights'
+	foreach y of var `varlist' {
+		forvalues n = 1/`nw' {
+			quietly replace `_alty_' = .
+			quietly replace `_y_' = .
 
-		display "Estimating `tw'"
+			local tw : word `n' of `tweights'
+			local cw : word `n' of `cweights'
 
-		mata: st_numscalar("`co'", sum_product("`y' ``cw''"))
-		mata: st_numscalar("`tr'", sum_product("`y' ``tw''"))
-		matrix `att' = `tr' - `co'
+			display "Estimating `tw'"
 
-		* wild bootstrap with Rademacher weights requires flipping the error term
-		quietly replace `_y_' = cond(``tw''>0, `y' - `tr', `y') if ``tw'' !=0 & !missing(``tw'') & `touse'
-		quietly replace `_alty_' = cond(``tw''>0, `tr' - `y', -`y') if ``tw'' !=0 & !missing(``tw'') & `touse'
-		quietly replace `_y_' = cond(``cw''>0, `y' - `co', `y') if ``cw'' !=0 & !missing(``cw'') & `touse'
-		quietly replace `_alty_' = cond(``cw''>0, `co' - `y', -`y') if ``cw'' !=0 & !missing(``cw'') & `touse'
+			mata: st_numscalar("`co'", sum_product("`y' ``cw''"))
+			mata: st_numscalar("`tr'", sum_product("`y' ``tw''"))
+			matrix `att' = `tr' - `co'
 
-		set seed 4399
-		mata: st_numscalar("`v'", bs_variance("`_y_' `_alty_' ``tw'' ``cw'' `cluster'", `B', 1))
-		matrix `b' = nullmat(`b'), `att'
-		matrix `V' = nullmat(`V'), `v'
-		local colname `colname' `tw'
+			* wild bootstrap with Rademacher weights requires flipping the error term
+			quietly replace `_y_' = cond(``tw''>0, `y' - `tr', `y') if ``tw'' !=0 & !missing(``tw'') & `touse'
+			quietly replace `_alty_' = cond(``tw''>0, `tr' - `y', -`y') if ``tw'' !=0 & !missing(``tw'') & `touse'
+			quietly replace `_y_' = cond(``cw''>0, `y' - `co', `y') if ``cw'' !=0 & !missing(``cw'') & `touse'
+			quietly replace `_alty_' = cond(``cw''>0, `co' - `y', -`y') if ``cw'' !=0 & !missing(``cw'') & `touse'
+
+			set seed 4399
+			mata: st_numscalar("`v'", bs_variance("`_y_' `_alty_' ``tw'' ``cw'' `cluster'", `B', 1))
+			matrix `b' = nullmat(`b'), `att'
+			matrix `V' = nullmat(`V'), `v'
+			local eqname `eqname' `y'
+			local colname `colname' `tw'
+		}
 	}
 	matrix `V' = diag(`V')
 	matrix colname `b' = `colname'
-	matrix coleq   `b' = `y'
+	matrix coleq   `b' = `eqname'
 	matrix colname `V' = `colname'
-	matrix coleq   `V' = `y'
+	matrix coleq   `V' = `eqname'
 	matrix rowname `V' = `colname'
-	matrix roweq   `V' = `y'
+	matrix roweq   `V' = `eqname'
 
 	ereturn post `b' `V'
 	ereturn local cmd attgt
