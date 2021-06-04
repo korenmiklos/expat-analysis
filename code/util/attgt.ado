@@ -163,7 +163,7 @@ program attgt, eclass
 			local tw : word `n' of `tweights'
 			local cw : word `n' of `cweights'
 
-			display "Estimating `tw'"
+			display "Estimating `y': `tw'"
 
 			mata: st_numscalar("`co'", sum_product("`y' ``cw''"))
 			mata: st_numscalar("`tr'", sum_product("`y' ``tw''"))
