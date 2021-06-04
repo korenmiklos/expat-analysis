@@ -3200,5 +3200,42 @@ exporter     |
      event_2 |   .0739714   .0277126     2.67   0.008     .0196558     .128287
      event_3 |   .0738011   .0212182     3.48   0.001     .0322141    .1153881
 ------------------------------------------------------------------------------
+```
 
+Test that order does not matter
+```
+. attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(has_expat_ceo ) aggregate(e) pre(2) 
+> post(3) reps(20)
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1988 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating exporter: event_m2
+Estimating exporter: event_m1
+Estimating exporter: event_1
+Estimating exporter: event_2
+Estimating exporter: event_3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+exporter     |
+    event_m2 |  -.0140938   .0325203    -0.43   0.665    -.0778323    .0496448
+    event_m1 |  -.0322272    .018028    -1.79   0.074    -.0675615    .0031071
+     event_1 |   .0405351   .0205509     1.97   0.049      .000256    .0808142
+     event_2 |   .0739714   .0277126     2.67   0.008     .0196558     .128287
+     event_3 |   .0738011   .0212182     3.48   0.001     .0322141    .1153881
+-------------+----------------------------------------------------------------
+lnQL         |
+    event_m2 |   .0567715   .0431826     1.31   0.189    -.0278649    .1414079
+    event_m1 |  -.0016242    .024751    -0.07   0.948    -.0501352    .0468868
+     event_1 |   .1157186    .036145     3.20   0.001     .0448756    .1865616
+     event_2 |   .2348289   .0513223     4.58   0.000     .1342391    .3354188
+     event_3 |    .291681   .0735978     3.96   0.000      .147432      .43593
+------------------------------------------------------------------------------
 ```
