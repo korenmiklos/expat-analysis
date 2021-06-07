@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- opened on:   3 Jun 2021, 19:55:53
+ opened on:   7 Jun 2021, 11:01:44
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -313,11 +313,11 @@ hole1_after |
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                       285,203
-        from master                   285,203  (filter==1)
+    not matched                       285,202
+        from master                   285,202  (filter==1)
         from using                          0  (filter==2)
 
-    matched                            22,557  (filter==3)
+    matched                            22,558  (filter==3)
     -----------------------------------------
 
 . drop ever_foreign
@@ -330,7 +330,7 @@ hole1_after |
 . drop foreign_nceo ever_foreign_nceo
 
 . 
-. do "code/create/calc_hole.do"
+. do "`here'/code/create/calc_hole.do"
 
 . cap drop hole* x
 
@@ -364,7 +364,7 @@ end of do-file
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
 ---------+--------------------------------------------------------------------------------------------------------------------------------------------
-     sum |     12430      1043      1187      1443      1550      1353      1119       944     22557       373       122        75        48        30
+     sum |     12431      1043      1187      1443      1550      1354      1119       944     22558       373       122        75        48        30
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    stats |     hole6     hole7     hole8     hole9    hole10
@@ -411,7 +411,7 @@ has_out~nceo: 279299 missing values recoded
 3387
 
 . 
-. do "code/create/calc_hole.do"
+. do "`here'/code/create/calc_hole.do"
 
 . cap drop hole* x
 
@@ -445,7 +445,7 @@ end of do-file
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
 ---------+--------------------------------------------------------------------------------------------------------------------------------------------
-     sum |     12430      1043      1187      1443      1550      1353      1119       944     22557       373       122        75        48        30
+     sum |     12431      1043      1187      1443      1550      1354      1119       944     22558       373       122        75        48        30
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    stats |     hole6     hole7     hole8     hole9    hole10
@@ -474,7 +474,7 @@ end of do-file
 (3,267 observations deleted)
 
 . 
-. do "code/create/calc_hole.do"
+. do "`here'/code/create/calc_hole.do"
 
 . cap drop hole* x
 
@@ -508,7 +508,7 @@ end of do-file
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
 ---------+--------------------------------------------------------------------------------------------------------------------------------------------
-     sum |     12430      1043      1187      1443      1550      1353      1119       944     22557       373       122        75        48        30
+     sum |     12431      1043      1187      1443      1550      1354      1119       944     22558       373       122        75        48        30
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    stats |     hole6     hole7     hole8     hole9    hole10
@@ -524,11 +524,11 @@ end of do-file
 total[6,19]
        foreign  foreign_3  foreign_2  foreign_1   foreign0   foreign1   foreign2   foreign3      count      hole1      hole2      hole3      hole4      hole5
 sum      31183       1206       1388       1699       2139       2873       2736       2548     307760       3801       1166        669        433        269
-sum      12430       1043       1187       1443       1550       1353       1119        944      22557        373        122         75         48         30
+sum      12431       1043       1187       1443       1550       1354       1119        944      22558        373        122         75         48         30
 sum      29543       1130       1296       1571       1991       2707       2568       2382     304373       3749       1151        660        430        266
-sum      12430       1043       1187       1443       1550       1353       1119        944      22557        373        122         75         48         30
+sum      12431       1043       1187       1443       1550       1354       1119        944      22558        373        122         75         48         30
 sum      12431       1130       1276       1522       1582       1354       1121        947     282172       3413       1045        597        381        233
-sum      12430       1043       1187       1443       1550       1353       1119        944      22557        373        122         75         48         30
+sum      12431       1043       1187       1443       1550       1354       1119        944      22558        373        122         75         48         30
 
          hole6      hole7      hole8      hole9     hole10
 sum        178        133         96         68         44
@@ -615,9 +615,9 @@ frame_id_numeric                                                                
 . 
 . mata : mat_total_analysis = st_matrix("total")
 
-. mata: mata matsave "temp/matrix-analysis" mat_total_analysis, replace
+. mata: mata matsave "`here'/temp/matrix-analysis" mat_total_analysis, replace
 (saving mat_total_analysis[6,19])
-file temp/matrix-analysis.mmat saved
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/matrix-analysis.mmat saved
 
 . 
 . drop first_year_foreign time_foreign foreign_* foreign? count x
@@ -635,6 +635,38 @@ file temp/matrix-analysis.mmat saved
   1,588
 
 . drop *new
+
+. 
+. **Recompute spell using only hires
+. bys frame_id_numeric: egen first_year_firm = min(year)
+
+. tempvar t_hire
+
+. gen `t_hire'=hire_ceo
+
+. replace `t_hire' = 1 if first_year_firm==year 
+(23,717 real changes made)
+
+. bys frame_id_numeric: gen ceo_spell_hire=sum(`t_hire')
+
+. 
+. ******Foreign-hired ceo***********
+. tempvar t_ceo
+
+. bys frame_id_numeric: egen `t_ceo'= max(ceo_spell_hire) if !foreign
+(12,431 missing values generated)
+
+. bys frame_id_numeric: egen last_ceo_spell_do = max(`t_ceo')
+
+. gen foreign_hire = (ceo_spell_hire > last_ceo_spell_do)
+
+. replace foreign_hire = . if last_ceo_spell_do == .
+(0 real changes made)
+
+. 
+. bys frame_id_numeric: egen ever_foreign_hire = max(foreign_hire)
+
+. cap drop `t_hire' `t_ceo'
 
 . 
 . compress
@@ -657,12 +689,17 @@ file temp/matrix-analysis.mmat saved
   variable hole9 was float now byte
   variable hole10 was float now byte
   variable industry_year was float now int
+  variable first_year_firm was float now int
+  variable ceo_spell_hire was float now byte
+  variable last_ceo_spell_do was float now byte
+  variable foreign_hire was float now byte
+  variable ever_foreign_hire was float now byte
   variable jetok was double now long
   variable export was double now long
   variable immat was double now long
   variable final_netgep was double now long
   variable country_all_ceo was str12 now str9
-  (20,316,384 bytes saved)
+  (24,266,792 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
 file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/analysis_sample.dta saved
@@ -671,5 +708,5 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/analy
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- closed on:   3 Jun 2021, 19:56:10
+ closed on:   7 Jun 2021, 11:02:06
 --------------------------------------------------------------------------------------------------------------------------------------------------------------

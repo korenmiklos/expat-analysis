@@ -78,7 +78,7 @@ rename foreign_ceo foreign
 rename ever_foreign_ceo ever_foreign
 drop foreign_nceo ever_foreign_nceo
 
-do "code/create/calc_hole.do"
+do "`here'/code/create/calc_hole.do"
 tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
 mat total = r(StatTotal)
 tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if filter == 3, stat(sum) save
@@ -95,7 +95,7 @@ drop if owner_spell_total > 3 // FIXME: doublecheck the length of spells
 scalar dropped_too_many_foreign_change = r(N_drop)
 display dropped_too_many_foreign_change
 
-do "code/create/calc_hole.do"
+do "`here'/code/create/calc_hole.do"
 tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
 mat total = (total \ r(StatTotal))
 tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if filter == 3, stat(sum) save
@@ -111,7 +111,7 @@ bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign
 keep if start_as_domestic
 keep if owner_spell <= 2
 
-do "code/create/calc_hole.do"
+do "`here'/code/create/calc_hole.do"
 tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
 mat total = (total \ r(StatTotal))
 tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if filter == 3, stat(sum) save
@@ -152,7 +152,7 @@ count if firm_tag
 count
 
 mata : mat_total_analysis = st_matrix("total")
-mata: mata matsave "temp/matrix-analysis" mat_total_analysis, replace
+mata: mata matsave "`here'/temp/matrix-analysis" mat_total_analysis, replace
 
 drop first_year_foreign time_foreign foreign_* foreign? count x
 
@@ -161,6 +161,23 @@ generate time_foreign_new = year - first_year_foreign_new
 gen foreign0_new = (time_foreign_new == 0)
 count if foreign0_new == 1
 drop *new
+
+**Recompute spell using only hires
+bys frame_id_numeric: egen first_year_firm = min(year)
+tempvar t_hire
+gen `t_hire'=hire_ceo
+replace `t_hire' = 1 if first_year_firm==year 
+bys frame_id_numeric: gen ceo_spell_hire=sum(`t_hire')
+
+******Foreign-hired ceo***********
+tempvar t_ceo
+bys frame_id_numeric: egen `t_ceo'= max(ceo_spell_hire) if !foreign
+bys frame_id_numeric: egen last_ceo_spell_do = max(`t_ceo')
+gen foreign_hire = (ceo_spell_hire > last_ceo_spell_do)
+replace foreign_hire = . if last_ceo_spell_do == .
+
+bys frame_id_numeric: egen ever_foreign_hire = max(foreign_hire)
+cap drop `t_hire' `t_ceo'
 
 compress
 save "`here'/temp/analysis_sample.dta", replace
