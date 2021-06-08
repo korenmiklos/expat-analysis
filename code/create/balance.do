@@ -17,8 +17,6 @@ codebook frame_id*
 drop frame_id
 xtset frame_id_numeric year
 
-merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign) keep(1 3) nogen
-
 do "code/create/emp_clean"
 count
 count if emp == emp_cl & emp != .
@@ -85,23 +83,11 @@ forval i = 1/3 {
 }
 gen count = 1
 
-do "code/create/calc_hole.do"
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
-mat total = r(StatTotal)
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if ever_foreign == 1, stat(sum) save
-mat total = (total \ r(StatTotal))
-
 * drop greenfield
 bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
 bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
 keep if start_as_domestic
 drop owner_spell start_as_domestic
-
-do "code/create/calc_hole.do"
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
-mat total = (total \ r(StatTotal))
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if ever_foreign == 1, stat(sum) save
-mat total = (total \ r(StatTotal))
 
 * limit sample before large merge - sampling based on firm-level variables, firm-year done later
 * average employment and financial firms deleted
@@ -113,12 +99,6 @@ local sample ((avg_emp >= 20) & (industry_mode != 64 & industry_mode != 65 & ind
 drop if !`sample'
 scalar dropped_size_or_finance = r(N_drop)
 display dropped_size_or_finance
-
-do "code/create/calc_hole.do"
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
-mat total = (total \ r(StatTotal))
-tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if ever_foreign == 1, stat(sum) save
-mat total = (total \ r(StatTotal))
 
 * proxy firm founding date with first balance sheet filed
 tempvar foundyear
@@ -188,14 +168,7 @@ count if missing(lnK, lnQ, lnL, lnM, foreign)
 *count
 
 foreach var in lnK lnQ lnL lnM {
-
 	drop if missing(`var')
-	
-	do "code/create/calc_hole.do"
-	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
-	mat total = (total \ r(StatTotal))
-	tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if ever_foreign == 1, stat(sum) save
-	mat total = (total \ r(StatTotal))
 }
 
 *drop if missing(foreign)
@@ -203,7 +176,6 @@ foreach var in lnK lnQ lnL lnM {
 *mat total = (total \ r(StatTotal))
 
 *drop hole* x
-mat list total
 count
 
 * TFP (Cobb-Douglas)
@@ -236,12 +208,6 @@ generate domestic_sales = sales - export
 replace domestic_sales = 0 if domestic_sales < 0 | missing(domestic_sales)
 
 count
-
-matrix rownames total = "beginning" "greenfield dropped" "sampling" "missing lnK" "missing lnQ" "missing lnL" "missing lnM"
-mata : mat_total_balance = st_matrix("total")
-mata: mata matsave "temp/matrix-balance" mat_total_balance, replace
-drop hole? x
-tab hole10
 
 save_all_to_json
 cap drop __*
