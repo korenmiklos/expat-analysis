@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- opened on:   7 Jun 2021, 11:01:44
+ opened on:   8 Jun 2021, 12:23:04
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -350,7 +350,7 @@ end of do-file
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
 ---------+--------------------------------------------------------------------------------------------------------------------------------------------
-     sum |     31183      1206      1388      1699      2139      2873      2736      2548    307760      3801      1166       669       433       269
+     sum |     31184      1206      1388      1699      2139      2873      2736      2548    307760      3801      1166       669       433       269
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    stats |     hole6     hole7     hole8     hole9    hole10
@@ -364,7 +364,7 @@ end of do-file
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
 ---------+--------------------------------------------------------------------------------------------------------------------------------------------
-     sum |     12431      1043      1187      1443      1550      1354      1119       944     22558       373       122        75        48        30
+     sum |     12432      1043      1187      1443      1550      1354      1119       944     22558       373       122        75        48        30
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    stats |     hole6     hole7     hole8     hole9    hole10
@@ -445,7 +445,7 @@ end of do-file
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
 ---------+--------------------------------------------------------------------------------------------------------------------------------------------
-     sum |     12431      1043      1187      1443      1550      1354      1119       944     22558       373       122        75        48        30
+     sum |     12432      1043      1187      1443      1550      1354      1119       944     22558       373       122        75        48        30
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    stats |     hole6     hole7     hole8     hole9    hole10
@@ -494,7 +494,7 @@ end of do-file
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
 ---------+--------------------------------------------------------------------------------------------------------------------------------------------
-     sum |     12431      1130      1276      1522      1582      1354      1121       947    282172      3413      1045       597       381       233
+     sum |     12432      1130      1276      1522      1582      1354      1121       947    282172      3413      1045       597       381       233
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    stats |     hole6     hole7     hole8     hole9    hole10
@@ -508,7 +508,7 @@ end of do-file
 
    stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
 ---------+--------------------------------------------------------------------------------------------------------------------------------------------
-     sum |     12431      1043      1187      1443      1550      1354      1119       944     22558       373       122        75        48        30
+     sum |     12432      1043      1187      1443      1550      1354      1119       944     22558       373       122        75        48        30
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
    stats |     hole6     hole7     hole8     hole9    hole10
@@ -523,12 +523,12 @@ end of do-file
 
 total[6,19]
        foreign  foreign_3  foreign_2  foreign_1   foreign0   foreign1   foreign2   foreign3      count      hole1      hole2      hole3      hole4      hole5
-sum      31183       1206       1388       1699       2139       2873       2736       2548     307760       3801       1166        669        433        269
-sum      12431       1043       1187       1443       1550       1354       1119        944      22558        373        122         75         48         30
+sum      31184       1206       1388       1699       2139       2873       2736       2548     307760       3801       1166        669        433        269
+sum      12432       1043       1187       1443       1550       1354       1119        944      22558        373        122         75         48         30
 sum      29543       1130       1296       1571       1991       2707       2568       2382     304373       3749       1151        660        430        266
-sum      12431       1043       1187       1443       1550       1354       1119        944      22558        373        122         75         48         30
-sum      12431       1130       1276       1522       1582       1354       1121        947     282172       3413       1045        597        381        233
-sum      12431       1043       1187       1443       1550       1354       1119        944      22558        373        122         75         48         30
+sum      12432       1043       1187       1443       1550       1354       1119        944      22558        373        122         75         48         30
+sum      12432       1130       1276       1522       1582       1354       1121        947     282172       3413       1045        597        381        233
+sum      12432       1043       1187       1443       1550       1354       1119        944      22558        373        122         75         48         30
 
          hole6      hole7      hole8      hole9     hole10
 sum        178        133         96         68         44
@@ -620,6 +620,49 @@ frame_id_numeric                                                                
 file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/matrix-analysis.mmat saved
 
 . 
+. count
+  282,172
+
+. count if ever_foreign == 1
+  22,558
+
+. tab filter ever_foreign
+
+                      |       (firstnm)
+                      |   ever_foreign_ceo
+               filter |         0          1 |     Total
+----------------------+----------------------+----------
+      master only (1) |   259,614          0 |   259,614 
+          matched (3) |         0     22,558 |    22,558 
+----------------------+----------------------+----------
+                Total |   259,614     22,558 |   282,172 
+
+. 
+. preserve
+
+.         contract time_foreign if ever_foreign == 1
+
+.         gen type = "analysis"
+
+.         save "`here'/temp/event_time_foreign_analysis", replace
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/event_time_foreign_analysis.dta saved
+
+. restore
+
+. 
+. preserve
+
+.         contract time_foreign
+
+.         gen type = "analysis-all"
+
+.         save "`here'/temp/event_time_all_analysis", replace
+(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/event_time_all_analysis.dta not found)
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/event_time_all_analysis.dta saved
+
+. restore
+
+. 
 . drop first_year_foreign time_foreign foreign_* foreign? count x
 
 . 
@@ -654,7 +697,7 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/matri
 . tempvar t_ceo
 
 . bys frame_id_numeric: egen `t_ceo'= max(ceo_spell_hire) if !foreign
-(12,431 missing values generated)
+(12,432 missing values generated)
 
 . bys frame_id_numeric: egen last_ceo_spell_do = max(`t_ceo')
 
@@ -708,5 +751,5 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/analy
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- closed on:   7 Jun 2021, 11:02:06
+ closed on:   8 Jun 2021, 12:23:26
 --------------------------------------------------------------------------------------------------------------------------------------------------------------

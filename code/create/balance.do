@@ -91,6 +91,18 @@ mat total = r(StatTotal)
 tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if ever_foreign == 1, stat(sum) save
 mat total = (total \ r(StatTotal))
 
+preserve
+	contract time_foreign if ever_foreign == 1
+	gen type = "balance"
+	save "`here'/temp/event_time_foreign_balance", replace
+restore
+
+preserve
+	contract time_foreign
+	gen type = "balance-all"
+	save "`here'/temp/event_time_all_balance", replace
+restore
+
 * drop greenfield
 bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
 bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
@@ -236,6 +248,21 @@ generate domestic_sales = sales - export
 replace domestic_sales = 0 if domestic_sales < 0 | missing(domestic_sales)
 
 count
+
+* calculating time_foreign - part II
+count
+
+preserve
+	contract time_foreign if ever_foreign == 1
+	gen type = "clean"
+	save "`here'/temp/event_time_foreign_clean", replace
+restore
+
+preserve
+	contract time_foreign
+	gen type = "clean-all"
+	save "`here'/temp/event_time_all_clean", replace
+restore
 
 matrix rownames total = "beginning" "greenfield dropped" "sampling" "missing lnK" "missing lnQ" "missing lnL" "missing lnM"
 mata : mat_total_balance = st_matrix("total")

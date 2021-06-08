@@ -154,6 +154,22 @@ count
 mata : mat_total_analysis = st_matrix("total")
 mata: mata matsave "`here'/temp/matrix-analysis" mat_total_analysis, replace
 
+count
+count if ever_foreign == 1
+tab filter ever_foreign
+
+preserve
+	contract time_foreign if ever_foreign == 1
+	gen type = "analysis"
+	save "`here'/temp/event_time_foreign_analysis", replace
+restore
+
+preserve
+	contract time_foreign
+	gen type = "analysis-all"
+	save "`here'/temp/event_time_all_analysis", replace
+restore
+
 drop first_year_foreign time_foreign foreign_* foreign? count x
 
 bys frame_id_numeric: egen first_year_foreign_new = min(cond(foreign == 1, year,.))
