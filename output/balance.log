@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/balance.log
   log type:  text
- opened on:   8 Jun 2021, 17:57:09
+ opened on:   8 Jun 2021, 18:42:09
 
 . 
 . use "`here'/input/merleg-expat/balance-small.dta"
@@ -50,6 +50,18 @@ frame_id_numeric                                                                
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1980 to 2018, but with gaps
                 delta:  1 unit
+
+. 
+. merge m:1 frame_id_numeric year using "`here'/temp/ever_foreign.dta", keepusing(ever_foreign) keep(1 3) nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     8,099,679
+        from master                 8,099,679  
+        from using                          0  
+
+    matched                            22,558  
+    -----------------------------------------
 
 . 
 . do "code/create/emp_clean"
@@ -1007,6 +1019,51 @@ file /srv/sandbox/zavecz/St3456347.000002 saved
 . gen count = 1
 
 . 
+. do "code/create/calc_hole.do"
+
+. cap drop hole* x
+
+. sort frame_id_numeric year
+
+. gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+(918,978 missing values generated)
+
+. forval i = 1(1)10 {
+  2.         gen hole`i' = (x > `i' & x != .)
+  3. }
+
+. 
+end of do-file
+
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
+---------+--------------------------------------------------------------------------------------------------------------------------------------------
+     sum |    660143     13505     17922     26714    122818    100456     86391     75047   8122237    151035     75330     54102     42482     33985
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   stats |     hole6     hole7     hole8     hole9    hole10
+---------+--------------------------------------------------
+     sum |     27923     23339     19628     15908     11840
+------------------------------------------------------------
+
+. mat total = r(StatTotal)
+
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if ever_foreign == 1, stat(sum) save
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
+---------+--------------------------------------------------------------------------------------------------------------------------------------------
+     sum |     12429      1043      1187      1443      1550      1354      1119       944     22558       146        24        12         9         4
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   stats |     hole6     hole7     hole8     hole9    hole10
+---------+--------------------------------------------------
+     sum |         3         3         2         2         1
+------------------------------------------------------------
+
+. mat total = (total \ r(StatTotal))
+
+. 
 . * drop greenfield
 . bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
 
@@ -1016,6 +1073,51 @@ file /srv/sandbox/zavecz/St3456347.000002 saved
 (541,862 observations deleted)
 
 . drop owner_spell start_as_domestic
+
+. 
+. do "code/create/calc_hole.do"
+
+. cap drop hole* x
+
+. sort frame_id_numeric year
+
+. gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+(850,787 missing values generated)
+
+. forval i = 1(1)10 {
+  2.         gen hole`i' = (x > `i' & x != .)
+  3. }
+
+. 
+end of do-file
+
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
+---------+--------------------------------------------------------------------------------------------------------------------------------------------
+     sum |    271063     13505     17326     24516     54627     44009     37466     32416   7580375    141372     71791     52109     41234     33144
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   stats |     hole6     hole7     hole8     hole9    hole10
+---------+--------------------------------------------------
+     sum |     27336     22906     19290     15635     11635
+------------------------------------------------------------
+
+. mat total = (total \ r(StatTotal))
+
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if ever_foreign == 1, stat(sum) save
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
+---------+--------------------------------------------------------------------------------------------------------------------------------------------
+     sum |     12429      1043      1187      1443      1550      1354      1119       944     22558       146        24        12         9         4
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   stats |     hole6     hole7     hole8     hole9    hole10
+---------+--------------------------------------------------
+     sum |         3         3         2         2         1
+------------------------------------------------------------
+
+. mat total = (total \ r(StatTotal))
 
 . 
 . * limit sample before large merge - sampling based on firm-level variables, firm-year done later
@@ -1039,6 +1141,51 @@ maxmode, minmode, or nummode() options to control this behavior.
 
 . display dropped_size_or_finance
 7100771
+
+. 
+. do "code/create/calc_hole.do"
+
+. cap drop hole* x
+
+. sort frame_id_numeric year
+
+. gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+(72,938 missing values generated)
+
+. forval i = 1(1)10 {
+  2.         gen hole`i' = (x > `i' & x != .)
+  3. }
+
+. 
+end of do-file
+
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
+---------+--------------------------------------------------------------------------------------------------------------------------------------------
+     sum |     39066      1704      2124      3024      6425      4777      3771      3199    479604      3507      1239       836       588       442
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   stats |     hole6     hole7     hole8     hole9    hole10
+---------+--------------------------------------------------
+     sum |       262       152        54        34        26
+------------------------------------------------------------
+
+. mat total = (total \ r(StatTotal))
+
+. tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if ever_foreign == 1, stat(sum) save
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
+---------+--------------------------------------------------------------------------------------------------------------------------------------------
+     sum |     12429      1043      1187      1443      1550      1354      1119       944     22558       146        24        12         9         4
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   stats |     hole6     hole7     hole8     hole9    hole10
+---------+--------------------------------------------------
+     sum |         3         3         2         2         1
+------------------------------------------------------------
+
+. mat total = (total \ r(StatTotal))
 
 . 
 . * proxy firm founding date with first balance sheet filed
@@ -1207,12 +1354,155 @@ tanass_18:                                      Number of Observations
 . *count
 . 
 . foreach var in lnK lnQ lnL lnM {
-  2.         drop if missing(`var')
-  3. }
+  2. 
+.         drop if missing(`var')
+  3.         
+.         do "code/create/calc_hole.do"
+  4.         tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole*, stat(sum) save
+  5.         mat total = (total \ r(StatTotal))
+  6.         tabstat foreign foreign_3 foreign_2 foreign_1 foreign0 foreign1 foreign2 foreign3 count hole* if ever_foreign == 1, stat(sum) save
+  7.         mat total = (total \ r(StatTotal))
+  8. }
 (66,608 observations deleted)
+
+. cap drop hole* x
+
+. sort frame_id_numeric year
+
+. gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+(41,984 missing values generated)
+
+. forval i = 1(1)10 {
+  2.         gen hole`i' = (x > `i' & x != .)
+  3. }
+
+. 
+end of do-file
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
+---------+--------------------------------------------------------------------------------------------------------------------------------------------
+     sum |     36716      1626      1956      2615      4252      3759      3337      3009    412996      2966       989       687       449       309
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   stats |     hole6     hole7     hole8     hole9    hole10
+---------+--------------------------------------------------
+     sum |       207       120        67        45        34
+------------------------------------------------------------
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
+---------+--------------------------------------------------------------------------------------------------------------------------------------------
+     sum |     12429      1043      1187      1443      1550      1354      1119       944     22558       162        41        29        21        10
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   stats |     hole6     hole7     hole8     hole9    hole10
+---------+--------------------------------------------------
+     sum |         6         5         4         4         2
+------------------------------------------------------------
 (17,323 observations deleted)
+
+. cap drop hole* x
+
+. sort frame_id_numeric year
+
+. gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+(39,146 missing values generated)
+
+. forval i = 1(1)10 {
+  2.         gen hole`i' = (x > `i' & x != .)
+  3. }
+
+. 
+end of do-file
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
+---------+--------------------------------------------------------------------------------------------------------------------------------------------
+     sum |     35865      1581      1844      2334      3310      3508      3232      2937    395673      3453      1080       667       429       289
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   stats |     hole6     hole7     hole8     hole9    hole10
+---------+--------------------------------------------------
+     sum |       198       124        77        51        33
+------------------------------------------------------------
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
+---------+--------------------------------------------------------------------------------------------------------------------------------------------
+     sum |     12429      1043      1187      1443      1550      1354      1119       944     22558       220        61        38        24        12
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   stats |     hole6     hole7     hole8     hole9    hole10
+---------+--------------------------------------------------
+     sum |         7         6         4         4         2
+------------------------------------------------------------
 (28,522 observations deleted)
+
+. cap drop hole* x
+
+. sort frame_id_numeric year
+
+. gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+(27,405 missing values generated)
+
+. forval i = 1(1)10 {
+  2.         gen hole`i' = (x > `i' & x != .)
+  3. }
+
+. 
+end of do-file
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
+---------+--------------------------------------------------------------------------------------------------------------------------------------------
+     sum |     34949      1532      1773      2125      2850      3188      3035      2834    367151      4010      1101       612       362       220
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   stats |     hole6     hole7     hole8     hole9    hole10
+---------+--------------------------------------------------
+     sum |       149        99        72        50        32
+------------------------------------------------------------
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
+---------+--------------------------------------------------------------------------------------------------------------------------------------------
+     sum |     12429      1043      1187      1443      1550      1354      1119       944     22558       289        76        44        27        13
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   stats |     hole6     hole7     hole8     hole9    hole10
+---------+--------------------------------------------------
+     sum |         7         6         4         4         2
+------------------------------------------------------------
 (2,812 observations deleted)
+
+. cap drop hole* x
+
+. sort frame_id_numeric year
+
+. gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
+(27,389 missing values generated)
+
+. forval i = 1(1)10 {
+  2.         gen hole`i' = (x > `i' & x != .)
+  3. }
+
+. 
+end of do-file
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
+---------+--------------------------------------------------------------------------------------------------------------------------------------------
+     sum |     34772      1530      1769      2116      2839      3176      3030      2827    364339      4195      1150       626       365       219
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   stats |     hole6     hole7     hole8     hole9    hole10
+---------+--------------------------------------------------
+     sum |       148        99        71        49        31
+------------------------------------------------------------
+
+   stats |   foreign  forei~_3  forei~_2  forei~_1  foreign0  foreign1  foreign2  foreign3     count     hole1     hole2     hole3     hole4     hole5
+---------+--------------------------------------------------------------------------------------------------------------------------------------------
+     sum |     12429      1043      1187      1443      1550      1354      1119       944     22558       305        80        46        29        15
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   stats |     hole6     hole7     hole8     hole9    hole10
+---------+--------------------------------------------------
+     sum |         9         7         5         4         2
+------------------------------------------------------------
 
 . 
 . *drop if missing(foreign)
@@ -1220,6 +1510,41 @@ tanass_18:                                      Number of Observations
 . *mat total = (total \ r(StatTotal))
 . 
 . *drop hole* x
+. mat list total
+
+total[14,19]
+       foreign  foreign_3  foreign_2  foreign_1   foreign0   foreign1   foreign2   foreign3      count      hole1      hole2      hole3      hole4      hole5
+sum     660143      13505      17922      26714     122818     100456      86391      75047    8122237     151035      75330      54102      42482      33985
+sum      12429       1043       1187       1443       1550       1354       1119        944      22558        146         24         12          9          4
+sum     271063      13505      17326      24516      54627      44009      37466      32416    7580375     141372      71791      52109      41234      33144
+sum      12429       1043       1187       1443       1550       1354       1119        944      22558        146         24         12          9          4
+sum      39066       1704       2124       3024       6425       4777       3771       3199     479604       3507       1239        836        588        442
+sum      12429       1043       1187       1443       1550       1354       1119        944      22558        146         24         12          9          4
+sum      36716       1626       1956       2615       4252       3759       3337       3009     412996       2966        989        687        449        309
+sum      12429       1043       1187       1443       1550       1354       1119        944      22558        162         41         29         21         10
+sum      35865       1581       1844       2334       3310       3508       3232       2937     395673       3453       1080        667        429        289
+sum      12429       1043       1187       1443       1550       1354       1119        944      22558        220         61         38         24         12
+sum      34949       1532       1773       2125       2850       3188       3035       2834     367151       4010       1101        612        362        220
+sum      12429       1043       1187       1443       1550       1354       1119        944      22558        289         76         44         27         13
+sum      34772       1530       1769       2116       2839       3176       3030       2827     364339       4195       1150        626        365        219
+sum      12429       1043       1187       1443       1550       1354       1119        944      22558        305         80         46         29         15
+
+         hole6      hole7      hole8      hole9     hole10
+sum      27923      23339      19628      15908      11840
+sum          3          3          2          2          1
+sum      27336      22906      19290      15635      11635
+sum          3          3          2          2          1
+sum        262        152         54         34         26
+sum          3          3          2          2          1
+sum        207        120         67         45         34
+sum          6          5          4          4          2
+sum        198        124         77         51         33
+sum          7          6          4          4          2
+sum        149         99         72         50         32
+sum          7          6          4          4          2
+sum        148         99         71         49         31
+sum          9          7          5          4          2
+
 . count
   364,339
 
@@ -1418,17 +1743,36 @@ tanass_18:                                      Number of Observations
   364,339
 
 . 
+. matrix rownames total = "beginning" "greenfield dropped" "sampling" "missing lnK" "missing lnQ" "missing lnL" "missing lnM"
+
+. mata : mat_total_balance = st_matrix("total")
+
+. mata: mata matsave "temp/matrix-balance" mat_total_balance, replace
+(saving mat_total_balance[14,19])
+file temp/matrix-balance.mmat saved
+
+. drop hole? x
+
+. tab hole10
+
+     hole10 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    364,308       99.99       99.99
+          1 |         31        0.01      100.00
+------------+-----------------------------------
+      Total |    364,339      100.00
+
+. 
 . save_all_to_json
 
 . cap drop __*
 
 . save "`here'/temp/balance-small-clean.dta", replace
-(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/balance-small-clean.dta not found)
 file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/balance-small-clean.dta saved
 
 . log close
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/balance.log
   log type:  text
- closed on:   8 Jun 2021, 18:06:28
+ closed on:   8 Jun 2021, 18:52:41
 --------------------------------------------------------------------------------------------------------------------------------------------------------------

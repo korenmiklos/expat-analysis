@@ -1,0 +1,160 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/matrix.log
+  log type:  text
+ opened on:   8 Jun 2021, 19:00:04
+
+. 
+. foreach file in balance analysis {
+  2.         clear all
+  3.         mata: mata matuse "temp/matrix-`file'", replace
+  4.         mata: st_matrix("total_`file'", mat_total_`file')
+  5. 
+.         matrix colnames total_`file' = "foreign" "foreign_3" "foreign_2" "foreign_1" "foreign0" "foreign1" "foreign2" "foreign3" "count" "hole1" "hole2" "ho
+> le3" "hole4" "hole5" "hole6" "hole7" "hole8" "hole9" "hole10"
+  6.         *No option to save row names as variables as svmat - https://www.stata.com/statalist/archive/2007-07/msg00477.html
+. 
+.         matrix list total_`file'
+  7. 
+.         svmat total_`file', names(col)
+  8.         
+.         tempfile `file'
+  9.         save ``file''
+ 10. }
+(loading mat_total_balance[14,19])
+
+total_balance[14,19]
+       foreign  foreign_3  foreign_2  foreign_1   foreign0   foreign1   foreign2   foreign3      count      hole1      hole2      hole3      hole4      hole5
+ r1     660143      13505      17922      26714     122818     100456      86391      75047    8122237     151035      75330      54102      42482      33985
+ r2      12429       1043       1187       1443       1550       1354       1119        944      22558        146         24         12          9          4
+ r3     271063      13505      17326      24516      54627      44009      37466      32416    7580375     141372      71791      52109      41234      33144
+ r4      12429       1043       1187       1443       1550       1354       1119        944      22558        146         24         12          9          4
+ r5      39066       1704       2124       3024       6425       4777       3771       3199     479604       3507       1239        836        588        442
+ r6      12429       1043       1187       1443       1550       1354       1119        944      22558        146         24         12          9          4
+ r7      36716       1626       1956       2615       4252       3759       3337       3009     412996       2966        989        687        449        309
+ r8      12429       1043       1187       1443       1550       1354       1119        944      22558        162         41         29         21         10
+ r9      35865       1581       1844       2334       3310       3508       3232       2937     395673       3453       1080        667        429        289
+r10      12429       1043       1187       1443       1550       1354       1119        944      22558        220         61         38         24         12
+r11      34949       1532       1773       2125       2850       3188       3035       2834     367151       4010       1101        612        362        220
+r12      12429       1043       1187       1443       1550       1354       1119        944      22558        289         76         44         27         13
+r13      34772       1530       1769       2116       2839       3176       3030       2827     364339       4195       1150        626        365        219
+r14      12429       1043       1187       1443       1550       1354       1119        944      22558        305         80         46         29         15
+
+         hole6      hole7      hole8      hole9     hole10
+ r1      27923      23339      19628      15908      11840
+ r2          3          3          2          2          1
+ r3      27336      22906      19290      15635      11635
+ r4          3          3          2          2          1
+ r5        262        152         54         34         26
+ r6          3          3          2          2          1
+ r7        207        120         67         45         34
+ r8          6          5          4          4          2
+ r9        198        124         77         51         33
+r10          7          6          4          4          2
+r11        149         99         72         50         32
+r12          7          6          4          4          2
+r13        148         99         71         49         31
+r14          9          7          5          4          2
+number of observations will be reset to 14
+Press any key to continue, or Break to abort
+number of observations (_N) was 0, now 14
+file /srv/sandbox/zavecz/St3456347.000001 saved
+(loading mat_total_analysis[6,19])
+
+total_analysis[6,19]
+      foreign  foreign_3  foreign_2  foreign_1   foreign0   foreign1   foreign2   foreign3      count      hole1      hole2      hole3      hole4      hole5
+r1      31183       1206       1388       1699       2139       2873       2736       2548     307760       3801       1166        669        433        269
+r2      12429       1043       1187       1443       1550       1354       1119        944      22558        373        122         75         48         30
+r3      29540       1130       1296       1571       1991       2707       2568       2382     304373       3749       1151        660        430        266
+r4      12429       1043       1187       1443       1550       1354       1119        944      22558        373        122         75         48         30
+r5      12429       1130       1276       1522       1582       1354       1121        947     282172       3413       1045        597        381        233
+r6      12429       1043       1187       1443       1550       1354       1119        944      22558        373        122         75         48         30
+
+        hole6      hole7      hole8      hole9     hole10
+r1        178        133         96         68         44
+r2         18         14         11         10          7
+r3        175        131         95         67         43
+r4         18         14         11         10          7
+r5        156        119         87         60         40
+r6         18         14         11         10          7
+number of observations will be reset to 6
+Press any key to continue, or Break to abort
+number of observations (_N) was 0, now 6
+file /srv/sandbox/zavecz/St3456347.000002 saved
+
+. 
+. use `balance', clear
+
+. append using `analysis'
+
+. 
+. gen when = _n
+
+. forval i = 2(2)20 {
+  2.         replace when = when - 1 if when == `i'
+  3. }
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. 
+. label define when_label 1 "beginning after interpolating fo3 holes and fo3 expanded" 3 "greenfield dropped (balance)" 5 "sampling" 7 "missing lnK" 9 "missin
+> g lnQ" 11 "missing lnL" 13 "missing lnM" 15 "manager merge" 17 "many foreign changes" 19 "D, D-F kept"
+
+. label values when when_label
+
+. 
+. gen type = _n
+
+. forval i = 1(2)20 {
+  2.         replace type = 1 if type == `i'
+  3. }
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. 
+. forval i = 2(2)20 {
+  2.         replace type = 2 if type == `i'
+  3. }
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. 
+. label define type_label 1 "all" 2 "analysis sample ever foreign"
+
+. label values type type_label
+
+. 
+. export delimited using "output/foreign_drop", replace
+(note: file output/foreign_drop.csv not found)
+file output/foreign_drop.csv saved
+
+. log close
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/matrix.log
+  log type:  text
+ closed on:   8 Jun 2021, 19:00:04
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
