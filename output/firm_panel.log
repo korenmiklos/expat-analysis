@@ -1,26 +1,26 @@
---------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/firm_panel.log
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//o
+> utput/firm_panel.log
   log type:  text
- opened on:   3 Jun 2021, 19:53:27
+ opened on:   8 Jun 2021, 18:29:29
 
 . 
-. * keep only sample from balance-small - NOTE: had to restructure as we have to keep foreign which is different in years - so no collapse this time
+. * keep only sample from balance-small - NOTE: had to restructure as we have t
+> o keep foreign which is different in years - so no collapse this time
 . use "`here'/temp/balance-small-clean.dta"
 
 . by frame_id_numeric: egen firm_birth = min(year)
 
 . by frame_id_numeric: egen firm_death = max(year)
 
-. keep frame_id year firm_birth firm_death foreign hole10
-
-. rename hole10 hole10_balance
+. keep frame_id year firm_birth firm_death foreign
 
 . tempfile sample
 
 . save `sample', replace
-(note: file /srv/sandbox/zavecz/St2133486.000001 not found)
-file /srv/sandbox/zavecz/St2133486.000001 saved
+(note: file /srv/sandbox/zavecz/St3475148.000001 not found)
+file /srv/sandbox/zavecz/St3475148.000001 saved
 
 . 
 . * count expats in do - asterisk used
@@ -33,10 +33,12 @@ file /srv/sandbox/zavecz/St2133486.000001 saved
 . *count if ever_expat == 1 & ever_foreign == 0 & firm_tag == 1
 . 
 . foreach type in ceo nceo {
-  2.         use "`here'/input/`type'-panel/`type'-panel.dta", clear // QUESTION: what is owner
+  2.         use "`here'/input/`type'-panel/`type'-panel.dta", clear // QUESTIO
+> N: what is owner
   3.         rename person_id manager_id
   4.         
-.         *for descriptives (number of ceo-s and nceo-s in original data, number of ceo and nceo job-spells in original data)
+.         *for descriptives (number of ceo-s and nceo-s in original data, numbe
+> r of ceo and nceo job-spells in original data)
 .         count
   5.         egen company_manager_id = group(frame_id_numeric manager_id)
   6.         codebook manager_id
@@ -45,7 +47,8 @@ file /srv/sandbox/zavecz/St2133486.000001 saved
   9. 
 .         * only keep sample firms
 .         merge m:1 frame_id_numeric year using `sample', keep(match) nogen
- 10.         count if first_year_of_firm == firm_birth // QUESTION: why not the same? - same for the last year
+ 10.         count if first_year_of_firm == firm_birth // QUESTION: why not the
+>  same? - same for the last year
  11. 
 .         * balance panel
 .         egen company_manager_id = group(frame_id manager_id)
@@ -58,33 +61,41 @@ file /srv/sandbox/zavecz/St2133486.000001 saved
 .         
 .         *forval i = 1(1)2 {
 .         *       sort company_manager_id year
-.         *       expand 1 + `i' if gap == `i', generate(filled_in_`i') // FIXME OR QUESTION: maybe second year as well
+.         *       expand 1 + `i' if gap == `i', generate(filled_in_`i') // FIXM
+> E OR QUESTION: maybe second year as well
 .         *       replace year = year - `i' if filled_in_`i'
 .         *       tab filled_in_`i'
 .         *}
 .         
-.         *bys company_manager_id year: replace year = year + _n - 1 if filled_in_2
+.         *bys company_manager_id year: replace year = year + _n - 1 if filled_
+> in_2
 .         
 .         expand 1 + (gap == 1), generate(filled_in)
  17.         replace year = year - 1 if filled_in
  18. 
 .         * create contiguous spells
 .         xtset company_manager_id year
- 19.         gen change = ceo != L.ceo // intuition: should be ok in both files (possible FIXME)
+ 19.         gen change = ceo != L.ceo // intuition: should be ok in both files
+>  (possible FIXME)
  20.         bysort company_manager_id (year): gen job_spell = sum(change)
  21. 
 .         * create job begin and end for each manager spell
 .         bys frame_id_numeric manager_id job_spell: egen job_begin = min(year)
- 22.         bys frame_id_numeric manager_id job_spell: egen job_end = max(year)
- 23.         keep frame_id_numeric manager_id job_spell year job_begin job_end expat founder insider outsider firm_birth foreign country_code hole10_balance
+ 22.         bys frame_id_numeric manager_id job_spell: egen job_end = max(year
+> )
+ 23.         keep frame_id_numeric manager_id job_spell year job_begin job_end 
+> expat founder insider outsider firm_birth foreign country_code
  24. 
-.         * if first managers arrive in year 1, extrapolate to year 0 - DROP SPELL
+.         * if first managers arrive in year 1, extrapolate to year 0 - DROP SP
+> ELL
 .         bys frame_id_numeric: egen first_cohort = min(job_begin)
- 25.         replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_begin == first_cohort)
+ 25.         replace job_begin = job_begin - 1 if (first_cohort == firm_birth +
+>  1) & (job_begin == first_cohort)
  26. 
 .         * NOTE: no collapse and expand --> there might be holes
 .         sort frame_id_numeric manager_id year
- 27.         count if frame_id_numeric == frame_id_numeric[_n-1] & manager_id == manager_id[_n-1] & year != (year[_n-1] + 1)
+ 27.         count if frame_id_numeric == frame_id_numeric[_n-1] & manager_id =
+> = manager_id[_n-1] & year != (year[_n-1] + 1)
  28. 
 .         * expat before 1990
 .         replace expat = 0 if job_begin < 1990
@@ -92,57 +103,73 @@ file /srv/sandbox/zavecz/St2133486.000001 saved
 .         ***********************
 .         * time invariant vars and drop entire series of firms from sample *
 .         ***********************
-.                 by frame_id_numeric: egen first_year_expat = min(cond(expat == 1, job_begin,.))
- 30.                 by frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.))
+.                 by frame_id_numeric: egen first_year_expat = min(cond(expat =
+> = 1, job_begin,.))
+ 30.                 by frame_id_numeric: egen first_year_foreign = min(cond(fo
+> reign == 1, year,.))
  31.                 
 .                 * which of the two happened first?
-.                 generate manager_after_owner = first_year_expat - first_year_foreign
+.                 generate manager_after_owner = first_year_expat - first_year_
+> foreign
  32.                 * event time relative to that
 .                 generate event_time = year - first_year_expat
  33.                 
-.                 * if foreign manager arrives up to 2 years before 1 year later than foreign owner, use foreign manager as arrival date. this is easier to im
-> plement
-.                 replace foreign = 1 if (manager_after_owner == -2) & inlist(event_time, 0, 1)
- 34.                 replace foreign = 1 if (manager_after_owner == -1) & inlist(event_time, 0)
- 35.                 replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
+.                 * if foreign manager arrives up to 2 years before 1 year late
+> r than foreign owner, use foreign manager as arrival date. this is easier to 
+> implement
+.                 replace foreign = 1 if (manager_after_owner == -2) & inlist(e
+> vent_time, 0, 1)
+ 34.                 replace foreign = 1 if (manager_after_owner == -1) & inlis
+> t(event_time, 0)
+ 35.                 replace foreign = 0 if (manager_after_owner == +1) & inlis
+> t(event_time, -1)
  36. 
-.                 * QUESTION: order of deletions (may be fine as all are firm level)
-.                 * drop firms where expat arrives earlier than 2 years before owner
+.                 * QUESTION: order of deletions (may be fine as all are firm l
+> evel)
+.                 * drop firms where expat arrives earlier than 2 years before 
+> owner
 .                 drop if manager_after_owner < -2
  37.                 
-.                 * ever expat and foreign created after foreign changes (drops were firm level before so should not mess with ever variables)
+.                 * ever expat and foreign created after foreign changes (drops
+>  were firm level before so should not mess with ever variables)
 .                 foreach X of var expat foreign {
- 38.                         by frame_id_numeric: egen ever_`X'_`type' = max(`X'==1)
+ 38.                         by frame_id_numeric: egen ever_`X'_`type' = max(`X
+> '==1)
  39.                 }
  40. 
 .                 * drop if there was an expat but was never foreign
 .                 drop if ever_expat == 1 & ever_foreign == 0
  41.                 scalar dropped_do3_expat_firmyears = r(N_drop)
  42.                 
-.                 * drop too many CEO-s - FIXME AND QUESTION: should be moved in the next file where spells are limited - but there cannot be created without 
-> manager level data
+.                 * drop too many CEO-s - FIXME AND QUESTION: should be moved i
+> n the next file where spells are limited - but there cannot be created withou
+> t manager level data
 .                 egen fp_tag = tag(frame_id_numeric manager_id) 
  43.                 by frame_id_numeric: egen n_ceo_ever = sum(fp_tag)
  44.                 drop if n_ceo > 15
  45.                 scalar dropped_too_many_CEOs = r(N_drop)
  46.                 drop fp_tag n_ceo_ever
  47.                 
-.         * hired or fired ceo since last observed year of firm - * POSSIBLE FIXME: expat, owner, insider, outsider, founder - hire, fire combinations later
+.         * hired or fired ceo since last observed year of firm - * POSSIBLE FI
+> XME: expat, owner, insider, outsider, founder - hire, fire combinations later
 .         tempvar previous_year
  48.         generate previous_year = .
  49.         forval t = 1985/2018 {
- 50.                 by frame_id_numeric: egen `previous_year' = max(cond(year < `t', year, .))
+ 50.                 by frame_id_numeric: egen `previous_year' = max(cond(year 
+> < `t', year, .))
  51.                 replace previous_year = `previous_year' if year == `t'
  52.                 drop `previous_year'
  53.         }
  54. 
 .         by frame_id_numeric: egen first_year = min(year)
- 55.         bys frame_id_numeric (year): generate byte hire = cond(first_year == year, 1, (job_begin <= year) & (job_begin > previous_year))
+ 55.         bys frame_id_numeric (year): generate byte hire = cond(first_year 
+> == year, 1, (job_begin <= year) & (job_begin > previous_year))
  56. 
 .         tempvar next_year
  57.         generate next_year = .
  58.         forval t = 1985/2018 {
- 59.                 by frame_id_numeric: egen `next_year' = min(cond(year > `t', year, .))
+ 59.                 by frame_id_numeric: egen `next_year' = min(cond(year > `t
+> ', year, .))
  60.                 replace next_year = `next_year' if year == `t'
  61.                 drop `next_year'
  62.         }
@@ -154,40 +181,44 @@ file /srv/sandbox/zavecz/St2133486.000001 saved
  66.         gen fire_expat_`type' = fire * expat
  67. 
 .         * number of expats and locals
-.         bys frame_id_numeric year: egen n_expat_`type' = total(cond(expat, 1, 0)) // could be in collapse but local not
- 68.         bys frame_id_numeric year: egen n_local_`type' = total(cond(!expat, 1, 0))
+.         bys frame_id_numeric year: egen n_expat_`type' = total(cond(expat, 1,
+>  0)) // could be in collapse but local not
+ 68.         bys frame_id_numeric year: egen n_local_`type' = total(cond(!expat
+> , 1, 0))
  69.         
-.         *for descriptives (number of ceo-s and nceo-s in final data, number of ceo and nceo job-spells in final data) - part I
-.         *tempfile raw_`type'
-.         *save `raw_`type''
-.         save "`here'/temp/raw_`type'.dta", replace
- 70.         
 .         * create firm-year data
 .         * FIXME: country_code may be different within a firm-year
-.         collapse (sum) n_founder_`type' = founder n_insider_`type' = insider n_outsider_`type' = outsider (firstnm) n_expat_`type' n_local_`type' foreign_`t
-> ype' = foreign ever_expat_`type' ever_foreign_`type' hole10_balance_`type' = hole10_balance (count) n_`type' = expat (max) hire_`type' = hire fire_`type' = 
-> fire hire_expat_`type' fire_expat_`type', by(frame_id_numeric year)
- 71. 
-.         * managers in first year not classified as new hires and in last year not classified as fired
+.         collapse (sum) n_founder_`type' = founder n_insider_`type' = insider 
+> n_outsider_`type' = outsider (firstnm) n_expat_`type' n_local_`type' foreign_
+> `type' = foreign ever_expat_`type' ever_foreign_`type' (count) n_`type' = exp
+> at (max) hire_`type' = hire fire_`type' = fire hire_expat_`type' fire_expat_`
+> type', by(frame_id_numeric year)
+ 70. 
+.         * managers in first year not classified as new hires and in last year
+>  not classified as fired
 .         bys frame_id_numeric (year): replace hire_`type' = 0 if (_n==1)
- 72.         bys frame_id_numeric (year): replace fire_`type' = 0 if (_n==_N)
- 73.         bys frame_id_numeric (year): replace hire_expat_`type' = 0 if (_n==1)
- 74.         bys frame_id_numeric (year): replace fire_expat_`type' = 0 if (_n==_N)
- 75.         bys frame_id_numeric (year): gen ceo_spell_`type' = sum(hire_`type' | fire_`type') + 1 // so that index start from 1
- 76. 
+ 71.         bys frame_id_numeric (year): replace fire_`type' = 0 if (_n==_N)
+ 72.         bys frame_id_numeric (year): replace hire_expat_`type' = 0 if (_n=
+> =1)
+ 73.         bys frame_id_numeric (year): replace fire_expat_`type' = 0 if (_n=
+> =_N)
+ 74.         bys frame_id_numeric (year): gen ceo_spell_`type' = sum(hire_`type
+> ' | fire_`type') + 1 // so that index start from 1
+ 75. 
 .         * create dummies from numbers
 .         foreach var in expat local founder insider outsider {
- 77.                 gen has_`var'_`type' = (n_`var'_`type' > 0) & n_`var'_`type' != .
- 78.         }
- 79.         
+ 76.                 gen has_`var'_`type' = (n_`var'_`type' > 0) & n_`var'_`typ
+> e' != .
+ 77.         }
+ 78.         
 .         tempfile manager_`type'
- 80.         save `manager_`type''
- 81. }
+ 79.         save `manager_`type''
+ 80. }
   12,891,181
 
---------------------------------------------------------------------------------------------------------------------------------------------------------------
-manager_id                                                                                                                      group(manager_id manager_type)
---------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+manager_id                                       group(manager_id manager_type)
+-------------------------------------------------------------------------------
 
                   type:  numeric (long)
 
@@ -200,9 +231,9 @@ manager_id                                                                      
            percentiles:        10%       25%       50%       75%       90%
                             260098    502954    782515   1.1e+06   1.3e+06
 
---------------------------------------------------------------------------------------------------------------------------------------------------------------
-company_manager_id                                                                                                          group(frame_id_numeric manager_id)
---------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+company_manager_id                           group(frame_id_numeric manager_id)
+-------------------------------------------------------------------------------
 
                   type:  numeric (float)
 
@@ -418,17 +449,16 @@ company_manager_id                                                              
          1 |    55,405     13,739 |    69,144 
 -----------+----------------------+----------
      Total |   363,320     69,144 |   432,464 
-file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/raw_ceo.dta saved
 (25,405 real changes made)
 (25,405 real changes made)
-(1220 real changes made)
-(1401 real changes made)
-file /srv/sandbox/zavecz/St2133486.000002 saved
+(1,220 real changes made)
+(1,401 real changes made)
+file /srv/sandbox/zavecz/St3475148.000002 saved
   288,033
 
---------------------------------------------------------------------------------------------------------------------------------------------------------------
-manager_id                                                                                                                                   group(manager_id)
---------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+manager_id                                                    group(manager_id)
+-------------------------------------------------------------------------------
 
                   type:  numeric (long)
 
@@ -441,9 +471,9 @@ manager_id                                                                      
            percentiles:        10%       25%       50%       75%       90%
                             230023    478933    743701   1.1e+06   1.3e+06
 
---------------------------------------------------------------------------------------------------------------------------------------------------------------
-company_manager_id                                                                                                          group(frame_id_numeric manager_id)
---------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+company_manager_id                           group(frame_id_numeric manager_id)
+-------------------------------------------------------------------------------
 
                   type:  numeric (float)
 
@@ -654,37 +684,26 @@ company_manager_id                                                              
          1 |    12,511      3,554 |    16,065 
 -----------+----------------------+----------
      Total |    51,598     16,065 |    67,663 
-file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/raw_nceo.dta saved
 (5,138 real changes made)
 (5,138 real changes made)
 (149 real changes made)
 (188 real changes made)
-file /srv/sandbox/zavecz/St2133486.000003 saved
+file /srv/sandbox/zavecz/St3475148.000003 saved
 
-. 
-. *for descriptives (number of ceo-s and nceo-s in final data, number of ceo and nceo job-spells in final data) - part II
-. *foreach type in ceo nceo {
-. *       use "`here'/temp/balance-small-clean.dta", clear
-. *       merge 1:m frame_id_numeric year using `raw_`type'', nogen keep(match) keepusing(manager_id)
-. *       count
-. *       egen company_manager_id = group(frame_id_numeric manager_id)
-. *       codebook manager_id
-. *       codebook company_manager_id 
-. *}
 . 
 . use `manager_ceo'
 
-. 
 . * merge on manager_countries
-. merge 1:1 frame_id_numeric year using "`here'/temp/manager_country.dta", keep(master match) nogen
+. merge 1:1 frame_id_numeric year using "`here'/temp/manager_country.dta", keep
+> (master match) nogen
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                       292,023
-        from master                   292,023  
+    not matched                       291,867
+        from master                   291,867  
         from using                          0  
 
-    matched                            17,793  
+    matched                            17,949  
     -----------------------------------------
 
 . tabulate has_expat_ceo if missing(country_list)
@@ -692,28 +711,30 @@ file /srv/sandbox/zavecz/St2133486.000003 saved
 has_expat_c |
          eo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    290,805       99.58       99.58
-          1 |      1,218        0.42      100.00
+          0 |    291,048       99.72       99.72
+          1 |        819        0.28      100.00
 ------------+-----------------------------------
-      Total |    292,023      100.00
+      Total |    291,867      100.00
 
 . tabulate has_expat_ceo if !missing(country_list)
 
 has_expat_c |
          eo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        716        4.02        4.02
-          1 |     17,077       95.98      100.00
+          0 |        473        2.64        2.64
+          1 |     17,476       97.36      100.00
 ------------+-----------------------------------
-      Total |     17,793      100.00
+      Total |     17,949      100.00
 
 . rename country_list country_all_ceo
 
 . rename language_list lang_all_ceo
 
 . 
-. merge 1:1 frame_id_numeric year using `manager_nceo', keep (1 3) nogen // 1, only 1 and 3 to not have missing cases in tab has_expat_ceo, missing in analysi
-> s-sample 2, merge here to makes sure to have only ceo-s when countries are merged
+. merge 1:1 frame_id_numeric year using `manager_nceo', keep (1 3) nogen // 1, 
+> only 1 and 3 to not have missing cases in tab has_expat_ceo, missing in analy
+> sis-sample 2, merge here to makes sure to have only ceo-s when countries are 
+> merged
 
     Result                           # of obs.
     -----------------------------------------
@@ -728,13 +749,11 @@ has_expat_c |
 . count
   309,816
 
-. 
 . compress
   variable n_expat_ceo was float now byte
   variable n_local_ceo was float now byte
   variable ever_expat_ceo was float now byte
   variable ever_foreign_ceo was float now byte
-  variable hole10_balance_ceo was float now byte
   variable n_ceo was long now byte
   variable hire_expat_ceo was float now byte
   variable fire_expat_ceo was float now byte
@@ -748,7 +767,6 @@ has_expat_c |
   variable n_local_nceo was float now byte
   variable ever_expat_nceo was float now byte
   variable ever_foreign_nceo was float now byte
-  variable hole10_balance_nceo was float now byte
   variable n_nceo was long now byte
   variable hire_expat_nceo was float now byte
   variable fire_expat_nceo was float now byte
@@ -765,62 +783,17 @@ has_expat_c |
   variable n_insider_nceo was double now byte
   variable n_outsider_nceo was double now byte
   variable country_all_ceo was str15 now str12
-  (39,966,264 bytes saved)
+  (38,107,368 bytes saved)
 
 . *save_all_to_json
 . save "`here'/temp/firm_events.dta", replace
-file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/firm_events.dta saved
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/firm
+> _events.dta saved
 
-. 
-. preserve
-
-.         sort frame_id_numeric year
-
-.         gen x = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-(25,405 missing values generated)
-
-.         gen hole10 = (x > 10 & x != .)
-
-.         tab hole10 hole10_balance_ceo
-
-           |       (firstnm)
-           |    hole10_balance
-    hole10 |         0          1 |     Total
------------+----------------------+----------
-         0 |   309,768          4 |   309,772 
-         1 |        21         23 |        44 
------------+----------------------+----------
-     Total |   309,789         27 |   309,816 
-
-.         *keep if hole10
-.         keep if hole10 & !hole10_balance_ceo
-(309,795 observations deleted)
-
-.         set seed 123
-
-.         *sample 10, count
-.         sample 5, count
-(16 observations deleted)
-
-.         rename year year_hole
-
-.         *keep frame_id_numeric year_hole hole10 hole10_balance_ceo
-.         keep frame_id_numeric year_hole
-
-.         *save "`here'/temp/holes_manager_sample", replace
-.         *export delimited using "`here'/temp/holes_manager_sample.csv", replace
-.         save "`here'/temp/holes_manager_sample_unique", replace
-file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/holes_manager_sample_unique.dta saved
-
-.         export delimited using "`here'/temp/holes_manager_sample_unique.csv", replace
-file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/holes_manager_sample_unique.csv saved
-
-. restore
-
-. 
 . log close
       name:  <unnamed>
-       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/firm_panel.log
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//o
+> utput/firm_panel.log
   log type:  text
- closed on:   3 Jun 2021, 19:54:43
---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ closed on:   8 Jun 2021, 18:31:16
+-------------------------------------------------------------------------------
