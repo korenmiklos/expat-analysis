@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt.log
   log type:  text
- opened on:  10 Jun 2021, 18:13:50
+ opened on:  21 Jun 2021, 18:35:25
 
 . 
 . use "`here'/temp/analysis_sample.dta"
@@ -22,8 +22,9 @@
   2.         *eststo: attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(`var') aggregate(e) pre(2) post(3) reps(20)
 .         *attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(`var') aggregate(e) pre(2) post(3) reps(20)
 .         attgt lnQ lnQL TFP_cd lnK lnL lnKL exporter if ever_foreign, treatment(`var') aggregate(e) pre(4) post(4) reps(20) notyet
-  3.         eststo model_`var', title("`var'")
-  4.         *matrix list e(b)
+  3.         count if e(sample) == 1
+  4.         eststo model_`var', title("`var'")
+  5.         *matrix list e(b)
 . }
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
@@ -159,6 +160,7 @@ exporter     |
      event_3 |   .0285873   .0170824     1.67   0.094    -.0048936    .0620683
      event_4 |   .0291572   .0144314     2.02   0.043     .0008722    .0574422
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -293,6 +295,7 @@ exporter     |
      event_3 |   .0268954   .0134946     1.99   0.046     .0004464    .0533444
      event_4 |   .0358277   .0149061     2.40   0.016     .0066123    .0650432
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -427,6 +430,7 @@ exporter     |
      event_3 |   .0352655   .0212604     1.66   0.097    -.0064042    .0769352
      event_4 |   .0514739   .0201532     2.55   0.011     .0119744    .0909734
 ------------------------------------------------------------------------------
+  0
 
 . 
 . esttab model* using "`here'/output/table_attgt.tex", mtitle b(3) se(3) replace
@@ -440,5 +444,5 @@ exporter     |
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt.log
   log type:  text
- closed on:  10 Jun 2021, 19:55:25
+ closed on:  21 Jun 2021, 20:11:05
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
