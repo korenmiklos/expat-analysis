@@ -28,12 +28,15 @@ foreach sample in ef efh {
 		*attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(`var') aggregate(e) pre(2) post(3) reps(20)
 		attgt lnQ lnQL TFP_cd lnK lnL lnKL exporter if `sample', treatment(`var') aggregate(e) pre(4) post(4) reps(20) notyet
 		count if e(sample) == 1
-		eststo model_`sample'`var', title("`var'")
+		eststo model_`sample'`var', title("`sample' `var'")
 		*matrix list e(b)
 	}
 
-	esttab model_`sample'* using "`here'/output/table_`sample'_attgt.tex", mtitle title("`sample'") b(3) se(3) replace
-	esttab model_`sample'* using "`here'/output/table_`sample'_attgt.txt", mtitle title("`sample'") b(3) se(3) replace
+	*esttab model_`sample'* using "`here'/output/table_`sample'_attgt.tex", mtitle title("`sample'") b(3) se(3) replace
+	*esttab model_`sample'* using "`here'/output/table_`sample'_attgt.txt", mtitle title("`sample'") b(3) se(3) replace
 }
+
+esttab model* using "`here'/output/table_attgt.tex", mtitle b(3) se(3) replace
+esttab model* using "`here'/output/table_attgt.txt", mtitle b(3) se(3) replace
 
 log close

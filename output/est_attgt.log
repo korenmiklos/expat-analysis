@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt.log
   log type:  text
- opened on:  22 Jun 2021, 13:36:00
+ opened on:  23 Jun 2021, 15:20:43
 
 . 
 . use "`here'/temp/analysis_sample.dta"
@@ -31,13 +31,13 @@
 .                 *attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(`var') aggregate(e) pre(2) post(3) reps(20)
 .                 attgt lnQ lnQL TFP_cd lnK lnL lnKL exporter if `sample', treatment(`var') aggregate(e) pre(4) post(4) reps(20) notyet
   4.                 count if e(sample) == 1
-  5.                 eststo model_`sample'`var', title("`var'")
+  5.                 eststo model_`sample'`var', title("`sample' `var'")
   6.                 *matrix list e(b)
 .         }
   7. 
-.         esttab model_`sample'* using "`here'/output/table_`sample'_attgt.tex", mtitle title("`sample'") b(3) se(3) replace
-  8.         esttab model_`sample'* using "`here'/output/table_`sample'_attgt.txt", mtitle title("`sample'") b(3) se(3) replace
-  9. }
+.         *esttab model_`sample'* using "`here'/output/table_`sample'_attgt.tex", mtitle title("`sample'") b(3) se(3) replace
+.         *esttab model_`sample'* using "`here'/output/table_`sample'_attgt.txt", mtitle title("`sample'") b(3) se(3) replace
+. }
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -443,10 +443,6 @@ exporter     |
      event_4 |   .0514739   .0201532     2.55   0.011     .0119744    .0909734
 ------------------------------------------------------------------------------
   0
-(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_ef_attgt.tex not found)
-(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_ef_attgt.tex)
-(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_ef_attgt.txt not found)
-(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_ef_attgt.txt)
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -852,15 +848,18 @@ exporter     |
      event_4 |   .0545401   .0206834     2.64   0.008     .0140015    .0950787
 ------------------------------------------------------------------------------
   0
-(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_efh_attgt.tex not found)
-(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_efh_attgt.tex)
-(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_efh_attgt.txt not found)
-(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_efh_attgt.txt)
+
+. 
+. esttab model* using "`here'/output/table_attgt.tex", mtitle b(3) se(3) replace
+(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt.tex)
+
+. esttab model* using "`here'/output/table_attgt.txt", mtitle b(3) se(3) replace
+(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt.txt)
 
 . 
 . log close
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt.log
   log type:  text
- closed on:  22 Jun 2021, 16:58:01
+ closed on:  23 Jun 2021, 18:51:03
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
