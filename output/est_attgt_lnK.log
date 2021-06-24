@@ -1,0 +1,135 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_lnK.log
+  log type:  text
+ opened on:  24 Jun 2021, 19:25:35
+
+. 
+. use "`here'/temp/analysis_sample.dta"
+
+. 
+. *attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(has_expat_ceo ) aggregate(e) pre(2) post(3) reps(20)
+. *matrix list e(b)
+. *esttab
+. 
+. *foreach var in exporter lnQL {
+. *       attgt `var' if inrange(year, 1992, 2004) & ever_foreign, treatment(has_expat_ceo ) aggregate(e) pre(2) post(3) reps(20)
+. *       matrix list e(b)
+. *       esttab
+. *}
+. 
+. rename ever_foreign ef
+
+. rename ever_foreign_hire efh
+
+. rename has_expat_ceo has_expat
+
+. 
+. foreach sample in ef efh {
+  2.         foreach var in foreign foreign_hire has_expat {
+  3.                 *eststo: attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(`var') aggregate(e) pre(2) post(3) reps(20)
+.                 *attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(`var') aggregate(e) pre(2) post(3) reps(20)
+.                 attgt lnK if `sample', treatment(`var') aggregate(att) reps(20) notyet
+  4.                 count if e(sample) == 1
+  5.                 eststo model_`sample'`var', title("`sample' `var'")
+  6.                 *matrix list e(b)
+.         }
+  7. 
+.         *esttab model_`sample'* using "`here'/output/table_`sample'_attgt.tex", mtitle title("`sample'") b(3) se(3) replace
+.         *esttab model_`sample'* using "`here'/output/table_`sample'_attgt.txt", mtitle title("`sample'") b(3) se(3) replace
+. }
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnK: att
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnK          |
+         att |  -.0228354   .0543424    -0.42   0.674    -.1293447    .0836738
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnK: att
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnK          |
+         att |  -.0463112   .0649676    -0.71   0.476    -.1736453    .0810229
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnK: att
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnK          |
+         att |   .0520836   .0822488     0.63   0.527    -.1091212    .2132883
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnK: att
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnK          |
+         att |   -.041118    .072206    -0.57   0.569    -.1826392    .1004032
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnK: att
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnK          |
+         att |  -.0592995   .0635852    -0.93   0.351    -.1839241    .0653252
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnK: att
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnK          |
+         att |   .0621979   .0816633     0.76   0.446    -.0978593    .2222551
+------------------------------------------------------------------------------
+  0
+
+. 
+. esttab model* using "`here'/output/table_attgt_lnK.tex", mtitle b(3) se(3) replace
+(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_lnK.tex not found)
+(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_lnK.tex)
+
+. esttab model* using "`here'/output/table_attgt_lnK.txt", mtitle b(3) se(3) replace
+(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_lnK.txt not found)
+(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_lnK.txt)
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_lnK.log
+  log type:  text
+ closed on:  24 Jun 2021, 20:41:12
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
