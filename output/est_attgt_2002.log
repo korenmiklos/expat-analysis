@@ -1,0 +1,861 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_2002.log
+  log type:  text
+ opened on:  24 Jun 2021, 13:38:18
+
+. 
+. use "`here'/temp/analysis_sample.dta"
+
+. 
+. *attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(has_expat_ceo ) aggregate(e) pre(2) post(3) reps(20)
+. *matrix list e(b)
+. *esttab
+. 
+. *foreach var in exporter lnQL {
+. *       attgt `var' if inrange(year, 1992, 2004) & ever_foreign, treatment(has_expat_ceo ) aggregate(e) pre(2) post(3) reps(20)
+. *       matrix list e(b)
+. *       esttab
+. *}
+. 
+. rename ever_foreign ef
+
+. rename ever_foreign_hire efh
+
+. rename has_expat_ceo has_expat
+
+. 
+. foreach sample in ef efh {
+  2.         foreach var in foreign foreign_hire has_expat {
+  3.                 *eststo: attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(`var') aggregate(e) pre(2) post(3) reps(20)
+.                 *attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(`var') aggregate(e) pre(2) post(3) reps(20)
+.                 attgt lnQ lnQL TFP_cd lnK lnL lnKL exporter if `sample' & year > 2002, treatment(`var') aggregate(e) pre(4) post(4) reps(20) notyet
+  4.                 *count if e(sample) == 1
+.                 eststo model_`sample'`var', title("`sample' `var'")
+  5.                 *matrix list e(b)
+.         }
+  6. 
+.         *esttab model_`sample'* using "`here'/output/table_`sample'_attgt.tex", mtitle title("`sample'") b(3) se(3) replace
+.         *esttab model_`sample'* using "`here'/output/table_`sample'_attgt.txt", mtitle title("`sample'") b(3) se(3) replace
+. }
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQ: event_m4
+Estimating lnQ: event_m3
+Estimating lnQ: event_m2
+Estimating lnQ: event_m1
+Estimating lnQ: event_1
+Estimating lnQ: event_2
+Estimating lnQ: event_3
+Estimating lnQ: event_4
+Estimating lnQL: event_m4
+Estimating lnQL: event_m3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating TFP_cd: event_m4
+Estimating TFP_cd: event_m3
+Estimating TFP_cd: event_m2
+Estimating TFP_cd: event_m1
+Estimating TFP_cd: event_1
+Estimating TFP_cd: event_2
+Estimating TFP_cd: event_3
+Estimating TFP_cd: event_4
+Estimating lnK: event_m4
+Estimating lnK: event_m3
+Estimating lnK: event_m2
+Estimating lnK: event_m1
+Estimating lnK: event_1
+Estimating lnK: event_2
+Estimating lnK: event_3
+Estimating lnK: event_4
+Estimating lnL: event_m4
+Estimating lnL: event_m3
+Estimating lnL: event_m2
+Estimating lnL: event_m1
+Estimating lnL: event_1
+Estimating lnL: event_2
+Estimating lnL: event_3
+Estimating lnL: event_4
+Estimating lnKL: event_m4
+Estimating lnKL: event_m3
+Estimating lnKL: event_m2
+Estimating lnKL: event_m1
+Estimating lnKL: event_1
+Estimating lnKL: event_2
+Estimating lnKL: event_3
+Estimating lnKL: event_4
+Estimating exporter: event_m4
+Estimating exporter: event_m3
+Estimating exporter: event_m2
+Estimating exporter: event_m1
+Estimating exporter: event_1
+Estimating exporter: event_2
+Estimating exporter: event_3
+Estimating exporter: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQ          |
+    event_m4 |   .1519116   .0851561     1.78   0.074    -.0149913    .3188145
+    event_m3 |    .084522   .0620077     1.36   0.173    -.0370109    .2060549
+    event_m2 |   .0337198   .0635672     0.53   0.596    -.0908696    .1583092
+    event_m1 |  -.0066747   .0412977    -0.16   0.872    -.0876168    .0742674
+     event_1 |   .0853209   .0516932     1.65   0.099     -.015996    .1866378
+     event_2 |   .1098193   .0673081     1.63   0.103    -.0221021    .2417407
+     event_3 |   .1122509   .0705368     1.59   0.112    -.0259987    .2505006
+     event_4 |   .0693314    .135015     0.51   0.608    -.1952932    .3339561
+-------------+----------------------------------------------------------------
+lnQL         |
+    event_m4 |   .0281024   .0415018     0.68   0.498    -.0532396    .1094444
+    event_m3 |   .0118833   .0457045     0.26   0.795    -.0776958    .1014625
+    event_m2 |   .0399169    .045789     0.87   0.383    -.0498278    .1296617
+    event_m1 |   .0080686   .0254436     0.32   0.751       -.0418    .0579372
+     event_1 |   .0609308   .0430792     1.41   0.157    -.0235028    .1453645
+     event_2 |   .0527133   .0692767     0.76   0.447    -.0830666    .1884932
+     event_3 |   .0916276   .0759426     1.21   0.228    -.0572171    .2404723
+     event_4 |   .0602574   .0808767     0.75   0.456     -.098258    .2187728
+-------------+----------------------------------------------------------------
+TFP_cd       |
+    event_m4 |   .0145376   .0184802     0.79   0.431    -.0216829    .0507581
+    event_m3 |   .0277852    .022108     1.26   0.209    -.0155456     .071116
+    event_m2 |  -.0105275    .025256    -0.42   0.677    -.0600284    .0389734
+    event_m1 |  -.0045976   .0129712    -0.35   0.723    -.0300206    .0208254
+     event_1 |   .0101311   .0169542     0.60   0.550    -.0230985    .0433607
+     event_2 |   .0282342   .0295078     0.96   0.339    -.0296001    .0860684
+     event_3 |   .0290526   .0351062     0.83   0.408    -.0397543    .0978595
+     event_4 |   .0007343   .0394981     0.02   0.985    -.0766806    .0781493
+-------------+----------------------------------------------------------------
+lnK          |
+    event_m4 |   .0742657   .0818566     0.91   0.364    -.0861702    .2347016
+    event_m3 |   .0273788   .0763452     0.36   0.720    -.1222551    .1770127
+    event_m2 |   .0576856   .0661823     0.87   0.383    -.0720294    .1874005
+    event_m1 |   .0670989   .0430107     1.56   0.119    -.0172005    .1513983
+     event_1 |  -.0447215   .0343283    -1.30   0.193    -.1120038    .0225609
+     event_2 |  -.0153895   .0430794    -0.36   0.721    -.0998236    .0690446
+     event_3 |  -.0776224   .0765044    -1.01   0.310    -.2275683    .0723235
+     event_4 |   -.176126   .1141799    -1.54   0.123    -.3999146    .0476625
+-------------+----------------------------------------------------------------
+lnL          |
+    event_m4 |   .1238093   .0807045     1.53   0.125    -.0343687    .2819872
+    event_m3 |   .0726387   .0671928     1.08   0.280    -.0590566    .2043341
+    event_m2 |  -.0061971   .0402389    -0.15   0.878    -.0850639    .0726697
+    event_m1 |  -.0147432   .0292974    -0.50   0.615     -.072165    .0426786
+     event_1 |   .0243901   .0223821     1.09   0.276     -.019478    .0682582
+     event_2 |    .057106   .0432648     1.32   0.187    -.0276914    .1419034
+     event_3 |   .0206233   .0543943     0.38   0.705    -.0859876    .1272342
+     event_4 |    .009074   .1036252     0.09   0.930    -.1940276    .2121757
+-------------+----------------------------------------------------------------
+lnKL         |
+    event_m4 |  -.0495436   .0800309    -0.62   0.536    -.2064012     .107314
+    event_m3 |  -.0452599    .061506    -0.74   0.462    -.1658094    .0752896
+    event_m2 |   .0638826    .055423     1.15   0.249    -.0447444    .1725097
+    event_m1 |   .0818421   .0406874     2.01   0.044     .0020963    .1615879
+     event_1 |  -.0691115   .0395851    -1.75   0.081    -.1466968    .0084738
+     event_2 |  -.0724955   .0550586    -1.32   0.188    -.1804083    .0354173
+     event_3 |  -.0982457   .0856517    -1.15   0.251      -.26612    .0696286
+     event_4 |  -.1852001   .1185918    -1.56   0.118    -.4176357    .0472355
+-------------+----------------------------------------------------------------
+exporter     |
+    event_m4 |   .0066942   .0250567     0.27   0.789     -.042416    .0558044
+    event_m3 |  -.0080781   .0226241    -0.36   0.721    -.0524205    .0362644
+    event_m2 |   .0230108   .0244229     0.94   0.346    -.0248571    .0708788
+    event_m1 |  -.0014401   .0151697    -0.09   0.924    -.0311722    .0282921
+     event_1 |   .0236576   .0129757     1.82   0.068    -.0017742    .0490895
+     event_2 |   .0169712   .0157861     1.08   0.282    -.0139689    .0479114
+     event_3 |   .0006413   .0252705     0.03   0.980     -.048888    .0501706
+     event_4 |   .0093958    .035184     0.27   0.789    -.0595635    .0783551
+------------------------------------------------------------------------------
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQ: event_m4
+Estimating lnQ: event_m3
+Estimating lnQ: event_m2
+Estimating lnQ: event_m1
+Estimating lnQ: event_1
+Estimating lnQ: event_2
+Estimating lnQ: event_3
+Estimating lnQ: event_4
+Estimating lnQL: event_m4
+Estimating lnQL: event_m3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating TFP_cd: event_m4
+Estimating TFP_cd: event_m3
+Estimating TFP_cd: event_m2
+Estimating TFP_cd: event_m1
+Estimating TFP_cd: event_1
+Estimating TFP_cd: event_2
+Estimating TFP_cd: event_3
+Estimating TFP_cd: event_4
+Estimating lnK: event_m4
+Estimating lnK: event_m3
+Estimating lnK: event_m2
+Estimating lnK: event_m1
+Estimating lnK: event_1
+Estimating lnK: event_2
+Estimating lnK: event_3
+Estimating lnK: event_4
+Estimating lnL: event_m4
+Estimating lnL: event_m3
+Estimating lnL: event_m2
+Estimating lnL: event_m1
+Estimating lnL: event_1
+Estimating lnL: event_2
+Estimating lnL: event_3
+Estimating lnL: event_4
+Estimating lnKL: event_m4
+Estimating lnKL: event_m3
+Estimating lnKL: event_m2
+Estimating lnKL: event_m1
+Estimating lnKL: event_1
+Estimating lnKL: event_2
+Estimating lnKL: event_3
+Estimating lnKL: event_4
+Estimating exporter: event_m4
+Estimating exporter: event_m3
+Estimating exporter: event_m2
+Estimating exporter: event_m1
+Estimating exporter: event_1
+Estimating exporter: event_2
+Estimating exporter: event_3
+Estimating exporter: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQ          |
+    event_m4 |   .1707635    .082454     2.07   0.038     .0091566    .3323704
+    event_m3 |   .1115767   .0611034     1.83   0.068    -.0081837    .2313371
+    event_m2 |   .0024296   .0530263     0.05   0.963       -.1015    .1063592
+    event_m1 |   .0082634   .0289497     0.29   0.775    -.0484769    .0650037
+     event_1 |   .1029976   .0531719     1.94   0.053    -.0012174    .2072126
+     event_2 |   .1699184   .0879686     1.93   0.053     -.002497    .3423337
+     event_3 |   .1423919   .0973811     1.46   0.144    -.0484715    .3332553
+     event_4 |   .1935546   .1263596     1.53   0.126    -.0541056    .4412149
+-------------+----------------------------------------------------------------
+lnQL         |
+    event_m4 |   .0888697   .0587958     1.51   0.131     -.026368    .2041074
+    event_m3 |   .0864834   .0521034     1.66   0.097    -.0156375    .1886043
+    event_m2 |    .045691   .0435543     1.05   0.294    -.0396738    .1310558
+    event_m1 |   .0297209   .0296356     1.00   0.316    -.0283638    .0878057
+     event_1 |   .0952806   .0442871     2.15   0.031     .0084794    .1820818
+     event_2 |   .1713659   .0674213     2.54   0.011     .0392226    .3035092
+     event_3 |   .1776625   .0767417     2.32   0.021     .0272517    .3280734
+     event_4 |   .1742838   .0863543     2.02   0.044     .0050325    .3435351
+-------------+----------------------------------------------------------------
+TFP_cd       |
+    event_m4 |   .0060147   .0317471     0.19   0.850    -.0562085    .0682378
+    event_m3 |   .0195898   .0220964     0.89   0.375    -.0237184     .062898
+    event_m2 |  -.0338578   .0244995    -1.38   0.167    -.0818759    .0141603
+    event_m1 |  -.0053584   .0133898    -0.40   0.689    -.0316019    .0208851
+     event_1 |    .029902   .0195568     1.53   0.126    -.0084286    .0682325
+     event_2 |   .0622208   .0294948     2.11   0.035     .0044121    .1200295
+     event_3 |   .0540677   .0380964     1.42   0.156    -.0205999    .1287354
+     event_4 |   .0598668   .0454075     1.32   0.187    -.0291302    .1488638
+-------------+----------------------------------------------------------------
+lnK          |
+    event_m4 |   .0720202   .0953574     0.76   0.450    -.1148769    .2589173
+    event_m3 |  -.0382322   .0834387    -0.46   0.647     -.201769    .1253046
+    event_m2 |   .0750818   .0602915     1.25   0.213    -.0430873    .1932509
+    event_m1 |   .0579751   .0396593     1.46   0.144    -.0197556    .1357058
+     event_1 |  -.0175788   .0400968    -0.44   0.661     -.096167    .0610095
+     event_2 |    .038365   .0652441     0.59   0.557    -.0895111    .1662411
+     event_3 |  -.1063945   .0857341    -1.24   0.215    -.2744302    .0616412
+     event_4 |  -.1884494   .1355092    -1.39   0.164    -.4540426    .0771438
+-------------+----------------------------------------------------------------
+lnL          |
+    event_m4 |   .0818939   .0589299     1.39   0.165    -.0336066    .1973943
+    event_m3 |   .0250933   .0519583     0.48   0.629     -.076743    .1269297
+    event_m2 |  -.0432614   .0399976    -1.08   0.279    -.1216554    .0351325
+    event_m1 |  -.0214575    .035394    -0.61   0.544    -.0908285    .0479134
+     event_1 |    .007717   .0285947     0.27   0.787    -.0483275    .0637615
+     event_2 |  -.0014475   .0543065    -0.03   0.979    -.1078863    .1049913
+     event_3 |  -.0352706   .0651799    -0.54   0.588    -.1630208    .0924796
+     event_4 |   .0192709   .0790414     0.24   0.807    -.1356474    .1741892
+-------------+----------------------------------------------------------------
+lnKL         |
+    event_m4 |  -.0098737   .1035648    -0.10   0.924     -.212857    .1931095
+    event_m3 |  -.0633255   .0991981    -0.64   0.523    -.2577503    .1310992
+    event_m2 |   .1183432   .0699897     1.69   0.091    -.0188341    .2555205
+    event_m1 |   .0794326   .0526832     1.51   0.132    -.0238245    .1826897
+     event_1 |  -.0252958   .0470648    -0.54   0.591    -.1175412    .0669496
+     event_2 |   .0398125   .0781928     0.51   0.611    -.1134426    .1930675
+     event_3 |  -.0711239   .0912425    -0.78   0.436    -.2499558     .107708
+     event_4 |  -.2077203   .1172256    -1.77   0.076    -.4374782    .0220376
+-------------+----------------------------------------------------------------
+exporter     |
+    event_m4 |  -.0408023   .0259439    -1.57   0.116    -.0916515    .0100468
+    event_m3 |  -.0357154   .0183802    -1.94   0.052    -.0717399    .0003091
+    event_m2 |  -.0158254   .0214022    -0.74   0.460     -.057773    .0261221
+    event_m1 |   .0009359   .0148954     0.06   0.950    -.0282586    .0301303
+     event_1 |   .0178197   .0155873     1.14   0.253    -.0127309    .0483702
+     event_2 |   .0181606   .0221983     0.82   0.413    -.0253472    .0616685
+     event_3 |   .0327044   .0259446     1.26   0.207    -.0181461     .083555
+     event_4 |   .0783473   .0355524     2.20   0.028     .0086659    .1480287
+------------------------------------------------------------------------------
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQ: event_m4
+Estimating lnQ: event_m3
+Estimating lnQ: event_m2
+Estimating lnQ: event_m1
+Estimating lnQ: event_1
+Estimating lnQ: event_2
+Estimating lnQ: event_3
+Estimating lnQ: event_4
+Estimating lnQL: event_m4
+Estimating lnQL: event_m3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating TFP_cd: event_m4
+Estimating TFP_cd: event_m3
+Estimating TFP_cd: event_m2
+Estimating TFP_cd: event_m1
+Estimating TFP_cd: event_1
+Estimating TFP_cd: event_2
+Estimating TFP_cd: event_3
+Estimating TFP_cd: event_4
+Estimating lnK: event_m4
+Estimating lnK: event_m3
+Estimating lnK: event_m2
+Estimating lnK: event_m1
+Estimating lnK: event_1
+Estimating lnK: event_2
+Estimating lnK: event_3
+Estimating lnK: event_4
+Estimating lnL: event_m4
+Estimating lnL: event_m3
+Estimating lnL: event_m2
+Estimating lnL: event_m1
+Estimating lnL: event_1
+Estimating lnL: event_2
+Estimating lnL: event_3
+Estimating lnL: event_4
+Estimating lnKL: event_m4
+Estimating lnKL: event_m3
+Estimating lnKL: event_m2
+Estimating lnKL: event_m1
+Estimating lnKL: event_1
+Estimating lnKL: event_2
+Estimating lnKL: event_3
+Estimating lnKL: event_4
+Estimating exporter: event_m4
+Estimating exporter: event_m3
+Estimating exporter: event_m2
+Estimating exporter: event_m1
+Estimating exporter: event_1
+Estimating exporter: event_2
+Estimating exporter: event_3
+Estimating exporter: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQ          |
+    event_m4 |   .1346744   .0952243     1.41   0.157    -.0519617    .3213105
+    event_m3 |  -.0025507   .0751886    -0.03   0.973    -.1499177    .1448163
+    event_m2 |  -.0134568   .0663218    -0.20   0.839    -.1434452    .1165316
+    event_m1 |   -.025736   .0348033    -0.74   0.460    -.0939492    .0424771
+     event_1 |   .1681598   .0839701     2.00   0.045     .0035814    .3327382
+     event_2 |   .2726486   .1022865     2.67   0.008     .0721707    .4731264
+     event_3 |   .2936765   .1176593     2.50   0.013     .0630686    .5242845
+     event_4 |   .3006774   .1586571     1.90   0.058    -.0102847    .6116396
+-------------+----------------------------------------------------------------
+lnQL         |
+    event_m4 |   .0830756     .06796     1.22   0.222    -.0501236    .2162748
+    event_m3 |   .0165479   .0505979     0.33   0.744    -.0826222    .1157179
+    event_m2 |    .069118   .0406551     1.70   0.089    -.0105645    .1488004
+    event_m1 |   .0374286   .0245148     1.53   0.127    -.0106195    .0854768
+     event_1 |   .1488539   .0502085     2.96   0.003      .050447    .2472608
+     event_2 |    .270778   .0652358     4.15   0.000     .1429183    .3986378
+     event_3 |   .3175972   .0783674     4.05   0.000     .1639998    .4711945
+     event_4 |   .2915058   .0995148     2.93   0.003     .0964604    .4865513
+-------------+----------------------------------------------------------------
+TFP_cd       |
+    event_m4 |   .0152643   .0378112     0.40   0.686    -.0588443    .0893729
+    event_m3 |    .028667   .0229246     1.25   0.211    -.0162644    .0735984
+    event_m2 |   .0064567   .0250484     0.26   0.797    -.0426373    .0555506
+    event_m1 |   .0121815   .0119415     1.02   0.308    -.0112233    .0355864
+     event_1 |   .0427711   .0240792     1.78   0.076    -.0044233    .0899655
+     event_2 |   .0852433   .0332318     2.57   0.010     .0201101    .1503764
+     event_3 |   .0746266   .0372136     2.01   0.045     .0016892     .147564
+     event_4 |   .0799147   .0473516     1.69   0.091    -.0128928    .1727222
+-------------+----------------------------------------------------------------
+lnK          |
+    event_m4 |    .054925   .1181662     0.46   0.642    -.1766765    .2865265
+    event_m3 |  -.1393204    .102278    -1.36   0.173    -.3397815    .0611407
+    event_m2 |   .0246842   .0865405     0.29   0.775     -.144932    .1943005
+    event_m1 |   .0153164   .0489789     0.31   0.754    -.0806804    .1113132
+     event_1 |   .0346857   .0532896     0.65   0.515    -.0697599    .1391314
+     event_2 |   .0789738   .0952353     0.83   0.407     -.107684    .2656317
+     event_3 |  -.0090999   .1219482    -0.07   0.941    -.2481141    .2299142
+     event_4 |  -.0523629   .1345453    -0.39   0.697    -.3160669     .211341
+-------------+----------------------------------------------------------------
+lnL          |
+    event_m4 |   .0515988   .0746981     0.69   0.490    -.0948067    .1980043
+    event_m3 |  -.0190985   .0504953    -0.38   0.705    -.1180675    .0798705
+    event_m2 |  -.0825747   .0526216    -1.57   0.117    -.1857111    .0205616
+    event_m1 |  -.0631646   .0342165    -1.85   0.065    -.1302278    .0038985
+     event_1 |    .019306   .0525347     0.37   0.713    -.0836602    .1222722
+     event_2 |   .0018705    .072521     0.03   0.979    -.1402681    .1440091
+     event_3 |  -.0239206   .0723931    -0.33   0.741    -.1658084    .1179672
+     event_4 |   .0091717   .0925728     0.10   0.921    -.1722676    .1906109
+-------------+----------------------------------------------------------------
+lnKL         |
+    event_m4 |   .0033262   .1406152     0.02   0.981    -.2722745    .2789268
+    event_m3 |  -.1202219   .1068791    -1.12   0.261    -.3297011    .0892574
+    event_m2 |   .1072589   .0738404     1.45   0.146    -.0374656    .2519834
+    event_m1 |    .078481   .0541147     1.45   0.147    -.0275818    .1845438
+     event_1 |   .0153798   .0584673     0.26   0.793     -.099214    .1299736
+     event_2 |   .0771033   .0867794     0.89   0.374    -.0929812    .2471878
+     event_3 |   .0148206   .1024081     0.14   0.885    -.1858954    .2155367
+     event_4 |  -.0615346   .0888681    -0.69   0.489    -.2357129    .1126437
+-------------+----------------------------------------------------------------
+exporter     |
+    event_m4 |  -.0096057   .0270793    -0.35   0.723      -.06268    .0434687
+    event_m3 |  -.0046856   .0318474    -0.15   0.883    -.0671053    .0577342
+    event_m2 |  -.0121202   .0262786    -0.46   0.645    -.0636253     .039385
+    event_m1 |    .007329   .0184384     0.40   0.691    -.0288097    .0434676
+     event_1 |   .0271368   .0215565     1.26   0.208    -.0151132    .0693868
+     event_2 |   .0154386    .023845     0.65   0.517    -.0312967    .0621739
+     event_3 |   .0033891   .0310923     0.11   0.913    -.0575506    .0643289
+     event_4 |   .0308048   .0324031     0.95   0.342    -.0327041    .0943137
+------------------------------------------------------------------------------
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQ: event_m4
+Estimating lnQ: event_m3
+Estimating lnQ: event_m2
+Estimating lnQ: event_m1
+Estimating lnQ: event_1
+Estimating lnQ: event_2
+Estimating lnQ: event_3
+Estimating lnQ: event_4
+Estimating lnQL: event_m4
+Estimating lnQL: event_m3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating TFP_cd: event_m4
+Estimating TFP_cd: event_m3
+Estimating TFP_cd: event_m2
+Estimating TFP_cd: event_m1
+Estimating TFP_cd: event_1
+Estimating TFP_cd: event_2
+Estimating TFP_cd: event_3
+Estimating TFP_cd: event_4
+Estimating lnK: event_m4
+Estimating lnK: event_m3
+Estimating lnK: event_m2
+Estimating lnK: event_m1
+Estimating lnK: event_1
+Estimating lnK: event_2
+Estimating lnK: event_3
+Estimating lnK: event_4
+Estimating lnL: event_m4
+Estimating lnL: event_m3
+Estimating lnL: event_m2
+Estimating lnL: event_m1
+Estimating lnL: event_1
+Estimating lnL: event_2
+Estimating lnL: event_3
+Estimating lnL: event_4
+Estimating lnKL: event_m4
+Estimating lnKL: event_m3
+Estimating lnKL: event_m2
+Estimating lnKL: event_m1
+Estimating lnKL: event_1
+Estimating lnKL: event_2
+Estimating lnKL: event_3
+Estimating lnKL: event_4
+Estimating exporter: event_m4
+Estimating exporter: event_m3
+Estimating exporter: event_m2
+Estimating exporter: event_m1
+Estimating exporter: event_1
+Estimating exporter: event_2
+Estimating exporter: event_3
+Estimating exporter: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQ          |
+    event_m4 |   .1347654   .0904517     1.49   0.136    -.0425167    .3120475
+    event_m3 |   .0943532   .0763484     1.24   0.217     -.055287    .2439933
+    event_m2 |   .0486936   .0698466     0.70   0.486    -.0882033    .1855904
+    event_m1 |   .0030696   .0443119     0.07   0.945    -.0837801    .0899194
+     event_1 |    .159368   .0709761     2.25   0.025     .0202573    .2984787
+     event_2 |   .2122647   .0845954     2.51   0.012     .0464608    .3780686
+     event_3 |   .2056748   .0781728     2.63   0.009     .0524589    .3588907
+     event_4 |   .2207588   .1286431     1.72   0.086    -.0313769    .4728946
+-------------+----------------------------------------------------------------
+lnQL         |
+    event_m4 |   .0288259   .0717249     0.40   0.688    -.1117524    .1694041
+    event_m3 |    .023065   .0484958     0.48   0.634     -.071985     .118115
+    event_m2 |   .0535719   .0423437     1.27   0.206    -.0294202    .1365639
+    event_m1 |   .0087146   .0366759     0.24   0.812    -.0631688    .0805981
+     event_1 |   .0966633   .0597582     1.62   0.106    -.0204606    .2137871
+     event_2 |   .1056586   .0841045     1.26   0.209    -.0591832    .2705004
+     event_3 |   .1401696   .0893187     1.57   0.117    -.0348918     .315231
+     event_4 |   .1369806   .0896351     1.53   0.126    -.0387009    .3126621
+-------------+----------------------------------------------------------------
+TFP_cd       |
+    event_m4 |   -.007531   .0364006    -0.21   0.836    -.0788749    .0638129
+    event_m3 |   .0122373    .018663     0.66   0.512    -.0243414    .0488161
+    event_m2 |  -.0295553   .0299362    -0.99   0.324    -.0882292    .0291186
+    event_m1 |  -.0042601   .0197196    -0.22   0.829    -.0429098    .0343895
+     event_1 |   .0361073   .0251376     1.44   0.151    -.0131616    .0853762
+     event_2 |   .0647758   .0321462     2.02   0.044     .0017705    .1277811
+     event_3 |   .0720859   .0504143     1.43   0.153    -.0267242     .170896
+     event_4 |   .0878665   .0389575     2.26   0.024     .0115112    .1642218
+-------------+----------------------------------------------------------------
+lnK          |
+    event_m4 |   .0854007   .1155498     0.74   0.460    -.1410728    .3118742
+    event_m3 |   .0633391   .0954025     0.66   0.507    -.1236464    .2503245
+    event_m2 |   .1322677   .0791451     1.67   0.095    -.0228538    .2873893
+    event_m1 |   .0942698   .0470828     2.00   0.045     .0019891    .1865504
+     event_1 |   .0129719   .0501418     0.26   0.796    -.0853043    .1112481
+     event_2 |   .0709144   .0558314     1.27   0.204    -.0385131    .1803418
+     event_3 |  -.0992801   .0827135    -1.20   0.230    -.2613955    .0628353
+     event_4 |  -.2081906   .1376384    -1.51   0.130    -.4779569    .0615758
+-------------+----------------------------------------------------------------
+lnL          |
+    event_m4 |   .1059396   .0746164     1.42   0.156    -.0403059    .2521851
+    event_m3 |   .0712882   .0818822     0.87   0.384    -.0891978    .2317743
+    event_m2 |  -.0048782   .0588988    -0.08   0.934    -.1203177    .1105613
+    event_m1 |   -.005645   .0388437    -0.15   0.884    -.0817772    .0704873
+     event_1 |   .0627047   .0341577     1.84   0.066    -.0042432    .1296526
+     event_2 |   .1066061   .0600259     1.78   0.076    -.0110424    .2242547
+     event_3 |   .0655052   .0654227     1.00   0.317     -.062721    .1937314
+     event_4 |   .0837782   .0776393     1.08   0.281     -.068392    .2359484
+-------------+----------------------------------------------------------------
+lnKL         |
+    event_m4 |   -.020539   .1235017    -0.17   0.868    -.2625978    .2215199
+    event_m3 |  -.0079492    .077619    -0.10   0.918    -.1600797    .1441813
+    event_m2 |    .137146    .078102     1.76   0.079    -.0159311     .290223
+    event_m1 |   .0999147   .0342681     2.92   0.004     .0327504     .167079
+     event_1 |  -.0497328   .0614566    -0.81   0.418    -.1701855    .0707199
+     event_2 |  -.0356918   .0767873    -0.46   0.642     -.186192    .1148085
+     event_3 |  -.1647853   .0978353    -1.68   0.092    -.3565391    .0269684
+     event_4 |  -.2919688   .0972817    -3.00   0.003    -.4826375      -.1013
+-------------+----------------------------------------------------------------
+exporter     |
+    event_m4 |  -.0368819   .0304663    -1.21   0.226    -.0965947    .0228309
+    event_m3 |  -.0294244   .0303501    -0.97   0.332    -.0889096    .0300607
+    event_m2 |   .0148892   .0283891     0.52   0.600    -.0407525    .0705309
+    event_m1 |   .0028121   .0200467     0.14   0.888    -.0364788    .0421029
+     event_1 |   .0507026   .0199083     2.55   0.011     .0116831    .0897221
+     event_2 |   .0380944   .0221352     1.72   0.085    -.0052898    .0814787
+     event_3 |   .0311403   .0290271     1.07   0.283    -.0257518    .0880324
+     event_4 |     .06127   .0287439     2.13   0.033      .004933    .1176069
+------------------------------------------------------------------------------
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQ: event_m4
+Estimating lnQ: event_m3
+Estimating lnQ: event_m2
+Estimating lnQ: event_m1
+Estimating lnQ: event_1
+Estimating lnQ: event_2
+Estimating lnQ: event_3
+Estimating lnQ: event_4
+Estimating lnQL: event_m4
+Estimating lnQL: event_m3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating TFP_cd: event_m4
+Estimating TFP_cd: event_m3
+Estimating TFP_cd: event_m2
+Estimating TFP_cd: event_m1
+Estimating TFP_cd: event_1
+Estimating TFP_cd: event_2
+Estimating TFP_cd: event_3
+Estimating TFP_cd: event_4
+Estimating lnK: event_m4
+Estimating lnK: event_m3
+Estimating lnK: event_m2
+Estimating lnK: event_m1
+Estimating lnK: event_1
+Estimating lnK: event_2
+Estimating lnK: event_3
+Estimating lnK: event_4
+Estimating lnL: event_m4
+Estimating lnL: event_m3
+Estimating lnL: event_m2
+Estimating lnL: event_m1
+Estimating lnL: event_1
+Estimating lnL: event_2
+Estimating lnL: event_3
+Estimating lnL: event_4
+Estimating lnKL: event_m4
+Estimating lnKL: event_m3
+Estimating lnKL: event_m2
+Estimating lnKL: event_m1
+Estimating lnKL: event_1
+Estimating lnKL: event_2
+Estimating lnKL: event_3
+Estimating lnKL: event_4
+Estimating exporter: event_m4
+Estimating exporter: event_m3
+Estimating exporter: event_m2
+Estimating exporter: event_m1
+Estimating exporter: event_1
+Estimating exporter: event_2
+Estimating exporter: event_3
+Estimating exporter: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQ          |
+    event_m4 |   .2385835   .0875751     2.72   0.006     .0669393    .4102276
+    event_m3 |    .171839   .0644792     2.67   0.008      .045462     .298216
+    event_m2 |   .0428366   .0554074     0.77   0.439      -.06576    .1514332
+    event_m1 |   .0381827   .0301402     1.27   0.205     -.020891    .0972563
+     event_1 |    .083949   .0551263     1.52   0.128    -.0240966    .1919946
+     event_2 |   .1380063   .0906634     1.52   0.128    -.0396908    .3157033
+     event_3 |   .0919281   .1070827     0.86   0.391    -.1179501    .3018064
+     event_4 |   .1229193   .1383119     0.89   0.374    -.1481671    .3940057
+-------------+----------------------------------------------------------------
+lnQL         |
+    event_m4 |    .122412    .064922     1.89   0.059    -.0048327    .2496567
+    event_m3 |   .1336767   .0480489     2.78   0.005     .0395026    .2278508
+    event_m2 |   .0863187   .0430896     2.00   0.045     .0018646    .1707727
+    event_m1 |   .0482039   .0274363     1.76   0.079    -.0055702    .1019781
+     event_1 |   .0789923   .0471578     1.68   0.094    -.0134354    .1714199
+     event_2 |   .1346477   .0672371     2.00   0.045     .0028654    .2664301
+     event_3 |   .1349527   .0782644     1.72   0.085    -.0184426    .2883481
+     event_4 |   .1235539    .086803     1.42   0.155    -.0465768    .2936846
+-------------+----------------------------------------------------------------
+TFP_cd       |
+    event_m4 |    .008523   .0317006     0.27   0.788    -.0536091    .0706551
+    event_m3 |   .0267782   .0230458     1.16   0.245    -.0183908    .0719472
+    event_m2 |  -.0263582   .0273371    -0.96   0.335    -.0799381    .0272216
+    event_m1 |    .001459   .0119821     0.12   0.903    -.0220255    .0249435
+     event_1 |   .0226878   .0212047     1.07   0.285    -.0188726    .0642481
+     event_2 |   .0602161   .0268933     2.24   0.025     .0075062     .112926
+     event_3 |   .0532021   .0349435     1.52   0.128    -.0152859    .1216901
+     event_4 |   .0564438   .0323794     1.74   0.081    -.0070187    .1199063
+-------------+----------------------------------------------------------------
+lnK          |
+    event_m4 |   .1607766   .1128034     1.43   0.154     -.060314    .3818672
+    event_m3 |   .0222435    .088674     0.25   0.802    -.1515544    .1960415
+    event_m2 |   .1158001   .0598682     1.93   0.053    -.0015394    .2331397
+    event_m1 |   .0834023   .0407721     2.05   0.041     .0034904    .1633142
+     event_1 |  -.0349649   .0380264    -0.92   0.358    -.1094953    .0395656
+     event_2 |  -.0056468   .0653423    -0.09   0.931    -.1337154    .1224217
+     event_3 |  -.1858002   .1028591    -1.81   0.071    -.3874004       .0158
+     event_4 |  -.3035728   .1490152    -2.04   0.042    -.5956373   -.0115083
+-------------+----------------------------------------------------------------
+lnL          |
+    event_m4 |   .1161715   .0597639     1.94   0.052    -.0009637    .2333066
+    event_m3 |   .0381623   .0598426     0.64   0.524    -.0791271    .1554517
+    event_m2 |  -.0434821   .0437983    -0.99   0.321    -.1293252     .042361
+    event_m1 |  -.0100213   .0344325    -0.29   0.771    -.0775078    .0574652
+     event_1 |   .0049567   .0263675     0.19   0.851    -.0467226     .056636
+     event_2 |   .0033585    .047879     0.07   0.944    -.0904825    .0971996
+     event_3 |  -.0430246    .057365    -0.75   0.453     -.155458    .0694088
+     event_4 |  -.0006346   .0872959    -0.01   0.994    -.1717314    .1704623
+-------------+----------------------------------------------------------------
+lnKL         |
+    event_m4 |   .0446051   .1126221     0.40   0.692    -.1761301    .2653403
+    event_m3 |  -.0159188   .0979212    -0.16   0.871    -.2078409    .1760032
+    event_m2 |   .1592822   .0729245     2.18   0.029     .0163527    .3022117
+    event_m1 |   .0934236   .0518887     1.80   0.072    -.0082764    .1951235
+     event_1 |  -.0399216   .0448851    -0.89   0.374    -.1278948    .0480516
+     event_2 |  -.0090054   .0568882    -0.16   0.874    -.1205043    .1024935
+     event_3 |  -.1427756   .0765841    -1.86   0.062    -.2928776    .0073264
+     event_4 |  -.3029383   .0885033    -3.42   0.001    -.4764016   -.1294749
+-------------+----------------------------------------------------------------
+exporter     |
+    event_m4 |  -.0474701   .0336614    -1.41   0.158    -.1134452     .018505
+    event_m3 |  -.0251619   .0220087    -1.14   0.253    -.0682981    .0179743
+    event_m2 |   -.019757   .0211958    -0.93   0.351    -.0613001    .0217861
+    event_m1 |   .0000319   .0158201     0.00   0.998    -.0309748    .0310387
+     event_1 |   .0196365   .0168556     1.16   0.244    -.0133999     .052673
+     event_2 |   .0248503   .0210775     1.18   0.238    -.0164608    .0661614
+     event_3 |   .0324433   .0230631     1.41   0.160    -.0127596    .0776463
+     event_4 |    .078679   .0360707     2.18   0.029     .0079817    .1493763
+------------------------------------------------------------------------------
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQ: event_m4
+Estimating lnQ: event_m3
+Estimating lnQ: event_m2
+Estimating lnQ: event_m1
+Estimating lnQ: event_1
+Estimating lnQ: event_2
+Estimating lnQ: event_3
+Estimating lnQ: event_4
+Estimating lnQL: event_m4
+Estimating lnQL: event_m3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating TFP_cd: event_m4
+Estimating TFP_cd: event_m3
+Estimating TFP_cd: event_m2
+Estimating TFP_cd: event_m1
+Estimating TFP_cd: event_1
+Estimating TFP_cd: event_2
+Estimating TFP_cd: event_3
+Estimating TFP_cd: event_4
+Estimating lnK: event_m4
+Estimating lnK: event_m3
+Estimating lnK: event_m2
+Estimating lnK: event_m1
+Estimating lnK: event_1
+Estimating lnK: event_2
+Estimating lnK: event_3
+Estimating lnK: event_4
+Estimating lnL: event_m4
+Estimating lnL: event_m3
+Estimating lnL: event_m2
+Estimating lnL: event_m1
+Estimating lnL: event_1
+Estimating lnL: event_2
+Estimating lnL: event_3
+Estimating lnL: event_4
+Estimating lnKL: event_m4
+Estimating lnKL: event_m3
+Estimating lnKL: event_m2
+Estimating lnKL: event_m1
+Estimating lnKL: event_1
+Estimating lnKL: event_2
+Estimating lnKL: event_3
+Estimating lnKL: event_4
+Estimating exporter: event_m4
+Estimating exporter: event_m3
+Estimating exporter: event_m2
+Estimating exporter: event_m1
+Estimating exporter: event_1
+Estimating exporter: event_2
+Estimating exporter: event_3
+Estimating exporter: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQ          |
+    event_m4 |   .1131871    .103309     1.10   0.273    -.0892948    .3156689
+    event_m3 |  -.0160659   .0749405    -0.21   0.830    -.1629465    .1308147
+    event_m2 |  -.0213634   .0666775    -0.32   0.749    -.1520488    .1093221
+    event_m1 |  -.0273861   .0353043    -0.78   0.438    -.0965814    .0418091
+     event_1 |    .173611   .0842861     2.06   0.039     .0084133    .3388087
+     event_2 |   .2818814   .1015798     2.77   0.006     .0827888    .4809741
+     event_3 |   .3095524   .1183897     2.61   0.009     .0775128     .541592
+     event_4 |   .3243071   .1720065     1.89   0.059    -.0128194    .6614337
+-------------+----------------------------------------------------------------
+lnQL         |
+    event_m4 |     .07661   .0686964     1.12   0.265    -.0580324    .2112525
+    event_m3 |   .0183877   .0483604     0.38   0.704     -.076397    .1131725
+    event_m2 |   .0763566   .0399862     1.91   0.056     -.002015    .1547281
+    event_m1 |   .0427121   .0241236     1.77   0.077    -.0045693    .0899935
+     event_1 |   .1473201   .0512915     2.87   0.004     .0467906    .2478496
+     event_2 |   .2658553   .0672488     3.95   0.000     .1340501    .3976605
+     event_3 |   .3177709   .0799795     3.97   0.000     .1610141    .4745278
+     event_4 |    .299222   .1142874     2.62   0.009     .0752228    .5232213
+-------------+----------------------------------------------------------------
+TFP_cd       |
+    event_m4 |   .0101367   .0264978     0.38   0.702    -.0417981    .0620715
+    event_m3 |   .0290538   .0237929     1.22   0.222    -.0175795     .075687
+    event_m2 |   .0093205   .0265723     0.35   0.726    -.0427601    .0614012
+    event_m1 |   .0146444   .0117042     1.25   0.211    -.0082953    .0375841
+     event_1 |   .0411815   .0246424     1.67   0.095    -.0071166    .0894796
+     event_2 |   .0836223   .0336976     2.48   0.013     .0175763    .1496684
+     event_3 |   .0753968    .036461     2.07   0.039     .0039346    .1468591
+     event_4 |   .0861678   .0538752     1.60   0.110    -.0194256    .1917613
+-------------+----------------------------------------------------------------
+lnK          |
+    event_m4 |   .0247961   .0994198     0.25   0.803    -.1700631    .2196552
+    event_m3 |  -.1667368   .1035699    -1.61   0.107      -.36973    .0362565
+    event_m2 |  -.0004701   .0853819    -0.01   0.996    -.1678156    .1668754
+    event_m1 |   .0038398   .0478075     0.08   0.936    -.0898611    .0975407
+     event_1 |   .0482323   .0562809     0.86   0.391    -.0620763    .1585409
+     event_2 |   .1040333   .0982419     1.06   0.290    -.0885173    .2965839
+     event_3 |   .0160682   .1249023     0.13   0.898    -.2287358    .2608722
+     event_4 |  -.0268651   .1334307    -0.20   0.840    -.2883845    .2346543
+-------------+----------------------------------------------------------------
+lnL          |
+    event_m4 |   .0365771   .0839862     0.44   0.663    -.1280329     .201187
+    event_m3 |  -.0344536   .0520818    -0.66   0.508    -.1365319    .0676248
+    event_m2 |  -.0977199   .0541986    -1.80   0.071    -.2039472    .0085074
+    event_m1 |  -.0700982   .0354566    -1.98   0.048    -.1395919   -.0006045
+     event_1 |    .026291   .0523703     0.50   0.616     -.076353    .1289349
+     event_2 |   .0160262      .0724     0.22   0.825    -.1258753    .1579276
+     event_3 |  -.0082185   .0712096    -0.12   0.908    -.1477868    .1313498
+     event_4 |   .0250852   .0833816     0.30   0.764    -.1383399    .1885102
+-------------+----------------------------------------------------------------
+lnKL         |
+    event_m4 |   -.011781   .0843939    -0.14   0.889    -.1771901     .153628
+    event_m3 |  -.1322833   .1055626    -1.25   0.210    -.3391821    .0746156
+    event_m2 |   .0972498   .0724041     1.34   0.179    -.0446597    .2391592
+    event_m1 |   .0739379   .0556792     1.33   0.184    -.0351914    .1830672
+     event_1 |   .0219413   .0600013     0.37   0.715     -.095659    .1395417
+     event_2 |   .0880071   .0878768     1.00   0.317    -.0842283    .2602425
+     event_3 |   .0242867   .1046598     0.23   0.816    -.1808427    .2294161
+     event_4 |  -.0519503   .1112412    -0.47   0.640     -.269979    .1660784
+-------------+----------------------------------------------------------------
+exporter     |
+    event_m4 |  -.0107974   .0291016    -0.37   0.711    -.0678355    .0462407
+    event_m3 |  -.0039185     .03223    -0.12   0.903    -.0670881    .0592511
+    event_m2 |  -.0129594   .0269834    -0.48   0.631    -.0658459     .039927
+    event_m1 |   .0060765   .0189338     0.32   0.748     -.031033    .0431859
+     event_1 |   .0276915   .0210275     1.32   0.188    -.0135217    .0689047
+     event_2 |   .0147252    .023085     0.64   0.524    -.0305205    .0599709
+     event_3 |   .0010441   .0309393     0.03   0.973    -.0595957     .061684
+     event_4 |   .0275968   .0370622     0.74   0.457    -.0450438    .1002375
+------------------------------------------------------------------------------
+
+. 
+. esttab model* using "`here'/output/table_attgt_2002.tex", mtitle b(3) se(3) replace
+(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_2002.tex not found)
+(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_2002.tex)
+
+. esttab model* using "`here'/output/table_attgt_2002.txt", mtitle b(3) se(3) replace
+(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_2002.txt not found)
+(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_2002.txt)
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_2002.log
+  log type:  text
+ closed on:  24 Jun 2021, 15:51:56
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
