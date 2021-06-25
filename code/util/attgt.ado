@@ -1,5 +1,5 @@
 program attgt, eclass
-	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 2)] [post(integer 2)] [reps(int 199)] [notyet] [debug] [cluster(varname)]
+	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 2)] [post(integer 2)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(string)]
 	marksample touse
 
 	* boostrap
@@ -10,6 +10,11 @@ program attgt, eclass
 		local aggregate gt
 	}
 	assert inlist("`aggregate'", "gt", "e", "att")
+
+	* limitcontrol option limits control observations to satisfy "if `limitcontrol'"
+	if ("`limitcontrol'"=="") {
+		local limitcontrol 1
+	}
 
 	* read panel structure
 	xtset
@@ -59,12 +64,12 @@ program attgt, eclass
 			local treated (`group'==`g') & (`timing')
 			if ("`tyet'"=="") {
 				* never treated
-				local control missing(`group') & (`timing')
+				local control missing(`group') & (`timing') & (`limitcontrol')
 			}
 			else {
 				* not yet treated
 				* QUESTION: > or >=
-				local control (missing(`group') | (`group' > max(`g', `t'))) & (`timing')
+				local control (missing(`group') | (`group' > max(`g', `t'))) & (`timing') & (`limitcontrol')
 			}
 			quietly count if `treated' & `touse'
 			local n_treated = r(N)/2

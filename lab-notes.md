@@ -3239,3 +3239,75 @@ lnQL         |
      event_3 |    .291681   .0735978     3.96   0.000      .147432      .43593
 ------------------------------------------------------------------------------
 ```
+
+# 2021-06-25
+## Implement limitcontrol
+```
+. attgt export if ever_foreign & year<=1996, treatment(manager) aggregate(e) pre(2) post(2) reps(20)
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1992 to 2003, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating export: event_m2
+Estimating export: event_m1
+Estimating export: event_1
+Estimating export: event_2
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      8,124
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m2 |   -.133692   .0464961    -2.88   0.004    -.2248226   -.0425614
+    event_m1 |  -.1170807   .0560185    -2.09   0.037     -.226875   -.0072864
+     event_1 |   -.018152   .0441675    -0.41   0.681    -.1047187    .0684147
+     event_2 |  -.0228106     .07117    -0.32   0.749    -.1623013    .1166801
+------------------------------------------------------------------------------
+
+. attgt export if ever_foreign & year<=1996, treatment(manager) aggregate(e) pre(2) post(2) reps(20) limitcontrol(foreign)
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1992 to 2003, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating export: event_m2
+Estimating export: event_m1
+Estimating export: event_1
+Estimating export: event_2
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      5,645
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m2 |  -.0892966   .0493026    -1.81   0.070     -.185928    .0073347
+    event_m1 |  -.0949261   .0479608    -1.98   0.048    -.1889276   -.0009246
+     event_1 |  -.0347656   .0396547    -0.88   0.381    -.1124874    .0429561
+     event_2 |  -.0512843   .0721615    -0.71   0.477    -.1927183    .0901497
+------------------------------------------------------------------------------
+
+. attgt export if ever_foreign & year<=1996, treatment(manager) aggregate(e) pre(2) post(2) reps(20) limitcontrol(foreign==1 & L.foreign==1)
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1992 to 2003, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating export: event_m2
+Estimating export: event_m1
+Estimating export: event_1
+Estimating export: event_2
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      4,067
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m2 |   .2923452   .0664321     4.40   0.000     .1621407    .4225497
+    event_m1 |   .0801804   .0495601     1.62   0.106    -.0169555    .1773164
+     event_1 |  -.0833115   .0397688    -2.09   0.036    -.1612568   -.0053661
+     event_2 |  -.1041501   .0720074    -1.45   0.148    -.2452821    .0369818
+------------------------------------------------------------------------------
+
+. 
+```
