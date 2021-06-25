@@ -149,6 +149,8 @@ program attgt, eclass
 			local cweights control
 	}
 
+	tempvar esample
+	quietly generate byte `esample' = 0
 
 	* aggregate across known weights
 	quietly generate `_alty_' = .
@@ -162,6 +164,9 @@ program attgt, eclass
 
 			local tw : word `n' of `tweights'
 			local cw : word `n' of `cweights'
+
+			* set estimation sample
+			quietly replace `esample' = 1 if ((``tw'' != 0 & !missing(``tw'')) | (``cw'' != 0 & !missing(``cw''))) & `touse'
 
 			display "Estimating `y': `tw'"
 
@@ -191,11 +196,15 @@ program attgt, eclass
 	matrix rowname `V' = `colname'
 	matrix roweq   `V' = `eqname'
 
-	ereturn post `b' `V'
+	quietly count if `esample' == 1
+	local Nobs = r(N)
+
+	ereturn post `b' `V', obs(`Nobs') esample(`esample')
 	ereturn local cmd attgt
 	ereturn local cmdline attgt `0'
 	display "Callaway Sant'Anna (2021)"
-	ereturn display
+	* Use Stata's built-in but undocumented estimation display
+	_prefix_display
 
 end
 
