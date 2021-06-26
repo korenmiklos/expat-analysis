@@ -29,11 +29,15 @@ gen lnEx=ln(export_18)
 gen Qh=sales_18-export_18
 gen lnQh=ln(Qh)
 
+count if lnIK_0 ==.
+count if lnEx ==.
+count if lnQh ==.
+
 foreach sample in ef efh {
 	foreach var in foreign foreign_hire has_expat {
 		*eststo: attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(`var') aggregate(e) pre(2) post(3) reps(20)
 		*attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(`var') aggregate(e) pre(2) post(3) reps(20)
-		attgt lnQL TFP_cd lnK lnIK_0 lnL exporter lnQ lnQh lnEx if `sample', treatment(`var') aggregate(e) pre(4) post(4) reps(20) notyet
+		attgt lnQL TFP_cd lnK lnL exporter lnQ if `sample', treatment(`var') aggregate(e) pre(4) post(4) reps(20) notyet
 		count if e(sample) == 1
 		eststo model_`sample'`var', title("`sample' `var'")
 		*matrix list e(b)
