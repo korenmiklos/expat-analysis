@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/timer.log
   log type:  text
- opened on:  25 Jun 2021, 21:54:35
+ opened on:  26 Jun 2021, 19:27:16
 
 . 
 . use "`here'/temp/analysis_sample.dta", clear
@@ -10,6 +10,48 @@
 . net install csdid, from ("https://raw.githubusercontent.com/friosavila/csdid_drdid/main/code/") replace
 checking csdid consistency and verifying not already installed...
 all files already exist and are up to date.
+
+. 
+. tab first_year_foreign, missing
+
+first_year_ |
+    foreign |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1990 |        389        0.14        0.14
+       1991 |        403        0.14        0.28
+       1992 |      1,519        0.54        0.82
+       1993 |      1,188        0.42        1.24
+       1994 |        726        0.26        1.50
+       1995 |      1,043        0.37        1.87
+       1996 |      1,133        0.40        2.27
+       1997 |        912        0.32        2.59
+       1998 |      1,159        0.41        3.00
+       1999 |        932        0.33        3.33
+       2000 |        982        0.35        3.68
+       2001 |        721        0.26        3.94
+       2002 |        579        0.21        4.14
+       2003 |        467        0.17        4.31
+       2004 |        585        0.21        4.51
+       2005 |      1,091        0.39        4.90
+       2006 |        887        0.31        5.22
+       2007 |      1,341        0.48        5.69
+       2008 |      1,375        0.49        6.18
+       2009 |        918        0.33        6.50
+       2010 |        615        0.22        6.72
+       2011 |        498        0.18        6.90
+       2012 |        664        0.24        7.13
+       2013 |        492        0.17        7.31
+       2014 |        362        0.13        7.44
+       2015 |        245        0.09        7.52
+       2016 |        416        0.15        7.67
+       2017 |        465        0.16        7.83
+       2018 |        451        0.16        7.99
+          . |    259,614       92.01      100.00
+------------+-----------------------------------
+      Total |    282,172      100.00
+
+. mvencode first_year_foreign, mv(0)
+first_year~n: 259614 missing values recoded
 
 . 
 . timer on 1
@@ -1133,16 +1175,16 @@ wgt          |
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
-. estat simple
+. capture noisily estat simple
 Simple Average Treatment
 expression too long
-r(130);
 
-end of do-file
+. 
+. di _rc
+130
 
-r(130);
-
-. estat event
+. if _rc == 130 {
+.         estat event
 Event Studies:Dynamic effects
 
 ------------------------------------------------------------------------------
@@ -1210,25 +1252,20 @@ Event Studies:Dynamic effects
          E27 |          0  (omitted)
          E28 |          0  (omitted)
 ------------------------------------------------------------------------------
-
-. do "/srv/sandbox/zavecz/SD3754483.000000"
-
-. timer off 3
-
+.         timer off 3
 . 
-. timer list 1
-   1:    741.62 /        1 =     741.6230
-
-. timer list 2
-   2:    664.84 /        1 =     664.8420
-
-. timer list 3
-   3:   7501.95 /        1 =    7501.9540
+.         timer list 1
+   1:    810.80 /        1 =     810.8050
+.         timer list 2
+   2:    715.07 /        1 =     715.0730
+.         timer list 3
+   3:   7593.11 /        1 =    7593.1140
+. }
 
 . 
 . log close
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/timer.log
   log type:  text
- closed on:  26 Jun 2021, 00:23:04
+ closed on:  26 Jun 2021, 21:59:18
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
