@@ -2,27 +2,19 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_loop.log
   log type:  text
- opened on:  25 Jun 2021, 12:43:35
+ opened on:  26 Jun 2021, 22:37:26
 
 . 
 . use "`here'/temp/analysis_sample.dta"
 
-. 
-. *attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(has_expat_ceo ) aggregate(e) pre(2) post(3) reps(20)
-. *matrix list e(b)
-. *esttab
-. 
-. *foreach var in exporter lnQL {
-. *       attgt `var' if inrange(year, 1992, 2004) & ever_foreign, treatment(has_expat_ceo ) aggregate(e) pre(2) post(3) reps(20)
-. *       matrix list e(b)
-. *       esttab
-. *}
 . 
 . rename ever_foreign ef
 
 . rename ever_foreign_hire efh
 
 . rename has_expat_ceo has_expat
+
+. rename exporter exp
 
 . 
 . gen lnIK = ln(immat_18)
@@ -44,18 +36,15 @@
 (80,529 missing values generated)
 
 . 
-. foreach depvar in lnQL TFP_cd lnK lnIK_0 lnL exporter lnQ lnQh lnEx {
+. foreach depvar in lnQL TFP_cd lnK lnIK_0 lnL exp lnQ lnQh lnEx {
   2.         foreach sample in ef efh {
   3.                 foreach var in foreign foreign_hire has_expat {
   4.                         attgt `depvar' if `sample', treatment(`var') aggregate(e) pre(4) post(4) reps(20) notyet
-  5.                         *count if e(sample) == 1
-.                         eststo model_`sample'`var'`depvar', title("`depvar' `sample' `var'")
-  6.                 }
-  7.         }
-  8. 
-.         *esttab model_`sample'* using "`here'/output/table_`sample'_attgt.tex", mtitle title("`sample'") b(3) se(3) replace
-.         *esttab model_`sample'* using "`here'/output/table_`sample'_attgt.txt", mtitle title("`sample'") b(3) se(3) replace
-. }
+  5.                         count if e(sample) == 1
+  6.                         eststo model_`sample'`var'`depvar', title("`depvar' `sample' `var'")
+  7.                 }
+  8.         }
+  9. }
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -82,6 +71,7 @@ lnQL         |
      event_3 |    .116693   .0490765     2.38   0.017     .0205048    .2128812
      event_4 |   .0961642   .0484105     1.99   0.047     .0012813     .191047
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -108,6 +98,7 @@ lnQL         |
      event_3 |   .2338928   .0490865     4.76   0.000     .1376851    .3301005
      event_4 |   .2171956   .0600808     3.62   0.000     .0994394    .3349518
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -134,6 +125,7 @@ lnQL         |
      event_3 |   .3378921   .0717232     4.71   0.000     .1973173     .478467
      event_4 |   .3190805    .072783     4.38   0.000     .1764284    .4617326
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -160,6 +152,7 @@ lnQL         |
      event_3 |    .155978   .0633095     2.46   0.014     .0318937    .2800624
      event_4 |   .1460516   .0490372     2.98   0.003     .0499404    .2421628
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -186,6 +179,7 @@ lnQL         |
      event_3 |   .2149225   .0330963     6.49   0.000     .1500549    .2797901
      event_4 |   .1981976   .0444299     4.46   0.000     .1111167    .2852786
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -212,6 +206,7 @@ lnQL         |
      event_3 |   .3323481   .0755277     4.40   0.000     .1843166    .4803797
      event_4 |   .3163092   .0683033     4.63   0.000     .1824373    .4501812
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -238,6 +233,7 @@ TFP_cd       |
      event_3 |   .0559805   .0204476     2.74   0.006     .0159039    .0960571
      event_4 |   .0408797   .0235817     1.73   0.083    -.0053397    .0870991
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -264,6 +260,7 @@ TFP_cd       |
      event_3 |    .087409   .0214843     4.07   0.000     .0453006    .1295174
      event_4 |   .0850286   .0208423     4.08   0.000     .0441785    .1258788
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -290,6 +287,7 @@ TFP_cd       |
      event_3 |   .0987621   .0268914     3.67   0.000      .046056    .1514682
      event_4 |   .0982946   .0291996     3.37   0.001     .0410644    .1555247
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -316,6 +314,7 @@ TFP_cd       |
      event_3 |   .0803057   .0263533     3.05   0.002     .0286541    .1319572
      event_4 |   .0767414   .0284007     2.70   0.007     .0210771    .1324057
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -342,6 +341,7 @@ TFP_cd       |
      event_3 |   .0847575   .0223881     3.79   0.000     .0408777    .1286373
      event_4 |   .0821444   .0283651     2.90   0.004     .0265498    .1377391
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -368,6 +368,7 @@ TFP_cd       |
      event_3 |   .0965747   .0284339     3.40   0.001     .0408453     .152304
      event_4 |   .0985166   .0465682     2.12   0.034     .0072447    .1897885
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -394,6 +395,7 @@ lnK          |
      event_3 |  -.0318624   .0432637    -0.74   0.461    -.1166577     .052933
      event_4 |  -.1171392   .0799431    -1.47   0.143    -.2738249    .0395464
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -420,6 +422,7 @@ lnK          |
      event_3 |  -.0623666    .054139    -1.15   0.249    -.1684772    .0437439
      event_4 |  -.1157637   .0631787    -1.83   0.067    -.2395917    .0080643
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -446,6 +449,7 @@ lnK          |
      event_3 |   .1770374   .0699632     2.53   0.011     .0399121    .3141626
      event_4 |   .1529977   .0964241     1.59   0.113    -.0359901    .3419855
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -472,6 +476,7 @@ lnK          |
      event_3 |   -.019594   .0591988    -0.33   0.741    -.1356216    .0964336
      event_4 |  -.1206899   .0742257    -1.63   0.104    -.2661696    .0247899
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -498,6 +503,7 @@ lnK          |
      event_3 |  -.0970163   .0712378    -1.36   0.173    -.2366397    .0426072
      event_4 |  -.1679571   .0774341    -2.17   0.030    -.3197252   -.0161889
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -524,6 +530,7 @@ lnK          |
      event_3 |   .2047892   .0710453     2.88   0.004     .0655429    .3440355
      event_4 |   .1807441   .0802594     2.25   0.024     .0234385    .3380497
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -550,6 +557,7 @@ lnIK_0       |
      event_3 |   .3093853   .1831557     1.69   0.091    -.0495933    .6683638
      event_4 |   .4121615   .1687205     2.44   0.015     .0814754    .7428476
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -576,6 +584,7 @@ lnIK_0       |
      event_3 |   .1992353   .1371077     1.45   0.146    -.0694908    .4679613
      event_4 |   .2190005   .2629179     0.83   0.405    -.2963092    .7343102
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -602,6 +611,7 @@ lnIK_0       |
      event_3 |   .6636112   .1329989     4.99   0.000     .4029381    .9242843
      event_4 |   .5777482   .3157341     1.83   0.067    -.0410793    1.196576
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -628,6 +638,7 @@ lnIK_0       |
      event_3 |   .5034614   .1458893     3.45   0.001     .2175236    .7893992
      event_4 |   .6331241   .3312388     1.91   0.056     -.016092     1.28234
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -654,6 +665,7 @@ lnIK_0       |
      event_3 |   .1657886    .128305     1.29   0.196    -.0856845    .4172618
      event_4 |   .1667778   .2230776     0.75   0.455    -.2704463    .6040019
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -680,6 +692,7 @@ lnIK_0       |
      event_3 |   .7157855   .1390994     5.15   0.000     .4431557    .9884153
      event_4 |   .6272661   .2819823     2.22   0.026      .074591    1.179941
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -706,6 +719,7 @@ lnL          |
      event_3 |   .0939927   .0391591     2.40   0.016     .0172422    .1707432
      event_4 |   .1199027   .0549383     2.18   0.029     .0122256    .2275798
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -732,6 +746,7 @@ lnL          |
      event_3 |   .0094555   .0450364     0.21   0.834    -.0788143    .0977252
      event_4 |   .0556534   .0547434     1.02   0.309    -.0516417    .1629484
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -758,6 +773,7 @@ lnL          |
      event_3 |     .13808    .040404     3.42   0.001     .0588896    .2172703
      event_4 |   .1907714   .0658192     2.90   0.004      .061768    .3197747
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -784,6 +800,7 @@ lnL          |
      event_3 |    .146081   .0471179     3.10   0.002     .0537316    .2384304
      event_4 |   .1750847     .05294     3.31   0.001     .0713241    .2788453
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -810,6 +827,7 @@ lnL          |
      event_3 |   .0078811   .0503421     0.16   0.876    -.0907875    .1065497
      event_4 |   .0489205   .0564025     0.87   0.386    -.0616265    .1594674
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -836,23 +854,24 @@ lnL          |
      event_3 |   .1584484    .041104     3.85   0.000      .077886    .2390108
      event_4 |   .2143333   .0628334     3.41   0.001     .0911821    .3374845
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
 Generating weights...
-Estimating exporter: event_m4
-Estimating exporter: event_m3
-Estimating exporter: event_m2
-Estimating exporter: event_m1
-Estimating exporter: event_1
-Estimating exporter: event_2
-Estimating exporter: event_3
-Estimating exporter: event_4
+Estimating exp: event_m4
+Estimating exp: event_m3
+Estimating exp: event_m2
+Estimating exp: event_m1
+Estimating exp: event_1
+Estimating exp: event_2
+Estimating exp: event_3
+Estimating exp: event_4
 Callaway Sant'Anna (2021)
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-exporter     |
+exp          |
     event_m4 |  -.0212942   .0167848    -1.27   0.205    -.0541918    .0116033
     event_m3 |   .0082952   .0167244     0.50   0.620    -.0244841    .0410745
     event_m2 |   .0034432   .0149232     0.23   0.818    -.0258058    .0326922
@@ -862,23 +881,24 @@ exporter     |
      event_3 |   .0282746   .0171104     1.65   0.098    -.0052612    .0618104
      event_4 |   .0277561    .014207     1.95   0.051     -.000089    .0556012
 ------------------------------------------------------------------------------
+  0
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
 Generating weights...
-Estimating exporter: event_m4
-Estimating exporter: event_m3
-Estimating exporter: event_m2
-Estimating exporter: event_m1
-Estimating exporter: event_1
-Estimating exporter: event_2
-Estimating exporter: event_3
-Estimating exporter: event_4
+Estimating exp: event_m4
+Estimating exp: event_m3
+Estimating exp: event_m2
+Estimating exp: event_m1
+Estimating exp: event_1
+Estimating exp: event_2
+Estimating exp: event_3
+Estimating exp: event_4
 Callaway Sant'Anna (2021)
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-exporter     |
+exp          |
     event_m4 |  -.0329972   .0221714    -1.49   0.137    -.0764523     .010458
     event_m3 |  -.0157268   .0157237    -1.00   0.317    -.0465446     .015091
     event_m2 |  -.0275687   .0127287    -2.17   0.030    -.0525165   -.0026208
@@ -888,10 +908,615 @@ exporter     |
      event_3 |     .02571   .0134592     1.91   0.056    -.0006696    .0520896
      event_4 |   .0328118    .014227     2.31   0.021     .0049274    .0606961
 ------------------------------------------------------------------------------
-_est_model_efforeign_hireexporter invalid name
-r(7);
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating exp: event_m4
+Estimating exp: event_m3
+Estimating exp: event_m2
+Estimating exp: event_m1
+Estimating exp: event_1
+Estimating exp: event_2
+Estimating exp: event_3
+Estimating exp: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+exp          |
+    event_m4 |  -.0249176   .0319637    -0.78   0.436    -.0875653    .0377302
+    event_m3 |   .0083368   .0258185     0.32   0.747    -.0422666    .0589402
+    event_m2 |  -.0179719   .0227528    -0.79   0.430    -.0625665    .0266227
+    event_m1 |   .0046972    .016919     0.28   0.781    -.0284635    .0378578
+     event_1 |   .0398314   .0135298     2.94   0.003     .0133135    .0663493
+     event_2 |   .0358941   .0165926     2.16   0.031     .0033732    .0684149
+     event_3 |   .0361188   .0214868     1.68   0.093    -.0059946    .0782323
+     event_4 |   .0522581   .0202775     2.58   0.010     .0125149    .0920013
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating exp: event_m4
+Estimating exp: event_m3
+Estimating exp: event_m2
+Estimating exp: event_m1
+Estimating exp: event_1
+Estimating exp: event_2
+Estimating exp: event_3
+Estimating exp: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+exp          |
+    event_m4 |  -.0455831   .0265475    -1.72   0.086    -.0976153     .006449
+    event_m3 |   .0003149   .0207221     0.02   0.988    -.0402998    .0409296
+    event_m2 |  -.0107455   .0172233    -0.62   0.533    -.0445026    .0230116
+    event_m1 |  -.0225515   .0109509    -2.06   0.039    -.0440149   -.0010881
+     event_1 |   .0349021   .0107993     3.23   0.001     .0137358    .0560684
+     event_2 |   .0238456   .0116526     2.05   0.041     .0010069    .0466842
+     event_3 |   .0379092   .0180438     2.10   0.036     .0025441    .0732744
+     event_4 |   .0475325   .0140159     3.39   0.001      .020062    .0750031
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating exp: event_m4
+Estimating exp: event_m3
+Estimating exp: event_m2
+Estimating exp: event_m1
+Estimating exp: event_1
+Estimating exp: event_2
+Estimating exp: event_3
+Estimating exp: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+exp          |
+    event_m4 |  -.0368402   .0177321    -2.08   0.038    -.0715944    -.002086
+    event_m3 |  -.0114129   .0139283    -0.82   0.413    -.0387119    .0158861
+    event_m2 |  -.0289086   .0118388    -2.44   0.015    -.0521122    -.005705
+    event_m1 |   -.003582   .0098997    -0.36   0.717    -.0229851    .0158211
+     event_1 |   .0125523   .0100216     1.25   0.210    -.0070897    .0321943
+     event_2 |   .0132103   .0136838     0.97   0.334    -.0136095    .0400301
+     event_3 |   .0263533   .0184656     1.43   0.154    -.0098386    .0625452
+     event_4 |   .0357297    .019786     1.81   0.071    -.0030502    .0745096
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating exp: event_m4
+Estimating exp: event_m3
+Estimating exp: event_m2
+Estimating exp: event_m1
+Estimating exp: event_1
+Estimating exp: event_2
+Estimating exp: event_3
+Estimating exp: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+exp          |
+    event_m4 |  -.0287295   .0232572    -1.24   0.217    -.0743127    .0168537
+    event_m3 |   .0070895   .0264975     0.27   0.789    -.0448446    .0590236
+    event_m2 |  -.0193557   .0233668    -0.83   0.407    -.0651538    .0264424
+    event_m1 |   .0030125   .0172558     0.17   0.861    -.0308083    .0368332
+     event_1 |   .0407946   .0137699     2.96   0.003      .013806    .0677831
+     event_2 |   .0369102   .0173474     2.13   0.033     .0029099    .0709105
+     event_3 |   .0376156   .0228504     1.65   0.100    -.0071704    .0824016
+     event_4 |    .055635   .0208389     2.67   0.008     .0147915    .0964785
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQ: event_m4
+Estimating lnQ: event_m3
+Estimating lnQ: event_m2
+Estimating lnQ: event_m1
+Estimating lnQ: event_1
+Estimating lnQ: event_2
+Estimating lnQ: event_3
+Estimating lnQ: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQ          |
+    event_m4 |   .1244788   .0571645     2.18   0.029     .0124385    .2365191
+    event_m3 |   .1067017   .0471572     2.26   0.024     .0142752    .1991281
+    event_m2 |   .0289795   .0426584     0.68   0.497    -.0546294    .1125885
+    event_m1 |  -.0008678   .0228766    -0.04   0.970    -.0457052    .0439696
+     event_1 |   .0947607   .0257939     3.67   0.000     .0442055    .1453158
+     event_2 |   .1517204    .039538     3.84   0.000     .0742273    .2292135
+     event_3 |   .2106857    .054757     3.85   0.000      .103364    .3180074
+     event_4 |   .2160668   .0777755     2.78   0.005     .0636296    .3685041
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQ: event_m4
+Estimating lnQ: event_m3
+Estimating lnQ: event_m2
+Estimating lnQ: event_m1
+Estimating lnQ: event_1
+Estimating lnQ: event_2
+Estimating lnQ: event_3
+Estimating lnQ: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQ          |
+    event_m4 |   .1767129   .0596643     2.96   0.003      .059773    .2936527
+    event_m3 |   .1017991   .0520075     1.96   0.050    -.0001337    .2037319
+    event_m2 |   .0331862   .0309131     1.07   0.283    -.0274025    .0937749
+    event_m1 |   .0064861   .0299693     0.22   0.829    -.0522527     .065225
+     event_1 |   .1157736    .034779     3.33   0.001     .0476079    .1839392
+     event_2 |   .1970438   .0419573     4.70   0.000     .1148091    .2792785
+     event_3 |   .2433482   .0494263     4.92   0.000     .1464745     .340222
+     event_4 |   .2728489   .0632925     4.31   0.000      .148798    .3968999
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQ: event_m4
+Estimating lnQ: event_m3
+Estimating lnQ: event_m2
+Estimating lnQ: event_m1
+Estimating lnQ: event_1
+Estimating lnQ: event_2
+Estimating lnQ: event_3
+Estimating lnQ: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQ          |
+    event_m4 |   .1070433   .0801535     1.34   0.182    -.0500547    .2641413
+    event_m3 |  -.0034359    .072734    -0.05   0.962     -.145992    .1391202
+    event_m2 |  -.0190662   .0735551    -0.26   0.795    -.1632316    .1250993
+    event_m1 |   .0095702   .0355126     0.27   0.788    -.0600332    .0791737
+     event_1 |   .2309404   .0471284     4.90   0.000     .1385705    .3233103
+     event_2 |   .3812559   .0699026     5.45   0.000     .2442492    .5182625
+     event_3 |   .4759721   .0816082     5.83   0.000      .316023    .6359212
+     event_4 |   .5098518   .0883237     5.77   0.000     .3367406    .6829631
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQ: event_m4
+Estimating lnQ: event_m3
+Estimating lnQ: event_m2
+Estimating lnQ: event_m1
+Estimating lnQ: event_1
+Estimating lnQ: event_2
+Estimating lnQ: event_3
+Estimating lnQ: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQ          |
+    event_m4 |   .1536584   .0589223     2.61   0.009     .0381729    .2691439
+    event_m3 |   .1017577   .0609465     1.67   0.095    -.0176953    .2212107
+    event_m2 |   .0384006   .0423218     0.91   0.364    -.0445487    .1213498
+    event_m1 |   -.025579   .0314703    -0.81   0.416    -.0872596    .0361017
+     event_1 |   .1584888   .0404619     3.92   0.000      .079185    .2377926
+     event_2 |   .2151254   .0568828     3.78   0.000     .1036371    .3266136
+     event_3 |    .302059   .0603157     5.01   0.000     .1838425    .4202755
+     event_4 |   .3211363    .065345     4.91   0.000     .1930624    .4492102
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQ: event_m4
+Estimating lnQ: event_m3
+Estimating lnQ: event_m2
+Estimating lnQ: event_m1
+Estimating lnQ: event_1
+Estimating lnQ: event_2
+Estimating lnQ: event_3
+Estimating lnQ: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQ          |
+    event_m4 |   .2085397   .0526961     3.96   0.000     .1052571    .3118222
+    event_m3 |   .1275263   .0402941     3.16   0.002     .0485513    .2065013
+    event_m2 |   .0489064   .0349584     1.40   0.162    -.0196108    .1174236
+    event_m1 |   .0201996   .0311245     0.65   0.516    -.0408033    .0812026
+     event_1 |   .1061788   .0366276     2.90   0.004       .03439    .1779676
+     event_2 |   .1842442   .0395778     4.66   0.000     .1066732    .2618152
+     event_3 |   .2228036   .0611089     3.65   0.000     .1030324    .3425748
+     event_4 |   .2471181   .0614814     4.02   0.000     .1266167    .3676194
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQ: event_m4
+Estimating lnQ: event_m3
+Estimating lnQ: event_m2
+Estimating lnQ: event_m1
+Estimating lnQ: event_1
+Estimating lnQ: event_2
+Estimating lnQ: event_3
+Estimating lnQ: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQ          |
+    event_m4 |   .0912168   .0803775     1.13   0.256    -.0663202    .2487538
+    event_m3 |  -.0179501   .0729867    -0.25   0.806    -.1610013    .1251012
+    event_m2 |  -.0284486   .0760323    -0.37   0.708    -.1774691    .1205719
+    event_m1 |   .0036825   .0351512     0.10   0.917    -.0652127    .0725776
+     event_1 |   .2362302   .0482718     4.89   0.000     .1416193    .3308412
+     event_2 |   .3915477   .0725274     5.40   0.000     .2493967    .5336988
+     event_3 |   .4907965   .0844718     5.81   0.000     .3252348    .6563583
+     event_4 |   .5306425   .1028986     5.16   0.000      .328965      .73232
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQh: event_m4
+Estimating lnQh: event_m3
+Estimating lnQh: event_m2
+Estimating lnQh: event_m1
+Estimating lnQh: event_1
+Estimating lnQh: event_2
+Estimating lnQh: event_3
+Estimating lnQh: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQh         |
+    event_m4 |  -2.120631   .3083312    -6.88   0.000    -2.724949   -1.516313
+    event_m3 |   -1.67372   .2977587    -5.62   0.000    -2.257316   -1.090124
+    event_m2 |  -1.278424   .2428094    -5.27   0.000    -1.754322   -.8025267
+    event_m1 |  -.4721861   .1299495    -3.63   0.000    -.7268825   -.2174897
+     event_1 |     2.9131   .2643876    11.02   0.000      2.39491    3.431291
+     event_2 |   2.408705   .2640121     9.12   0.000     1.891251     2.92616
+     event_3 |   2.123256   .3193014     6.65   0.000     1.497436    2.749075
+     event_4 |   2.113781   .3355242     6.30   0.000     1.456165    2.771396
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQh: event_m4
+Estimating lnQh: event_m3
+Estimating lnQh: event_m2
+Estimating lnQh: event_m1
+Estimating lnQh: event_1
+Estimating lnQh: event_2
+Estimating lnQh: event_3
+Estimating lnQh: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQh         |
+    event_m4 |  -.5645271   .2473937    -2.28   0.022     -1.04941   -.0796443
+    event_m3 |  -.4668811   .2345188    -1.99   0.047    -.9265294   -.0072327
+    event_m2 |  -.2661324   .1800025    -1.48   0.139    -.6189307     .086666
+    event_m1 |  -.1207372   .1743488    -0.69   0.489    -.4624545    .2209801
+     event_1 |   2.450195   .1675325    14.63   0.000     2.121837    2.778552
+     event_2 |   1.800574   .2161196     8.33   0.000     1.376988    2.224161
+     event_3 |   1.663071   .3133251     5.31   0.000     1.048965    2.277177
+     event_4 |   1.673316   .3228055     5.18   0.000     1.040629    2.306003
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQh: event_m4
+Estimating lnQh: event_m3
+Estimating lnQh: event_m2
+Estimating lnQh: event_m1
+Estimating lnQh: event_1
+Estimating lnQh: event_2
+Estimating lnQh: event_3
+Estimating lnQh: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQh         |
+    event_m4 |  -.4662148   .3305088    -1.41   0.158       -1.114    .1815706
+    event_m3 |  -.5053162   .3370973    -1.50   0.134    -1.166015    .1553823
+    event_m2 |  -.2239703   .2530125    -0.89   0.376    -.7198657     .271925
+    event_m1 |  -.0297985   .1857782    -0.16   0.873    -.3939172    .3343201
+     event_1 |   2.001068   .2160907     9.26   0.000     1.577538    2.424598
+     event_2 |    1.60416    .244711     6.56   0.000     1.124535    2.083785
+     event_3 |   1.221986   .2877607     4.25   0.000     .6579856    1.785987
+     event_4 |   1.228641   .2861788     4.29   0.000     .6677413    1.789542
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQh: event_m4
+Estimating lnQh: event_m3
+Estimating lnQh: event_m2
+Estimating lnQh: event_m1
+Estimating lnQh: event_1
+Estimating lnQh: event_2
+Estimating lnQh: event_3
+Estimating lnQh: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQh         |
+    event_m4 |  -1.637168   .1930965    -8.48   0.000     -2.01563   -1.258706
+    event_m3 |  -1.119717   .2789362    -4.01   0.000    -1.666422   -.5730122
+    event_m2 |  -1.092138   .2345851    -4.66   0.000    -1.551916   -.6323596
+    event_m1 |  -.4505759   .2506899    -1.80   0.072    -.9419191    .0407673
+     event_1 |   2.706543   .2755445     9.82   0.000     2.166486    3.246601
+     event_2 |   2.345465   .4047346     5.80   0.000       1.5522     3.13873
+     event_3 |   2.200771   .3140125     7.01   0.000     1.585318    2.816224
+     event_4 |   2.147511   .4152128     5.17   0.000     1.333709    2.961313
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQh: event_m4
+Estimating lnQh: event_m3
+Estimating lnQh: event_m2
+Estimating lnQh: event_m1
+Estimating lnQh: event_1
+Estimating lnQh: event_2
+Estimating lnQh: event_3
+Estimating lnQh: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQh         |
+    event_m4 |  -1.332836   .2362843    -5.64   0.000    -1.795945   -.8697276
+    event_m3 |  -1.036283   .2659202    -3.90   0.000    -1.557477    -.515089
+    event_m2 |  -.8626015   .2378387    -3.63   0.000    -1.328757   -.3964461
+    event_m1 |  -.5526361   .3440947    -1.61   0.108    -1.227049    .1217772
+     event_1 |   3.058003   .4218608     7.25   0.000     2.231171    3.884835
+     event_2 |   2.858404    .545247     5.24   0.000      1.78974    3.927069
+     event_3 |   2.672104    .421715     6.34   0.000     1.845558     3.49865
+     event_4 |   2.806299   .5373308     5.22   0.000      1.75315    3.859448
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQh: event_m4
+Estimating lnQh: event_m3
+Estimating lnQh: event_m2
+Estimating lnQh: event_m1
+Estimating lnQh: event_1
+Estimating lnQh: event_2
+Estimating lnQh: event_3
+Estimating lnQh: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQh         |
+    event_m4 |  -.4580648   .3295474    -1.39   0.165    -1.103966    .1878363
+    event_m3 |  -.4984858   .3277983    -1.52   0.128    -1.140959     .143987
+    event_m2 |  -.2240419   .2572596    -0.87   0.384    -.7282614    .2801775
+    event_m1 |  -.0346487   .1897568    -0.18   0.855    -.4065651    .3372677
+     event_1 |   2.010568   .2204776     9.12   0.000      1.57844    2.442696
+     event_2 |    1.59966   .2562326     6.24   0.000     1.097453    2.101866
+     event_3 |   1.221153   .2334397     5.23   0.000     .7636194    1.678686
+     event_4 |   1.206465   .2737743     4.41   0.000     .6698777    1.743053
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnEx: event_m4
+Estimating lnEx: event_m3
+Estimating lnEx: event_m2
+Estimating lnEx: event_m1
+Estimating lnEx: event_1
+Estimating lnEx: event_2
+Estimating lnEx: event_3
+Estimating lnEx: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnEx         |
+    event_m4 |  -2.294638   .4901216    -4.68   0.000    -3.255259   -1.334017
+    event_m3 |  -1.552537   .4482433    -3.46   0.001    -2.431078   -.6739964
+    event_m2 |  -1.402956   .3275494    -4.28   0.000    -2.044941   -.7609711
+    event_m1 |   -.681344   .1659725    -4.11   0.000    -1.006644    -.356044
+     event_1 |    3.83529   .1588168    24.15   0.000     3.524014    4.146565
+     event_2 |   2.908122   .2836676    10.25   0.000     2.352144    3.464101
+     event_3 |    3.18837   .3871435     8.24   0.000     2.429583    3.947157
+     event_4 |   3.245254   .4667626     6.95   0.000     2.330416    4.160092
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnEx: event_m4
+Estimating lnEx: event_m3
+Estimating lnEx: event_m2
+Estimating lnEx: event_m1
+Estimating lnEx: event_1
+Estimating lnEx: event_2
+Estimating lnEx: event_3
+Estimating lnEx: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnEx         |
+    event_m4 |  -1.075207   .3919265    -2.74   0.006    -1.843369   -.3070449
+    event_m3 |  -.3761329   .3175052    -1.18   0.236    -.9984317    .2461659
+    event_m2 |  -.6717881   .3012857    -2.23   0.026    -1.262297    -.081279
+    event_m1 |   .0060369   .2286633     0.03   0.979    -.4421349    .4542087
+     event_1 |   3.340291   .2044293    16.34   0.000     2.939617    3.740965
+     event_2 |   2.287562   .3088657     7.41   0.000     1.682196    2.892928
+     event_3 |   2.294446   .2153131    10.66   0.000      1.87244    2.716451
+     event_4 |   2.227653   .2740178     8.13   0.000     1.690588    2.764718
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnEx: event_m4
+Estimating lnEx: event_m3
+Estimating lnEx: event_m2
+Estimating lnEx: event_m1
+Estimating lnEx: event_1
+Estimating lnEx: event_2
+Estimating lnEx: event_3
+Estimating lnEx: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnEx         |
+    event_m4 |  -.7546303   .4604414    -1.64   0.101    -1.657079    .1478182
+    event_m3 |  -.1882387    .336651    -0.56   0.576    -.8480625     .471585
+    event_m2 |  -.6994515   .3738306    -1.87   0.061    -1.432146     .033243
+    event_m1 |  -.2652243   .2996837    -0.89   0.376    -.8525936    .3221451
+     event_1 |   3.138481   .2285892    13.73   0.000     2.690455    3.586508
+     event_2 |   1.893346   .3167987     5.98   0.000     1.272432    2.514261
+     event_3 |   1.687926   .2928273     5.76   0.000     1.113995    2.261857
+     event_4 |   1.808366   .3273949     5.52   0.000     1.166683    2.450048
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnEx: event_m4
+Estimating lnEx: event_m3
+Estimating lnEx: event_m2
+Estimating lnEx: event_m1
+Estimating lnEx: event_1
+Estimating lnEx: event_2
+Estimating lnEx: event_3
+Estimating lnEx: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnEx         |
+    event_m4 |   -2.42067   .7009178    -3.45   0.001    -3.794444   -1.046896
+    event_m3 |  -1.419022   .5384984    -2.64   0.008     -2.47446    -.363585
+    event_m2 |  -1.450638    .541318    -2.68   0.007    -2.511601   -.3896739
+    event_m1 |  -.8600095   .2710675    -3.17   0.002    -1.391292    -.328727
+     event_1 |   4.115852   .1680821    24.49   0.000     3.786417    4.445287
+     event_2 |   3.243343   .3220315    10.07   0.000     2.612173    3.874513
+     event_3 |   3.547194   .3055872    11.61   0.000     2.948254    4.146134
+     event_4 |   3.619025   .5791204     6.25   0.000      2.48397     4.75408
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnEx: event_m4
+Estimating lnEx: event_m3
+Estimating lnEx: event_m2
+Estimating lnEx: event_m1
+Estimating lnEx: event_1
+Estimating lnEx: event_2
+Estimating lnEx: event_3
+Estimating lnEx: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnEx         |
+    event_m4 |  -2.016641   .6301534    -3.20   0.001    -3.251719   -.7815632
+    event_m3 |  -.9977576   .3858692    -2.59   0.010    -1.754047   -.2414678
+    event_m2 |  -1.185467   .3017545    -3.93   0.000    -1.776895   -.5940394
+    event_m1 |  -.1197698   .2384652    -0.50   0.615     -.587153    .3476135
+     event_1 |   3.447184   .2085737    16.53   0.000     3.038387    3.855981
+     event_2 |   2.752829   .4243364     6.49   0.000     1.921145    3.584513
+     event_3 |   3.073232   .4074209     7.54   0.000     2.274702    3.871762
+     event_4 |   3.356019   .7247466     4.63   0.000     1.935542    4.776497
+------------------------------------------------------------------------------
+  0
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnEx: event_m4
+Estimating lnEx: event_m3
+Estimating lnEx: event_m2
+Estimating lnEx: event_m1
+Estimating lnEx: event_1
+Estimating lnEx: event_2
+Estimating lnEx: event_3
+Estimating lnEx: event_4
+Callaway Sant'Anna (2021)
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnEx         |
+    event_m4 |  -.9021075   .4181297    -2.16   0.031    -1.721627   -.0825884
+    event_m3 |  -.2722628   .3681955    -0.74   0.460    -.9939126    .4493871
+    event_m2 |  -.7696013   .4075634    -1.89   0.059    -1.568411    .0292084
+    event_m1 |  -.3239624   .3017281    -1.07   0.283    -.9153386    .2674139
+     event_1 |   3.181106   .2305799    13.80   0.000     2.729178    3.633034
+     event_2 |   1.960629   .3145449     6.23   0.000     1.344132    2.577126
+     event_3 |   1.780716   .2942277     6.05   0.000     1.204041    2.357392
+     event_4 |   1.933453    .333161     5.80   0.000     1.280469    2.586436
+------------------------------------------------------------------------------
+  0
 
-end of do-file
+. 
+. esttab model* using "`here'/output/table_attgt_loop.tex", mtitle b(3) se(3) replace
+(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_loop.tex not found)
+(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_loop.tex)
 
-r(7);
+. esttab model* using "`here'/output/table_attgt_loop.txt", mtitle b(3) se(3) replace
+(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_loop.txt not found)
+(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_loop.txt)
 
+. 
+. log close
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_loop.log
+  log type:  text
+ closed on:  27 Jun 2021, 10:43:42
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
