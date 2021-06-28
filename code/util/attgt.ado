@@ -1,5 +1,5 @@
 program attgt, eclass
-	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 2)] [post(integer 2)] [reps(int 199)] [notyet] [debug] [cluster(varname)]
+	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 2)] [post(integer 2)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(string)]
 	marksample touse
 
 	* boostrap
@@ -10,6 +10,11 @@ program attgt, eclass
 		local aggregate gt
 	}
 	assert inlist("`aggregate'", "gt", "e", "att")
+
+	* limitcontrol option limits control observations to satisfy "if `limitcontrol'"
+	if ("`limitcontrol'"=="") {
+		local limitcontrol 1
+	}
 
 	* read panel structure
 	xtset
@@ -59,12 +64,12 @@ program attgt, eclass
 			local treated (`group'==`g') & (`timing')
 			if ("`tyet'"=="") {
 				* never treated
-				local control missing(`group') & (`timing')
+				local control missing(`group') & (`timing') & (`limitcontrol')
 			}
 			else {
 				* not yet treated
 				* QUESTION: > or >=
-				local control (missing(`group') | (`group' > max(`g', `t'))) & (`timing')
+				local control (missing(`group') | (`group' > max(`g', `t'))) & (`timing') & (`limitcontrol')
 			}
 			quietly count if `treated' & `touse'
 			local n_treated = r(N)/2
@@ -149,6 +154,8 @@ program attgt, eclass
 			local cweights control
 	}
 
+	tempvar esample
+	quietly generate byte `esample' = 0
 
 	* aggregate across known weights
 	quietly generate `_alty_' = .
@@ -162,6 +169,9 @@ program attgt, eclass
 
 			local tw : word `n' of `tweights'
 			local cw : word `n' of `cweights'
+
+			* set estimation sample
+			quietly replace `esample' = 1 if ((``tw'' != 0 & !missing(``tw'')) | (``cw'' != 0 & !missing(``cw''))) & `touse'
 
 			display "Estimating `y': `tw'"
 
@@ -191,11 +201,15 @@ program attgt, eclass
 	matrix rowname `V' = `colname'
 	matrix roweq   `V' = `eqname'
 
-	ereturn post `b' `V'
+	quietly count if `esample' == 1
+	local Nobs = r(N)
+
+	ereturn post `b' `V', obs(`Nobs') esample(`esample')
 	ereturn local cmd attgt
 	ereturn local cmdline attgt `0'
 	display "Callaway Sant'Anna (2021)"
-	ereturn display
+	* Use Stata's built-in but undocumented estimation display
+	_prefix_display
 
 end
 
