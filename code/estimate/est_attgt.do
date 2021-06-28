@@ -29,9 +29,13 @@ gen lnEx=ln(export_18)
 gen Qh=sales_18-export_18
 gen lnQh=ln(Qh)
 
-count if lnIK_0 ==.
-count if lnEx ==.
-count if lnQh ==.
+count
+foreach var in sales_18 export_18 immat_18 emp_add tanass_18 lnQL TFP_cd lnK lnIK_0 lnL exporter lnQ lnQh lnEx {
+	di "=`var'"
+	count if `var' == .
+	count if `var' == 0
+	count if `var' != . & `var' != 0
+}
 
 foreach sample in ef efh {
 	foreach var in foreign foreign_hire has_expat {
