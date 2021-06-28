@@ -21,7 +21,7 @@ attgt lnQ if ever_foreign, treatment(foreign) aggregate(att) reps(20) notyet
 timer off 2
 
 timer on 3
-csdid lnQ if ever_foreign, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) method(dripw) notyet
+csdid lnQ if ever_foreign, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) method(reg) notyet
 capture noisily estat simple
 
 di _rc

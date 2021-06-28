@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/timer.log
   log type:  text
- opened on:  26 Jun 2021, 19:27:16
+ opened on:  28 Jun 2021, 11:46:41
 
 . 
 . use "`here'/temp/analysis_sample.dta", clear
@@ -100,7 +100,7 @@ lnQ          |
 . 
 . timer on 3
 
-. csdid lnQ if ever_foreign, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) method(dripw) notyet
+. csdid lnQ if ever_foreign, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) method(reg) notyet
 Panel is not balanced
 Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
@@ -1255,11 +1255,11 @@ Event Studies:Dynamic effects
 .         timer off 3
 . 
 .         timer list 1
-   1:    810.80 /        1 =     810.8050
+   1:    784.66 /        1 =     784.6570
 .         timer list 2
-   2:    715.07 /        1 =     715.0730
+   2:    786.26 /        1 =     786.2580
 .         timer list 3
-   3:   7593.11 /        1 =    7593.1140
+   3:   7847.51 /        1 =    7847.5140
 . }
 
 . 
@@ -1267,5 +1267,5 @@ Event Studies:Dynamic effects
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/timer.log
   log type:  text
- closed on:  26 Jun 2021, 21:59:18
+ closed on:  28 Jun 2021, 14:23:43
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
