@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_2002.log
   log type:  text
- opened on:  27 Jun 2021, 13:29:45
+ opened on:  29 Jun 2021, 12:14:21
 
 . 
 . use "`here'/temp/analysis_sample.dta"
@@ -112,6 +112,9 @@ Estimating lnQ: event_2
 Estimating lnQ: event_3
 Estimating lnQ: event_4
 Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      5,902
+
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
@@ -175,7 +178,7 @@ lnQ          |
      event_3 |    .104805   .0690989     1.52   0.129    -.0306264    .2402364
      event_4 |   .0661172   .1253651     0.53   0.598    -.1795939    .3118283
 ------------------------------------------------------------------------------
-  0
+  5,902
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -229,6 +232,9 @@ Estimating lnQ: event_2
 Estimating lnQ: event_3
 Estimating lnQ: event_4
 Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      7,282
+
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
@@ -292,7 +298,7 @@ lnQ          |
      event_3 |   .1438689   .0854189     1.68   0.092    -.0235491     .311287
      event_4 |   .1919321   .1131008     1.70   0.090    -.0297414    .4136055
 ------------------------------------------------------------------------------
-  0
+  7,282
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -346,6 +352,9 @@ Estimating lnQ: event_2
 Estimating lnQ: event_3
 Estimating lnQ: event_4
 Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      9,737
+
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
@@ -409,7 +418,7 @@ lnQ          |
      event_3 |   .2801446   .1046362     2.68   0.007     .0750614    .4852277
      event_4 |   .2793585   .1359811     2.05   0.040     .0128405    .5458765
 ------------------------------------------------------------------------------
-  0
+  9,737
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -463,6 +472,9 @@ Estimating lnQ: event_2
 Estimating lnQ: event_3
 Estimating lnQ: event_4
 Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      3,700
+
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
@@ -526,7 +538,7 @@ lnQ          |
      event_3 |   .1895288   .0741001     2.56   0.011     .0442953    .3347622
      event_4 |   .2151959   .1228157     1.75   0.080    -.0255184    .4559102
 ------------------------------------------------------------------------------
-  0
+  3,700
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -580,6 +592,9 @@ Estimating lnQ: event_2
 Estimating lnQ: event_3
 Estimating lnQ: event_4
 Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      4,502
+
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
@@ -643,7 +658,7 @@ lnQ          |
      event_3 |   .0941861   .1007345     0.93   0.350    -.1032498     .291622
      event_4 |   .1261756   .1275956     0.99   0.323    -.1239071    .3762583
 ------------------------------------------------------------------------------
-  0
+  4,502
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -697,6 +712,9 @@ Estimating lnQ: event_2
 Estimating lnQ: event_3
 Estimating lnQ: event_4
 Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      6,957
+
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
@@ -760,7 +778,7 @@ lnQ          |
      event_3 |   .2933054   .1065284     2.75   0.006     .0845136    .5020973
      event_4 |   .3022274   .1505286     2.01   0.045     .0071969     .597258
 ------------------------------------------------------------------------------
-  0
+  6,957
 
 . 
 . esttab model* using "`here'/output/table_attgt_2002.tex", mtitle b(3) se(3) replace
@@ -774,5 +792,5 @@ lnQ          |
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_2002.log
   log type:  text
- closed on:  27 Jun 2021, 15:31:50
+ closed on:  29 Jun 2021, 14:16:36
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
