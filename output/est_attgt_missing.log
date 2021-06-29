@@ -1,0 +1,162 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_missing.log
+  log type:  text
+ opened on:  29 Jun 2021, 12:07:01
+
+. 
+. use "`here'/temp/analysis_sample.dta"
+
+. 
+. *attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(has_expat_ceo ) aggregate(e) pre(2) post(3) reps(20)
+. *matrix list e(b)
+. *esttab
+. 
+. *foreach var in exporter lnQL {
+. *       attgt `var' if inrange(year, 1992, 2004) & ever_foreign, treatment(has_expat_ceo ) aggregate(e) pre(2) post(3) reps(20)
+. *       matrix list e(b)
+. *       esttab
+. *}
+. 
+. rename ever_foreign ef
+
+. rename ever_foreign_hire efh
+
+. rename has_expat_ceo has_expat
+
+. 
+. gen lnIK = ln(immat_18)
+(139,036 missing values generated)
+
+. gen lnIK_0=lnIK
+(139,036 missing values generated)
+
+. replace lnIK_0=0 if immat_18==0
+(40,686 real changes made)
+
+. gen lnEx=ln(export_18)
+(198,574 missing values generated)
+
+. gen Qh=sales_18-export_18
+(79,688 missing values generated)
+
+. gen lnQh=ln(Qh)
+(80,529 missing values generated)
+
+. 
+. count
+  282,172
+
+. foreach var in sales_18 export_18 immat_18 emp_add tanass_18 lnQL TFP_cd lnK lnIK_0 lnL exporter lnQ lnQh lnEx {
+  2.         di "=`var'"
+  3.         count if `var' == .
+  4.         count if `var' == 0
+  5.         count if `var' != . & `var' != 0
+  6. }
+=sales_18
+  0
+  0
+  282,172
+=export_18
+  79,688
+  118,886
+  83,598
+=immat_18
+  98,347
+  40,686
+  143,139
+=emp_add
+  0
+  0
+  282,172
+=tanass_18
+  0
+  0
+  282,172
+=lnQL
+  0
+  1
+  282,171
+=TFP_cd
+  1,226
+  0
+  280,946
+=lnK
+  0
+  12
+  282,160
+=lnIK_0
+  98,350
+  40,702
+  143,120
+=lnL
+  0
+  4,952
+  277,220
+=exporter
+  0
+  198,574
+  83,598
+=lnQ
+  0
+  1
+  282,171
+=lnQh
+  80,529
+  2
+  201,641
+=lnEx
+  198,574
+  0
+  83,598
+
+. 
+. foreach var in sales_18 export_18 TFP_cd {
+  2.         quietly gen zero_missing_positive = 0 if `var' == 0
+  3.         quietly replace zero_missing_positive = 1 if missing(`var')
+  4.         quietly replace zero_missing_positive = 2 if `var' > 0 & !missing(`var')
+  5.         *tab zero_missing_positive l1.zero_missing_positive, missing
+.         quietly gen zero_missing_positive_lag = l1.zero_missing_positive
+  6.         di "`var'"
+  7.         tab zero_missing_positive zero_missing_positive_lag, missing
+  8.         drop zero*
+  9. }
+sales_18
+
+zero_missi | zero_missing_positive
+ng_positiv |         _lag
+         e |         2          . |     Total
+-----------+----------------------+----------
+         2 |   255,042     27,130 |   282,172 
+-----------+----------------------+----------
+     Total |   255,042     27,130 |   282,172 
+export_18
+
+zero_missi |
+ng_positiv |          zero_missing_positive_lag
+         e |         0          1          2          . |     Total
+-----------+--------------------------------------------+----------
+         0 |    92,038      3,781      6,013     17,054 |   118,886 
+         1 |     8,794     61,019      5,112      4,763 |    79,688 
+         2 |     7,615      4,204     66,466      5,313 |    83,598 
+-----------+--------------------------------------------+----------
+     Total |   108,447     69,004     77,591     27,130 |   282,172 
+TFP_cd
+
+zero_missi |
+ng_positiv |    zero_missing_positive_lag
+         e |         1          2          . |     Total
+-----------+---------------------------------+----------
+         1 |       371          1        854 |     1,226 
+         2 |         6     95,669     49,516 |   145,191 
+         . |         2     37,086     98,667 |   135,755 
+-----------+---------------------------------+----------
+     Total |       379    132,756    149,037 |   282,172 
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_missing.log
+  log type:  text
+ closed on:  29 Jun 2021, 12:07:02
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
