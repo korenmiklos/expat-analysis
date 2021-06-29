@@ -25,12 +25,17 @@ csdid lnQ if ever_foreign, ivar(frame_id_numeric) time(year) gvar(first_year_for
 *csdid_stats simple, wboot
 *csdid_stats event, wboot
 estat simple
-estat event
+*estat event
 timer off 3
+
+timer on 4
+csdid lnQ if ever_foreign, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) agg(simple) method(reg) notyet //wboot saverif("csdid_example") replace
+timer off 4
 
 timer list 1
 timer list 2
 timer list 3
+timer list 4
 
 *csdid lnQ if ever_foreign, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) method(reg) notyet
 *capture noisily estat simple

@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/timer.log
   log type:  text
- opened on:  29 Jun 2021, 20:28:56
+ opened on:  29 Jun 2021, 22:27:40
 
 . 
 . use "`here'/temp/analysis_sample.dta", clear
@@ -1162,13 +1162,80 @@ Average Treatment Effect on Treated
          ATT |   .3271671   .0921703     3.55   0.000     .1465166    .5078176
 ------------------------------------------------------------------------------
 
-. estat event
-ATT by Periods Before and After treatment
-Event Study:Dynamic effects
-estimates post: matrix has missing values
-r(504);
+. *estat event
+. timer off 3
 
-end of do-file
+. 
+. timer on 4
 
-r(504);
+. csdid lnQ if ever_foreign, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) agg(simple) method(reg) notyet //wboot saverif("csdid_example") replac
+> e
+Panel is not balanced
+Will use observations with Pair balanced (observed at t0 and t1)
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+.......
+Difference-in-difference with Multiple Time Periods
+Outcome model  : regression adjustment
+Treatment model: none
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         ATT |   .3271671   .0921703     3.55   0.000     .1465166    .5078176
+------------------------------------------------------------------------------
+Control: Not yet Treated
 
+See Callaway and Sant'Anna (2021) for details
+
+. timer off 4
+
+. 
+. timer list 1
+   1:    752.66 /        1 =     752.6600
+
+. timer list 2
+   2:    659.80 /        1 =     659.7980
+
+. timer list 3
+   3:   2261.72 /        1 =    2261.7230
+
+. timer list 4
+   4:   2249.75 /        1 =    2249.7540
+
+. 
+. *csdid lnQ if ever_foreign, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) method(reg) notyet
+. *capture noisily estat simple
+. 
+. *di _rc
+. *if _rc == 130 {
+. *       estat event
+. *       timer off 3
+. 
+. *       timer list 1
+. *       timer list 2
+. *       timer list 3
+. *}
+. 
+. log close
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/timer.log
+  log type:  text
+ closed on:  30 Jun 2021, 00:06:27
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
