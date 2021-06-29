@@ -21,17 +21,25 @@ attgt lnQ if ever_foreign, treatment(foreign) aggregate(att) reps(20) notyet
 timer off 2
 
 timer on 3
-csdid lnQ if ever_foreign, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) method(reg) notyet
-capture noisily estat simple
+csdid lnQ if ever_foreign, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) method(reg) agg(event) notyet saverif("csdid_example") wboot replace
+csdid_stats simple , wboot
+timer off 3
 
-di _rc
-if _rc == 130 {
-	estat event
-	timer off 3
+timer list 1
+timer list 2
+timer list 3
 
-	timer list 1
-	timer list 2
-	timer list 3
-}
+*csdid lnQ if ever_foreign, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) method(reg) notyet
+*capture noisily estat simple
+
+*di _rc
+*if _rc == 130 {
+*	estat event
+*	timer off 3
+
+*	timer list 1
+*	timer list 2
+*	timer list 3
+*}
 
 log close
