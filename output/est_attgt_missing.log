@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_missing.log
   log type:  text
- opened on:  29 Jun 2021, 12:07:01
+ opened on:  30 Jun 2021, 10:53:32
 
 . 
 . use "`here'/temp/analysis_sample.dta"
@@ -43,11 +43,45 @@
 . gen lnQh=ln(Qh)
 (80,529 missing values generated)
 
+. gen Qh_ratio = Qh/sales_18
+(79,688 missing values generated)
+
+. gen lnQhr = ln(Qh_ratio)
+(80,529 missing values generated)
+
+. 
+. clonevar immat_18_imputed = immat_18
+(98,347 missing values generated)
+
+. clonevar export_18_imputed = export_18
+(79,688 missing values generated)
+
+. 
+. mvencode immat_18_imputed export_18_imputed, mv(0) override
+immat_18_i~d: 98347 missing values recoded
+export_18_~d: 79688 missing values recoded
+
+. 
+. gen lnEx_imputed=ln(export_18_imputed)
+(198,574 missing values generated)
+
+. gen Qh_imputed=sales_18-export_18_imputed
+
+. gen lnQh_imputed=ln(Qh_imputed)
+(841 missing values generated)
+
+. gen Qh_ratio_imputed = Qh_imputed/sales_18
+
+. gen lnQhr_imputed = ln(Qh_ratio_imputed)
+(841 missing values generated)
+
+. 
 . 
 . count
   282,172
 
-. foreach var in sales_18 export_18 immat_18 emp_add tanass_18 lnQL TFP_cd lnK lnIK_0 lnL exporter lnQ lnQh lnEx {
+. foreach var in sales_18 export_18 immat_18 emp_add tanass_18 lnQL TFP_cd lnK lnIK_0 lnL exporter lnQ lnQh lnEx lnQhr immat_18_imputed export_18_imputed lnEx
+> _imputed lnQh_imputed lnQhr_imputed {
   2.         di "=`var'"
   3.         count if `var' == .
   4.         count if `var' == 0
@@ -109,9 +143,33 @@
   198,574
   0
   83,598
+=lnQhr
+  80,529
+  104,886
+  96,757
+=immat_18_imputed
+  0
+  139,033
+  143,139
+=export_18_imputed
+  0
+  198,574
+  83,598
+=lnEx_imputed
+  198,574
+  0
+  83,598
+=lnQh_imputed
+  841
+  2
+  281,329
+=lnQhr_imputed
+  841
+  174,155
+  107,176
 
 . 
-. foreach var in sales_18 export_18 TFP_cd {
+. foreach var in immat_18 export_18 TFP_cd immat_18_imputed export_18_imputed {
   2.         quietly gen zero_missing_positive = 0 if `var' == 0
   3.         quietly replace zero_missing_positive = 1 if missing(`var')
   4.         quietly replace zero_missing_positive = 2 if `var' > 0 & !missing(`var')
@@ -121,15 +179,18 @@
   7.         tab zero_missing_positive zero_missing_positive_lag, missing
   8.         drop zero*
   9. }
-sales_18
+immat_18
 
-zero_missi | zero_missing_positive
-ng_positiv |         _lag
-         e |         2          . |     Total
------------+----------------------+----------
-         2 |   255,042     27,130 |   282,172 
------------+----------------------+----------
-     Total |   255,042     27,130 |   282,172 
+zero_missi |
+ng_positiv |          zero_missing_positive_lag
+         e |         0          1          2          . |     Total
+-----------+--------------------------------------------+----------
+         0 |    24,439      6,914      5,292      4,041 |    40,686 
+         1 |     3,761     73,005      3,728     17,853 |    98,347 
+         2 |     5,584      9,257    123,056      5,239 |   143,136 
+         . |         1          2          0          0 |         3 
+-----------+--------------------------------------------+----------
+     Total |    33,785     89,178    132,076     27,133 |   282,172 
 export_18
 
 zero_missi |
@@ -152,11 +213,32 @@ ng_positiv |    zero_missing_positive_lag
          . |         2     37,086     98,667 |   135,755 
 -----------+---------------------------------+----------
      Total |       379    132,756    149,037 |   282,172 
+immat_18_imputed
+
+zero_missi |
+ng_positiv |    zero_missing_positive_lag
+         e |         0          2          . |     Total
+-----------+---------------------------------+----------
+         0 |   108,119      9,020     21,894 |   139,033 
+         2 |    14,841    123,056      5,239 |   143,136 
+         . |         3          0          0 |         3 
+-----------+---------------------------------+----------
+     Total |   122,963    132,076     27,133 |   282,172 
+export_18_imputed
+
+zero_missi |
+ng_positiv |    zero_missing_positive_lag
+         e |         0          2          . |     Total
+-----------+---------------------------------+----------
+         0 |   165,632     11,125     21,817 |   198,574 
+         2 |    11,819     66,466      5,313 |    83,598 
+-----------+---------------------------------+----------
+     Total |   177,451     77,591     27,130 |   282,172 
 
 . 
 . log close
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_missing.log
   log type:  text
- closed on:  29 Jun 2021, 12:07:02
+ closed on:  30 Jun 2021, 10:53:35
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
