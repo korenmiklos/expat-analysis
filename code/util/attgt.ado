@@ -1,5 +1,5 @@
 program attgt, eclass
-	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 2)] [post(integer 2)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(string)]
+	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 999)] [post(integer 999)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(string)]
 	marksample touse
 
 	* boostrap
@@ -55,7 +55,7 @@ program attgt, eclass
 	display "Generating weights..."
 	foreach g in `gs' {
 		foreach t in `ts' {
-		if (`g'!=`t') & (`g'>`min_time') {
+		if (`g'!=`t') & (`g'>`min_time') & (`t' - `g' <= `post') & (`g' - `t' <= `pre') {
 			* within (g,t), panel has to be balanced
 			mata: st_local("leadlag1", lead_lag(`g', `t'))
 			mata: st_local("leadlag2", lead_lag(`t', `g'))
