@@ -2,21 +2,11 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt.log
   log type:  text
- opened on:  28 Jun 2021, 14:40:18
+ opened on:   5 Jul 2021, 17:57:22
 
 . 
-. use "`here'/temp/analysis_sample.dta"
+. use "`here'/temp/analysis_sample.dta", clear
 
-. 
-. *attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(has_expat_ceo ) aggregate(e) pre(2) post(3) reps(20)
-. *matrix list e(b)
-. *esttab
-. 
-. *foreach var in exporter lnQL {
-. *       attgt `var' if inrange(year, 1992, 2004) & ever_foreign, treatment(has_expat_ceo ) aggregate(e) pre(2) post(3) reps(20)
-. *       matrix list e(b)
-. *       esttab
-. *}
 . 
 . rename ever_foreign ef
 
@@ -25,105 +15,13 @@
 . rename has_expat_ceo has_expat
 
 . 
-. gen lnIK = ln(immat_18)
-(139,036 missing values generated)
-
-. gen lnIK_0=lnIK
-(139,036 missing values generated)
-
-. replace lnIK_0=0 if immat_18==0
-(40,686 real changes made)
-
-. gen lnEx=ln(export_18)
-(198,574 missing values generated)
-
-. gen Qh=sales_18-export_18
-(79,688 missing values generated)
-
-. gen lnQh=ln(Qh)
-(80,529 missing values generated)
-
-. 
-. count
-  282,172
-
-. foreach var in sales_18 export_18 immat_18 emp_add tanass_18 lnQL TFP_cd lnK lnIK_0 lnL exporter lnQ lnQh lnEx {
-  2.         di "=`var'"
-  3.         count if `var' == .
-  4.         count if `var' == 0
-  5.         count if `var' != . & `var' != 0
-  6. }
-=sales_18
-  0
-  0
-  282,172
-=export_18
-  79,688
-  118,886
-  83,598
-=immat_18
-  98,347
-  40,686
-  143,139
-=emp_add
-  0
-  0
-  282,172
-=tanass_18
-  0
-  0
-  282,172
-=lnQL
-  0
-  1
-  282,171
-=TFP_cd
-  1,226
-  0
-  280,946
-=lnK
-  0
-  12
-  282,160
-=lnIK_0
-  98,350
-  40,702
-  143,120
-=lnL
-  0
-  4,952
-  277,220
-=exporter
-  0
-  198,574
-  83,598
-=lnQ
-  0
-  1
-  282,171
-=lnQh
-  80,529
-  2
-  201,641
-=lnEx
-  198,574
-  0
-  83,598
-
-. 
 . foreach sample in ef efh {
   2.         foreach var in foreign foreign_hire has_expat {
-  3.                 *eststo: attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(`var') aggregate(e) pre(2) post(3) reps(20)
-.                 *attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(`var') aggregate(e) pre(2) post(3) reps(20)
-.                 attgt lnQL TFP_cd lnK lnL exporter lnQ if `sample', treatment(`var') aggregate(e) pre(4) post(4) reps(20) notyet
+  3.                 attgt lnQL TFP_cd lnK lnL exporter lnQ if `sample', treatment(`var') aggregate(e) pre(4) post(4) reps(20) notyet
   4.                 count if e(sample) == 1
   5.                 eststo model_`sample'`var', title("`sample' `var'")
-  6.                 *matrix list e(b)
-.         }
-  7. 
-.         *esttab model_`sample'* using "`here'/output/table_`sample'_attgt.tex", mtitle title("`sample'") b(3) se(3) replace
-.         *esttab model_`sample'* using "`here'/output/table_`sample'_attgt.txt", mtitle title("`sample'") b(3) se(3) replace
-. }
+  6.         }
+  7. }
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -857,5 +755,5 @@ lnQ          |
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt.log
   log type:  text
- closed on:  28 Jun 2021, 17:36:40
+ closed on:   5 Jul 2021, 20:06:41
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
