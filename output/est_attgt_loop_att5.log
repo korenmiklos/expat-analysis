@@ -1,0 +1,72 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_loop_att5.log
+  log type:  text
+ opened on:   6 Jul 2021, 17:51:58
+
+. 
+. use "`here'/temp/analysis_sample.dta"
+
+. 
+. replace foreign_hire = 1 if ever_foreign_hire == 1 & foreign == 1
+(1,544 real changes made)
+
+. replace has_expat_ceo = 1 if ever_expat_ceo == 1 & foreign == 1
+(2,378 real changes made)
+
+. 
+. rename ever_foreign ef
+
+. rename ever_foreign_hire efh
+
+. rename has_expat_ceo has_expat
+
+. 
+. gen lnIK = ln(immat_18)
+(139,036 missing values generated)
+
+. gen lnIK_0 = lnIK
+(139,036 missing values generated)
+
+. replace lnIK_0 = 0 if immat_18 == 0
+(40,686 real changes made)
+
+. 
+. replace export_18 = 0 if export_18 == .
+(79,688 real changes made)
+
+. gen Qh = sales_18 - export_18
+
+. gen lnQh = ln(Qh)
+(841 missing values generated)
+
+. gen lnQhr = lnQ - lnQh
+(841 missing values generated)
+
+. 
+. foreach depvar in TFP_cd lnIK_0 lnQh lnQhr {
+  2.         foreach sample in ef efh {
+  3.                 foreach var in foreign foreign_hire has_expat {
+  4.                         attgt `depvar' if `sample' & time_foreign <= 5, treatment(`var') aggregate(att) pre(5) post(5) reps(20) notyet
+  5.                         count if e(sample) == 1
+  6.                         eststo model_`sample'`var'`depvar', title("`depvar' `sample' `var'")
+  7.                 }
+  8.         }
+  9. }
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+unknown function *if!missing()
+r(133);
+
+end of do-file
+
+r(133);
+
+. log close
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_loop_att5.log
+  log type:  text
+ closed on:   6 Jul 2021, 17:55:11
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
