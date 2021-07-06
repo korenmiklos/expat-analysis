@@ -8,13 +8,16 @@ log using "`here'/output/est_attgt", text replace
 
 use "`here'/temp/analysis_sample.dta", clear
 
+replace foreign_hire = 1 if ever_foreign_hire == 1 & foreign == 1
+replace has_expat_ceo = 1 if ever_expat_ceo == 1 & foreign == 1
+
 rename ever_foreign ef
 rename ever_foreign_hire efh
 rename has_expat_ceo has_expat
 
 foreach sample in ef efh {
 	foreach var in foreign foreign_hire has_expat {
-		attgt lnQL TFP_cd lnK lnL exporter lnQ if `sample', treatment(`var') aggregate(e) pre(4) post(4) reps(20) notyet
+		attgt lnQL lnK lnL exporter lnQ if `sample' & time_foreign <= 5, treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet
 		count if e(sample) == 1
 		eststo model_`sample'`var', title("`sample' `var'")
 	}
