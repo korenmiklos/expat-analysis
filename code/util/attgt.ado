@@ -1,5 +1,5 @@
 program attgt, eclass
-	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 999)] [post(integer 999)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(string)]
+	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 999)] [post(integer 999)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(varname)]
 	marksample touse
 
 	* boostrap
@@ -15,9 +15,9 @@ program attgt, eclass
 		local pre 0
 	}
 
-	* limitcontrol option limits control observations to satisfy "if `limitcontrol'"
-	if ("`limitcontrol'"=="") {
-		local limitcontrol 1
+	* limitcontrol option limits control observations to satisfy "if `limitcontrol'" both in g and in t
+	if ("`limitcontrol'"!="") {
+		confirm numeric variable `limitcontrol'
 	}
 
 	* read panel structure
@@ -70,16 +70,25 @@ program attgt, eclass
 			mata: st_local("leadlag1", lead_lag(`g', `t'))
 			mata: st_local("leadlag2", lead_lag(`t', `g'))
 			local timing (`time'==`g' & `leadlag1'.`time'==`t') | (`time'==`t' & `leadlag2'.`time'==`g')
+			if ("`limitcontrol'" != "") {
+				local lc (`limitcontrol' & `leadlag1'.`limitcontrol' ///
+					& !missing(`limitcontrol', `leadlag1'.`limitcontrol') & `time'==`g') ///
+					| (`limitcontrol' & `leadlag2'.`limitcontrol' ///
+					& !missing(`limitcontrol', `leadlag2'.`limitcontrol') & `time'==`t')
+			}
+			else {
+				local lc 1
+			}
 
 			local treated (`group'==`g') & (`timing')
 			if ("`tyet'"=="") {
 				* never treated
-				local control missing(`group') & (`timing') & (`limitcontrol')
+				local control missing(`group') & (`timing') & (`lc')
 			}
 			else {
 				* not yet treated
 				* QUESTION: > or >=
-				local control (missing(`group') | (`group' > max(`g', `t'))) & (`timing') & (`limitcontrol')
+				local control (missing(`group') | (`group' > max(`g', `t'))) & (`timing') & (`lc')
 			}
 			quietly count if `treated' & `touse'
 			local n_treated = r(N)/2
