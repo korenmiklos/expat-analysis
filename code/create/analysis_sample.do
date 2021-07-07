@@ -137,6 +137,24 @@ drop *new
 
 do "`here'/code/create/event_dummies_firmlevel"
 
+count
+count if ever_foreign
+count if ever_foreign & firm_tag
+count if ever_expat_ceo & firm_tag
+count if has_expat_ceo
+
+drop if time_foreign > 5 //& time_foreign != .
+drop ever_expat* ever_foreign_hire
+
+by frame_id_numeric: egen ever_expat = max(has_expat_ceo)
+by frame_id_numeric: egen ever_foreign_hire = max(foreign_hire)
+
+count
+count if ever_foreign
+count if ever_foreign & firm_tag
+count if ever_expat & firm_tag
+count if has_expat_ceo
+
 compress
 save "`here'/temp/analysis_sample.dta", replace
 log close
