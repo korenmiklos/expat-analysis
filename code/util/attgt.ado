@@ -45,6 +45,12 @@ program attgt, eclass
 	quietly summarize `time' if `touse'
 	local min_time = r(min)
 	local max_time = r(max)
+	quietly summarize `group' if `touse'
+	local min_g = r(min)
+	local max_g = r(max)
+	* feasible event windows
+	local max_pre = min(`max_g' - `min_time', `pre')
+	local max_post = min(`max_time' - `min_g', `post')
 	
 	* estimate ATT(g,t) as eq 2.6 in https://pedrohcgs.github.io/files/Callaway_SantAnna_2020.pdf
 	quietly levelsof `group' if `touse' & `group' > `min_time', local(gs)
@@ -86,7 +92,7 @@ program attgt, eclass
 
 	if ("`aggregate'"=="e") {
 		tempname n_e
-		forvalues e = `pre'(-1)1 {
+		forvalues e = `max_pre'(-1)1 {
 			scalar `n_e' = 0
 			tempvar event_m`e' wce_m`e'
 			quietly generate `event_m`e'' = 0
@@ -104,7 +110,7 @@ program attgt, eclass
 			local tweights `tweights' event_m`e'
 			local cweights `cweights' wce_m`e'
 		}
-		forvalues e = 1/`post' {
+		forvalues e = 1/`max_post' {
 			scalar `n_e' = 0
 			tempvar event_`e' wce_`e'
 			quietly generate `event_`e'' = 0
@@ -141,7 +147,7 @@ program attgt, eclass
 			scalar `n' = 0
 			foreach g in `gs' {
 				foreach t in `ts' {
-				if (`g'!=`t') & (`g'>`min_time') {
+				if (`g'!=`t') & (`g'>`min_time') & (`t' - `g' <= `post') & (`g' - `t' <= `pre') {
 					quietly replace `att' = `att' + `n_`g'_`t''*`treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
 					quietly replace `control' = `control' + `n_`g'_`t''*`control_`g'_`t'' if !missing(`control_`g'_`t'') & `touse'
 					scalar `n' = `n' + `n_`g'_`t''
