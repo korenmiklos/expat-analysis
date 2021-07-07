@@ -1,5 +1,5 @@
 program attgt, eclass
-	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 2)] [post(integer 2)] [reps(int 199)] [notyet] [debug] [cluster(varname)]
+	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 999)] [post(integer 999)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(string)]
 	marksample touse
 
 	* boostrap
@@ -10,6 +10,15 @@ program attgt, eclass
 		local aggregate gt
 	}
 	assert inlist("`aggregate'", "gt", "e", "att")
+	if ("`aggregate'"=="att") {
+		* if we only compute ATT, no need to check pre-trends
+		local pre 0
+	}
+
+	* limitcontrol option limits control observations to satisfy "if `limitcontrol'"
+	if ("`limitcontrol'"=="") {
+		local limitcontrol 1
+	}
 
 	* read panel structure
 	xtset
@@ -40,6 +49,12 @@ program attgt, eclass
 	quietly summarize `time' if `touse'
 	local min_time = r(min)
 	local max_time = r(max)
+	quietly summarize `group' if `touse'
+	local min_g = r(min)
+	local max_g = r(max)
+	* feasible event windows
+	local max_pre = min(`max_g' - `min_time', `pre')
+	local max_post = min(`max_time' - `min_g', `post')
 	
 	* estimate ATT(g,t) as eq 2.6 in https://pedrohcgs.github.io/files/Callaway_SantAnna_2020.pdf
 	quietly levelsof `group' if `touse' & `group' > `min_time', local(gs)
@@ -50,7 +65,7 @@ program attgt, eclass
 	display "Generating weights..."
 	foreach g in `gs' {
 		foreach t in `ts' {
-		if (`g'!=`t') & (`g'>`min_time') {
+		if (`g'!=`t') & (`g'>`min_time') & (`t' - `g' <= `post') & (`g' - `t' <= `pre') {
 			* within (g,t), panel has to be balanced
 			mata: st_local("leadlag1", lead_lag(`g', `t'))
 			mata: st_local("leadlag2", lead_lag(`t', `g'))
@@ -59,12 +74,12 @@ program attgt, eclass
 			local treated (`group'==`g') & (`timing')
 			if ("`tyet'"=="") {
 				* never treated
-				local control missing(`group') & (`timing')
+				local control missing(`group') & (`timing') & (`limitcontrol')
 			}
 			else {
 				* not yet treated
 				* QUESTION: > or >=
-				local control (missing(`group') | (`group' > max(`g', `t'))) & (`timing')
+				local control (missing(`group') | (`group' > max(`g', `t'))) & (`timing') & (`limitcontrol')
 			}
 			quietly count if `treated' & `touse'
 			local n_treated = r(N)/2
@@ -81,7 +96,7 @@ program attgt, eclass
 
 	if ("`aggregate'"=="e") {
 		tempname n_e
-		forvalues e = `pre'(-1)1 {
+		forvalues e = `max_pre'(-1)1 {
 			scalar `n_e' = 0
 			tempvar event_m`e' wce_m`e'
 			quietly generate `event_m`e'' = 0
@@ -99,7 +114,7 @@ program attgt, eclass
 			local tweights `tweights' event_m`e'
 			local cweights `cweights' wce_m`e'
 		}
-		forvalues e = 1/`post' {
+		forvalues e = 1/`max_post' {
 			scalar `n_e' = 0
 			tempvar event_`e' wce_`e'
 			quietly generate `event_`e'' = 0
@@ -136,7 +151,7 @@ program attgt, eclass
 			scalar `n' = 0
 			foreach g in `gs' {
 				foreach t in `ts' {
-				if (`g'!=`t') & (`g'>`min_time') {
+				if (`g' < `t') & (`g'>`min_time') & (`t' - `g' <= `post') {
 					quietly replace `att' = `att' + `n_`g'_`t''*`treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
 					quietly replace `control' = `control' + `n_`g'_`t''*`control_`g'_`t'' if !missing(`control_`g'_`t'') & `touse'
 					scalar `n' = `n' + `n_`g'_`t''
@@ -149,6 +164,8 @@ program attgt, eclass
 			local cweights control
 	}
 
+	tempvar esample
+	quietly generate byte `esample' = 0
 
 	* aggregate across known weights
 	quietly generate `_alty_' = .
@@ -162,6 +179,9 @@ program attgt, eclass
 
 			local tw : word `n' of `tweights'
 			local cw : word `n' of `cweights'
+
+			* set estimation sample
+			quietly replace `esample' = 1 if ((``tw'' != 0 & !missing(``tw'')) | (``cw'' != 0 & !missing(``cw''))) & `touse'
 
 			display "Estimating `y': `tw'"
 
@@ -191,11 +211,15 @@ program attgt, eclass
 	matrix rowname `V' = `colname'
 	matrix roweq   `V' = `eqname'
 
-	ereturn post `b' `V'
+	quietly count if `esample' == 1
+	local Nobs = r(N)
+
+	ereturn post `b' `V', obs(`Nobs') esample(`esample')
 	ereturn local cmd attgt
 	ereturn local cmdline attgt `0'
 	display "Callaway Sant'Anna (2021)"
-	ereturn display
+	* Use Stata's built-in but undocumented estimation display
+	_prefix_display
 
 end
 

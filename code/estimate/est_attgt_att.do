@@ -4,7 +4,7 @@ here
 local here = r(here)
 
 cap log close
-log using "`here'/output/est_attgt", text replace
+log using "`here'/output/est_attgt_att", text replace
 
 use "`here'/temp/analysis_sample.dta", clear
 
@@ -17,13 +17,13 @@ rename has_expat_ceo has_expat
 
 foreach sample in ef efh {
 	foreach var in foreign foreign_hire has_expat {
-		attgt lnQL lnK lnL exporter lnQ if `sample' & time_foreign <= 5, treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet
+		attgt lnQL lnK lnL exporter lnQ if `sample' & time_foreign <= 5, treatment(`var') aggregate(att) reps(20) notyet
 		count if e(sample) == 1
 		eststo model_`sample'`var', title("`sample' `var'")
 	}
 }
 
-esttab model* using "`here'/output/table_attgt.tex", mtitle b(3) se(3) replace
-esttab model* using "`here'/output/table_attgt.txt", mtitle b(3) se(3) replace
+esttab model* using "`here'/output/table_attgt_att.tex", mtitle b(3) se(3) replace
+esttab model* using "`here'/output/table_attgt_att.txt", mtitle b(3) se(3) replace
 
 log close

@@ -209,7 +209,7 @@ replace domestic_sales = 0 if domestic_sales < 0 | missing(domestic_sales)
 
 count
 
-save_all_to_json
+*save_all_to_json
 cap drop __*
 save "`here'/temp/balance-small-clean.dta", replace
 log close
