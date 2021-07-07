@@ -1,5 +1,5 @@
 program attgt, eclass
-	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 999)] [post(integer 999)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(string)]
+	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 999)] [post(integer 999)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(string)] [weightprefix(string)]
 	marksample touse
 
 	* boostrap
@@ -26,7 +26,7 @@ program attgt, eclass
 	xtset
 	local i = r(panelvar)
 	local time = r(timevar)
-	markout `touse' `i' `time' `treatment'
+	markout `touse' `i' `time' `treatment' `varlist'
 
 	* test that cluster embeds ivar
 	if ("`cluster'"!="") {
@@ -62,10 +62,29 @@ program attgt, eclass
 	quietly levelsof `group' if `touse' & `group' > `min_time', local(gs)
 	quietly levelsof `time' if `touse', local(ts)
 
+	* check that valid weights exist for each treatment group
+	if ("`weightprefix'" != "") {
+		foreach g in `gs' {
+			confirm numeric variable `weightprefix'`g'
+			assert `weightprefix'`g' >= 0 if `touse'
+			* FIXME: check weights do not vary within i over t
+		}
+	}
+	else {
+		tempvar one
+		quietly generate byte `one' = 1
+	}
+
 	* FIXME: check that g = min_time is not used as control
 	* create design matrix
 	display "Generating weights..."
 	foreach g in `gs' {
+		if ("`weightprefix'" != "") {
+			local cweight `weightprefix'`g'
+		}
+		else {
+			local cweight `one'
+		}
 		foreach t in `ts' {
 		if (`g'!=`t') & (`g'>`min_time') & (`t' - `g' <= `post') & (`g' - `t' <= `pre') {
 			* within (g,t), panel has to be balanced
@@ -94,13 +113,18 @@ program attgt, eclass
 			}
 			quietly count if `treated' & `touse'
 			local n_treated = r(N)/2
-			quietly count if `control' & `touse'
+			quietly summarize `cweight' if `control' & `touse'
+			local sumw_control = r(sum)/2
 			local n_control = r(N)/2
 			local n_`g'_`t' = `n_treated'
+			if (`n_control' == 0) {
+				* no treatment effect without controls
+				local n_`g'_`t' = 0
+			}
 
 			tempvar treated_`g'_`t' control_`g'_`t'
 			quietly generate `treated_`g'_`t'' = cond(`time'==`t', +1/`n_treated', -1/`n_treated') if `treated' & `touse'
-			quietly generate `control_`g'_`t'' = cond(`time'==`t', +1/`n_control', -1/`n_control') if `control' & `touse'
+			quietly generate `control_`g'_`t'' = cond(`time'==`t', `cweight'/`sumw_control', -`cweight'/`sumw_control') if `control' & `touse'
 		}
 		}
 	}
@@ -114,7 +138,7 @@ program attgt, eclass
 			quietly generate `wce_m`e'' = 0
 			foreach g in `gs' {
 				local t = `g' - `e'
-				if (`t' >= `min_time') {
+				if (`t' >= `min_time') & ("`n_`g'_`t''" != "") {
 					quietly replace `event_m`e'' = `event_m`e'' + `n_`g'_`t''*`treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
 					quietly replace `wce_m`e'' = `wce_m`e'' + `n_`g'_`t''*`control_`g'_`t'' if !missing(`control_`g'_`t'') & `touse'
 					scalar `n_e' = `n_e' + `n_`g'_`t''
@@ -132,7 +156,7 @@ program attgt, eclass
 			quietly generate `wce_`e'' = 0
 			foreach g in `gs' {
 				local t = `g' + `e'
-				if (`t' <= `max_time') {
+				if (`t' <= `max_time') & ("`n_`g'_`t''" != "") {
 					quietly replace `event_`e'' = `event_`e'' + `n_`g'_`t''*`treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
 					quietly replace `wce_`e'' = `wce_`e'' + `n_`g'_`t''*`control_`g'_`t'' if !missing(`control_`g'_`t'') & `touse'
 					scalar `n_e' = `n_e' + `n_`g'_`t''
@@ -147,7 +171,7 @@ program attgt, eclass
 	if ("`aggregate'"=="gt") {
 			foreach g in `gs' {
 				foreach t in `ts' {
-				if (`g'!=`t') & (`g'>`min_time') {
+				if (`g'!=`t') & (`g'>`min_time') & ("`n_`g'_`t''" != "") {
 					local tweights `tweights' treated_`g'_`t'
 					local cweights `cweights' control_`g'_`t'
 				}
@@ -162,7 +186,7 @@ program attgt, eclass
 			scalar `n' = 0
 			foreach g in `gs' {
 				foreach t in `ts' {
-				if (`g' < `t') & (`g'>`min_time') & (`t' - `g' <= `post') {
+				if (`g' < `t') & (`g'>`min_time') & (`t' - `g' <= `post') & ("`n_`g'_`t''" != "") {
 					quietly replace `att' = `att' + `n_`g'_`t''*`treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
 					quietly replace `control' = `control' + `n_`g'_`t''*`control_`g'_`t'' if !missing(`control_`g'_`t'') & `touse'
 					scalar `n' = `n' + `n_`g'_`t''
@@ -207,7 +231,7 @@ program attgt, eclass
 			quietly replace `_alty_' = cond(``cw''>0, `co' - `y', -`y') if ``cw'' !=0 & !missing(``cw'') & `touse'
 
 			set seed 4399
-			mata: st_numscalar("`v'", bs_variance("`_y_' `_alty_' ``tw'' ``cw'' `cluster'", `B', 1))
+			mata: st_numscalar("`v'", bs_variance("`_y_' `_alty_' ``tw'' ``cw'' `cluster'", "`touse'", `B', 1))
 			matrix `b' = nullmat(`b'), `att'
 			matrix `V' = nullmat(`V'), `v'
 			local eqname `eqname' `y'
@@ -262,10 +286,10 @@ real scalar sum_product(string matrix vars)
 	return(colsum(X[1...,1] :* X[1...,2]))
 }
 
-real scalar bs_variance(string matrix vars, real scalar B, real scalar cluster)
+real scalar bs_variance(string matrix vars, string scalar selectvar, real scalar B, real scalar cluster)
 {
 	X = 0
-	st_view(X, ., vars, 0)
+	st_view(X, ., vars, selectvar)
 	N = rows(X)
 	Y = J(N, 1, 0)
 	theta = J(B, 1, .)
@@ -298,7 +322,7 @@ real vector recode(real vector x)
 	G = rows(levelsof)
 	output = J(N, 1, 0)
 	for (n=1; n<=N; n++) {
-		output[n] = min(select(levelsof, levelsof :== x[n]))
+		output[n] = min(selectindex(levelsof :== x[n]))
 	}
 	return(output)
 }
