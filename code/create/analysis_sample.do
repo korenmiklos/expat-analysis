@@ -155,6 +155,9 @@ count if ever_foreign & firm_tag
 count if ever_expat & firm_tag
 count if has_expat_ceo
 
+replace foreign_hire = 1 if ever_foreign_hire == 1 & foreign == 1
+replace has_expat_ceo = 1 if ever_expat == 1 & foreign == 1
+
 compress
 save "`here'/temp/analysis_sample.dta", replace
 log close

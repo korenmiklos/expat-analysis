@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- opened on:   7 Jul 2021, 20:35:59
+ opened on:   8 Jul 2021, 10:26:03
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -682,6 +682,13 @@ end of do-file
   1,805
 
 . 
+. replace foreign_hire = 1 if ever_foreign_hire == 1 & foreign == 1
+(754 real changes made)
+
+. replace has_expat_ceo = 1 if ever_expat == 1 & foreign == 1
+(459 real changes made)
+
+. 
 . compress
   variable minyear was float now int
   variable maxyear was float now int
@@ -786,5 +793,5 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/analy
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- closed on:   7 Jul 2021, 20:36:19
+ closed on:   8 Jul 2021, 10:26:21
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
