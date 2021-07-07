@@ -10,6 +10,10 @@ program attgt, eclass
 		local aggregate gt
 	}
 	assert inlist("`aggregate'", "gt", "e", "att")
+	if ("`aggregate'"=="att") {
+		* if we only compute ATT, no need to check pre-trends
+		local pre 0
+	}
 
 	* limitcontrol option limits control observations to satisfy "if `limitcontrol'"
 	if ("`limitcontrol'"=="") {
@@ -147,7 +151,7 @@ program attgt, eclass
 			scalar `n' = 0
 			foreach g in `gs' {
 				foreach t in `ts' {
-				if (`g'!=`t') & (`g'>`min_time') & (`t' - `g' <= `post') & (`g' - `t' <= `pre') {
+				if (`g' < `t') & (`g'>`min_time') & (`t' - `g' <= `post') {
 					quietly replace `att' = `att' + `n_`g'_`t''*`treated_`g'_`t'' if !missing(`treated_`g'_`t'') & `touse'
 					quietly replace `control' = `control' + `n_`g'_`t''*`control_`g'_`t'' if !missing(`control_`g'_`t'') & `touse'
 					scalar `n' = `n' + `n_`g'_`t''
