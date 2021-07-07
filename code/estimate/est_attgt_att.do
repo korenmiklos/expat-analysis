@@ -6,41 +6,21 @@ local here = r(here)
 cap log close
 log using "`here'/output/est_attgt_att", text replace
 
-use "`here'/temp/analysis_sample.dta"
+use "`here'/temp/analysis_sample.dta", clear
 
-*attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(has_expat_ceo ) aggregate(e) pre(2) post(3) reps(20)
-*matrix list e(b)
-*esttab
-
-*foreach var in exporter lnQL {
-*	attgt `var' if inrange(year, 1992, 2004) & ever_foreign, treatment(has_expat_ceo ) aggregate(e) pre(2) post(3) reps(20)
-*	matrix list e(b)
-*	esttab
-*}
+replace foreign_hire = 1 if ever_foreign_hire == 1 & foreign == 1
+replace has_expat_ceo = 1 if ever_expat_ceo == 1 & foreign == 1
 
 rename ever_foreign ef
 rename ever_foreign_hire efh
 rename has_expat_ceo has_expat
 
-gen lnIK = ln(immat_18)
-gen lnIK_0=lnIK
-replace lnIK_0=0 if immat_18==0
-gen lnEx=ln(export_18)
-gen Qh=sales_18-export_18
-gen lnQh=ln(Qh)
-
 foreach sample in ef efh {
 	foreach var in foreign foreign_hire has_expat {
-		*eststo: attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(`var') aggregate(e) pre(2) post(3) reps(20)
-		*attgt exporter lnQL if inrange(year, 1992, 2004) & ever_foreign, treatment(`var') aggregate(e) pre(2) post(3) reps(20)
-		attgt lnQL TFP_cd lnK lnL exporter lnQ if `sample', treatment(`var') aggregate(att) reps(20) notyet
+		attgt lnQL lnK lnL exporter lnQ if `sample' & time_foreign <= 5, treatment(`var') aggregate(att) reps(20) notyet
 		count if e(sample) == 1
 		eststo model_`sample'`var', title("`sample' `var'")
-		*matrix list e(b)
 	}
-
-	*esttab model_`sample'* using "`here'/output/table_`sample'_attgt.tex", mtitle title("`sample'") b(3) se(3) replace
-	*esttab model_`sample'* using "`here'/output/table_`sample'_attgt.txt", mtitle title("`sample'") b(3) se(3) replace
 }
 
 esttab model* using "`here'/output/table_attgt_att.tex", mtitle b(3) se(3) replace
