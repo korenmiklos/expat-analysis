@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/timer.log
   log type:  text
- opened on:   5 Jul 2021, 21:39:37
+ opened on:   7 Jul 2021, 18:21:26
 
 . 
 . use "`here'/temp/analysis_sample.dta", clear
@@ -880,12 +880,12 @@ Generating weights...
 Estimating lnQ: att
 Callaway Sant'Anna (2021)
 
-                                                Number of obs     =     18,649
+                                                Number of obs     =     18,230
 
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         att |   .1567721   .0396475     3.95   0.000     .0790644    .2344798
+         att |   .2062819   .0910391     2.27   0.023     .0278484    .3847153
 ------------------------------------------------------------------------------
 
 . timer off 3
@@ -2534,43 +2534,43 @@ comparisons
 attgt - event time 4 year window
 
 . timer list 1
-   1:    282.34 /        1 =     282.3370
+   1:    279.88 /        1 =     279.8790
 
 . di "csdid - event time 4 year window"
 csdid - event time 4 year window
 
 . timer list 2
-   2:   1628.17 /        1 =    1628.1700
+   2:   1559.69 /        1 =    1559.6910
 
 . di "attgt - att"
 attgt - att
 
 . timer list 3
-   3:    576.72 /        1 =     576.7180
+   3:    223.01 /        1 =     223.0070
 
 . di "csdid - att (estat method)"
 csdid - att (estat method)
 
 . timer list 4
-   4:   1655.07 /        1 =    1655.0670
+   4:   1566.66 /        1 =    1566.6630
 
 . di "csdid - att (agg method)"
 csdid - att (agg method)
 
 . timer list 5
-   5:   1627.67 /        1 =    1627.6670
+   5:   1538.80 /        1 =    1538.7960
 
 . di "csdid - att (agg method with wboot)"
 csdid - att (agg method with wboot)
 
 . timer list 6
-   6:   1633.22 /        1 =    1633.2240
+   6:   1542.57 /        1 =    1542.5710
 
 . di "csdid - att and event time (estat method)"
 csdid - att and event time (estat method)
 
 . timer list 7
-   7:   1719.42 /        1 =    1719.4220
+   7:   1603.91 /        1 =    1603.9130
 
 . 
 . *csdid lnQ if ever_foreign, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) method(reg) notyet
@@ -2590,5 +2590,5 @@ csdid - att and event time (estat method)
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/timer.log
   log type:  text
- closed on:   6 Jul 2021, 00:11:43
+ closed on:   7 Jul 2021, 20:40:05
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
