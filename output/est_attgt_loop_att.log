@@ -2,17 +2,10 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_loop_att.log
   log type:  text
- opened on:   7 Jul 2021, 09:47:19
+ opened on:   8 Jul 2021, 17:59:56
 
 . 
 . use "`here'/temp/analysis_sample.dta"
-
-. 
-. replace foreign_hire = 1 if ever_foreign_hire == 1 & foreign == 1
-(1,544 real changes made)
-
-. replace has_expat_ceo = 1 if ever_expat_ceo == 1 & foreign == 1
-(2,378 real changes made)
 
 . 
 . rename ever_foreign ef
@@ -23,36 +16,34 @@
 
 . 
 . gen lnIK = ln(immat_18)
-(139,036 missing values generated)
+(7,125 missing values generated)
 
 . gen lnIK_0 = lnIK
-(139,036 missing values generated)
+(7,125 missing values generated)
 
 . replace lnIK_0 = 0 if immat_18 == 0
-(40,686 real changes made)
+(1,274 real changes made)
 
 . 
 . replace export_18 = 0 if export_18 == .
-(79,688 real changes made)
+(2,465 real changes made)
 
 . gen Qh = sales_18 - export_18
 
 . gen lnQh = ln(Qh)
-(841 missing values generated)
+(121 missing values generated)
 
 . gen lnQhr = lnQ - lnQh
-(841 missing values generated)
+(121 missing values generated)
 
 . 
 . foreach depvar in TFP_cd lnIK_0 lnQh lnQhr {
-  2.         foreach sample in ef efh {
-  3.                 foreach var in foreign foreign_hire has_expat {
-  4.                         attgt `depvar' if `sample' & time_foreign <= 5, treatment(`var') aggregate(att) reps(20) notyet
-  5.                         count if e(sample) == 1
-  6.                         eststo model_`sample'`var'`depvar', title("`depvar' `sample' `var'")
-  7.                 }
-  8.         }
-  9. }
+  2.         foreach var in foreign foreign_hire has_expat {
+  3.                 attgt `depvar', treatment(`var') aggregate(att) reps(20) notyet limitcontrol(foreign == 0)
+  4.                 count if e(sample) == 1
+  5.                 eststo model_`sample'`var'`depvar', title("`depvar' `sample' `var'")
+  6.         }
+  7. }
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -60,14 +51,14 @@ Generating weights...
 Estimating TFP_cd: att
 Callaway Sant'Anna (2021)
 
-                                                Number of obs     =     16,263
+                                                Number of obs     =     15,674
 
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         att |   .0202808   .0112767     1.80   0.072    -.0018212    .0423827
+         att |   .0379195   .0181771     2.09   0.037      .002293     .073546
 ------------------------------------------------------------------------------
-  16,263
+  15,674
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -75,14 +66,14 @@ Generating weights...
 Estimating TFP_cd: att
 Callaway Sant'Anna (2021)
 
-                                                Number of obs     =     16,288
+                                                Number of obs     =     13,774
 
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         att |   .0424502   .0153625     2.76   0.006     .0123402    .0725601
+         att |   .0659518   .0220909     2.99   0.003     .0226544    .1092492
 ------------------------------------------------------------------------------
-  16,288
+  13,774
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -90,59 +81,14 @@ Generating weights...
 Estimating TFP_cd: att
 Callaway Sant'Anna (2021)
 
-                                                Number of obs     =     16,398
+                                                Number of obs     =     11,727
 
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         att |   .1064884   .0275182     3.87   0.000     .0525539     .160423
+         att |   .1194061   .0390856     3.05   0.002     .0427997    .1960125
 ------------------------------------------------------------------------------
-  16,398
-       panel variable:  frame_id_numeric (unbalanced)
-        time variable:  year, 1985 to 2018, but with gaps
-                delta:  1 unit
-Generating weights...
-Estimating TFP_cd: att
-Callaway Sant'Anna (2021)
-
-                                                Number of obs     =     11,293
-
-------------------------------------------------------------------------------
-             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         att |   .0348994   .0170842     2.04   0.041     .0014151    .0683837
-------------------------------------------------------------------------------
-  11,293
-       panel variable:  frame_id_numeric (unbalanced)
-        time variable:  year, 1985 to 2018, but with gaps
-                delta:  1 unit
-Generating weights...
-Estimating TFP_cd: att
-Callaway Sant'Anna (2021)
-
-                                                Number of obs     =     11,293
-
-------------------------------------------------------------------------------
-             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         att |   .0348994   .0170842     2.04   0.041     .0014151    .0683837
-------------------------------------------------------------------------------
-  11,293
-       panel variable:  frame_id_numeric (unbalanced)
-        time variable:  year, 1985 to 2018, but with gaps
-                delta:  1 unit
-Generating weights...
-Estimating TFP_cd: att
-Callaway Sant'Anna (2021)
-
-                                                Number of obs     =     11,408
-
-------------------------------------------------------------------------------
-             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         att |   .1066059   .0309359     3.45   0.001     .0459726    .1672391
-------------------------------------------------------------------------------
-  11,408
+  11,727
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -150,14 +96,14 @@ Generating weights...
 Estimating lnIK_0: att
 Callaway Sant'Anna (2021)
 
-                                                Number of obs     =      9,172
+                                                Number of obs     =      8,307
 
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         att |  -1.272876    .110811   -11.49   0.000    -1.490061    -1.05569
+         att |   .3670408    .165787     2.21   0.027     .0421042    .6919773
 ------------------------------------------------------------------------------
-  9,172
+  8,307
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -165,14 +111,14 @@ Generating weights...
 Estimating lnIK_0: att
 Callaway Sant'Anna (2021)
 
-                                                Number of obs     =      9,430
+                                                Number of obs     =      7,390
 
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         att |  -1.467995   .1028716   -14.27   0.000     -1.66962    -1.26637
+         att |   .3785744   .2137841     1.77   0.077    -.0404348    .7975837
 ------------------------------------------------------------------------------
-  9,430
+  7,390
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -180,59 +126,14 @@ Generating weights...
 Estimating lnIK_0: att
 Callaway Sant'Anna (2021)
 
-                                                Number of obs     =      9,975
+                                                Number of obs     =      6,232
 
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         att |  -1.837274   .2231559    -8.23   0.000    -2.274652   -1.399897
+         att |   .6912762    .266566     2.59   0.010     .1688164    1.213736
 ------------------------------------------------------------------------------
-  9,975
-       panel variable:  frame_id_numeric (unbalanced)
-        time variable:  year, 1985 to 2018, but with gaps
-                delta:  1 unit
-Generating weights...
-Estimating lnIK_0: att
-Callaway Sant'Anna (2021)
-
-                                                Number of obs     =      6,102
-
-------------------------------------------------------------------------------
-             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         att |  -1.472538    .106451   -13.83   0.000    -1.681178   -1.263898
-------------------------------------------------------------------------------
-  6,102
-       panel variable:  frame_id_numeric (unbalanced)
-        time variable:  year, 1985 to 2018, but with gaps
-                delta:  1 unit
-Generating weights...
-Estimating lnIK_0: att
-Callaway Sant'Anna (2021)
-
-                                                Number of obs     =      6,102
-
-------------------------------------------------------------------------------
-             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         att |  -1.472538    .106451   -13.83   0.000    -1.681178   -1.263898
-------------------------------------------------------------------------------
-  6,102
-       panel variable:  frame_id_numeric (unbalanced)
-        time variable:  year, 1985 to 2018, but with gaps
-                delta:  1 unit
-Generating weights...
-Estimating lnIK_0: att
-Callaway Sant'Anna (2021)
-
-                                                Number of obs     =      6,649
-
-------------------------------------------------------------------------------
-             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         att |  -1.773581    .228587    -7.76   0.000    -2.221603   -1.325559
-------------------------------------------------------------------------------
-  6,649
+  6,232
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -240,14 +141,14 @@ Generating weights...
 Estimating lnQh: att
 Callaway Sant'Anna (2021)
 
-                                                Number of obs     =     16,245
+                                                Number of obs     =     15,653
 
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         att |  -4.211004   .1505543   -27.97   0.000    -4.506084   -3.915923
+         att |   .1435182   .0611196     2.35   0.019      .023726    .2633105
 ------------------------------------------------------------------------------
-  16,245
+  15,653
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -255,14 +156,14 @@ Generating weights...
 Estimating lnQh: att
 Callaway Sant'Anna (2021)
 
-                                                Number of obs     =     16,275
+                                                Number of obs     =     13,741
 
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         att |  -5.130264   .2145438   -23.91   0.000    -5.550762   -4.709766
+         att |   .1783339   .0758386     2.35   0.019      .029693    .3269748
 ------------------------------------------------------------------------------
-  16,275
+  13,741
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -270,59 +171,14 @@ Generating weights...
 Estimating lnQh: att
 Callaway Sant'Anna (2021)
 
-                                                Number of obs     =     16,388
+                                                Number of obs     =     11,690
 
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         att |  -5.283143   .2552421   -20.70   0.000    -5.783409   -4.782878
+         att |    .347941   .1345711     2.59   0.010     .0841864    .6116955
 ------------------------------------------------------------------------------
-  16,388
-       panel variable:  frame_id_numeric (unbalanced)
-        time variable:  year, 1985 to 2018, but with gaps
-                delta:  1 unit
-Generating weights...
-Estimating lnQh: att
-Callaway Sant'Anna (2021)
-
-                                                Number of obs     =     11,242
-
-------------------------------------------------------------------------------
-             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         att |   -5.40898   .1949384   -27.75   0.000    -5.791052   -5.026908
-------------------------------------------------------------------------------
-  11,242
-       panel variable:  frame_id_numeric (unbalanced)
-        time variable:  year, 1985 to 2018, but with gaps
-                delta:  1 unit
-Generating weights...
-Estimating lnQh: att
-Callaway Sant'Anna (2021)
-
-                                                Number of obs     =     11,242
-
-------------------------------------------------------------------------------
-             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         att |   -5.40898   .1949384   -27.75   0.000    -5.791052   -5.026908
-------------------------------------------------------------------------------
-  11,242
-       panel variable:  frame_id_numeric (unbalanced)
-        time variable:  year, 1985 to 2018, but with gaps
-                delta:  1 unit
-Generating weights...
-Estimating lnQh: att
-Callaway Sant'Anna (2021)
-
-                                                Number of obs     =     11,357
-
-------------------------------------------------------------------------------
-             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         att |  -4.994315   .2801133   -17.83   0.000    -5.543326   -4.445303
-------------------------------------------------------------------------------
-  11,357
+  11,690
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -330,14 +186,14 @@ Generating weights...
 Estimating lnQhr: att
 Callaway Sant'Anna (2021)
 
-                                                Number of obs     =     16,245
+                                                Number of obs     =     15,653
 
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         att |  -.0917542   .0321502    -2.85   0.004    -.1547674    -.028741
+         att |   .1262185   .0285971     4.41   0.000     .0701692    .1822678
 ------------------------------------------------------------------------------
-  16,245
+  15,653
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -345,14 +201,14 @@ Generating weights...
 Estimating lnQhr: att
 Callaway Sant'Anna (2021)
 
-                                                Number of obs     =     16,275
+                                                Number of obs     =     13,741
 
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         att |  -.1120255   .0375005    -2.99   0.003     -.185525   -.0385259
+         att |   .1687336   .0368857     4.57   0.000      .096439    .2410282
 ------------------------------------------------------------------------------
-  16,275
+  13,741
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
@@ -360,67 +216,20 @@ Generating weights...
 Estimating lnQhr: att
 Callaway Sant'Anna (2021)
 
-                                                Number of obs     =     16,388
+                                                Number of obs     =     11,690
 
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         att |  -.1352047   .0625959    -2.16   0.031    -.2578905   -.0125189
+         att |   .2969782   .0593537     5.00   0.000     .1806472    .4133092
 ------------------------------------------------------------------------------
-  16,388
-       panel variable:  frame_id_numeric (unbalanced)
-        time variable:  year, 1985 to 2018, but with gaps
-                delta:  1 unit
-Generating weights...
-Estimating lnQhr: att
-Callaway Sant'Anna (2021)
-
-                                                Number of obs     =     11,242
-
-------------------------------------------------------------------------------
-             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         att |  -.1177746   .0391618    -3.01   0.003    -.1945303   -.0410189
-------------------------------------------------------------------------------
-  11,242
-       panel variable:  frame_id_numeric (unbalanced)
-        time variable:  year, 1985 to 2018, but with gaps
-                delta:  1 unit
-Generating weights...
-Estimating lnQhr: att
-Callaway Sant'Anna (2021)
-
-                                                Number of obs     =     11,242
-
-------------------------------------------------------------------------------
-             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         att |  -.1177746   .0391618    -3.01   0.003    -.1945303   -.0410189
-------------------------------------------------------------------------------
-  11,242
-       panel variable:  frame_id_numeric (unbalanced)
-        time variable:  year, 1985 to 2018, but with gaps
-                delta:  1 unit
-Generating weights...
-Estimating lnQhr: att
-Callaway Sant'Anna (2021)
-
-                                                Number of obs     =     11,357
-
-------------------------------------------------------------------------------
-             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         att |  -.1256069   .0659506    -1.90   0.057    -.2548677     .003654
-------------------------------------------------------------------------------
-  11,357
+  11,690
 
 . 
 . esttab model* using "`here'/output/table_attgt_loop_att.tex", mtitle b(3) se(3) replace
-(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_loop_att.tex not found)
 (output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_loop_att.tex)
 
 . esttab model* using "`here'/output/table_attgt_loop_att.txt", mtitle b(3) se(3) replace
-(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_loop_att.txt not found)
 (output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_loop_att.txt)
 
 . 
@@ -428,5 +237,5 @@ Callaway Sant'Anna (2021)
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_loop_att.log
   log type:  text
- closed on:   7 Jul 2021, 13:41:02
+ closed on:   8 Jul 2021, 18:05:30
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
