@@ -3212,3 +3212,156 @@ Callaway Sant'Anna (2021)
      event_5 |   .2179485   .0910129     2.39   0.017     .0395664    .3963305
 ------------------------------------------------------------------------------
 ```
+
+After extending the three treatments to the same date, the sample sizes are still different across the three regressions:
+```
+. attgt lnQL exporter if ever_foreign, treatment(foreign) aggregate(e) pre(3) post(5) reps(199) limitcontrol(foreig
+> n==0) notyet
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQL: event_m3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating lnQL: event_5
+Estimating exporter: event_m3
+Estimating exporter: event_m2
+Estimating exporter: event_m1
+Estimating exporter: event_1
+Estimating exporter: event_2
+Estimating exporter: event_3
+Estimating exporter: event_4
+Estimating exporter: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =     15,075
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQL         |
+    event_m3 |   .0158497   .0378522     0.42   0.675    -.0583392    .0900386
+    event_m2 |  -.0270264   .0337371    -0.80   0.423    -.0931499    .0390971
+    event_m1 |  -.0204552   .0235146    -0.87   0.384     -.066543    .0256326
+     event_1 |    .039672   .0278992     1.42   0.155    -.0150094    .0943534
+     event_2 |   .0604717    .038305     1.58   0.114    -.0146046    .1355481
+     event_3 |   .0750026   .0451519     1.66   0.097    -.0134935    .1634986
+     event_4 |   .0628377   .0545599     1.15   0.249    -.0440977     .169773
+     event_5 |   .0964842   .0606374     1.59   0.112    -.0223629    .2153312
+-------------+----------------------------------------------------------------
+exporter     |
+    event_m3 |  -.0010466   .0157082    -0.07   0.947    -.0318341    .0297408
+    event_m2 |   .0069453   .0158109     0.44   0.660    -.0240435     .037934
+    event_m1 |   -.015111   .0111682    -1.35   0.176    -.0370002    .0067782
+     event_1 |   .0240441   .0098068     2.45   0.014     .0048232    .0432651
+     event_2 |   .0271026    .012757     2.12   0.034     .0020993    .0521059
+     event_3 |   .0342722   .0162821     2.10   0.035     .0023599    .0661845
+     event_4 |   .0365793   .0182605     2.00   0.045     .0007893    .0723692
+     event_5 |   .0295091   .0197721     1.49   0.136    -.0092435    .0682618
+------------------------------------------------------------------------------
+
+. attgt lnQL exporter if ever_foreign, treatment(foreign_hire) aggregate(e) pre(3) post(5) reps(199) limitcontrol(f
+> oreign==0) notyet
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQL: event_m3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating lnQL: event_5
+Estimating exporter: event_m3
+Estimating exporter: event_m2
+Estimating exporter: event_m1
+Estimating exporter: event_1
+Estimating exporter: event_2
+Estimating exporter: event_3
+Estimating exporter: event_4
+Estimating exporter: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =     13,243
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQL         |
+    event_m3 |   .0192314   .0469034     0.41   0.682    -.0726976    .1111604
+    event_m2 |  -.0068544   .0424632    -0.16   0.872    -.0900808    .0763719
+    event_m1 |  -.0426886   .0309788    -1.38   0.168    -.1034059    .0180286
+     event_1 |   .0531561   .0367817     1.45   0.148    -.0189347    .1252469
+     event_2 |   .1020429   .0448133     2.28   0.023     .0142105    .1898752
+     event_3 |   .1493317   .0555853     2.69   0.007     .0403865     .258277
+     event_4 |   .1327253   .0620935     2.14   0.033     .0110242    .2544264
+     event_5 |   .1220504   .0679902     1.80   0.073     -.011208    .2553088
+-------------+----------------------------------------------------------------
+exporter     |
+    event_m3 |   -.001097   .0211534    -0.05   0.959    -.0425569    .0403628
+    event_m2 |   -.003308   .0192853    -0.17   0.864    -.0411064    .0344904
+    event_m1 |  -.0082117   .0137259    -0.60   0.550    -.0351139    .0186905
+     event_1 |   .0119809   .0205836     0.58   0.561    -.0283623    .0523241
+     event_2 |   .0214038   .0242765     0.88   0.378    -.0261773    .0689848
+     event_3 |   .0055558   .0315771     0.18   0.860    -.0563342    .0674458
+     event_4 |   .0417944    .022076     1.89   0.058    -.0014738    .0850625
+     event_5 |   .0173061   .0314108     0.55   0.582    -.0442579    .0788701
+------------------------------------------------------------------------------
+
+. attgt lnQL exporter if ever_foreign, treatment(has_expat_ceo) aggregate(e) pre(3) post(5) reps(199) limitcontrol(
+> foreign==0) notyet
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQL: event_m3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating lnQL: event_5
+Estimating exporter: event_m3
+Estimating exporter: event_m2
+Estimating exporter: event_m1
+Estimating exporter: event_1
+Estimating exporter: event_2
+Estimating exporter: event_3
+Estimating exporter: event_4
+Estimating exporter: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =     11,365
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQL         |
+    event_m3 |   .1070861   .0708401     1.51   0.131    -.0317579    .2459301
+    event_m2 |   .0940838   .0679322     1.38   0.166    -.0390608    .2272284
+    event_m1 |   .0381607   .0453286     0.84   0.400    -.0506817    .1270032
+     event_1 |   .1544569   .0548249     2.82   0.005      .047002    .2619117
+     event_2 |   .2805201   .0651787     4.30   0.000     .1527722     .408268
+     event_3 |   .3189763   .0736065     4.33   0.000     .1747102    .4632424
+     event_4 |    .320469   .0820518     3.91   0.000     .1596504    .4812876
+     event_5 |   .2816698    .090485     3.11   0.002     .1043225    .4590171
+-------------+----------------------------------------------------------------
+exporter     |
+    event_m3 |   .0036835   .0313296     0.12   0.906    -.0577214    .0650885
+    event_m2 |  -.0071205   .0274894    -0.26   0.796    -.0609987    .0467577
+    event_m1 |  -.0019276   .0216181    -0.09   0.929    -.0442983    .0404431
+     event_1 |   .0408308   .0199837     2.04   0.041     .0016634    .0799982
+     event_2 |   .0521637   .0259262     2.01   0.044     .0013493    .1029781
+     event_3 |   .0679728   .0277469     2.45   0.014     .0135899    .1223557
+     event_4 |   .0936137   .0307831     3.04   0.002     .0332798    .1539475
+     event_5 |   .0748032   .0316935     2.36   0.018     .0126851    .1369213
+------------------------------------------------------------------------------
+```
