@@ -3139,3 +3139,76 @@ lnQL         |
 ------------------------------------------------------------------------------
 
 ```
+
+# 2021-07-08
+## Test limitcontrol
+Seems to be working:
+```
+. use $here/temp/analysis_sample, clear
+
+. xtset frame_id_numeric year
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+
+. attgt lnQL if ever_foreign, treatment(has_expat_ceo) aggregate(e) pre(3) post(5) reps(50)
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQL: event_m3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating lnQL: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =     16,005
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m3 |   .0073052   .0527648     0.14   0.890    -.0961118    .1107222
+    event_m2 |   .0000324   .0564359     0.00   1.000    -.1105799    .1106446
+    event_m1 |   .0189854   .0265722     0.71   0.475    -.0330952    .0710659
+     event_1 |   .1651683   .0473078     3.49   0.000     .0724467    .2578899
+     event_2 |   .2545995   .0601153     4.24   0.000     .1367756    .3724234
+     event_3 |    .320761   .0641466     5.00   0.000     .1950359     .446486
+     event_4 |   .3008238   .0693261     4.34   0.000     .1649472    .4367004
+     event_5 |   .2768019   .0794813     3.48   0.000     .1210214    .4325823
+------------------------------------------------------------------------------
+
+. attgt lnQL if ever_foreign, treatment(has_expat_ceo) aggregate(e) pre(3) post(5) reps(50) limitcontrol(foreign==0
+> )
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQL: event_m3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating lnQL: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      9,976
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m3 |    .046455   .0581974     0.80   0.425    -.0676098    .1605198
+    event_m2 |   .0239283   .0576496     0.42   0.678    -.0890628    .1369194
+    event_m1 |   .0307391   .0265018     1.16   0.246    -.0212035    .0826818
+     event_1 |   .1511193   .0497022     3.04   0.002     .0537048    .2485339
+     event_2 |   .2326542   .0629239     3.70   0.000     .1093258    .3559827
+     event_3 |   .2818527   .0689853     4.09   0.000     .1466441    .4170614
+     event_4 |   .2420923   .0759454     3.19   0.001      .093242    .3909426
+     event_5 |   .2179485   .0910129     2.39   0.017     .0395664    .3963305
+------------------------------------------------------------------------------
+```
