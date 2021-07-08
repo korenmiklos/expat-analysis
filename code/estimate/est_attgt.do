@@ -16,7 +16,7 @@ count
 count if ef & time_foreign <= 5
 
 foreach var in foreign foreign_hire has_expat {
-		attgt lnQL lnK lnL exporter lnQ, treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet
+		attgt lnQL lnK lnL exporter lnQ, treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0)
 		count if e(sample) == 1
 		eststo model_`var', title("`var'")
 }
