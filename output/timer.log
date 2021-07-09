@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/timer.log
   log type:  text
- opened on:   8 Jul 2021, 18:15:18
+ opened on:   9 Jul 2021, 09:51:27
 
 . 
 . use "`here'/temp/analysis_sample.dta", clear
@@ -52,11 +52,68 @@ first_year_ |
 . mvencode first_year_foreign, mv(0)
 
 . 
+. timer on 1
+
+. attgt lnQ if year > 1990 & year < 2017, treatment(foreign) aggregate(att) reps(20) notyet
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQ: att
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =     14,425
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         att |   .1377482   .0449225     3.07   0.002     .0497017    .2257947
+------------------------------------------------------------------------------
+
+. timer off 1
+
+. 
+. timer on 2
+
+. csdid lnQ if year > 1990 & year < 2017, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) agg(simple) method(reg) notyet
+Units always treated found. These will be excluded
+(219 real changes made)
+Panel is not balanced
+Will use observations with Pair balanced (observed at t0 and t1)
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+.........................
+Difference-in-difference with Multiple Time Periods
+Outcome model  : regression adjustment
+Treatment model: none
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         ATT |   .1544542   .0433844     3.56   0.000     .0694222    .2394861
+------------------------------------------------------------------------------
+Control: Not yet Treated
+
+See Callaway and Sant'Anna (2021) for details
+
+. timer off 2
+
+. 
 . keep if year > 1990 & year < 2017
 (757 observations deleted)
 
 . 
-. timer on 1
+. timer on 3
 
 . attgt lnQ, treatment(foreign) aggregate(e) pre(4) post(4) reps(20) notyet
        panel variable:  frame_id_numeric (unbalanced)
@@ -88,10 +145,10 @@ Callaway Sant'Anna (2021)
      event_4 |   .1639624   .0691891     2.37   0.018     .0283542    .2995707
 ------------------------------------------------------------------------------
 
-. timer off 1
+. timer off 3
 
 . 
-. timer on 2
+. timer on 4
 
 . attgt lnQ, treatment(foreign) aggregate(e) pre(4) post(4) reps(20) notyet limitcontrol(foreign == 0)
        panel variable:  frame_id_numeric (unbalanced)
@@ -123,10 +180,10 @@ Callaway Sant'Anna (2021)
      event_4 |   .1639624   .0691891     2.37   0.018     .0283542    .2995707
 ------------------------------------------------------------------------------
 
-. timer off 2
+. timer off 4
 
 . 
-. timer on 3
+. timer on 5
 
 . csdid lnQ, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) method(reg) notyet //saverif("csdid_example") replace
 Units always treated found. These will be excluded
@@ -903,10 +960,10 @@ Event Study:Dynamic effects
          T+4 |   .1836955   .0731511     2.51   0.012     .0403219     .327069
 ------------------------------------------------------------------------------
 
-. timer off 3
+. timer off 5
 
 . 
-. timer on 4
+. timer on 6
 
 . attgt lnQ, treatment(foreign) aggregate(att) reps(20) notyet
        panel variable:  frame_id_numeric (unbalanced)
@@ -924,10 +981,10 @@ Callaway Sant'Anna (2021)
          att |   .1377482   .0449225     3.07   0.002     .0497017    .2257947
 ------------------------------------------------------------------------------
 
-. timer off 4
+. timer off 6
 
 . 
-. timer on 5
+. timer on 7
 
 . attgt lnQ, treatment(foreign) aggregate(att) reps(20) notyet limitcontrol(foreign == 0)
        panel variable:  frame_id_numeric (unbalanced)
@@ -945,10 +1002,10 @@ Callaway Sant'Anna (2021)
          att |   .1377482   .0449225     3.07   0.002     .0497017    .2257947
 ------------------------------------------------------------------------------
 
-. timer off 5
+. timer off 7
 
 . 
-. timer on 6
+. timer on 8
 
 . csdid lnQ, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) method(reg) notyet //wboot saverif("csdid_example") replace
 Units always treated found. These will be excluded
@@ -1716,10 +1773,10 @@ Average Treatment Effect on Treated
          ATT |   .1544542   .0433844     3.56   0.000     .0694222    .2394861
 ------------------------------------------------------------------------------
 
-. timer off 6
+. timer off 8
 
 . 
-. timer on 7
+. timer on 9
 
 . csdid lnQ, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) agg(simple) method(reg) notyet //wboot saverif("csdid_example") replace
 Units always treated found. These will be excluded
@@ -1752,10 +1809,10 @@ Control: Not yet Treated
 
 See Callaway and Sant'Anna (2021) for details
 
-. timer off 7
+. timer off 9
 
 . 
-. timer on 8
+. timer on 10
 
 . csdid lnQ, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) agg(simple) method(reg) notyet wboot //saverif("csdid_example") replace
 Units always treated found. These will be excluded
@@ -1789,10 +1846,10 @@ Control: Not yet Treated
 
 See Callaway and Sant'Anna (2021) for details
 
-. timer off 8
+. timer off 10
 
 . 
-. timer on 9
+. timer on 11
 
 . csdid lnQ, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) method(reg) notyet //wboot saverif("csdid_example") replace
 Units always treated found. These will be excluded
@@ -2577,65 +2634,77 @@ Event Study:Dynamic effects
          T+4 |   .1836955   .0731511     2.51   0.012     .0403219     .327069
 ------------------------------------------------------------------------------
 
-. timer off 9
+. timer off 11
 
 . 
 . di "comparisons"
 comparisons
 
-. di "attgt - event time 4 year window"
-attgt - event time 4 year window
-
-. timer list 1
-   1:     12.07 /        1 =      12.0680
-
-. di "attgt - event time 4 year window with limitsample"
-attgt - event time 4 year window with limitsample
-
-. timer list 2
-   2:     13.06 /        1 =      13.0640
-
-. di "csdid - event time 4 year window"
-csdid - event time 4 year window
-
-. timer list 3
-   3:    165.95 /        1 =     165.9520
-
 . di "attgt - att"
 attgt - att
 
-. timer list 4
-   4:     17.77 /        1 =      17.7660
-
-. di "attgt - att with limitsample"
-attgt - att with limitsample
-
-. timer list 5
-   5:     17.38 /        1 =      17.3760
-
-. di "csdid - att (estat method)"
-csdid - att (estat method)
-
-. timer list 6
-   6:    163.75 /        1 =     163.7450
+. timer list 1
+   1:     19.16 /        1 =      19.1580
 
 . di "csdid - att (agg method)"
 csdid - att (agg method)
 
+. timer list 2
+   2:    160.97 /        1 =     160.9750
+
+. di "attgt - event time 4 year window"
+attgt - event time 4 year window
+
+. timer list 3
+   3:     12.16 /        1 =      12.1570
+
+. di "attgt - event time 4 year window with limitsample"
+attgt - event time 4 year window with limitsample
+
+. timer list 4
+   4:     12.11 /        1 =      12.1140
+
+. di "csdid - event time 4 year window"
+csdid - event time 4 year window
+
+. timer list 5
+   5:    166.29 /        1 =     166.2890
+
+. di "attgt - att"
+attgt - att
+
+. timer list 6
+   6:     18.38 /        1 =      18.3760
+
+. di "attgt - att with limitsample"
+attgt - att with limitsample
+
 . timer list 7
-   7:    149.60 /        1 =     149.6000
+   7:     17.56 /        1 =      17.5640
+
+. di "csdid - att (estat method)"
+csdid - att (estat method)
+
+. timer list 8
+   8:    158.68 /        1 =     158.6830
+
+. di "csdid - att (agg method)"
+csdid - att (agg method)
+
+. timer list 9
+   9:    142.50 /        1 =     142.5020
 
 . di "csdid - att (agg method with wboot)"
 csdid - att (agg method with wboot)
 
-. timer list 8
-   8:    147.23 /        1 =     147.2320
+. timer list 10
+  10:    125.42 /        1 =     125.4150
 
 . di "csdid - att and event time (estat method)"
 csdid - att and event time (estat method)
 
-. timer list 9
-   9:    155.55 /        1 =     155.5540
+. timer list 11
+  11:    160.40 /        1 =     160.3980
 
 . 
 . *csdid lnQ if ever_foreign, ivar(frame_id_numeric) time(year) gvar(first_year_foreign) method(reg) notyet
@@ -2655,5 +2724,5 @@ csdid - att and event time (estat method)
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/timer.log
   log type:  text
- closed on:   8 Jul 2021, 18:29:22
+ closed on:   9 Jul 2021, 10:08:04
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
