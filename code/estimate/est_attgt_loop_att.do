@@ -7,9 +7,6 @@ log using "`here'/output/est_attgt_loop_att", text replace
 
 use "`here'/temp/analysis_sample.dta"
 
-replace foreign_hire = 1 if ever_foreign_hire == 1 & foreign == 1
-replace has_expat_ceo = 1 if ever_expat_ceo == 1 & foreign == 1
-
 rename ever_foreign ef
 rename ever_foreign_hire efh
 rename has_expat_ceo has_expat
@@ -24,12 +21,10 @@ gen lnQh = ln(Qh)
 gen lnQhr = lnQ - lnQh
 
 foreach depvar in TFP_cd lnIK_0 lnQh lnQhr {
-	foreach sample in ef efh {
-		foreach var in foreign foreign_hire has_expat {
-			attgt `depvar' if `sample' & time_foreign <= 5, treatment(`var') aggregate(att) reps(20) notyet
-			count if e(sample) == 1
-			eststo model_`sample'`var'`depvar', title("`depvar' `sample' `var'")
-		}
+	foreach var in foreign foreign_hire has_expat {
+		attgt `depvar', treatment(`var') aggregate(att) reps(20) notyet limitcontrol(foreign == 0)
+		count if e(sample) == 1
+		eststo model_`sample'`var'`depvar', title("`depvar' `sample' `var'")
 	}
 }
 

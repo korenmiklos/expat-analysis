@@ -2,17 +2,10 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_att5.log
   log type:  text
- opened on:   6 Jul 2021, 17:44:59
+ opened on:   8 Jul 2021, 18:12:46
 
 . 
 . use "`here'/temp/analysis_sample.dta", clear
-
-. 
-. replace foreign_hire = 1 if ever_foreign_hire == 1 & foreign == 1
-(1,544 real changes made)
-
-. replace has_expat_ceo = 1 if ever_expat_ceo == 1 & foreign == 1
-(2,378 real changes made)
 
 . 
 . rename ever_foreign ef
@@ -22,27 +15,121 @@
 . rename has_expat_ceo has_expat
 
 . 
-. foreach sample in ef efh {
-  2.         foreach var in foreign foreign_hire has_expat {
-  3.                 attgt lnQL lnK lnL exporter lnQ if `sample' & time_foreign <= 5, treatment(`var') aggregate(att) pre(5) post(5) reps(20) notyet
-  4.                 count if e(sample) == 1
-  5.                 eststo model_`sample'`var', title("`sample' `var'")
-  6.         }
-  7. }
+. foreach var in foreign foreign_hire has_expat {
+  2.         attgt lnQL lnK lnL exporter lnQ, treatment(`var') aggregate(att) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0)
+  3.         count if e(sample) == 1
+  4.         eststo model_`sample'`var', title("`sample' `var'")
+  5. }
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
 Generating weights...
-unknown function *if!missing()
-r(133);
+Estimating lnQL: att
+Estimating lnK: att
+Estimating lnL: att
+Estimating exporter: att
+Estimating lnQ: att
+Callaway Sant'Anna (2021)
 
-end of do-file
+                                                Number of obs     =     15,097
 
-r(133);
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQL         |
+         att |   .0827846   .0363257     2.28   0.023     .0115876    .1539816
+-------------+----------------------------------------------------------------
+lnK          |
+         att |  -.0723124   .0594752    -1.22   0.224    -.1888816    .0442568
+-------------+----------------------------------------------------------------
+lnL          |
+         att |   .0743893   .0374881     1.98   0.047     .0009141    .1478646
+-------------+----------------------------------------------------------------
+exporter     |
+         att |   .0278472   .0149322     1.86   0.062    -.0014193    .0571137
+-------------+----------------------------------------------------------------
+lnQ          |
+         att |   .1571739   .0492271     3.19   0.001     .0606906    .2536573
+------------------------------------------------------------------------------
+  15,097
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQL: att
+Estimating lnK: att
+Estimating lnL: att
+Estimating exporter: att
+Estimating lnQ: att
+Callaway Sant'Anna (2021)
 
+                                                Number of obs     =     13,343
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQL         |
+         att |   .1342125   .0402318     3.34   0.001     .0553597    .2130654
+-------------+----------------------------------------------------------------
+lnK          |
+         att |  -.0430713   .0658057    -0.65   0.513    -.1720481    .0859055
+-------------+----------------------------------------------------------------
+lnL          |
+         att |   .0990637   .0370774     2.67   0.008     .0263933    .1717341
+-------------+----------------------------------------------------------------
+exporter     |
+         att |    .032786   .0185719     1.77   0.078    -.0036143    .0691864
+-------------+----------------------------------------------------------------
+lnQ          |
+         att |   .2332763   .0582785     4.00   0.000     .1190524    .3475001
+------------------------------------------------------------------------------
+  13,343
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQL: att
+Estimating lnK: att
+Estimating lnL: att
+Estimating exporter: att
+Estimating lnQ: att
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =     11,506
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+lnQL         |
+         att |   .2972663   .0440339     6.75   0.000     .2109614    .3835712
+-------------+----------------------------------------------------------------
+lnK          |
+         att |    .125837   .0793351     1.59   0.113    -.0296568    .2813309
+-------------+----------------------------------------------------------------
+lnL          |
+         att |   .1489923   .0505105     2.95   0.003     .0499935    .2479912
+-------------+----------------------------------------------------------------
+exporter     |
+         att |   .0623585   .0211962     2.94   0.003     .0208147    .1039022
+-------------+----------------------------------------------------------------
+lnQ          |
+         att |   .4462587   .0767301     5.82   0.000     .2958704     .596647
+------------------------------------------------------------------------------
+  11,506
+
+. 
+. esttab model* using "`here'/output/table_attgt_att5.tex", mtitle b(3) se(3) replace
+(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_att5.tex not found)
+(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_att5.tex)
+
+. esttab model* using "`here'/output/table_attgt_att5.txt", mtitle b(3) se(3) replace
+(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_att5.txt not found)
+(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_att5.txt)
+
+. 
 . log close
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_att5.log
   log type:  text
- closed on:   6 Jul 2021, 17:50:28
+ closed on:   8 Jul 2021, 18:13:18
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
