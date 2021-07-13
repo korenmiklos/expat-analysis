@@ -66,8 +66,25 @@ program attgt, eclass
 	if ("`weightprefix'" != "") {
 		foreach g in `gs' {
 			confirm numeric variable `weightprefix'`g'
-			assert `weightprefix'`g' >= 0 if `touse'
-			* FIXME: check weights do not vary within i over t
+			capture assert `weightprefix'`g' >= 0 if `touse', fast
+			if _rc {
+				display in red "Weights must be non-negative."
+				error 9
+			}
+			tempvar i1 i2
+			* check that weight does not vary within ivar
+			quietly egen `i1' = group(`i')
+			quietly egen `i2' = group(`i' `weightprefix'`g')
+			quietly summarize `i1'
+			local m1 = r(max)
+			quietly summarize `i2'
+			local m2 = r(max)
+			capture assert `m1' == `m2'
+			if _rc {
+				display in red "Weights cannot vary within `i'."
+				error 9
+			}
+			drop `i1' `i2'
 		}
 	}
 	else {
