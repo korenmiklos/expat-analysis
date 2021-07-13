@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_loop.log
   log type:  text
- opened on:  13 Jul 2021, 18:08:04
+ opened on:  13 Jul 2021, 18:19:26
 
 . 
 . use "`here'/temp/analysis_sample.dta"
@@ -47,8 +47,8 @@
 .         foreach var in foreign_hire_only has_expat {
   8.                 attgt `depvar' if efh, treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0)
   9.                 count if e(sample) == 1
- 10.                 eststo mh`var', title("efh `var'")
- 11. }
+ 10.                 eststo mh`var'`depvar', title("efh `depvar' `var'")
+ 11.         }
  12. }
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
@@ -723,5 +723,5 @@ Callaway Sant'Anna (2021)
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_loop.log
   log type:  text
- closed on:  13 Jul 2021, 18:12:00
+ closed on:  13 Jul 2021, 18:24:06
 --------------------------------------------------------------------------------------------------------------------------------------------------------------

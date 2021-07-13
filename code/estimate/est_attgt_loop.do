@@ -30,8 +30,8 @@ foreach depvar in TFP_cd lnIK_0 lnQh lnQhr {
 	foreach var in foreign_hire_only has_expat {
 		attgt `depvar' if efh, treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0)
 		count if e(sample) == 1
-		eststo mh`var', title("efh `var'")
-}
+		eststo mh`var'`depvar', title("efh `depvar' `var'")
+	}
 }
 
 esttab m* using "`here'/output/table_attgt_loop.tex", mtitle b(3) se(3) replace
