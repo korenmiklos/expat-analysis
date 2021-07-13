@@ -21,14 +21,20 @@ gen lnQh = ln(Qh)
 gen lnQhr = lnQ - lnQh
 
 foreach depvar in TFP_cd lnIK_0 lnQh lnQhr {
-	foreach var in foreign foreign_hire has_expat {
+	foreach var in foreign_only foreign_hire_only has_expat {
 		attgt `depvar', treatment(`var') aggregate(att) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0)
 		count if e(sample) == 1
-		eststo model_`sample'`var'`depvar', title("`depvar' `sample' `var'")
+		eststo m`var'`depvar', title("`depvar' `var'")
+	}
+	
+	foreach var in foreign_hire_only has_expat {
+		attgt `depvar' if efh, treatment(`var') aggregate(att) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0)
+		count if e(sample) == 1
+		eststo mh`var'`depvar', title("efh `depvar' `var'")
 	}
 }
 
-esttab model* using "`here'/output/table_attgt_loop_att5.tex", mtitle b(3) se(3) replace
-esttab model* using "`here'/output/table_attgt_loop_att5.txt", mtitle b(3) se(3) replace
+esttab m* using "`here'/output/table_attgt_loop_att5.tex", mtitle b(3) se(3) replace
+esttab m* using "`here'/output/table_attgt_loop_att5.txt", mtitle b(3) se(3) replace
 
 log close
