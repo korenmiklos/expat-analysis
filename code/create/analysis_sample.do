@@ -158,6 +158,12 @@ count if has_expat_ceo
 replace foreign_hire = 1 if ever_foreign_hire == 1 & foreign == 1
 replace has_expat_ceo = 1 if ever_expat == 1 & foreign == 1
 
+gen foreign_only = foreign & !foreign_hire
+gen foreign_hire_only = foreign_hire & !has_expat_ceo
+
+tab foreign_only foreign_hire
+tab foreign_hire_only has_expat_ceo
+
 compress
 save "`here'/temp/analysis_sample.dta", replace
 log close

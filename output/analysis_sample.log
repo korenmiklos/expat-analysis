@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- opened on:  13 Jul 2021, 14:37:38
+ opened on:  13 Jul 2021, 17:06:24
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -689,6 +689,32 @@ end of do-file
 (389 real changes made)
 
 . 
+. gen foreign_only = foreign & !foreign_hire
+
+. gen foreign_hire_only = foreign_hire & !has_expat_ceo
+
+. 
+. tab foreign_only foreign_hire
+
+foreign_on |     foreign_hire
+        ly |         0          1 |     Total
+-----------+----------------------+----------
+         0 |     6,693      3,291 |     9,984 
+         1 |     1,517          0 |     1,517 
+-----------+----------------------+----------
+     Total |     8,210      3,291 |    11,501 
+
+. tab foreign_hire_only has_expat_ceo
+
+foreign_hi |     has_expat_ceo
+   re_only |         0          1 |     Total
+-----------+----------------------+----------
+         0 |     8,210      2,063 |    10,273 
+         1 |     1,228          0 |     1,228 
+-----------+----------------------+----------
+     Total |     9,438      2,063 |    11,501 
+
+. 
 . compress
   variable year was float now int
   variable minyear was float now int
@@ -777,6 +803,8 @@ end of do-file
   variable foreign_hire_expat_1e5 was float now byte
   variable ever_expat was float now byte
   variable ever_foreign_hire was float now byte
+  variable foreign_only was float now byte
+  variable foreign_hire_only was float now byte
   variable originalid was double now long
   variable sales was double now long
   variable tanass was double now long
@@ -786,7 +814,7 @@ end of do-file
   variable immat was double now long
   variable final_netgep was double now long
   variable country_all_ceo was str12 now str9
-  (3,335,290 bytes saved)
+  (3,404,296 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
 file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/analysis_sample.dta saved
@@ -795,5 +823,5 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/analy
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- closed on:  13 Jul 2021, 14:37:59
+ closed on:  13 Jul 2021, 17:06:46
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
