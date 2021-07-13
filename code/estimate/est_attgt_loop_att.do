@@ -28,7 +28,7 @@ foreach depvar in TFP_cd lnIK_0 lnQh lnQhr {
 	}
 	
 	foreach var in foreign_hire_only has_expat {
-		attgt `depvar' if efh & year >= 2012, treatment(`var') aggregate(att) reps(20) notyet limitcontrol(foreign == 0)
+		attgt `depvar' if efh, treatment(`var') aggregate(att) reps(20) notyet limitcontrol(foreign == 0)
 		count if e(sample) == 1
 		eststo mh`var'`depvar', title("efh `depvar' `var'")
 	}
