@@ -1,33 +1,33 @@
 {
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-\begin{tabular}{l*{3}{c}}
+\begin{tabular}{l*{5}{c}}
 \hline\hline
-            &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}\\
-            &\multicolumn{1}{c}{ foreign}&\multicolumn{1}{c}{ foreign\_hire}&\multicolumn{1}{c}{ has\_expat}\\
+            &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}&\multicolumn{1}{c}{(5)}\\
+            &\multicolumn{1}{c}{foreign\_only}&\multicolumn{1}{c}{foreign\_hire\_only}&\multicolumn{1}{c}{has\_expat}&\multicolumn{1}{c}{efh foreign\_hire\_only}&\multicolumn{1}{c}{efh has\_expat}\\
 \hline
-lnQL        &                     &                     &                     \\
-att         &       0.088\sym{*}  &       0.143\sym{***}&       0.301\sym{***}\\
-            &     (0.039)         &     (0.041)         &     (0.047)         \\
+lnQL        &                     &                     &                     &                     &                     \\
+att         &       0.002         &      -0.060         &       0.319\sym{***}&      -0.052         &       0.316\sym{***}\\
+            &     (0.069)         &     (0.066)         &     (0.090)         &     (0.060)         &     (0.059)         \\
 \hline
-lnK         &                     &                     &                     \\
-att         &      -0.079         &      -0.052         &       0.128         \\
-            &     (0.061)         &     (0.067)         &     (0.085)         \\
+lnK         &                     &                     &                     &                     &                     \\
+att         &       0.042         &      -0.077         &       0.246\sym{*}  &      -0.046         &       0.263\sym{***}\\
+            &     (0.086)         &     (0.121)         &     (0.104)         &     (0.114)         &     (0.067)         \\
 \hline
-lnL         &                     &                     &                     \\
-att         &       0.077         &       0.094\sym{*}  &       0.153\sym{**} \\
-            &     (0.042)         &     (0.042)         &     (0.056)         \\
+lnL         &                     &                     &                     &                     &                     \\
+att         &       0.120\sym{*}  &       0.170         &       0.203\sym{**} &       0.201\sym{*}  &       0.239\sym{***}\\
+            &     (0.047)         &     (0.088)         &     (0.075)         &     (0.086)         &     (0.070)         \\
 \hline
-exporter    &                     &                     &                     \\
-att         &       0.030         &       0.034         &       0.065\sym{**} \\
-            &     (0.015)         &     (0.019)         &     (0.021)         \\
+exporter    &                     &                     &                     &                     &                     \\
+att         &       0.004         &       0.012         &       0.064         &       0.028         &       0.078\sym{**} \\
+            &     (0.016)         &     (0.020)         &     (0.034)         &     (0.025)         &     (0.024)         \\
 \hline
-lnQ         &                     &                     &                     \\
-att         &       0.166\sym{**} &       0.238\sym{***}&       0.454\sym{***}\\
-            &     (0.055)         &     (0.064)         &     (0.082)         \\
+lnQ         &                     &                     &                     &                     &                     \\
+att         &       0.122         &       0.110         &       0.522\sym{***}&       0.149         &       0.555\sym{***}\\
+            &     (0.081)         &     (0.103)         &     (0.144)         &     (0.094)         &     (0.098)         \\
 \hline
-\(N\)       &       15771         &       13851         &       11793         \\
+\(N\)       &        7693         &        7424         &        8250         &        5037         &        5858         \\
 \hline\hline
-\multicolumn{4}{l}{\footnotesize Standard errors in parentheses}\\
-\multicolumn{4}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
+\multicolumn{6}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{6}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
 \end{tabular}
 }
