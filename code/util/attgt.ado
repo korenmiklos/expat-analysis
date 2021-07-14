@@ -68,20 +68,20 @@ program attgt, eclass
 			confirm numeric variable `weightprefix'`g'
 			capture assert `weightprefix'`g' >= 0 if `touse', fast
 			if _rc {
-				display in red "Weights must be non-negative."
+				display in red "Weights must be non-negative. Offending weight:  `weightprefix'`g'"
 				error 9
 			}
 			tempvar i1 i2
 			* check that weight does not vary within ivar
-			quietly egen `i1' = group(`i')
-			quietly egen `i2' = group(`i' `weightprefix'`g')
+			quietly egen `i1' = group(`i') if `touse'
+			quietly egen `i2' = group(`i' `weightprefix'`g') if `touse'
 			quietly summarize `i1'
 			local m1 = r(max)
 			quietly summarize `i2'
 			local m2 = r(max)
 			capture assert `m1' == `m2'
 			if _rc {
-				display in red "Weights cannot vary within `i'."
+				display in red "Weights cannot vary within `i'. Offending weight:  `weightprefix'`g'"
 				error 9
 			}
 			drop `i1' `i2'
