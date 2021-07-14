@@ -1,0 +1,74 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_weights.log
+  log type:  text
+ opened on:  14 Jul 2021, 17:21:03
+
+. 
+. use "/`here'/external/pscore.dta", clear
+
+. drop treat_match
+
+. reshape wide weight_match, i(frame_id_numeric) j(year)
+(note: j = 1989 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011 2012 2013)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                     3493   ->     705
+Number of variables                   3   ->      26
+j variable (25 values)             year   ->   (dropped)
+xij variables:
+                           weight_match   ->   weight_match1989 weight_match1990 ... weight_match2013
+-----------------------------------------------------------------------------
+
+. tempfile weights
+
+. save `weights'
+file /srv/sandbox/zavecz/St318813.000001 saved
+
+. 
+. use "`here'/temp/analysis_sample.dta", clear
+
+. 
+. rename ever_foreign ef
+
+. rename ever_foreign_hire efh
+
+. rename has_expat_ceo has_expat
+
+. 
+. count
+  11,501
+
+. count if ef & time_foreign <= 5
+  11,501
+
+. 
+. merge m:1 frame_id_numeric using `weights', keep (1 3) nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                         5,763
+        from master                     5,763  
+        from using                          0  
+
+    matched                             5,738  
+    -----------------------------------------
+
+. 
+. foreach var in foreign_only foreign_hire_only has_expat {
+  2.                 attgt lnQL lnK lnL exporter lnQ, treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0) weightprefix(wei
+> ght_match)
+  3.                 count if e(sample) == 1
+  4.                 eststo m`var', title("`var'")
+  5. }
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2018, but with gaps
+                delta:  1 unit
+Weights cannot vary within frame_id_numeric.
+r(9);
+
+end of do-file
+
+r(9);
+
