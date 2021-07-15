@@ -10,7 +10,8 @@ use "/`here'/external/pscore.dta", clear
 drop treat_match
 *mvencode weight_match, mv(0)
 reshape wide weight_match, i(frame_id_numeric) j(year)
-mvencode weight_match*, mv(0)
+*mvencode weight_match*, mv(0)
+duplicates report frame_id_numeric
 tempfile weights
 save `weights'
 
@@ -24,6 +25,14 @@ count
 count if ef & time_foreign <= 5
 
 merge m:1 frame_id_numeric using `weights', keep (1 3) nogen
+
+drop if year > 2013
+
+*duplicates tag frame_id_numeric weight_match1989, gen(dup)
+*replace dup = 1 if dup >=1 & dup != .
+*tab dup, miss
+
+mvencode weight_match*, mv(0)
 
 foreach var in foreign_only foreign_hire_only has_expat {
 		attgt lnQL lnK lnL exporter lnQ, treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0) weightprefix(weight_match)
