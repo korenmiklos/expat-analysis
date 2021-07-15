@@ -1,5 +1,5 @@
 program attgt, eclass
-	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 999)] [post(integer 999)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(string)] [weightprefix(string)]
+	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 999)] [post(integer 999)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(string)] [weightprefix(string)] [treatment2(varname)]
 	marksample touse
 
 	* boostrap
@@ -13,6 +13,17 @@ program attgt, eclass
 	if ("`aggregate'"=="att") {
 		* if we only compute ATT, no need to check pre-trends
 		local pre 0
+	}
+
+	if ("`treatment2'" != "") {
+		capture assert "`limitcontrol'`tyet'" == ""
+		if _rc {
+			display in red "limitcontrol and notyet incompatible with treatment2"
+			error 9
+		}
+		tempvar group2
+		quietly egen `group2' = min(cond(`treatment2', `time'-1, .)) if `touse', by(`i')
+		* FIXME: range of group2 may not be the same as group. what to do with these treatment times?
 	}
 
 	* limitcontrol option limits control observations to satisfy "if `limitcontrol'" both in g and in t
@@ -124,9 +135,15 @@ program attgt, eclass
 				local control missing(`group') & (`timing') & (`lc')
 			}
 			else {
-				* not yet treated
-				* QUESTION: > or >=
-				local control (missing(`group') | (`group' > max(`g', `t'))) & (`timing') & (`lc')
+				if "`treatment2'" != "" {
+					local control (`group2'==`g') & (`timing')
+
+				}
+				else {
+					* not yet treated
+					* QUESTION: > or >=
+					local control (missing(`group') | (`group' > max(`g', `t'))) & (`timing') & (`lc')
+				}
 			}
 			quietly count if `treated' & `touse'
 			local n_treated = r(N)/2
