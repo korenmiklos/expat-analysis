@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- opened on:  13 Jul 2021, 17:06:24
+ opened on:  15 Jul 2021, 15:34:17
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -715,6 +715,16 @@ foreign_hi |     has_expat_ceo
      Total |     9,438      2,063 |    11,501 
 
 . 
+. drop foreign_e5 foreign_e4 foreign_e3 foreign_e2 foreign_e1 foreigne0 foreigne1 foreigne2 foreigne3 foreigne4 foreigne5 foreign_hire_local_1 foreign_hire_ex
+> pat_1 foreign_hire_local_2 foreign_hire_expat_2 foreign_hire_local_3 foreign_hire_expat_3 foreign_hire_local_4 foreign_hire_expat_4 foreign_hire_local_5 for
+> eign_hire_expat_5 foreign_hire_local_6 foreign_hire_expat_6 foreign_hire_local_7 foreign_hire_expat_7 foreign_hire_local_8 foreign_hire_expat_8 foreign_hire
+> _local_9 foreign_hire_expat_9 foreign_hire_local_10 foreign_hire_expat_10 foreign_hire_local_11 foreign_hire_expat_11 foreign_hire_local_3plus foreign_hire_
+> expat_3plus foreign_hire_LL_2 foreign_hire_LE_2 foreign_hire_EL_2 foreign_hire_EE_2 foreign_hire_local_1_e5 foreign_hire_local_1_e4 foreign_hire_local_1_e3 
+> foreign_hire_local_1_e2 foreign_hire_local_1_e1 foreign_hire_local_1e0 foreign_hire_local_1e1 foreign_hire_local_1e2 foreign_hire_local_1e3 foreign_hire_loc
+> al_1e4 foreign_hire_local_1e5 foreign_hire_expat_1_e5 foreign_hire_expat_1_e4 foreign_hire_expat_1_e3 foreign_hire_expat_1_e2 foreign_hire_expat_1_e1 foreig
+> n_hire_expat_1e0 foreign_hire_expat_1e1 foreign_hire_expat_1e2 foreign_hire_expat_1e3 foreign_hire_expat_1e4 foreign_hire_expat_1e5
+
+. 
 . compress
   variable year was float now int
   variable minyear was float now int
@@ -731,17 +741,6 @@ foreign_hi |     has_expat_ceo
   variable diff was float now byte
   variable first_year_foreign was float now int
   variable time_foreign was float now byte
-  variable foreign_e5 was float now byte
-  variable foreign_e4 was float now byte
-  variable foreign_e3 was float now byte
-  variable foreign_e2 was float now byte
-  variable foreign_e1 was float now byte
-  variable foreigne0 was float now byte
-  variable foreigne1 was float now byte
-  variable foreigne2 was float now byte
-  variable foreigne3 was float now byte
-  variable foreigne4 was float now byte
-  variable foreigne5 was float now byte
   variable first_year_firm was float now int
   variable ceo_spell_hire was float now byte
   variable last_ceo_spell_do was float now byte
@@ -749,58 +748,8 @@ foreign_hi |     has_expat_ceo
   variable foreign_hire_insider was float now byte
   variable expat_alone was float now byte
   variable ceo_spell_foreign was float now byte
-  variable foreign_hire_local_1 was float now byte
-  variable foreign_hire_expat_1 was float now byte
-  variable foreign_hire_local_2 was float now byte
-  variable foreign_hire_expat_2 was float now byte
-  variable foreign_hire_local_3 was float now byte
-  variable foreign_hire_expat_3 was float now byte
-  variable foreign_hire_local_4 was float now byte
-  variable foreign_hire_expat_4 was float now byte
-  variable foreign_hire_local_5 was float now byte
-  variable foreign_hire_expat_5 was float now byte
-  variable foreign_hire_local_6 was float now byte
-  variable foreign_hire_expat_6 was float now byte
-  variable foreign_hire_local_7 was float now byte
-  variable foreign_hire_expat_7 was float now byte
-  variable foreign_hire_local_8 was float now byte
-  variable foreign_hire_expat_8 was float now byte
-  variable foreign_hire_local_9 was float now byte
-  variable foreign_hire_expat_9 was float now byte
-  variable foreign_hire_local_10 was float now byte
-  variable foreign_hire_expat_10 was float now byte
-  variable foreign_hire_local_11 was float now byte
-  variable foreign_hire_expat_11 was float now byte
-  variable foreign_hire_local_3plus was float now byte
-  variable foreign_hire_expat_3plus was float now byte
-  variable foreign_hire_LL_2 was float now byte
-  variable foreign_hire_LE_2 was float now byte
-  variable foreign_hire_EL_2 was float now byte
-  variable foreign_hire_EE_2 was float now byte
   variable time_foreign_hire_local was float now byte
   variable time_foreign_hire_expat was float now byte
-  variable foreign_hire_local_1_e5 was float now byte
-  variable foreign_hire_local_1_e4 was float now byte
-  variable foreign_hire_local_1_e3 was float now byte
-  variable foreign_hire_local_1_e2 was float now byte
-  variable foreign_hire_local_1_e1 was float now byte
-  variable foreign_hire_local_1e0 was float now byte
-  variable foreign_hire_local_1e1 was float now byte
-  variable foreign_hire_local_1e2 was float now byte
-  variable foreign_hire_local_1e3 was float now byte
-  variable foreign_hire_local_1e4 was float now byte
-  variable foreign_hire_local_1e5 was float now byte
-  variable foreign_hire_expat_1_e5 was float now byte
-  variable foreign_hire_expat_1_e4 was float now byte
-  variable foreign_hire_expat_1_e3 was float now byte
-  variable foreign_hire_expat_1_e2 was float now byte
-  variable foreign_hire_expat_1_e1 was float now byte
-  variable foreign_hire_expat_1e0 was float now byte
-  variable foreign_hire_expat_1e1 was float now byte
-  variable foreign_hire_expat_1e2 was float now byte
-  variable foreign_hire_expat_1e3 was float now byte
-  variable foreign_hire_expat_1e4 was float now byte
-  variable foreign_hire_expat_1e5 was float now byte
   variable ever_expat was float now byte
   variable ever_foreign_hire was float now byte
   variable foreign_only was float now byte
@@ -814,7 +763,7 @@ foreign_hi |     has_expat_ceo
   variable immat was double now long
   variable final_netgep was double now long
   variable country_all_ceo was str12 now str9
-  (3,404,296 bytes saved)
+  (1,299,613 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
 file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/analysis_sample.dta saved
@@ -823,5 +772,5 @@ file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//temp/analy
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/analysis_sample.log
   log type:  text
- closed on:  13 Jul 2021, 17:06:46
+ closed on:  15 Jul 2021, 15:34:38
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
