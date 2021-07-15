@@ -8,7 +8,9 @@ log using "`here'/output/est_attgt_weights", text replace
 
 use "/`here'/external/pscore.dta", clear
 drop treat_match
+*mvencode weight_match, mv(0)
 reshape wide weight_match, i(frame_id_numeric) j(year)
+mvencode weight_match*, mv(0)
 tempfile weights
 save `weights'
 

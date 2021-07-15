@@ -2,13 +2,14 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_weights.log
   log type:  text
- opened on:  14 Jul 2021, 17:21:03
+ opened on:  15 Jul 2021, 10:07:03
 
 . 
 . use "/`here'/external/pscore.dta", clear
 
 . drop treat_match
 
+. *mvencode weight_match, mv(0)
 . reshape wide weight_match, i(frame_id_numeric) j(year)
 (note: j = 1989 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011 2012 2013)
 
@@ -21,10 +22,37 @@ xij variables:
                            weight_match   ->   weight_match1989 weight_match1990 ... weight_match2013
 -----------------------------------------------------------------------------
 
+. mvencode weight_match*, mv(0)
+weight_~1989: 683 missing values recoded
+weight_~1990: 615 missing values recoded
+weight_~1991: 547 missing values recoded
+weight_~1992: 504 missing values recoded
+weight_~1993: 491 missing values recoded
+weight_~1994: 456 missing values recoded
+weight_~1995: 466 missing values recoded
+weight_~1996: 477 missing values recoded
+weight_~1997: 470 missing values recoded
+weight_~1998: 482 missing values recoded
+weight_~1999: 485 missing values recoded
+weight_~2000: 493 missing values recoded
+weight_~2001: 511 missing values recoded
+weight_~2002: 543 missing values recoded
+weight_~2003: 560 missing values recoded
+weight_~2004: 575 missing values recoded
+weight_~2005: 593 missing values recoded
+weight_~2006: 600 missing values recoded
+weight_~2007: 612 missing values recoded
+weight_~2008: 626 missing values recoded
+weight_~2009: 656 missing values recoded
+weight_~2010: 660 missing values recoded
+weight_~2011: 664 missing values recoded
+weight_~2012: 673 missing values recoded
+weight_~2013: 690 missing values recoded
+
 . tempfile weights
 
 . save `weights'
-file /srv/sandbox/zavecz/St318813.000001 saved
+file /srv/sandbox/zavecz/St493301.000001 saved
 
 . 
 . use "`here'/temp/analysis_sample.dta", clear
@@ -65,7 +93,7 @@ file /srv/sandbox/zavecz/St318813.000001 saved
        panel variable:  frame_id_numeric (unbalanced)
         time variable:  year, 1985 to 2018, but with gaps
                 delta:  1 unit
-Weights cannot vary within frame_id_numeric.
+Weights cannot vary within frame_id_numeric. Offending weight:  weight_match1989
 r(9);
 
 end of do-file
