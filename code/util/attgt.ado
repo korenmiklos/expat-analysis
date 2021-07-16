@@ -1,5 +1,5 @@
 program attgt, eclass
-	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 999)] [post(integer 999)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(string)] [weightprefix(string)]
+	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 999)] [post(integer 999)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(string)] [weightprefix(string)] [treatment2(varname)]
 	marksample touse
 
 	* boostrap
@@ -13,6 +13,17 @@ program attgt, eclass
 	if ("`aggregate'"=="att") {
 		* if we only compute ATT, no need to check pre-trends
 		local pre 0
+	}
+
+	if ("`treatment2'" != "") {
+		capture assert "`limitcontrol'`tyet'" == ""
+		if _rc {
+			display in red "limitcontrol and notyet incompatible with treatment2"
+			error 9
+		}
+		tempvar group2
+		quietly egen `group2' = min(cond(`treatment2', `time'-1, .)) if `touse', by(`i')
+		* FIXME: range of group2 may not be the same as group. what to do with these treatment times?
 	}
 
 	* limitcontrol option limits control observations to satisfy "if `limitcontrol'" both in g and in t
@@ -66,8 +77,25 @@ program attgt, eclass
 	if ("`weightprefix'" != "") {
 		foreach g in `gs' {
 			confirm numeric variable `weightprefix'`g'
-			assert `weightprefix'`g' >= 0 if `touse'
-			* FIXME: check weights do not vary within i over t
+			capture assert `weightprefix'`g' >= 0 if `touse', fast
+			if _rc {
+				display in red "Weights must be non-negative. Offending weight:  `weightprefix'`g'"
+				error 9
+			}
+			tempvar i1 i2
+			* check that weight does not vary within ivar
+			quietly egen `i1' = group(`i') if `touse'
+			quietly egen `i2' = group(`i' `weightprefix'`g') if `touse'
+			quietly summarize `i1'
+			local m1 = r(max)
+			quietly summarize `i2'
+			local m2 = r(max)
+			capture assert `m1' == `m2'
+			if _rc {
+				display in red "Weights cannot vary within `i'. Offending weight:  `weightprefix'`g'"
+				error 9
+			}
+			drop `i1' `i2'
 		}
 	}
 	else {
@@ -107,9 +135,15 @@ program attgt, eclass
 				local control missing(`group') & (`timing') & (`lc')
 			}
 			else {
-				* not yet treated
-				* QUESTION: > or >=
-				local control (missing(`group') | (`group' > max(`g', `t'))) & (`timing') & (`lc')
+				if "`treatment2'" != "" {
+					local control (`group2'==`g') & (`timing')
+
+				}
+				else {
+					* not yet treated
+					* QUESTION: > or >=
+					local control (missing(`group') | (`group' > max(`g', `t'))) & (`timing') & (`lc')
+				}
 			}
 			quietly count if `treated' & `touse'
 			local n_treated = r(N)/2

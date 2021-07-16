@@ -1,0 +1,805 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_loop_weightstr.log
+  log type:  text
+ opened on:  16 Jul 2021, 15:49:55
+
+. 
+. use "/`here'/external/pscore_trends.dta", clear
+
+. drop treat_match
+
+. *mvencode weight_match, mv(0)
+. reshape wide weight_match, i(frame_id_numeric) j(year)
+(note: j = 1989 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011 2012 2013)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                     2724   ->     511
+Number of variables                   3   ->      25
+j variable (24 values)             year   ->   (dropped)
+xij variables:
+                           weight_match   ->   weight_match1989 weight_match1991 ... weight_match2013
+-----------------------------------------------------------------------------
+
+. gen weight_match1990 = 0
+
+. *mvencode weight_match*, mv(0)
+. duplicates report frame_id_numeric
+
+Duplicates in terms of frame_id_numeric
+
+--------------------------------------
+   copies | observations       surplus
+----------+---------------------------
+        1 |          511             0
+--------------------------------------
+
+. tempfile weights
+
+. save `weights'
+file /srv/sandbox/zavecz/St807224.000001 saved
+
+. 
+. use "`here'/temp/analysis_sample.dta"
+
+. 
+. rename ever_foreign ef
+
+. rename ever_foreign_hire efh
+
+. rename has_expat_ceo has_expat
+
+. 
+. gen lnIK = ln(immat_18)
+(5,130 missing values generated)
+
+. gen lnIK_0 = lnIK
+(5,130 missing values generated)
+
+. replace lnIK_0 = 0 if immat_18 == 0
+(857 real changes made)
+
+. 
+. replace export_18 = 0 if export_18 == .
+(1,473 real changes made)
+
+. gen Qh = sales_18 - export_18
+
+. gen lnQh = ln(Qh)
+(122 missing values generated)
+
+. gen lnQhr = lnQ - lnQh
+(122 missing values generated)
+
+. 
+. merge m:1 frame_id_numeric using `weights', keep (1 3) nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                         6,809
+        from master                     6,809  
+        from using                          0  
+
+    matched                             4,692  
+    -----------------------------------------
+
+. drop if year > 2013
+(611 observations deleted)
+
+. mvencode weight_match*, mv(0) override
+weight_~1989: 10633 missing values recoded
+weight_~1991: 10043 missing values recoded
+weight_~1992: 9854 missing values recoded
+weight_~1993: 9312 missing values recoded
+weight_~1994: 8995 missing values recoded
+weight_~1995: 8834 missing values recoded
+weight_~1996: 8839 missing values recoded
+weight_~1997: 8833 missing values recoded
+weight_~1998: 8749 missing values recoded
+weight_~1999: 8831 missing values recoded
+weight_~2000: 8960 missing values recoded
+weight_~2001: 9042 missing values recoded
+weight_~2002: 9189 missing values recoded
+weight_~2003: 9429 missing values recoded
+weight_~2004: 9727 missing values recoded
+weight_~2005: 9850 missing values recoded
+weight_~2006: 10013 missing values recoded
+weight_~2007: 10101 missing values recoded
+weight_~2008: 10188 missing values recoded
+weight_~2009: 10376 missing values recoded
+weight_~2010: 10504 missing values recoded
+weight_~2011: 10574 missing values recoded
+weight_~2012: 10764 missing values recoded
+weight_~2013: 10804 missing values recoded
+weight_~1990: 6439 missing values recoded
+
+. 
+. foreach depvar in TFP_cd lnIK_0 lnQh lnQhr {
+  2.         foreach var in foreign_only foreign_hire_only has_expat {
+  3.                 attgt `depvar', treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0) weightprefix(weight_match)
+  4.                 count if e(sample) == 1
+  5.                 eststo m`var'`depvar', title("`depvar' `var'")
+  6.         }
+  7.         
+.         foreach var in foreign_hire_only has_expat {
+  8.                 attgt `depvar' if efh, treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0) weightprefix(weight_match)
+  9.                 count if e(sample) == 1
+ 10.                 eststo mh`var'`depvar', title("efh `depvar' `var'")
+ 11.         }
+ 12. }
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating TFP_cd: event_m5
+Estimating TFP_cd: event_m4
+Estimating TFP_cd: event_m3
+Estimating TFP_cd: event_m2
+Estimating TFP_cd: event_m1
+Estimating TFP_cd: event_1
+Estimating TFP_cd: event_2
+Estimating TFP_cd: event_3
+Estimating TFP_cd: event_4
+Estimating TFP_cd: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      5,508
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .0609587   .0607722     1.00   0.316    -.0581526    .1800699
+    event_m4 |  -.0018462   .0335237    -0.06   0.956    -.0675513     .063859
+    event_m3 |   .0017673   .0378132     0.05   0.963    -.0723453    .0758799
+    event_m2 |  -.1266063   .0523196    -2.42   0.016    -.2291509   -.0240618
+    event_m1 |  -.0088115   .0300401    -0.29   0.769    -.0676889    .0500659
+     event_1 |   .0372429   .0366061     1.02   0.309    -.0345036    .1089895
+     event_2 |   .0293678   .0409283     0.72   0.473    -.0508502    .1095858
+     event_3 |   .0020963   .0578809     0.04   0.971    -.1113482    .1155409
+     event_4 |  -.0032389   .0639084    -0.05   0.960    -.1284971    .1220193
+     event_5 |  -.0104044   .0596189    -0.17   0.861    -.1272552    .1064464
+------------------------------------------------------------------------------
+  5,508
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating TFP_cd: event_m5
+Estimating TFP_cd: event_m4
+Estimating TFP_cd: event_m3
+Estimating TFP_cd: event_m2
+Estimating TFP_cd: event_m1
+Estimating TFP_cd: event_1
+Estimating TFP_cd: event_2
+Estimating TFP_cd: event_3
+Estimating TFP_cd: event_4
+Estimating TFP_cd: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      4,387
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .1003671   .0682715     1.47   0.142    -.0334425    .2341768
+    event_m4 |   .1278401   .0714711     1.79   0.074    -.0122407     .267921
+    event_m3 |   .0740337    .044708     1.66   0.098    -.0135925    .1616598
+    event_m2 |  -.0749813   .0493301    -1.52   0.129    -.1716665    .0217038
+    event_m1 |  -.1097253   .0436447    -2.51   0.012    -.1952673   -.0241833
+     event_1 |   .0411355   .0496544     0.83   0.407    -.0561854    .1384565
+     event_2 |   .0520033   .0422583     1.23   0.218    -.0308214     .134828
+     event_3 |   .0775499   .0470519     1.65   0.099    -.0146701    .1697699
+     event_4 |   .0148285   .0482985     0.31   0.759    -.0798348    .1094918
+     event_5 |  -.0479722   .0651176    -0.74   0.461    -.1756003    .0796559
+------------------------------------------------------------------------------
+  4,387
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating TFP_cd: event_m5
+Estimating TFP_cd: event_m4
+Estimating TFP_cd: event_m3
+Estimating TFP_cd: event_m2
+Estimating TFP_cd: event_m1
+Estimating TFP_cd: event_1
+Estimating TFP_cd: event_2
+Estimating TFP_cd: event_3
+Estimating TFP_cd: event_4
+Estimating TFP_cd: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      4,774
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .1330652   .0404191     3.29   0.001     .0538452    .2122853
+    event_m4 |   .1443357   .0451026     3.20   0.001     .0559362    .2327353
+    event_m3 |    .102766   .0388514     2.65   0.008     .0266187    .1789133
+    event_m2 |   .0716389   .0275922     2.60   0.009     .0175591    .1257186
+    event_m1 |  -.0148772   .0296682    -0.50   0.616    -.0730258    .0432715
+     event_1 |    .116184   .0418026     2.78   0.005     .0342523    .1981156
+     event_2 |   .1322307   .0464739     2.85   0.004     .0411436    .2233178
+     event_3 |    .164106   .0547952     2.99   0.003     .0567093    .2715026
+     event_4 |   .1627039   .0463284     3.51   0.000     .0719018     .253506
+     event_5 |   .1390206   .0578674     2.40   0.016     .0256026    .2524387
+------------------------------------------------------------------------------
+  4,774
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating TFP_cd: event_m5
+Estimating TFP_cd: event_m4
+Estimating TFP_cd: event_m3
+Estimating TFP_cd: event_m2
+Estimating TFP_cd: event_m1
+Estimating TFP_cd: event_1
+Estimating TFP_cd: event_2
+Estimating TFP_cd: event_3
+Estimating TFP_cd: event_4
+Estimating TFP_cd: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      4,354
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .1015896   .0770035     1.32   0.187    -.0493345    .2525136
+    event_m4 |   .1282849   .0767613     1.67   0.095    -.0221644    .2787343
+    event_m3 |   .0749588   .0555095     1.35   0.177    -.0338378    .1837555
+    event_m2 |  -.0737676   .0659951    -1.12   0.264    -.2031157    .0555804
+    event_m1 |  -.1087057   .0401866    -2.71   0.007      -.18747   -.0299413
+     event_1 |   .0400208   .0359682     1.11   0.266    -.0304755    .1105172
+     event_2 |   .0498788   .0476776     1.05   0.295    -.0435675    .1433251
+     event_3 |     .07331   .0511743     1.43   0.152    -.0269898    .1736098
+     event_4 |   .0115792   .0608197     0.19   0.849    -.1076252    .1307837
+     event_5 |  -.0522443   .0766463    -0.68   0.495    -.2024682    .0979796
+------------------------------------------------------------------------------
+  4,354
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating TFP_cd: event_m5
+Estimating TFP_cd: event_m4
+Estimating TFP_cd: event_m3
+Estimating TFP_cd: event_m2
+Estimating TFP_cd: event_m1
+Estimating TFP_cd: event_1
+Estimating TFP_cd: event_2
+Estimating TFP_cd: event_3
+Estimating TFP_cd: event_4
+Estimating TFP_cd: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      4,741
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .1441471   .0494765     2.91   0.004     .0471749    .2411194
+    event_m4 |    .149534   .0498817     3.00   0.003     .0517677    .2473004
+    event_m3 |   .1052003   .0382944     2.75   0.006     .0301446    .1802559
+    event_m2 |   .0745697   .0294812     2.53   0.011     .0167876    .1323517
+    event_m1 |  -.0124965   .0427417    -0.29   0.770    -.0962687    .0712757
+     event_1 |   .1151612   .0447483     2.57   0.010      .027456    .2028663
+     event_2 |   .1298165   .0468653     2.77   0.006     .0379621    .2216709
+     event_3 |   .1598595   .0513059     3.12   0.002     .0593018    .2604172
+     event_4 |   .1602663   .0565183     2.84   0.005     .0494924    .2710401
+     event_5 |    .135628   .0580503     2.34   0.019     .0218516    .2494044
+------------------------------------------------------------------------------
+  4,741
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnIK_0: event_m5
+Estimating lnIK_0: event_m4
+Estimating lnIK_0: event_m3
+Estimating lnIK_0: event_m2
+Estimating lnIK_0: event_m1
+Estimating lnIK_0: event_1
+Estimating lnIK_0: event_2
+Estimating lnIK_0: event_3
+Estimating lnIK_0: event_4
+Estimating lnIK_0: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      3,013
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |  -.7953398   .5731101    -1.39   0.165    -1.918615    .3279354
+    event_m4 |  -1.349101   .5261912    -2.56   0.010    -2.380417   -.3177849
+    event_m3 |  -.6804416    .465822    -1.46   0.144    -1.593436    .2325527
+    event_m2 |   .0499581   .2392194     0.21   0.835    -.4189034    .5188196
+    event_m1 |   -.083027    .178315    -0.47   0.641     -.432518    .2664639
+     event_1 |   .6526611   .2020141     3.23   0.001     .2567207    1.048602
+     event_2 |   .5984887   .2940114     2.04   0.042     .0222369    1.174741
+     event_3 |   .0900654   .4412362     0.20   0.838    -.7747417    .9548724
+     event_4 |   .3540739   .4996392     0.71   0.479    -.6252009    1.333349
+     event_5 |    .603886   .6933456     0.87   0.384    -.7550464    1.962818
+------------------------------------------------------------------------------
+  3,013
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnIK_0: event_m5
+Estimating lnIK_0: event_m4
+Estimating lnIK_0: event_m3
+Estimating lnIK_0: event_m2
+Estimating lnIK_0: event_m1
+Estimating lnIK_0: event_1
+Estimating lnIK_0: event_2
+Estimating lnIK_0: event_3
+Estimating lnIK_0: event_4
+Estimating lnIK_0: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      2,454
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .5649999   .6056623     0.93   0.351    -.6220765    1.752076
+    event_m4 |   .0211894   .4250869     0.05   0.960    -.8119655    .8543443
+    event_m3 |   .2827112   .3763155     0.75   0.452    -.4548536    1.020276
+    event_m2 |   .4018648   .2853186     1.41   0.159    -.1573493    .9610789
+    event_m1 |   .3213417   .3032961     1.06   0.289    -.2731077    .9157911
+     event_1 |   .8793724   .3064418     2.87   0.004     .2787576    1.479987
+     event_2 |   .9023199   .4060593     2.22   0.026     .1064584    1.698181
+     event_3 |  -.2506045   .4209008    -0.60   0.552    -1.075555    .5743459
+     event_4 |     -.0276   .4787777    -0.06   0.954    -.9659871    .9107872
+     event_5 |   .2542176   .7079115     0.36   0.720    -1.133263    1.641699
+------------------------------------------------------------------------------
+  2,454
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnIK_0: event_m5
+Estimating lnIK_0: event_m4
+Estimating lnIK_0: event_m3
+Estimating lnIK_0: event_m2
+Estimating lnIK_0: event_m1
+Estimating lnIK_0: event_1
+Estimating lnIK_0: event_2
+Estimating lnIK_0: event_3
+Estimating lnIK_0: event_4
+Estimating lnIK_0: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      2,448
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   -.145367   .5542213    -0.26   0.793    -1.231621    .9408867
+    event_m4 |   .4879821   .5119618     0.95   0.341    -.5154447    1.491409
+    event_m3 |   .1801325   .4438575     0.41   0.685    -.6898123    1.050077
+    event_m2 |  -.1532464   .3019712    -0.51   0.612    -.7450991    .4386064
+    event_m1 |   -.217787   .2181601    -1.00   0.318    -.6453729    .2097989
+     event_1 |   1.307916   .3552907     3.68   0.000     .6115587    2.004273
+     event_2 |   1.360429   .4219867     3.22   0.001     .5333499    2.187507
+     event_3 |   1.091137   .5264388     2.07   0.038     .0593364    2.122938
+     event_4 |   1.476223   .6096995     2.42   0.015     .2812337    2.671212
+     event_5 |   1.305631   .6953919     1.88   0.060    -.0573125    2.668574
+------------------------------------------------------------------------------
+  2,448
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnIK_0: event_m5
+Estimating lnIK_0: event_m4
+Estimating lnIK_0: event_m3
+Estimating lnIK_0: event_m2
+Estimating lnIK_0: event_m1
+Estimating lnIK_0: event_1
+Estimating lnIK_0: event_2
+Estimating lnIK_0: event_3
+Estimating lnIK_0: event_4
+Estimating lnIK_0: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      2,436
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |    .565346   .4680594     1.21   0.227    -.3520335    1.482725
+    event_m4 |   .0270421   .3955061     0.07   0.945    -.7481357    .8022198
+    event_m3 |   .2815896   .3541847     0.80   0.427    -.4125997     .975779
+    event_m2 |   .3981014   .3279164     1.21   0.225    -.2446029    1.040806
+    event_m1 |   .3172872   .3005209     1.06   0.291    -.2717229    .9062973
+     event_1 |     .87008   .3409215     2.55   0.011     .2018862    1.538274
+     event_2 |   .8763213   .3910585     2.24   0.025     .1098607    1.642782
+     event_3 |  -.2842537   .3475705    -0.82   0.413    -.9654793    .3969719
+     event_4 |  -.0541732   .4327728    -0.13   0.900    -.9023923     .794046
+     event_5 |   .2542698   .5627192     0.45   0.651    -.8486395    1.357179
+------------------------------------------------------------------------------
+  2,436
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnIK_0: event_m5
+Estimating lnIK_0: event_m4
+Estimating lnIK_0: event_m3
+Estimating lnIK_0: event_m2
+Estimating lnIK_0: event_m1
+Estimating lnIK_0: event_1
+Estimating lnIK_0: event_2
+Estimating lnIK_0: event_3
+Estimating lnIK_0: event_4
+Estimating lnIK_0: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      2,430
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |  -.1447411     .60574    -0.24   0.811     -1.33197    1.042487
+    event_m4 |   .5147458   .4958514     1.04   0.299    -.4571051    1.486597
+    event_m3 |   .2218523   .3976766     0.56   0.577    -.5575794    1.001284
+    event_m2 |  -.1373468   .3201745    -0.43   0.668    -.7648773    .4901838
+    event_m1 |   -.201218   .2151981    -0.94   0.350    -.6229986    .2205625
+     event_1 |   1.300508   .1910542     6.81   0.000     .9260491    1.674968
+     event_2 |   1.342632   .2463157     5.45   0.000      .859862    1.825402
+     event_3 |   1.068118   .2754273     3.88   0.000     .5282906    1.607946
+     event_4 |   1.462994   .4841603     3.02   0.003     .5140574    2.411931
+     event_5 |   1.327571   .5912811     2.25   0.025     .1686818    2.486461
+------------------------------------------------------------------------------
+  2,430
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQh: event_m5
+Estimating lnQh: event_m4
+Estimating lnQh: event_m3
+Estimating lnQh: event_m2
+Estimating lnQh: event_m1
+Estimating lnQh: event_1
+Estimating lnQh: event_2
+Estimating lnQh: event_3
+Estimating lnQh: event_4
+Estimating lnQh: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      5,480
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |  -.0852501   .1481118    -0.58   0.565    -.3755439    .2050437
+    event_m4 |  -.1895401   .1711631    -1.11   0.268    -.5250137    .1459335
+    event_m3 |  -.1863238   .1505078    -1.24   0.216    -.4813137    .1086662
+    event_m2 |  -.2951694   .1619915    -1.82   0.068    -.6126668    .0223281
+    event_m1 |   .0236403    .108617     0.22   0.828    -.1892452    .2365257
+     event_1 |   .3091722   .0652376     4.74   0.000     .1813089    .4370355
+     event_2 |   .4169505   .0797243     5.23   0.000     .2606936    .5732073
+     event_3 |   .3261571   .1070586     3.05   0.002     .1163262     .535988
+     event_4 |   .4212351   .1414793     2.98   0.003     .1439407    .6985295
+     event_5 |   .4557831   .1335269     3.41   0.001     .1940752    .7174909
+------------------------------------------------------------------------------
+  5,480
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQh: event_m5
+Estimating lnQh: event_m4
+Estimating lnQh: event_m3
+Estimating lnQh: event_m2
+Estimating lnQh: event_m1
+Estimating lnQh: event_1
+Estimating lnQh: event_2
+Estimating lnQh: event_3
+Estimating lnQh: event_4
+Estimating lnQh: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      4,358
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .0223397   .2034523     0.11   0.913    -.3764194    .4210988
+    event_m4 |   -.052573   .1472873    -0.36   0.721    -.3412508    .2361049
+    event_m3 |   .0139728   .1442639     0.10   0.923    -.2687793    .2967249
+    event_m2 |  -.3757388   .2127074    -1.77   0.077    -.7926376    .0411601
+    event_m1 |  -.2903662   .1249435    -2.32   0.020    -.5352509   -.0454815
+     event_1 |   .1958968   .1187682     1.65   0.099    -.0368847    .4286782
+     event_2 |   .2695716    .117285     2.30   0.022     .0396973    .4994459
+     event_3 |    .259394   .1161213     2.23   0.025     .0318005    .4869875
+     event_4 |   .2344982   .1208205     1.94   0.052    -.0023056     .471302
+     event_5 |   .1253405   .1708284     0.73   0.463    -.2094771    .4601581
+------------------------------------------------------------------------------
+  4,358
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQh: event_m5
+Estimating lnQh: event_m4
+Estimating lnQh: event_m3
+Estimating lnQh: event_m2
+Estimating lnQh: event_m1
+Estimating lnQh: event_1
+Estimating lnQh: event_2
+Estimating lnQh: event_3
+Estimating lnQh: event_4
+Estimating lnQh: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      4,703
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .7059882   .2064297     3.42   0.001     .3013934    1.110583
+    event_m4 |   .6058569   .1825726     3.32   0.001     .2480211    .9636926
+    event_m3 |   .4544547   .1368288     3.32   0.001     .1862751    .7226343
+    event_m2 |   .4729467   .1155728     4.09   0.000     .2464282    .6994652
+    event_m1 |   .1565326   .0848116     1.85   0.065    -.0096952    .3227603
+     event_1 |   .4659539   .1458238     3.20   0.001     .1801444    .7517633
+     event_2 |   .6013851   .1709665     3.52   0.000     .2662969    .9364732
+     event_3 |   .5363407   .1864259     2.88   0.004     .1709526    .9017289
+     event_4 |    .635155   .2063916     3.08   0.002     .2306349    1.039675
+     event_5 |   .6990634   .2248207     3.11   0.002      .258423    1.139704
+------------------------------------------------------------------------------
+  4,703
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQh: event_m5
+Estimating lnQh: event_m4
+Estimating lnQh: event_m3
+Estimating lnQh: event_m2
+Estimating lnQh: event_m1
+Estimating lnQh: event_1
+Estimating lnQh: event_2
+Estimating lnQh: event_3
+Estimating lnQh: event_4
+Estimating lnQh: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      4,325
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .0238094   .1958005     0.12   0.903    -.3599525    .4075712
+    event_m4 |  -.0524223   .1691022    -0.31   0.757    -.3838566     .279012
+    event_m3 |   .0138603   .1219753     0.11   0.910    -.2252069    .2529274
+    event_m2 |  -.3752792   .2218004    -1.69   0.091    -.8099999    .0594415
+    event_m1 |  -.2901609   .1192352    -2.43   0.015    -.5238576   -.0564641
+     event_1 |   .1937785   .1267915     1.53   0.126    -.0547284    .4422853
+     event_2 |   .2652514   .1184032     2.24   0.025     .0331853    .4973174
+     event_3 |   .2528163   .1353546     1.87   0.062    -.0124738    .5181064
+     event_4 |   .2303329   .1610777     1.43   0.153    -.0853736    .5460394
+     event_5 |    .119496   .2020697     0.59   0.554    -.2765533    .5155453
+------------------------------------------------------------------------------
+  4,325
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQh: event_m5
+Estimating lnQh: event_m4
+Estimating lnQh: event_m3
+Estimating lnQh: event_m2
+Estimating lnQh: event_m1
+Estimating lnQh: event_1
+Estimating lnQh: event_2
+Estimating lnQh: event_3
+Estimating lnQh: event_4
+Estimating lnQh: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      4,670
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .7226864   .2928227     2.47   0.014     .1487644    1.296608
+    event_m4 |   .6164863    .223995     2.75   0.006     .1774642    1.055508
+    event_m3 |    .460561   .1646525     2.80   0.005     .1378481    .7832739
+    event_m2 |   .4760648   .1588542     3.00   0.003     .1647162    .7874134
+    event_m1 |   .1596494   .0694447     2.30   0.022     .0235403    .2957585
+     event_1 |   .4638521   .1226828     3.78   0.000     .2233982     .704306
+     event_2 |   .5968836    .157517     3.79   0.000      .288156    .9056112
+     event_3 |   .5300497   .2056738     2.58   0.010     .1269365     .933163
+     event_4 |   .6312179   .2243314     2.81   0.005     .1915365    1.070899
+     event_5 |   .6921929   .2024372     3.42   0.001     .2954233    1.088962
+------------------------------------------------------------------------------
+  4,670
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQhr: event_m5
+Estimating lnQhr: event_m4
+Estimating lnQhr: event_m3
+Estimating lnQhr: event_m2
+Estimating lnQhr: event_m1
+Estimating lnQhr: event_1
+Estimating lnQhr: event_2
+Estimating lnQhr: event_3
+Estimating lnQhr: event_4
+Estimating lnQhr: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      5,480
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .1285534    .101534     1.27   0.205    -.0704497    .3275564
+    event_m4 |   .1184634   .1028176     1.15   0.249    -.0830555    .3199823
+    event_m3 |   .0791853   .0789451     1.00   0.316    -.0755442    .2339148
+    event_m2 |   .0196155   .0824589     0.24   0.812    -.1420009     .181232
+    event_m1 |   .0236944   .0582507     0.41   0.684    -.0904749    .1378638
+     event_1 |     .00983   .0392246     0.25   0.802    -.0670488    .0867088
+     event_2 |   .0228436   .0511318     0.45   0.655    -.0773729    .1230601
+     event_3 |   .0396013   .0585067     0.68   0.498    -.0750698    .1542724
+     event_4 |   .0047889   .0541032     0.09   0.929    -.1012514    .1108293
+     event_5 |   .0589949   .0760527     0.78   0.438    -.0900656    .2080554
+------------------------------------------------------------------------------
+  5,480
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQhr: event_m5
+Estimating lnQhr: event_m4
+Estimating lnQhr: event_m3
+Estimating lnQhr: event_m2
+Estimating lnQhr: event_m1
+Estimating lnQhr: event_1
+Estimating lnQhr: event_2
+Estimating lnQhr: event_3
+Estimating lnQhr: event_4
+Estimating lnQhr: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      4,358
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .2419421   .1435697     1.69   0.092    -.0394493    .5233334
+    event_m4 |   .3006275   .1308204     2.30   0.022     .0442243    .5570308
+    event_m3 |   .2041308   .0979465     2.08   0.037     .0121593    .3961024
+    event_m2 |   .1239557   .0743695     1.67   0.096    -.0218058    .2697172
+    event_m1 |   .0513953   .0724488     0.71   0.478    -.0906017    .1933924
+     event_1 |   .0520631   .0271818     1.92   0.055    -.0012122    .1053384
+     event_2 |   .0727173   .0331206     2.20   0.028     .0078021    .1376325
+     event_3 |   .0981319   .0391486     2.51   0.012     .0214021    .1748617
+     event_4 |   .0325068   .0425793     0.76   0.445     -.050947    .1159607
+     event_5 |  -.0052101   .0612982    -0.08   0.932    -.1253523    .1149322
+------------------------------------------------------------------------------
+  4,358
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQhr: event_m5
+Estimating lnQhr: event_m4
+Estimating lnQhr: event_m3
+Estimating lnQhr: event_m2
+Estimating lnQhr: event_m1
+Estimating lnQhr: event_1
+Estimating lnQhr: event_2
+Estimating lnQhr: event_3
+Estimating lnQhr: event_4
+Estimating lnQhr: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      4,703
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |  -.1382036   .1737541    -0.80   0.426    -.4787554    .2023481
+    event_m4 |  -.0177361   .1082849    -0.16   0.870    -.2299706    .1944985
+    event_m3 |  -.0577047   .0830533    -0.69   0.487    -.2204861    .1050768
+    event_m2 |   .0364829   .1092989     0.33   0.739    -.1777391    .2507049
+    event_m1 |  -.0350566   .0582934    -0.60   0.548    -.1493095    .0791964
+     event_1 |   .3592118   .0787611     4.56   0.000     .2048428    .5135807
+     event_2 |   .3181244   .0715439     4.45   0.000      .177901    .4583478
+     event_3 |   .3150857   .0599706     5.25   0.000     .1975455     .432626
+     event_4 |    .298432   .0782194     3.82   0.000     .1451247    .4517392
+     event_5 |   .4101777   .1036673     3.96   0.000     .2069936    .6133618
+------------------------------------------------------------------------------
+  4,703
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQhr: event_m5
+Estimating lnQhr: event_m4
+Estimating lnQhr: event_m3
+Estimating lnQhr: event_m2
+Estimating lnQhr: event_m1
+Estimating lnQhr: event_1
+Estimating lnQhr: event_2
+Estimating lnQhr: event_3
+Estimating lnQhr: event_4
+Estimating lnQhr: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      4,325
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .2427388   .1157297     2.10   0.036     .0159127    .4695649
+    event_m4 |   .3010544   .1125496     2.67   0.007     .0804612    .5216475
+    event_m3 |   .2053967   .0954225     2.15   0.031     .0183721    .3924213
+    event_m2 |   .1250835   .0740219     1.69   0.091    -.0199967    .2701637
+    event_m1 |   .0520947   .0608159     0.86   0.392    -.0671023    .1712917
+     event_1 |   .0520662   .0464716     1.12   0.263    -.0390165    .1431489
+     event_2 |   .0732999   .0487966     1.50   0.133    -.0223396    .1689394
+     event_3 |   .0981471   .0693605     1.42   0.157    -.0377969    .2340912
+     event_4 |   .0314914   .0714021     0.44   0.659    -.1084541    .1714369
+     event_5 |   -.003984   .0743058    -0.05   0.957    -.1496208    .1416528
+------------------------------------------------------------------------------
+  4,325
+       panel variable:  frame_id_numeric (unbalanced)
+        time variable:  year, 1985 to 2013, but with gaps
+                delta:  1 unit
+Generating weights...
+Estimating lnQhr: event_m5
+Estimating lnQhr: event_m4
+Estimating lnQhr: event_m3
+Estimating lnQhr: event_m2
+Estimating lnQhr: event_m1
+Estimating lnQhr: event_1
+Estimating lnQhr: event_2
+Estimating lnQhr: event_3
+Estimating lnQhr: event_4
+Estimating lnQhr: event_5
+Callaway Sant'Anna (2021)
+
+                                                Number of obs     =      4,670
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    event_m5 |  -.1335439   .1461754    -0.91   0.361    -.4200424    .1529547
+    event_m4 |  -.0149494   .1263973    -0.12   0.906    -.2626836    .2327848
+    event_m3 |  -.0543187   .1094809    -0.50   0.620    -.2688972    .1602599
+    event_m2 |   .0397892   .1216148     0.33   0.744    -.1985714    .2781498
+    event_m1 |  -.0336641   .0623674    -0.54   0.589     -.155902    .0885738
+     event_1 |   .3593358    .078881     4.56   0.000     .2047319    .5139397
+     event_2 |   .3185601   .0623142     5.11   0.000     .1964265    .4406937
+     event_3 |   .3154101   .0585679     5.39   0.000     .2006192     .430201
+     event_4 |   .2981057   .0717813     4.15   0.000     .1574169    .4387945
+     event_5 |   .4120312   .0717634     5.74   0.000     .2713776    .5526848
+------------------------------------------------------------------------------
+  4,670
+
+. 
+. esttab m* using "`here'/output/table_attgt_loop_weightstr.tex", mtitle b(3) se(3) replace
+(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_loop_weightstr.tex)
+
+. esttab m* using "`here'/output/table_attgt_loop_weightstr.txt", mtitle b(3) se(3) replace
+(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_attgt_loop_weightstr.txt)
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_attgt_loop_weightstr.log
+  log type:  text
+ closed on:  16 Jul 2021, 15:53:45
+--------------------------------------------------------------------------------------------------------------------------------------------------------------

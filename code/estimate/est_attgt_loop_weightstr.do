@@ -3,7 +3,17 @@ here
 local here = r(here)
 
 cap log close
-log using "`here'/output/est_attgt_loop", text replace
+log using "`here'/output/est_attgt_loop_weightstr", text replace
+
+use "/`here'/external/pscore_trends.dta", clear
+drop treat_match
+*mvencode weight_match, mv(0)
+reshape wide weight_match, i(frame_id_numeric) j(year)
+gen weight_match1990 = 0
+*mvencode weight_match*, mv(0)
+duplicates report frame_id_numeric
+tempfile weights
+save `weights'
 
 use "`here'/temp/analysis_sample.dta"
 
@@ -20,6 +30,10 @@ gen Qh = sales_18 - export_18
 gen lnQh = ln(Qh)
 gen lnQhr = lnQ - lnQh
 
+merge m:1 frame_id_numeric using `weights', keep (1 3) nogen
+drop if year > 2013
+mvencode weight_match*, mv(0) override
+
 foreach depvar in TFP_cd lnIK_0 lnQh lnQhr {
 	foreach var in foreign_only foreign_hire_only has_expat {
 		attgt `depvar', treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0)
@@ -34,7 +48,7 @@ foreach depvar in TFP_cd lnIK_0 lnQh lnQhr {
 	}
 }
 
-esttab m* using "`here'/output/table_attgt_loop.tex", mtitle b(3) se(3) replace
-esttab m* using "`here'/output/table_attgt_loop.txt", mtitle b(3) se(3) replace
+esttab m* using "`here'/output/table_attgt_loop_weightstr.tex", mtitle b(3) se(3) replace
+esttab m* using "`here'/output/table_attgt_loop_weightstr.txt", mtitle b(3) se(3) replace
 
 log close
