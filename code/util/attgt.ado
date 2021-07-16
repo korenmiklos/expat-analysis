@@ -147,7 +147,7 @@ program attgt, eclass
 			}
 			quietly count if `treated' & `touse'
 			local n_treated = r(N)/2
-			quietly summarize `cweight' if `control' & `touse'
+			quietly summarize `cweight' if `control' & `touse' & `cweight' != 0 & !missing(`cweight')
 			local sumw_control = r(sum)/2
 			local n_control = r(N)/2
 			local n_`g'_`t' = `n_treated'
