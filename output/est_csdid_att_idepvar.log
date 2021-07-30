@@ -1,8 +1,8 @@
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_csdid_att_ipw.log
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_csdid_att_idepvar.log
   log type:  text
- opened on:  29 Jul 2021, 22:22:25
+ opened on:  29 Jul 2021, 16:51:05
 
 . 
 . use "`here'/temp/analysis_sample.dta"
@@ -58,14 +58,41 @@ fy_foreig~ho: 8458 missing values recoded
     fy_expat: 7098 missing values recoded
 
 . 
+. gen x = exporter if time_foreign > -4 & time_foreign < 0
+(8,969 missing values generated)
+
+. egen exporter_before = max(x), by(frame_id_numeric)
+(139 missing values generated)
+
+. drop x
+
+. 
+. sort frame_id_numeric year
+
+. 
+. foreach var in lnL lnQ lnK {
+  2.         gen `var'_sq = `var'^2
+  3.         gen `var'_lag=L.`var'
+  4.         gen `var'_lag_sq=`var'_lag^2
+  5. }
+(1,320 missing values generated)
+(1,320 missing values generated)
+(1,320 missing values generated)
+(1,320 missing values generated)
+(1,320 missing values generated)
+(1,320 missing values generated)
+
+. 
 . foreach depvar in lnQL lnK lnL exporter lnQ TFP_cd lnIK_0 lnQh lnQhr {
   2.         foreach var in fy_foreign_o fy_foreign_ho fy_expat {
-  3.                 csdid `depvar', ivar(frame_id_numeric) time(year) gvar(`var') agg(simple) method(ipw) notyet
+  3.                 csdid `depvar' lnL_sq lnQ_sq lnK_sq exporter_before i.year i.teaor08_2d, ivar(frame_id_numeric) time(year) gvar(`var') agg(simple) method
+> (reg) notyet
   4.                 eststo m`var'`depvar', title("`depvar' `var'")
   5.         }
   6.         
 .         foreach var in fy_foreign_o fy_foreign_ho fy_expat {
-  7.                 csdid `depvar', ivar(frame_id_numeric) time(year) gvar(`var') agg(simple) method(ipw) notyet
+  7.                 csdid `depvar' lnL_sq lnQ_sq lnK_sq exporter_before i.year i.teaor08_2d, ivar(frame_id_numeric) time(year) gvar(`var') agg(simple) method
+> (reg) notyet
   8.                 eststo mh`var'`depvar', title("efh `depvar' `var'")
   9.         }
  10. }
@@ -92,12 +119,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |  -.0193062   .0585922    -0.33   0.742    -.1341448    .0955324
+         ATT |   .0364858   .0475525     0.77   0.443    -.0567154    .1296871
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -125,12 +152,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |  -.0738501   .0789707    -0.94   0.350    -.2286298    .0809296
+         ATT |  -.0821989   .0705446    -1.17   0.244    -.2204638     .056066
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -158,12 +185,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |    .334575   .0633392     5.28   0.000     .2104324    .4587175
+         ATT |   .3007358   .0582357     5.16   0.000     .1865959    .4148757
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -191,12 +218,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |  -.0193062   .0585922    -0.33   0.742    -.1341448    .0955324
+         ATT |   .0364858   .0475525     0.77   0.443    -.0567154    .1296871
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -224,12 +251,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |  -.0738501   .0789707    -0.94   0.350    -.2286298    .0809296
+         ATT |  -.0821989   .0705446    -1.17   0.244    -.2204638     .056066
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -257,12 +284,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |    .334575   .0633392     5.28   0.000     .2104324    .4587175
+         ATT |   .3007358   .0582357     5.16   0.000     .1865959    .4148757
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -290,12 +317,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0532367   .0783825     0.68   0.497    -.1003902    .2068637
+         ATT |    .058004   .0748325     0.78   0.438    -.0886651    .2046731
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -323,12 +350,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |  -.0837233   .0883837    -0.95   0.344    -.2569521    .0895055
+         ATT |   .0392308   .0887635     0.44   0.659    -.1347425     .213204
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -356,12 +383,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .2851514   .0737105     3.87   0.000     .1406815    .4296213
+         ATT |   .3601784   .0695986     5.18   0.000     .2237676    .4965892
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -389,12 +416,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0532367   .0783825     0.68   0.497    -.1003902    .2068637
+         ATT |    .058004   .0748325     0.78   0.438    -.0886651    .2046731
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -422,12 +449,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |  -.0837233   .0883837    -0.95   0.344    -.2569521    .0895055
+         ATT |   .0392308   .0887635     0.44   0.659    -.1347425     .213204
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -455,12 +482,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .2851514   .0737105     3.87   0.000     .1406815    .4296213
+         ATT |   .3601784   .0695986     5.18   0.000     .2237676    .4965892
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -488,12 +515,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .1146133   .0555882     2.06   0.039     .0056625    .2235642
+         ATT |   .0877846   .0543013     1.62   0.106     -.018644    .1942133
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -521,12 +548,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .1486237   .0851327     1.75   0.081    -.0182334    .3154807
+         ATT |   .1748376   .0730435     2.39   0.017     .0316749    .3180003
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -554,12 +581,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |    .210681   .0592166     3.56   0.000     .0946186    .3267434
+         ATT |   .2080652   .0534226     3.89   0.000     .1033589    .3127716
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -587,12 +614,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .1146133   .0555882     2.06   0.039     .0056625    .2235642
+         ATT |   .0877846   .0543013     1.62   0.106     -.018644    .1942133
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -620,12 +647,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .1486237   .0851327     1.75   0.081    -.0182334    .3154807
+         ATT |   .1748376   .0730435     2.39   0.017     .0316749    .3180003
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -653,12 +680,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |    .210681   .0592166     3.56   0.000     .0946186    .3267434
+         ATT |   .2080652   .0534226     3.89   0.000     .1033589    .3127716
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -686,12 +713,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |  -.0068179   .0206754    -0.33   0.742    -.0473409     .033705
+         ATT |  -.0021426   .0240159    -0.09   0.929    -.0492129    .0449277
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -719,12 +746,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0071724   .0238873     0.30   0.764    -.0396459    .0539906
+         ATT |  -.0039618   .0263967    -0.15   0.881    -.0556983    .0477747
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -752,12 +779,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0698058   .0231363     3.02   0.003     .0244594    .1151522
+         ATT |    .079212   .0261785     3.03   0.002     .0279031    .1305209
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -785,12 +812,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |  -.0068179   .0206754    -0.33   0.742    -.0473409     .033705
+         ATT |  -.0021426   .0240159    -0.09   0.929    -.0492129    .0449277
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -818,12 +845,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0071724   .0238873     0.30   0.764    -.0396459    .0539906
+         ATT |  -.0039618   .0263967    -0.15   0.881    -.0556983    .0477747
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -851,12 +878,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0698058   .0231363     3.02   0.003     .0244594    .1151522
+         ATT |    .079212   .0261785     3.03   0.002     .0279031    .1305209
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -884,12 +911,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0953071    .063155     1.51   0.131    -.0284743    .2190886
+         ATT |   .1242704   .0643907     1.93   0.054    -.0019331     .250474
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -917,12 +944,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0747736     .09439     0.79   0.428    -.1102274    .2597746
+         ATT |   .0926388   .0855974     1.08   0.279     -.075129    .2604065
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -950,12 +977,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |    .545256   .0810885     6.72   0.000     .3863256    .7041865
+         ATT |   .5088011   .0724157     7.03   0.000     .3668688    .6507333
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -983,12 +1010,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0953071    .063155     1.51   0.131    -.0284743    .2190886
+         ATT |   .1242704   .0643907     1.93   0.054    -.0019331     .250474
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1016,12 +1043,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0747736     .09439     0.79   0.428    -.1102274    .2597746
+         ATT |   .0926388   .0855974     1.08   0.279     -.075129    .2604065
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1049,12 +1076,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |    .545256   .0810885     6.72   0.000     .3863256    .7041865
+         ATT |   .5088011   .0724157     7.03   0.000     .3668688    .6507333
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1082,12 +1109,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   -.015578   .0326403    -0.48   0.633    -.0795518    .0483958
+         ATT |  -.0044221   .0310746    -0.14   0.887    -.0653273     .056483
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1115,12 +1142,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0076054   .0358232     0.21   0.832    -.0626069    .0778176
+         ATT |  -.0193028   .0377873    -0.51   0.609    -.0933646     .054759
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1148,12 +1175,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .1242247   .0358708     3.46   0.001     .0539192    .1945301
+         ATT |   .0885497   .0354819     2.50   0.013     .0190065    .1580929
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1181,12 +1208,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   -.015578   .0326403    -0.48   0.633    -.0795518    .0483958
+         ATT |  -.0044221   .0310746    -0.14   0.887    -.0653273     .056483
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1214,12 +1241,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0076054   .0358232     0.21   0.832    -.0626069    .0778176
+         ATT |  -.0193028   .0377873    -0.51   0.609    -.0933646     .054759
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1247,12 +1274,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .1242247   .0358708     3.46   0.001     .0539192    .1945301
+         ATT |   .0885497   .0354819     2.50   0.013     .0190065    .1580929
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1271,12 +1298,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .........................................
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0829812   .1811792     0.46   0.647    -.2721235     .438086
+         ATT |   .0371278   .2079702     0.18   0.858    -.3704863     .444742
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1295,12 +1322,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .........................................
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |  -.0117502   .2261144    -0.05   0.959    -.4549262    .4314259
+         ATT |   .1791244   .2344927     0.76   0.445    -.2804728    .6387216
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1319,12 +1346,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .........................................
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .8014913   .2350456     3.41   0.001     .3408104    1.262172
+         ATT |   .6658488   .2444953     2.72   0.006     .1866468    1.145051
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1343,12 +1370,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .........................................
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0829812   .1811792     0.46   0.647    -.2721235     .438086
+         ATT |   .0371278   .2079702     0.18   0.858    -.3704863     .444742
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1367,12 +1394,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .........................................
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |  -.0117502   .2261144    -0.05   0.959    -.4549262    .4314259
+         ATT |   .1791244   .2344927     0.76   0.445    -.2804728    .6387216
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1391,12 +1418,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .........................................
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .8014913   .2350456     3.41   0.001     .3408104    1.262172
+         ATT |   .6658488   .2444953     2.72   0.006     .1866468    1.145051
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1424,12 +1451,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .1484359    .072945     2.03   0.042     .0054662    .2914055
+         ATT |    .183924   .0771477     2.38   0.017     .0327173    .3351307
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1457,12 +1484,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0557511   .0917915     0.61   0.544    -.1241569    .2356591
+         ATT |   .0963438   .0913713     1.05   0.292    -.0827407    .2754283
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1490,12 +1517,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .2667717   .0919699     2.90   0.004      .086514    .4470295
+         ATT |   .2647197   .0880145     3.01   0.003     .0922144    .4372249
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1523,12 +1550,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .1484359    .072945     2.03   0.042     .0054662    .2914055
+         ATT |    .183924   .0771477     2.38   0.017     .0327173    .3351307
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1556,12 +1583,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0557511   .0917915     0.61   0.544    -.1241569    .2356591
+         ATT |   .0963438   .0913713     1.05   0.292    -.0827407    .2754283
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1589,12 +1616,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .2667717   .0919699     2.90   0.004      .086514    .4470295
+         ATT |   .2647197   .0880145     3.01   0.003     .0922144    .4372249
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1622,12 +1649,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |  -.0621262   .0372753    -1.67   0.096    -.1351844     .010932
+         ATT |  -.0585819   .0431887    -1.36   0.175    -.1432302    .0260664
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1655,12 +1682,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0058957   .0439162     0.13   0.893    -.0801785    .0919699
+         ATT |  -.0143292   .0547709    -0.26   0.794    -.1216781    .0930197
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1688,12 +1715,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .2548382    .055343     4.60   0.000      .146368    .3633085
+         ATT |   .2356183   .0580714     4.06   0.000     .1218004    .3494361
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1721,12 +1748,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |  -.0621262   .0372753    -1.67   0.096    -.1351844     .010932
+         ATT |  -.0585819   .0431887    -1.36   0.175    -.1432302    .0260664
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1754,12 +1781,12 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .0058957   .0439162     0.13   0.893    -.0801785    .0919699
+         ATT |  -.0143292   .0547709    -0.26   0.794    -.1216781    .0930197
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
@@ -1787,28 +1814,30 @@ Will use observations with Pair balanced (observed at t0 and t1)
 ..................................................
 .......
 Difference-in-difference with Multiple Time Periods
-Outcome model  : 
-Treatment model: 
+Outcome model  : regression adjustment
+Treatment model: none
 ------------------------------------------------------------------------------
              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         ATT |   .2548382    .055343     4.60   0.000      .146368    .3633085
+         ATT |   .2356183   .0580714     4.06   0.000     .1218004    .3494361
 ------------------------------------------------------------------------------
 Control: Not yet Treated
 
 See Callaway and Sant'Anna (2021) for details
 
 . 
-. esttab m* using "`here'/output/table_csdid_att_ipw.tex", mtitle b(3) se(3) replace
-(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_csdid_att_ipw.tex)
+. esttab m* using "`here'/output/table_csdid_att_idepvar.tex", mtitle b(3) se(3) replace
+(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_csdid_att_idepvar.tex not found)
+(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_csdid_att_idepvar.tex)
 
-. esttab m* using "`here'/output/table_csdid_att_ipw.txt", mtitle b(3) se(3) replace
-(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_csdid_att_ipw.txt)
+. esttab m* using "`here'/output/table_csdid_att_idepvar.txt", mtitle b(3) se(3) replace
+(note: file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_csdid_att_idepvar.txt not found)
+(output written to /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/table_csdid_att_idepvar.txt)
 
 . 
 . log close
       name:  <unnamed>
-       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_csdid_att_ipw.log
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_csdid_att_idepvar.log
   log type:  text
- closed on:  30 Jul 2021, 00:22:10
+ closed on:  29 Jul 2021, 18:47:08
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
