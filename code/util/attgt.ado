@@ -15,6 +15,12 @@ program attgt, eclass
 		local pre 0
 	}
 
+	* read panel structure
+	xtset
+	local i = r(panelvar)
+	local time = r(timevar)
+	markout `touse' `i' `time' `treatment' `varlist'
+
 	if ("`treatment2'" != "") {
 		capture assert "`limitcontrol'`tyet'" == ""
 		if _rc {
@@ -32,12 +38,6 @@ program attgt, eclass
 	}
 	tempvar lc_var
 	quietly generate byte `lc_var' = (`limitcontrol')
-
-	* read panel structure
-	xtset
-	local i = r(panelvar)
-	local time = r(timevar)
-	markout `touse' `i' `time' `treatment' `varlist'
 
 	* test that cluster embeds ivar
 	if ("`cluster'"!="") {
@@ -131,19 +131,18 @@ program attgt, eclass
 
 			local treated (`group'==`g') & (`timing')
 			if ("`tyet'"=="") {
-				* never treated
-				local control missing(`group') & (`timing') & (`lc')
-			}
-			else {
 				if "`treatment2'" != "" {
 					local control (`group2'==`g') & (`timing')
-
 				}
 				else {
+					* never treated
+					local control missing(`group') & (`timing') & (`lc')
+				}
+			}
+			else {
 					* not yet treated
 					* QUESTION: > or >=
 					local control (missing(`group') | (`group' > max(`g', `t'))) & (`timing') & (`lc')
-				}
 			}
 			quietly count if `treated' & `touse'
 			local n_treated = r(N)/2

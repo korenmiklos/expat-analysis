@@ -3410,3 +3410,46 @@ Callaway Sant'Anna (2021)
      event_5 |    .085313   .0306494     2.78   0.005     .0252413    .1453846
 ------------------------------------------------------------------------------
 ```
+
+# 2021-09-08
+## Fix several hard-to-detect bugs in the dual treatment case
+
+Now the control group does not matter (because there is no control group) and the inverse treatment results in almost exactly the inverse effect. The discrepancy is caused by weighting, which will be solved by #224.
+
+```
+. attgt lnQL, treatment(has_expat_ceo) treatment2(foreign_hire_only) aggregate(att) pre(3) post(5) reps(20)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+Estimating lnQL: att
+Callaway Sant'Anna (2021)
+
+                                                         Number of obs = 3,383
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         att |   .3289614   .1027852     3.20   0.001      .127506    .5304167
+------------------------------------------------------------------------------
+
+. attgt lnQL, treatment(foreign_hire_only) treatment2(has_expat_ceo) aggregate(att) pre(3) post(5) reps(20)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+Estimating lnQL: att
+Callaway Sant'Anna (2021)
+
+                                                         Number of obs = 3,383
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         att |  -.3192692   .1014718    -3.15   0.002    -.5181503   -.1203881
+------------------------------------------------------------------------------
+
+. 
+```
