@@ -149,11 +149,7 @@ program attgt, eclass
 			quietly summarize `cweight' if `control' & `touse'
 			local sumw_control = r(sum)/2
 			local n_control = r(N)/2
-			local n_`g'_`t' = `n_treated'
-			if (`n_control' == 0) {
-				* no treatment effect without controls
-				local n_`g'_`t' = 0
-			}
+			local n_`g'_`t' = `n_treated' * `n_control' / (`n_treated' + `n_control')
 
 			tempvar treated_`g'_`t' control_`g'_`t'
 			quietly generate `treated_`g'_`t'' = cond(`time'==`t', +1/`n_treated', -1/`n_treated') if `treated' & `touse'
