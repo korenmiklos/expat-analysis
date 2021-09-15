@@ -3453,3 +3453,42 @@ Callaway Sant'Anna (2021)
 
 . 
 ```
+
+# 2021-09-15
+## Symmetric group weights
+
+```
+. attgt lnQL, treatment(has_expat_ceo) treatment2(foreign_hire_only) aggregate(att) pre(3) post(5) reps(20)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+Estimating lnQL: att
+Callaway Sant'Anna (2021)
+
+                                                         Number of obs = 3,383
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         att |   .3176849   .1021125     3.11   0.002     .1175481    .5178216
+------------------------------------------------------------------------------
+
+. attgt lnQL, treatment(foreign_hire_only) treatment2(has_expat_ceo) aggregate(att) pre(3) post(5) reps(20)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+Estimating lnQL: att
+Callaway Sant'Anna (2021)
+
+                                                         Number of obs = 3,383
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         att |  -.3176849   .1021125    -3.11   0.002    -.5178216   -.1175481
+------------------------------------------------------------------------------
+```
