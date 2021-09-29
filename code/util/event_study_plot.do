@@ -15,8 +15,7 @@ generate lower = 0
 
 local colnames : colnames e(b)
 local outcomes : coleq e(b)
-* FIXME: get treatment var from ereturn
-local treatment : word 3 of `e(cmdline)'
+local treatment : `e(treatment)'
 
 forvalues i = 1/`T' {
     * get event time index
@@ -40,7 +39,7 @@ levelsof outcome, local(outcomes)
 foreach X in `outcomes' {
     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(none)) ///
         (line b t if outcome=="`X'", lcolor(blue)), ///
-        ytitle("`X'") xtitle("Year of `treatment'") ///
+        ytitle("`X'") xtitle("Year since `treatment'") ///
         graphregion(color(white)) legend(off)
     graph rename `X'
 }
