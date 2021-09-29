@@ -14,6 +14,9 @@ generate upper = 0
 generate lower = 0
 
 local colnames : colnames e(b)
+local outcome : coleq e(b)
+local outcome : word 1 of `outcome'
+local treatment : word 3 of `e(cmdline)'
 
 forvalues i = 1/`T' {
     * get event time index
@@ -26,7 +29,10 @@ forvalues i = 1/`T' {
 }
 sort t
 
-twoway (rarea lower upper t) (line b t)
+twoway (rarea lower upper t, fcolor(blue%30) lwidth(none)) ///
+    (line b t, lcolor(blue)), ///
+    ytitle("`outcome'") xtitle("Year of `treatment'") ///
+    graphregion(color(white)) legend(off)
 
 list
 restore
