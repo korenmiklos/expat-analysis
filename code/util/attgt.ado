@@ -1,5 +1,5 @@
 program attgt, eclass
-	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 999)] [post(integer 999)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(string)] [weightprefix(string)] [treatment2(varname)]
+	syntax varlist [if] [in], treatment(varname) [ipw(varlist)]	[aggregate(string)] [absorb(varlist)] [pre(integer 999)] [post(integer 999)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(string)] [weightprefix(string)] [treatment2(varname)]
 	marksample touse
 
 	* boostrap
@@ -15,11 +15,14 @@ program attgt, eclass
 		local pre 0
 	}
 
+	tempvar ipweight
+	quietly generate `ipweight' = 1
+
 	* read panel structure
 	xtset
 	local i = r(panelvar)
 	local time = r(timevar)
-	markout `touse' `i' `time' `treatment' `varlist'
+	markout `touse' `i' `time' `treatment' `varlist' `ipw'
 
 	if ("`treatment2'" != "") {
 		capture assert "`limitcontrol'`tyet'" == ""
@@ -144,19 +147,38 @@ program attgt, eclass
 					* QUESTION: > or >=
 					local control (missing(`group') | (`group' > max(`g', `t'))) & (`timing') & (`lc')
 			}
+
+			if ("`ipw'" != "") {
+				tempvar TD phat
+				quietly generate byte `TD' = `treated'
+				capture probit `TD' `ipw' if (`treated' | `control') & `touse' & (`time' == `g')
+				if (_rc==0) {
+					quietly predict `phat' if `control' & `touse' & (`time' == `g'), pr
+					quietly replace `phat' = 0.9 if `phat' > 0.9 & `control' & `touse' & (`time' == `g')
+					quietly replace `ipweight' = `phat' / (1 - `phat') if `control' & `touse' & (`time' == `g')
+					quietly replace `ipweight' = `leadlag2'.`ipweight' if `control' & `touse' & (`leadlag2'.`time' == `g')
+				}
+				else {
+					* invalid propensity score estimates, cannot use this control group
+					quietly replace `ipweight' = 0 if `control' & `touse'
+				}
+			}
+
 			quietly count if `treated' & `touse'
 			local n_treated = r(N)/2
-			quietly summarize `cweight' if `control' & `touse'
+			quietly summarize `ipweight' if `control' & `touse' & `ipweight' != 0 & !missing(`ipweight')
 			local sumw_control = r(sum)/2
 			local n_control = r(N)/2
 			local n_`g'_`t' = `n_treated' * `n_control' / (`n_treated' + `n_control')
 
 			tempvar treated_`g'_`t' control_`g'_`t'
 			quietly generate `treated_`g'_`t'' = cond(`time'==`t', +1/`n_treated', -1/`n_treated') if `treated' & `touse'
-			quietly generate `control_`g'_`t'' = cond(`time'==`t', `cweight'/`sumw_control', -`cweight'/`sumw_control') if `control' & `touse'
+			quietly generate `control_`g'_`t'' = cond(`time'==`t', `ipweight'/`sumw_control', -`ipweight'/`sumw_control') if `control' & `touse'
 		}
 		}
 	}
+
+	summarize `ipweight', detail
 
 	if ("`aggregate'"=="e") {
 		tempname n_e
