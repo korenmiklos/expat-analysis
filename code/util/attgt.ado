@@ -160,13 +160,13 @@ program attgt, eclass
 				}
 				else {
 					* invalid propensity score estimates, cannot use this control group
-					quietly replace `ipweight' = 0 if `control' & `touse'
+					quietly replace `ipweight' = 0 if `control' & `touse' & `timing'
 				}
 			}
 
 			quietly count if `treated' & `touse'
 			local n_treated = r(N)/2
-			quietly summarize `ipweight' if `control' & `touse' & `ipweight' != 0 & !missing(`ipweight')
+			quietly summarize `ipweight' if `control' & `touse' 
 			local sumw_control = r(sum)/2
 			local n_control = r(N)/2
 			local n_`g'_`t' = `n_treated' * `n_control' / (`n_treated' + `n_control')
