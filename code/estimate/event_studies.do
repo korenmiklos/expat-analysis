@@ -8,27 +8,26 @@ log using "`here'/output/event_studies", text replace
 
 local pre 3
 local post 8
+local vars lnL lnQL lnK exporter
 
 use "`here'/temp/analysis_sample.dta", clear
 keep if ever_foreign
 
-rename ever_foreign ef
-rename ever_foreign_hire efh
-rename has_expat_ceo has_expat
-
 count
-count if ef & time_foreign <= 5
 
-generate foreign_hire_only = foreign_hire & !has_expat
+rename has_expat_ceo expat_hire
+generate domestic_hire = foreign_hire & !expat_hire
+generate no_hire = foreign & !foreign_hire
 
-foreach var in foreign_hire_only has_expat {
-    foreach y in lnQL lnK lnL exporter lnQ {
-        * do loop bc event_study_plot cannot yet do multiple equations 
-		attgt `y' if efh, treatment(`var') aggregate(e) pre(`pre') post(`post') notyet limitcontrol(foreign == 0)
-		count if e(sample) == 1
-		eststo mh`var', title("efh `var'")
-        do "`here'/code/util/event_study_plot.do"
-        graph export "`here'/output/figure/event_study/`var'_`y'.png", replace
+
+foreach treatment in no_hire domestic_hire expat_hire {
+    attgt `vars', treatment(`treatment') aggregate(e) pre(`pre') post(`post') notyet limitcontrol(foreign == 0)
+    count if e(sample) == 1
+    do "`here'/code/util/event_study_plot.do"
+    foreach outcome in `vars' {
+        graph display `outcome'
+        graph export "`here'/output/figure/event_study/`treatment'_`outcome'.png", replace
+        graph drop `outcome'
     }
 }
 
