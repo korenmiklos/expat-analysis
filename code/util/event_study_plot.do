@@ -15,7 +15,7 @@ generate lower = 0
 
 local colnames : colnames e(b)
 local outcomes : coleq e(b)
-local treatment : `e(treatment)'
+local treatment = e(treatment)
 
 forvalues i = 1/`T' {
     * get event time index
