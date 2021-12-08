@@ -16,13 +16,13 @@ count
 count if ef & time_foreign <= 5
 
 foreach var in foreign_only foreign_hire_only has_expat {
-		attgt lnQL lnK lnL exporter lnQ, treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0) ipw(lnQ lnK lnL lnM exporter)
+		attgt lnQL lnK lnL exporter lnQ, treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0) ipw(lnQ)
 		count if e(sample) == 1
 		eststo m`var', title("`var'")
 }
 
 foreach var in foreign_hire_only has_expat {
-		attgt lnQL lnK lnL exporter lnQ if efh, treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0) ipw(lnQ lnK lnL lnM exporter)
+		attgt lnQL lnK lnL exporter lnQ if efh, treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0) ipw(lnQ)
 		count if e(sample) == 1
 		eststo mh`var', title("efh `var'")
 }
