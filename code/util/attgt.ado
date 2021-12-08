@@ -154,7 +154,7 @@ program attgt, eclass
 				capture probit `TD' `ipw' if (`treated' | `control') & `touse' & (`time' == `g')
 				if (_rc==0) {
 					quietly predict `phat' if `control' & `touse' & (`time' == `g'), pr
-					quietly replace `phat' = 0.9 if `phat' > 0.9 & `control' & `touse' & (`time' == `g')
+					quietly replace `phat' = 0.99 if `phat' > 0.99 & `control' & `touse' & (`time' == `g')
 					quietly replace `ipweight' = `phat' / (1 - `phat') if `control' & `touse' & (`time' == `g')
 					quietly replace `ipweight' = `leadlag2'.`ipweight' if `control' & `touse' & (`leadlag2'.`time' == `g')
 				}
