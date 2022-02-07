@@ -154,7 +154,7 @@ program attgt, eclass
 				capture probit `TD' `ipw' if (`treated' | `control') & `touse' & (`time' == `g')
 				if (_rc==0) {
 					quietly predict `phat' if `control' & `touse' & (`time' == `g'), pr
-					quietly replace `phat' = 0.9 if `phat' > 0.9 & `control' & `touse' & (`time' == `g')
+					quietly replace `phat' = 0.99 if `phat' > 0.99 & `control' & `touse' & (`time' == `g')
 					quietly replace `ipweight' = `phat' / (1 - `phat') if `control' & `touse' & (`time' == `g')
 					quietly replace `ipweight' = `leadlag2'.`ipweight' if `control' & `touse' & (`leadlag2'.`time' == `g')
 				}
@@ -166,7 +166,7 @@ program attgt, eclass
 
 			quietly count if `treated' & `touse'
 			local n_treated = r(N)/2
-			quietly summarize `ipweight' if `control' & `touse' 
+			quietly summarize `ipweight' if `control' & `touse' & `ipweight' != 0 & !missing(`ipweight')
 			local sumw_control = r(sum)/2
 			local n_control = r(N)/2
 			local n_`g'_`t' = `n_treated' * `n_control' / (`n_treated' + `n_control')
@@ -320,7 +320,6 @@ string scalar lead_lag(real scalar g, real scalar t)
 		return("L" + strofreal(g - t))
 	}
 }
-
 string scalar minus(real scalar t)
 {
 	if (t >= 0) {
@@ -330,14 +329,12 @@ string scalar minus(real scalar t)
 		return("m" + strofreal(-t))
 	} 
 }
-
 real scalar sum_product(string matrix vars)
 {
 	X = 0
 	st_view(X, ., vars, 0)
 	return(colsum(X[1...,1] :* X[1...,2]))
 }
-
 real scalar bs_variance(string matrix vars, string scalar selectvar, real scalar B, real scalar cluster)
 {
 	X = 0
@@ -345,7 +342,6 @@ real scalar bs_variance(string matrix vars, string scalar selectvar, real scalar
 	N = rows(X)
 	Y = J(N, 1, 0)
 	theta = J(B, 1, .)
-
 	if (cluster==1) {
 		group = recode(X[1..., 5])
 		K = max(group)
@@ -354,19 +350,15 @@ real scalar bs_variance(string matrix vars, string scalar selectvar, real scalar
 		group = 1::N
 		K = N
 	}
-
 	for (i=1; i<=B; i++) {
 		flip = rdiscrete(K, 1, (0.5, 0.5))
-
 		for (n=1; n<=N; n++) {
 			Y[n,1] = X[n, 1..2][flip[group[n]]]
 		}
-
 		theta[i, 1] = colsum(Y :* X[1..., 3]) - colsum(Y :* X[1..., 4])
 	}
 	return((variance(theta))[1,1])
 }
-
 real vector recode(real vector x)
 {
 	N = rows(x)
@@ -378,12 +370,10 @@ real vector recode(real vector x)
 	}
 	return(output)
 }
-
 real matrix build_index(real vector ivar, real vector tvar)
 {
 	N = colmax(ivar)
 	T = colmax(tvar)
-
 	index = J(N, T, 0)
 	for (i=1; i<=N; i++) {
 		for (t=1; t<=T; t++) {
@@ -395,22 +385,17 @@ real matrix build_index(real vector ivar, real vector tvar)
 	}
 	return(index)
 }
-
 void difference_baseline(string scalar vars)
 {
 	real matrix YX
 	st_view(YX, ., vars)
-
 	ivar = YX[., 3]
 	tvar = YX[., 4]
 	gvar = YX[., 5]
-
 	T = colmax(tvar)
 	N = colmax(ivar)
-
 	index = build_index(ivar, tvar)
 	printf("503,7 = %f", index[503,7])
-
 	for (i=1; i<=N; i++) {
 		for (g=1; g<=T; g++) {
 			if (index[i, g] > 0) {
@@ -432,5 +417,4 @@ void difference_baseline(string scalar vars)
 		}
 	}
 }
-
 end
