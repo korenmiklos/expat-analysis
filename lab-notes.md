@@ -3492,3 +3492,26 @@ Callaway Sant'Anna (2021)
          att |  -.3176849   .1021125    -3.11   0.002    -.5178216   -.1175481
 ------------------------------------------------------------------------------
 ```
+## 2022-02-07
+## Who are the control firms?
+### Monadic design
+
+Treatment: firm `i` hires an expat manager in year `t`
+
+```
+keep if ever_foreign
+attgt ..., notyet limitcontrol(foreign == 0)
+```
+
+Firms will be acquired later, they are still in domestic ownership at time `g` as well as time `t`.  
+
+For identification purposes, closest comparison group is the set of firms that hired a local manager in year `t`.
+
+### Dyadic design
+Treatment: firm `i` hires a manager from market `c` in year `t`
+
+Broad control group is the same: to be but not yet acquired domestic firms. They can be used to estimate firm and time fixed effects in a two-stage approach.
+
+Narrow control: firm `i` hires a expat manager from market `k=/=c` in year `t`
+
+(For illustrative purposes, work out first with only two markets, GER and ITA.)
