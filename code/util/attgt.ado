@@ -160,7 +160,7 @@ program attgt, eclass
 				}
 				else {
 					* invalid propensity score estimates, cannot use this control group
-					quietly replace `ipweight' = 0 if `control' & `touse'
+					quietly replace `ipweight' = 0 if `control' & `touse' & `timing'
 				}
 			}
 
@@ -303,6 +303,7 @@ program attgt, eclass
 	ereturn post `b' `V', obs(`Nobs') esample(`esample')
 	ereturn local cmd attgt
 	ereturn local cmdline attgt `0'
+	ereturn local treatment `treatment'
 	display "Callaway Sant'Anna (2021)"
 	* Use Stata's built-in but undocumented estimation display
 	_prefix_display
