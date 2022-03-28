@@ -8,11 +8,13 @@ log using "`here'/output/event_studies", text replace
 
 local pre 5
 local post 10
-local vars lnL lnQL lnK exporter
+local vars lnL lnQL lnK exporter RperK TFP_cd survival
 local controls lnQ lnK lnL lnM exporter
 
 use "`here'/temp/analysis_sample.dta", clear
 keep if ever_foreign
+
+generate byte survival = !missing(F.sales)
 
 count
 
