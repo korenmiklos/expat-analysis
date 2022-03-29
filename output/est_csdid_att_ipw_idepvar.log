@@ -1,0 +1,126 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/est_csdid_att_ipw_idepvar.log
+  log type:  text
+ opened on:  30 Jul 2021, 11:29:10
+
+. 
+. use "`here'/temp/analysis_sample.dta"
+
+. 
+. rename ever_foreign ef
+
+. rename ever_foreign_hire efh
+
+. rename has_expat_ceo has_expat
+
+. 
+. gen lnIK = ln(immat_18)
+(5,130 missing values generated)
+
+. gen lnIK_0 = lnIK
+(5,130 missing values generated)
+
+. replace lnIK_0 = 0 if immat_18 == 0
+(857 real changes made)
+
+. 
+. replace export_18 = 0 if export_18 == .
+(1,473 real changes made)
+
+. gen Qh = sales_18 - export_18
+
+. gen lnQh = ln(Qh)
+(122 missing values generated)
+
+. gen lnQhr = lnQ - lnQh
+(122 missing values generated)
+
+. 
+. bys frame_id_numeric: egen first_year_foreign_new = min(cond(foreign == 1, year,.))
+
+. bys frame_id_numeric: egen fy_foreign_o = min(cond(foreign_only == 1, year,.))
+(7,446 missing values generated)
+
+. bys frame_id_numeric: egen fy_foreign_ho = min(cond(foreign_hire_only == 1, year,.))
+(8,458 missing values generated)
+
+. bys frame_id_numeric: egen fy_expat = min(cond(has_expat == 1, year,.))
+(7,098 missing values generated)
+
+. count if first_year_foreign_new != first_year_foreign_new
+  0
+
+. 
+. mvencode fy_*, mv(0)
+fy_foreign_o: 7446 missing values recoded
+fy_foreig~ho: 8458 missing values recoded
+    fy_expat: 7098 missing values recoded
+
+. 
+. gen x = exporter if time_foreign > -4 & time_foreign < 0
+(8,969 missing values generated)
+
+. egen exporter_before = max(x), by(frame_id_numeric)
+(139 missing values generated)
+
+. drop x
+
+. 
+. sort frame_id_numeric year
+
+. 
+. foreach var in lnL lnQ lnK {
+  2.         gen `var'_sq = `var'^2
+  3.         gen `var'_lag=L.`var'
+  4.         gen `var'_lag_sq=`var'_lag^2
+  5. }
+(1,320 missing values generated)
+(1,320 missing values generated)
+(1,320 missing values generated)
+(1,320 missing values generated)
+(1,320 missing values generated)
+(1,320 missing values generated)
+
+. 
+. foreach depvar in lnQL lnK lnL exporter lnQ TFP_cd lnIK_0 lnQh lnQhr {
+  2.         foreach var in fy_foreign_o fy_foreign_ho fy_expat {
+  3.                 csdid `depvar' lnL_sq lnQ_sq lnK_sq exporter_before i.year i.teaor08_2d, ivar(frame_id_numeric) time(year) gvar(`var') agg(simple) method
+> (ipw) notyet
+  4.                 eststo m`var'`depvar', title("`depvar' `var'")
+  5.         }
+  6.         
+.         foreach var in fy_foreign_o fy_foreign_ho fy_expat {
+  7.                 csdid `depvar' lnL_sq lnQ_sq lnK_sq exporter_before i.year i.teaor08_2d, ivar(frame_id_numeric) time(year) gvar(`var') agg(simple) method
+> (ipw) notyet
+  8.                 eststo mh`var'`depvar', title("efh `depvar' `var'")
+  9.         }
+ 10. }
+Panel is not balanced
+Will use observations with Pair balanced (observed at t0 and t1)
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+..................................................
+.......estimates post: matrix has missing values
+r(504);
+
+end of do-file
+
+r(504);
+

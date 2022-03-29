@@ -1,5 +1,5 @@
 program attgt, eclass
-	syntax varlist [if] [in], treatment(varname) [aggregate(string)] [absorb(varlist)] [pre(integer 999)] [post(integer 999)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(string)] [weightprefix(string)] [treatment2(varname)]
+	syntax varlist [if] [in], treatment(varname) [ipw(varlist)]	[aggregate(string)] [absorb(varlist)] [pre(integer 999)] [post(integer 999)] [reps(int 199)] [notyet] [debug] [cluster(varname)] [limitcontrol(string)] [weightprefix(string)] [treatment2(varname)]
 	marksample touse
 
 	* boostrap
@@ -14,6 +14,15 @@ program attgt, eclass
 		* if we only compute ATT, no need to check pre-trends
 		local pre 0
 	}
+
+	tempvar ipweight
+	quietly generate `ipweight' = 1
+
+	* read panel structure
+	xtset
+	local i = r(panelvar)
+	local time = r(timevar)
+	markout `touse' `i' `time' `treatment' `varlist' `ipw'
 
 	if ("`treatment2'" != "") {
 		capture assert "`limitcontrol'`tyet'" == ""
@@ -32,12 +41,6 @@ program attgt, eclass
 	}
 	tempvar lc_var
 	quietly generate byte `lc_var' = (`limitcontrol')
-
-	* read panel structure
-	xtset
-	local i = r(panelvar)
-	local time = r(timevar)
-	markout `touse' `i' `time' `treatment' `varlist'
 
 	* test that cluster embeds ivar
 	if ("`cluster'"!="") {
@@ -131,37 +134,51 @@ program attgt, eclass
 
 			local treated (`group'==`g') & (`timing')
 			if ("`tyet'"=="") {
-				* never treated
-				local control missing(`group') & (`timing') & (`lc')
-			}
-			else {
 				if "`treatment2'" != "" {
 					local control (`group2'==`g') & (`timing')
-
 				}
 				else {
+					* never treated
+					local control missing(`group') & (`timing') & (`lc')
+				}
+			}
+			else {
 					* not yet treated
 					* QUESTION: > or >=
 					local control (missing(`group') | (`group' > max(`g', `t'))) & (`timing') & (`lc')
+			}
+
+			if ("`ipw'" != "") {
+				tempvar TD phat
+				quietly generate byte `TD' = `treated'
+				capture probit `TD' `ipw' if (`treated' | `control') & `touse' & (`time' == `g')
+				if (_rc==0) {
+					quietly predict `phat' if `control' & `touse' & (`time' == `g'), pr
+					quietly replace `phat' = 0.99 if `phat' > 0.99 & `control' & `touse' & (`time' == `g')
+					quietly replace `ipweight' = `phat' / (1 - `phat') if `control' & `touse' & (`time' == `g')
+					quietly replace `ipweight' = `leadlag2'.`ipweight' if `control' & `touse' & (`leadlag2'.`time' == `g')
+				}
+				else {
+					* invalid propensity score estimates, cannot use this control group
+					quietly replace `ipweight' = 0 if `control' & `touse'
 				}
 			}
+
 			quietly count if `treated' & `touse'
 			local n_treated = r(N)/2
-			quietly summarize `cweight' if `control' & `touse'
+			quietly summarize `ipweight' if `control' & `touse' & `ipweight' != 0 & !missing(`ipweight')
 			local sumw_control = r(sum)/2
 			local n_control = r(N)/2
-			local n_`g'_`t' = `n_treated'
-			if (`n_control' == 0) {
-				* no treatment effect without controls
-				local n_`g'_`t' = 0
-			}
+			local n_`g'_`t' = `n_treated' * `n_control' / (`n_treated' + `n_control')
 
 			tempvar treated_`g'_`t' control_`g'_`t'
 			quietly generate `treated_`g'_`t'' = cond(`time'==`t', +1/`n_treated', -1/`n_treated') if `treated' & `touse'
-			quietly generate `control_`g'_`t'' = cond(`time'==`t', `cweight'/`sumw_control', -`cweight'/`sumw_control') if `control' & `touse'
+			quietly generate `control_`g'_`t'' = cond(`time'==`t', `ipweight'/`sumw_control', -`ipweight'/`sumw_control') if `control' & `touse'
 		}
 		}
 	}
+
+	summarize `ipweight', detail
 
 	if ("`aggregate'"=="e") {
 		tempname n_e
@@ -302,7 +319,6 @@ string scalar lead_lag(real scalar g, real scalar t)
 		return("L" + strofreal(g - t))
 	}
 }
-
 string scalar minus(real scalar t)
 {
 	if (t >= 0) {
@@ -312,14 +328,12 @@ string scalar minus(real scalar t)
 		return("m" + strofreal(-t))
 	} 
 }
-
 real scalar sum_product(string matrix vars)
 {
 	X = 0
 	st_view(X, ., vars, 0)
 	return(colsum(X[1...,1] :* X[1...,2]))
 }
-
 real scalar bs_variance(string matrix vars, string scalar selectvar, real scalar B, real scalar cluster)
 {
 	X = 0
@@ -327,7 +341,6 @@ real scalar bs_variance(string matrix vars, string scalar selectvar, real scalar
 	N = rows(X)
 	Y = J(N, 1, 0)
 	theta = J(B, 1, .)
-
 	if (cluster==1) {
 		group = recode(X[1..., 5])
 		K = max(group)
@@ -336,19 +349,15 @@ real scalar bs_variance(string matrix vars, string scalar selectvar, real scalar
 		group = 1::N
 		K = N
 	}
-
 	for (i=1; i<=B; i++) {
 		flip = rdiscrete(K, 1, (0.5, 0.5))
-
 		for (n=1; n<=N; n++) {
 			Y[n,1] = X[n, 1..2][flip[group[n]]]
 		}
-
 		theta[i, 1] = colsum(Y :* X[1..., 3]) - colsum(Y :* X[1..., 4])
 	}
 	return((variance(theta))[1,1])
 }
-
 real vector recode(real vector x)
 {
 	N = rows(x)
@@ -360,12 +369,10 @@ real vector recode(real vector x)
 	}
 	return(output)
 }
-
 real matrix build_index(real vector ivar, real vector tvar)
 {
 	N = colmax(ivar)
 	T = colmax(tvar)
-
 	index = J(N, T, 0)
 	for (i=1; i<=N; i++) {
 		for (t=1; t<=T; t++) {
@@ -377,22 +384,17 @@ real matrix build_index(real vector ivar, real vector tvar)
 	}
 	return(index)
 }
-
 void difference_baseline(string scalar vars)
 {
 	real matrix YX
 	st_view(YX, ., vars)
-
 	ivar = YX[., 3]
 	tvar = YX[., 4]
 	gvar = YX[., 5]
-
 	T = colmax(tvar)
 	N = colmax(ivar)
-
 	index = build_index(ivar, tvar)
 	printf("503,7 = %f", index[503,7])
-
 	for (i=1; i<=N; i++) {
 		for (g=1; g<=T; g++) {
 			if (index[i, g] > 0) {
@@ -414,5 +416,4 @@ void difference_baseline(string scalar vars)
 		}
 	}
 }
-
 end

@@ -3,10 +3,10 @@ here
 local here = r(here)
 
 cap log close
-log using "`here'/output/est_attgt_loop_weights", text replace
+log using "`here'/output/est_attgt_loop_weightsfo", text replace
 
-use "/`here'/external/pscore.dta", clear
-drop treat_match
+use "/`here'/external/pscore_focontrol.dta", clear
+drop treat_match year_match
 *mvencode weight_match, mv(0)
 reshape wide weight_match, i(frame_id_numeric) j(year)
 *mvencode weight_match*, mv(0)
@@ -47,7 +47,7 @@ foreach depvar in TFP_cd lnIK_0 lnQh lnQhr {
 	}
 }
 
-esttab m* using "`here'/output/table_attgt_loop_weights.tex", mtitle b(3) se(3) replace
-esttab m* using "`here'/output/table_attgt_loop_weights.txt", mtitle b(3) se(3) replace
+esttab m* using "`here'/output/table_attgt_loop_weightsfo.tex", mtitle b(3) se(3) replace
+esttab m* using "`here'/output/table_attgt_loop_weightsfo.txt", mtitle b(3) se(3) replace
 
 log close

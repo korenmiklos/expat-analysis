@@ -36,13 +36,13 @@ mvencode weight_match*, mv(0) override
 
 foreach depvar in TFP_cd lnIK_0 lnQh lnQhr {
 	foreach var in foreign_only foreign_hire_only has_expat {
-		attgt `depvar', treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0)
+		attgt `depvar', treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0) weightprefix(weight_match)
 		count if e(sample) == 1
 		eststo m`var'`depvar', title("`depvar' `var'")
 	}
 	
 	foreach var in foreign_hire_only has_expat {
-		attgt `depvar' if efh, treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0)
+		attgt `depvar' if efh, treatment(`var') aggregate(e) pre(5) post(5) reps(20) notyet limitcontrol(foreign == 0) weightprefix(weight_match)
 		count if e(sample) == 1
 		eststo mh`var'`depvar', title("efh `depvar' `var'")
 	}
