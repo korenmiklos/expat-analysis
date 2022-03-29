@@ -3365,3 +3365,207 @@ exporter     |
      event_5 |   .0748032   .0316935     2.36   0.018     .0126851    .1369213
 ------------------------------------------------------------------------------
 ```
+
+# 2021-07-14
+## Bootstrap the difference between two treatments
+
+The Callaway-Sant'Anna ATT(g,t) effect is defined as
+$$
+\text{ATT}_{gt} = 
+\text E_{i:G(i)=g} (y_{it} - y_{ig})
+-
+\text E_{i:G(i)>t} (y_{it} - y_{ig}).
+$$
+Were are interested in the ATTs of multiple treatments that happen at the same time $g$. 
+
+We further restrict the control group to be such that they don't receive any of the treatments in the study period.
+
+Let treatment $k$ have treatment time $G_k(i)$. The control group for a pair $(g,t)$ is
+$$
+i: \min_k G_k(i) > t,
+$$
+and define 
+$$
+\gamma_{gt} \equiv 
+\text E_{i: \min_k G_k(i) > t} (y_{it} - y_{ig}).
+$$
+Then the ATT of treatment $k$ is
+$$
+\text{ATT}^k_{gt} = 
+\text E_{i:G_k(i)=g} (y_{it} - y_{ig})
+-
+\gamma_{gt}.
+$$
+We will also be interested in the relative efficacy of two treatments, which can be computed as
+$$
+\text{ATT}^k_{gt} - \text{ATT}^l_{gt}= 
+\text E_{i:G_k(i)=g} (y_{it} - y_{ig})
+-
+\text E_{i:G_l(i)=g} (y_{it} - y_{ig}),
+$$
+because the control group is the same for both treatments.
+
+```
+. attgt lnQL, treatment(has_expat_ceo) treatment2(foreign_only) pre(2) post(5) aggregate(e)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating lnQL: event_5
+Callaway Sant'Anna (2021)
+
+                                                        Number of obs = 14,087
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    event_m2 |   .0790276   .0676427     1.17   0.243    -.0535496    .2116048
+    event_m1 |   .0308842   .0448818     0.69   0.491    -.0570826     .118851
+     event_1 |   .1661652   .0538805     3.08   0.002     .0605614    .2717691
+     event_2 |    .292294   .0619047     4.72   0.000     .1709629    .4136251
+     event_3 |   .3292112   .0694408     4.74   0.000     .1931098    .4653127
+     event_4 |   .3484737   .0771349     4.52   0.000     .1972921    .4996554
+     event_5 |   .3166146   .0856003     3.70   0.000     .1488412    .4843881
+------------------------------------------------------------------------------
+
+. attgt exporter, treatment(has_expat_ceo) treatment2(foreign_only) pre(2) post(5) aggregate(e)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+Estimating exporter: event_m2
+Estimating exporter: event_m1
+Estimating exporter: event_1
+Estimating exporter: event_2
+Estimating exporter: event_3
+Estimating exporter: event_4
+Estimating exporter: event_5
+Callaway Sant'Anna (2021)
+
+                                                        Number of obs = 14,087
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    event_m2 |  -.0033099   .0270873    -0.12   0.903       -.0564    .0497801
+    event_m1 |  -.0009375   .0206869    -0.05   0.964    -.0414831    .0396081
+     event_1 |   .0442152   .0184495     2.40   0.017     .0080548    .0803756
+     event_2 |   .0529061   .0240689     2.20   0.028     .0057319    .1000803
+     event_3 |   .0807434   .0251196     3.21   0.001     .0315099     .129977
+     event_4 |    .101172   .0293931     3.44   0.001     .0435627    .1587814
+     event_5 |    .085313   .0306494     2.78   0.005     .0252413    .1453846
+------------------------------------------------------------------------------
+```
+
+# 2021-09-08
+## Fix several hard-to-detect bugs in the dual treatment case
+
+Now the control group does not matter (because there is no control group) and the inverse treatment results in almost exactly the inverse effect. The discrepancy is caused by weighting, which will be solved by #224.
+
+```
+. attgt lnQL, treatment(has_expat_ceo) treatment2(foreign_hire_only) aggregate(att) pre(3) post(5) reps(20)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+Estimating lnQL: att
+Callaway Sant'Anna (2021)
+
+                                                         Number of obs = 3,383
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         att |   .3289614   .1027852     3.20   0.001      .127506    .5304167
+------------------------------------------------------------------------------
+
+. attgt lnQL, treatment(foreign_hire_only) treatment2(has_expat_ceo) aggregate(att) pre(3) post(5) reps(20)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+Estimating lnQL: att
+Callaway Sant'Anna (2021)
+
+                                                         Number of obs = 3,383
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         att |  -.3192692   .1014718    -3.15   0.002    -.5181503   -.1203881
+------------------------------------------------------------------------------
+
+. 
+```
+
+# 2021-09-15
+## Symmetric group weights
+
+```
+. attgt lnQL, treatment(has_expat_ceo) treatment2(foreign_hire_only) aggregate(att) pre(3) post(5) reps(20)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+Estimating lnQL: att
+Callaway Sant'Anna (2021)
+
+                                                         Number of obs = 3,383
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         att |   .3176849   .1021125     3.11   0.002     .1175481    .5178216
+------------------------------------------------------------------------------
+
+. attgt lnQL, treatment(foreign_hire_only) treatment2(has_expat_ceo) aggregate(att) pre(3) post(5) reps(20)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+Estimating lnQL: att
+Callaway Sant'Anna (2021)
+
+                                                         Number of obs = 3,383
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         att |  -.3176849   .1021125    -3.11   0.002    -.5178216   -.1175481
+------------------------------------------------------------------------------
+```
+## 2022-02-07
+## Who are the control firms?
+### Monadic design
+
+Treatment: firm `i` hires an expat manager in year `t`
+
+```
+keep if ever_foreign
+attgt ..., notyet limitcontrol(foreign == 0)
+```
+
+Firms will be acquired later, they are still in domestic ownership at time `g` as well as time `t`.  
+
+For identification purposes, closest comparison group is the set of firms that hired a local manager in year `t`.
+
+### Dyadic design
+Treatment: firm `i` hires a manager from market `c` in year `t`
+
+Broad control group is the same: to be but not yet acquired domestic firms. They can be used to estimate firm and time fixed effects in a two-stage approach.
+
+Narrow control: firm `i` hires a expat manager from market `k=/=c` in year `t`
+
+(For illustrative purposes, work out first with only two markets, GER and ITA.)
