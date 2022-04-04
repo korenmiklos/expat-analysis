@@ -20,16 +20,21 @@ rename has_expat_ceo expat_hire
 generate local_hire = foreign_hire & !expat_hire
 generate no_hire = foreign & !foreign_hire
 
-foreach treatment in no_hire local_hire expat_hire {
-    attgt `vars' if year <= 2003, treatment(`treatment') aggregate(att) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) //ipw(`controls')
+*for the sake of column names
+rename no_hire no
+rename local_hire local
+rename expat_hire expat 
+ 
+foreach treatment in no local expat {
+    attgt `vars' if year <= 2003, treatment(`treatment') aggregate(att) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) //ipw(`controls') - //ipw to be figured out
     count if e(sample) == 1
-    eststo mb`var'_`treatment', title("before 2004 `var' _`treatment'")
+    eststo mb`var'_`treatment', title("< 2004 `var' `treatment'")
 }
 
-foreach treatment in no_hire local_hire expat_hire {
+foreach treatment in no local expat {
     attgt `vars' if year >= 2004, treatment(`treatment') aggregate(att) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) //ipw(`controls')
     count if e(sample) == 1
-    eststo ma`var'_`treatment', title("after 2003 `var' _`treatment'")
+    eststo ma`var'_`treatment', title(">= 2004 `var' `treatment'")
 }
 
 esttab m* using "`here'/output/table_attgt_att_split.tex", mtitle b(3) se(3) replace
