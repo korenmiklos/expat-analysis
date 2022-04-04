@@ -22,7 +22,7 @@ generate no_hire = foreign & !foreign_hire
 
 
 foreach treatment in no_hire local_hire expat_hire {
-    attgt `vars', treatment(`treatment') aggregate(e) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) ipw(`controls')
+    attgt `vars', treatment(`treatment') aggregate(e) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) //ipw(`controls')
     count if e(sample) == 1
     do "`here'/code/util/event_study_plot.do"
     foreach outcome in `vars' {
