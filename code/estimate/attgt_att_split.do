@@ -20,6 +20,10 @@ rename has_expat_ceo expat_hire
 generate local_hire = foreign_hire & !expat_hire
 generate no_hire = foreign & !foreign_hire
 
+tab time_foreign no_hire
+tab time_foreign local_hire
+tab time_foreign expat_hire
+
 *for the sake of column names
 rename no_hire no
 rename local_hire local
