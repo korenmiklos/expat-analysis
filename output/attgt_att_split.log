@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/attgt_att_split.log
   log type:  text
- opened on:   4 Apr 2022, 15:03:34
+ opened on:   4 Apr 2022, 15:09:00
 
 . 
 . local pre 2
@@ -34,7 +34,7 @@
 . foreach treatment in no_hire local_hire expat_hire {
   2.     attgt `vars' if year <= 2003, treatment(`treatment') aggregate(att) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) //ipw(`controls')
   3.     count if e(sample) == 1
-  4.     eststo m`var', title("before 2004 `var'")
+  4.     eststo mb`var'_`treatment', title("before 2004 `var' _`treatment'")
   5. }
 
 Panel variable: frame_id_numeric (unbalanced)
@@ -197,7 +197,7 @@ TFP_cd       |
 . foreach treatment in no_hire local_hire expat_hire {
   2.     attgt `vars' if year >= 2004, treatment(`treatment') aggregate(att) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) //ipw(`controls')
   3.     count if e(sample) == 1
-  4.     eststo m`var', title("after 2003 `var'")
+  4.     eststo ma`var'_`treatment', title("after 2003 `var' _`treatment'")
   5. }
 
 Panel variable: frame_id_numeric (unbalanced)
@@ -368,5 +368,5 @@ TFP_cd       |
       name:  <unnamed>
        log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/attgt_att_split.log
   log type:  text
- closed on:   4 Apr 2022, 15:04:12
+ closed on:   4 Apr 2022, 15:09:40
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
