@@ -6,8 +6,8 @@ local here = r(here)
 cap log close
 log using "`here'/output/attgt_att_split", text replace
 
-local pre 5
-local post 10
+local pre 2
+local post 5
 local vars lnL lnQL lnK exporter RperK TFP_cd
 local controls lnQ lnK lnL lnM exporter
 
@@ -21,13 +21,13 @@ generate local_hire = foreign_hire & !expat_hire
 generate no_hire = foreign & !foreign_hire
 
 foreach treatment in no_hire local_hire expat_hire {
-    attgt `vars' if year <= 2003, treatment(`treatment') aggregate(att) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) ipw(`controls')
+    attgt `vars' if year <= 2003, treatment(`treatment') aggregate(att) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) //ipw(`controls')
     count if e(sample) == 1
     eststo m`var', title("before 2004 `var'")
 }
 
 foreach treatment in no_hire local_hire expat_hire {
-    attgt `vars' if year >= 2004, treatment(`treatment') aggregate(att) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) ipw(`controls')
+    attgt `vars' if year >= 2004, treatment(`treatment') aggregate(att) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) //ipw(`controls')
     count if e(sample) == 1
     eststo m`var', title("after 2003 `var'")
 }
