@@ -1,0 +1,2329 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/event_studies.log
+  log type:  text
+ opened on:   3 Apr 2022, 13:20:35
+
+. 
+. local pre 5
+
+. local post 10
+
+. local vars lnL lnQL lnK exporter RperK TFP_cd
+
+. local controls lnQ lnK lnL lnM exporter
+
+. 
+. use "`here'/temp/analysis_sample.dta", clear
+
+. keep if ever_foreign
+(0 observations deleted)
+
+. 
+. count
+  11,501
+
+. 
+. rename has_expat_ceo expat_hire
+
+. generate local_hire = foreign_hire & !expat_hire
+
+. generate no_hire = foreign & !foreign_hire
+
+. 
+. 
+. foreach treatment in no_hire local_hire expat_hire {
+  2.     attgt `vars', treatment(`treatment') aggregate(e) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) ipw(`controls')
+  3.     count if e(sample) == 1
+  4.     do "`here'/code/util/event_study_plot.do"
+  5.     foreach outcome in `vars' {
+  6.         graph display `outcome'
+  7.         graph export "`here'/output/figure/event_study/`treatment'_`outcome'.png", replace
+  8.         graph drop `outcome'
+  9.     }
+ 10. }
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+
+                          __000001
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%     .0015106              0
+10%     .0078272              0       Obs              11,501
+25%      .037239              0       Sum of wgt.      11,501
+
+50%            1                      Mean           .8177141
+                        Largest       Std. dev.      1.583006
+75%            1       8.999998
+90%            1       8.999998       Variance       2.505908
+95%            1       8.999998       Skewness       4.512177
+99%     8.999998       8.999998       Kurtosis       23.61568
+Estimating lnL: event_m5
+Estimating lnL: event_m4
+Estimating lnL: event_m3
+Estimating lnL: event_m2
+Estimating lnL: event_m1
+Estimating lnL: event_1
+Estimating lnL: event_2
+Estimating lnL: event_3
+Estimating lnL: event_4
+Estimating lnL: event_5
+Estimating lnL: event_6
+Estimating lnL: event_7
+Estimating lnL: event_8
+Estimating lnL: event_9
+Estimating lnL: event_10
+Estimating lnQL: event_m5
+Estimating lnQL: event_m4
+Estimating lnQL: event_m3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating lnQL: event_5
+Estimating lnQL: event_6
+Estimating lnQL: event_7
+Estimating lnQL: event_8
+Estimating lnQL: event_9
+Estimating lnQL: event_10
+Estimating lnK: event_m5
+Estimating lnK: event_m4
+Estimating lnK: event_m3
+Estimating lnK: event_m2
+Estimating lnK: event_m1
+Estimating lnK: event_1
+Estimating lnK: event_2
+Estimating lnK: event_3
+Estimating lnK: event_4
+Estimating lnK: event_5
+Estimating lnK: event_6
+Estimating lnK: event_7
+Estimating lnK: event_8
+Estimating lnK: event_9
+Estimating lnK: event_10
+Estimating exporter: event_m5
+Estimating exporter: event_m4
+Estimating exporter: event_m3
+Estimating exporter: event_m2
+Estimating exporter: event_m1
+Estimating exporter: event_1
+Estimating exporter: event_2
+Estimating exporter: event_3
+Estimating exporter: event_4
+Estimating exporter: event_5
+Estimating exporter: event_6
+Estimating exporter: event_7
+Estimating exporter: event_8
+Estimating exporter: event_9
+Estimating exporter: event_10
+Estimating RperK: event_m5
+Estimating RperK: event_m4
+Estimating RperK: event_m3
+Estimating RperK: event_m2
+Estimating RperK: event_m1
+Estimating RperK: event_1
+Estimating RperK: event_2
+Estimating RperK: event_3
+Estimating RperK: event_4
+Estimating RperK: event_5
+Estimating RperK: event_6
+Estimating RperK: event_7
+Estimating RperK: event_8
+Estimating RperK: event_9
+Estimating RperK: event_10
+Estimating TFP_cd: event_m5
+Estimating TFP_cd: event_m4
+Estimating TFP_cd: event_m3
+Estimating TFP_cd: event_m2
+Estimating TFP_cd: event_m1
+Estimating TFP_cd: event_1
+Estimating TFP_cd: event_2
+Estimating TFP_cd: event_3
+Estimating TFP_cd: event_4
+Estimating TFP_cd: event_5
+Estimating TFP_cd: event_6
+Estimating TFP_cd: event_7
+Estimating TFP_cd: event_8
+Estimating TFP_cd: event_9
+Estimating TFP_cd: event_10
+Callaway Sant'Anna (2021)
+
+                                                         Number of obs = 7,766
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+lnL          |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |  -.0685663   .0765049    -0.90   0.370    -.2185131    .0813806
+    event_m1 |    -.07454   .0479368    -1.55   0.120    -.1684943    .0194144
+     event_1 |   -.094897   .0558675    -1.70   0.089    -.2043954    .0146013
+     event_2 |  -.0546654   .0840509    -0.65   0.515    -.2194021    .1100712
+     event_3 |  -.0748492   .1277856    -0.59   0.558    -.3253044     .175606
+     event_4 |   .0348214   .1409534     0.25   0.805    -.2414423     .311085
+     event_5 |   .0063852   .1796988     0.04   0.972    -.3458179    .3585884
+     event_6 |    .086292   .2024133     0.43   0.670    -.3104308    .4830148
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+-------------+----------------------------------------------------------------
+lnQL         |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |  -.4242581   .1841924    -2.30   0.021    -.7852685   -.0632477
+    event_m1 |  -.1035985   .1090488    -0.95   0.342    -.3173302    .1101333
+     event_1 |  -.2696687   .1328687    -2.03   0.042    -.5300865   -.0092508
+     event_2 |  -.2083334   .1513999    -1.38   0.169    -.5050717    .0884049
+     event_3 |  -.3863012   .1970274    -1.96   0.050    -.7724677   -.0001346
+     event_4 |  -.4104629   .2288158    -1.79   0.073    -.8589336    .0380079
+     event_5 |  -.4095395   .2652026    -1.54   0.123     -.929327     .110248
+     event_6 |  -.5913024   .2777854    -2.13   0.033    -1.135752   -.0468531
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+-------------+----------------------------------------------------------------
+lnK          |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |  -.3301084   .1578581    -2.09   0.037    -.6395047   -.0207122
+    event_m1 |  -.1302073    .092829    -1.40   0.161    -.3121488    .0517342
+     event_1 |  -.3141745   .1360759    -2.31   0.021    -.5808783   -.0474706
+     event_2 |  -.3140935   .1852811    -1.70   0.090    -.6772379    .0490508
+     event_3 |  -.3924155   .2564034    -1.53   0.126    -.8949569     .110126
+     event_4 |  -.3186128   .2786739    -1.14   0.253    -.8648035    .2275779
+     event_5 |  -.3972431   .3392766    -1.17   0.242    -1.062213    .2677268
+     event_6 |  -.4724997   .3541229    -1.33   0.182    -1.166568    .2215684
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+-------------+----------------------------------------------------------------
+exporter     |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |  -.0145555     .02645    -0.55   0.582    -.0663966    .0372856
+    event_m1 |  -.0480938   .0215422    -2.23   0.026    -.0903157   -.0058719
+     event_1 |   .0153379   .0197818     0.78   0.438    -.0234337    .0541095
+     event_2 |  -.0049476    .026295    -0.19   0.851    -.0564849    .0465898
+     event_3 |  -.0440144   .0354117    -1.24   0.214    -.1134201    .0253913
+     event_4 |  -.0350112   .0422341    -0.83   0.407    -.1177886    .0477661
+     event_5 |   .0251286   .0510312     0.49   0.622    -.0748907    .1251479
+     event_6 |  -.0104353   .0570154    -0.18   0.855    -.1221834    .1013128
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+-------------+----------------------------------------------------------------
+RperK        |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |  -.0154076   .0105011    -1.47   0.142    -.0359895    .0051742
+    event_m1 |  -.0097139   .0056805    -1.71   0.087    -.0208474    .0014197
+     event_1 |   .0095302   .0050126     1.90   0.057    -.0002943    .0193547
+     event_2 |   .0083642   .0067729     1.23   0.217    -.0049104    .0216389
+     event_3 |   .0017875   .0107494     0.17   0.868    -.0192809    .0228559
+     event_4 |   .0111288   .0109438     1.02   0.309    -.0103208    .0325783
+     event_5 |   .0174331   .0128605     1.36   0.175     -.007773    .0426392
+     event_6 |   .0319526   .0184214     1.73   0.083    -.0041528     .068058
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+-------------+----------------------------------------------------------------
+TFP_cd       |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |  -.1000137   .0472591    -2.12   0.034    -.1926398   -.0073876
+    event_m1 |   .0362848   .0367989     0.99   0.324    -.0358398    .1084094
+     event_1 |  -.0052762   .0294086    -0.18   0.858    -.0629159    .0523636
+     event_2 |   .0179693    .035074     0.51   0.608    -.0507745    .0867131
+     event_3 |  -.0336867   .0381965    -0.88   0.378    -.1085504     .041177
+     event_4 |   -.074454   .0555603    -1.34   0.180    -.1833502    .0344422
+     event_5 |  -.0693779   .0627339    -1.11   0.269    -.1923342    .0535783
+     event_6 |  -.1243923   .0691241    -1.80   0.072     -.259873    .0110884
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+------------------------------------------------------------------------------
+  7,766
+
+. * assume attgt estimate with aggregate(e) option has been recently produced
+. preserve
+
+. clear
+
+. 
+. local Z 1.96
+
+. 
+. local T = colsof(e(b)) 
+
+. set obs `T'
+Number of observations (_N) was 0, now 90.
+
+. 
+. generate str outcome = ""
+(90 missing values generated)
+
+. generate b = 0
+
+. generate t = 0
+
+. generate upper = 0
+
+. generate lower = 0
+
+. 
+. local colnames : colnames e(b)
+
+. local outcomes : coleq e(b)
+
+. local treatment = e(treatment)
+
+. 
+. forvalues i = 1/`T' {
+  2.     * get event time index
+.     local name : word `i' of `colnames'
+  3.     local outcome : word `i' of `outcomes'
+  4.     replace outcome = "`outcome'" in `i'
+  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-", .)) in `i'
+  6.     * get estimates from regression
+.     replace b = e(b)[1, `i'] in `i'
+  7.     replace upper = b + `Z' * sqrt(e(V)[`i', `i']) in `i'
+  8.     replace lower = b - `Z' * sqrt(e(V)[`i', `i']) in `i'
+  9. }
+variable outcome was str1 now str3
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+variable outcome was str3 now str4
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+variable outcome was str4 now str8
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+
+. * create period 0 for every outcome
+. expand 1+(t==1), generate(expanded)
+(6 observations created)
+
+. foreach X in t b upper lower {
+  2.     replace `X' = 0 if expanded
+  3. }
+(6 real changes made)
+(6 real changes made)
+(6 real changes made)
+(6 real changes made)
+
+. sort outcome t
+
+. 
+. levelsof outcome, local(outcomes)
+`"RperK"' `"TFP_cd"' `"exporter"' `"lnK"' `"lnL"' `"lnQL"'
+
+. foreach X in `outcomes' {
+  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(none)) ///
+>         (line b t if outcome=="`X'", lcolor(blue)), ///
+>         ytitle("`X'") xtitle("Year since `treatment'") ///
+>         graphregion(color(white)) legend(off)
+  3.     graph rename `X'
+  4. }
+
+. restore
+
+. 
+end of do-file
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/no_hire_lnL.png saved as PNG format
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/no_hire_lnQL.png saved as PNG format
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/no_hire_lnK.png saved as PNG format
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/no_hire_exporter.png saved as PNG format
+(file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/no_hire_RperK.png not found)
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/no_hire_RperK.png saved as PNG format
+(file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/no_hire_TFP_cd.png not found)
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/no_hire_TFP_cd.png saved as PNG format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+
+                          __000001
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%     3.54e-10              0
+10%     .0027306              0       Obs              11,501
+25%     .0235281              0       Sum of wgt.      11,501
+
+50%            1                      Mean           .8260253
+                        Largest       Std. dev.      1.667431
+75%            1       8.999998
+90%            1       8.999998       Variance       2.780325
+95%            1       8.999998       Skewness       4.292614
+99%     8.999998       8.999998       Kurtosis       21.31825
+Estimating lnL: event_m5
+Estimating lnL: event_m4
+Estimating lnL: event_m3
+Estimating lnL: event_m2
+Estimating lnL: event_m1
+Estimating lnL: event_1
+Estimating lnL: event_2
+Estimating lnL: event_3
+Estimating lnL: event_4
+Estimating lnL: event_5
+Estimating lnL: event_6
+Estimating lnL: event_7
+Estimating lnL: event_8
+Estimating lnL: event_9
+Estimating lnL: event_10
+Estimating lnQL: event_m5
+Estimating lnQL: event_m4
+Estimating lnQL: event_m3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating lnQL: event_5
+Estimating lnQL: event_6
+Estimating lnQL: event_7
+Estimating lnQL: event_8
+Estimating lnQL: event_9
+Estimating lnQL: event_10
+Estimating lnK: event_m5
+Estimating lnK: event_m4
+Estimating lnK: event_m3
+Estimating lnK: event_m2
+Estimating lnK: event_m1
+Estimating lnK: event_1
+Estimating lnK: event_2
+Estimating lnK: event_3
+Estimating lnK: event_4
+Estimating lnK: event_5
+Estimating lnK: event_6
+Estimating lnK: event_7
+Estimating lnK: event_8
+Estimating lnK: event_9
+Estimating lnK: event_10
+Estimating exporter: event_m5
+Estimating exporter: event_m4
+Estimating exporter: event_m3
+Estimating exporter: event_m2
+Estimating exporter: event_m1
+Estimating exporter: event_1
+Estimating exporter: event_2
+Estimating exporter: event_3
+Estimating exporter: event_4
+Estimating exporter: event_5
+Estimating exporter: event_6
+Estimating exporter: event_7
+Estimating exporter: event_8
+Estimating exporter: event_9
+Estimating exporter: event_10
+Estimating RperK: event_m5
+Estimating RperK: event_m4
+Estimating RperK: event_m3
+Estimating RperK: event_m2
+Estimating RperK: event_m1
+Estimating RperK: event_1
+Estimating RperK: event_2
+Estimating RperK: event_3
+Estimating RperK: event_4
+Estimating RperK: event_5
+Estimating RperK: event_6
+Estimating RperK: event_7
+Estimating RperK: event_8
+Estimating RperK: event_9
+Estimating RperK: event_10
+Estimating TFP_cd: event_m5
+Estimating TFP_cd: event_m4
+Estimating TFP_cd: event_m3
+Estimating TFP_cd: event_m2
+Estimating TFP_cd: event_m1
+Estimating TFP_cd: event_1
+Estimating TFP_cd: event_2
+Estimating TFP_cd: event_3
+Estimating TFP_cd: event_4
+Estimating TFP_cd: event_5
+Estimating TFP_cd: event_6
+Estimating TFP_cd: event_7
+Estimating TFP_cd: event_8
+Estimating TFP_cd: event_9
+Estimating TFP_cd: event_10
+Callaway Sant'Anna (2021)
+
+                                                         Number of obs = 7,472
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+lnL          |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |   .1792308   .0952725     1.88   0.060    -.0074999    .3659614
+    event_m1 |   .0556438   .0570656     0.98   0.330    -.0562027    .1674903
+     event_1 |  -.0164141   .0830744    -0.20   0.843    -.1792369    .1464086
+     event_2 |  -.0235546   .1087994    -0.22   0.829    -.2367974    .1896882
+     event_3 |    .028636   .1338132     0.21   0.831     -.233633     .290905
+     event_4 |  -.0695707   .1557051    -0.45   0.655     -.374747    .2356056
+     event_5 |   .0599435   .1766286     0.34   0.734    -.2862422    .4061292
+     event_6 |  -.1973927   .2163583    -0.91   0.362    -.6214473    .2266618
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+-------------+----------------------------------------------------------------
+lnQL         |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |  -.1447353   .1463913    -0.99   0.323     -.431657    .1421864
+    event_m1 |  -.2550911   .1312833    -1.94   0.052    -.5124016    .0022194
+     event_1 |  -.6074591   .1602757    -3.79   0.000    -.9215937   -.2933246
+     event_2 |  -.4214104    .172746    -2.44   0.015    -.7599863   -.0828345
+     event_3 |  -.3567391    .182752    -1.95   0.051    -.7149264    .0014482
+     event_4 |  -.3937927   .2109351    -1.87   0.062    -.8072178    .0196324
+     event_5 |  -.3545611   .2241122    -1.58   0.114    -.7938129    .0846906
+     event_6 |  -.3512015   .2280532    -1.54   0.124    -.7981776    .0957745
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+-------------+----------------------------------------------------------------
+lnK          |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |   .1563359   .1408972     1.11   0.267    -.1198176    .4324894
+    event_m1 |  -.0220097   .1257862    -0.17   0.861    -.2685462    .2245268
+     event_1 |  -.3642322   .1562414    -2.33   0.020    -.6704596   -.0580047
+     event_2 |   -.342414   .2032936    -1.68   0.092     -.740862    .0560341
+     event_3 |  -.3141737    .239083    -1.31   0.189    -.7827679    .1544204
+     event_4 |  -.4909282   .2540173    -1.93   0.053    -.9887929    .0069364
+     event_5 |  -.3558458   .2655847    -1.34   0.180    -.8763823    .1646907
+     event_6 |  -.6587106   .3407276    -1.93   0.053    -1.326524    .0091031
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+-------------+----------------------------------------------------------------
+exporter     |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |   .0024603   .0386388     0.06   0.949    -.0732702    .0781909
+    event_m1 |  -.0264891   .0318721    -0.83   0.406    -.0889572    .0359791
+     event_1 |    .030783   .0258671     1.19   0.234    -.0199155    .0814815
+     event_2 |  -.0030286   .0296381    -0.10   0.919    -.0611182    .0550609
+     event_3 |   .0384665   .0358063     1.07   0.283    -.0317125    .1086455
+     event_4 |  -.0045317    .041846    -0.11   0.914    -.0865483    .0774848
+     event_5 |   .0254982   .0428775     0.59   0.552    -.0585402    .1095366
+     event_6 |   .0027165    .058875     0.05   0.963    -.1126764    .1181095
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+-------------+----------------------------------------------------------------
+RperK        |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |  -.0059171   .0084878    -0.70   0.486    -.0225529    .0107188
+    event_m1 |   .0119306    .010093     1.18   0.237    -.0078514    .0317126
+     event_1 |  -.0009666   .0055374    -0.17   0.861    -.0118198    .0098865
+     event_2 |   .0082829    .010417     0.80   0.427     -.012134    .0286998
+     event_3 |    -.00047   .0105029    -0.04   0.964    -.0210553    .0201154
+     event_4 |  -.0060172   .0113692    -0.53   0.597    -.0283003     .016266
+     event_5 |  -.0068036    .010524    -0.65   0.518    -.0274304    .0138231
+     event_6 |   -.000279   .0114397    -0.02   0.981    -.0227004    .0221423
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+-------------+----------------------------------------------------------------
+TFP_cd       |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |  -.0782406   .0459664    -1.70   0.089    -.1683331    .0118518
+    event_m1 |  -.0916197   .0346484    -2.64   0.008    -.1595294     -.02371
+     event_1 |  -.0334357    .043569    -0.77   0.443    -.1188295     .051958
+     event_2 |    -.02203   .0457371    -0.48   0.630    -.1116731    .0676132
+     event_3 |  -.0122112   .0527472    -0.23   0.817    -.1155938    .0911713
+     event_4 |  -.0659889   .0632589    -1.04   0.297    -.1899742    .0579964
+     event_5 |  -.0998565   .0679655    -1.47   0.142    -.2330665    .0333535
+     event_6 |  -.1343212   .0672282    -2.00   0.046    -.2660861   -.0025563
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+------------------------------------------------------------------------------
+  7,472
+
+. * assume attgt estimate with aggregate(e) option has been recently produced
+. preserve
+
+. clear
+
+. 
+. local Z 1.96
+
+. 
+. local T = colsof(e(b)) 
+
+. set obs `T'
+Number of observations (_N) was 0, now 90.
+
+. 
+. generate str outcome = ""
+(90 missing values generated)
+
+. generate b = 0
+
+. generate t = 0
+
+. generate upper = 0
+
+. generate lower = 0
+
+. 
+. local colnames : colnames e(b)
+
+. local outcomes : coleq e(b)
+
+. local treatment = e(treatment)
+
+. 
+. forvalues i = 1/`T' {
+  2.     * get event time index
+.     local name : word `i' of `colnames'
+  3.     local outcome : word `i' of `outcomes'
+  4.     replace outcome = "`outcome'" in `i'
+  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-", .)) in `i'
+  6.     * get estimates from regression
+.     replace b = e(b)[1, `i'] in `i'
+  7.     replace upper = b + `Z' * sqrt(e(V)[`i', `i']) in `i'
+  8.     replace lower = b - `Z' * sqrt(e(V)[`i', `i']) in `i'
+  9. }
+variable outcome was str1 now str3
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+variable outcome was str3 now str4
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+variable outcome was str4 now str8
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+
+. * create period 0 for every outcome
+. expand 1+(t==1), generate(expanded)
+(6 observations created)
+
+. foreach X in t b upper lower {
+  2.     replace `X' = 0 if expanded
+  3. }
+(6 real changes made)
+(6 real changes made)
+(6 real changes made)
+(6 real changes made)
+
+. sort outcome t
+
+. 
+. levelsof outcome, local(outcomes)
+`"RperK"' `"TFP_cd"' `"exporter"' `"lnK"' `"lnL"' `"lnQL"'
+
+. foreach X in `outcomes' {
+  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(none)) ///
+>         (line b t if outcome=="`X'", lcolor(blue)), ///
+>         ytitle("`X'") xtitle("Year since `treatment'") ///
+>         graphregion(color(white)) legend(off)
+  3.     graph rename `X'
+  4. }
+
+. restore
+
+. 
+end of do-file
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/local_hire_lnL.png saved as PNG format
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/local_hire_lnQL.png saved as PNG format
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/local_hire_lnK.png saved as PNG format
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/local_hire_exporter.png saved as PNG format
+(file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/local_hire_RperK.png not found)
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/local_hire_RperK.png saved as PNG format
+(file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/local_hire_TFP_cd.png not found)
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/local_hire_TFP_cd.png saved as PNG format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+
+                          __000001
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%     .0042297              0
+10%     .0106216              0       Obs              11,501
+25%     .0335841              0       Sum of wgt.      11,501
+
+50%     .9912882                      Mean           .7042681
+                        Largest       Std. dev.      1.327718
+75%            1       8.999998
+90%            1       8.999998       Variance       1.762835
+95%            1       8.999998       Skewness       5.290434
+99%     8.999998       8.999998       Kurtosis        33.4306
+Estimating lnL: event_m5
+Estimating lnL: event_m4
+Estimating lnL: event_m3
+Estimating lnL: event_m2
+Estimating lnL: event_m1
+Estimating lnL: event_1
+Estimating lnL: event_2
+Estimating lnL: event_3
+Estimating lnL: event_4
+Estimating lnL: event_5
+Estimating lnL: event_6
+Estimating lnL: event_7
+Estimating lnL: event_8
+Estimating lnL: event_9
+Estimating lnL: event_10
+Estimating lnQL: event_m5
+Estimating lnQL: event_m4
+Estimating lnQL: event_m3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating lnQL: event_5
+Estimating lnQL: event_6
+Estimating lnQL: event_7
+Estimating lnQL: event_8
+Estimating lnQL: event_9
+Estimating lnQL: event_10
+Estimating lnK: event_m5
+Estimating lnK: event_m4
+Estimating lnK: event_m3
+Estimating lnK: event_m2
+Estimating lnK: event_m1
+Estimating lnK: event_1
+Estimating lnK: event_2
+Estimating lnK: event_3
+Estimating lnK: event_4
+Estimating lnK: event_5
+Estimating lnK: event_6
+Estimating lnK: event_7
+Estimating lnK: event_8
+Estimating lnK: event_9
+Estimating lnK: event_10
+Estimating exporter: event_m5
+Estimating exporter: event_m4
+Estimating exporter: event_m3
+Estimating exporter: event_m2
+Estimating exporter: event_m1
+Estimating exporter: event_1
+Estimating exporter: event_2
+Estimating exporter: event_3
+Estimating exporter: event_4
+Estimating exporter: event_5
+Estimating exporter: event_6
+Estimating exporter: event_7
+Estimating exporter: event_8
+Estimating exporter: event_9
+Estimating exporter: event_10
+Estimating RperK: event_m5
+Estimating RperK: event_m4
+Estimating RperK: event_m3
+Estimating RperK: event_m2
+Estimating RperK: event_m1
+Estimating RperK: event_1
+Estimating RperK: event_2
+Estimating RperK: event_3
+Estimating RperK: event_4
+Estimating RperK: event_5
+Estimating RperK: event_6
+Estimating RperK: event_7
+Estimating RperK: event_8
+Estimating RperK: event_9
+Estimating RperK: event_10
+Estimating TFP_cd: event_m5
+Estimating TFP_cd: event_m4
+Estimating TFP_cd: event_m3
+Estimating TFP_cd: event_m2
+Estimating TFP_cd: event_m1
+Estimating TFP_cd: event_1
+Estimating TFP_cd: event_2
+Estimating TFP_cd: event_3
+Estimating TFP_cd: event_4
+Estimating TFP_cd: event_5
+Estimating TFP_cd: event_6
+Estimating TFP_cd: event_7
+Estimating TFP_cd: event_8
+Estimating TFP_cd: event_9
+Estimating TFP_cd: event_10
+Callaway Sant'Anna (2021)
+
+                                                         Number of obs = 8,180
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+lnL          |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |          0  (omitted)
+    event_m1 |          0  (omitted)
+     event_1 |  -.0397814   .0561752    -0.71   0.479    -.1498828    .0703201
+     event_2 |  -.0200129   .0775033    -0.26   0.796    -.1719166    .1318908
+     event_3 |   .0191132    .087022     0.22   0.826    -.1514467    .1896732
+     event_4 |   .2081151   .0965275     2.16   0.031     .0189247    .3973055
+     event_5 |   .1636502   .1212591     1.35   0.177    -.0740133    .4013136
+     event_6 |   .2138555     .13245     1.61   0.106    -.0457417    .4734527
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+-------------+----------------------------------------------------------------
+lnQL         |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |          0  (omitted)
+    event_m1 |          0  (omitted)
+     event_1 |  -.3259765   .1229072    -2.65   0.008    -.5668701   -.0850828
+     event_2 |  -.0285744   .1346139    -0.21   0.832    -.2924128    .2352639
+     event_3 |  -.0019897   .1396563    -0.01   0.989     -.275711    .2717316
+     event_4 |   .0404105   .1416869     0.29   0.775    -.2372908    .3181118
+     event_5 |  -.0255398   .1620964    -0.16   0.875     -.343243    .2921634
+     event_6 |   .0493196   .1640805     0.30   0.764    -.2722723    .3709116
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+-------------+----------------------------------------------------------------
+lnK          |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |          0  (omitted)
+    event_m1 |          0  (omitted)
+     event_1 |  -.2068963   .1049733    -1.97   0.049    -.4126401   -.0011524
+     event_2 |  -.0491177   .1467221    -0.33   0.738    -.3366876    .2384523
+     event_3 |  -.0075018    .157778    -0.05   0.962     -.316741    .3017374
+     event_4 |   .1731622   .1519029     1.14   0.254    -.1245621    .4708865
+     event_5 |   .0686141   .1828806     0.38   0.708    -.2898253    .4270535
+     event_6 |   .2113043   .1882073     1.12   0.262    -.1575752    .5801838
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+-------------+----------------------------------------------------------------
+exporter     |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |          0  (omitted)
+    event_m1 |          0  (omitted)
+     event_1 |   .0674954   .0220889     3.06   0.002     .0242018    .1107889
+     event_2 |   .0844344   .0285721     2.96   0.003     .0284341    .1404348
+     event_3 |   .0948978   .0310505     3.06   0.002       .03404    .1557555
+     event_4 |   .1386599   .0350081     3.96   0.000     .0700453    .2072745
+     event_5 |    .135537    .039403     3.44   0.001     .0583084    .2127655
+     event_6 |    .146438   .0483233     3.03   0.002     .0517261    .2411499
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+-------------+----------------------------------------------------------------
+RperK        |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |          0  (omitted)
+    event_m1 |          0  (omitted)
+     event_1 |   .0097441   .0064329     1.51   0.130    -.0028641    .0223523
+     event_2 |   .0082352   .0085761     0.96   0.337    -.0085736    .0250439
+     event_3 |    .005194   .0099243     0.52   0.601    -.0142573    .0246454
+     event_4 |    .004295   .0099182     0.43   0.665    -.0151443    .0237344
+     event_5 |    .007172   .0094477     0.76   0.448    -.0113452    .0256893
+     event_6 |   .0051538   .0096416     0.53   0.593    -.0137434     .024051
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+-------------+----------------------------------------------------------------
+TFP_cd       |
+    event_m5 |          0  (omitted)
+    event_m4 |          0  (omitted)
+    event_m3 |          0  (omitted)
+    event_m2 |          0  (omitted)
+    event_m1 |          0  (omitted)
+     event_1 |  -.0255232   .0455054    -0.56   0.575    -.1147122    .0636658
+     event_2 |   .0168262   .0451547     0.37   0.709    -.0716754    .1053279
+     event_3 |   .0154183    .045669     0.34   0.736    -.0740913    .1049279
+     event_4 |   .0226445   .0508769     0.45   0.656    -.0770724    .1223614
+     event_5 |   .0235546   .0493404     0.48   0.633    -.0731508    .1202601
+     event_6 |   .0050831    .048283     0.11   0.916    -.0895498    .0997161
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
+------------------------------------------------------------------------------
+  8,180
+
+. * assume attgt estimate with aggregate(e) option has been recently produced
+. preserve
+
+. clear
+
+. 
+. local Z 1.96
+
+. 
+. local T = colsof(e(b)) 
+
+. set obs `T'
+Number of observations (_N) was 0, now 90.
+
+. 
+. generate str outcome = ""
+(90 missing values generated)
+
+. generate b = 0
+
+. generate t = 0
+
+. generate upper = 0
+
+. generate lower = 0
+
+. 
+. local colnames : colnames e(b)
+
+. local outcomes : coleq e(b)
+
+. local treatment = e(treatment)
+
+. 
+. forvalues i = 1/`T' {
+  2.     * get event time index
+.     local name : word `i' of `colnames'
+  3.     local outcome : word `i' of `outcomes'
+  4.     replace outcome = "`outcome'" in `i'
+  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-", .)) in `i'
+  6.     * get estimates from regression
+.     replace b = e(b)[1, `i'] in `i'
+  7.     replace upper = b + `Z' * sqrt(e(V)[`i', `i']) in `i'
+  8.     replace lower = b - `Z' * sqrt(e(V)[`i', `i']) in `i'
+  9. }
+variable outcome was str1 now str3
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+variable outcome was str3 now str4
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+variable outcome was str4 now str8
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+
+. * create period 0 for every outcome
+. expand 1+(t==1), generate(expanded)
+(6 observations created)
+
+. foreach X in t b upper lower {
+  2.     replace `X' = 0 if expanded
+  3. }
+(6 real changes made)
+(6 real changes made)
+(6 real changes made)
+(6 real changes made)
+
+. sort outcome t
+
+. 
+. levelsof outcome, local(outcomes)
+`"RperK"' `"TFP_cd"' `"exporter"' `"lnK"' `"lnL"' `"lnQL"'
+
+. foreach X in `outcomes' {
+  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(none)) ///
+>         (line b t if outcome=="`X'", lcolor(blue)), ///
+>         ytitle("`X'") xtitle("Year since `treatment'") ///
+>         graphregion(color(white)) legend(off)
+  3.     graph rename `X'
+  4. }
+
+. restore
+
+. 
+end of do-file
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/expat_hire_lnL.png saved as PNG format
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/expat_hire_lnQL.png saved as PNG format
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/expat_hire_lnK.png saved as PNG format
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/expat_hire_exporter.png saved as PNG format
+(file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/expat_hire_RperK.png not found)
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/expat_hire_RperK.png saved as PNG format
+(file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/expat_hire_TFP_cd.png not found)
+file /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/figure/event_study/expat_hire_TFP_cd.png saved as PNG format
+
+. 
+. /*esttab m* using "`here'/output/.tex", mtitle b(3) se(3) replace
+> esttab m* using "`here'/output/table_attgt.txt", mtitle b(3) se(3) replace*/
+. 
+. log close
+      name:  <unnamed>
+       log:  /srv/sandbox/zavecz/dropbox_encrypted/darthmouth/expat-analysis//output/event_studies.log
+  log type:  text
+ closed on:   3 Apr 2022, 13:29:33
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
