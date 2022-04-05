@@ -9,7 +9,7 @@ log using "`here'/output/event_studies", text replace
 local pre 5
 local post 10
 local vars lnL lnQL lnK exporter RperK TFP_cd
-local controls lnQ lnK lnL lnM exporter
+local controls lnQ lnL exporter
 
 use "`here'/temp/analysis_sample.dta", clear
 keep if ever_foreign
@@ -22,7 +22,7 @@ generate no_hire = foreign & !foreign_hire
 
 
 foreach treatment in no_hire local_hire expat_hire {
-    attgt `vars', treatment(`treatment') aggregate(e) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) //ipw(`controls')
+    attgt `vars', treatment(`treatment') aggregate(e) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) ipw(`controls')
     count if e(sample) == 1
     do "`here'/code/util/event_study_plot.do"
     foreach outcome in `vars' {
