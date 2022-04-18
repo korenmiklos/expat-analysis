@@ -6,8 +6,8 @@ local here = r(here)
 cap log close
 log using "`here'/output/attgt_att_split", text replace
 
-local pre 5
-local post 10
+local pre 2
+local post 5
 local vars lnL lnQL lnK exporter RperK TFP_cd
 local controls lnQ lnK lnL lnM exporter
 
@@ -20,16 +20,25 @@ rename has_expat_ceo expat_hire
 generate local_hire = foreign_hire & !expat_hire
 generate no_hire = foreign & !foreign_hire
 
-foreach treatment in no_hire local_hire expat_hire {
-    attgt `vars' if year <= 2003, treatment(`treatment') aggregate(att) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) ipw(`controls')
+tab time_foreign no_hire
+tab time_foreign local_hire
+tab time_foreign expat_hire
+
+*for the sake of column names
+rename no_hire no
+rename local_hire local
+rename expat_hire expat 
+ 
+foreach treatment in no local expat {
+    attgt `vars' if year <= 2003, treatment(`treatment') aggregate(att) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) //ipw(`controls') - //ipw to be figured out
     count if e(sample) == 1
-    eststo m`var', title("before 2004 `var'")
+    eststo mb`var'_`treatment', title("< 2004 `var' `treatment'")
 }
 
-foreach treatment in no_hire local_hire expat_hire {
-    attgt `vars' if year >= 2004, treatment(`treatment') aggregate(att) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) ipw(`controls')
+foreach treatment in no local expat {
+    attgt `vars' if year >= 2004, treatment(`treatment') aggregate(att) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) //ipw(`controls')
     count if e(sample) == 1
-    eststo m`var', title("after 2003 `var'")
+    eststo ma`var'_`treatment', title(">= 2004 `var' `treatment'")
 }
 
 esttab m* using "`here'/output/table_attgt_att_split.tex", mtitle b(3) se(3) replace
