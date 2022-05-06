@@ -1,8 +1,8 @@
------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
       name:  <unnamed>
        log:  /Users/koren/Documents/workspace/expat//output/event_studies.log
   log type:  text
- opened on:   5 Apr 2022, 07:36:26
+ opened on:   6 May 2022, 16:33:37
 
 . 
 . local pre 5
@@ -17,11 +17,11 @@
 . use "`here'/temp/analysis_sample.dta", clear
 
 . keep if ever_foreign
-(243,388 observations deleted)
+(0 observations deleted)
 
 . 
 . count
-  24,010
+  11,675
 
 . 
 . rename has_expat_ceo expat_hire
@@ -33,35 +33,37 @@
 . 
 . 
 . foreach treatment in no_hire local_hire expat_hire {
-  2.     attgt `vars', treatment(`treatment') aggregate(e) pre(`pre') post(`post') notyet limitcontrol(foreign ==
->  0) ipw(`controls')
+  2.     attgt `vars', treatment(`treatment') aggregate(e) pre(`pre') post(`pos
+> t') notyet limitcontrol(foreign == 0) ipw(`controls')
   3.     count if e(sample) == 1
   4.     do "`here'/code/util/event_study_plot.do"
   5.     foreach outcome in `vars' {
   6.         graph display `outcome'
-  7.         graph export "`here'/output/figure/event_study/`treatment'_`outcome'.png", replace
+  7.         graph export "`here'/output/figure/event_study/`treatment'_`outcom
+> e'.png", replace
   8.         graph drop `outcome'
   9.     }
  10. }
-       panel variable:  frame_id_numeric (unbalanced)
-        time variable:  year, 1988 to 2018, but with gaps
-                delta:  1 unit
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
 Generating weights...
 
                           __000001
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%     .0278486              0
- 5%     .0522296              0
-10%     .0673877              0       Obs              24,010
-25%     .1493328              0       Sum of Wgt.      24,010
+ 1%     .0029651       1.19e-07
+ 5%     .0139273       1.92e-06
+10%     .0204318       .0000358       Obs              11,675
+25%     .0372671       .0000713       Sum of wgt.      11,675
 
-50%            1                      Mean           .6990137
-                        Largest       Std. Dev.      .4203227
-75%            1       1.601795
-90%            1       1.838374       Variance       .1766712
-95%            1       2.330216       Skewness      -.6946272
-99%            1       2.357624       Kurtosis       1.555512
+50%     .1591756                      Mean           .5068256
+                        Largest       Std. dev.      .4757751
+75%            1        2.62031
+90%            1       3.285151       Variance       .2263619
+95%            1       4.347564       Skewness       .2079703
+99%            1        4.82059       Kurtosis       2.071231
 Estimating lnL: event_m5
 Estimating lnL: event_m4
 Estimating lnL: event_m3
@@ -154,114 +156,114 @@ Estimating TFP_cd: event_9
 Estimating TFP_cd: event_10
 Callaway Sant'Anna (2021)
 
-                                                Number of obs     =     15,735
+                                                         Number of obs = 7,727
 
 ------------------------------------------------------------------------------
-             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
 lnL          |
-    event_m5 |  -.0041956   .0798844    -0.05   0.958    -.1607661    .1523749
-    event_m4 |  -.0971485   .0737043    -1.32   0.187    -.2416063    .0473092
-    event_m3 |   -.048507   .0596353    -0.81   0.416    -.1653899     .068376
-    event_m2 |  -.0430911   .0429673    -1.00   0.316    -.1273054    .0411232
-    event_m1 |  -.0525997   .0310733    -1.69   0.091    -.1135024    .0083029
-     event_1 |   .1267006   .0365424     3.47   0.001     .0550788    .1983224
-     event_2 |   .1233207   .0480731     2.57   0.010     .0290992    .2175423
-     event_3 |   .1020705   .0588629     1.73   0.083    -.0132986    .2174396
-     event_4 |   .0965769   .0674839     1.43   0.152    -.0356892     .228843
-     event_5 |   .1064613   .0762528     1.40   0.163    -.0429914    .2559141
-     event_6 |   .1697846   .0842401     2.02   0.044     .0046771    .3348921
-     event_7 |   .1324781   .0932836     1.42   0.156    -.0503543    .3153105
-     event_8 |   .0864292     .10568     0.82   0.413    -.1206998    .2935582
-     event_9 |   .1556958   .1156527     1.35   0.178    -.0709793     .382371
-    event_10 |    .173264   .1351577     1.28   0.200    -.0916403    .4381682
+    event_m5 |  -.0034359   .1401931    -0.02   0.980    -.2782094    .2713375
+    event_m4 |   .0288863   .1273627     0.23   0.821    -.2207399    .2785125
+    event_m3 |    .101937   .1201329     0.85   0.396    -.1335191    .3373932
+    event_m2 |   .0228015   .1034116     0.22   0.825    -.1798816    .2254846
+    event_m1 |  -.1565701   .0698196    -2.24   0.025    -.2934139   -.0197263
+     event_1 |  -.0470832   .0610941    -0.77   0.441    -.1668255    .0726591
+     event_2 |   .0068837   .0784815     0.09   0.930    -.1469372    .1607046
+     event_3 |   .0448914   .0985532     0.46   0.649    -.1482693     .238052
+     event_4 |   .1843372   .1088574     1.69   0.090    -.0290193    .3976937
+     event_5 |   .1515684   .1227574     1.23   0.217    -.0890318    .3921685
+     event_6 |   .2206684   .1354861     1.63   0.103    -.0448794    .4862163
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 -------------+----------------------------------------------------------------
 lnQL         |
-    event_m5 |   .1099927   .1474011     0.75   0.456    -.1789081    .3988934
-    event_m4 |   .1175206   .1282883     0.92   0.360    -.1339199    .3689612
-    event_m3 |   .0952497   .1166978     0.82   0.414    -.1334737    .3239731
-    event_m2 |   .0624966   .0878829     0.71   0.477    -.1097507     .234744
-    event_m1 |   .0518692   .0635013     0.82   0.414    -.0725911    .1763295
-     event_1 |   .0345114   .0700692     0.49   0.622    -.1028217    .1718445
-     event_2 |   .0162535   .0811971     0.20   0.841    -.1428899     .175397
-     event_3 |  -.0132195   .0853189    -0.15   0.877    -.1804415    .1540025
-     event_4 |  -.0295962   .1022729    -0.29   0.772    -.2300473     .170855
-     event_5 |   .0390589    .096314     0.41   0.685    -.1497131    .2278308
-     event_6 |   .0236303   .1067199     0.22   0.825    -.1855369    .2327974
-     event_7 |   .0159591   .1203368     0.13   0.894    -.2198968    .2518149
-     event_8 |  -.0148742   .1299045    -0.11   0.909    -.2694823     .239734
-     event_9 |   .0776843    .133493     0.58   0.561    -.1839572    .3393259
-    event_10 |  -.0048163   .1510047    -0.03   0.975    -.3007801    .2911475
+    event_m5 |   .0343654   .2589606     0.13   0.894    -.4731879    .5419188
+    event_m4 |  -.0503002   .2288178    -0.22   0.826     -.498775    .3981745
+    event_m3 |  -.1703892   .2046406    -0.83   0.405    -.5714775     .230699
+    event_m2 |   -.191911   .1588603    -1.21   0.227    -.5032716    .1194496
+    event_m1 |   -.001209   .1221721    -0.01   0.992    -.2406618    .2382439
+     event_1 |   .2138121   .1248889     1.71   0.087    -.0309657    .4585898
+     event_2 |   .1458584   .1609464     0.91   0.365    -.1695908    .4613077
+     event_3 |   .0416574   .1730902     0.24   0.810    -.2975933     .380908
+     event_4 |   .1103383   .1986206     0.56   0.579     -.278951    .4996275
+     event_5 |   .1491845    .232401     0.64   0.521     -.306313    .6046821
+     event_6 |   -.017945   .2444775    -0.07   0.941    -.4971121     .461222
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 -------------+----------------------------------------------------------------
 lnK          |
-    event_m5 |    .109055   .1908119     0.57   0.568    -.2649295    .4830395
-    event_m4 |   .0168946   .1659172     0.10   0.919    -.3082972    .3420864
-    event_m3 |   .0131621   .1433198     0.09   0.927    -.2677396    .2940639
-    event_m2 |  -.0036258   .1060796    -0.03   0.973     -.211538    .2042865
-    event_m1 |   .0343925   .0759632     0.45   0.651    -.1144927    .1832777
-     event_1 |   .1038465   .0921701     1.13   0.260    -.0768036    .2844967
-     event_2 |   .0262342   .1032895     0.25   0.800    -.1762094    .2286779
-     event_3 |   -.025693   .1151744    -0.22   0.823    -.2514306    .2000446
-     event_4 |  -.0582912   .1387981    -0.42   0.675    -.3303305     .213748
-     event_5 |  -.0401121   .1473614    -0.27   0.785    -.3289352    .2487109
-     event_6 |   -.021016   .1602724    -0.13   0.896    -.3351443    .2931122
-     event_7 |  -.0713005   .1852377    -0.38   0.700    -.4343598    .2917588
-     event_8 |  -.1041352   .2034413    -0.51   0.609    -.5028728    .2946024
-     event_9 |   .0497827   .2163044     0.23   0.818    -.3741661    .4737316
-    event_10 |  -.0112468   .2479253    -0.05   0.964    -.4971715    .4746779
+    event_m5 |  -.0440182   .3100628    -0.14   0.887    -.6517301    .5636937
+    event_m4 |  -.1729016   .2987918    -0.58   0.563    -.7585228    .4127196
+    event_m3 |  -.1386946   .2582431    -0.54   0.591    -.6448418    .3674526
+    event_m2 |  -.1881589   .1996391    -0.94   0.346    -.5794444    .2031265
+    event_m1 |  -.1445294   .1498014    -0.96   0.335    -.4381349     .149076
+     event_1 |   .0772495   .1450311     0.53   0.594    -.2070062    .3615052
+     event_2 |    .040066   .1721226     0.23   0.816     -.297288    .3774201
+     event_3 |   .0963323   .1968476     0.49   0.625    -.2894819    .4821465
+     event_4 |   .1787422   .2199368     0.81   0.416     -.252326    .6098104
+     event_5 |   .1479464   .2458912     0.60   0.547    -.3339916    .6298844
+     event_6 |  -.0238821   .2595061    -0.09   0.927    -.5325047    .4847406
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 -------------+----------------------------------------------------------------
 exporter     |
-    event_m5 |  -.0449285   .0238169    -1.89   0.059    -.0916088    .0017518
-    event_m4 |  -.0402539   .0226218    -1.78   0.075    -.0845919     .004084
-    event_m3 |  -.0280799   .0189255    -1.48   0.138    -.0651731    .0090134
-    event_m2 |  -.0074409     .01713    -0.43   0.664    -.0410152    .0261333
-    event_m1 |  -.0359984   .0131736    -2.73   0.006    -.0618183   -.0101786
-     event_1 |   .0408379    .013195     3.09   0.002     .0149761    .0666996
-     event_2 |   .0420579   .0158498     2.65   0.008     .0109928     .073123
-     event_3 |   .0459555     .01857     2.47   0.013     .0095589    .0823521
-     event_4 |    .040401     .02064     1.96   0.050    -.0000526    .0808546
-     event_5 |   .0748455    .021622     3.46   0.001     .0324671     .117224
-     event_6 |   .0805266   .0244465     3.29   0.001     .0326124    .1284407
-     event_7 |   .0683616   .0267933     2.55   0.011     .0158478    .1208755
-     event_8 |   .0762844   .0318604     2.39   0.017     .0138393    .1387296
-     event_9 |   .0717813    .036736     1.95   0.051    -.0002199    .1437825
-    event_10 |   .0473504    .038943     1.22   0.224    -.0289764    .1236773
+    event_m5 |  -.0574807   .0453203    -1.27   0.205    -.1463069    .0313454
+    event_m4 |  -.0397295   .0373809    -1.06   0.288    -.1129948    .0335358
+    event_m3 |  -.0461413   .0365438    -1.26   0.207    -.1177658    .0254833
+    event_m2 |   .0151403     .03247     0.47   0.641    -.0484997    .0787804
+    event_m1 |  -.0608484   .0234998    -2.59   0.010    -.1069072   -.0147897
+     event_1 |   .0402197   .0209447     1.92   0.055    -.0008312    .0812706
+     event_2 |   .0477412   .0253463     1.88   0.060    -.0019367     .097419
+     event_3 |    .010172   .0342624     0.30   0.767    -.0569811    .0773251
+     event_4 |  -.0045681   .0343087    -0.13   0.894    -.0718119    .0626757
+     event_5 |   .0372966    .042718     0.87   0.383    -.0464292    .1210223
+     event_6 |   .0165464   .0452549     0.37   0.715    -.0721516    .1052443
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 -------------+----------------------------------------------------------------
 RperK        |
-    event_m5 |   .0017036   .0068702     0.25   0.804    -.0117616    .0151689
-    event_m4 |   -.005461   .0055591    -0.98   0.326    -.0163567    .0054347
-    event_m3 |  -.0059786   .0048381    -1.24   0.217     -.015461    .0035039
-    event_m2 |  -.0055382   .0042355    -1.31   0.191    -.0138396    .0027633
-    event_m1 |  -.0027062   .0034075    -0.79   0.427    -.0093848    .0039723
-     event_1 |   .0025734   .0030455     0.84   0.398    -.0033957    .0085425
-     event_2 |   .0068987   .0045356     1.52   0.128     -.001991    .0157884
-     event_3 |   .0078599    .004656     1.69   0.091    -.0012657    .0169855
-     event_4 |   .0105505   .0059402     1.78   0.076    -.0010921    .0221932
-     event_5 |   .0080267   .0063357     1.27   0.205     -.004391    .0204444
-     event_6 |   .0095526   .0072841     1.31   0.190    -.0047239    .0238291
-     event_7 |   .0141703   .0085694     1.65   0.098    -.0026253    .0309659
-     event_8 |   .0169491   .0090302     1.88   0.061    -.0007498     .034648
-     event_9 |   .0172478   .0093122     1.85   0.064    -.0010037    .0354993
-    event_10 |   .0114903   .0091519     1.26   0.209    -.0064471    .0294277
+    event_m5 |   .0065261   .0118588     0.55   0.582    -.0167167     .029769
+    event_m4 |   .0014998   .0096222     0.16   0.876    -.0173594    .0203591
+    event_m3 |  -.0068546    .007932    -0.86   0.387     -.022401    .0086918
+    event_m2 |  -.0084967   .0072704    -1.17   0.243    -.0227464    .0057529
+    event_m1 |  -.0057612   .0041042    -1.40   0.160    -.0138052    .0022828
+     event_1 |   .0083219   .0051979     1.60   0.109    -.0018658    .0185095
+     event_2 |   .0090979   .0074357     1.22   0.221    -.0054759    .0236716
+     event_3 |   .0106379   .0094529     1.13   0.260    -.0078894    .0291653
+     event_4 |   .0142533   .0084185     1.69   0.090    -.0022468    .0307533
+     event_5 |    .012998   .0100017     1.30   0.194    -.0066049    .0326009
+     event_6 |   .0200896   .0148189     1.36   0.175     -.008955    .0491341
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 -------------+----------------------------------------------------------------
 TFP_cd       |
-    event_m5 |   .0275311   .0254621     1.08   0.280    -.0223736    .0774358
-    event_m4 |     .03107   .0212942     1.46   0.145    -.0106659     .072806
-    event_m3 |    .020584    .019605     1.05   0.294    -.0178411     .059009
-    event_m2 |  -.0050394   .0170248    -0.30   0.767    -.0384074    .0283285
-    event_m1 |   .0084474   .0140992     0.60   0.549    -.0191865    .0360813
-     event_1 |   .0143819   .0132615     1.08   0.278    -.0116101     .040374
-     event_2 |   .0191375   .0183326     1.04   0.297    -.0167938    .0550688
-     event_3 |   .0172002   .0231381     0.74   0.457    -.0281496    .0625501
-     event_4 |   .0059408   .0240635     0.25   0.805    -.0412228    .0531045
-     event_5 |   .0102481   .0245731     0.42   0.677    -.0379143    .0584106
-     event_6 |  -.0006297   .0229115    -0.03   0.978    -.0455354     .044276
-     event_7 |  -.0263501   .0274126    -0.96   0.336    -.0800777    .0273776
-     event_8 |  -.0178691   .0314763    -0.57   0.570    -.0795615    .0438234
-     event_9 |  -.0087351   .0356283    -0.25   0.806    -.0785653    .0610952
-    event_10 |  -.0540767   .0384124    -1.41   0.159    -.1293636    .0212102
+    event_m5 |   .0288709   .0359316     0.80   0.422    -.0415537    .0992955
+    event_m4 |  -.0063465   .0314857    -0.20   0.840    -.0680574    .0553643
+    event_m3 |  -.0022623    .030155    -0.08   0.940     -.061365    .0568405
+    event_m2 |  -.0655815   .0469356    -1.40   0.162    -.1575737    .0264107
+    event_m1 |   .0012366    .036825     0.03   0.973     -.070939    .0734122
+     event_1 |   .0053764   .0220517     0.24   0.807    -.0378441    .0485969
+     event_2 |   .0077432   .0257015     0.30   0.763    -.0426307    .0581172
+     event_3 |  -.0240511   .0326649    -0.74   0.462    -.0880731    .0399709
+     event_4 |  -.0597514    .046205    -1.29   0.196    -.1503116    .0308088
+     event_5 |  -.0949739   .0499274    -1.90   0.057    -.1928299    .0028821
+     event_6 |   -.117832   .0527632    -2.23   0.026    -.2212459    -.014418
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 ------------------------------------------------------------------------------
-  15,735
+  7,727
 
 . * assume attgt estimate with aggregate(e) option has been recently produced
 . preserve
@@ -275,7 +277,7 @@ TFP_cd       |
 . local T = colsof(e(b)) 
 
 . set obs `T'
-number of observations (_N) was 0, now 90
+Number of observations (_N) was 0, now 90.
 
 . 
 . generate str outcome = ""
@@ -302,7 +304,8 @@ number of observations (_N) was 0, now 90
 .     local name : word `i' of `colnames'
   3.     local outcome : word `i' of `outcomes'
   4.     replace outcome = "`outcome'" in `i'
-  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-", .)) in `i'
+  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-
+> ", .)) in `i'
   6.     * get estimates from regression
 .     replace b = e(b)[1, `i'] in `i'
   7.     replace upper = b + `Z' * sqrt(e(V)[`i', `i']) in `i'
@@ -366,24 +369,24 @@ variable outcome was str1 now str3
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 variable outcome was str3 now str4
 (1 real change made)
 (1 real change made)
@@ -442,12 +445,24 @@ variable outcome was str3 now str4
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
@@ -505,36 +520,24 @@ variable outcome was str3 now str4
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 variable outcome was str4 now str8
 (1 real change made)
 (1 real change made)
@@ -593,12 +596,24 @@ variable outcome was str4 now str8
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
@@ -656,12 +671,24 @@ variable outcome was str4 now str8
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
@@ -719,48 +746,24 @@ variable outcome was str4 now str8
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 
 . * create period 0 for every outcome
 . expand 1+(t==1), generate(expanded)
@@ -781,7 +784,8 @@ variable outcome was str4 now str8
 `"RperK"' `"TFP_cd"' `"exporter"' `"lnK"' `"lnL"' `"lnQL"'
 
 . foreach X in `outcomes' {
-  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(none)) ///
+  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(
+> none)) ///
 >         (line b t if outcome=="`X'", lcolor(blue)), ///
 >         ytitle("`X'") xtitle("Year since `treatment'") ///
 >         graphregion(color(white)) legend(off)
@@ -792,32 +796,38 @@ variable outcome was str4 now str8
 
 . 
 end of do-file
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_lnL.png written in PNG format)
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_lnQL.png written in PNG format)
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_lnK.png written in PNG format)
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_exporter.png written in PNG forma
-> t)
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_RperK.png written in PNG format)
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_TFP_cd.png written in PNG format)
-       panel variable:  frame_id_numeric (unbalanced)
-        time variable:  year, 1988 to 2018, but with gaps
-                delta:  1 unit
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_
+> lnL.png written in PNG format
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_
+> lnQL.png written in PNG format
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_
+> lnK.png written in PNG format
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_
+> exporter.png written in PNG format
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_
+> RperK.png written in PNG format
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_
+> TFP_cd.png written in PNG format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
 Generating weights...
 
                           __000001
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%     .0043364       1.10e-10
- 5%     .0123984       1.48e-09
-10%     .0175933       1.23e-08       Obs              24,010
-25%     .0327004       2.91e-07       Sum of Wgt.      24,010
+ 1%     .0017484              0
+ 5%     .0074949              0
+10%     .0125537              0       Obs              11,675
+25%     .0307201              0       Sum of wgt.      11,675
 
-50%            1                      Mean           .5252957
-                        Largest       Std. Dev.      .4804423
+50%     .1075862                      Mean           .4897173
+                        Largest       Std. dev.      .4783004
 75%            1              1
-90%            1              1       Variance       .2308248
-95%            1              1       Skewness      -.0274633
-99%            1       1.630945       Kurtosis       1.008851
+90%            1              1       Variance       .2287712
+95%            1              1       Skewness       .1231223
+99%            1       1.305888       Kurtosis       1.027224
 Estimating lnL: event_m5
 Estimating lnL: event_m4
 Estimating lnL: event_m3
@@ -910,114 +920,114 @@ Estimating TFP_cd: event_9
 Estimating TFP_cd: event_10
 Callaway Sant'Anna (2021)
 
-                                                Number of obs     =     15,885
+                                                         Number of obs = 7,290
 
 ------------------------------------------------------------------------------
-             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
 lnL          |
-    event_m5 |   .1456641   .0950554     1.53   0.125     -.040641    .3319693
-    event_m4 |   .1568661   .0827151     1.90   0.058    -.0052526    .3189848
-    event_m3 |   .1325752   .0624524     2.12   0.034     .0101708    .2549796
-    event_m2 |   .0277331   .0451159     0.61   0.539    -.0606925    .1161587
-    event_m1 |   .0254394   .0339192     0.75   0.453     -.041041    .0919199
-     event_1 |   .3719475   .0957653     3.88   0.000     .1842509     .559644
-     event_2 |   .3514476   .1091679     3.22   0.001     .1374824    .5654129
-     event_3 |   .3148805   .1048795     3.00   0.003     .1093205    .5204406
-     event_4 |   .3236495   .1087829     2.98   0.003      .110439    .5368601
-     event_5 |   .3173077     .11156     2.84   0.004      .098654    .5359613
-     event_6 |   .2261131   .1341447     1.69   0.092    -.0368056    .4890318
-     event_7 |   .3919398   .1325796     2.96   0.003     .1320885    .6517911
-     event_8 |   .4151943   .1436423     2.89   0.004     .1336605    .6967281
-     event_9 |    .389215   .1543899     2.52   0.012     .0866162    .6918137
-    event_10 |    .342293   .1561121     2.19   0.028     .0363189    .6482672
+    event_m5 |   .2686819   .1825432     1.47   0.141    -.0890962      .62646
+    event_m4 |   .1166553   .1435799     0.81   0.417    -.1647561    .3980667
+    event_m3 |   .1826632   .1218386     1.50   0.134     -.056136    .4214624
+    event_m2 |    .138368   .1142833     1.21   0.226    -.0856231    .3623591
+    event_m1 |   .0159821   .0717407     0.22   0.824    -.1246271    .1565914
+     event_1 |          0  (omitted)
+     event_2 |     .13201   .1109662     1.19   0.234    -.0854797    .3494996
+     event_3 |   .1743146   .1354248     1.29   0.198    -.0911131    .4397423
+     event_4 |   .2077519   .1556244     1.33   0.182    -.0972663      .51277
+     event_5 |   .1505807   .1673056     0.90   0.368    -.1773321    .4784936
+     event_6 |   -.018455   .1852608    -0.10   0.921    -.3815595    .3446495
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 -------------+----------------------------------------------------------------
 lnQL         |
-    event_m5 |   .0269727   .1285358     0.21   0.834     -.224953    .2788983
-    event_m4 |  -.0139714   .1088384    -0.13   0.898    -.2272908    .1993481
-    event_m3 |   .0434517   .0912344     0.48   0.634    -.1353645     .222268
-    event_m2 |  -.0202102   .0632108    -0.32   0.749    -.1441011    .1036806
-    event_m1 |  -.0043658   .0700259    -0.06   0.950    -.1416139    .1328824
-     event_1 |   .1598628   .1603718     1.00   0.319    -.1544601    .4741857
-     event_2 |   .1647703   .1813968     0.91   0.364     -.190761    .5203015
-     event_3 |   .1708319   .1862404     0.92   0.359    -.1941927    .5358564
-     event_4 |   .1895455   .1938221     0.98   0.328    -.1903389    .5694299
-     event_5 |   .2395178   .2077835     1.15   0.249    -.1677304     .646766
-     event_6 |   .2336823   .2124137     1.10   0.271    -.1826409    .6500055
-     event_7 |   .3044972   .2154458     1.41   0.158    -.1177687    .7267632
-     event_8 |    .349365    .239069     1.46   0.144    -.1192017    .8179316
-     event_9 |   .3562076   .2495935     1.43   0.154    -.1329867    .8454019
-    event_10 |    .363798   .2807695     1.30   0.195       -.1865    .9140961
+    event_m5 |   .0217269   .2846872     0.08   0.939    -.5362497    .5797036
+    event_m4 |   .1525963    .203846     0.75   0.454    -.2469345    .5521271
+    event_m3 |   .0971004   .1929379     0.50   0.615    -.2810509    .4752516
+    event_m2 |  -.0290174   .1668222    -0.17   0.862    -.3559829    .2979481
+    event_m1 |  -.1582492   .1592113    -0.99   0.320    -.4702977    .1537993
+     event_1 |          0  (omitted)
+     event_2 |   .0537454   .1894025     0.28   0.777    -.3174766    .4249675
+     event_3 |   .0112623    .209031     0.05   0.957     -.398431    .4209556
+     event_4 |  -.0545908   .2283969    -0.24   0.811    -.5022404    .3930588
+     event_5 |  -.1628009   .2240217    -0.73   0.467    -.6018754    .2762736
+     event_6 |  -.0580573   .2613319    -0.22   0.824    -.5702584    .4541437
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 -------------+----------------------------------------------------------------
 lnK          |
-    event_m5 |   .2664914   .1940585     1.37   0.170    -.1138562     .646839
-    event_m4 |     .29564   .1591872     1.86   0.063    -.0163612    .6076412
-    event_m3 |   .2607337     .12801     2.04   0.042     .0098386    .5116287
-    event_m2 |   .1489599    .088747     1.68   0.093    -.0249811    .3229009
-    event_m1 |   .0575235   .0813013     0.71   0.479    -.1018242    .2168712
-     event_1 |   .3933385   .2190665     1.80   0.073     -.036024     .822701
-     event_2 |   .3272337   .2540426     1.29   0.198    -.1706806     .825148
-     event_3 |   .2166486    .252491     0.86   0.391    -.2782247    .7115219
-     event_4 |   .1286756   .2669725     0.48   0.630     -.394581    .6519322
-     event_5 |  -.0170245   .2791488    -0.06   0.951     -.564146    .5300971
-     event_6 |   -.094153   .2932527    -0.32   0.748    -.6689176    .4806117
-     event_7 |   .1731503   .2818877     0.61   0.539    -.3793395      .72564
-     event_8 |   .1725136    .310406     0.56   0.578    -.4358709    .7808982
-     event_9 |    .073974   .3300325     0.22   0.823    -.5728778    .7208257
-    event_10 |   .0780348   .3611356     0.22   0.829    -.6297779    .7858475
+    event_m5 |   .3277417   .3214995     1.02   0.308    -.3023858    .9578692
+    event_m4 |   .2828718   .2467902     1.15   0.252    -.2008281    .7665717
+    event_m3 |   .1784642    .239162     0.75   0.456    -.2902848    .6472132
+    event_m2 |   .1388231   .2062196     0.67   0.501    -.2653599    .5430061
+    event_m1 |  -.0202306   .1688443    -0.12   0.905    -.3511594    .3106982
+     event_1 |          0  (omitted)
+     event_2 |   .0456979   .2232811     0.20   0.838    -.3919249    .4833208
+     event_3 |   .0497232   .2552431     0.19   0.846     -.450544    .5499905
+     event_4 |  -.0911478   .2931762    -0.31   0.756    -.6657626     .483467
+     event_5 |  -.1450978   .2996339    -0.48   0.628    -.7323695     .442174
+     event_6 |    -.36939   .3251785    -1.14   0.256    -1.006728    .2679482
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 -------------+----------------------------------------------------------------
 exporter     |
-    event_m5 |   .0099992   .0281337     0.36   0.722    -.0451418    .0651402
-    event_m4 |  -.0097266   .0269365    -0.36   0.718    -.0625211     .043068
-    event_m3 |  -.0257447   .0248206    -1.04   0.300    -.0743922    .0229029
-    event_m2 |  -.0303407   .0202309    -1.50   0.134    -.0699925    .0093111
-    event_m1 |   -.009226   .0157477    -0.59   0.558     -.040091    .0216389
-     event_1 |   .1190312   .0184606     6.45   0.000     .0828492    .1552132
-     event_2 |   .1068152   .0226402     4.72   0.000     .0624413     .151189
-     event_3 |    .129572    .024371     5.32   0.000     .0818057    .1773383
-     event_4 |   .1006326   .0290858     3.46   0.001     .0436256    .1576396
-     event_5 |   .1160353    .034565     3.36   0.001     .0482892    .1837813
-     event_6 |   .1160776   .0375918     3.09   0.002      .042399    .1897562
-     event_7 |   .1201435   .0397236     3.02   0.002     .0422865    .1980004
-     event_8 |   .1193184   .0416817     2.86   0.004     .0376238     .201013
-     event_9 |   .1334911    .043555     3.06   0.002     .0481249    .2188573
-    event_10 |   .1286165   .0455656     2.82   0.005     .0393096    .2179234
+    event_m5 |  -.0294533   .0504107    -0.58   0.559    -.1282564    .0693499
+    event_m4 |  -.0531688   .0449121    -1.18   0.236    -.1411949    .0348574
+    event_m3 |  -.0376011   .0378611    -0.99   0.321    -.1118075    .0366053
+    event_m2 |  -.0764722   .0319523    -2.39   0.017    -.1390975   -.0138469
+    event_m1 |  -.0589357    .028712    -2.05   0.040    -.1152102   -.0026612
+     event_1 |          0  (omitted)
+     event_2 |    .047676   .0308301     1.55   0.122    -.0127499     .108102
+     event_3 |   .0426803   .0395353     1.08   0.280    -.0348075    .1201682
+     event_4 |    -.00671   .0418455    -0.16   0.873    -.0887257    .0753057
+     event_5 |    .018046     .04099     0.44   0.660    -.0622928    .0983849
+     event_6 |  -.0065369   .0458918    -0.14   0.887    -.0964832    .0834094
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 -------------+----------------------------------------------------------------
 RperK        |
-    event_m5 |   .0003101   .0083303     0.04   0.970    -.0160169    .0166371
-    event_m4 |  -.0072726   .0071823    -1.01   0.311    -.0213495    .0068044
-    event_m3 |  -.0103551   .0067153    -1.54   0.123    -.0235168    .0028065
-    event_m2 |  -.0052607    .007033    -0.75   0.454    -.0190452    .0085238
-    event_m1 |   .0029805   .0046057     0.65   0.518    -.0060465    .0120076
-     event_1 |   .0018825   .0043471     0.43   0.665    -.0066377    .0104026
-     event_2 |   .0105027   .0068465     1.53   0.125    -.0029161    .0239216
-     event_3 |   .0075924   .0074259     1.02   0.307     -.006962    .0221469
-     event_4 |   .0100251   .0090642     1.11   0.269    -.0077404    .0277907
-     event_5 |   .0170893   .0112033     1.53   0.127    -.0048689    .0390474
-     event_6 |   .0108016    .012083     0.89   0.371    -.0128806    .0344839
-     event_7 |  -.0032961   .0113126    -0.29   0.771    -.0254684    .0188762
-     event_8 |   .0012482   .0141193     0.09   0.930    -.0264251    .0289215
-     event_9 |   .0094292   .0140708     0.67   0.503    -.0181491    .0370075
-    event_10 |    .004746    .015498     0.31   0.759    -.0256294    .0351214
+    event_m5 |   .0240806   .0146642     1.64   0.101    -.0046608     .052822
+    event_m4 |  -.0041383   .0130925    -0.32   0.752    -.0297991    .0215226
+    event_m3 |  -.0112442   .0096257    -1.17   0.243    -.0301102    .0076218
+    event_m2 |  -.0079544   .0087605    -0.91   0.364    -.0251247    .0092159
+    event_m1 |   .0037925   .0090834     0.42   0.676    -.0140108    .0215957
+     event_1 |          0  (omitted)
+     event_2 |   .0081556   .0101277     0.81   0.421    -.0116944    .0280056
+     event_3 |  -.0058145   .0110568    -0.53   0.599    -.0274855    .0158565
+     event_4 |  -.0086112   .0128643    -0.67   0.503    -.0338248    .0166024
+     event_5 |  -.0083298   .0104461    -0.80   0.425    -.0288038    .0121441
+     event_6 |   .0028568   .0129109     0.22   0.825    -.0224482    .0281617
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 -------------+----------------------------------------------------------------
 TFP_cd       |
-    event_m5 |    .001407   .0236657     0.06   0.953     -.044977     .047791
-    event_m4 |  -.0384781   .0274289    -1.40   0.161    -.0922378    .0152816
-    event_m3 |  -.0234722   .0212377    -1.11   0.269    -.0650973    .0181529
-    event_m2 |   -.015352   .0249081    -0.62   0.538     -.064171     .033467
-    event_m1 |   .0049269   .0154762     0.32   0.750    -.0254059    .0352598
-     event_1 |    .000672   .0164314     0.04   0.967    -.0315329     .032877
-     event_2 |   .0311473   .0199224     1.56   0.118       -.0079    .0701946
-     event_3 |   .0681869   .0249764     2.73   0.006     .0192341    .1171397
-     event_4 |   .0518558   .0258901     2.00   0.045     .0011122    .1025994
-     event_5 |   .0501709   .0228804     2.19   0.028     .0053261    .0950157
-     event_6 |   .0466723   .0266138     1.75   0.079    -.0054898    .0988344
-     event_7 |   .0488087   .0266424     1.83   0.067    -.0034094    .1010267
-     event_8 |   .0728021   .0353623     2.06   0.040     .0034933    .1421108
-     event_9 |   .0746298   .0348566     2.14   0.032     .0063121    .1429475
-    event_10 |   .0871235   .0340426     2.56   0.010     .0204013    .1538457
+    event_m5 |   .0706465   .0643734     1.10   0.272    -.0555231    .1968161
+    event_m4 |   .0753782   .0485211     1.55   0.120    -.0197215    .1704779
+    event_m3 |   .0292327   .0376575     0.78   0.438    -.0445747    .1030401
+    event_m2 |  -.0622953   .0443143    -1.41   0.160    -.1491498    .0245591
+    event_m1 |  -.0646243   .0361209    -1.79   0.074    -.1354199    .0061713
+     event_1 |          0  (omitted)
+     event_2 |   .0115647   .0379142     0.31   0.760    -.0627459    .0858752
+     event_3 |   .0270298   .0396403     0.68   0.495    -.0506638    .1047234
+     event_4 |  -.0236741   .0424968    -0.56   0.577    -.1069663    .0596182
+     event_5 |  -.0905852    .054284    -1.67   0.095      -.19698    .0158095
+     event_6 |   -.107401    .064575    -1.66   0.096    -.2339656    .0191636
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 ------------------------------------------------------------------------------
-  15,885
+  7,290
 
 . * assume attgt estimate with aggregate(e) option has been recently produced
 . preserve
@@ -1031,7 +1041,7 @@ TFP_cd       |
 . local T = colsof(e(b)) 
 
 . set obs `T'
-number of observations (_N) was 0, now 90
+Number of observations (_N) was 0, now 90.
 
 . 
 . generate str outcome = ""
@@ -1058,7 +1068,8 @@ number of observations (_N) was 0, now 90
 .     local name : word `i' of `colnames'
   3.     local outcome : word `i' of `outcomes'
   4.     replace outcome = "`outcome'" in `i'
-  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-", .)) in `i'
+  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-
+> ", .)) in `i'
   6.     * get estimates from regression
 .     replace b = e(b)[1, `i'] in `i'
   7.     replace upper = b + `Z' * sqrt(e(V)[`i', `i']) in `i'
@@ -1092,6 +1103,9 @@ variable outcome was str1 now str3
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
@@ -1119,27 +1133,24 @@ variable outcome was str1 now str3
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 variable outcome was str3 now str4
 (1 real change made)
 (1 real change made)
@@ -1168,6 +1179,9 @@ variable outcome was str3 now str4
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
@@ -1195,12 +1209,24 @@ variable outcome was str3 now str4
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
@@ -1228,6 +1254,9 @@ variable outcome was str3 now str4
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
@@ -1255,42 +1284,24 @@ variable outcome was str3 now str4
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 variable outcome was str4 now str8
 (1 real change made)
 (1 real change made)
@@ -1319,6 +1330,9 @@ variable outcome was str4 now str8
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
@@ -1346,12 +1360,24 @@ variable outcome was str4 now str8
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
@@ -1379,6 +1405,9 @@ variable outcome was str4 now str8
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
@@ -1406,12 +1435,24 @@ variable outcome was str4 now str8
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
@@ -1439,6 +1480,9 @@ variable outcome was str4 now str8
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
@@ -1466,57 +1510,24 @@ variable outcome was str4 now str8
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 
 . * create period 0 for every outcome
 . expand 1+(t==1), generate(expanded)
@@ -1526,9 +1537,9 @@ variable outcome was str4 now str8
   2.     replace `X' = 0 if expanded
   3. }
 (6 real changes made)
-(6 real changes made)
-(6 real changes made)
-(6 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 
 . sort outcome t
 
@@ -1537,7 +1548,8 @@ variable outcome was str4 now str8
 `"RperK"' `"TFP_cd"' `"exporter"' `"lnK"' `"lnL"' `"lnQL"'
 
 . foreach X in `outcomes' {
-  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(none)) ///
+  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(
+> none)) ///
 >         (line b t if outcome=="`X'", lcolor(blue)), ///
 >         ytitle("`X'") xtitle("Year since `treatment'") ///
 >         graphregion(color(white)) legend(off)
@@ -1548,35 +1560,38 @@ variable outcome was str4 now str8
 
 . 
 end of do-file
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hire_lnL.png written in PNG format)
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hire_lnQL.png written in PNG format
-> )
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hire_lnK.png written in PNG format)
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hire_exporter.png written in PNG fo
-> rmat)
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hire_RperK.png written in PNG forma
-> t)
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hire_TFP_cd.png written in PNG form
-> at)
-       panel variable:  frame_id_numeric (unbalanced)
-        time variable:  year, 1988 to 2018, but with gaps
-                delta:  1 unit
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hi
+> re_lnL.png written in PNG format
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hi
+> re_lnQL.png written in PNG format
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hi
+> re_lnK.png written in PNG format
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hi
+> re_exporter.png written in PNG format
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hi
+> re_RperK.png written in PNG format
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hi
+> re_TFP_cd.png written in PNG format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
 Generating weights...
 
                           __000001
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%     .0079285       2.42e-06
- 5%     .0169486       .0000368
-10%     .0211762       .0000379       Obs              24,010
-25%     .0421878       .0000811       Sum of Wgt.      24,010
+ 1%     .0098232       .0005585
+ 5%     .0208264       .0006391
+10%      .029675       .0011807       Obs              11,675
+25%     .0560509       .0012136       Sum of wgt.      11,675
 
-50%            1                      Mean           .5502523
-                        Largest       Std. Dev.      .4770455
+50%     .2041534                      Mean           .5199778
+                        Largest       Std. dev.      .4645549
 75%            1              1
-90%            1              1       Variance       .2275724
-95%            1              1       Skewness      -.1212276
-99%            1       1.110199       Kurtosis       1.021074
+90%            1              1       Variance       .2158113
+95%            1              1       Skewness       .0511748
+99%            1              1       Kurtosis        1.02754
 Estimating lnL: event_m5
 Estimating lnL: event_m4
 Estimating lnL: event_m3
@@ -1669,114 +1684,114 @@ Estimating TFP_cd: event_9
 Estimating TFP_cd: event_10
 Callaway Sant'Anna (2021)
 
-                                                Number of obs     =     15,821
+                                                         Number of obs = 8,678
 
 ------------------------------------------------------------------------------
-             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
 lnL          |
-    event_m5 |     .04575   .0749438     0.61   0.542    -.1011373    .1926372
-    event_m4 |   .0980208   .0661874     1.48   0.139    -.0317042    .2277458
-    event_m3 |   .1053298   .0694689     1.52   0.129    -.0308267    .2414862
-    event_m2 |   .0168777   .0510571     0.33   0.741    -.0831925    .1169478
-    event_m1 |   .0143804    .038853     0.37   0.711      -.06177    .0905308
-     event_1 |   .2484026   .0529439     4.69   0.000     .1446344    .3521708
-     event_2 |   .3074556   .0550378     5.59   0.000     .1995835    .4153276
-     event_3 |   .3119075   .0698786     4.46   0.000     .1749479    .4488671
-     event_4 |   .3400631   .0786709     4.32   0.000      .185871    .4942552
-     event_5 |   .3497202   .0870827     4.02   0.000     .1790412    .5203992
-     event_6 |   .3430919   .1004103     3.42   0.001     .1462913    .5398925
-     event_7 |   .3572171   .1035089     3.45   0.001     .1543434    .5600909
-     event_8 |   .3966904   .1109852     3.57   0.000     .1791633    .6142175
-     event_9 |   .4125366    .123939     3.33   0.001     .1696207    .6554524
-    event_10 |   .3181728   .1442104     2.21   0.027     .0355256    .6008201
+    event_m5 |   .0024351   .1206408     0.02   0.984    -.2340166    .2388868
+    event_m4 |  -.0212766    .100601    -0.21   0.833     -.218451    .1758978
+    event_m3 |  -.0468709   .0940966    -0.50   0.618    -.2312968     .137555
+    event_m2 |   -.010202   .0646984    -0.16   0.875    -.1370086    .1166046
+    event_m1 |  -.0398804   .0422247    -0.94   0.345    -.1226393    .0428784
+     event_1 |   .2939855   .0672304     4.37   0.000     .1622163    .4257548
+     event_2 |   .3283438   .0791968     4.15   0.000      .173121    .4835666
+     event_3 |    .351985   .0953621     3.69   0.000     .1650787    .5388913
+     event_4 |   .4301734   .1042834     4.13   0.000     .2257818    .6345651
+     event_5 |   .4197457   .1182607     3.55   0.000     .1879589    .6515324
+     event_6 |   .4488621   .1296158     3.46   0.001     .1948197    .7029044
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 -------------+----------------------------------------------------------------
 lnQL         |
-    event_m5 |   .0814447   .1255896     0.65   0.517    -.1647063    .3275957
-    event_m4 |   .0886755   .1004006     0.88   0.377     -.108106     .285457
-    event_m3 |  -.0174851    .099843    -0.18   0.861    -.2131738    .1782035
-    event_m2 |  -.0501749    .092296    -0.54   0.587    -.2310718     .130722
-    event_m1 |  -.0647736   .0611177    -1.06   0.289    -.1845621     .055015
-     event_1 |   .1908276   .1160181     1.64   0.100    -.0365638     .418219
-     event_2 |   .2987778    .116819     2.56   0.011     .0698168    .5277389
-     event_3 |   .3320935   .1388138     2.39   0.017     .0600234    .6041635
-     event_4 |   .3286625   .1510656     2.18   0.030     .0325795    .6247456
-     event_5 |   .3765469   .1664374     2.26   0.024     .0503357    .7027582
-     event_6 |   .3901114    .169515     2.30   0.021      .057868    .7223547
-     event_7 |   .3441085   .1700853     2.02   0.043     .0107475    .6774695
-     event_8 |   .3917281   .1871178     2.09   0.036     .0249838    .7584723
-     event_9 |   .3946716   .2064276     1.91   0.056    -.0099191    .7992623
-    event_10 |   .4129358   .2119642     1.95   0.051    -.0025063     .828378
+    event_m5 |   .3169076   .1723656     1.84   0.066    -.0209228    .6547379
+    event_m4 |   .3028543   .1339733     2.26   0.024     .0402714    .5654371
+    event_m3 |   .1178525   .1430199     0.82   0.410    -.1624613    .3981663
+    event_m2 |   .1839741   .1123799     1.64   0.102    -.0362865    .4042347
+    event_m1 |   .0391457   .0932141     0.42   0.675    -.1435506     .221842
+     event_1 |   .1015794   .1161764     0.87   0.382    -.1261221    .3292809
+     event_2 |   .2462654   .1310317     1.88   0.060    -.0105519    .5030828
+     event_3 |   .2851199   .1401789     2.03   0.042     .0103743    .5598656
+     event_4 |   .2415124   .1559103     1.55   0.121     -.064066    .5470909
+     event_5 |   .2149358   .1727373     1.24   0.213    -.1236231    .5534946
+     event_6 |    .311719   .1719083     1.81   0.070    -.0252152    .6486532
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 -------------+----------------------------------------------------------------
 lnK          |
-    event_m5 |   .2974287   .1623348     1.83   0.067    -.0207416     .615599
-    event_m4 |   .3007033   .1369442     2.20   0.028     .0322977     .569109
-    event_m3 |   .1849041   .1428663     1.29   0.196    -.0951087    .4649169
-    event_m2 |   .0537555   .1087603     0.49   0.621    -.1594108    .2669219
-    event_m1 |   .0434234   .0888156     0.49   0.625     -.130652    .2174987
-     event_1 |   .2534007   .1444783     1.75   0.079    -.0297715    .5365729
-     event_2 |   .3151034   .1496787     2.11   0.035     .0217385    .6084682
-     event_3 |   .2971433   .1703434     1.74   0.081    -.0367236    .6310103
-     event_4 |   .2462064   .1841216     1.34   0.181    -.1146654    .6070782
-     event_5 |   .2513806   .2123005     1.18   0.236    -.1647208    .6674819
-     event_6 |   .2650567   .2175289     1.22   0.223    -.1612921    .6914054
-     event_7 |   .2336518   .2156098     1.08   0.279    -.1889357    .6562392
-     event_8 |   .2069876    .236876     0.87   0.382    -.2572809    .6712561
-     event_9 |   .1167723   .2558105     0.46   0.648     -.384607    .6181516
-    event_10 |  -.0190728   .2673981    -0.07   0.943    -.5431634    .5050179
+    event_m5 |    .348835   .2124563     1.64   0.101    -.0675717    .7652418
+    event_m4 |   .2989442   .1763027     1.70   0.090    -.0466027    .6444911
+    event_m3 |    .172911   .1873295     0.92   0.356    -.1942481    .5400701
+    event_m2 |   .1563294   .1297305     1.21   0.228    -.0979377    .4105966
+    event_m1 |   .0396629   .1058985     0.37   0.708    -.1678942    .2472201
+     event_1 |   .3217445   .1506808     2.14   0.033     .0264156    .6170735
+     event_2 |   .4053353   .1733758     2.34   0.019      .065525    .7451457
+     event_3 |    .400081   .1874469     2.13   0.033     .0326918    .7674701
+     event_4 |   .4261725   .2027876     2.10   0.036     .0287162    .8236288
+     event_5 |   .4170899   .2359622     1.77   0.077    -.0453875    .8795672
+     event_6 |   .4646085   .2327506     2.00   0.046     .0084256    .9207913
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 -------------+----------------------------------------------------------------
 exporter     |
-    event_m5 |  -.0136108     .03269    -0.42   0.677     -.077682    .0504605
-    event_m4 |  -.0387367   .0285981    -1.35   0.176    -.0947879    .0173146
-    event_m3 |  -.0084078    .027049    -0.31   0.756    -.0614228    .0446072
-    event_m2 |  -.0130634    .024672    -0.53   0.596    -.0614197    .0352928
-    event_m1 |  -.0018618   .0196803    -0.09   0.925    -.0404345    .0367109
-     event_1 |    .212824    .017964    11.85   0.000     .1776153    .2480327
-     event_2 |   .2188804   .0210004    10.42   0.000     .1777204    .2600405
-     event_3 |   .2194478   .0245967     8.92   0.000     .1712392    .2676564
-     event_4 |   .2410033   .0266601     9.04   0.000     .1887504    .2932563
-     event_5 |   .2533919   .0293106     8.65   0.000     .1959442    .3108395
-     event_6 |   .2424482   .0291448     8.32   0.000     .1853254     .299571
-     event_7 |   .2047794   .0317518     6.45   0.000      .142547    .2670119
-     event_8 |   .1990382   .0344494     5.78   0.000     .1315187    .2665578
-     event_9 |   .2154246   .0340133     6.33   0.000     .1487597    .2820896
-    event_10 |   .1856086   .0369921     5.02   0.000     .1131053    .2581118
+    event_m5 |  -.0277656   .0413978    -0.67   0.502    -.1089038    .0533726
+    event_m4 |  -.0646841   .0330728    -1.96   0.050    -.1295056    .0001374
+    event_m3 |   .0083137   .0293704     0.28   0.777    -.0492511    .0658786
+    event_m2 |  -.0441551   .0258206    -1.71   0.087    -.0947625    .0064523
+    event_m1 |  -.0275701   .0218895    -1.26   0.208    -.0704728    .0153326
+     event_1 |   .1623168   .0213103     7.62   0.000     .1205493    .2040842
+     event_2 |   .1803493   .0256272     7.04   0.000     .1301209    .2305777
+     event_3 |    .167803   .0319544     5.25   0.000     .1051736    .2304324
+     event_4 |   .1863399   .0345327     5.40   0.000     .1186572    .2540227
+     event_5 |   .1861075   .0362951     5.13   0.000     .1149704    .2572445
+     event_6 |   .1787276   .0368033     4.86   0.000     .1065945    .2508607
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 -------------+----------------------------------------------------------------
 RperK        |
-    event_m5 |   .0073469   .0076068     0.97   0.334    -.0075621     .022256
-    event_m4 |    .007557   .0081876     0.92   0.356    -.0084903    .0236044
-    event_m3 |   .0020454   .0081386     0.25   0.802    -.0139059    .0179967
-    event_m2 |  -.0044268   .0055362    -0.80   0.424    -.0152776    .0064239
-    event_m1 |  -.0034153   .0039829    -0.86   0.391    -.0112216    .0043909
-     event_1 |   .0041848   .0052776     0.79   0.428    -.0061591    .0145286
-     event_2 |   .0024652   .0067369     0.37   0.714     -.010739    .0156693
-     event_3 |   .0076527   .0081643     0.94   0.349    -.0083491    .0236545
-     event_4 |   .0025117   .0087699     0.29   0.775    -.0146771    .0197004
-     event_5 |    .000825   .0100932     0.08   0.935    -.0189573    .0206073
-     event_6 |  -.0028052   .0114752    -0.24   0.807    -.0252962    .0196858
-     event_7 |      .0012   .0119477     0.10   0.920     -.022217     .024617
-     event_8 |  -.0028206   .0113155    -0.25   0.803    -.0249987    .0193575
-     event_9 |  -.0025323   .0117589    -0.22   0.829    -.0255792    .0205147
-    event_10 |  -.0014211   .0125395    -0.11   0.910    -.0259981    .0231558
+    event_m5 |   .0015589   .0086491     0.18   0.857     -.015393    .0185107
+    event_m4 |   .0105778   .0101093     1.05   0.295    -.0092361    .0303916
+    event_m3 |  -.0005782   .0080305    -0.07   0.943    -.0163178    .0151613
+    event_m2 |  -.0041541   .0060058    -0.69   0.489    -.0159253     .007617
+    event_m1 |   .0015426   .0039491     0.39   0.696    -.0061976    .0092827
+     event_1 |   .0100325   .0051022     1.97   0.049     .0000323    .0200327
+     event_2 |   .0108213   .0065115     1.66   0.097     -.001941    .0235835
+     event_3 |   .0129762   .0075326     1.72   0.085    -.0017874    .0277398
+     event_4 |   .0079463   .0084818     0.94   0.349    -.0086778    .0245703
+     event_5 |   .0049943   .0086796     0.58   0.565    -.0120173    .0220059
+     event_6 |   .0084149   .0097678     0.86   0.389    -.0107296    .0275593
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 -------------+----------------------------------------------------------------
 TFP_cd       |
-    event_m5 |   .0062218   .0279625     0.22   0.824    -.0485836    .0610272
-    event_m4 |   .0465109   .0258781     1.80   0.072    -.0042092     .097231
-    event_m3 |     .01361   .0249099     0.55   0.585    -.0352124    .0624325
-    event_m2 |  -.0261951   .0262067    -1.00   0.318    -.0775593    .0251691
-    event_m1 |    .002667   .0144132     0.19   0.853    -.0255824    .0309164
-     event_1 |   .0322296   .0231788     1.39   0.164       -.0132    .0776591
-     event_2 |   .0557943   .0269565     2.07   0.038     .0029605    .1086281
-     event_3 |   .0602992   .0304369     1.98   0.048     .0006439    .1199545
-     event_4 |   .0672907   .0323099     2.08   0.037     .0039645     .130617
-     event_5 |   .0726433   .0330193     2.20   0.028     .0079268    .1373599
-     event_6 |    .085954   .0293016     2.93   0.003     .0285239     .143384
-     event_7 |   .0787519   .0336652     2.34   0.019     .0127694    .1447344
-     event_8 |   .0771784   .0359777     2.15   0.032     .0066634    .1476934
-     event_9 |   .0657931   .0381931     1.72   0.085    -.0090641    .1406503
-    event_10 |   .0786878   .0400559     1.96   0.049     .0001797    .1571958
+    event_m5 |    .116364   .0446074     2.61   0.009     .0289352    .2037929
+    event_m4 |   .1111452   .0397195     2.80   0.005     .0332964    .1889939
+    event_m3 |   .0635003   .0378892     1.68   0.094    -.0107611    .1377618
+    event_m2 |   .0391153   .0285194     1.37   0.170    -.0167817    .0950124
+    event_m1 |   .0186816    .031847     0.59   0.557    -.0437375    .0811006
+     event_1 |   .0692465   .0316413     2.19   0.029     .0072308    .1312623
+     event_2 |   .0987949   .0369117     2.68   0.007     .0264492    .1711406
+     event_3 |   .1006833   .0375606     2.68   0.007     .0270659    .1743008
+     event_4 |   .0973777   .0476155     2.05   0.041     .0040531    .1907023
+     event_5 |   .0866441   .0491838     1.76   0.078    -.0097542    .1830425
+     event_6 |   .1063294   .0461622     2.30   0.021     .0158533    .1968056
+     event_7 |          0  (omitted)
+     event_8 |          0  (omitted)
+     event_9 |          0  (omitted)
+    event_10 |          0  (omitted)
 ------------------------------------------------------------------------------
-  15,821
+  8,678
 
 . * assume attgt estimate with aggregate(e) option has been recently produced
 . preserve
@@ -1790,7 +1805,7 @@ TFP_cd       |
 . local T = colsof(e(b)) 
 
 . set obs `T'
-number of observations (_N) was 0, now 90
+Number of observations (_N) was 0, now 90.
 
 . 
 . generate str outcome = ""
@@ -1817,7 +1832,8 @@ number of observations (_N) was 0, now 90
 .     local name : word `i' of `colnames'
   3.     local outcome : word `i' of `outcomes'
   4.     replace outcome = "`outcome'" in `i'
-  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-", .)) in `i'
+  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-
+> ", .)) in `i'
   6.     * get estimates from regression
 .     replace b = e(b)[1, `i'] in `i'
   7.     replace upper = b + `Z' * sqrt(e(V)[`i', `i']) in `i'
@@ -1881,24 +1897,24 @@ variable outcome was str1 now str3
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 variable outcome was str3 now str4
 (1 real change made)
 (1 real change made)
@@ -1957,12 +1973,24 @@ variable outcome was str3 now str4
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
@@ -2020,36 +2048,24 @@ variable outcome was str3 now str4
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 variable outcome was str4 now str8
 (1 real change made)
 (1 real change made)
@@ -2108,12 +2124,24 @@ variable outcome was str4 now str8
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
@@ -2171,12 +2199,24 @@ variable outcome was str4 now str8
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
 (1 real change made)
@@ -2234,48 +2274,24 @@ variable outcome was str4 now str8
 (1 real change made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 (1 real change made)
 (1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 
 . * create period 0 for every outcome
 . expand 1+(t==1), generate(expanded)
@@ -2296,7 +2312,8 @@ variable outcome was str4 now str8
 `"RperK"' `"TFP_cd"' `"exporter"' `"lnK"' `"lnL"' `"lnQL"'
 
 . foreach X in `outcomes' {
-  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(none)) ///
+  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(
+> none)) ///
 >         (line b t if outcome=="`X'", lcolor(blue)), ///
 >         ytitle("`X'") xtitle("Year since `treatment'") ///
 >         graphregion(color(white)) legend(off)
@@ -2307,16 +2324,18 @@ variable outcome was str4 now str8
 
 . 
 end of do-file
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/expat_hire_lnL.png written in PNG format)
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/expat_hire_lnQL.png written in PNG format
-> )
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/expat_hire_lnK.png written in PNG format)
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/expat_hire_exporter.png written in PNG fo
-> rmat)
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/expat_hire_RperK.png written in PNG forma
-> t)
-(file /Users/koren/Documents/workspace/expat//output/figure/event_study/expat_hire_TFP_cd.png written in PNG form
-> at)
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/expat_hi
+> re_lnL.png written in PNG format
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/expat_hi
+> re_lnQL.png written in PNG format
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/expat_hi
+> re_lnK.png written in PNG format
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/expat_hi
+> re_exporter.png written in PNG format
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/expat_hi
+> re_RperK.png written in PNG format
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/expat_hi
+> re_TFP_cd.png written in PNG format
 
 . 
 . /*esttab m* using "`here'/output/.tex", mtitle b(3) se(3) replace
@@ -2326,5 +2345,5 @@ end of do-file
       name:  <unnamed>
        log:  /Users/koren/Documents/workspace/expat//output/event_studies.log
   log type:  text
- closed on:   5 Apr 2022, 08:13:14
------------------------------------------------------------------------------------------------------------------
+ closed on:   6 May 2022, 16:46:42
+-------------------------------------------------------------------------------
