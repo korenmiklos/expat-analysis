@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/koren/Documents/workspace/expat//output/analysis_sample.log
   log type:  text
- opened on:   6 May 2022, 17:53:32
+ opened on:   6 May 2022, 18:00:40
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -689,8 +689,8 @@ end of do-file
   3,846
 
 . 
-. drop if time_foreign > 5 //& time_foreign != .
-(273,053 observations deleted)
+. keep if ever_foreign
+(268,404 observations deleted)
 
 . drop ever_expat* ever_foreign_hire
 
@@ -701,26 +701,26 @@ end of do-file
 
 . 
 . count
-  11,502
+  16,151
 
 . count if ever_foreign
-  11,502
+  16,151
 
 . count if ever_foreign & firm_tag
   1,127
 
 . count if ever_expat & firm_tag
-  424
+  489
 
 . count if has_expat_ceo
-  1,674
+  3,846
 
 . 
 . replace foreign_hire = 1 if ever_foreign_hire == 1 & foreign == 1
-(515 real changes made)
+(1,148 real changes made)
 
 . replace has_expat_ceo = 1 if ever_expat == 1 & foreign == 1
-(389 real changes made)
+(2,012 real changes made)
 
 . 
 . gen foreign_only = foreign & !foreign_hire
@@ -733,20 +733,20 @@ end of do-file
 foreign_on |     foreign_hire
         ly |         0          1 |     Total
 -----------+----------------------+----------
-         0 |     6,689      3,297 |     9,986 
-         1 |     1,516          0 |     1,516 
+         0 |     6,689      8,049 |    14,738 
+         1 |     1,413          0 |     1,413 
 -----------+----------------------+----------
-     Total |     8,205      3,297 |    11,502 
+     Total |     8,102      8,049 |    16,151 
 
 . tab foreign_hire_only has_expat_ceo
 
 foreign_hi |     has_expat_ceo
    re_only |         0          1 |     Total
 -----------+----------------------+----------
-         0 |     8,205      2,063 |    10,268 
-         1 |     1,234          0 |     1,234 
+         0 |     8,102      5,858 |    13,960 
+         1 |     2,191          0 |     2,191 
 -----------+----------------------+----------
-     Total |     9,439      2,063 |    11,502 
+     Total |    10,293      5,858 |    16,151 
 
 . 
 . drop foreign_e5 foreign_e4 foreign_e3 foreign_e2 foreign_e1 foreigne0 foreign
@@ -772,7 +772,7 @@ foreign_hi |     has_expat_ceo
   variable minyear was float now int
   variable maxyear was float now int
   variable exporter_5 was float now byte
-  variable age was float now byte
+  variable age was float now int
   variable owner_spell was float now byte
   variable owner_spell_total was float now byte
   variable divest was float now byte
@@ -797,15 +797,13 @@ foreign_hi |     has_expat_ceo
   variable foreign_only was float now byte
   variable foreign_hire_only was float now byte
   variable originalid was double now long
-  variable sales was double now long
   variable tanass was double now long
   variable jetok was double now long
   variable export was double now long
   variable ranyag was double now long
   variable immat was double now long
   variable final_netgep was double now long
-  variable country_all_ceo was str12 now str9
-  (1,299,726 bytes saved)
+  (1,695,855 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
 file /Users/koren/Documents/workspace/expat//temp/analysis_sample.dta saved
@@ -814,5 +812,5 @@ file /Users/koren/Documents/workspace/expat//temp/analysis_sample.dta saved
       name:  <unnamed>
        log:  /Users/koren/Documents/workspace/expat//output/analysis_sample.log
   log type:  text
- closed on:   6 May 2022, 17:53:43
+ closed on:   6 May 2022, 18:00:53
 -------------------------------------------------------------------------------
