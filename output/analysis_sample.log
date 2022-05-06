@@ -1,9 +1,8 @@
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Documents/research/expat-monadic//output/analysis_sam
-> ple.log
+       log:  /Users/koren/Documents/workspace/expat//output/analysis_sample.log
   log type:  text
- opened on:   5 May 2022, 11:20:32
+ opened on:   6 May 2022, 15:48:39
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -824,28 +823,14 @@ Panel variable: frame_id_numeric (strongly balanced)
 . generate byte survival = 1 - dead_firm
 
 . 
-. tempvar begin end
-
-. egen `begin' = min(cond(survival, year, .)), by(frame_id_numeric)
-
-. egen `end' = max(cond(survival, year+1, .)), by(frame_id_numeric)
-
-. keep if inrange(year, `begin', `end')
-(25,933 observations deleted)
-
-. drop `begin' `end'
-
-. 
 end of do-file
 
 . save "`here'/temp/analysis_sample.dta", replace
-file /Users/koren/Documents/research/expat-monadic//temp/analysis_sample.dta
-    saved
+file /Users/koren/Documents/workspace/expat//temp/analysis_sample.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Documents/research/expat-monadic//output/analysis_sam
-> ple.log
+       log:  /Users/koren/Documents/workspace/expat//output/analysis_sample.log
   log type:  text
- closed on:   5 May 2022, 11:20:54
+ closed on:   6 May 2022, 15:48:51
 -------------------------------------------------------------------------------

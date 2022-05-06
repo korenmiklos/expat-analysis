@@ -12,7 +12,7 @@ ___/   /   /___/   /   /___/       MP—Parallel Edition
 
 Stata license: Single-user 2-core  perpetual
 Serial number: 501706328764
-  Licensed to: Miklós Koren
+  Licensed to: Miklos Koren
                CEU MicroData
 
 Notes:
@@ -26,7 +26,7 @@ Notes:
 . clear all
 
 . here
-/Users/koren/Documents/research/expat-monadic/
+/Users/koren/Documents/workspace/expat/
 
 . local here = r(here)
 
@@ -1301,10 +1301,7 @@ ZW
   (0 bytes saved)
 
 . save "`here'/temp/manager_country.dta", replace
-(file /Users/koren/Documents/research/expat-monadic//temp/manager_country.dta
-    not found)
-file /Users/koren/Documents/research/expat-monadic//temp/manager_country.dta
-    saved
+file /Users/koren/Documents/workspace/expat//temp/manager_country.dta saved
 
 . 
 end of do-file

@@ -12,7 +12,7 @@ ___/   /   /___/   /   /___/       MP—Parallel Edition
 
 Stata license: Single-user 2-core  perpetual
 Serial number: 501706328764
-  Licensed to: Miklós Koren
+  Licensed to: Miklos Koren
                CEU MicroData
 
 Notes:
@@ -33,7 +33,7 @@ Notes:
 . 
 . * find root folder
 . here
-/Users/koren/Documents/research/expat-monadic/
+/Users/koren/Documents/workspace/expat/
 
 . local here = r(here)
 
@@ -41,10 +41,9 @@ Notes:
 . log using "`here'/output/firm_panel", text replace
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Documents/research/expat-monadic//output/firm_panel.l
-> og
+       log:  /Users/koren/Documents/workspace/expat//output/firm_panel.log
   log type:  text
- opened on:   4 May 2022, 23:59:31
+ opened on:   6 May 2022, 15:47:42
 
 . 
 . * keep only sample from balance-small - NOTE: had to restructure as we have t
@@ -60,9 +59,9 @@ Notes:
 . tempfile sample
 
 . save `sample', replace
-(file /var/folders/d3/0fbv6hwj19g5_2r8vdmfkmvh0000gn/T//St10172.000001 not
+(file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St02659.000001 not
     found)
-file /var/folders/d3/0fbv6hwj19g5_2r8vdmfkmvh0000gn/T//St10172.000001 saved
+file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St02659.000001 saved
     as .dta format
 
 . 
@@ -500,7 +499,7 @@ Panel variable: company_manager_id (unbalanced)
 (25,748 real changes made)
 (1231 real changes made)
 (1401 real changes made)
-file /var/folders/d3/0fbv6hwj19g5_2r8vdmfkmvh0000gn/T//St10172.000002 saved
+file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St02659.000002 saved
     as .dta format
   288,033
 
@@ -739,7 +738,7 @@ Panel variable: company_manager_id (unbalanced)
 (5,181 real changes made)
 (143 real changes made)
 (178 real changes made)
-file /var/folders/d3/0fbv6hwj19g5_2r8vdmfkmvh0000gn/T//St10172.000003 saved
+file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St02659.000003 saved
     as .dta format
 
 . 
@@ -840,17 +839,13 @@ has_expat_c |
 
 . *save_all_to_json
 . save "`here'/temp/firm_events.dta", replace
-(file /Users/koren/Documents/research/expat-monadic//temp/firm_events.dta not
-    found)
-file /Users/koren/Documents/research/expat-monadic//temp/firm_events.dta
-    saved
+file /Users/koren/Documents/workspace/expat//temp/firm_events.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Documents/research/expat-monadic//output/firm_panel.l
-> og
+       log:  /Users/koren/Documents/workspace/expat//output/firm_panel.log
   log type:  text
- closed on:   5 May 2022, 01:00:16
+ closed on:   6 May 2022, 15:48:39
 -------------------------------------------------------------------------------
 
 . 

@@ -14,6 +14,9 @@ local controls lnQ lnL exporter
 use "`here'/temp/analysis_sample.dta", clear
 keep if ever_foreign
 
+xtset frame_id_numeric year
+generate byte Fsurvival = F.survival
+
 count
 
 rename has_expat_ceo expat_hire

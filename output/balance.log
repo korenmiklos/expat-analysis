@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Documents/research/expat-monadic//output/balance.log
+       log:  /Users/koren/Documents/workspace/expat//output/balance.log
   log type:  text
- opened on:   4 May 2022, 18:55:00
+ opened on:   6 May 2022, 15:23:59
 
 . 
 . use "`here'/input/merleg-expat/balance-small.dta"
@@ -1001,7 +1001,7 @@ Duplicates in terms of frame_id_numeric
 . tempfile expat
 
 . save `expat'
-file /var/folders/d3/0fbv6hwj19g5_2r8vdmfkmvh0000gn/T//St09839.000002 saved
+file /var/folders/f4/7drmhl1d5kj3wp1r33jvx32m0000gn/T//St02488.000002 saved
     as .dta format
 
 . restore
@@ -1488,16 +1488,12 @@ tanass_18:                                      Number of observations
 . cap drop __*
 
 . save "`here'/temp/balance-small-clean.dta", replace
-(file
-    /Users/koren/Documents/research/expat-monadic//temp/balance-small-clean.d
-    > ta not found)
-file
-    /Users/koren/Documents/research/expat-monadic//temp/balance-small-clean.d
-    > ta saved
+file /Users/koren/Documents/workspace/expat//temp/balance-small-clean.dta
+    saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Documents/research/expat-monadic//output/balance.log
+       log:  /Users/koren/Documents/workspace/expat//output/balance.log
   log type:  text
- closed on:   4 May 2022, 19:12:23
+ closed on:   6 May 2022, 15:33:23
 -------------------------------------------------------------------------------
