@@ -3569,3 +3569,69 @@ Broad control group is the same: to be but not yet acquired domestic firms. They
 Narrow control: firm `i` hires a expat manager from market `k=/=c` in year `t`
 
 (For illustrative purposes, work out first with only two markets, GER and ITA.)
+
+# 2022-05-06
+## Investigate event study graphs
+## Explore multi-CEO firms
+```
+. reghdfe lnQL i.n_expat_ceo  if n_ceo <= 2, a(frame_id_numeric year)
+(dropped 15 singleton observations)
+(MWFE estimator converged in 9 iterations)
+
+HDFE Linear regression                            Number of obs   =     14,452
+Absorbing 2 HDFE groups                           F(   2,  13315) =      17.59
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7400
+                                                  Adj R-squared   =     0.7178
+                                                  Within R-sq.    =     0.0026
+                                                  Root MSE        =     0.7734
+
+------------------------------------------------------------------------------
+        lnQL | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+ n_expat_ceo |
+          1  |   .1046176   .0244717     4.28   0.000     .0566495    .1525857
+          2  |   .2676369   .0533132     5.02   0.000     .1631355    .3721383
+             |
+       _cons |   9.875211   .0081151  1216.90   0.000     9.859304    9.891117
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+----------------------------------------------------------+
+      Absorbed FE | Categories  - Redundant  = Num. Coefs |
+------------------+---------------------------------------|
+ frame_id_numeric |      1102           0        1102     |
+             year |        34           1          33     |
+----------------------------------------------------------+
+
+. reghdfe lnQL i.n_expat_ceo foreign  if n_ceo <= 2, a(frame_id_numeric year)
+(dropped 15 singleton observations)
+(MWFE estimator converged in 9 iterations)
+
+HDFE Linear regression                            Number of obs   =     14,452
+Absorbing 2 HDFE groups                           F(   3,  13314) =      13.41
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7401
+                                                  Adj R-squared   =     0.7179
+                                                  Within R-sq.    =     0.0030
+                                                  Root MSE        =     0.7732
+
+------------------------------------------------------------------------------
+        lnQL | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+ n_expat_ceo |
+          1  |   .0872814    .025661     3.40   0.001     .0369822    .1375805
+          2  |   .2534001   .0536821     4.72   0.000     .1481757    .3586246
+             |
+     foreign |   .0499104   .0222632     2.24   0.025     .0062714    .0935494
+       _cons |   9.850018   .0138605   710.66   0.000      9.82285    9.877187
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+----------------------------------------------------------+
+      Absorbed FE | Categories  - Redundant  = Num. Coefs |
+------------------+---------------------------------------|
+ frame_id_numeric |      1102           0        1102     |
+             year |        34           1          33     |
+----------------------------------------------------------+
+```
