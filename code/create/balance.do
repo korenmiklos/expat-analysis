@@ -26,13 +26,8 @@ count if emp != emp_cl & emp_cl != .
 gen emp_add = emp_cl + 1
 corr emp emp_cl emp_add
 
-* use fo2 instead of fo3
-merge 1:1 originalid year using "input/balance-sheet-80-19-plus-vars/balance-80-19-plus-vars.dta", keep(1 3) nogen
-tab fo2 fo3, missing
-
 * foreign fill 
-rename fo2 foreign
-*rename fo3 foreign
+rename fo3 foreign
 tab year foreign, missing
 inspect foreign
 *inspect jetok_18 if missing(foreign)
