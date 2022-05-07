@@ -31,8 +31,7 @@ merge 1:1 originalid year using "input/balance-sheet-80-19-plus-vars/balance-80-
 tab fo2 fo3, missing
 
 * foreign fill 
-rename fo2 foreign
-*rename fo3 foreign
+rename fo3 foreign
 tab year foreign, missing
 inspect foreign
 *inspect jetok_18 if missing(foreign)
