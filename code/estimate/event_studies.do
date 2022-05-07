@@ -20,13 +20,10 @@ generate byte Fsurvival = F.survival
 count
 
 rename has_expat_ceo expat_hire
-generate byte local_hire = foreign_hire & !expat_hire
-generate byte no_hire = foreign & !foreign_hire
-generate byte partly_expat = expat_hire & !expat_alone
+generate local_hire = foreign_hire & !expat_hire
+generate no_hire = foreign & !foreign_hire
 
-local treatments no_hire local_hire partly_expat expat_alone
-
-/*foreach treatment in `treatments' {
+foreach treatment in no_hire local_hire expat_hire {
     attgt Fsurvival, treatment(`treatment') aggregate(e) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) ipw(`controls')
     count if e(sample) == 1
     do "`here'/code/util/event_study_plot.do"
@@ -35,9 +32,9 @@ local treatments no_hire local_hire partly_expat expat_alone
         graph export "`here'/output/figure/event_study/`treatment'_`outcome'.png", replace
         graph drop `outcome'
     }
-}*/
+}
 keep if survival
-foreach treatment in `treatments' {
+foreach treatment in no_hire local_hire expat_hire {
     attgt `vars' if survival, treatment(`treatment') aggregate(e) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) ipw(`controls')
     count if e(sample) == 1
     do "`here'/code/util/event_study_plot.do"
