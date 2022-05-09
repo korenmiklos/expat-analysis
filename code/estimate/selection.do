@@ -2,28 +2,33 @@ here
 local here = r(here)
 
 use "`here'/temp/analysis_sample.dta", clear
+keep if survival
 
-local explanatory lnL exporter TFP_cd RperK ??
-local dummies teaor08_2d##year
-local options keep(lnL exporter TFP_cd RperK) tex(frag) dec(3) nocons nonotes addtext(Ind-year FE, YES)
-local sample1 !foreign & owner_spell == 1
+rename has_expat_ceo expat_hire
+generate local_hire = foreign_hire & !expat_hire
+generate no_hire = foreign & !foreign_hire
 
-* selection into foreign acquisition
-reghdfe ever_foreign `explanatory' if `sample1', a(`dummies') cluster(originalid)
+xtset frame_id_numeric year
+generate control = F.no_hire + 2*F.local_hire + 3*F.expat_hire
+
+label define ctrl 1 "No hire" 2 "Local hire" 3 "Expat hire"
+label values control ctrl
+
+tabulate control, missing
+
+local explanatory lnL lnKL lnMQ exporter TFP_cd
+local dummies i.teaor08_2d i.year
+local options keep(lnL lnKL lnMQ exporter TFP_cd) tex(frag) dec(3) nocons nonotes label
+local sample1 time_foreign == -1
+
+label variable lnL "Employment (log)"
+label variable lnKL "Capital per worker (log)"
+label variable lnMQ "Material share (log)"
+label variable exporter "Exporter (dummy)"
+label variable TFP_cd "TFP (log)"
+
+mlogit control `explanatory' `dummies' if `sample1', baseoutcome(1) robust
 outreg2 using "`here'/output/table/selection.tex", replace `options'
 
-* selection into manager hire
-reghdfe ever_foreign_hire `explanatory' if ever_foreign & `sample1', a(`dummies') cluster(originalid)
-outreg2 using "`here'/output/table/selection.tex", append `options'
-
-* selection into expat hire
-reghdfe ever_expat `explanatory' if ever_foreign & ever_foreign_hire & `sample1', a(`dummies') cluster(originalid)
-outreg2 using "`here'/output/table/selection.tex", append `options'
-
-generate degree_control = ever_foreign + ever_foreign_hire + ever_expat 
-label define dc 0 "Domestic" 1 "Foreign owner" 2 "Foreign hire" 3 "Expat hire"
-label value degree_control dc
-
-tabulate degree_control
-*oprobit degree_control `explanatory'  i.teaor08_2d#year if `sample1', vce(cluster originalid)
-*outreg2 using "`here'/output/table/selection.tex", append `options'
+ologit control `explanatory' `dummies' if `sample1', robust
+outreg2 using "`here'/output/table/selection.tex", append `options' ctitle(Ordered logit)
