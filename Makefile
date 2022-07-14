@@ -1,6 +1,6 @@
 STATA = stata -b do
 ESTIMATOR = temp/analysis_sample.dta estimate.do regram.do
-.PHONY: all
+.PHONY: all tables install reset
 SPECS = descriptive manager_level heterogeneity event_study switch selection
 
 all: output/table/selection.tex output/table/diffindiff.tex output/table/cross_section.tex output/table/exporter.tex output/table/dummies.tex
@@ -24,4 +24,7 @@ install:
 tables: 
 	python3 ~/Dropbox/projects/py/oak/oak.py -p id -c output -o output .
 	rm -rf output/regression/_*
+reset:
+	bead input unload
+	bead input load
 
