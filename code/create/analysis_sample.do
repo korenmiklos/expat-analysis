@@ -81,9 +81,7 @@ mvencode *_nceo, mv(0) override
 bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
 bys frame_id_numeric (year): egen owner_spell_total = total(foreign != foreign[_n-1])
 
-drop if owner_spell_total > 3 // FIXME: doublecheck the length of spells
-scalar dropped_too_many_foreign_change = r(N_drop)
-display dropped_too_many_foreign_change
+* NB: we are keeping all owner spells, including DFDF etc. re #257
 
 * divestiture
 bys frame_id_numeric (year): gen divest = sum(cond(owner_spell != owner_spell[_n-1] & foreign == 0 & _n != 1, 1, 0))

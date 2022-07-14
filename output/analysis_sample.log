@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/koren/Documents/workspace/expat//output/analysis_sample.log
   log type:  text
- opened on:  14 Jul 2022, 21:26:02
+ opened on:  14 Jul 2022, 21:58:06
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -275,21 +275,14 @@ has_out~nceo: 271575 missing values recoded
 > n[_n-1])
 
 . 
-. drop if owner_spell_total > 3 // FIXME: doublecheck the length of spells
-(3,793 observations deleted)
-
-. scalar dropped_too_many_foreign_change = r(N_drop)
-
-. display dropped_too_many_foreign_change
-3793
-
+. * NB: we are keeping all owner spells, including DFDF etc. re #257
 . 
 . * divestiture
 . bys frame_id_numeric (year): gen divest = sum(cond(owner_spell != owner_spell
 > [_n-1] & foreign == 0 & _n != 1, 1, 0))
 
 . replace divest = 1 if divest > 0
-(0 real changes made)
+(633 real changes made)
 
 . 
 . * only keep D, D-F owner spells
@@ -298,10 +291,10 @@ has_out~nceo: 271575 missing values recoded
 
 . *keep if start_as_domestic & owner_spell <= 2
 . keep if start_as_domestic
-(18,105 observations deleted)
+(18,895 observations deleted)
 
 . keep if owner_spell <= 2
-(3,444 observations deleted)
+(4,895 observations deleted)
 
 . 
 . * check foreign end expat numbers
@@ -309,26 +302,26 @@ has_out~nceo: 271575 missing values recoded
 
 . 
 . count if ever_foreign
-  21,426
+  22,978
 
 . count if ever_foreign & firm_tag
-  1,544
+  1,687
 
 . count if ever_expat_ceo & firm_tag
-  588
+  662
 
 . count if ever_expat_nceo & firm_tag
-  10
+  15
 
 . 
 . count if has_expat_nceo == 1
-  384
+  411
 
 . count if has_expat_nceo == 1 & foreign == 0
   4
 
 . count if has_expat_ceo == 1
-  4,227
+  4,575
 
 . count if has_expat_ceo == 1 & foreign == 0 // FIXME - should be 0
   0
@@ -365,19 +358,19 @@ frame_id_numeric                                                    (unlabeled)
                   Type: Numeric (long)
 
                  Range: [10000049,90620052]           Units: 1
-         Unique values: 22,322                    Missing .: 0/275,200
+         Unique values: 22,465                    Missing .: 0/276,752
 
                   Mean: 1.3e+07
              Std. dev.: 6.3e+06
 
            Percentiles:     10%       25%       50%       75%       90%
-                        1.0e+07   1.0e+07   1.1e+07   1.2e+07   2.2e+07
+                        1.0e+07   1.0e+07   1.1e+07   1.2e+07   2.1e+07
 
 . count if firm_tag
-  22,322
+  22,465
 
 . count
-  275,200
+  276,752
 
 . 
 . drop first_year_foreign time_foreign foreign_* foreign? count
@@ -393,7 +386,7 @@ frame_id_numeric                                                    (unlabeled)
 . gen foreign0_new = (time_foreign_new == 0)
 
 . count if foreign0_new == 1
-  1,544
+  1,687
 
 . drop *new
 
@@ -424,33 +417,33 @@ Panel variable: frame_id_numeric (unbalanced)
 . 
 . reghdfe n_ceo foreign has_expat_ceo lnL, a(teaor08_2d##year) cluster(frame_id
 > _numeric)
-(dropped 101 singleton observations)
+(dropped 98 singleton observations)
 (MWFE estimator converged in 1 iterations)
 
-HDFE Linear regression                            Number of obs   =    275,099
-Absorbing 1 HDFE group                            F(   3,  22319) =     117.62
+HDFE Linear regression                            Number of obs   =    276,654
+Absorbing 1 HDFE group                            F(   3,  22464) =     124.33
 Statistics robust to heteroskedasticity           Prob > F        =     0.0000
-                                                  R-squared       =     0.0766
-                                                  Adj R-squared   =     0.0688
-                                                  Within R-sq.    =     0.0132
-Number of clusters (frame_id_numeric) =     22,320Root MSE        =     0.7898
+                                                  R-squared       =     0.0771
+                                                  Adj R-squared   =     0.0694
+                                                  Within R-sq.    =     0.0138
+Number of clusters (frame_id_numeric) =     22,465Root MSE        =     0.7893
 
-                  (Std. err. adjusted for 22,320 clusters in frame_id_numeric)
+                  (Std. err. adjusted for 22,465 clusters in frame_id_numeric)
 ------------------------------------------------------------------------------
              |               Robust
        n_ceo | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-     foreign |  -.1935642   .0175075   -11.06   0.000    -.2278801   -.1592483
-has_exp~_ceo |   .8044885    .054814    14.68   0.000     .6970491    .9119279
-         lnL |   .0351314   .0036984     9.50   0.000     .0278823    .0423805
-       _cons |   1.281029   .0137022    93.49   0.000     1.254172    1.307886
+     foreign |   -.184464   .0168679   -10.94   0.000    -.2175263   -.1514018
+has_exp~_ceo |   .7903952   .0513153    15.40   0.000     .6898136    .8909768
+         lnL |   .0352422   .0036761     9.59   0.000     .0280367    .0424477
+       _cons |   1.280248   .0136238    93.97   0.000     1.253545    1.306952
 ------------------------------------------------------------------------------
 
 Absorbed degrees of freedom:
 -----------------------------------------------------------+
        Absorbed FE | Categories  - Redundant  = Num. Coefs |
 -------------------+---------------------------------------|
-   teaor08_2d#year |      2299           0        2299     |
+   teaor08_2d#year |      2309           0        2309     |
 -----------------------------------------------------------+
 
 . 
@@ -460,7 +453,7 @@ Absorbed degrees of freedom:
 . tempvar t_year
 
 . gen `t_year' = year if foreign==1 & foreign[_n-1]==0 
-(273,656 missing values generated)
+(275,065 missing values generated)
 
 . bys frame_id_numeric: egen first_year_foreign=max(`t_year')
 (253,774 missing values generated)
@@ -481,7 +474,7 @@ Absorbed degrees of freedom:
 
 . 
 . replace foreigne5=1 if time_foreign>5 & time_foreign<.
-(5,461 real changes made)
+(5,772 real changes made)
 
 . drop foreign_e0
 
@@ -498,7 +491,7 @@ Absorbed degrees of freedom:
 . gen `t_hire'=hire_ceo
 
 . replace `t_hire' = 1 if first_year_firm==year 
-(22,322 real changes made)
+(22,465 real changes made)
 
 . bys frame_id_numeric: gen ceo_spell_hire=sum(`t_hire')
 
@@ -508,7 +501,7 @@ Absorbed degrees of freedom:
 . tempvar t_ceo
 
 . bys frame_id_numeric: egen `t_ceo'= max(ceo_spell_hire) if !foreign
-(11,877 missing values generated)
+(12,726 missing values generated)
 
 . bys frame_id_numeric: egen last_ceo_spell_do = max(`t_ceo')
 
@@ -541,7 +534,7 @@ Absorbed degrees of freedom:
 . gen ceo_spell_foreign = ceo_spell_hire - last_ceo_spell_do
 
 . replace ceo_spell_foreign = 0 if ceo_spell_foreign<0
-(119,695 real changes made)
+(119,941 real changes made)
 
 . 
 . tempvar t_expat
@@ -646,16 +639,16 @@ Panel variable: frame_id_numeric (unbalanced)
 > antype'<.
  13. drop foreign_`mantype'_1_e0
  14. }
-(274,598 missing values generated)
-(266,502 missing values generated)
-(266,502 missing values generated)
-(1,967 real changes made, 1,967 to missing)
-(270 real changes made)
-(274,719 missing values generated)
-(267,368 missing values generated)
-(267,368 missing values generated)
-(3,035 real changes made, 3,035 to missing)
-(299 real changes made)
+(276,103 missing values generated)
+(267,487 missing values generated)
+(267,487 missing values generated)
+(2,121 real changes made, 2,121 to missing)
+(275 real changes made)
+(276,225 missing values generated)
+(268,350 missing values generated)
+(268,350 missing values generated)
+(3,204 real changes made, 3,204 to missing)
+(313 real changes made)
 
 . 
 . order foreign_hire_local_1_e5 foreign_hire_local_1_e4 foreign_hire_local_1_e3
@@ -674,19 +667,19 @@ end of do-file
 
 . 
 . count
-  275,200
+  276,752
 
 . count if ever_foreign
-  21,426
+  22,978
 
 . count if ever_foreign & firm_tag
-  1,544
+  1,687
 
 . count if ever_expat_ceo & firm_tag
-  588
+  662
 
 . count if has_expat_ceo
-  4,227
+  4,575
 
 . 
 . drop if missing(time_foreign)
@@ -701,26 +694,26 @@ end of do-file
 
 . 
 . count
-  21,426
+  22,978
 
 . count if ever_foreign
-  21,426
+  22,978
 
 . count if ever_foreign & firm_tag
-  1,544
+  1,687
 
 . count if ever_expat & firm_tag
-  570
+  627
 
 . count if has_expat_ceo
-  4,227
+  4,575
 
 . 
 . replace foreign_hire = 1 if ever_foreign_hire == 1 & foreign == 1
-(1,434 real changes made)
+(1,542 real changes made)
 
 . replace has_expat_ceo = 1 if ever_expat == 1 & foreign == 1
-(2,218 real changes made)
+(2,377 real changes made)
 
 . 
 . gen foreign_only = foreign & !foreign_hire
@@ -733,20 +726,20 @@ end of do-file
 foreign_on |     foreign_hire
         ly |         0          1 |     Total
 -----------+----------------------+----------
-         0 |     9,549     10,036 |    19,585 
-         1 |     1,841          0 |     1,841 
+         0 |    10,252     10,735 |    20,987 
+         1 |     1,991          0 |     1,991 
 -----------+----------------------+----------
-     Total |    11,390     10,036 |    21,426 
+     Total |    12,243     10,735 |    22,978 
 
 . tab foreign_hire_only has_expat_ceo
 
 foreign_hi |     has_expat_ceo
    re_only |         0          1 |     Total
 -----------+----------------------+----------
-         0 |    11,390      6,445 |    17,835 
-         1 |     3,591          0 |     3,591 
+         0 |    12,243      6,952 |    19,195 
+         1 |     3,783          0 |     3,783 
 -----------+----------------------+----------
-     Total |    14,981      6,445 |    21,426 
+     Total |    16,026      6,952 |    22,978 
 
 . 
 . drop foreign_e5 foreign_e4 foreign_e3 foreign_e2 foreign_e1 foreigne0 foreign
@@ -804,7 +797,7 @@ foreign_hi |     has_expat_ceo
   variable final_netgep was double now long
   variable ranyag8091_18 was double now long
   variable country_all_ceo was str18 now str15
-  (2,356,860 bytes saved)
+  (2,527,580 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
 file /Users/koren/Documents/workspace/expat//temp/analysis_sample.dta saved
@@ -813,5 +806,5 @@ file /Users/koren/Documents/workspace/expat//temp/analysis_sample.dta saved
       name:  <unnamed>
        log:  /Users/koren/Documents/workspace/expat//output/analysis_sample.log
   log type:  text
- closed on:  14 Jul 2022, 21:26:13
+ closed on:  14 Jul 2022, 21:58:18
 -------------------------------------------------------------------------------
