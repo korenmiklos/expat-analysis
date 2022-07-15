@@ -22,10 +22,10 @@ generate no_hire = foreign & !foreign_hire
 
 
 foreach treatment in no_hire local_hire expat_hire {
-    attgt `vars', treatment(`treatment') aggregate(e) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) ipw(`controls')
-    count if e(sample) == 1
-    do "`here'/code/util/event_study_plot.do"
     foreach outcome in `vars' {
+        attgt `outcome', treatment(`treatment') aggregate(e) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) ipw(`controls')
+        count if e(sample) == 1
+        do "`here'/code/util/event_study_plot.do"
         graph display `outcome'
         graph export "`here'/output/figure/event_study/`treatment'_`outcome'.png", replace
         graph drop `outcome'

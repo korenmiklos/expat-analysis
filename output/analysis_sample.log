@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/koren/Documents/workspace/expat//output/analysis_sample.log
   log type:  text
- opened on:  14 Jul 2022, 21:58:06
+ opened on:  14 Jul 2022, 22:10:20
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -682,9 +682,6 @@ end of do-file
   4,575
 
 . 
-. drop if missing(time_foreign)
-(253,774 observations deleted)
-
 . drop ever_expat* ever_foreign_hire
 
 . 
@@ -694,7 +691,7 @@ end of do-file
 
 . 
 . count
-  22,978
+  276,752
 
 . count if ever_foreign
   22,978
@@ -726,20 +723,20 @@ end of do-file
 foreign_on |     foreign_hire
         ly |         0          1 |     Total
 -----------+----------------------+----------
-         0 |    10,252     10,735 |    20,987 
+         0 |   264,026     10,735 |   274,761 
          1 |     1,991          0 |     1,991 
 -----------+----------------------+----------
-     Total |    12,243     10,735 |    22,978 
+     Total |   266,017     10,735 |   276,752 
 
 . tab foreign_hire_only has_expat_ceo
 
 foreign_hi |     has_expat_ceo
    re_only |         0          1 |     Total
 -----------+----------------------+----------
-         0 |    12,243      6,952 |    19,195 
+         0 |   266,017      6,952 |   272,969 
          1 |     3,783          0 |     3,783 
 -----------+----------------------+----------
-     Total |    16,026      6,952 |    22,978 
+     Total |   269,800      6,952 |   276,752 
 
 . 
 . drop foreign_e5 foreign_e4 foreign_e3 foreign_e2 foreign_e1 foreigne0 foreign
@@ -788,16 +785,13 @@ foreign_hi |     has_expat_ceo
   variable ever_foreign_hire was float now byte
   variable foreign_only was float now byte
   variable foreign_hire_only was float now byte
-  variable sales was double now long
-  variable tanass was double now long
   variable jetok was double now long
   variable export was double now long
-  variable ranyag was double now long
   variable immat was double now long
   variable final_netgep was double now long
   variable ranyag8091_18 was double now long
   variable country_all_ceo was str18 now str15
-  (2,527,580 bytes saved)
+  (27,121,696 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
 file /Users/koren/Documents/workspace/expat//temp/analysis_sample.dta saved
@@ -806,5 +800,5 @@ file /Users/koren/Documents/workspace/expat//temp/analysis_sample.dta saved
       name:  <unnamed>
        log:  /Users/koren/Documents/workspace/expat//output/analysis_sample.log
   log type:  text
- closed on:  14 Jul 2022, 21:58:18
+ closed on:  14 Jul 2022, 22:10:35
 -------------------------------------------------------------------------------

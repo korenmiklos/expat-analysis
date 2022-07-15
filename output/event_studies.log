@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/koren/Documents/workspace/expat//output/event_studies.log
   log type:  text
- opened on:  14 Jul 2022, 21:58:18
+ opened on:  15 Jul 2022, 09:56:28
 
 . 
 . local pre 5
@@ -17,7 +17,7 @@
 . use "`here'/temp/analysis_sample.dta", clear
 
 . keep if ever_foreign
-(0 observations deleted)
+(253,774 observations deleted)
 
 . 
 . count
@@ -33,11 +33,11 @@
 . 
 . 
 . foreach treatment in no_hire local_hire expat_hire {
-  2.     attgt `vars', treatment(`treatment') aggregate(e) pre(`pre') post(`pos
-> t') notyet limitcontrol(foreign == 0) ipw(`controls')
-  3.     count if e(sample) == 1
-  4.     do "`here'/code/util/event_study_plot.do"
-  5.     foreach outcome in `vars' {
+  2.     foreach outcome in `vars' {
+  3.         attgt `outcome', treatment(`treatment') aggregate(e) pre(`pre') po
+> st(`post') notyet limitcontrol(foreign == 0) ipw(`controls')
+  4.         count if e(sample) == 1
+  5.         do "`here'/code/util/event_study_plot.do"
   6.         graph display `outcome'
   7.         graph export "`here'/output/figure/event_study/`treatment'_`outcom
 > e'.png", replace
@@ -53,17 +53,17 @@ Generating weights...
                           __000001
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%     .0099966       4.01e-07
- 5%     .0133865       1.68e-06
-10%     .0263295       .0000208       Obs              22,978
-25%     .0420763       .0000243       Sum of wgt.      22,978
+ 1%     .0099088       4.01e-07
+ 5%     .0150486       1.66e-06
+10%     .0260679       .0000206       Obs              22,978
+25%     .0411195       .0000243       Sum of wgt.      22,978
 
-50%            1                      Mean           .6097126
-                        Largest       Std. dev.       .467478
+50%            1                      Mean           .6069266
+                        Largest       Std. dev.      .4678239
 75%            1              1
-90%            1              1       Variance       .2185357
-95%            1       1.021508       Skewness      -.3680465
-99%            1         1.6263       Kurtosis       1.147101
+90%            1       1.000099       Variance       .2188592
+95%            1       1.018986       Skewness      -.3553998
+99%            1         1.6263       Kurtosis       1.138441
 Estimating lnL: event_m5
 Estimating lnL: event_m4
 Estimating lnL: event_m3
@@ -79,191 +79,30 @@ Estimating lnL: event_7
 Estimating lnL: event_8
 Estimating lnL: event_9
 Estimating lnL: event_10
-Estimating lnQL: event_m5
-Estimating lnQL: event_m4
-Estimating lnQL: event_m3
-Estimating lnQL: event_m2
-Estimating lnQL: event_m1
-Estimating lnQL: event_1
-Estimating lnQL: event_2
-Estimating lnQL: event_3
-Estimating lnQL: event_4
-Estimating lnQL: event_5
-Estimating lnQL: event_6
-Estimating lnQL: event_7
-Estimating lnQL: event_8
-Estimating lnQL: event_9
-Estimating lnQL: event_10
-Estimating lnK: event_m5
-Estimating lnK: event_m4
-Estimating lnK: event_m3
-Estimating lnK: event_m2
-Estimating lnK: event_m1
-Estimating lnK: event_1
-Estimating lnK: event_2
-Estimating lnK: event_3
-Estimating lnK: event_4
-Estimating lnK: event_5
-Estimating lnK: event_6
-Estimating lnK: event_7
-Estimating lnK: event_8
-Estimating lnK: event_9
-Estimating lnK: event_10
-Estimating exporter: event_m5
-Estimating exporter: event_m4
-Estimating exporter: event_m3
-Estimating exporter: event_m2
-Estimating exporter: event_m1
-Estimating exporter: event_1
-Estimating exporter: event_2
-Estimating exporter: event_3
-Estimating exporter: event_4
-Estimating exporter: event_5
-Estimating exporter: event_6
-Estimating exporter: event_7
-Estimating exporter: event_8
-Estimating exporter: event_9
-Estimating exporter: event_10
-Estimating RperK: event_m5
-Estimating RperK: event_m4
-Estimating RperK: event_m3
-Estimating RperK: event_m2
-Estimating RperK: event_m1
-Estimating RperK: event_1
-Estimating RperK: event_2
-Estimating RperK: event_3
-Estimating RperK: event_4
-Estimating RperK: event_5
-Estimating RperK: event_6
-Estimating RperK: event_7
-Estimating RperK: event_8
-Estimating RperK: event_9
-Estimating RperK: event_10
-Estimating TFP_cd: event_m5
-Estimating TFP_cd: event_m4
-Estimating TFP_cd: event_m3
-Estimating TFP_cd: event_m2
-Estimating TFP_cd: event_m1
-Estimating TFP_cd: event_1
-Estimating TFP_cd: event_2
-Estimating TFP_cd: event_3
-Estimating TFP_cd: event_4
-Estimating TFP_cd: event_5
-Estimating TFP_cd: event_6
-Estimating TFP_cd: event_7
-Estimating TFP_cd: event_8
-Estimating TFP_cd: event_9
-Estimating TFP_cd: event_10
 Callaway Sant'Anna (2021)
 
-                                                        Number of obs = 11,485
+                                                        Number of obs = 11,589
 
 ------------------------------------------------------------------------------
              | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-lnL          |
-    event_m5 |   .0448459   .0879056     0.51   0.610    -.1274459    .2171377
-    event_m4 |   .1329521    .073457     1.81   0.070     -.011021    .2769253
-    event_m3 |   .0841009   .0663611     1.27   0.205    -.0459646    .2141663
-    event_m2 |   .0896258   .0482062     1.86   0.063    -.0048567    .1841083
-    event_m1 |   .0363205   .0436632     0.83   0.406    -.0492578    .1218989
-     event_1 |  -.0310414   .0315458    -0.98   0.325    -.0928701    .0307873
-     event_2 |  -.0255128   .0461403    -0.55   0.580    -.1159461    .0649205
-     event_3 |  -.0632074   .0598417    -1.06   0.291    -.1804949    .0540802
-     event_4 |  -.0227471   .0813695    -0.28   0.780    -.1822284    .1367341
-     event_5 |  -.1083579   .1014017    -1.07   0.285    -.3071016    .0903858
-     event_6 |  -.0391024    .115939    -0.34   0.736    -.2663387    .1881339
-     event_7 |   .0154704   .1232103     0.13   0.900    -.2260174    .2569582
-     event_8 |  -.2192018   .1772203    -1.24   0.216    -.5665472    .1281436
-     event_9 |  -.1220052   .2106028    -0.58   0.562    -.5347791    .2907687
-    event_10 |  -.2581794   .3276087    -0.79   0.431    -.9002807    .3839218
--------------+----------------------------------------------------------------
-lnQL         |
-    event_m5 |  -.0265638    .106062    -0.25   0.802    -.2344415    .1813138
-    event_m4 |  -.1820629   .1083954    -1.68   0.093    -.3945141    .0303882
-    event_m3 |  -.1176961   .1174862    -1.00   0.316    -.3479648    .1125727
-    event_m2 |  -.0591363    .079955    -0.74   0.460    -.2158452    .0975727
-    event_m1 |  -.0768601   .0988911    -0.78   0.437    -.2706831    .1169629
-     event_1 |   .1051084   .0599788     1.75   0.080    -.0124478    .2226647
-     event_2 |   .0210074   .0832615     0.25   0.801    -.1421822     .184197
-     event_3 |    .008899   .0974176     0.09   0.927     -.182036    .1998339
-     event_4 |  -.0027426    .101699    -0.03   0.978    -.2020689    .1965837
-     event_5 |  -.0401379   .1173474    -0.34   0.732    -.2701347    .1898588
-     event_6 |  -.1860611   .1413249    -1.32   0.188    -.4630528    .0909305
-     event_7 |  -.0562222   .1333218    -0.42   0.673    -.3175281    .2050837
-     event_8 |   .0786034   .1691631     0.46   0.642    -.2529503     .410157
-     event_9 |   .1457653   .1988666     0.73   0.464     -.244006    .5355366
-    event_10 |   .2576583   .2429118     1.06   0.289      -.21844    .7337567
--------------+----------------------------------------------------------------
-lnK          |
-    event_m5 |   .0302235   .1380432     0.22   0.827    -.2403362    .3007832
-    event_m4 |   .0737766   .1392752     0.53   0.596    -.1991977    .3467509
-    event_m3 |   .0154849   .1441153     0.11   0.914    -.2669758    .2979457
-    event_m2 |   .0149788   .1022431     0.15   0.884    -.1854141    .2153716
-    event_m1 |   .0566817   .1094161     0.52   0.604      -.15777    .2711333
-     event_1 |  -.0215332    .068787    -0.31   0.754    -.1563532    .1132867
-     event_2 |  -.1571971   .0901389    -1.74   0.081    -.3338661    .0194719
-     event_3 |  -.1101594   .1153372    -0.96   0.340    -.3362161    .1158974
-     event_4 |  -.0833076   .1332725    -0.63   0.532     -.344517    .1779018
-     event_5 |  -.2686414   .1683257    -1.60   0.110    -.5985538     .061271
-     event_6 |  -.1888404   .1961225    -0.96   0.336    -.5732335    .1955527
-     event_7 |  -.1512239   .1917049    -0.79   0.430    -.5269586    .2245108
-     event_8 |  -.1067541   .2379886    -0.45   0.654    -.5732032     .359695
-     event_9 |   .0000542   .3246322     0.00   1.000    -.6362133    .6363217
-    event_10 |  -.1737874   .4543865    -0.38   0.702    -1.064368    .7167937
--------------+----------------------------------------------------------------
-exporter     |
-    event_m5 |  -.0124049   .0303774    -0.41   0.683    -.0719435    .0471336
-    event_m4 |   .0179445   .0265109     0.68   0.498    -.0340159    .0699049
-    event_m3 |   .0232026   .0249349     0.93   0.352    -.0256688     .072074
-    event_m2 |   .0469817   .0222134     2.12   0.034     .0034441    .0905192
-    event_m1 |  -.0057897   .0178966    -0.32   0.746    -.0408663    .0292869
-     event_1 |   .0190436   .0174529     1.09   0.275    -.0151635    .0532507
-     event_2 |   .0244323   .0223101     1.10   0.273    -.0192947    .0681593
-     event_3 |    .027403   .0315861     0.87   0.386    -.0345046    .0893106
-     event_4 |   -.023514    .039107    -0.60   0.548    -.1001623    .0531343
-     event_5 |  -.0316586   .0384301    -0.82   0.410    -.1069803     .043663
-     event_6 |  -.0086998   .0479039    -0.18   0.856    -.1025897    .0851901
-     event_7 |  -.0185139   .0505418    -0.37   0.714     -.117574    .0805463
-     event_8 |   .0118746   .0522954     0.23   0.820    -.0906225    .1143716
-     event_9 |   .0124438   .0768248     0.16   0.871    -.1381301    .1630176
-    event_10 |  -.0032799   .0812379    -0.04   0.968    -.1625033    .1559436
--------------+----------------------------------------------------------------
-RperK        |
-    event_m5 |  -.0022652   .0068032    -0.33   0.739    -.0155991    .0110688
-    event_m4 |  -.0067648   .0061179    -1.11   0.269    -.0187557    .0052261
-    event_m3 |  -.0083291   .0054601    -1.53   0.127    -.0190306    .0023725
-    event_m2 |  -.0099851   .0059457    -1.68   0.093    -.0216383    .0016682
-    event_m1 |  -.0042389   .0045469    -0.93   0.351    -.0131507    .0046729
-     event_1 |   .0079832   .0046305     1.72   0.085    -.0010923    .0170587
-     event_2 |    .007092   .0054205     1.31   0.191     -.003532    .0177159
-     event_3 |   .0074956    .007972     0.94   0.347    -.0081293    .0231204
-     event_4 |   .0255258   .0119488     2.14   0.033     .0021066     .048945
-     event_5 |    .005312   .0127937     0.42   0.678    -.0197632    .0303872
-     event_6 |  -.0012972   .0178447    -0.07   0.942    -.0362723    .0336778
-     event_7 |   .0127656   .0156907     0.81   0.416    -.0179876    .0435189
-     event_8 |   .0060163   .0147631     0.41   0.684    -.0229189    .0349515
-     event_9 |   .0331095   .0229142     1.44   0.148    -.0118016    .0780206
-    event_10 |   .0244046   .0194477     1.25   0.210    -.0137121    .0625213
--------------+----------------------------------------------------------------
-TFP_cd       |
-    event_m5 |   .0013273   .0400601     0.03   0.974     -.077189    .0798436
-    event_m4 |  -.0275242   .0263079    -1.05   0.295    -.0790867    .0240383
-    event_m3 |  -.0172777   .0265118    -0.65   0.515    -.0692399    .0346846
-    event_m2 |  -.0176974   .0195957    -0.90   0.366    -.0561042    .0207095
-    event_m1 |  -.0133135     .02133    -0.62   0.533    -.0551194    .0284925
-     event_1 |   .0082694   .0154034     0.54   0.591    -.0219207    .0384595
-     event_2 |   .0001528   .0237546     0.01   0.995    -.0464053    .0467109
-     event_3 |  -.0091482    .027575    -0.33   0.740    -.0631941    .0448978
-     event_4 |  -.0637046   .0456044    -1.40   0.162    -.1530877    .0256784
-     event_5 |    -.09901   .0552211    -1.79   0.073    -.2072414    .0092215
-     event_6 |  -.1070408   .0596216    -1.80   0.073     -.223897    .0098153
-     event_7 |  -.0640323   .0577732    -1.11   0.268    -.1772657     .049201
-     event_8 |  -.0810943    .075848    -1.07   0.285    -.2297536     .067565
-     event_9 |  -.0545932    .077289    -0.71   0.480    -.2060767    .0968904
-    event_10 |  -.0848844   .0907068    -0.94   0.349    -.2626665    .0928977
+    event_m5 |    .067871   .0878999     0.77   0.440    -.1044095    .2401516
+    event_m4 |   .1600763   .0715111     2.24   0.025     .0199171    .3002355
+    event_m3 |   .1239564   .0659425     1.88   0.060    -.0052885    .2532013
+    event_m2 |   .1052427   .0454849     2.31   0.021     .0160941    .1943914
+    event_m1 |   .0515179   .0381752     1.35   0.177     -.023304    .1263398
+     event_1 |   -.046617   .0274522    -1.70   0.089    -.1004222    .0071883
+     event_2 |   -.017797   .0383364    -0.46   0.642    -.0929349     .057341
+     event_3 |  -.0766186   .0667636    -1.15   0.251    -.2074729    .0542357
+     event_4 |  -.0488049   .0819326    -0.60   0.551    -.2093899      .11178
+     event_5 |  -.1222839   .1041833    -1.17   0.240    -.3264793    .0819115
+     event_6 |   -.038045   .1239013    -0.31   0.759     -.280887     .204797
+     event_7 |   .0106376   .1204595     0.09   0.930    -.2254587    .2467339
+     event_8 |  -.2310638   .1708968    -1.35   0.176    -.5660154    .1038877
+     event_9 |  -.1432434    .194894    -0.73   0.462    -.5252286    .2387418
+    event_10 |  -.2756805   .3195646    -0.86   0.388    -.9020156    .3506545
 ------------------------------------------------------------------------------
-  11,485
+  11,589
 
 . * assume attgt estimate with aggregate(e) option has been recently produced
 . preserve
@@ -277,11 +116,11 @@ TFP_cd       |
 . local T = colsof(e(b)) 
 
 . set obs `T'
-Number of observations (_N) was 0, now 90.
+Number of observations (_N) was 0, now 15.
 
 . 
 . generate str outcome = ""
-(90 missing values generated)
+(15 missing values generated)
 
 . generate b = 0
 
@@ -387,308 +226,147 @@ variable outcome was str1 now str3
 (1 real change made)
 (1 real change made)
 (1 real change made)
-variable outcome was str3 now str4
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-variable outcome was str4 now str8
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
+
+. * create period 0 for every outcome
+. expand 1+(t==1), generate(expanded)
+(1 observation created)
+
+. foreach X in t b upper lower {
+  2.     replace `X' = 0 if expanded
+  3. }
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. sort outcome t
+
+. 
+. levelsof outcome, local(outcomes)
+`"lnL"'
+
+. foreach X in `outcomes' {
+  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(
+> none)) ///
+>         (line b t if outcome=="`X'", lcolor(blue)), ///
+>         ytitle("`X'") xtitle("Year since `treatment'") ///
+>         graphregion(color(white)) legend(off)
+  3.     graph rename `X'
+  4. }
+
+. restore
+
+. 
+end of do-file
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_
+> lnL.png written in PNG format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+
+                          __000001
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0099088       4.01e-07
+ 5%     .0150486       1.66e-06
+10%     .0260679       .0000206       Obs              22,978
+25%     .0411195       .0000243       Sum of wgt.      22,978
+
+50%            1                      Mean           .6069266
+                        Largest       Std. dev.      .4678239
+75%            1              1
+90%            1       1.000099       Variance       .2188592
+95%            1       1.018986       Skewness      -.3553998
+99%            1         1.6263       Kurtosis       1.138441
+Estimating lnQL: event_m5
+Estimating lnQL: event_m4
+Estimating lnQL: event_m3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating lnQL: event_5
+Estimating lnQL: event_6
+Estimating lnQL: event_7
+Estimating lnQL: event_8
+Estimating lnQL: event_9
+Estimating lnQL: event_10
+Callaway Sant'Anna (2021)
+
+                                                        Number of obs = 11,589
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    event_m5 |  -.0282632   .1047152    -0.27   0.787    -.2335012    .1769749
+    event_m4 |  -.1452309   .1028762    -1.41   0.158    -.3468645    .0564027
+    event_m3 |   -.055182   .1082956    -0.51   0.610    -.2674375    .1570735
+    event_m2 |  -.0590963   .0775278    -0.76   0.446    -.2110481    .0928554
+    event_m1 |  -.0588737   .0915459    -0.64   0.520    -.2383004     .120553
+     event_1 |    .062743   .0546476     1.15   0.251    -.0443644    .1698504
+     event_2 |   .0547077   .0509079     1.07   0.283    -.0450699    .1544854
+     event_3 |    .028702   .0579937     0.49   0.621    -.0849636    .1423675
+     event_4 |  -.0824283   .0795268    -1.04   0.300    -.2382979    .0734412
+     event_5 |  -.0619166   .1032469    -0.60   0.549    -.2642768    .1404436
+     event_6 |  -.1671961   .1321995    -1.26   0.206    -.4263023      .09191
+     event_7 |  -.0322882   .1193337    -0.27   0.787    -.2661779    .2016016
+     event_8 |    .092894   .1617164     0.57   0.566    -.2240644    .4098523
+     event_9 |   .1841929   .1852085     0.99   0.320     -.178809    .5471948
+    event_10 |   .3014068   .2266568     1.33   0.184    -.1428323    .7456459
+------------------------------------------------------------------------------
+  11,589
+
+. * assume attgt estimate with aggregate(e) option has been recently produced
+. preserve
+
+. clear
+
+. 
+. local Z 1.96
+
+. 
+. local T = colsof(e(b)) 
+
+. set obs `T'
+Number of observations (_N) was 0, now 15.
+
+. 
+. generate str outcome = ""
+(15 missing values generated)
+
+. generate b = 0
+
+. generate t = 0
+
+. generate upper = 0
+
+. generate lower = 0
+
+. 
+. local colnames : colnames e(b)
+
+. local outcomes : coleq e(b)
+
+. local treatment = e(treatment)
+
+. 
+. forvalues i = 1/`T' {
+  2.     * get event time index
+.     local name : word `i' of `colnames'
+  3.     local outcome : word `i' of `outcomes'
+  4.     replace outcome = "`outcome'" in `i'
+  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-
+> ", .)) in `i'
+  6.     * get estimates from regression
+.     replace b = e(b)[1, `i'] in `i'
+  7.     replace upper = b + `Z' * sqrt(e(V)[`i', `i']) in `i'
+  8.     replace lower = b - `Z' * sqrt(e(V)[`i', `i']) in `i'
+  9. }
+variable outcome was str1 now str4
 (1 real change made)
 (1 real change made)
 (1 real change made)
@@ -767,21 +445,21 @@ variable outcome was str4 now str8
 
 . * create period 0 for every outcome
 . expand 1+(t==1), generate(expanded)
-(6 observations created)
+(1 observation created)
 
 . foreach X in t b upper lower {
   2.     replace `X' = 0 if expanded
   3. }
-(6 real changes made)
-(6 real changes made)
-(6 real changes made)
-(6 real changes made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
 
 . sort outcome t
 
 . 
 . levelsof outcome, local(outcomes)
-`"RperK"' `"TFP_cd"' `"exporter"' `"lnK"' `"lnL"' `"lnQL"'
+`"lnQL"'
 
 . foreach X in `outcomes' {
   2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(
@@ -797,17 +475,1951 @@ variable outcome was str4 now str8
 . 
 end of do-file
 file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_
-> lnL.png written in PNG format
-file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_
 > lnQL.png written in PNG format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+
+                          __000001
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0099088       4.01e-07
+ 5%     .0150486       1.66e-06
+10%     .0260679       .0000206       Obs              22,978
+25%     .0411195       .0000243       Sum of wgt.      22,978
+
+50%            1                      Mean           .6069266
+                        Largest       Std. dev.      .4678239
+75%            1              1
+90%            1       1.000099       Variance       .2188592
+95%            1       1.018986       Skewness      -.3553998
+99%            1         1.6263       Kurtosis       1.138441
+Estimating lnK: event_m5
+Estimating lnK: event_m4
+Estimating lnK: event_m3
+Estimating lnK: event_m2
+Estimating lnK: event_m1
+Estimating lnK: event_1
+Estimating lnK: event_2
+Estimating lnK: event_3
+Estimating lnK: event_4
+Estimating lnK: event_5
+Estimating lnK: event_6
+Estimating lnK: event_7
+Estimating lnK: event_8
+Estimating lnK: event_9
+Estimating lnK: event_10
+Callaway Sant'Anna (2021)
+
+                                                        Number of obs = 11,589
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .0196374    .126925     0.15   0.877    -.2291311    .2684059
+    event_m4 |   .1021544   .1200986     0.85   0.395    -.1332345    .3375433
+    event_m3 |   .0764495   .1193873     0.64   0.522    -.1575453    .3104442
+    event_m2 |   .0197152   .0879089     0.22   0.823    -.1525831    .1920134
+    event_m1 |   .0789481   .0980884     0.80   0.421    -.1133016    .2711977
+     event_1 |  -.0463021     .06534    -0.71   0.479    -.1743662     .081762
+     event_2 |  -.1344993   .0657401    -2.05   0.041    -.2633476    -.005651
+     event_3 |  -.0689883   .0898832    -0.77   0.443    -.2451561    .1071794
+     event_4 |  -.1453467   .1262271    -1.15   0.250    -.3927473    .1020538
+     event_5 |  -.2904489   .1522588    -1.91   0.056    -.5888708    .0079729
+     event_6 |  -.1735149   .1887085    -0.92   0.358    -.5433767    .1963469
+     event_7 |  -.1411092   .1797981    -0.78   0.433    -.4935071    .2112886
+     event_8 |  -.1223908   .2348093    -0.52   0.602    -.5826086     .337827
+     event_9 |  -.0010318   .3033785    -0.00   0.997    -.5956426    .5935791
+    event_10 |  -.1735385   .4443959    -0.39   0.696    -1.044538    .6974615
+------------------------------------------------------------------------------
+  11,589
+
+. * assume attgt estimate with aggregate(e) option has been recently produced
+. preserve
+
+. clear
+
+. 
+. local Z 1.96
+
+. 
+. local T = colsof(e(b)) 
+
+. set obs `T'
+Number of observations (_N) was 0, now 15.
+
+. 
+. generate str outcome = ""
+(15 missing values generated)
+
+. generate b = 0
+
+. generate t = 0
+
+. generate upper = 0
+
+. generate lower = 0
+
+. 
+. local colnames : colnames e(b)
+
+. local outcomes : coleq e(b)
+
+. local treatment = e(treatment)
+
+. 
+. forvalues i = 1/`T' {
+  2.     * get event time index
+.     local name : word `i' of `colnames'
+  3.     local outcome : word `i' of `outcomes'
+  4.     replace outcome = "`outcome'" in `i'
+  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-
+> ", .)) in `i'
+  6.     * get estimates from regression
+.     replace b = e(b)[1, `i'] in `i'
+  7.     replace upper = b + `Z' * sqrt(e(V)[`i', `i']) in `i'
+  8.     replace lower = b - `Z' * sqrt(e(V)[`i', `i']) in `i'
+  9. }
+variable outcome was str1 now str3
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. * create period 0 for every outcome
+. expand 1+(t==1), generate(expanded)
+(1 observation created)
+
+. foreach X in t b upper lower {
+  2.     replace `X' = 0 if expanded
+  3. }
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. sort outcome t
+
+. 
+. levelsof outcome, local(outcomes)
+`"lnK"'
+
+. foreach X in `outcomes' {
+  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(
+> none)) ///
+>         (line b t if outcome=="`X'", lcolor(blue)), ///
+>         ytitle("`X'") xtitle("Year since `treatment'") ///
+>         graphregion(color(white)) legend(off)
+  3.     graph rename `X'
+  4. }
+
+. restore
+
+. 
+end of do-file
 file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_
 > lnK.png written in PNG format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+
+                          __000001
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0099088       4.01e-07
+ 5%     .0150486       1.66e-06
+10%     .0260679       .0000206       Obs              22,978
+25%     .0411195       .0000243       Sum of wgt.      22,978
+
+50%            1                      Mean           .6069266
+                        Largest       Std. dev.      .4678239
+75%            1              1
+90%            1       1.000099       Variance       .2188592
+95%            1       1.018986       Skewness      -.3553998
+99%            1         1.6263       Kurtosis       1.138441
+Estimating exporter: event_m5
+Estimating exporter: event_m4
+Estimating exporter: event_m3
+Estimating exporter: event_m2
+Estimating exporter: event_m1
+Estimating exporter: event_1
+Estimating exporter: event_2
+Estimating exporter: event_3
+Estimating exporter: event_4
+Estimating exporter: event_5
+Estimating exporter: event_6
+Estimating exporter: event_7
+Estimating exporter: event_8
+Estimating exporter: event_9
+Estimating exporter: event_10
+Callaway Sant'Anna (2021)
+
+                                                        Number of obs = 11,589
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    event_m5 |  -.0156815   .0336442    -0.47   0.641    -.0816229      .05026
+    event_m4 |   .0186107   .0278482     0.67   0.504    -.0359709    .0731922
+    event_m3 |   .0267828   .0260406     1.03   0.304    -.0242559    .0778215
+    event_m2 |   .0442137   .0268898     1.64   0.100    -.0084894    .0969168
+    event_m1 |  -.0075706   .0177075    -0.43   0.669    -.0422767    .0271355
+     event_1 |   .0165017   .0160194     1.03   0.303    -.0148958    .0478991
+     event_2 |   .0266316   .0231204     1.15   0.249    -.0186835    .0719466
+     event_3 |   .0264556   .0303159     0.87   0.383    -.0329626    .0858737
+     event_4 |  -.0274846   .0418714    -0.66   0.512     -.109551    .0545818
+     event_5 |  -.0315815   .0435947    -0.72   0.469    -.1170256    .0538626
+     event_6 |  -.0106604   .0510086    -0.21   0.834    -.1106355    .0893146
+     event_7 |  -.0209103   .0556275    -0.38   0.707    -.1299383    .0881176
+     event_8 |   .0083717   .0573328     0.15   0.884    -.1039985    .1207419
+     event_9 |   .0072623   .0777534     0.09   0.926    -.1451316    .1596561
+    event_10 |   -.011725   .0909866    -0.13   0.897    -.1900555    .1666054
+------------------------------------------------------------------------------
+  11,589
+
+. * assume attgt estimate with aggregate(e) option has been recently produced
+. preserve
+
+. clear
+
+. 
+. local Z 1.96
+
+. 
+. local T = colsof(e(b)) 
+
+. set obs `T'
+Number of observations (_N) was 0, now 15.
+
+. 
+. generate str outcome = ""
+(15 missing values generated)
+
+. generate b = 0
+
+. generate t = 0
+
+. generate upper = 0
+
+. generate lower = 0
+
+. 
+. local colnames : colnames e(b)
+
+. local outcomes : coleq e(b)
+
+. local treatment = e(treatment)
+
+. 
+. forvalues i = 1/`T' {
+  2.     * get event time index
+.     local name : word `i' of `colnames'
+  3.     local outcome : word `i' of `outcomes'
+  4.     replace outcome = "`outcome'" in `i'
+  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-
+> ", .)) in `i'
+  6.     * get estimates from regression
+.     replace b = e(b)[1, `i'] in `i'
+  7.     replace upper = b + `Z' * sqrt(e(V)[`i', `i']) in `i'
+  8.     replace lower = b - `Z' * sqrt(e(V)[`i', `i']) in `i'
+  9. }
+variable outcome was str1 now str8
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. * create period 0 for every outcome
+. expand 1+(t==1), generate(expanded)
+(1 observation created)
+
+. foreach X in t b upper lower {
+  2.     replace `X' = 0 if expanded
+  3. }
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. sort outcome t
+
+. 
+. levelsof outcome, local(outcomes)
+`"exporter"'
+
+. foreach X in `outcomes' {
+  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(
+> none)) ///
+>         (line b t if outcome=="`X'", lcolor(blue)), ///
+>         ytitle("`X'") xtitle("Year since `treatment'") ///
+>         graphregion(color(white)) legend(off)
+  3.     graph rename `X'
+  4. }
+
+. restore
+
+. 
+end of do-file
 file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_
 > exporter.png written in PNG format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+
+                          __000001
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0099617       4.01e-07
+ 5%     .0151582       1.66e-06
+10%     .0261917       .0000206       Obs              22,978
+25%     .0413894       .0000243       Sum of wgt.      22,978
+
+50%            1                      Mean           .6078852
+                        Largest       Std. dev.      .4677693
+75%            1              1
+90%            1              1       Variance       .2188081
+95%            1       1.019636       Skewness      -.3597899
+99%            1         1.6263       Kurtosis       1.141018
+Estimating RperK: event_m5
+Estimating RperK: event_m4
+Estimating RperK: event_m3
+Estimating RperK: event_m2
+Estimating RperK: event_m1
+Estimating RperK: event_1
+Estimating RperK: event_2
+Estimating RperK: event_3
+Estimating RperK: event_4
+Estimating RperK: event_5
+Estimating RperK: event_6
+Estimating RperK: event_7
+Estimating RperK: event_8
+Estimating RperK: event_9
+Estimating RperK: event_10
+Callaway Sant'Anna (2021)
+
+                                                        Number of obs = 11,552
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    event_m5 |  -.0023327   .0065748    -0.35   0.723    -.0152191    .0105536
+    event_m4 |  -.0067687   .0058425    -1.16   0.247    -.0182198    .0046824
+    event_m3 |  -.0083285   .0059467    -1.40   0.161    -.0199839    .0033269
+    event_m2 |  -.0099043   .0058821    -1.68   0.092     -.021433    .0016245
+    event_m1 |  -.0042023   .0043584    -0.96   0.335    -.0127445    .0043399
+     event_1 |   .0079025   .0041611     1.90   0.058    -.0002531    .0160581
+     event_2 |   .0070525   .0062842     1.12   0.262    -.0052643    .0193692
+     event_3 |    .007539    .009114     0.83   0.408    -.0103241     .025402
+     event_4 |   .0253889   .0124605     2.04   0.042     .0009667     .049811
+     event_5 |   .0052651   .0119833     0.44   0.660    -.0182217    .0287519
+     event_6 |  -.0009689   .0170945    -0.06   0.955    -.0344735    .0325357
+     event_7 |   .0124691   .0166504     0.75   0.454    -.0201651    .0451032
+     event_8 |   .0057604   .0148701     0.39   0.698    -.0233845    .0349052
+     event_9 |   .0310355   .0246937     1.26   0.209    -.0173633    .0794342
+    event_10 |   .0219975   .0190105     1.16   0.247    -.0152624    .0592573
+------------------------------------------------------------------------------
+  11,552
+
+. * assume attgt estimate with aggregate(e) option has been recently produced
+. preserve
+
+. clear
+
+. 
+. local Z 1.96
+
+. 
+. local T = colsof(e(b)) 
+
+. set obs `T'
+Number of observations (_N) was 0, now 15.
+
+. 
+. generate str outcome = ""
+(15 missing values generated)
+
+. generate b = 0
+
+. generate t = 0
+
+. generate upper = 0
+
+. generate lower = 0
+
+. 
+. local colnames : colnames e(b)
+
+. local outcomes : coleq e(b)
+
+. local treatment = e(treatment)
+
+. 
+. forvalues i = 1/`T' {
+  2.     * get event time index
+.     local name : word `i' of `colnames'
+  3.     local outcome : word `i' of `outcomes'
+  4.     replace outcome = "`outcome'" in `i'
+  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-
+> ", .)) in `i'
+  6.     * get estimates from regression
+.     replace b = e(b)[1, `i'] in `i'
+  7.     replace upper = b + `Z' * sqrt(e(V)[`i', `i']) in `i'
+  8.     replace lower = b - `Z' * sqrt(e(V)[`i', `i']) in `i'
+  9. }
+variable outcome was str1 now str5
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. * create period 0 for every outcome
+. expand 1+(t==1), generate(expanded)
+(1 observation created)
+
+. foreach X in t b upper lower {
+  2.     replace `X' = 0 if expanded
+  3. }
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. sort outcome t
+
+. 
+. levelsof outcome, local(outcomes)
+`"RperK"'
+
+. foreach X in `outcomes' {
+  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(
+> none)) ///
+>         (line b t if outcome=="`X'", lcolor(blue)), ///
+>         ytitle("`X'") xtitle("Year since `treatment'") ///
+>         graphregion(color(white)) legend(off)
+  3.     graph rename `X'
+  4. }
+
+. restore
+
+. 
+end of do-file
 file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_
 > RperK.png written in PNG format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+
+                          __000001
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%      .009924       4.01e-07
+ 5%     .0132617       1.68e-06
+10%     .0261906       .0000208       Obs              22,978
+25%     .0418528       .0000243       Sum of wgt.      22,978
+
+50%            1                      Mean           .6087975
+                        Largest       Std. dev.      .4675264
+75%            1              1
+90%            1       1.001005       Variance        .218581
+95%            1       1.020881       Skewness      -.3638293
+99%            1         1.6263       Kurtosis       1.144579
+Estimating TFP_cd: event_m5
+Estimating TFP_cd: event_m4
+Estimating TFP_cd: event_m3
+Estimating TFP_cd: event_m2
+Estimating TFP_cd: event_m1
+Estimating TFP_cd: event_1
+Estimating TFP_cd: event_2
+Estimating TFP_cd: event_3
+Estimating TFP_cd: event_4
+Estimating TFP_cd: event_5
+Estimating TFP_cd: event_6
+Estimating TFP_cd: event_7
+Estimating TFP_cd: event_8
+Estimating TFP_cd: event_9
+Estimating TFP_cd: event_10
+Callaway Sant'Anna (2021)
+
+                                                        Number of obs = 11,521
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .0009689   .0395581     0.02   0.980    -.0765635    .0785013
+    event_m4 |  -.0292241   .0264794    -1.10   0.270    -.0811228    .0226747
+    event_m3 |  -.0190464   .0270115    -0.71   0.481     -.071988    .0338952
+    event_m2 |   -.021182   .0204583    -1.04   0.300    -.0612795    .0189155
+    event_m1 |  -.0144675   .0214059    -0.68   0.499    -.0564224    .0274873
+     event_1 |   .0016429   .0173934     0.09   0.925    -.0324474    .0357333
+     event_2 |   .0039418   .0238385     0.17   0.869    -.0427809    .0506644
+     event_3 |  -.0131199   .0281403    -0.47   0.641    -.0682739    .0420341
+     event_4 |  -.0625603    .045549    -1.37   0.170    -.1518347    .0267141
+     event_5 |  -.0984537   .0549876    -1.79   0.073    -.2062275    .0093201
+     event_6 |   -.106506   .0596894    -1.78   0.074     -.223495     .010483
+     event_7 |  -.0637159   .0578739    -1.10   0.271    -.1771468    .0497149
+     event_8 |  -.0782928   .0757691    -1.03   0.301    -.2267976     .070212
+     event_9 |  -.0507061    .077222    -0.66   0.511    -.2020585    .1006464
+    event_10 |  -.0798542   .0907327    -0.88   0.379     -.257687    .0979785
+------------------------------------------------------------------------------
+  11,521
+
+. * assume attgt estimate with aggregate(e) option has been recently produced
+. preserve
+
+. clear
+
+. 
+. local Z 1.96
+
+. 
+. local T = colsof(e(b)) 
+
+. set obs `T'
+Number of observations (_N) was 0, now 15.
+
+. 
+. generate str outcome = ""
+(15 missing values generated)
+
+. generate b = 0
+
+. generate t = 0
+
+. generate upper = 0
+
+. generate lower = 0
+
+. 
+. local colnames : colnames e(b)
+
+. local outcomes : coleq e(b)
+
+. local treatment = e(treatment)
+
+. 
+. forvalues i = 1/`T' {
+  2.     * get event time index
+.     local name : word `i' of `colnames'
+  3.     local outcome : word `i' of `outcomes'
+  4.     replace outcome = "`outcome'" in `i'
+  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-
+> ", .)) in `i'
+  6.     * get estimates from regression
+.     replace b = e(b)[1, `i'] in `i'
+  7.     replace upper = b + `Z' * sqrt(e(V)[`i', `i']) in `i'
+  8.     replace lower = b - `Z' * sqrt(e(V)[`i', `i']) in `i'
+  9. }
+variable outcome was str1 now str6
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. * create period 0 for every outcome
+. expand 1+(t==1), generate(expanded)
+(1 observation created)
+
+. foreach X in t b upper lower {
+  2.     replace `X' = 0 if expanded
+  3. }
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. sort outcome t
+
+. 
+. levelsof outcome, local(outcomes)
+`"TFP_cd"'
+
+. foreach X in `outcomes' {
+  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(
+> none)) ///
+>         (line b t if outcome=="`X'", lcolor(blue)), ///
+>         ytitle("`X'") xtitle("Year since `treatment'") ///
+>         graphregion(color(white)) legend(off)
+  3.     graph rename `X'
+  4. }
+
+. restore
+
+. 
+end of do-file
 file /Users/koren/Documents/workspace/expat//output/figure/event_study/no_hire_
 > TFP_cd.png written in PNG format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+
+                          __000001
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0135339       8.76e-07
+ 5%      .024842       9.91e-07
+10%     .0301429       2.06e-06       Obs              22,978
+25%     .0505145       5.82e-06       Sum of wgt.      22,978
+
+50%            1                      Mean           .6053662
+                        Largest       Std. dev.      .4673815
+75%            1              1
+90%            1              1       Variance       .2184454
+95%            1       1.208352       Skewness      -.3410544
+99%            1       2.469931       Kurtosis        1.13641
+Estimating lnL: event_m5
+Estimating lnL: event_m4
+Estimating lnL: event_m3
+Estimating lnL: event_m2
+Estimating lnL: event_m1
+Estimating lnL: event_1
+Estimating lnL: event_2
+Estimating lnL: event_3
+Estimating lnL: event_4
+Estimating lnL: event_5
+Estimating lnL: event_6
+Estimating lnL: event_7
+Estimating lnL: event_8
+Estimating lnL: event_9
+Estimating lnL: event_10
+Callaway Sant'Anna (2021)
+
+                                                        Number of obs = 12,720
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .2696162   .0966779     2.79   0.005     .0801311    .4591014
+    event_m4 |    .104191   .0726524     1.43   0.152    -.0382051    .2465871
+    event_m3 |   .2081589   .0622301     3.34   0.001     .0861902    .3301277
+    event_m2 |   .0816204   .0487212     1.68   0.094    -.0138713    .1771121
+    event_m1 |   .0598425   .0371687     1.61   0.107    -.0130068    .1326917
+     event_1 |   .0063631   .0475842     0.13   0.894    -.0869002    .0996265
+     event_2 |   .0193127   .0633022     0.31   0.760    -.1047572    .1433827
+     event_3 |   .0607878   .0877125     0.69   0.488    -.1111256    .2327012
+     event_4 |   .0959451   .1030061     0.93   0.352    -.1059431    .2978334
+     event_5 |   .0022637   .1165292     0.02   0.985    -.2261294    .2306568
+     event_6 |   .0053814   .1320409     0.04   0.967    -.2534139    .2641767
+     event_7 |    -.02017   .1451602    -0.14   0.889    -.3046787    .2643388
+     event_8 |   .0904643   .1557709     0.58   0.561     -.214841    .3957696
+     event_9 |  -.0152426   .1832455    -0.08   0.934    -.3743972    .3439119
+    event_10 |   .1650058   .2061693     0.80   0.424    -.2390786    .5690902
+------------------------------------------------------------------------------
+  12,720
+
+. * assume attgt estimate with aggregate(e) option has been recently produced
+. preserve
+
+. clear
+
+. 
+. local Z 1.96
+
+. 
+. local T = colsof(e(b)) 
+
+. set obs `T'
+Number of observations (_N) was 0, now 15.
+
+. 
+. generate str outcome = ""
+(15 missing values generated)
+
+. generate b = 0
+
+. generate t = 0
+
+. generate upper = 0
+
+. generate lower = 0
+
+. 
+. local colnames : colnames e(b)
+
+. local outcomes : coleq e(b)
+
+. local treatment = e(treatment)
+
+. 
+. forvalues i = 1/`T' {
+  2.     * get event time index
+.     local name : word `i' of `colnames'
+  3.     local outcome : word `i' of `outcomes'
+  4.     replace outcome = "`outcome'" in `i'
+  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-
+> ", .)) in `i'
+  6.     * get estimates from regression
+.     replace b = e(b)[1, `i'] in `i'
+  7.     replace upper = b + `Z' * sqrt(e(V)[`i', `i']) in `i'
+  8.     replace lower = b - `Z' * sqrt(e(V)[`i', `i']) in `i'
+  9. }
+variable outcome was str1 now str3
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. * create period 0 for every outcome
+. expand 1+(t==1), generate(expanded)
+(1 observation created)
+
+. foreach X in t b upper lower {
+  2.     replace `X' = 0 if expanded
+  3. }
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. sort outcome t
+
+. 
+. levelsof outcome, local(outcomes)
+`"lnL"'
+
+. foreach X in `outcomes' {
+  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(
+> none)) ///
+>         (line b t if outcome=="`X'", lcolor(blue)), ///
+>         ytitle("`X'") xtitle("Year since `treatment'") ///
+>         graphregion(color(white)) legend(off)
+  3.     graph rename `X'
+  4. }
+
+. restore
+
+. 
+end of do-file
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hi
+> re_lnL.png written in PNG format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+
+                          __000001
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0135339       8.76e-07
+ 5%      .024842       9.91e-07
+10%     .0301429       2.06e-06       Obs              22,978
+25%     .0505145       5.82e-06       Sum of wgt.      22,978
+
+50%            1                      Mean           .6053662
+                        Largest       Std. dev.      .4673815
+75%            1              1
+90%            1              1       Variance       .2184454
+95%            1       1.208352       Skewness      -.3410544
+99%            1       2.469931       Kurtosis        1.13641
+Estimating lnQL: event_m5
+Estimating lnQL: event_m4
+Estimating lnQL: event_m3
+Estimating lnQL: event_m2
+Estimating lnQL: event_m1
+Estimating lnQL: event_1
+Estimating lnQL: event_2
+Estimating lnQL: event_3
+Estimating lnQL: event_4
+Estimating lnQL: event_5
+Estimating lnQL: event_6
+Estimating lnQL: event_7
+Estimating lnQL: event_8
+Estimating lnQL: event_9
+Estimating lnQL: event_10
+Callaway Sant'Anna (2021)
+
+                                                        Number of obs = 12,720
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    event_m5 |  -.1217739   .1137755    -1.07   0.284    -.3447698     .101222
+    event_m4 |  -.0142707   .1041022    -0.14   0.891    -.2183074    .1897659
+    event_m3 |  -.0814052   .1041049    -0.78   0.434     -.285447    .1226367
+    event_m2 |  -.0316321   .0735247    -0.43   0.667    -.1757379    .1124737
+    event_m1 |  -.0568562   .0863421    -0.66   0.510    -.2260835    .1123712
+     event_1 |   .0625968   .0857315     0.73   0.465    -.1054338    .2306274
+     event_2 |   .0615699   .1028033     0.60   0.549    -.1399209    .2630606
+     event_3 |     .06517   .1183248     0.55   0.582    -.1667423    .2970824
+     event_4 |  -.0378971   .1070324    -0.35   0.723    -.2476767    .1718826
+     event_5 |  -.0512922   .1207003    -0.42   0.671    -.2878606    .1852761
+     event_6 |   .0618284   .1320748     0.47   0.640    -.1970335    .3206903
+     event_7 |  -.0238063    .154878    -0.15   0.878    -.3273617    .2797491
+     event_8 |  -.0098282   .1761486    -0.06   0.956    -.3550732    .3354168
+     event_9 |   .1264555    .196445     0.64   0.520    -.2585695    .5114806
+    event_10 |   .0313172   .1918259     0.16   0.870    -.3446546     .407289
+------------------------------------------------------------------------------
+  12,720
+
+. * assume attgt estimate with aggregate(e) option has been recently produced
+. preserve
+
+. clear
+
+. 
+. local Z 1.96
+
+. 
+. local T = colsof(e(b)) 
+
+. set obs `T'
+Number of observations (_N) was 0, now 15.
+
+. 
+. generate str outcome = ""
+(15 missing values generated)
+
+. generate b = 0
+
+. generate t = 0
+
+. generate upper = 0
+
+. generate lower = 0
+
+. 
+. local colnames : colnames e(b)
+
+. local outcomes : coleq e(b)
+
+. local treatment = e(treatment)
+
+. 
+. forvalues i = 1/`T' {
+  2.     * get event time index
+.     local name : word `i' of `colnames'
+  3.     local outcome : word `i' of `outcomes'
+  4.     replace outcome = "`outcome'" in `i'
+  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-
+> ", .)) in `i'
+  6.     * get estimates from regression
+.     replace b = e(b)[1, `i'] in `i'
+  7.     replace upper = b + `Z' * sqrt(e(V)[`i', `i']) in `i'
+  8.     replace lower = b - `Z' * sqrt(e(V)[`i', `i']) in `i'
+  9. }
+variable outcome was str1 now str4
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. * create period 0 for every outcome
+. expand 1+(t==1), generate(expanded)
+(1 observation created)
+
+. foreach X in t b upper lower {
+  2.     replace `X' = 0 if expanded
+  3. }
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. sort outcome t
+
+. 
+. levelsof outcome, local(outcomes)
+`"lnQL"'
+
+. foreach X in `outcomes' {
+  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(
+> none)) ///
+>         (line b t if outcome=="`X'", lcolor(blue)), ///
+>         ytitle("`X'") xtitle("Year since `treatment'") ///
+>         graphregion(color(white)) legend(off)
+  3.     graph rename `X'
+  4. }
+
+. restore
+
+. 
+end of do-file
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hi
+> re_lnQL.png written in PNG format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+
+                          __000001
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0135339       8.76e-07
+ 5%      .024842       9.91e-07
+10%     .0301429       2.06e-06       Obs              22,978
+25%     .0505145       5.82e-06       Sum of wgt.      22,978
+
+50%            1                      Mean           .6053662
+                        Largest       Std. dev.      .4673815
+75%            1              1
+90%            1              1       Variance       .2184454
+95%            1       1.208352       Skewness      -.3410544
+99%            1       2.469931       Kurtosis        1.13641
+Estimating lnK: event_m5
+Estimating lnK: event_m4
+Estimating lnK: event_m3
+Estimating lnK: event_m2
+Estimating lnK: event_m1
+Estimating lnK: event_1
+Estimating lnK: event_2
+Estimating lnK: event_3
+Estimating lnK: event_4
+Estimating lnK: event_5
+Estimating lnK: event_6
+Estimating lnK: event_7
+Estimating lnK: event_8
+Estimating lnK: event_9
+Estimating lnK: event_10
+Callaway Sant'Anna (2021)
+
+                                                        Number of obs = 12,720
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .3173525   .1385735     2.29   0.022     .0457534    .5889516
+    event_m4 |   .1591336   .1134006     1.40   0.161    -.0631275    .3813948
+    event_m3 |   .1546008   .1081406     1.43   0.153    -.0573509    .3665526
+    event_m2 |   .1111847   .0837713     1.33   0.184     -.053004    .2753733
+    event_m1 |   .0784199    .085148     0.92   0.357    -.0884671    .2453069
+     event_1 |  -.0537511   .0911695    -0.59   0.555    -.2324399    .1249378
+     event_2 |  -.1779452   .1071496    -1.66   0.097    -.3879545    .0320642
+     event_3 |  -.1809025   .1242309    -1.46   0.145    -.4243906    .0625857
+     event_4 |  -.3140301   .1644745    -1.91   0.056    -.6363942     .008334
+     event_5 |  -.3890618   .1867268    -2.08   0.037    -.7550396   -.0230841
+     event_6 |  -.3567529   .1952683    -1.83   0.068    -.7394718    .0259659
+     event_7 |   -.375422   .1992383    -1.88   0.060    -.7659218    .0150778
+     event_8 |  -.3815416   .2276155    -1.68   0.094    -.8276598    .0645765
+     event_9 |  -.4699806   .2466746    -1.91   0.057     -.953454    .0134927
+    event_10 |  -.3669005   .2833713    -1.29   0.195     -.922298     .188497
+------------------------------------------------------------------------------
+  12,720
+
+. * assume attgt estimate with aggregate(e) option has been recently produced
+. preserve
+
+. clear
+
+. 
+. local Z 1.96
+
+. 
+. local T = colsof(e(b)) 
+
+. set obs `T'
+Number of observations (_N) was 0, now 15.
+
+. 
+. generate str outcome = ""
+(15 missing values generated)
+
+. generate b = 0
+
+. generate t = 0
+
+. generate upper = 0
+
+. generate lower = 0
+
+. 
+. local colnames : colnames e(b)
+
+. local outcomes : coleq e(b)
+
+. local treatment = e(treatment)
+
+. 
+. forvalues i = 1/`T' {
+  2.     * get event time index
+.     local name : word `i' of `colnames'
+  3.     local outcome : word `i' of `outcomes'
+  4.     replace outcome = "`outcome'" in `i'
+  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-
+> ", .)) in `i'
+  6.     * get estimates from regression
+.     replace b = e(b)[1, `i'] in `i'
+  7.     replace upper = b + `Z' * sqrt(e(V)[`i', `i']) in `i'
+  8.     replace lower = b - `Z' * sqrt(e(V)[`i', `i']) in `i'
+  9. }
+variable outcome was str1 now str3
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. * create period 0 for every outcome
+. expand 1+(t==1), generate(expanded)
+(1 observation created)
+
+. foreach X in t b upper lower {
+  2.     replace `X' = 0 if expanded
+  3. }
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. sort outcome t
+
+. 
+. levelsof outcome, local(outcomes)
+`"lnK"'
+
+. foreach X in `outcomes' {
+  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(
+> none)) ///
+>         (line b t if outcome=="`X'", lcolor(blue)), ///
+>         ytitle("`X'") xtitle("Year since `treatment'") ///
+>         graphregion(color(white)) legend(off)
+  3.     graph rename `X'
+  4. }
+
+. restore
+
+. 
+end of do-file
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hi
+> re_lnK.png written in PNG format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+
+                          __000001
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0135339       8.76e-07
+ 5%      .024842       9.91e-07
+10%     .0301429       2.06e-06       Obs              22,978
+25%     .0505145       5.82e-06       Sum of wgt.      22,978
+
+50%            1                      Mean           .6053662
+                        Largest       Std. dev.      .4673815
+75%            1              1
+90%            1              1       Variance       .2184454
+95%            1       1.208352       Skewness      -.3410544
+99%            1       2.469931       Kurtosis        1.13641
+Estimating exporter: event_m5
+Estimating exporter: event_m4
+Estimating exporter: event_m3
+Estimating exporter: event_m2
+Estimating exporter: event_m1
+Estimating exporter: event_1
+Estimating exporter: event_2
+Estimating exporter: event_3
+Estimating exporter: event_4
+Estimating exporter: event_5
+Estimating exporter: event_6
+Estimating exporter: event_7
+Estimating exporter: event_8
+Estimating exporter: event_9
+Estimating exporter: event_10
+Callaway Sant'Anna (2021)
+
+                                                        Number of obs = 12,720
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .0040356   .0306804     0.13   0.895     -.056097    .0641681
+    event_m4 |  -.0234244   .0316488    -0.74   0.459    -.0854548    .0386061
+    event_m3 |   .0022317    .026352     0.08   0.933    -.0494172    .0538807
+    event_m2 |  -.0173257   .0229464    -0.76   0.450    -.0622999    .0276485
+    event_m1 |  -.0219148   .0171723    -1.28   0.202    -.0555718    .0117422
+     event_1 |  -.0340509   .0181393    -1.88   0.060    -.0696033    .0015014
+     event_2 |  -.0293468   .0201911    -1.45   0.146    -.0689206     .010227
+     event_3 |  -.0588357   .0251174    -2.34   0.019    -.1080648   -.0096066
+     event_4 |  -.0655768   .0259143    -2.53   0.011    -.1163679   -.0147857
+     event_5 |  -.0714582   .0319689    -2.24   0.025    -.1341161   -.0088004
+     event_6 |  -.0723015   .0337728    -2.14   0.032    -.1384949    -.006108
+     event_7 |  -.0653608   .0399611    -1.64   0.102    -.1436832    .0129615
+     event_8 |  -.0344593   .0428042    -0.81   0.421     -.118354    .0494354
+     event_9 |  -.0209763   .0490925    -0.43   0.669    -.1171958    .0752433
+    event_10 |  -.0256107   .0596275    -0.43   0.668    -.1424784     .091257
+------------------------------------------------------------------------------
+  12,720
+
+. * assume attgt estimate with aggregate(e) option has been recently produced
+. preserve
+
+. clear
+
+. 
+. local Z 1.96
+
+. 
+. local T = colsof(e(b)) 
+
+. set obs `T'
+Number of observations (_N) was 0, now 15.
+
+. 
+. generate str outcome = ""
+(15 missing values generated)
+
+. generate b = 0
+
+. generate t = 0
+
+. generate upper = 0
+
+. generate lower = 0
+
+. 
+. local colnames : colnames e(b)
+
+. local outcomes : coleq e(b)
+
+. local treatment = e(treatment)
+
+. 
+. forvalues i = 1/`T' {
+  2.     * get event time index
+.     local name : word `i' of `colnames'
+  3.     local outcome : word `i' of `outcomes'
+  4.     replace outcome = "`outcome'" in `i'
+  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-
+> ", .)) in `i'
+  6.     * get estimates from regression
+.     replace b = e(b)[1, `i'] in `i'
+  7.     replace upper = b + `Z' * sqrt(e(V)[`i', `i']) in `i'
+  8.     replace lower = b - `Z' * sqrt(e(V)[`i', `i']) in `i'
+  9. }
+variable outcome was str1 now str8
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. * create period 0 for every outcome
+. expand 1+(t==1), generate(expanded)
+(1 observation created)
+
+. foreach X in t b upper lower {
+  2.     replace `X' = 0 if expanded
+  3. }
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. sort outcome t
+
+. 
+. levelsof outcome, local(outcomes)
+`"exporter"'
+
+. foreach X in `outcomes' {
+  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(
+> none)) ///
+>         (line b t if outcome=="`X'", lcolor(blue)), ///
+>         ytitle("`X'") xtitle("Year since `treatment'") ///
+>         graphregion(color(white)) legend(off)
+  3.     graph rename `X'
+  4. }
+
+. restore
+
+. 
+end of do-file
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hi
+> re_exporter.png written in PNG format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1985 to 2018, but with gaps
+         Delta: 1 unit
+Generating weights...
+
+                          __000001
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0161488       8.76e-07
+ 5%     .0251638       9.91e-07
+10%     .0305493       2.06e-06       Obs              22,978
+25%     .0510388       5.82e-06       Sum of wgt.      22,978
+
+50%            1                      Mean           .6063082
+                        Largest       Std. dev.      .4672352
+75%            1              1
+90%            1              1       Variance       .2183088
+95%            1              1       Skewness      -.3447944
+99%            1       2.469931       Kurtosis       1.138026
+Estimating RperK: event_m5
+Estimating RperK: event_m4
+Estimating RperK: event_m3
+Estimating RperK: event_m2
+Estimating RperK: event_m1
+Estimating RperK: event_1
+Estimating RperK: event_2
+Estimating RperK: event_3
+Estimating RperK: event_4
+Estimating RperK: event_5
+Estimating RperK: event_6
+Estimating RperK: event_7
+Estimating RperK: event_8
+Estimating RperK: event_9
+Estimating RperK: event_10
+Callaway Sant'Anna (2021)
+
+                                                        Number of obs = 12,679
+
+------------------------------------------------------------------------------
+             | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    event_m5 |   .0113022   .0089695     1.26   0.208    -.0062776     .028882
+    event_m4 |   -.002293   .0064103    -0.36   0.721     -.014857     .010271
+    event_m3 |  -.0095227   .0054602    -1.74   0.081    -.0202245    .0011792
+    event_m2 |   .0024243   .0058037     0.42   0.676    -.0089507    .0137992
+    event_m1 |   .0003347   .0054007     0.06   0.951    -.0102505    .0109199
+     event_1 |   .0030554   .0037875     0.81   0.420    -.0043679    .0104788
+     event_2 |   .0134879   .0055984     2.41   0.016     .0025153    .0244605
+     event_3 |   .0156548   .0075758     2.07   0.039     .0008066    .0305031
+     event_4 |   .0121367   .0087448     1.39   0.165    -.0050028    .0292761
+     event_5 |   .0219765   .0100642     2.18   0.029     .0022511    .0417019
+     event_6 |   .0154075   .0105527     1.46   0.144    -.0052753    .0360903
+     event_7 |   .0124402   .0133548     0.93   0.352    -.0137347    .0386151
+     event_8 |   .0255782   .0149742     1.71   0.088    -.0037707    .0549271
+     event_9 |   .0202933   .0165595     1.23   0.220    -.0121628    .0527494
+    event_10 |   .0125263   .0173789     0.72   0.471    -.0215357    .0465882
+------------------------------------------------------------------------------
+  12,679
+
+. * assume attgt estimate with aggregate(e) option has been recently produced
+. preserve
+
+. clear
+
+. 
+. local Z 1.96
+
+. 
+. local T = colsof(e(b)) 
+
+. set obs `T'
+Number of observations (_N) was 0, now 15.
+
+. 
+. generate str outcome = ""
+(15 missing values generated)
+
+. generate b = 0
+
+. generate t = 0
+
+. generate upper = 0
+
+. generate lower = 0
+
+. 
+. local colnames : colnames e(b)
+
+. local outcomes : coleq e(b)
+
+. local treatment = e(treatment)
+
+. 
+. forvalues i = 1/`T' {
+  2.     * get event time index
+.     local name : word `i' of `colnames'
+  3.     local outcome : word `i' of `outcomes'
+  4.     replace outcome = "`outcome'" in `i'
+  5.     replace t = real(subinstr(subinstr("`name'", "event_", "", .), "m", "-
+> ", .)) in `i'
+  6.     * get estimates from regression
+.     replace b = e(b)[1, `i'] in `i'
+  7.     replace upper = b + `Z' * sqrt(e(V)[`i', `i']) in `i'
+  8.     replace lower = b - `Z' * sqrt(e(V)[`i', `i']) in `i'
+  9. }
+variable outcome was str1 now str5
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. * create period 0 for every outcome
+. expand 1+(t==1), generate(expanded)
+(1 observation created)
+
+. foreach X in t b upper lower {
+  2.     replace `X' = 0 if expanded
+  3. }
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. sort outcome t
+
+. 
+. levelsof outcome, local(outcomes)
+`"RperK"'
+
+. foreach X in `outcomes' {
+  2.     twoway (rarea lower upper t if outcome=="`X'", fcolor(blue%30) lwidth(
+> none)) ///
+>         (line b t if outcome=="`X'", lcolor(blue)), ///
+>         ytitle("`X'") xtitle("Year since `treatment'") ///
+>         graphregion(color(white)) legend(off)
+  3.     graph rename `X'
+  4. }
+
+. restore
+
+. 
+end of do-file
+file /Users/koren/Documents/workspace/expat//output/figure/event_study/local_hi
+> re_RperK.png written in PNG format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1985 to 2018, but with gaps

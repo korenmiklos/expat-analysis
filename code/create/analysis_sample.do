@@ -141,7 +141,6 @@ count if ever_foreign & firm_tag
 count if ever_expat_ceo & firm_tag
 count if has_expat_ceo
 
-drop if missing(time_foreign)
 drop ever_expat* ever_foreign_hire
 
 by frame_id_numeric: egen ever_expat = max(has_expat_ceo)
