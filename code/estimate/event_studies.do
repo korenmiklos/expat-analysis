@@ -9,7 +9,7 @@ log using "`here'/output/event_studies", text replace
 local pre 5
 local post 10
 local vars lnL lnQL lnK exporter RperK TFP_cd
-local controls lnQ lnL exporter
+local controls `vars'
 
 use "`here'/temp/analysis_sample.dta", clear
 
@@ -32,10 +32,10 @@ summarize phat
 drop if phat < r(mean)
 
 foreach treatment in no_hire local_hire expat_hire {
+    attgt `vars', treatment(`treatment') aggregate(e) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) ipw(`controls')
+    count if e(sample) == 1
+    do "`here'/code/util/event_study_plot.do"
     foreach outcome in `vars' {
-        attgt `outcome', treatment(`treatment') aggregate(e) pre(`pre') post(`post') notyet limitcontrol(foreign == 0) ipw(`controls')
-        count if e(sample) == 1
-        do "`here'/code/util/event_study_plot.do"
         graph display `outcome'
         graph export "`here'/output/figure/event_study/`treatment'_`outcome'.png", replace
         graph drop `outcome'
