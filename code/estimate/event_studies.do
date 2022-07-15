@@ -12,7 +12,6 @@ local vars lnL lnQL lnK exporter RperK TFP_cd
 local controls lnQ lnL exporter
 
 use "`here'/temp/analysis_sample.dta", clear
-keep if ever_foreign
 
 count
 
@@ -20,6 +19,17 @@ rename has_expat_ceo expat_hire
 generate local_hire = foreign_hire & !expat_hire
 generate no_hire = foreign & !foreign_hire
 
+* select appropriate controls
+generate byte treated = (time_foreign == 0) if (time_foreign == 0 | missing(time_foreign))
+tempvar phat prmin prmax
+egen `prmin' = min(treated), by(industry_year)
+egen `prmax' = max(treated), by(industry_year)
+probit treated `controls' i.industry_year if `prmin' < `prmax'
+predict `phat', pr
+replace `phat' = `prmin' if `prmin' == `prmax'
+egen phat = min(`phat'), by(frame_id_numeric)
+summarize phat
+drop if phat < r(mean)
 
 foreach treatment in no_hire local_hire expat_hire {
     foreach outcome in `vars' {
