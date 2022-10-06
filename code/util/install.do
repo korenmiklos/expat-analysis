@@ -13,3 +13,7 @@ capture ssc install estout
 * install here
 capture ado uninstall here
 net install here, from("https://raw.githubusercontent.com/korenmiklos/here/master/")
+
+* install attgt
+capture ado uninstall attgt
+net install attgt, from(https://raw.githubusercontent.com/korenmiklos/attgt/v0.2.3/)
