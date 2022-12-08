@@ -1,7 +1,7 @@
 
   ___  ____  ____  ____  ____ ®
  /__    /   ____/   /   ____/      17.0
-___/   /   /___/   /   /___/       MP—Parallel Edition
+___/   /   /___/   /   /___/       BE—Basic Edition
 
  Statistics and Data Science       Copyright 1985-2021 StataCorp LLC
                                    StataCorp
@@ -10,23 +10,21 @@ ___/   /   /___/   /   /___/       MP—Parallel Edition
                                    800-STATA-PC        https://www.stata.com
                                    979-696-4600        stata@stata.com
 
-Stata license: Single-user 2-core  perpetual
-Serial number: 501706328764
+Stata license: 6-user network perpetual
+Serial number: 501706335292
   Licensed to: Miklos Koren
-               CEU MicroData
+               Central European University
 
 Notes:
       1. Stata is running in batch mode.
       2. Unicode is supported; see help unicode_advice.
-      3. More than 2 billion observations are allowed; see help obs_advice.
-      4. Maximum number of variables is set to 5,000; see help set_maxvar.
 
 . do code/create/manager_country.do 
 
 . clear all
 
 . here
-/Users/koren/Documents/workspace/expat/
+/srv/sandbox/expat/almos/
 
 . local here = r(here)
 
@@ -1301,7 +1299,8 @@ ZW
   (0 bytes saved)
 
 . save "`here'/temp/manager_country.dta", replace
-file /Users/koren/Documents/workspace/expat//temp/manager_country.dta saved
+(file /srv/sandbox/expat/almos//temp/manager_country.dta not found)
+file /srv/sandbox/expat/almos//temp/manager_country.dta saved
 
 . 
 end of do-file

@@ -5,10 +5,12 @@ set more off
 here
 local here = r(here)
 
-cap log close
-log using "`here'/output/balance", text replace
+global here "/srv/sandbox/expat/almos"
 
-use "`here'/input/merleg-expat/balance-small.dta"
+cap log close
+log using "$here/output/balance", text replace
+
+use "$here/input/merleg-expat/balance-small.dta" 
 
 * keep only numeric part of frame_id
 keep if substr(frame_id, 1, 2) == "ft"
@@ -57,7 +59,7 @@ display foreign_interpolate
 
 * foreign change
 preserve
-use "`here'/input/ceo-panel/ceo-panel.dta", clear
+use "$here/input/ceo-panel/ceo-panel.dta", clear
 * expat is changed if job_begin < 1990 in firm_panel.do, not here
 bys frame_id_numeric: egen first_year_expat = min(cond(expat == 1, year,.))
 duplicates drop frame_id_numeric, force
@@ -215,5 +217,5 @@ count
 
 *save_all_to_json
 cap drop __*
-save "`here'/temp/balance-small-clean.dta", replace
+save "$here/temp/balance-small-clean.dta", replace
 log close
