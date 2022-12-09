@@ -13,6 +13,14 @@ save "temp/compare_sample.dta", replace
 foreach X of varlist _all {
 	label variable `X' ""
 }
-tabulate old_foreign new_foreign, missing
-tabulate old_expat new_expat, missing
+egen ft = tag(frame_id_numeric)
+foreach X in foreign expat {
+	tabulate old_`X' new_`X', missing
+	foreach t in old new {
+		egen `t'_ever_`X' = max(`t'_`X'), by(frame_id_numeric)
+	}
+	tabulate old_`X' new_`X' if new_ever_foreign, missing
+	tabulate old_ever_`X' new_ever_`X' if ft, missing
+}
+
 
