@@ -22,8 +22,6 @@ foreach var of varlist hole* {
 drop x_before hole*
 
 merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(match) nogen
-*merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(1 3) //nogen
-*merge 1:1 frame_id year using "`here'/temp/firm_events.dta"
 
 sort frame_id_numeric year
 gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
@@ -91,7 +89,6 @@ replace divest = 1 if divest > 0
 
 * only keep D, D-F owner spells
 bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
-*keep if start_as_domestic & owner_spell <= 2
 keep if start_as_domestic
 keep if owner_spell <= 2
 
@@ -127,7 +124,7 @@ codebook frame_id_numeric
 count if firm_tag
 count
 
-drop first_year_foreign time_foreign foreign_* foreign? count
+drop first_year_foreign time_foreign 
 
 bys frame_id_numeric: egen first_year_foreign_new = min(cond(foreign == 1, year,.))
 generate time_foreign_new = year - first_year_foreign_new
@@ -166,6 +163,5 @@ tab foreign_hire_only has_expat_ceo
 drop foreign_e5 foreign_e4 foreign_e3 foreign_e2 foreign_e1 foreigne0 foreigne1 foreigne2 foreigne3 foreigne4 foreigne5 foreign_hire_local_1 foreign_hire_expat_1 foreign_hire_local_2 foreign_hire_expat_2 foreign_hire_local_3 foreign_hire_expat_3 foreign_hire_local_4 foreign_hire_expat_4 foreign_hire_local_5 foreign_hire_expat_5 foreign_hire_local_6 foreign_hire_expat_6 foreign_hire_local_7 foreign_hire_expat_7 foreign_hire_local_8 foreign_hire_expat_8 foreign_hire_local_9 foreign_hire_expat_9 foreign_hire_local_10 foreign_hire_expat_10 foreign_hire_local_11 foreign_hire_expat_11 foreign_hire_local_3plus foreign_hire_expat_3plus foreign_hire_LL_2 foreign_hire_LE_2 foreign_hire_EL_2 foreign_hire_EE_2 foreign_hire_local_1_e5 foreign_hire_local_1_e4 foreign_hire_local_1_e3 foreign_hire_local_1_e2 foreign_hire_local_1_e1 foreign_hire_local_1e0 foreign_hire_local_1e1 foreign_hire_local_1e2 foreign_hire_local_1e3 foreign_hire_local_1e4 foreign_hire_local_1e5 foreign_hire_expat_1_e5 foreign_hire_expat_1_e4 foreign_hire_expat_1_e3 foreign_hire_expat_1_e2 foreign_hire_expat_1_e1 foreign_hire_expat_1e0 foreign_hire_expat_1e1 foreign_hire_expat_1e2 foreign_hire_expat_1e3 foreign_hire_expat_1e4 foreign_hire_expat_1e5
 
 compress
-do "`here'/code/create/survival.do"
 save "`here'/temp/analysis_sample.dta", replace
 log close

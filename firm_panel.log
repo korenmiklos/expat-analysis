@@ -41,7 +41,7 @@ Notes:
       name:  <unnamed>
        log:  /srv/sandbox/expat/almos//output/firm_panel.log
   log type:  text
- opened on:  11 Nov 2022, 17:07:11
+ opened on:   9 Dec 2022, 18:51:36
 
 . 
 . * keep only sample from balance-small - NOTE: had to restructure as we have t
@@ -57,8 +57,8 @@ Notes:
 . tempfile sample
 
 . save `sample', replace
-(file /srv/sandbox/koren/St3574973.000001 not found)
-file /srv/sandbox/koren/St3574973.000001 saved as .dta format
+(file /srv/sandbox/koren/St4121271.000001 not found)
+file /srv/sandbox/koren/St4121271.000001 saved as .dta format
 
 . 
 . * count expats in do - asterisk used
@@ -495,7 +495,7 @@ Panel variable: company_manager_id (unbalanced)
 (25,654 real changes made)
 (1,274 real changes made)
 (1,498 real changes made)
-file /srv/sandbox/koren/St3574973.000002 saved as .dta format
+file /srv/sandbox/koren/St4121271.000002 saved as .dta format
   288,033
 
 -------------------------------------------------------------------------------
@@ -733,7 +733,7 @@ Panel variable: company_manager_id (unbalanced)
 (5,148 real changes made)
 (153 real changes made)
 (194 real changes made)
-file /srv/sandbox/koren/St3574973.000003 saved as .dta format
+file /srv/sandbox/koren/St4121271.000003 saved as .dta format
 
 . 
 . use `manager_ceo'
@@ -833,14 +833,13 @@ has_expat_c |
 
 . *save_all_to_json
 . save "`here'/temp/firm_events.dta", replace
-(file /srv/sandbox/expat/almos//temp/firm_events.dta not found)
 file /srv/sandbox/expat/almos//temp/firm_events.dta saved
 
 . log close
       name:  <unnamed>
        log:  /srv/sandbox/expat/almos//output/firm_panel.log
   log type:  text
- closed on:  11 Nov 2022, 17:08:18
+ closed on:   9 Dec 2022, 18:52:45
 -------------------------------------------------------------------------------
 
 . 

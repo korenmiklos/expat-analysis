@@ -37,7 +37,7 @@ Notes:
       name:  <unnamed>
        log:  /srv/sandbox/expat/almos//output/analysis_sample.log
   log type:  text
- opened on:  11 Nov 2022, 17:24:02
+ opened on:   9 Dec 2022, 18:55:08
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -99,9 +99,6 @@ hole1_befor |
     Matched                           312,682  
     -----------------------------------------
 
-. *merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(1 3) //nog
-> en
-. *merge 1:1 frame_id year using "`here'/temp/firm_events.dta"
 . 
 . sort frame_id_numeric year
 
@@ -331,7 +328,6 @@ has_out~nceo: 282557 missing values recoded
 . bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (fore
 > ign == 0))
 
-. *keep if start_as_domestic & owner_spell <= 2
 . keep if start_as_domestic
 (18,915 observations deleted)
 
@@ -415,7 +411,7 @@ frame_id_numeric                                                    (unlabeled)
   286,790
 
 . 
-. drop first_year_foreign time_foreign foreign_* foreign? count
+. drop first_year_foreign time_foreign 
 
 . 
 . bys frame_id_numeric: egen first_year_foreign_new = min(cond(foreign == 1, ye
@@ -836,35 +832,6 @@ foreign_hi |     has_expat_ceo
   variable country_all_ceo was str18 now str15
   (28,679,000 bytes saved)
 
-. do "`here'/code/create/survival.do"
-
-. fillin frame_id_numeric year
-
-. rename _fillin dead_firm
-
-. xtset frame_id_numeric year
-
-Panel variable: frame_id_numeric (strongly balanced)
- Time variable: year, 1985 to 2018
-         Delta: 1 unit
-
-. generate byte survival = 1 - dead_firm
-
-. 
-. tempvar begin end
-
-. egen `begin' = min(cond(survival, year, .)), by(frame_id_numeric)
-
-. egen `end' = max(cond(survival, year+1, .)), by(frame_id_numeric)
-
-. keep if `begin' <= year
-(274,191 observations deleted)
-
-. drop `begin' `end'
-
-. 
-end of do-file
-
 . save "`here'/temp/analysis_sample.dta", replace
 file /srv/sandbox/expat/almos//temp/analysis_sample.dta saved
 
@@ -872,7 +839,7 @@ file /srv/sandbox/expat/almos//temp/analysis_sample.dta saved
       name:  <unnamed>
        log:  /srv/sandbox/expat/almos//output/analysis_sample.log
   log type:  text
- closed on:  11 Nov 2022, 17:24:22
+ closed on:   9 Dec 2022, 18:55:22
 -------------------------------------------------------------------------------
 
 . 
