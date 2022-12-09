@@ -65,7 +65,7 @@ file temp/compare_sample.dta saved
   3.         foreach t in old new {
   4.                 egen `t'_ever_`X' = max(`t'_`X'), by(frame_id_numeric)
   5.         }
-  6.         tabulate old_`X' new_`X' if new_ever_foreign, missing
+  6.         tabulate old_`X' new_`X' if old_ever_foreign==1, missing
   7.         tabulate old_ever_`X' new_ever_`X' if ft, missing
   8. }
 
@@ -83,11 +83,11 @@ old_foreig |           new_foreign
 old_foreig |           new_foreign
          n |         0          1          . |     Total
 -----------+---------------------------------+----------
-         0 |     5,743        195        721 |     6,659 
-         1 |        15      4,154        627 |     4,796 
-         . |     4,493      8,504     14,552 |    27,549 
+         0 |     5,768        195        727 |     6,690 
+         1 |        20      4,154        636 |     4,810 
+         . |        55      4,382      8,567 |    13,004 
 -----------+---------------------------------+----------
-     Total |    10,251     12,853     15,900 |    39,004 
+     Total |     5,843      8,731      9,930 |    24,504 
 
 old_ever_f |         new_ever_foreign
     oreign |         0          1          . |     Total
@@ -111,11 +111,11 @@ old_ever_f |         new_ever_foreign
            |            new_expat
  old_expat |         0          1          . |     Total
 -----------+---------------------------------+----------
-         0 |     7,738        570      1,084 |     9,392 
+         0 |     7,768        570      1,099 |     9,437 
          1 |        20      1,779        264 |     2,063 
-         . |     8,034      4,963     14,552 |    27,549 
+         . |     1,152      3,285      8,567 |    13,004 
 -----------+---------------------------------+----------
-     Total |    15,792      7,312     15,900 |    39,004 
+     Total |     8,940      5,634      9,930 |    24,504 
 
 old_ever_e |          new_ever_expat
       xpat |         0          1          . |     Total

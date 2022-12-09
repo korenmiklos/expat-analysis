@@ -19,7 +19,7 @@ foreach X in foreign expat {
 	foreach t in old new {
 		egen `t'_ever_`X' = max(`t'_`X'), by(frame_id_numeric)
 	}
-	tabulate old_`X' new_`X' if new_ever_foreign, missing
+	tabulate old_`X' new_`X' if old_ever_foreign==1, missing
 	tabulate old_ever_`X' new_ever_`X' if ft, missing
 }
 
