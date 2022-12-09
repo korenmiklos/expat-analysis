@@ -1,0 +1,85 @@
+
+  ___  ____  ____  ____  ____ ®
+ /__    /   ____/   /   ____/      17.0
+___/   /   /___/   /   /___/       BE—Basic Edition
+
+ Statistics and Data Science       Copyright 1985-2021 StataCorp LLC
+                                   StataCorp
+                                   4905 Lakeway Drive
+                                   College Station, Texas 77845 USA
+                                   800-STATA-PC        https://www.stata.com
+                                   979-696-4600        stata@stata.com
+
+Stata license: 6-user network perpetual
+Serial number: 501706335292
+  Licensed to: Miklos Koren
+               Central European University
+
+Notes:
+      1. Stata is running in batch mode.
+      2. Unicode is supported; see help unicode_advice.
+
+. do code/compare_sample.do 
+
+. use "temp/analysis_sample.dta"
+
+. keep frame_id_numeric year foreign has_expat_ceo
+
+. rename foreign new_foreign
+
+. rename has_expat_ceo new_expat
+
+. 
+. merge 1:1 frame_id_numeric year using "temp/analysis_sample-2022-05-05.dta", 
+> keepusing(foreign has_expat_ceo) nogen
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                       531,913
+        from master                   530,584  
+        from using                      1,329  
+
+    Matched                            10,171  
+    -----------------------------------------
+
+. rename foreign old_foreign
+
+. rename has_expat_ceo old_expat
+
+. 
+. compress
+  (0 bytes saved)
+
+. save "temp/compare_sample.dta", replace
+file temp/compare_sample.dta saved
+
+. 
+. foreach X of varlist _all {
+  2.         label variable `X' ""
+  3. }
+
+. tabulate old_foreign new_foreign, missing
+
+old_foreig |           new_foreign
+         n |         0          1          . |     Total
+-----------+---------------------------------+----------
+         0 |     5,768        195        727 |     6,690 
+         1 |        20      4,154        636 |     4,810 
+         . |   268,149      8,504    253,931 |   530,584 
+-----------+---------------------------------+----------
+     Total |   273,937     12,853    255,294 |   542,084 
+
+. tabulate old_expat new_expat, missing
+
+           |            new_expat
+ old_expat |         0          1          . |     Total
+-----------+---------------------------------+----------
+         0 |     7,768        570      1,099 |     9,437 
+         1 |        20      1,779        264 |     2,063 
+         . |   271,690      4,963    253,931 |   530,584 
+-----------+---------------------------------+----------
+     Total |   279,478      7,312    255,294 |   542,084 
+
+. 
+. 
+end of do-file
