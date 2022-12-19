@@ -81,6 +81,8 @@ replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
 drop manager_after_owner event_time first_year_expat
 
 generate time_foreign = year - first_year_foreign
+
+*ez szerintem nem kell
 forval i = 0/3 {
 	gen foreign`i' = (time_foreign == `i')
 }
