@@ -1,4 +1,4 @@
-
+global here "/srv/sandbox/expat/almos"
 
 
 
@@ -136,3 +136,93 @@ foreach X of varlist $outcome  {
 }
 
 esttab using "$here/output/check_12_2022/2wfe_expat_e_w.xlsx", star(* .1 ** .05 *** .01)  b(3) se noconstant label replace  nonote  r2
+
+
+preserve
+keep if ever_foreign_hire==1
+
+eststo clear
+foreach X of varlist $outcome  {
+	eststo: attgt `X', treatment(has_expat_ceo) aggregate(att) pre(5) post(5) notyet limitcontrol(foreign==0)
+}
+
+esttab using "$here/2wfe_expat_fh.xlsx", star(* .1 ** .05 *** .01)  b(3) se noconstant label replace  nonote  r2
+
+restore
+
+eststo clear
+foreach X of varlist $outcome  {
+	eststo: quietly reghdfe `X' has_expat_ceo if ever_foreign_hire==1, a(frame_id_numeric teaor08_2d##year) cluster(frame_id_numeric)
+}
+
+esttab using "$here/output/check_12_2022/fe_fh.xlsx", star(* .1 ** .05 *** .01)  b(3) se keep(has_expat_ceo) noconstant label replace  nonote  r2
+
+*Selection regressions
+gen large_firm=(emp>100)
+
+reghdfe ever_foreign lnQL exporter industrial_firm large_firm year_90s if time_foreign==-1 | ever_foreign==0, noabsorb
+
+reghdfe ever_foreign_hire lnQL exporter industrial_firm large_firm year_90s if time_foreign==-1 & ever_foreign==1, noabsorb
+
+reghdfe ever_expat lnQL exporter industrial_firm large_firm year_90s if time_foreign==-1 & ever_foreign_hire==1, noabsorb
+
+*Two state FE
+preserve 
+keep if ever_foreign==1
+xtset frame_id_numeric year
+
+foreach var in TFP_cd {
+quietly xtreg `var' if foreign==0 & ever_foreign==1, fe
+predict fe, u
+egen `var'_fe=max(fe), by(frame_id_numeric)
+drop fe
+}
+
+reghdfe TFP_cd_fe foreign foreign_hire has_expat_ceo, a(year) cluster(frame_id_numeric)
+
+restore
+
+*SO vs PO
+egen ever_so=max(so2_with_mo2), by(frame_id_numeric)
+
+reghdfe TFP_cd foreign foreign_hire has_expat_ceo if ever_so==1, a(frame_id_numeric teaor08_2d##year) cluster(frame_id_numeric)
+reghdfe TFP_cd foreign foreign_hire has_expat_ceo if ever_so==0, a(frame_id_numeric teaor08_2d##year) cluster(frame_id_numeric)
+
+eststo clear
+foreach X of varlist $outcome  {
+	eststo: attgt `X' if ever_so==0, treatment(foreign) aggregate(att) pre(5) post(5) notyet limitcontrol(foreign==0)
+}
+
+foreach X of varlist $outcome  {
+	eststo: attgt `X' if ever_so==0, treatment(foreign_hire) aggregate(att) pre(5) post(5) notyet limitcontrol(foreign==0)
+}
+
+foreach X of varlist $outcome  {
+	eststo: attgt `X' if ever_so==0, treatment(has_expat_ceo) aggregate(att) pre(5) post(5) notyet limitcontrol(foreign==0)
+}
+
+esttab using "$here/output/check_12_2022/wfe_po.xlsx", star(* .1 ** .05 *** .01)  b(3) se noconstant label replace  nonote  r2
+
+*Csdid2
+gen x=year if time_foreign==0 & ever_expat==1
+egen first_expat=max(x), by(frame_id_numeric)
+recode first_expat (.=0)
+
+csdid2 TFP_cd,  ivar(frame_id_numeric) tvar(year) gvar(first_expat)
+estat event
+estat event, wboot plot
+estat event, wboot revent(-5/5)
+
+csdid2 lnQL,  ivar(frame_id_numeric) tvar(year) gvar(first_expat)
+estat event
+
+*estimate post-predict
+
+ssc install frause
+
+csdid2 TFP_cd, ivar(frame_id_numeric) tvar(year) gvar(first_expat) long
+estat event, revent(-5/5)
+lincom Post_avg-Pre_avg
+
+
+
