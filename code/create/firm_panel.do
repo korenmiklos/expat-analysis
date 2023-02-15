@@ -170,13 +170,6 @@ foreach type in ceo nceo {
 }
 
 use `manager_ceo'
-* merge on manager_countries
-merge 1:1 frame_id_numeric year using "`here'/temp/manager_country.dta", keep(master match) nogen
-tabulate has_expat_ceo if missing(country_list)
-tabulate has_expat_ceo if !missing(country_list)
-rename country_list country_all_ceo
-rename language_list lang_all_ceo
-
 merge 1:1 frame_id_numeric year using `manager_nceo', keep (1 3) nogen // 1, only 1 and 3 to not have missing cases in tab has_expat_ceo, missing in analysis-sample 2, merge here to makes sure to have only ceo-s when countries are merged
 
 count
