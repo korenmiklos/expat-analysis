@@ -112,7 +112,7 @@ gen lnQ = ln(sales_18)
 gen lnQL = lnQ - lnL
 gen lnMQ = lnM - lnQ
 gen byte exporter = export_18 > 0 & export_18 != .
-gen export_share = export_18 / sales
+gen export_share = export_18 / sales_18
 gen exporter_5 = (export_share > .05 & export_share != .)
 replace exporter_5 = . if export_share == .
 

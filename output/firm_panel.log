@@ -1,9 +1,8 @@
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/firm_panel.lo
-> g
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- opened on:  24 Jan 2024, 17:10:47
+ opened on:  24 Jan 2024, 18:17:09
 
 . 
 . * keep only sample from balance-small - NOTE: had to restructure as we have t
@@ -19,35 +18,26 @@
 . tempfile sample
 
 . save `sample', replace
-(file /var/folders/5z/21k9mmsd55d1w5_jl5n192sh0000gn/T//St19299.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St44321.000001 not
     found)
-file /var/folders/5z/21k9mmsd55d1w5_jl5n192sh0000gn/T//St19299.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St44321.000001 saved
     as .dta format
 
 . 
-. * count expats in do - asterisk used
-. *use "`here'/input/ceo-panel/ceo-panel.dta", clear // QUESTION: what is owner
-. *rename person_id manager_id
-. *merge m:1 frame_id_numeric year using `sample', keep(match) nogen
-. *bys frame_id_numeric: egen ever_expat = max(expat == 1)
-. *bys frame_id_numeri: egen ever_foreign = max(foreign == 1)
-. *egen firm_tag = tag(frame_id_numeric)
-. *count if ever_expat == 1 & ever_foreign == 0 & firm_tag == 1
 . 
-.         use "`here'/input/ceo-panel/ceo-panel.dta", clear // QUESTION: what i
-> s owner
+. use "`here'/input/ceo-panel/ceo-panel.dta", clear 
 
-.         rename person_id manager_id
+. rename person_id manager_id
 
-.         
-.         *for descriptives (number of ceo-s and nceo-s in original data, numbe
-> r of ceo and nceo job-spells in original data)
-.         count
+. 
+. *for descriptives (number of ceo-s and nceo-s in original data, number of ceo
+>  and nceo job-spells in original data)
+. count
   15,390,598
 
-.         egen company_manager_id = group(frame_id_numeric manager_id)
+. egen company_manager_id = group(frame_id_numeric manager_id)
 
-.         codebook manager_id
+. codebook manager_id
 
 -------------------------------------------------------------------------------
 manager_id                                       group(manager_id manager_type)
@@ -64,7 +54,7 @@ manager_id                                       group(manager_id manager_type)
            Percentiles:    10%       25%       50%       75%       90%
                         284414    548711    816617   1.1e+06   1.4e+06
 
-.         codebook company_manager_id
+. codebook company_manager_id
 
 -------------------------------------------------------------------------------
 company_manager_id                           group(frame_id_numeric manager_id)
@@ -81,11 +71,11 @@ company_manager_id                           group(frame_id_numeric manager_id)
            Percentiles:     10%       25%       50%       75%       90%
                          194578    499718   1.1e+06   1.7e+06   2.1e+06
 
-.         drop company_manager_id
+. drop company_manager_id
 
 . 
-.         * only keep sample firms
-.         merge m:1 frame_id_numeric year using `sample', keep(match) nogen
+. * only keep sample firms
+. merge m:1 frame_id_numeric year using `sample', keep(match) nogen
 (variable year was int, now float to accommodate using data's values)
 
     Result                      Number of obs
@@ -94,27 +84,26 @@ company_manager_id                           group(frame_id_numeric manager_id)
     Matched                           527,554  
     -----------------------------------------
 
-.         count if first_year_of_firm == firm_birth // QUESTION: why not the sa
-> me? - same for the last year
+. count if first_year_of_firm == firm_birth
   302,527
 
 . 
-.         * balance panel
-.         egen company_manager_id = group(frame_id manager_id)
+. * balance panel
+. egen company_manager_id = group(frame_id manager_id)
 
-.         xtset company_manager_id year
+. xtset company_manager_id year
 
 Panel variable: company_manager_id (unbalanced)
  Time variable: year, 1980 to 2018, but with gaps
          Delta: 1 unit
 
-.         by company_manager_id: generate gap = year - year[_n-1] - 1
+. by company_manager_id: generate gap = year - year[_n-1] - 1
 (92,284 missing values generated)
 
-.         replace gap = 0 if missing(gap)
+. replace gap = 0 if missing(gap)
 (92,284 real changes made)
 
-.         tabulate gap
+. tabulate gap
 
         gap |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -148,159 +137,136 @@ Panel variable: company_manager_id (unbalanced)
       Total |    527,554      100.00
 
 . 
-.         * fill in gap if only 1 or 2-year long
-.         
-.         *forval i = 1(1)2 {
-.         *       sort company_manager_id year
-.         *       expand 1 + `i' if gap == `i', generate(filled_in_`i') // FIXM
-> E OR QUESTION: maybe second year as well
-.         *       replace year = year - `i' if filled_in_`i'
-.         *       tab filled_in_`i'
-.         *}
-.         
-.         *bys company_manager_id year: replace year = year + _n - 1 if filled_
-> in_2
-.         
-.         expand 1 + (gap == 1), generate(filled_in)
+. expand 1 + (gap == 1), generate(filled_in)
 (3,298 observations created)
 
-.         replace year = year - 1 if filled_in
+. replace year = year - 1 if filled_in
 (3,298 real changes made)
 
 . 
-.         * create contiguous spells
-.         xtset company_manager_id year
+. * create contiguous spells
+. xtset company_manager_id year
 
 Panel variable: company_manager_id (unbalanced)
  Time variable: year, 1980 to 2018, but with gaps
          Delta: 1 unit
 
-.         gen change = ceo != L.ceo // intuition: should be ok in both files (p
-> ossible FIXME)
+. gen change = ceo != L.ceo // intuition: should be ok in both files (possible 
+> FIXME)
 
-.         bysort company_manager_id (year): gen job_spell = sum(change)
-
-. 
-.         * create job begin and end for each manager spell
-.         bys frame_id_numeric manager_id job_spell: egen job_begin = min(year)
-
-.         bys frame_id_numeric manager_id job_spell: egen job_end = max(year)
-
-.         keep frame_id_numeric manager_id job_spell year job_begin job_end exp
-> at founder insider outsider firm_birth foreign country_code
+. bysort company_manager_id (year): gen job_spell = sum(change)
 
 . 
-.         * if first managers arrive in year 1, extrapolate to year 0 - DROP SP
-> ELL
-.         bys frame_id_numeric: egen first_cohort = min(job_begin)
+. * create job begin and end for each manager spell
+. bys frame_id_numeric manager_id job_spell: egen job_begin = min(year)
 
-.         replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1)
->  & (job_begin == first_cohort)
+. bys frame_id_numeric manager_id job_spell: egen job_end = max(year)
+
+. keep frame_id_numeric manager_id job_spell year job_begin job_end expat found
+> er insider outsider firm_birth foreign country_code
+
+. 
+. * if first managers arrive in year 1, extrapolate to year 0 - DROP SPELL
+. bys frame_id_numeric: egen first_cohort = min(job_begin)
+
+. replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_
+> begin == first_cohort)
 (60,198 real changes made)
 
 . 
-.         * NOTE: no collapse and expand --> there might be holes
-.         sort frame_id_numeric manager_id year
+. * NOTE: no collapse and expand --> there might be holes
+. sort frame_id_numeric manager_id year
 
-.         count if frame_id_numeric == frame_id_numeric[_n-1] & manager_id == m
-> anager_id[_n-1] & year != (year[_n-1] + 1)
+. count if frame_id_numeric == frame_id_numeric[_n-1] & manager_id == manager_i
+> d[_n-1] & year != (year[_n-1] + 1)
   3,197
 
 . 
-.         * expat before 1990
-.         replace expat = 0 if job_begin < 1990
+. * expat before 1990
+. replace expat = 0 if job_begin < 1990
 (690 real changes made)
 
 . 
-.         ***********************
-.         * time invariant vars and drop entire series of firms from sample *
-.         ***********************
-.                 by frame_id_numeric: egen first_year_expat = min(cond(expat =
-> = 1, job_begin,.))
+. ***********************
+. * time invariant vars and drop entire series of firms from sample *
+. ***********************
+. by frame_id_numeric: egen first_year_expat = min(cond(expat == 1, job_begin,.
+> ))
 (444,831 missing values generated)
 
-.                 by frame_id_numeric: egen first_year_foreign = min(cond(forei
-> gn == 1, year,.))
+. by frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.)
+> )
 (436,042 missing values generated)
 
-.                 
-.                 * which of the two happened first?
-.                 generate manager_after_owner = first_year_expat - first_year_
-> foreign
+. 
+. * which of the two happened first?
+. generate manager_after_owner = first_year_expat - first_year_foreign
 (462,274 missing values generated)
 
-.                 * event time relative to that
-.                 generate event_time = year - first_year_expat
+. * event time relative to that
+. generate event_time = year - first_year_expat
 (444,831 missing values generated)
 
-.                 
-.                 * if foreign manager arrives up to 2 years before 1 year late
-> r than foreign owner, use foreign manager as arrival date. this is easier to 
-> implement
-.                 replace foreign = 1 if (manager_after_owner == -2) & inlist(e
-> vent_time, 0, 1)
+. 
+. * if foreign manager arrives up to 2 years before 1 year later than foreign o
+> wner, use foreign manager as arrival date. this is easier to implement
+. replace foreign = 1 if (manager_after_owner == -2) & inlist(event_time, 0, 1)
 (39 real changes made)
 
-.                 replace foreign = 1 if (manager_after_owner == -1) & inlist(e
-> vent_time, 0)
+. replace foreign = 1 if (manager_after_owner == -1) & inlist(event_time, 0)
 (46 real changes made)
 
-.                 replace foreign = 0 if (manager_after_owner == +1) & inlist(e
-> vent_time, -1)
+. replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
 (28 real changes made)
 
 . 
-.                 * QUESTION: order of deletions (may be fine as all are firm l
-> evel)
-.                 * drop firms where expat arrives earlier than 2 years before 
-> owner
-.                 drop if manager_after_owner < -2
+. * drop firms where expat arrives earlier than 2 years before owner
+. drop if manager_after_owner < -2
 (6,001 observations deleted)
 
-.                 
-.                 * ever expat and foreign created after foreign changes (drops
->  were firm level before so should not mess with ever variables)
-.                 foreach X of var expat foreign {
-  2.                         by frame_id_numeric: egen ever_`X'_ceo = max(`X'==
-> 1)
-  3.                 }
+. 
+. * ever expat and foreign created after foreign changes (drops were firm level
+>  before so should not mess with ever variables)
+. foreach X of var expat foreign {
+  2.         by frame_id_numeric: egen ever_`X'_ceo = max(`X'==1)
+  3. }
 
 . 
-.                 * drop if there was an expat but was never foreign
-.                 drop if ever_expat == 1 & ever_foreign == 0
+. * drop if there was an expat but was never foreign
+. drop if ever_expat == 1 & ever_foreign == 0
 (17,443 observations deleted)
 
-.                 scalar dropped_do3_expat_firmyears = r(N_drop)
+. scalar dropped_do3_expat_firmyears = r(N_drop)
 
-.                 
-.                 * drop too many CEO-s - FIXME AND QUESTION: should be moved i
-> n the next file where spells are limited - but there cannot be created withou
-> t manager level data
-.                 egen fp_tag = tag(frame_id_numeric manager_id) 
+. 
+. * drop too many CEO-s - FIXME AND QUESTION: should be moved in the next file 
+> where spells are limited - but there cannot be created without manager level 
+> data
+. egen fp_tag = tag(frame_id_numeric manager_id) 
 
-.                 by frame_id_numeric: egen n_ceo_ever = sum(fp_tag)
+. by frame_id_numeric: egen n_ceo_ever = sum(fp_tag)
 
-.                 drop if n_ceo > 15
+. drop if n_ceo > 15
 (13,554 observations deleted)
 
-.                 scalar dropped_too_many_CEOs = r(N_drop)
+. scalar dropped_too_many_CEOs = r(N_drop)
 
-.                 drop fp_tag n_ceo_ever
+. drop fp_tag n_ceo_ever
 
-.                 
-.         * hired or fired ceo since last observed year of firm - * POSSIBLE FI
-> XME: expat, owner, insider, outsider, founder - hire, fire combinations later
-.         tempvar previous_year
+.         
+. * hired or fired ceo since last observed year of firm - * POSSIBLE FIXME: exp
+> at, owner, insider, outsider, founder - hire, fire combinations later
+. tempvar previous_year
 
-.         generate previous_year = .
+. generate previous_year = .
 (493,854 missing values generated)
 
-.         forval t = 1985/2018 {
-  2.                 by frame_id_numeric: egen `previous_year' = max(cond(year 
-> < `t', year, .))
-  3.                 replace previous_year = `previous_year' if year == `t'
-  4.                 drop `previous_year'
-  5.         }
+. forval t = 1985/2018 {
+  2.         by frame_id_numeric: egen `previous_year' = max(cond(year < `t', y
+> ear, .))
+  3.         replace previous_year = `previous_year' if year == `t'
+  4.         drop `previous_year'
+  5. }
 (437,603 missing values generated)
 (2,009 real changes made)
 (434,414 missing values generated)
@@ -371,23 +337,23 @@ Panel variable: company_manager_id (unbalanced)
 (19,825 real changes made)
 
 . 
-.         by frame_id_numeric: egen first_year = min(year)
+. by frame_id_numeric: egen first_year = min(year)
 
-.         bys frame_id_numeric (year): generate byte hire = cond(first_year == 
-> year, 1, (job_begin <= year) & (job_begin > previous_year))
+. bys frame_id_numeric (year): generate byte hire = cond(first_year == year, 1,
+>  (job_begin <= year) & (job_begin > previous_year))
 
 . 
-.         tempvar next_year
+. tempvar next_year
 
-.         generate next_year = .
+. generate next_year = .
 (493,854 missing values generated)
 
-.         forval t = 1985/2018 {
-  2.                 by frame_id_numeric: egen `next_year' = min(cond(year > `t
-> ', year, .))
-  3.                 replace next_year = `next_year' if year == `t'
-  4.                 drop `next_year'
-  5.         }
+. forval t = 1985/2018 {
+  2.         by frame_id_numeric: egen `next_year' = min(cond(year > `t', year,
+>  .))
+  3.         replace next_year = `next_year' if year == `t'
+  4.         drop `next_year'
+  5. }
 (2,271 real changes made)
 (2,468 real changes made)
 (7 missing values generated)
@@ -456,9 +422,9 @@ Panel variable: company_manager_id (unbalanced)
 (0 real changes made)
 
 . 
-.         gen byte fire = ((job_end >= year) & (job_end < next_year))
+. gen byte fire = ((job_end >= year) & (job_end < next_year))
 
-.         tabulate hire fire 
+. tabulate hire fire 
 
            |         fire
       hire |         0          1 |     Total
@@ -469,49 +435,47 @@ Panel variable: company_manager_id (unbalanced)
      Total |   397,574     96,280 |   493,854 
 
 . 
-.         gen hire_expat_ceo = hire * expat
+. gen hire_expat_ceo = hire * expat
 
-.         gen fire_expat_ceo = fire * expat
-
-. 
-.         * number of expats and locals
-.         bys frame_id_numeric year: egen n_expat_ceo = total(cond(expat, 1, 0)
-> ) // could be in collapse but local not
-
-.         bys frame_id_numeric year: egen n_local_ceo = total(cond(!expat, 1, 0
-> ))
-
-.         
-.         * create firm-year data
-.         * FIXME: country_code may be different within a firm-year
-.         collapse (sum) n_founder_ceo = founder n_insider_ceo = insider n_outs
-> ider_ceo = outsider (firstnm) n_expat_ceo n_local_ceo foreign_ceo = foreign e
-> ver_expat_ceo ever_foreign_ceo (count) n_ceo = expat (max) hire_ceo = hire fi
-> re_ceo = fire hire_expat_ceo fire_expat_ceo, by(frame_id_numeric year)
+. gen fire_expat_ceo = fire * expat
 
 . 
-.         * managers in first year not classified as new hires and in last year
->  not classified as fired
-.         bys frame_id_numeric (year): replace hire_ceo = 0 if (_n==1)
+. * number of expats and locals
+. bys frame_id_numeric year: egen n_expat_ceo = total(cond(expat, 1, 0)) // cou
+> ld be in collapse but local not
+
+. bys frame_id_numeric year: egen n_local_ceo = total(cond(!expat, 1, 0))
+
+. 
+. * create firm-year data
+. collapse (sum) n_founder_ceo = founder n_insider_ceo = insider n_outsider_ceo
+>  = outsider (firstnm) n_expat_ceo n_local_ceo foreign_ceo = foreign ever_expa
+> t_ceo ever_foreign_ceo (count) n_ceo = expat (max) hire_ceo = hire fire_ceo =
+>  fire hire_expat_ceo fire_expat_ceo, by(frame_id_numeric year)
+
+. 
+. * managers in first year not classified as new hires and in last year not cla
+> ssified as fired
+. bys frame_id_numeric (year): replace hire_ceo = 0 if (_n==1)
 (35,590 real changes made)
 
-.         bys frame_id_numeric (year): replace fire_ceo = 0 if (_n==_N)
+. bys frame_id_numeric (year): replace fire_ceo = 0 if (_n==_N)
 (35,590 real changes made)
 
-.         bys frame_id_numeric (year): replace hire_expat_ceo = 0 if (_n==1)
+. bys frame_id_numeric (year): replace hire_expat_ceo = 0 if (_n==1)
 (1492 real changes made)
 
-.         bys frame_id_numeric (year): replace fire_expat_ceo = 0 if (_n==_N)
+. bys frame_id_numeric (year): replace fire_expat_ceo = 0 if (_n==_N)
 (1777 real changes made)
 
-.         bys frame_id_numeric (year): gen ceo_spell_ceo = sum(hire_ceo | fire_
-> ceo) + 1 // so that index start from 1
+. bys frame_id_numeric (year): gen ceo_spell_ceo = sum(hire_ceo | fire_ceo) + 1
+>  // so that index start from 1
 
 . 
-.         * create dummies from numbers
-.         foreach var in expat local founder insider outsider {
-  2.                 gen has_`var'_ceo = (n_`var'_ceo > 0) & n_`var'_ceo != .
-  3.         }
+. * create dummies from numbers
+. foreach var in expat local founder insider outsider {
+  2.         gen has_`var'_ceo = (n_`var'_ceo > 0) & n_`var'_ceo != .
+  3. }
 
 .         
 . count
@@ -537,14 +501,12 @@ Panel variable: company_manager_id (unbalanced)
   variable n_outsider_ceo was double now byte
   (21,331,906 bytes saved)
 
-. *save_all_to_json
 . save "`here'/temp/firm_events.dta", replace
-file /Users/koren/Tresorit/Mac2Mac/projects/expat//temp/firm_events.dta saved
+file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/firm_panel.lo
-> g
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- closed on:  24 Jan 2024, 17:11:33
+ closed on:  24 Jan 2024, 18:17:53
 -------------------------------------------------------------------------------

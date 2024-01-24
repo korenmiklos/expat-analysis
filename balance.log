@@ -12,8 +12,8 @@ ___/   /   /___/   /   /___/       MP—Parallel Edition
 
 Stata license: Single-user 2-core  perpetual
 Serial number: 501806323834
-  Licensed to: Miklós Koren
-               Central European University
+  Licensed to: Miklos Koren
+               CEU MicroData
 
 Notes:
       1. Stata is running in batch mode.
@@ -31,7 +31,7 @@ Notes:
 . 
 . * find root folder
 . here
-/Users/koren/Tresorit/Mac2Mac/projects/expat/
+/Users/koren/Tresorit/Mac/projects/expat/
 
 . local here = r(here)
 
@@ -41,9 +41,9 @@ Notes:
 . log using "`here'/output/balance", text replace
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/balance.log
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/balance.log
   log type:  text
- opened on:  24 Jan 2024, 17:05:45
+ opened on:  24 Jan 2024, 18:15:54
 
 . 
 . use "`here'/input/merleg-expat/balance-small.dta" 
@@ -275,7 +275,7 @@ Duplicates in terms of frame_id_numeric
 . tempfile expat
 
 . save `expat'
-file /var/folders/5z/21k9mmsd55d1w5_jl5n192sh0000gn/T//St19193.000002 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St44153.000002 saved
     as .dta format
 
 . restore
@@ -421,7 +421,7 @@ warning: For at least one group, teaor08_2d contains all missing values.
 
 . gen byte exporter = export_18 > 0 & export_18 != .
 
-. gen export_share = export_18 / sales
+. gen export_share = export_18 / sales_18
 (192,228 missing values generated)
 
 . gen exporter_5 = (export_share > .05 & export_share != .)
@@ -561,15 +561,14 @@ tanass_18:                                      Number of observations
 . cap drop __*
 
 . save "`here'/temp/balance-small-clean.dta", replace
-file
-    /Users/koren/Tresorit/Mac2Mac/projects/expat//temp/balance-small-clean.dt
-    > a saved
+file /Users/koren/Tresorit/Mac/projects/expat//temp/balance-small-clean.dta
+    saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/balance.log
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/balance.log
   log type:  text
- closed on:  24 Jan 2024, 17:06:59
+ closed on:  24 Jan 2024, 18:17:09
 -------------------------------------------------------------------------------
 
 . 
