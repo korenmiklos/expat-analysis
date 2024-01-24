@@ -1,9 +1,9 @@
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/analysis_samp
-> le.log
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
+> og
   log type:  text
- opened on:  24 Jan 2024, 17:21:11
+ opened on:  24 Jan 2024, 19:27:09
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -11,238 +11,15 @@
 . drop foreign
 
 . 
-. *Check holes in the time series
-. sort frame_id_numeric year
-
-. gen x_before = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1
-> ]
-(39,130 missing values generated)
-
-. gen hole10_before = (x_before > 10 & x_before != .)
-
-. gen hole2_before = (x_before > 2 & x_before != .)
-
-. gen hole1_before = (x_before > 1 & x_before != .)
-
-. 
-. foreach var of varlist hole* {
-  2.         tab `var'
-  3. }
-
-hole10_befo |
-         re |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |    392,554       99.99       99.99
-          1 |         32        0.01      100.00
-------------+-----------------------------------
-      Total |    392,586      100.00
-
-hole2_befor |
-          e |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |    391,459       99.71       99.71
-          1 |      1,127        0.29      100.00
-------------+-----------------------------------
-      Total |    392,586      100.00
-
-hole1_befor |
-          e |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |    388,936       99.07       99.07
-          1 |      3,650        0.93      100.00
-------------+-----------------------------------
-      Total |    392,586      100.00
-
-. 
-. drop x_before hole*
-
-. 
-. *Merge with 
 . merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(match) noge
 > n
 
     Result                      Number of obs
     -----------------------------------------
     Not matched                             0
-    Matched                           342,420  
+    Matched                           343,019  
     -----------------------------------------
 
-. 
-. sort frame_id_numeric year
-
-. gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-(35,590 missing values generated)
-
-. gen hole10_after_m = (x_after > 10 & x_after != .)
-
-. gen hole2_after_m = (x_after > 2 & x_after != .)
-
-. gen hole1_after_m = (x_after > 1 & x_after != .)
-
-. 
-. foreach var of varlist hole* {
-  2.         tab `var'
-  3. }
-
-hole10_afte |
-        r_m |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |    342,393       99.99       99.99
-          1 |         27        0.01      100.00
-------------+-----------------------------------
-      Total |    342,420      100.00
-
-hole2_after |
-         _m |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |    341,462       99.72       99.72
-          1 |        958        0.28      100.00
-------------+-----------------------------------
-      Total |    342,420      100.00
-
-hole1_after |
-         _m |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |    339,396       99.12       99.12
-          1 |      3,024        0.88      100.00
-------------+-----------------------------------
-      Total |    342,420      100.00
-
-. 
-. drop x_after hole*
-
-. 
-. preserve
-
-. use "`here'/temp/balance-small-clean.dta", clear
-
-.         drop foreign
-
-.         merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(1 3
-> )
-
-    Result                      Number of obs
-    -----------------------------------------
-    Not matched                        50,166
-        from master                    50,166  (_merge==1)
-        from using                          0  (_merge==2)
-
-    Matched                           342,420  (_merge==3)
-    -----------------------------------------
-
-.         sort frame_id_numeric year
-
-.         gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numer
-> ic[_n-1]
-(39,130 missing values generated)
-
-.         gen hole10_after_mm = (x_after > 10 & x_after != .)
-
-.         gen hole2_after_mm = (x_after > 2 & x_after != .)
-
-.         gen hole1_after_mm = (x_after > 1 & x_after != .)
-
-. 
-.         foreach var of varlist hole* {
-  2.                 tab `var'
-  3.         }
-
-hole10_afte |
-       r_mm |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |    392,554       99.99       99.99
-          1 |         32        0.01      100.00
-------------+-----------------------------------
-      Total |    392,586      100.00
-
-hole2_after |
-        _mm |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |    391,459       99.71       99.71
-          1 |      1,127        0.29      100.00
-------------+-----------------------------------
-      Total |    392,586      100.00
-
-hole1_after |
-        _mm |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |    388,936       99.07       99.07
-          1 |      3,650        0.93      100.00
-------------+-----------------------------------
-      Total |    392,586      100.00
-
-.         drop x_after hole*
-
-. restore
-
-. 
-. preserve
-
-.         use "`here'/temp/balance-small-clean.dta", clear
-
-.         merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(2 3
-> )
-
-    Result                      Number of obs
-    -----------------------------------------
-    Not matched                         1,643
-        from master                         0  (_merge==1)
-        from using                      1,643  (_merge==2)
-
-    Matched                           342,420  (_merge==3)
-    -----------------------------------------
-
-.         sort frame_id_numeric year
-
-.         gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numer
-> ic[_n-1]
-(35,590 missing values generated)
-
-.         gen hole10_after_um = (x_after > 10 & x_after != .)
-
-.         gen hole2_after_um = (x_after > 2 & x_after != .)
-
-.         gen hole1_after_um = (x_after > 1 & x_after != .)
-
-. 
-.         foreach var of varlist hole* {
-  2.                 tab `var'
-  3.         }
-
-hole10_afte |
-       r_um |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |    344,036       99.99       99.99
-          1 |         27        0.01      100.00
-------------+-----------------------------------
-      Total |    344,063      100.00
-
-hole2_after |
-        _um |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |    343,105       99.72       99.72
-          1 |        958        0.28      100.00
-------------+-----------------------------------
-      Total |    344,063      100.00
-
-hole1_after |
-        _um |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |    342,682       99.60       99.60
-          1 |      1,381        0.40      100.00
-------------+-----------------------------------
-      Total |    344,063      100.00
-
-.         drop x_after hole*
-
-. restore
-
-. 
-. rename foreign_ceo foreign
-
-. rename ever_foreign_ceo ever_foreign
-
-. 
 . 
 . * many foreign changes deleted
 . bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
@@ -250,19 +27,30 @@ hole1_after |
 . bys frame_id_numeric (year): egen owner_spell_total = total(foreign != foreig
 > n[_n-1])
 
+. tabulate owner_spell_total
+
+owner_spell |
+     _total |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |    306,418       89.33       89.33
+          2 |     21,544        6.28       95.61
+          3 |     11,149        3.25       98.86
+          4 |      2,276        0.66       99.52
+          5 |      1,253        0.37       99.89
+          6 |        222        0.06       99.95
+          7 |        131        0.04       99.99
+          8 |         26        0.01      100.00
+------------+-----------------------------------
+      Total |    343,019      100.00
+
 . 
 . drop if owner_spell_total > 3 
-(3,810 observations deleted)
-
-. scalar dropped_too_many_foreign_change = r(N_drop)
-
-. display dropped_too_many_foreign_change
-3810
+(3,908 observations deleted)
 
 . 
 . * divestment
-. bys frame_id_numeric (year): gen divest = sum(cond(owner_spell != owner_spell
-> [_n-1] & foreign == 0 & _n != 1, 1, 0))
+. bys frame_id_numeric (year): gen divest = sum(owner_spell != owner_spell[_n-1
+> ] & foreign == 0 & _n != 1)
 
 . replace divest = 1 if divest > 0
 (0 real changes made)
@@ -272,44 +60,50 @@ hole1_after |
 . bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (fore
 > ign == 0))
 
-. *keep if start_as_domestic
+. tabulate start_as_domestic
+
+start_as_do |
+     mestic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |     17,981        5.30        5.30
+          1 |    321,130       94.70      100.00
+------------+-----------------------------------
+      Total |    339,111      100.00
+
+. keep if start_as_domestic
+(17,981 observations deleted)
+
 . keep if owner_spell <= 2
-(3,946 observations deleted)
+(3,726 observations deleted)
 
-. drop if divest==1
-(1,612 observations deleted)
-
-. 
-. *Greenfield variable
-. tempvar x
-
-. egen `x'=min(foreign), by(frame_id_numeric)
-
-. gen greenfield=(`x'==1)
+. drop if divest == 1
+(0 observations deleted)
 
 . 
+. drop owner_spell_total divest start_as_domestic
+
 . 
 . * check foreign and expat numbers
 . egen firm_tag = tag(frame_id_numeric)
 
 . 
 . count if ever_foreign
-  40,393
+  24,745
 
 . count if ever_foreign & firm_tag
-  3,463
+  1,745
 
-. count if ever_expat_ceo & firm_tag
-  2,224
+. count if ever_expat & firm_tag
+  705
 
 . 
 . count if has_expat_ceo == 1
-  17,427
+  5,346
 
-. count if has_expat_ceo == 1 & foreign == 0 // FIXME - should be 0
+. count if has_expat_ceo == 1 & foreign == 0 
   0
 
-. count if ever_expat_ceo == 1 & ever_foreign == 0
+. count if ever_expat == 1 & ever_foreign == 0
   0
 
 . 
@@ -326,58 +120,130 @@ frame_id_numeric                                                    (unlabeled)
                   Type: Numeric (long)
 
                  Range: [10000049,74849574]           Units: 1
-         Unique values: 35,403                    Missing .: 0/333,052
+         Unique values: 33,685                    Missing .: 0/317,404
 
                   Mean: 1.4e+07
-             Std. dev.: 6.5e+06
+             Std. dev.: 6.6e+06
 
            Percentiles:     10%       25%       50%       75%       90%
                         1.0e+07   1.0e+07   1.1e+07   1.3e+07   2.4e+07
 
 . count if firm_tag
-  35,403
+  33,685
 
 . count
-  333,052
+  317,404
 
 . 
 . drop first_year_foreign time_foreign 
 
 . 
-. bys frame_id_numeric: egen first_year_foreign_new = min(cond(foreign == 1, ye
-> ar,.))
-(292,659 missing values generated)
-
-. generate time_foreign_new = year - first_year_foreign_new
-(292,659 missing values generated)
-
-. gen foreign0_new = (time_foreign_new == 0)
-
-. count if foreign0_new == 1
-  3,463
-
-. drop *new
-
-. 
 . count
-  333,052
+  317,404
 
 . count if ever_foreign
-  40,393
+  24,745
 
 . count if ever_foreign & firm_tag
-  3,463
+  1,745
 
-. count if ever_expat_ceo & firm_tag
-  2,224
+. count if ever_expat & firm_tag
+  705
 
 . count if has_expat_ceo
-  17,427
+  5,346
 
 . 
-. drop ever_expat* ever_foreign_hire
-variable ever_foreign_hire not found
-r(111);
+. drop ever_expat ever_foreign
 
-end of do-file
-r(111);
+. egen ever_expat = max(has_expat_ceo), by(frame_id_numeric)
+
+. egen ever_foreign = max(foreign), by(frame_id_numeric)
+
+. * did new foreign owner hire any ceos?
+. egen ever_foreign_hire = max((hire_ceo == 1) & (foreign == 1) * (owner_spell 
+> == 2)), by(frame_id_numeric)
+
+. generate foreign_hire = ever_foreign_hire & foreign
+
+. 
+. * check the patterns of expat - local transitions. 
+. local ceo has_expat_ceo
+
+. bys frame_id_numeric (year): generate ceo_foreign_spell = sum(`ceo' != `ceo'[
+> _n-1])
+
+. 
+. * drop after first expat leaves
+. drop if ceo_foreign_spell>2
+(2,015 observations deleted)
+
+. drop if ceo_foreign_spell==2 & has_expat_ceo==0
+(0 observations deleted)
+
+. 
+. keep if ever_foreign==1
+(292,659 observations deleted)
+
+. 
+. generate foreign_only = foreign & !foreign_hire
+
+. generate foreign_hire_only = foreign_hire & !has_expat_ceo
+
+. 
+. tabulate foreign_only foreign_hire
+
+foreign_on |     foreign_hire
+        ly |         0          1 |     Total
+-----------+----------------------+----------
+         0 |    10,695      9,954 |    20,649 
+         1 |     2,081          0 |     2,081 
+-----------+----------------------+----------
+     Total |    12,776      9,954 |    22,730 
+
+. tabulate foreign_hire_only has_expat_ceo
+
+foreign_hi |     has_expat_ceo
+   re_only |         0          1 |     Total
+-----------+----------------------+----------
+         0 |    12,776      4,795 |    17,571 
+         1 |     5,159          0 |     5,159 
+-----------+----------------------+----------
+     Total |    17,935      4,795 |    22,730 
+
+. 
+. compress
+  variable year was float now int
+  variable minyear was float now int
+  variable maxyear was float now int
+  variable exporter_5 was float now byte
+  variable age was float now int
+  variable owner_spell was float now byte
+  variable industry_year was float now int
+  variable ever_expat was float now byte
+  variable ever_foreign was float now byte
+  variable ever_foreign_hire was float now byte
+  variable foreign_hire was float now byte
+  variable ceo_foreign_spell was float now byte
+  variable foreign_only was float now byte
+  variable foreign_hire_only was float now byte
+  variable originalid was double now long
+  variable sales was double now long
+  variable tanass was double now long
+  variable jetok was double now long
+  variable export was double now long
+  variable ranyag was double now long
+  variable immat was double now long
+  variable final_netgep was double now long
+  (1,568,370 bytes saved)
+
+. save "`here'/temp/analysis_sample.dta", replace
+file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
+
+. log close
+      name:  <unnamed>
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
+> og
+  log type:  text
+ closed on:  24 Jan 2024, 19:27:10
+-------------------------------------------------------------------------------
