@@ -3,7 +3,7 @@
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
 > og
   log type:  text
- opened on:  24 Jan 2024, 19:27:09
+ opened on:  24 Jan 2024, 19:49:54
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -175,20 +175,27 @@ frame_id_numeric                                                    (unlabeled)
 
 . 
 . * drop after first expat leaves
-. drop if ceo_foreign_spell>2
+. drop if ceo_foreign_spell > 2
 (2,015 observations deleted)
 
-. drop if ceo_foreign_spell==2 & has_expat_ceo==0
+. drop if ceo_foreign_spell == 2 & has_expat_ceo == 0
 (0 observations deleted)
 
 . 
-. keep if ever_foreign==1
+. keep if ever_foreign == 1
 (292,659 observations deleted)
 
 . 
 . generate foreign_only = foreign & !foreign_hire
 
-. generate foreign_hire_only = foreign_hire & !has_expat_ceo
+. generate local_ceo = foreign_hire & !has_expat_ceo
+
+. egen ever_local_ceo = max(local_ceo), by(frame_id_numeric)
+
+. 
+. * drop if local hires are much later replaced by expats
+. drop if ever_local_ceo & has_expat_ceo
+(1,288 observations deleted)
 
 . 
 . tabulate foreign_only foreign_hire
@@ -196,20 +203,41 @@ frame_id_numeric                                                    (unlabeled)
 foreign_on |     foreign_hire
         ly |         0          1 |     Total
 -----------+----------------------+----------
-         0 |    10,695      9,954 |    20,649 
+         0 |    10,695      8,666 |    19,361 
          1 |     2,081          0 |     2,081 
 -----------+----------------------+----------
-     Total |    12,776      9,954 |    22,730 
+     Total |    12,776      8,666 |    21,442 
 
-. tabulate foreign_hire_only has_expat_ceo
+. tabulate local_ceo has_expat_ceo
 
-foreign_hi |     has_expat_ceo
-   re_only |         0          1 |     Total
+           |     has_expat_ceo
+ local_ceo |         0          1 |     Total
 -----------+----------------------+----------
-         0 |    12,776      4,795 |    17,571 
+         0 |    12,776      3,507 |    16,283 
          1 |     5,159          0 |     5,159 
 -----------+----------------------+----------
-     Total |    17,935      4,795 |    22,730 
+     Total |    17,935      3,507 |    21,442 
+
+. 
+. keep if ever_foreign_hire
+(5,486 observations deleted)
+
+. * no variation in these, drop
+. drop ever_foreign ever_foreign_hire
+
+. 
+. egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric
+> ) 
+
+. generate time_foreign = year - first_year_foreign
+
+. 
+. * limit sample to event window
+. keep if inrange(time_foreign, -10, 5)
+(4,920 observations deleted)
+
+. 
+. egen exporter_pre = max(exporter & (time_foreign < 0)), by(frame_id_numeric)
 
 . 
 . compress
@@ -217,16 +245,18 @@ foreign_hi |     has_expat_ceo
   variable minyear was float now int
   variable maxyear was float now int
   variable exporter_5 was float now byte
-  variable age was float now int
+  variable age was float now byte
   variable owner_spell was float now byte
   variable industry_year was float now int
   variable ever_expat was float now byte
-  variable ever_foreign was float now byte
-  variable ever_foreign_hire was float now byte
   variable foreign_hire was float now byte
   variable ceo_foreign_spell was float now byte
   variable foreign_only was float now byte
-  variable foreign_hire_only was float now byte
+  variable local_ceo was float now byte
+  variable ever_local_ceo was float now byte
+  variable first_year_foreign was float now int
+  variable time_foreign was float now byte
+  variable exporter_pre was float now byte
   variable originalid was double now long
   variable sales was double now long
   variable tanass was double now long
@@ -235,7 +265,8 @@ foreign_hi |     has_expat_ceo
   variable ranyag was double now long
   variable immat was double now long
   variable final_netgep was double now long
-  (1,568,370 bytes saved)
+  variable tanass_18 was double now long
+  (871,844 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
 file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
@@ -245,5 +276,5 @@ file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
 > og
   log type:  text
- closed on:  24 Jan 2024, 19:27:10
+ closed on:  24 Jan 2024, 19:49:55
 -------------------------------------------------------------------------------
