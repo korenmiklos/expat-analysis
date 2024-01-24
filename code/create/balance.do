@@ -5,12 +5,10 @@ set more off
 here
 local here = r(here)
 
-global here "/srv/sandbox/expat/almos"
-
 cap log close
-log using "$here/output/balance", text replace
+log using "`here'/output/balance", text replace
 
-use "$here/input/merleg-expat/balance-small.dta" 
+use "`here'/input/merleg-expat/balance-small.dta" 
 
 * keep only numeric part of frame_id
 keep if substr(frame_id, 1, 2) == "ft"
@@ -19,7 +17,7 @@ codebook frame_id*
 drop frame_id
 xtset frame_id_numeric year
 
-do "code/create/emp_clean"
+do "`here'/code/create/emp_clean"
 count
 count if emp == emp_cl & emp != .
 count if emp != emp_cl & emp != . & emp_cl != .
@@ -29,7 +27,7 @@ gen emp_add = emp_cl + 1
 corr emp emp_cl emp_add
 
 * use fo2 instead of fo3
-merge 1:1 originalid year using "input/balance-sheet-80-19-plus-vars/balance-80-19-plus-vars.dta", keep(1 3) nogen
+merge 1:1 originalid year using "`here'/input/balance-sheet-80-19-plus-vars/balance-80-19-plus-vars.dta", keep(1 3) nogen
 tab fo2 fo3, missing
 
 * foreign fill 
@@ -59,7 +57,7 @@ display foreign_interpolate
 
 * foreign change
 preserve
-use "$here/input/ceo-panel/ceo-panel.dta", clear
+use "`here'/input/ceo-panel/ceo-panel.dta", clear
 * expat is changed if job_begin < 1990 in firm_panel.do, not here
 bys frame_id_numeric: egen first_year_expat = min(cond(expat == 1, year,.))
 duplicates drop frame_id_numeric, force
@@ -81,15 +79,6 @@ replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
 drop manager_after_owner event_time first_year_expat
 
 generate time_foreign = year - first_year_foreign
-
-*ez szerintem nem kell
-forval i = 0/3 {
-	gen foreign`i' = (time_foreign == `i')
-}
-forval i = 1/3 {
-	gen foreign_`i' = (time_foreign == -`i')
-}
-gen count = 1
 
 * drop greenfield
 bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
@@ -219,5 +208,5 @@ count
 
 *save_all_to_json
 cap drop __*
-save "$here/temp/balance-small-clean.dta", replace
+save "`here'/temp/balance-small-clean.dta", replace
 log close
