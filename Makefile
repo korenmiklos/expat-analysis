@@ -15,8 +15,6 @@ temp/analysis_sample.dta: input/fo3-owner-names/country_codes.dta temp/balance-s
 	$(STATA) code/create/analysis_sample.do
 temp/firm_events.dta: input/ceo-panel/ceo-panel.dta input/nceo-panel/nceo-panel.dta temp/balance-small-clean.dta code/create/firm_panel.do
 	$(STATA) code/create/firm_panel.do
-temp/manager_country.dta: input/ceo-panel/ceo-panel.dta
-	$(STATA) code/create/manager_country.do
 temp/balance-small-clean.dta: input/merleg-expat/balance-small.dta input/ceo-panel/ceo-panel.dta code/create/balance.do
 	$(STATA) code/create/balance.do
 install:

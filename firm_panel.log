@@ -1,23 +1,26 @@
 
   ___  ____  ____  ____  ____ ®
- /__    /   ____/   /   ____/      17.0
-___/   /   /___/   /   /___/       BE—Basic Edition
+ /__    /   ____/   /   ____/      18.0
+___/   /   /___/   /   /___/       MP—Parallel Edition
 
- Statistics and Data Science       Copyright 1985-2021 StataCorp LLC
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
                                    StataCorp
                                    4905 Lakeway Drive
                                    College Station, Texas 77845 USA
                                    800-STATA-PC        https://www.stata.com
                                    979-696-4600        stata@stata.com
 
-Stata license: 6-user network perpetual
-Serial number: 501706335292
-  Licensed to: Miklos Koren
+Stata license: Single-user 2-core  perpetual
+Serial number: 501806323834
+  Licensed to: Miklós Koren
                Central European University
 
 Notes:
       1. Stata is running in batch mode.
       2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
 
 . do code/create/firm_panel.do 
 
@@ -31,7 +34,7 @@ Notes:
 . 
 . * find root folder
 . here
-/srv/sandbox/expat/almos/
+/Users/koren/Tresorit/Mac2Mac/projects/expat/
 
 . local here = r(here)
 
@@ -39,9 +42,10 @@ Notes:
 . log using "`here'/output/firm_panel", text replace
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /srv/sandbox/expat/almos//output/firm_panel.log
+       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/firm_panel.lo
+> g
   log type:  text
- opened on:  15 Feb 2023, 14:05:17
+ opened on:  24 Jan 2024, 17:10:47
 
 . 
 . * keep only sample from balance-small - NOTE: had to restructure as we have t
@@ -57,8 +61,10 @@ Notes:
 . tempfile sample
 
 . save `sample', replace
-(file /srv/sandbox/koren/St173495.000001 not found)
-file /srv/sandbox/koren/St173495.000001 saved as .dta format
+(file /var/folders/5z/21k9mmsd55d1w5_jl5n192sh0000gn/T//St19299.000001 not
+    found)
+file /var/folders/5z/21k9mmsd55d1w5_jl5n192sh0000gn/T//St19299.000001 saved
+    as .dta format
 
 . 
 . * count expats in do - asterisk used
@@ -70,189 +76,20 @@ file /srv/sandbox/koren/St173495.000001 saved as .dta format
 . *egen firm_tag = tag(frame_id_numeric)
 . *count if ever_expat == 1 & ever_foreign == 0 & firm_tag == 1
 . 
-. foreach type in ceo nceo {
-  2.         use "`here'/input/`type'-panel/`type'-panel.dta", clear // QUESTIO
-> N: what is owner
-  3.         rename person_id manager_id
-  4.         
+.         use "`here'/input/ceo-panel/ceo-panel.dta", clear // QUESTION: what i
+> s owner
+
+.         rename person_id manager_id
+
+.         
 .         *for descriptives (number of ceo-s and nceo-s in original data, numbe
 > r of ceo and nceo job-spells in original data)
 .         count
-  5.         egen company_manager_id = group(frame_id_numeric manager_id)
-  6.         codebook manager_id
-  7.         codebook company_manager_id
-  8.         drop company_manager_id
-  9. 
-.         * only keep sample firms
-.         merge m:1 frame_id_numeric year using `sample', keep(match) nogen
- 10.         count if first_year_of_firm == firm_birth // QUESTION: why not the
->  same? - same for the last year
- 11. 
-.         * balance panel
-.         egen company_manager_id = group(frame_id manager_id)
- 12.         xtset company_manager_id year
- 13.         by company_manager_id: generate gap = year - year[_n-1] - 1
- 14.         replace gap = 0 if missing(gap)
- 15.         tabulate gap
- 16. 
-.         * fill in gap if only 1 or 2-year long
-.         
-.         *forval i = 1(1)2 {
-.         *       sort company_manager_id year
-.         *       expand 1 + `i' if gap == `i', generate(filled_in_`i') // FIXM
-> E OR QUESTION: maybe second year as well
-.         *       replace year = year - `i' if filled_in_`i'
-.         *       tab filled_in_`i'
-.         *}
-.         
-.         *bys company_manager_id year: replace year = year + _n - 1 if filled_
-> in_2
-.         
-.         expand 1 + (gap == 1), generate(filled_in)
- 17.         replace year = year - 1 if filled_in
- 18. 
-.         * create contiguous spells
-.         xtset company_manager_id year
- 19.         gen change = ceo != L.ceo // intuition: should be ok in both files
->  (possible FIXME)
- 20.         bysort company_manager_id (year): gen job_spell = sum(change)
- 21. 
-.         * create job begin and end for each manager spell
-.         bys frame_id_numeric manager_id job_spell: egen job_begin = min(year)
- 22.         bys frame_id_numeric manager_id job_spell: egen job_end = max(year
-> )
- 23.         keep frame_id_numeric manager_id job_spell year job_begin job_end 
-> expat founder insider outsider firm_birth foreign country_code
- 24. 
-.         * if first managers arrive in year 1, extrapolate to year 0 - DROP SP
-> ELL
-.         bys frame_id_numeric: egen first_cohort = min(job_begin)
- 25.         replace job_begin = job_begin - 1 if (first_cohort == firm_birth +
->  1) & (job_begin == first_cohort)
- 26. 
-.         * NOTE: no collapse and expand --> there might be holes
-.         sort frame_id_numeric manager_id year
- 27.         count if frame_id_numeric == frame_id_numeric[_n-1] & manager_id =
-> = manager_id[_n-1] & year != (year[_n-1] + 1)
- 28. 
-.         * expat before 1990
-.         replace expat = 0 if job_begin < 1990
- 29. 
-.         ***********************
-.         * time invariant vars and drop entire series of firms from sample *
-.         ***********************
-.                 by frame_id_numeric: egen first_year_expat = min(cond(expat =
-> = 1, job_begin,.))
- 30.                 by frame_id_numeric: egen first_year_foreign = min(cond(fo
-> reign == 1, year,.))
- 31.                 
-.                 * which of the two happened first?
-.                 generate manager_after_owner = first_year_expat - first_year_
-> foreign
- 32.                 * event time relative to that
-.                 generate event_time = year - first_year_expat
- 33.                 
-.                 * if foreign manager arrives up to 2 years before 1 year late
-> r than foreign owner, use foreign manager as arrival date. this is easier to 
-> implement
-.                 replace foreign = 1 if (manager_after_owner == -2) & inlist(e
-> vent_time, 0, 1)
- 34.                 replace foreign = 1 if (manager_after_owner == -1) & inlis
-> t(event_time, 0)
- 35.                 replace foreign = 0 if (manager_after_owner == +1) & inlis
-> t(event_time, -1)
- 36. 
-.                 * QUESTION: order of deletions (may be fine as all are firm l
-> evel)
-.                 * drop firms where expat arrives earlier than 2 years before 
-> owner
-.                 drop if manager_after_owner < -2
- 37.                 
-.                 * ever expat and foreign created after foreign changes (drops
->  were firm level before so should not mess with ever variables)
-.                 foreach X of var expat foreign {
- 38.                         by frame_id_numeric: egen ever_`X'_`type' = max(`X
-> '==1)
- 39.                 }
- 40. 
-.                 * drop if there was an expat but was never foreign
-.                 drop if ever_expat == 1 & ever_foreign == 0
- 41.                 scalar dropped_do3_expat_firmyears = r(N_drop)
- 42.                 
-.                 * drop too many CEO-s - FIXME AND QUESTION: should be moved i
-> n the next file where spells are limited - but there cannot be created withou
-> t manager level data
-.                 egen fp_tag = tag(frame_id_numeric manager_id) 
- 43.                 by frame_id_numeric: egen n_ceo_ever = sum(fp_tag)
- 44.                 drop if n_ceo > 15
- 45.                 scalar dropped_too_many_CEOs = r(N_drop)
- 46.                 drop fp_tag n_ceo_ever
- 47.                 
-.         * hired or fired ceo since last observed year of firm - * POSSIBLE FI
-> XME: expat, owner, insider, outsider, founder - hire, fire combinations later
-.         tempvar previous_year
- 48.         generate previous_year = .
- 49.         forval t = 1985/2018 {
- 50.                 by frame_id_numeric: egen `previous_year' = max(cond(year 
-> < `t', year, .))
- 51.                 replace previous_year = `previous_year' if year == `t'
- 52.                 drop `previous_year'
- 53.         }
- 54. 
-.         by frame_id_numeric: egen first_year = min(year)
- 55.         bys frame_id_numeric (year): generate byte hire = cond(first_year 
-> == year, 1, (job_begin <= year) & (job_begin > previous_year))
- 56. 
-.         tempvar next_year
- 57.         generate next_year = .
- 58.         forval t = 1985/2018 {
- 59.                 by frame_id_numeric: egen `next_year' = min(cond(year > `t
-> ', year, .))
- 60.                 replace next_year = `next_year' if year == `t'
- 61.                 drop `next_year'
- 62.         }
- 63. 
-.         gen byte fire = ((job_end >= year) & (job_end < next_year))
- 64.         tabulate hire fire 
- 65. 
-.         gen hire_expat_`type' = hire * expat
- 66.         gen fire_expat_`type' = fire * expat
- 67. 
-.         * number of expats and locals
-.         bys frame_id_numeric year: egen n_expat_`type' = total(cond(expat, 1,
->  0)) // could be in collapse but local not
- 68.         bys frame_id_numeric year: egen n_local_`type' = total(cond(!expat
-> , 1, 0))
- 69.         
-.         * create firm-year data
-.         * FIXME: country_code may be different within a firm-year
-.         collapse (sum) n_founder_`type' = founder n_insider_`type' = insider 
-> n_outsider_`type' = outsider (firstnm) n_expat_`type' n_local_`type' foreign_
-> `type' = foreign ever_expat_`type' ever_foreign_`type' (count) n_`type' = exp
-> at (max) hire_`type' = hire fire_`type' = fire hire_expat_`type' fire_expat_`
-> type', by(frame_id_numeric year)
- 70. 
-.         * managers in first year not classified as new hires and in last year
->  not classified as fired
-.         bys frame_id_numeric (year): replace hire_`type' = 0 if (_n==1)
- 71.         bys frame_id_numeric (year): replace fire_`type' = 0 if (_n==_N)
- 72.         bys frame_id_numeric (year): replace hire_expat_`type' = 0 if (_n=
-> =1)
- 73.         bys frame_id_numeric (year): replace fire_expat_`type' = 0 if (_n=
-> =_N)
- 74.         bys frame_id_numeric (year): gen ceo_spell_`type' = sum(hire_`type
-> ' | fire_`type') + 1 // so that index start from 1
- 75. 
-.         * create dummies from numbers
-.         foreach var in expat local founder insider outsider {
- 76.                 gen has_`var'_`type' = (n_`var'_`type' > 0) & n_`var'_`typ
-> e' != .
- 77.         }
- 78.         
-.         tempfile manager_`type'
- 79.         save `manager_`type''
- 80. }
   15,390,598
+
+.         egen company_manager_id = group(frame_id_numeric manager_id)
+
+.         codebook manager_id
 
 -------------------------------------------------------------------------------
 manager_id                                       group(manager_id manager_type)
@@ -269,6 +106,8 @@ manager_id                                       group(manager_id manager_type)
            Percentiles:    10%       25%       50%       75%       90%
                         284414    548711    816617   1.1e+06   1.4e+06
 
+.         codebook company_manager_id
+
 -------------------------------------------------------------------------------
 company_manager_id                           group(frame_id_numeric manager_id)
 -------------------------------------------------------------------------------
@@ -283,478 +122,442 @@ company_manager_id                           group(frame_id_numeric manager_id)
 
            Percentiles:     10%       25%       50%       75%       90%
                          194578    499718   1.1e+06   1.7e+06   2.1e+06
+
+.         drop company_manager_id
+
+. 
+.         * only keep sample firms
+.         merge m:1 frame_id_numeric year using `sample', keep(match) nogen
 (variable year was int, now float to accommodate using data's values)
 
     Result                      Number of obs
     -----------------------------------------
     Not matched                             0
-    Matched                           499,833  
+    Matched                           527,554  
     -----------------------------------------
-  288,737
+
+.         count if first_year_of_firm == firm_birth // QUESTION: why not the sa
+> me? - same for the last year
+  302,527
+
+. 
+.         * balance panel
+.         egen company_manager_id = group(frame_id manager_id)
+
+.         xtset company_manager_id year
 
 Panel variable: company_manager_id (unbalanced)
  Time variable: year, 1980 to 2018, but with gaps
          Delta: 1 unit
-(78,789 missing values generated)
-(78,789 real changes made)
+
+.         by company_manager_id: generate gap = year - year[_n-1] - 1
+(92,284 missing values generated)
+
+.         replace gap = 0 if missing(gap)
+(92,284 real changes made)
+
+.         tabulate gap
 
         gap |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    492,627       98.56       98.56
-          1 |      3,923        0.78       99.34
-          2 |      1,112        0.22       99.57
-          3 |        656        0.13       99.70
-          4 |        417        0.08       99.78
-          5 |        326        0.07       99.85
-          6 |        202        0.04       99.89
-          7 |        129        0.03       99.91
-          8 |        108        0.02       99.93
-          9 |        105        0.02       99.95
-         10 |         55        0.01       99.97
-         11 |         34        0.01       99.97
-         12 |         31        0.01       99.98
-         13 |         26        0.01       99.98
-         14 |         18        0.00       99.99
-         15 |         15        0.00       99.99
+          0 |    521,059       98.77       98.77
+          1 |      3,298        0.63       99.39
+          2 |      1,033        0.20       99.59
+          3 |        642        0.12       99.71
+          4 |        391        0.07       99.79
+          5 |        329        0.06       99.85
+          6 |        207        0.04       99.89
+          7 |        138        0.03       99.91
+          8 |        110        0.02       99.93
+          9 |        109        0.02       99.95
+         10 |         56        0.01       99.97
+         11 |         35        0.01       99.97
+         12 |         30        0.01       99.98
+         13 |         28        0.01       99.98
+         14 |         21        0.00       99.99
+         15 |         19        0.00       99.99
          16 |         11        0.00       99.99
          17 |         10        0.00       99.99
          18 |          6        0.00      100.00
-         19 |          7        0.00      100.00
-         20 |          6        0.00      100.00
-         21 |          3        0.00      100.00
+         19 |          5        0.00      100.00
+         20 |          7        0.00      100.00
+         21 |          4        0.00      100.00
          22 |          2        0.00      100.00
          23 |          1        0.00      100.00
          24 |          1        0.00      100.00
          25 |          2        0.00      100.00
 ------------+-----------------------------------
-      Total |    499,833      100.00
-(3,923 observations created)
-(3,923 real changes made)
+      Total |    527,554      100.00
+
+. 
+.         * fill in gap if only 1 or 2-year long
+.         
+.         *forval i = 1(1)2 {
+.         *       sort company_manager_id year
+.         *       expand 1 + `i' if gap == `i', generate(filled_in_`i') // FIXM
+> E OR QUESTION: maybe second year as well
+.         *       replace year = year - `i' if filled_in_`i'
+.         *       tab filled_in_`i'
+.         *}
+.         
+.         *bys company_manager_id year: replace year = year + _n - 1 if filled_
+> in_2
+.         
+.         expand 1 + (gap == 1), generate(filled_in)
+(3,298 observations created)
+
+.         replace year = year - 1 if filled_in
+(3,298 real changes made)
+
+. 
+.         * create contiguous spells
+.         xtset company_manager_id year
 
 Panel variable: company_manager_id (unbalanced)
  Time variable: year, 1980 to 2018, but with gaps
          Delta: 1 unit
-(41,966 real changes made)
-  3,283
-(363 real changes made)
-(419,381 missing values generated)
-(410,829 missing values generated)
-(436,148 missing values generated)
-(419,381 missing values generated)
-(37 real changes made)
-(48 real changes made)
-(20 real changes made)
-(6,048 observations deleted)
-(16,767 observations deleted)
-(13,372 observations deleted)
-(467,569 missing values generated)
-(411,592 missing values generated)
-(2,011 real changes made)
-(408,492 missing values generated)
-(2,270 real changes made)
-(406,548 missing values generated)
-(2,466 real changes made)
-(404,210 missing values generated)
-(2,709 real changes made)
-(402,944 missing values generated)
-(2,777 real changes made)
-(396,460 missing values generated)
-(3,279 real changes made)
-(353,599 missing values generated)
-(6,475 real changes made)
-(310,866 missing values generated)
-(8,232 real changes made)
-(256,047 missing values generated)
-(10,151 real changes made)
-(213,122 missing values generated)
-(11,719 real changes made)
-(181,426 missing values generated)
-(12,586 real changes made)
-(161,048 missing values generated)
-(12,953 real changes made)
-(140,917 missing values generated)
-(13,409 real changes made)
-(119,953 missing values generated)
-(14,113 real changes made)
-(103,867 missing values generated)
-(14,495 real changes made)
-(92,345 missing values generated)
-(14,663 real changes made)
-(78,334 missing values generated)
-(15,028 real changes made)
-(65,535 missing values generated)
-(15,452 real changes made)
-(56,110 missing values generated)
-(15,620 real changes made)
-(49,214 missing values generated)
-(16,382 real changes made)
-(42,614 missing values generated)
-(16,526 real changes made)
-(36,740 missing values generated)
-(16,602 real changes made)
-(30,585 missing values generated)
-(16,901 real changes made)
-(25,887 missing values generated)
-(17,526 real changes made)
-(20,902 missing values generated)
-(17,290 real changes made)
-(17,087 missing values generated)
-(17,074 real changes made)
-(13,598 missing values generated)
-(16,797 real changes made)
-(10,449 missing values generated)
-(16,642 real changes made)
-(7,750 missing values generated)
-(16,671 real changes made)
-(5,295 missing values generated)
-(16,328 real changes made)
-(3,193 missing values generated)
-(15,273 real changes made)
-(1,841 missing values generated)
-(15,253 real changes made)
-(815 missing values generated)
-(15,193 real changes made)
-(229 missing values generated)
-(14,751 real changes made)
-(467,569 missing values generated)
-(2,270 real changes made)
+
+.         gen change = ceo != L.ceo // intuition: should be ok in both files (p
+> ossible FIXME)
+
+.         bysort company_manager_id (year): gen job_spell = sum(change)
+
+. 
+.         * create job begin and end for each manager spell
+.         bys frame_id_numeric manager_id job_spell: egen job_begin = min(year)
+
+.         bys frame_id_numeric manager_id job_spell: egen job_end = max(year)
+
+.         keep frame_id_numeric manager_id job_spell year job_begin job_end exp
+> at founder insider outsider firm_birth foreign country_code
+
+. 
+.         * if first managers arrive in year 1, extrapolate to year 0 - DROP SP
+> ELL
+.         bys frame_id_numeric: egen first_cohort = min(job_begin)
+
+.         replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1)
+>  & (job_begin == first_cohort)
+(60,198 real changes made)
+
+. 
+.         * NOTE: no collapse and expand --> there might be holes
+.         sort frame_id_numeric manager_id year
+
+.         count if frame_id_numeric == frame_id_numeric[_n-1] & manager_id == m
+> anager_id[_n-1] & year != (year[_n-1] + 1)
+  3,197
+
+. 
+.         * expat before 1990
+.         replace expat = 0 if job_begin < 1990
+(690 real changes made)
+
+. 
+.         ***********************
+.         * time invariant vars and drop entire series of firms from sample *
+.         ***********************
+.                 by frame_id_numeric: egen first_year_expat = min(cond(expat =
+> = 1, job_begin,.))
+(444,831 missing values generated)
+
+.                 by frame_id_numeric: egen first_year_foreign = min(cond(forei
+> gn == 1, year,.))
+(436,042 missing values generated)
+
+.                 
+.                 * which of the two happened first?
+.                 generate manager_after_owner = first_year_expat - first_year_
+> foreign
+(462,274 missing values generated)
+
+.                 * event time relative to that
+.                 generate event_time = year - first_year_expat
+(444,831 missing values generated)
+
+.                 
+.                 * if foreign manager arrives up to 2 years before 1 year late
+> r than foreign owner, use foreign manager as arrival date. this is easier to 
+> implement
+.                 replace foreign = 1 if (manager_after_owner == -2) & inlist(e
+> vent_time, 0, 1)
+(39 real changes made)
+
+.                 replace foreign = 1 if (manager_after_owner == -1) & inlist(e
+> vent_time, 0)
+(46 real changes made)
+
+.                 replace foreign = 0 if (manager_after_owner == +1) & inlist(e
+> vent_time, -1)
+(28 real changes made)
+
+. 
+.                 * QUESTION: order of deletions (may be fine as all are firm l
+> evel)
+.                 * drop firms where expat arrives earlier than 2 years before 
+> owner
+.                 drop if manager_after_owner < -2
+(6,001 observations deleted)
+
+.                 
+.                 * ever expat and foreign created after foreign changes (drops
+>  were firm level before so should not mess with ever variables)
+.                 foreach X of var expat foreign {
+  2.                         by frame_id_numeric: egen ever_`X'_ceo = max(`X'==
+> 1)
+  3.                 }
+
+. 
+.                 * drop if there was an expat but was never foreign
+.                 drop if ever_expat == 1 & ever_foreign == 0
+(17,443 observations deleted)
+
+.                 scalar dropped_do3_expat_firmyears = r(N_drop)
+
+.                 
+.                 * drop too many CEO-s - FIXME AND QUESTION: should be moved i
+> n the next file where spells are limited - but there cannot be created withou
+> t manager level data
+.                 egen fp_tag = tag(frame_id_numeric manager_id) 
+
+.                 by frame_id_numeric: egen n_ceo_ever = sum(fp_tag)
+
+.                 drop if n_ceo > 15
+(13,554 observations deleted)
+
+.                 scalar dropped_too_many_CEOs = r(N_drop)
+
+.                 drop fp_tag n_ceo_ever
+
+.                 
+.         * hired or fired ceo since last observed year of firm - * POSSIBLE FI
+> XME: expat, owner, insider, outsider, founder - hire, fire combinations later
+.         tempvar previous_year
+
+.         generate previous_year = .
+(493,854 missing values generated)
+
+.         forval t = 1985/2018 {
+  2.                 by frame_id_numeric: egen `previous_year' = max(cond(year 
+> < `t', year, .))
+  3.                 replace previous_year = `previous_year' if year == `t'
+  4.                 drop `previous_year'
+  5.         }
+(437,603 missing values generated)
+(2,009 real changes made)
+(434,414 missing values generated)
+(2,271 real changes made)
+(432,411 missing values generated)
 (2,467 real changes made)
-(10 missing values generated)
-(2,718 real changes made)
-(195 missing values generated)
-(2,779 real changes made)
-(290 missing values generated)
-(3,276 real changes made)
-(1,341 missing values generated)
-(6,497 real changes made)
-(6,357 missing values generated)
-(8,412 real changes made)
-(11,722 missing values generated)
-(10,361 real changes made)
-(16,330 missing values generated)
-(11,624 real changes made)
-(21,035 missing values generated)
-(12,615 real changes made)
-(25,192 missing values generated)
-(12,981 real changes made)
-(29,817 missing values generated)
-(13,472 real changes made)
-(34,366 missing values generated)
-(13,960 real changes made)
-(38,770 missing values generated)
-(14,540 real changes made)
-(44,863 missing values generated)
-(14,499 real changes made)
-(50,053 missing values generated)
-(14,977 real changes made)
-(54,870 missing values generated)
-(15,328 real changes made)
-(60,790 missing values generated)
-(15,582 real changes made)
-(66,644 missing values generated)
-(15,633 real changes made)
-(74,403 missing values generated)
-(16,262 real changes made)
-(81,149 missing values generated)
-(16,435 real changes made)
-(88,274 missing values generated)
-(16,507 real changes made)
-(95,615 missing values generated)
-(16,751 real changes made)
-(105,011 missing values generated)
-(17,225 real changes made)
-(113,470 missing values generated)
-(17,007 real changes made)
-(121,545 missing values generated)
-(16,856 real changes made)
-(129,369 missing values generated)
-(16,654 real changes made)
-(136,074 missing values generated)
-(16,555 real changes made)
-(146,307 missing values generated)
-(16,407 real changes made)
-(167,237 missing values generated)
-(15,471 real changes made)
-(175,311 missing values generated)
-(15,124 real changes made)
-(182,477 missing values generated)
-(15,136 real changes made)
-(194,948 missing values generated)
-(14,668 real changes made)
-(467,569 missing values generated)
-(0 real changes made)
+(429,974 missing values generated)
+(2,727 real changes made)
+(427,699 missing values generated)
+(2,954 real changes made)
+(413,785 missing values generated)
+(4,023 real changes made)
+(376,502 missing values generated)
+(6,661 real changes made)
+(331,860 missing values generated)
+(8,603 real changes made)
+(276,115 missing values generated)
+(10,504 real changes made)
+(233,658 missing values generated)
+(11,953 real changes made)
+(202,009 missing values generated)
+(12,813 real changes made)
+(181,906 missing values generated)
+(13,099 real changes made)
+(161,444 missing values generated)
+(13,541 real changes made)
+(140,754 missing values generated)
+(14,201 real changes made)
+(124,768 missing values generated)
+(14,581 real changes made)
+(112,570 missing values generated)
+(14,760 real changes made)
+(98,902 missing values generated)
+(15,114 real changes made)
+(85,952 missing values generated)
+(15,538 real changes made)
+(76,687 missing values generated)
+(15,682 real changes made)
+(69,716 missing values generated)
+(16,445 real changes made)
+(62,902 missing values generated)
+(16,704 real changes made)
+(56,428 missing values generated)
+(16,818 real changes made)
+(49,982 missing values generated)
+(17,134 real changes made)
+(44,995 missing values generated)
+(17,726 real changes made)
+(39,964 missing values generated)
+(17,489 real changes made)
+(35,864 missing values generated)
+(17,287 real changes made)
+(32,144 missing values generated)
+(16,997 real changes made)
+(28,792 missing values generated)
+(16,860 real changes made)
+(25,931 missing values generated)
+(16,994 real changes made)
+(22,590 missing values generated)
+(16,768 real changes made)
+(20,032 missing values generated)
+(15,812 real changes made)
+(16,863 missing values generated)
+(15,954 real changes made)
+(9,743 missing values generated)
+(17,793 real changes made)
+(3,423 missing values generated)
+(19,825 real changes made)
 
-           |         fire
-      hire |         0          1 |     Total
------------+----------------------+----------
-         0 |   327,385     66,640 |   394,025 
-         1 |    56,880     16,664 |    73,544 
------------+----------------------+----------
-     Total |   384,265     83,304 |   467,569 
-(25,603 real changes made)
-(25,603 real changes made)
-(1,230 real changes made)
-(1,466 real changes made)
-file /srv/sandbox/koren/St173495.000002 saved as .dta format
-  288,033
+. 
+.         by frame_id_numeric: egen first_year = min(year)
 
--------------------------------------------------------------------------------
-manager_id                                                    group(manager_id)
--------------------------------------------------------------------------------
+.         bys frame_id_numeric (year): generate byte hire = cond(first_year == 
+> year, 1, (job_begin <= year) & (job_begin > previous_year))
 
-                  Type: Numeric (long)
+. 
+.         tempvar next_year
 
-                 Range: [80,1429833]                  Units: 1
-         Unique values: 58,121                    Missing .: 0/288,033
+.         generate next_year = .
+(493,854 missing values generated)
 
-                  Mean: 752768
-             Std. dev.: 371598
-
-           Percentiles:    10%       25%       50%       75%       90%
-                        230023    478933    743701   1.1e+06   1.3e+06
-
--------------------------------------------------------------------------------
-company_manager_id                           group(frame_id_numeric manager_id)
--------------------------------------------------------------------------------
-
-                  Type: Numeric (float)
-
-                 Range: [1,68173]                     Units: 1
-         Unique values: 68,173                    Missing .: 0/288,033
-
-                  Mean: 31559.5
-             Std. dev.: 19323.1
-
-           Percentiles:     10%       25%       50%       75%       90%
-                           5716     14672     30905     47630     59335
-(variable year was int, now float to accommodate using data's values)
-
-    Result                      Number of obs
-    -----------------------------------------
-    Not matched                             0
-    Matched                           119,538  
-    -----------------------------------------
-  35,028
-
-Panel variable: company_manager_id (unbalanced)
- Time variable: year, 1988 to 2018, but with gaps
-         Delta: 1 unit
-(28,110 missing values generated)
-(28,110 real changes made)
-
-        gap |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |    117,806       98.55       98.55
-          1 |        818        0.68       99.24
-          2 |        318        0.27       99.50
-          3 |        195        0.16       99.66
-          4 |        114        0.10       99.76
-          5 |         89        0.07       99.83
-          6 |         57        0.05       99.88
-          7 |         40        0.03       99.92
-          8 |         30        0.03       99.94
-          9 |         20        0.02       99.96
-         10 |         19        0.02       99.97
-         11 |          7        0.01       99.98
-         12 |          7        0.01       99.98
-         13 |          4        0.00       99.99
-         14 |          1        0.00       99.99
-         15 |          4        0.00       99.99
-         16 |          3        0.00       99.99
-         17 |          3        0.00      100.00
-         19 |          1        0.00      100.00
-         22 |          1        0.00      100.00
-         24 |          1        0.00      100.00
-------------+-----------------------------------
-      Total |    119,538      100.00
-(818 observations created)
-(818 real changes made)
-
-Panel variable: company_manager_id (unbalanced)
- Time variable: year, 1988 to 2018, but with gaps
-         Delta: 1 unit
-(7,292 real changes made)
-  914
-(106 real changes made)
-(87,981 missing values generated)
-(85,550 missing values generated)
-(98,148 missing values generated)
-(87,981 missing values generated)
-(14 real changes made)
-(20 real changes made)
-(88 real changes made)
-(2,268 observations deleted)
-(10,167 observations deleted)
-(40,014 observations deleted)
-(67,907 missing values generated)
-(67,907 missing values generated)
-(0 real changes made)
-(67,907 missing values generated)
-(0 real changes made)
-(67,907 missing values generated)
-(0 real changes made)
-(67,907 missing values generated)
-(0 real changes made)
-(58,576 missing values generated)
-(1,192 real changes made)
-(57,794 missing values generated)
-(1,277 real changes made)
-(53,471 missing values generated)
-(1,860 real changes made)
-(50,007 missing values generated)
-(1,944 real changes made)
-(46,707 missing values generated)
-(1,354 real changes made)
-(41,416 missing values generated)
-(1,639 real changes made)
-(37,830 missing values generated)
-(1,816 real changes made)
-(36,133 missing values generated)
-(1,780 real changes made)
-(35,287 missing values generated)
-(1,650 real changes made)
-(34,116 missing values generated)
-(1,533 real changes made)
-(33,039 missing values generated)
-(1,482 real changes made)
-(30,367 missing values generated)
-(1,504 real changes made)
-(27,680 missing values generated)
-(1,561 real changes made)
-(25,314 missing values generated)
-(1,651 real changes made)
-(23,830 missing values generated)
-(1,720 real changes made)
-(21,927 missing values generated)
-(1,940 real changes made)
-(16,245 missing values generated)
-(2,391 real changes made)
-(13,322 missing values generated)
-(2,432 real changes made)
-(10,989 missing values generated)
-(2,258 real changes made)
-(9,166 missing values generated)
-(2,348 real changes made)
-(7,327 missing values generated)
-(2,562 real changes made)
-(5,757 missing values generated)
-(2,578 real changes made)
-(4,758 missing values generated)
-(2,378 real changes made)
-(3,671 missing values generated)
-(2,422 real changes made)
-(2,894 missing values generated)
-(2,393 real changes made)
-(2,113 missing values generated)
-(2,406 real changes made)
-(1,330 missing values generated)
-(2,061 real changes made)
-(809 missing values generated)
-(2,046 real changes made)
-(329 missing values generated)
-(2,094 real changes made)
-(100 missing values generated)
-(2,019 real changes made)
-(67,907 missing values generated)
-(0 real changes made)
-(0 real changes made)
-(0 real changes made)
-(7 missing values generated)
-(1,192 real changes made)
-(54 missing values generated)
-(1,280 real changes made)
-(303 missing values generated)
-(1,910 real changes made)
-(1,609 missing values generated)
-(2,043 real changes made)
-(5,062 missing values generated)
-(1,480 real changes made)
-(5,890 missing values generated)
-(1,660 real changes made)
-(6,692 missing values generated)
-(1,843 real changes made)
-(7,283 missing values generated)
-(1,846 real changes made)
-(8,281 missing values generated)
-(1,718 real changes made)
-(9,591 missing values generated)
-(1,567 real changes made)
-(10,501 missing values generated)
-(1,527 real changes made)
-(11,828 missing values generated)
-(1,572 real changes made)
-(12,948 missing values generated)
-(1,584 real changes made)
-(14,119 missing values generated)
-(1,675 real changes made)
-(15,198 missing values generated)
-(1,679 real changes made)
-(17,898 missing values generated)
-(1,639 real changes made)
-(20,432 missing values generated)
-(2,314 real changes made)
-(22,027 missing values generated)
+.         forval t = 1985/2018 {
+  2.                 by frame_id_numeric: egen `next_year' = min(cond(year > `t
+> ', year, .))
+  3.                 replace next_year = `next_year' if year == `t'
+  4.                 drop `next_year'
+  5.         }
+(2,271 real changes made)
 (2,468 real changes made)
-(23,983 missing values generated)
-(2,410 real changes made)
-(25,526 missing values generated)
-(2,263 real changes made)
-(26,693 missing values generated)
-(2,417 real changes made)
-(28,773 missing values generated)
-(2,524 real changes made)
-(31,730 missing values generated)
-(2,386 real changes made)
-(33,309 missing values generated)
-(2,339 real changes made)
-(34,994 missing values generated)
-(2,386 real changes made)
-(36,427 missing values generated)
-(2,358 real changes made)
-(41,819 missing values generated)
-(2,005 real changes made)
-(43,786 missing values generated)
-(1,997 real changes made)
-(45,591 missing values generated)
-(2,029 real changes made)
-(47,617 missing values generated)
-(1,963 real changes made)
-(67,907 missing values generated)
+(7 missing values generated)
+(2,733 real changes made)
+(68 missing values generated)
+(2,955 real changes made)
+(341 missing values generated)
+(4,021 real changes made)
+(1,575 missing values generated)
+(6,681 real changes made)
+(6,561 missing values generated)
+(8,783 real changes made)
+(12,608 missing values generated)
+(10,723 real changes made)
+(17,622 missing values generated)
+(11,846 real changes made)
+(22,534 missing values generated)
+(12,846 real changes made)
+(26,998 missing values generated)
+(13,126 real changes made)
+(31,946 missing values generated)
+(13,597 real changes made)
+(36,720 missing values generated)
+(14,040 real changes made)
+(41,093 missing values generated)
+(14,624 real changes made)
+(47,378 missing values generated)
+(14,592 real changes made)
+(52,602 missing values generated)
+(15,064 real changes made)
+(57,572 missing values generated)
+(15,416 real changes made)
+(63,628 missing values generated)
+(15,643 real changes made)
+(69,558 missing values generated)
+(15,699 real changes made)
+(76,847 missing values generated)
+(16,363 real changes made)
+(84,040 missing values generated)
+(16,683 real changes made)
+(91,556 missing values generated)
+(16,758 real changes made)
+(99,045 missing values generated)
+(16,969 real changes made)
+(108,479 missing values generated)
+(17,438 real changes made)
+(117,219 missing values generated)
+(17,237 real changes made)
+(125,672 missing values generated)
+(17,056 real changes made)
+(133,779 missing values generated)
+(16,857 real changes made)
+(140,337 missing values generated)
+(16,793 real changes made)
+(151,154 missing values generated)
+(16,837 real changes made)
+(172,016 missing values generated)
+(15,992 real changes made)
+(181,267 missing values generated)
+(15,960 real changes made)
+(189,715 missing values generated)
+(17,720 real changes made)
+(200,707 missing values generated)
+(19,726 real changes made)
+(493,854 missing values generated)
 (0 real changes made)
+
+. 
+.         gen byte fire = ((job_end >= year) & (job_end < next_year))
+
+.         tabulate hire fire 
 
            |         fire
       hire |         0          1 |     Total
 -----------+----------------------+----------
-         0 |    39,245     12,546 |    51,791 
-         1 |    12,546      3,570 |    16,116 
+         0 |   334,285     73,040 |   407,325 
+         1 |    63,289     23,240 |    86,529 
 -----------+----------------------+----------
-     Total |    51,791     16,116 |    67,907 
-(5,138 real changes made)
-(5,138 real changes made)
-(151 real changes made)
-(192 real changes made)
-file /srv/sandbox/koren/St173495.000003 saved as .dta format
+     Total |   397,574     96,280 |   493,854 
 
 . 
-. use `manager_ceo'
+.         gen hire_expat_ceo = hire * expat
 
-. merge 1:1 frame_id_numeric year using `manager_nceo', keep (1 3) nogen // 1, 
-> only 1 and 3 to not have missing cases in tab has_expat_ceo, missing in analy
-> sis-sample 2, merge here to makes sure to have only ceo-s when countries are 
-> merged
-
-    Result                      Number of obs
-    -----------------------------------------
-    Not matched                       292,557
-        from master                   292,557  
-        from using                          0  
-
-    Matched                            30,098  
-    -----------------------------------------
+.         gen fire_expat_ceo = fire * expat
 
 . 
+.         * number of expats and locals
+.         bys frame_id_numeric year: egen n_expat_ceo = total(cond(expat, 1, 0)
+> ) // could be in collapse but local not
+
+.         bys frame_id_numeric year: egen n_local_ceo = total(cond(!expat, 1, 0
+> ))
+
+.         
+.         * create firm-year data
+.         * FIXME: country_code may be different within a firm-year
+.         collapse (sum) n_founder_ceo = founder n_insider_ceo = insider n_outs
+> ider_ceo = outsider (firstnm) n_expat_ceo n_local_ceo foreign_ceo = foreign e
+> ver_expat_ceo ever_foreign_ceo (count) n_ceo = expat (max) hire_ceo = hire fi
+> re_ceo = fire hire_expat_ceo fire_expat_ceo, by(frame_id_numeric year)
+
+. 
+.         * managers in first year not classified as new hires and in last year
+>  not classified as fired
+.         bys frame_id_numeric (year): replace hire_ceo = 0 if (_n==1)
+(35,590 real changes made)
+
+.         bys frame_id_numeric (year): replace fire_ceo = 0 if (_n==_N)
+(35,590 real changes made)
+
+.         bys frame_id_numeric (year): replace hire_expat_ceo = 0 if (_n==1)
+(1492 real changes made)
+
+.         bys frame_id_numeric (year): replace fire_expat_ceo = 0 if (_n==_N)
+(1777 real changes made)
+
+.         bys frame_id_numeric (year): gen ceo_spell_ceo = sum(hire_ceo | fire_
+> ceo) + 1 // so that index start from 1
+
+. 
+.         * create dummies from numbers
+.         foreach var in expat local founder insider outsider {
+  2.                 gen has_`var'_ceo = (n_`var'_ceo > 0) & n_`var'_ceo != .
+  3.         }
+
+.         
 . count
-  322,655
+  344,063
 
 . compress
   variable year was float now int
@@ -771,36 +574,21 @@ file /srv/sandbox/koren/St173495.000003 saved as .dta format
   variable has_founder_ceo was float now byte
   variable has_insider_ceo was float now byte
   variable has_outsider_ceo was float now byte
-  variable n_expat_nceo was float now byte
-  variable n_local_nceo was float now byte
-  variable ever_expat_nceo was float now byte
-  variable ever_foreign_nceo was float now byte
-  variable n_nceo was long now byte
-  variable hire_expat_nceo was float now byte
-  variable fire_expat_nceo was float now byte
-  variable ceo_spell_nceo was float now byte
-  variable has_expat_nceo was float now byte
-  variable has_local_nceo was float now byte
-  variable has_founder_nceo was float now byte
-  variable has_insider_nceo was float now byte
-  variable has_outsider_nceo was float now byte
   variable n_founder_ceo was double now byte
   variable n_insider_ceo was double now byte
   variable n_outsider_ceo was double now byte
-  variable n_founder_nceo was double now byte
-  variable n_insider_nceo was double now byte
-  variable n_outsider_nceo was double now byte
-  (39,363,910 bytes saved)
+  (21,331,906 bytes saved)
 
 . *save_all_to_json
 . save "`here'/temp/firm_events.dta", replace
-file /srv/sandbox/expat/almos//temp/firm_events.dta saved
+file /Users/koren/Tresorit/Mac2Mac/projects/expat//temp/firm_events.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /srv/sandbox/expat/almos//output/firm_panel.log
+       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/firm_panel.lo
+> g
   log type:  text
- closed on:  15 Feb 2023, 14:06:27
+ closed on:  24 Jan 2024, 17:11:33
 -------------------------------------------------------------------------------
 
 . 
