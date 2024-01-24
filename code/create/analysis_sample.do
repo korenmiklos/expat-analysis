@@ -1,4 +1,5 @@
 clear all
+
 * find root folder
 here
 local here = r(here)
@@ -9,6 +10,7 @@ log using "`here'/output/analysis_sample", text replace
 use "`here'/temp/balance-small-clean.dta"
 drop foreign
 
+*Check holes in the time series
 sort frame_id_numeric year
 gen x_before = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
 gen hole10_before = (x_before > 10 & x_before != .)
@@ -21,6 +23,7 @@ foreach var of varlist hole* {
 
 drop x_before hole*
 
+*Merge with 
 merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(match) nogen
 
 sort frame_id_numeric year
@@ -70,10 +73,7 @@ restore
 
 rename foreign_ceo foreign
 rename ever_foreign_ceo ever_foreign
-drop foreign_nceo ever_foreign_nceo
 
-*nceo overriden to have zeros
-mvencode *_nceo, mv(0) override
 
 * many foreign changes deleted
 bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
@@ -83,28 +83,31 @@ drop if owner_spell_total > 3 // FIXME: doublecheck the length of spells
 scalar dropped_too_many_foreign_change = r(N_drop)
 display dropped_too_many_foreign_change
 
-* divestiture
+* divestment
 bys frame_id_numeric (year): gen divest = sum(cond(owner_spell != owner_spell[_n-1] & foreign == 0 & _n != 1, 1, 0))
 replace divest = 1 if divest > 0
 
-* only keep D, D-F owner spells
+* only D, D-F F owner spells
 bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
-keep if start_as_domestic
+*keep if start_as_domestic
 keep if owner_spell <= 2
+drop if divest==1
 
-* check foreign end expat numbers
+*Greenfield variable
+tempvar x
+egen `x'=min(foreign), by(frame_id_numeric)
+gen greenfield=(`x'==1)
+
+
+* check foreign and expat numbers
 egen firm_tag = tag(frame_id_numeric)
 
 count if ever_foreign
 count if ever_foreign & firm_tag
 count if ever_expat_ceo & firm_tag
-count if ever_expat_nceo & firm_tag
 
-count if has_expat_nceo == 1
-count if has_expat_nceo == 1 & foreign == 0
 count if has_expat_ceo == 1
 count if has_expat_ceo == 1 & foreign == 0 // FIXME - should be 0
-count if ever_expat_nceo == 1 & ever_foreign == 0
 count if ever_expat_ceo == 1 & ever_foreign == 0
 
 *do "`here'/code/create/event_dummies_firmlevel.do"
@@ -151,8 +154,37 @@ count if ever_foreign & firm_tag
 count if ever_expat & firm_tag
 count if has_expat_ceo
 
-replace foreign_hire = 1 if ever_foreign_hire == 1 & foreign == 1
-replace has_expat_ceo = 1 if ever_expat == 1 & foreign == 1
+*do not let ceo type switch
+*replace foreign_hire = 1 if ever_foreign_hire == 1 & foreign == 1
+*replace has_expat_ceo = 1 if ever_expat == 1 & foreign == 1
+
+*Create foreign ceo spells
+tempvar ceo
+gen `ceo'=has_expat_ceo
+bys frame_id_numeric (year): gen ceo_foreign_spell = sum(`ceo' != `ceo'[_n-1])
+egen ceo_foreign_spell_total=total(`ceo' != `ceo'[_n-1]), by(frame_id_numeric)
+
+gen x0=(ceo_foreign_spell==1 & has_expat_ceo==1)
+gen x1=(ceo_foreign_spell==1 & has_expat_ceo==0)
+gen x2=(ceo_foreign_spell==2 & has_expat_ceo==1)
+
+egen first_expat=max(x0), by(frame_id_numeric)
+egen first_local=max(x1), by(frame_id_numeric)
+egen second_expat=max(x2), by(frame_id_numeric)
+
+*make sample
+drop if ceo_foreign_spell>2
+drop if ceo_foreign_spell==2 & has_expat_ceo==0
+
+keep if ever_foreign==1
+
+drop if greenfield==1 & first_expat==1
+
+*Create time_expat
+gen year_expat=year if has_expat_ceo==1 & has_expat_ceo[_n-1]==0 & frame_id_numeric==frame_id_numeric[_n-1]
+egen year_expat_l=max(year_expat), by(frame_id_numeric)
+gen time_expat=year-year_expat_l
+
 
 gen foreign_only = foreign & !foreign_hire
 gen foreign_hire_only = foreign_hire & !has_expat_ceo

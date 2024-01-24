@@ -26,8 +26,7 @@ save `sample', replace
 *egen firm_tag = tag(frame_id_numeric)
 *count if ever_expat == 1 & ever_foreign == 0 & firm_tag == 1
 
-foreach type in ceo nceo {
-	use "`here'/input/`type'-panel/`type'-panel.dta", clear // QUESTION: what is owner
+	use "`here'/input/ceo-panel/ceo-panel.dta", clear // QUESTION: what is owner
 	rename person_id manager_id
 	
 	*for descriptives (number of ceo-s and nceo-s in original data, number of ceo and nceo job-spells in original data)
@@ -105,7 +104,7 @@ foreach type in ceo nceo {
 		
 		* ever expat and foreign created after foreign changes (drops were firm level before so should not mess with ever variables)
 		foreach X of var expat foreign {
-			by frame_id_numeric: egen ever_`X'_`type' = max(`X'==1)
+			by frame_id_numeric: egen ever_`X'_ceo = max(`X'==1)
 		}
 
 		* drop if there was an expat but was never foreign
@@ -142,36 +141,29 @@ foreach type in ceo nceo {
 	gen byte fire = ((job_end >= year) & (job_end < next_year))
 	tabulate hire fire 
 
-	gen hire_expat_`type' = hire * expat
-	gen fire_expat_`type' = fire * expat
+	gen hire_expat_ceo = hire * expat
+	gen fire_expat_ceo = fire * expat
 
 	* number of expats and locals
-	bys frame_id_numeric year: egen n_expat_`type' = total(cond(expat, 1, 0)) // could be in collapse but local not
-	bys frame_id_numeric year: egen n_local_`type' = total(cond(!expat, 1, 0))
+	bys frame_id_numeric year: egen n_expat_ceo = total(cond(expat, 1, 0)) // could be in collapse but local not
+	bys frame_id_numeric year: egen n_local_ceo = total(cond(!expat, 1, 0))
 	
 	* create firm-year data
 	* FIXME: country_code may be different within a firm-year
-	collapse (sum) n_founder_`type' = founder n_insider_`type' = insider n_outsider_`type' = outsider (firstnm) n_expat_`type' n_local_`type' foreign_`type' = foreign ever_expat_`type' ever_foreign_`type' (count) n_`type' = expat (max) hire_`type' = hire fire_`type' = fire hire_expat_`type' fire_expat_`type', by(frame_id_numeric year)
+	collapse (sum) n_founder_ceo = founder n_insider_ceo = insider n_outsider_ceo = outsider (firstnm) n_expat_ceo n_local_ceo foreign_ceo = foreign ever_expat_ceo ever_foreign_ceo (count) n_ceo = expat (max) hire_ceo = hire fire_ceo = fire hire_expat_ceo fire_expat_ceo, by(frame_id_numeric year)
 
 	* managers in first year not classified as new hires and in last year not classified as fired
-	bys frame_id_numeric (year): replace hire_`type' = 0 if (_n==1)
-	bys frame_id_numeric (year): replace fire_`type' = 0 if (_n==_N)
-	bys frame_id_numeric (year): replace hire_expat_`type' = 0 if (_n==1)
-	bys frame_id_numeric (year): replace fire_expat_`type' = 0 if (_n==_N)
-	bys frame_id_numeric (year): gen ceo_spell_`type' = sum(hire_`type' | fire_`type') + 1 // so that index start from 1
+	bys frame_id_numeric (year): replace hire_ceo = 0 if (_n==1)
+	bys frame_id_numeric (year): replace fire_ceo = 0 if (_n==_N)
+	bys frame_id_numeric (year): replace hire_expat_ceo = 0 if (_n==1)
+	bys frame_id_numeric (year): replace fire_expat_ceo = 0 if (_n==_N)
+	bys frame_id_numeric (year): gen ceo_spell_ceo = sum(hire_ceo | fire_ceo) + 1 // so that index start from 1
 
 	* create dummies from numbers
 	foreach var in expat local founder insider outsider {
-		gen has_`var'_`type' = (n_`var'_`type' > 0) & n_`var'_`type' != .
+		gen has_`var'_ceo = (n_`var'_ceo > 0) & n_`var'_ceo != .
 	}
 	
-	tempfile manager_`type'
-	save `manager_`type''
-}
-
-use `manager_ceo'
-merge 1:1 frame_id_numeric year using `manager_nceo', keep (1 3) nogen // 1, only 1 and 3 to not have missing cases in tab has_expat_ceo, missing in analysis-sample 2, merge here to makes sure to have only ceo-s when countries are merged
-
 count
 compress
 *save_all_to_json
