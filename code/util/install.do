@@ -17,3 +17,6 @@ net install here, from("https://raw.githubusercontent.com/korenmiklos/here/maste
 * install attgt
 capture ado uninstall attgt
 net install attgt, from("https://raw.githubusercontent.com/korenmiklos/attgt/v0.2.2/")
+
+capture ado uninstall eventstudy
+net install eventstudy, from(https://raw.githubusercontent.com/codedthinking/eventstudy/main/)

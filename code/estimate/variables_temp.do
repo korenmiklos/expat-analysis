@@ -19,9 +19,20 @@ label define type 1 "Domestic" 2 "Foreign" 3 "Local hire" 4 "Expat", replace
 label values firm_type type
 
 *log vars
+
+recode immat_18 (.=0) if year>1996
+replace immat_18=0 if immat_18<0
+gen has_IK=(immat_18>0 & year>1996)
 gen lnIK=ln(immat_18)
-gen lnQd=ln(sales_18-export_18)
-gen lnExport=ln(export_18)
+
+
+gen export_18_cl=export_18
+recode export_18_cl (.=0)
+
+gen lnQd=ln(sales_18-export_18_cl)
+replace lnQd=lnQ if lnQd==.
+
+gen lnExport=ln(export_18_cl)
 
 *Pre-acq productivity
 gen high_tfp=.

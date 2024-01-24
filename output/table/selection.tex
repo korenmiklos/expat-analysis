@@ -1,17 +1,30 @@
-\begin{tabular}{lcccc} \hline
- & (1) & (2) & (3) & (4) \\
-VARIABLES & No\_hire & Local\_hire & Expat\_hire & Ordered logit \\ \hline
- &  &  &  &  \\
-Employment (log) &  & 0.027 & 0.017 & 0.019 \\
- &  & (0.055) & (0.054) & (0.040) \\
-Capital per worker (log) &  & 0.095** & 0.173*** & 0.110*** \\
- &  & (0.038) & (0.042) & (0.029) \\
-Material share (log) &  & -0.168 & -0.552*** & -0.356*** \\
- &  & (0.145) & (0.158) & (0.111) \\
-Exporter (dummy) &  & 0.077 & 0.358** & 0.246** \\
- &  & (0.165) & (0.165) & (0.125) \\
-TFP (log) &  & -0.321 & -1.273*** & -0.893*** \\
- &  & (0.206) & (0.225) & (0.158) \\
- &  &  &  &  \\
- Observations & 1,550 & 1,550 & 1,550 & 1,550 \\ \hline
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{3}{c}}
+\hline\hline
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}\\
+                    &\multicolumn{1}{c}{(firstnm) ever\_foreign\_ceo}&\multicolumn{1}{c}{ever\_foreign\_hire}&\multicolumn{1}{c}{ever\_expat}\\
+\hline
+Industry            &      -0.005\sym{***}&       0.039\sym{***}&       0.020         \\
+                    &     (0.001)         &     (0.015)         &     (0.019)         \\
+[1em]
+large\_firm          &       0.009\sym{***}&       0.072\sym{***}&      -0.047\sym{**} \\
+                    &     (0.001)         &     (0.016)         &     (0.020)         \\
+[1em]
+TFP (log)           &       0.001         &      -0.042\sym{*}  &      -0.026         \\
+                    &     (0.002)         &     (0.023)         &     (0.029)         \\
+[1em]
+lnIK                &       0.004\sym{***}&       0.012\sym{***}&      -0.012\sym{***}\\
+                    &     (0.000)         &     (0.003)         &     (0.004)         \\
+[1em]
+Exporter (dummy)    &       0.015\sym{***}&       0.032\sym{**} &       0.157\sym{***}\\
+                    &     (0.001)         &     (0.014)         &     (0.018)         \\
+[1em]
+year\_90s            &       0.036\sym{***}&       0.036\sym{**} &       0.012         \\
+                    &     (0.001)         &     (0.015)         &     (0.019)         \\
+\hline
+Observations        &      135414         &        5111         &        3345         \\
+\(R^{2}\)           &       0.009         &       0.019         &       0.029         \\
+\hline\hline
 \end{tabular}
+}

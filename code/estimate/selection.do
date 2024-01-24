@@ -24,8 +24,10 @@ esttab t1 t2 t3 t4 using "$here/output/table/descriptive.tex", main(mean) aux(sd
 *Selection regressions
 gen large_firm=(emp>100)
 gen year_90s=(year<2000)
+label var industrial_firm "Industry"
 
-local controls industrial_firm large_firm lnQL lnKL lnIK exporter year_90s
+*local controls industrial_firm large_firm lnQL lnIK exporter year_90s
+local controls industrial_firm large_firm TFP_cd lnIK exporter year_90s
 
 eststo clear
 eststo clear
