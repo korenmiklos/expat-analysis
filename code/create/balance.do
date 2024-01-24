@@ -17,15 +17,6 @@ codebook frame_id*
 drop frame_id
 xtset frame_id_numeric year
 
-do "`here'/code/create/emp_clean"
-count
-count if emp == emp_cl & emp != .
-count if emp != emp_cl & emp != . & emp_cl != .
-count if emp != emp_cl & emp != .
-count if emp != emp_cl & emp_cl != .
-gen emp_add = emp_cl + 1
-corr emp emp_cl emp_add
-
 * use fo2 instead of fo3
 merge 1:1 originalid year using "`here'/input/balance-sheet-80-19-plus-vars/balance-80-19-plus-vars.dta", keep(1 3) nogen
 tab fo2 fo3, missing
@@ -110,22 +101,15 @@ foreach x in sales export tanass jetok ranyag ranyag8091 immat {
 	replace `x'_18 = `x' if year < 1992 // FIXME: till ppi before 1992 is not filled up - just to not delete those rows because of missing ln dependent variables
 }
 
-* change emp
-*sort frame_id_numeric year
-
-*clonevar emp_clean = emp
-*replace emp_clean = . if (emp[_n-1] > 5 | emp[_n +1] > 5) & emp == 0
-*corr emp emp_clean
-
-*gen emp_add = emp_clean + 1
+* minimal employment cleaning
+replace emp = 1 if emp <= 0 | missing(emp)
 
 * creating dependent variables
-gen lnL = ln(emp_add)
-*gen lnL_add = ln(emp_add)
+gen lnL = ln(emp)
 gen lnM = ln(ranyag_18)
 replace lnM = ln(ranyag8091_18) if year <= 1991
 gen lnQ = ln(sales_18)
-gen lnQL = lnQ-lnL
+gen lnQL = lnQ - lnL
 gen lnMQ = lnM - lnQ
 gen byte exporter = export_18 > 0 & export_18 != .
 gen export_share = export_18 / sales
@@ -161,42 +145,15 @@ label variable RperK "Share of immaterial assets [0,1]"
 * firm-year deletions
 count if missing(lnK, lnQ, lnL, lnM, foreign) & year > 1991
 count if missing(lnK, lnQ, lnL, lnM, foreign)
-*drop if missing(lnK, lnQ, lnL, lnM, foreign) // ASK: whether year condition needed
-*count
 
 foreach var in lnK lnQ lnL lnM {
 	drop if missing(`var')
 }
 
-*drop if missing(foreign)
-*tabstat foreign foreign_0 foreign_1 count, stat(sum) save
-*mat total = (total \ r(StatTotal))
-
-*drop hole* x
 count
 
-* TFP (Cobb-Douglas)
-* FIXME: Replace CD with something fancy
-recode industry_mode (6 75 7 66 84 19 51 = .)
-
-levelsof industry_mode, local(levels)
-	foreach l of local levels {
-	disp `l'
-	qui reghdfe lnQ lnL lnK lnM if industry_mode == `l', a(frame_id_numeric year foundyear) resid
-	predict tfp_cd_`l', res
-	}
-
-gen  TFP_cd =  .
-levelsof industry_mode, local(levels)
-foreach l of local levels {
-
-		qui replace TFP_cd = tfp_cd_`l' if TFP_cd == .
-}
-
-drop tfp_cd_*
-
 * industry dummy and age
-gen byte industrial_firm = inlist(teaor08_1d,"B","C","D","E")
+gen byte industrial_firm = inlist(teaor08_1d, "B", "C", "D", "E")
 gen age = year - foundyear
 
 * missing export means 0 export
@@ -206,7 +163,6 @@ replace domestic_sales = 0 if domestic_sales < 0 | missing(domestic_sales)
 
 count
 
-*save_all_to_json
 cap drop __*
 save "`here'/temp/balance-small-clean.dta", replace
 log close
