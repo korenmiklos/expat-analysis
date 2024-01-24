@@ -36,8 +36,6 @@ foreach var of varlist hole* {
 	tab `var'
 }
 
-*tab _merge
-
 drop x_after hole*
 
 preserve
@@ -79,7 +77,7 @@ rename ever_foreign_ceo ever_foreign
 bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
 bys frame_id_numeric (year): egen owner_spell_total = total(foreign != foreign[_n-1])
 
-drop if owner_spell_total > 3 // FIXME: doublecheck the length of spells
+drop if owner_spell_total > 3 
 scalar dropped_too_many_foreign_change = r(N_drop)
 display dropped_too_many_foreign_change
 
@@ -110,17 +108,7 @@ count if has_expat_ceo == 1
 count if has_expat_ceo == 1 & foreign == 0 // FIXME - should be 0
 count if ever_expat_ceo == 1 & ever_foreign == 0
 
-*do "`here'/code/create/event_dummies_firmlevel.do"
-
-*merge 1:1 originalid year using "input/fo3-owner-names/country_codes.dta", keep(match master) nogen
-* "same country" only applies to expats at foreign firms
-*replace country_same = 0 if (has_expat == 0) | (foreign == 0)
-
 egen industry_year = group(teaor08_1d year)
-*egen last_before_acquisition = max(cond(time_foreign<0, time_foreign, .)), by(originalid)
-*egen ever_same_country = max(country_same), by(originalid)
-
-*do "`here'/code/create/countries.do"
 
 *for descriptives (number of firms and firm-years in final data)
 codebook frame_id_numeric
@@ -134,8 +122,6 @@ generate time_foreign_new = year - first_year_foreign_new
 gen foreign0_new = (time_foreign_new == 0)
 count if foreign0_new == 1
 drop *new
-
-do "`here'/code/create/event_dummies_firmlevel"
 
 count
 count if ever_foreign
@@ -153,10 +139,6 @@ count if ever_foreign
 count if ever_foreign & firm_tag
 count if ever_expat & firm_tag
 count if has_expat_ceo
-
-*do not let ceo type switch
-*replace foreign_hire = 1 if ever_foreign_hire == 1 & foreign == 1
-*replace has_expat_ceo = 1 if ever_expat == 1 & foreign == 1
 
 *Create foreign ceo spells
 tempvar ceo
@@ -191,8 +173,6 @@ gen foreign_hire_only = foreign_hire & !has_expat_ceo
 
 tab foreign_only foreign_hire
 tab foreign_hire_only has_expat_ceo
-
-drop foreign_e5 foreign_e4 foreign_e3 foreign_e2 foreign_e1 foreigne0 foreigne1 foreigne2 foreigne3 foreigne4 foreigne5 foreign_hire_local_1 foreign_hire_expat_1 foreign_hire_local_2 foreign_hire_expat_2 foreign_hire_local_3 foreign_hire_expat_3 foreign_hire_local_4 foreign_hire_expat_4 foreign_hire_local_5 foreign_hire_expat_5 foreign_hire_local_6 foreign_hire_expat_6 foreign_hire_local_7 foreign_hire_expat_7 foreign_hire_local_8 foreign_hire_expat_8 foreign_hire_local_9 foreign_hire_expat_9 foreign_hire_local_10 foreign_hire_expat_10 foreign_hire_local_11 foreign_hire_expat_11 foreign_hire_local_3plus foreign_hire_expat_3plus foreign_hire_LL_2 foreign_hire_LE_2 foreign_hire_EL_2 foreign_hire_EE_2 foreign_hire_local_1_e5 foreign_hire_local_1_e4 foreign_hire_local_1_e3 foreign_hire_local_1_e2 foreign_hire_local_1_e1 foreign_hire_local_1e0 foreign_hire_local_1e1 foreign_hire_local_1e2 foreign_hire_local_1e3 foreign_hire_local_1e4 foreign_hire_local_1e5 foreign_hire_expat_1_e5 foreign_hire_expat_1_e4 foreign_hire_expat_1_e3 foreign_hire_expat_1_e2 foreign_hire_expat_1_e1 foreign_hire_expat_1e0 foreign_hire_expat_1e1 foreign_hire_expat_1e2 foreign_hire_expat_1e3 foreign_hire_expat_1e4 foreign_hire_expat_1e5
 
 compress
 save "`here'/temp/analysis_sample.dta", replace

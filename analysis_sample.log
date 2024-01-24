@@ -1,31 +1,35 @@
 
   ___  ____  ____  ____  ____ ®
- /__    /   ____/   /   ____/      17.0
-___/   /   /___/   /   /___/       BE—Basic Edition
+ /__    /   ____/   /   ____/      18.0
+___/   /   /___/   /   /___/       MP—Parallel Edition
 
- Statistics and Data Science       Copyright 1985-2021 StataCorp LLC
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
                                    StataCorp
                                    4905 Lakeway Drive
                                    College Station, Texas 77845 USA
                                    800-STATA-PC        https://www.stata.com
                                    979-696-4600        stata@stata.com
 
-Stata license: 6-user network perpetual
-Serial number: 501706335292
-  Licensed to: Miklos Koren
+Stata license: Single-user 2-core  perpetual
+Serial number: 501806323834
+  Licensed to: Miklós Koren
                Central European University
 
 Notes:
       1. Stata is running in batch mode.
       2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
 
 . do code/create/analysis_sample.do 
 
 . clear all
 
+. 
 . * find root folder
 . here
-/srv/sandbox/expat/almos/
+/Users/koren/Tresorit/Mac2Mac/projects/expat/
 
 . local here = r(here)
 
@@ -35,9 +39,10 @@ Notes:
 . log using "`here'/output/analysis_sample", text replace
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /srv/sandbox/expat/almos//output/analysis_sample.log
+       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/analysis_samp
+> le.log
   log type:  text
- opened on:  15 Feb 2023, 14:06:27
+ opened on:  24 Jan 2024, 17:21:11
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -45,11 +50,12 @@ Notes:
 . drop foreign
 
 . 
+. *Check holes in the time series
 . sort frame_id_numeric year
 
 . gen x_before = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1
 > ]
-(27,407 missing values generated)
+(39,130 missing values generated)
 
 . gen hole10_before = (x_before > 10 & x_before != .)
 
@@ -65,45 +71,46 @@ Notes:
 hole10_befo |
          re |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    364,309       99.99       99.99
+          0 |    392,554       99.99       99.99
           1 |         32        0.01      100.00
 ------------+-----------------------------------
-      Total |    364,341      100.00
+      Total |    392,586      100.00
 
 hole2_befor |
           e |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    363,190       99.68       99.68
-          1 |      1,151        0.32      100.00
+          0 |    391,459       99.71       99.71
+          1 |      1,127        0.29      100.00
 ------------+-----------------------------------
-      Total |    364,341      100.00
+      Total |    392,586      100.00
 
 hole1_befor |
           e |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    360,148       98.85       98.85
-          1 |      4,193        1.15      100.00
+          0 |    388,936       99.07       99.07
+          1 |      3,650        0.93      100.00
 ------------+-----------------------------------
-      Total |    364,341      100.00
+      Total |    392,586      100.00
 
 . 
 . drop x_before hole*
 
 . 
+. *Merge with 
 . merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(match) noge
 > n
 
     Result                      Number of obs
     -----------------------------------------
     Not matched                             0
-    Matched                           320,580  
+    Matched                           342,420  
     -----------------------------------------
 
 . 
 . sort frame_id_numeric year
 
 . gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numeric[_n-1]
-(25,603 missing values generated)
+(35,590 missing values generated)
 
 . gen hole10_after_m = (x_after > 10 & x_after != .)
 
@@ -119,29 +126,27 @@ hole1_befor |
 hole10_afte |
         r_m |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    320,553       99.99       99.99
+          0 |    342,393       99.99       99.99
           1 |         27        0.01      100.00
 ------------+-----------------------------------
-      Total |    320,580      100.00
+      Total |    342,420      100.00
 
 hole2_after |
          _m |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    319,548       99.68       99.68
-          1 |      1,032        0.32      100.00
+          0 |    341,462       99.72       99.72
+          1 |        958        0.28      100.00
 ------------+-----------------------------------
-      Total |    320,580      100.00
+      Total |    342,420      100.00
 
 hole1_after |
          _m |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    316,983       98.88       98.88
-          1 |      3,597        1.12      100.00
+          0 |    339,396       99.12       99.12
+          1 |      3,024        0.88      100.00
 ------------+-----------------------------------
-      Total |    320,580      100.00
+      Total |    342,420      100.00
 
-. 
-. *tab _merge
 . 
 . drop x_after hole*
 
@@ -157,18 +162,18 @@ hole1_after |
 
     Result                      Number of obs
     -----------------------------------------
-    Not matched                        43,761
-        from master                    43,761  (_merge==1)
+    Not matched                        50,166
+        from master                    50,166  (_merge==1)
         from using                          0  (_merge==2)
 
-    Matched                           320,580  (_merge==3)
+    Matched                           342,420  (_merge==3)
     -----------------------------------------
 
 .         sort frame_id_numeric year
 
 .         gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numer
 > ic[_n-1]
-(27,407 missing values generated)
+(39,130 missing values generated)
 
 .         gen hole10_after_mm = (x_after > 10 & x_after != .)
 
@@ -184,26 +189,26 @@ hole1_after |
 hole10_afte |
        r_mm |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    364,309       99.99       99.99
+          0 |    392,554       99.99       99.99
           1 |         32        0.01      100.00
 ------------+-----------------------------------
-      Total |    364,341      100.00
+      Total |    392,586      100.00
 
 hole2_after |
         _mm |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    363,190       99.68       99.68
-          1 |      1,151        0.32      100.00
+          0 |    391,459       99.71       99.71
+          1 |      1,127        0.29      100.00
 ------------+-----------------------------------
-      Total |    364,341      100.00
+      Total |    392,586      100.00
 
 hole1_after |
         _mm |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    360,148       98.85       98.85
-          1 |      4,193        1.15      100.00
+          0 |    388,936       99.07       99.07
+          1 |      3,650        0.93      100.00
 ------------+-----------------------------------
-      Total |    364,341      100.00
+      Total |    392,586      100.00
 
 .         drop x_after hole*
 
@@ -219,18 +224,18 @@ hole1_after |
 
     Result                      Number of obs
     -----------------------------------------
-    Not matched                         2,075
+    Not matched                         1,643
         from master                         0  (_merge==1)
-        from using                      2,075  (_merge==2)
+        from using                      1,643  (_merge==2)
 
-    Matched                           320,580  (_merge==3)
+    Matched                           342,420  (_merge==3)
     -----------------------------------------
 
 .         sort frame_id_numeric year
 
 .         gen x_after = year - year[_n-1] if frame_id_numeric == frame_id_numer
 > ic[_n-1]
-(25,603 missing values generated)
+(35,590 missing values generated)
 
 .         gen hole10_after_um = (x_after > 10 & x_after != .)
 
@@ -246,26 +251,26 @@ hole1_after |
 hole10_afte |
        r_um |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    322,628       99.99       99.99
+          0 |    344,036       99.99       99.99
           1 |         27        0.01      100.00
 ------------+-----------------------------------
-      Total |    322,655      100.00
+      Total |    344,063      100.00
 
 hole2_after |
         _um |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    321,623       99.68       99.68
-          1 |      1,032        0.32      100.00
+          0 |    343,105       99.72       99.72
+          1 |        958        0.28      100.00
 ------------+-----------------------------------
-      Total |    322,655      100.00
+      Total |    344,063      100.00
 
 hole1_after |
         _um |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    321,133       99.53       99.53
-          1 |      1,522        0.47      100.00
+          0 |    342,682       99.60       99.60
+          1 |      1,381        0.40      100.00
 ------------+-----------------------------------
-      Total |    322,655      100.00
+      Total |    344,063      100.00
 
 .         drop x_after hole*
 
@@ -276,29 +281,7 @@ hole1_after |
 
 . rename ever_foreign_ceo ever_foreign
 
-. drop foreign_nceo ever_foreign_nceo
-
 . 
-. *nceo overriden to have zeros
-. mvencode *_nceo, mv(0) override
-n_found~nceo: 290575 missing values recoded
-n_insid~nceo: 290575 missing values recoded
-n_outsi~nceo: 290575 missing values recoded
-n_expat_nceo: 290575 missing values recoded
-n_local_nceo: 290575 missing values recoded
-ever_ex~nceo: 290575 missing values recoded
-      n_nceo: 290575 missing values recoded
-   hire_nceo: 290575 missing values recoded
-   fire_nceo: 290575 missing values recoded
-hire_ex~nceo: 290575 missing values recoded
-fire_ex~nceo: 290575 missing values recoded
-ceo_spe~nceo: 290575 missing values recoded
-has_exp~nceo: 290575 missing values recoded
-has_loc~nceo: 290575 missing values recoded
-has_fou~nceo: 290575 missing values recoded
-has_ins~nceo: 290575 missing values recoded
-has_out~nceo: 290575 missing values recoded
-
 . 
 . * many foreign changes deleted
 . bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
@@ -307,16 +290,16 @@ has_out~nceo: 290575 missing values recoded
 > n[_n-1])
 
 . 
-. drop if owner_spell_total > 3 // FIXME: doublecheck the length of spells
-(3,591 observations deleted)
+. drop if owner_spell_total > 3 
+(3,810 observations deleted)
 
 . scalar dropped_too_many_foreign_change = r(N_drop)
 
 . display dropped_too_many_foreign_change
-3591
+3810
 
 . 
-. * divestiture
+. * divestment
 . bys frame_id_numeric (year): gen divest = sum(cond(owner_spell != owner_spell
 > [_n-1] & foreign == 0 & _n != 1, 1, 0))
 
@@ -324,67 +307,53 @@ has_out~nceo: 290575 missing values recoded
 (0 real changes made)
 
 . 
-. * only keep D, D-F owner spells
+. * only D, D-F F owner spells
 . bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (fore
 > ign == 0))
 
-. keep if start_as_domestic
-(18,132 observations deleted)
-
+. *keep if start_as_domestic
 . keep if owner_spell <= 2
-(3,486 observations deleted)
+(3,946 observations deleted)
+
+. drop if divest==1
+(1,612 observations deleted)
 
 . 
-. * check foreign end expat numbers
+. *Greenfield variable
+. tempvar x
+
+. egen `x'=min(foreign), by(frame_id_numeric)
+
+. gen greenfield=(`x'==1)
+
+. 
+. 
+. * check foreign and expat numbers
 . egen firm_tag = tag(frame_id_numeric)
 
 . 
 . count if ever_foreign
-  23,231
+  40,393
 
 . count if ever_foreign & firm_tag
-  1,622
+  3,463
 
 . count if ever_expat_ceo & firm_tag
-  638
-
-. count if ever_expat_nceo & firm_tag
-  13
+  2,224
 
 . 
-. count if has_expat_nceo == 1
-  429
-
-. count if has_expat_nceo == 1 & foreign == 0
-  7
-
 . count if has_expat_ceo == 1
-  4,818
+  17,427
 
 . count if has_expat_ceo == 1 & foreign == 0 // FIXME - should be 0
   0
-
-. count if ever_expat_nceo == 1 & ever_foreign == 0
-  1
 
 . count if ever_expat_ceo == 1 & ever_foreign == 0
   0
 
 . 
-. *do "`here'/code/create/event_dummies_firmlevel.do"
-. 
-. *merge 1:1 originalid year using "input/fo3-owner-names/country_codes.dta", k
-> eep(match master) nogen
-. * "same country" only applies to expats at foreign firms
-. *replace country_same = 0 if (has_expat == 0) | (foreign == 0)
-. 
 . egen industry_year = group(teaor08_1d year)
 
-. *egen last_before_acquisition = max(cond(time_foreign<0, time_foreign, .)), b
-> y(originalid)
-. *egen ever_same_country = max(country_same), by(originalid)
-. 
-. *do "`here'/code/create/countries.do"
 . 
 . *for descriptives (number of firms and firm-years in final data)
 . codebook frame_id_numeric
@@ -396,19 +365,19 @@ frame_id_numeric                                                    (unlabeled)
                   Type: Numeric (long)
 
                  Range: [10000049,74849574]           Units: 1
-         Unique values: 23,964                    Missing .: 0/295,371
+         Unique values: 35,403                    Missing .: 0/333,052
 
-                  Mean: 1.3e+07
-             Std. dev.: 6.2e+06
+                  Mean: 1.4e+07
+             Std. dev.: 6.5e+06
 
            Percentiles:     10%       25%       50%       75%       90%
-                        1.0e+07   1.0e+07   1.1e+07   1.2e+07   2.1e+07
+                        1.0e+07   1.0e+07   1.1e+07   1.3e+07   2.4e+07
 
 . count if firm_tag
-  23,964
+  35,403
 
 . count
-  295,371
+  333,052
 
 . 
 . drop first_year_foreign time_foreign 
@@ -416,438 +385,38 @@ frame_id_numeric                                                    (unlabeled)
 . 
 . bys frame_id_numeric: egen first_year_foreign_new = min(cond(foreign == 1, ye
 > ar,.))
-(272,140 missing values generated)
+(292,659 missing values generated)
 
 . generate time_foreign_new = year - first_year_foreign_new
-(272,140 missing values generated)
+(292,659 missing values generated)
 
 . gen foreign0_new = (time_foreign_new == 0)
 
 . count if foreign0_new == 1
-  1,622
+  3,463
 
 . drop *new
 
 . 
-. do "`here'/code/create/event_dummies_firmlevel"
-
-. *cd C:\Users\Almos\Documents\Research\Expat\Expat_git\expat-analysis
-. *clear all
-. *here
-. *local here = r(here)
-. 
-. *use "`here'/temp/analysis_sample.dta", clear
-. 
-. tsset frame_id_numeric year
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1980 to 2018, but with gaps
-         Delta: 1 unit
-
-. 
-. *******Check number of ceos******************
-. bys frame_id_numeric: egen max_n_ceo = max(n_ceo)
-
-. bys frame_id_numeric: egen min_n_ceo = min(n_ceo)
-
-. gen diff = max_n_ceo-min_n_ceo
-
-. 
-. reghdfe n_ceo foreign has_expat_ceo lnL, a(teaor08_2d##year) cluster(frame_id
-> _numeric)
-(dropped 132 singleton observations)
-(MWFE estimator converged in 1 iterations)
-
-HDFE Linear regression                            Number of obs   =    295,239
-Absorbing 1 HDFE group                            F(   3,  23961) =     114.61
-Statistics robust to heteroskedasticity           Prob > F        =     0.0000
-                                                  R-squared       =     0.0810
-                                                  Adj R-squared   =     0.0730
-                                                  Within R-sq.    =     0.0133
-Number of clusters (frame_id_numeric) =     23,962Root MSE        =     0.8027
-
-                  (Std. err. adjusted for 23,962 clusters in frame_id_numeric)
-------------------------------------------------------------------------------
-             |               Robust
-       n_ceo | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-     foreign |  -.1690206   .0204117    -8.28   0.000    -.2090289   -.1290123
-has_exp~_ceo |   .7758693   .0522869    14.84   0.000     .6733836     .878355
-         lnL |   .0372475   .0036922    10.09   0.000     .0300106    .0444844
-       _cons |   1.284217   .0140449    91.44   0.000     1.256688    1.311746
-------------------------------------------------------------------------------
-
-Absorbed degrees of freedom:
------------------------------------------------------------+
-       Absorbed FE | Categories  - Redundant  = Num. Coefs |
--------------------+---------------------------------------|
-   teaor08_2d#year |      2561           0        2561     |
------------------------------------------------------------+
-
-. 
-. ******Event-time variable foreign**************
-. sort frame_id_numeric year
-
-. tempvar t_year
-
-. gen `t_year' = year if foreign==1 & foreign[_n-1]==0 
-(293,749 missing values generated)
-
-. bys frame_id_numeric: egen first_year_foreign=max(`t_year')
-(272,140 missing values generated)
-
-. gen time_foreign = year-first_year_foreign
-(272,140 missing values generated)
-
-. replace time_foreign=. if foreign==0 & time_foreign>0
-(0 real changes made)
-
-. 
-. forval i=0/5 {
-  2.         
-.         gen foreign_e`i'=(time_foreign==-`i')
-  3.         gen foreigne`i'=(time_foreign==`i')
-  4. 
-.         }
-
-. 
-. replace foreigne5=1 if time_foreign>5 & time_foreign<.
-(6,213 real changes made)
-
-. drop foreign_e0
-
-. 
-. order foreign_e5 foreign_e4 foreign_e3 foreign_e2 foreign_e1 foreigne0 foreig
-> ne1 foreigne2 foreigne3 foreigne4 foreigne5, a(time_foreign) 
-
-. 
-. **Recompute spell using only hires
-. bys frame_id_numeric: egen first_year_firm = min(year)
-
-. tempvar t_hire
-
-. gen `t_hire'=hire_ceo
-
-. replace `t_hire' = 1 if first_year_firm==year 
-(23,964 real changes made)
-
-. bys frame_id_numeric: gen ceo_spell_hire=sum(`t_hire')
-
-. 
-. 
-. ******Foreign-hired ceo***********
-. tempvar t_ceo
-
-. bys frame_id_numeric: egen `t_ceo'= max(ceo_spell_hire) if !foreign
-(12,980 missing values generated)
-
-. bys frame_id_numeric: egen last_ceo_spell_do = max(`t_ceo')
-
-. gen foreign_hire = (ceo_spell_hire > last_ceo_spell_do)
-
-. replace foreign_hire = . if last_ceo_spell_do == .
-(0 real changes made)
-
-. 
-. bys frame_id_numeric: egen ever_foreign_hire = max(foreign_hire)
-
-. 
-. 
-. **********Insider vs. outsider local CEO***************
-. tempvar fh_ins
-
-. gen `fh_ins'=(foreign_hire==1 & has_insider_ceo==1 & hire_ceo==1)
-
-. bysort frame_id_numeric ceo_spell_hire: egen foreign_hire_insider=max(`fh_ins
-> ') 
-
-. 
-. 
-. *****expat alone
-. gen expat_alone = (has_expat_ceo & !has_local_ceo)
-
-. 
-. *******First, second etc ceos************
-. 
-. gen ceo_spell_foreign = ceo_spell_hire - last_ceo_spell_do
-
-. replace ceo_spell_foreign = 0 if ceo_spell_foreign<0
-(129,059 real changes made)
-
-. 
-. tempvar t_expat
-
-. bys frame_id_numeric ceo_spell_foreign: egen `t_expat' = max(hire_expat_ceo)
-
-. 
-. forval i=1/11 {
-  2.         gen foreign_hire_local_`i' = (ceo_spell_foreign == `i' & `t_expat'
-> ==0)
-  3.         gen foreign_hire_expat_`i' = (ceo_spell_foreign == `i' & `t_expat'
-> ==1)  
-  4.         }
-
-. 
-. gen foreign_hire_local_3plus = (ceo_spell_foreign > 2 & `t_expat'==0)
-
-. gen foreign_hire_expat_3plus = (ceo_spell_foreign > 2 & `t_expat'==1)
-
-. 
-. 
-. **********Sequence of hires*********
-. tempvar t_LL 
-
-. tempvar t_LE
-
-. tempvar t_EL
-
-. tempvar t_EE
-
-. 
-. tsset frame_id_numeric year
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1980 to 2018, but with gaps
-         Delta: 1 unit
-
-. gen `t_LL' = (foreign_hire_local_2==1 & l.foreign_hire_local_1==1)
-
-. bys frame_id_numeric foreign_hire_local_2: egen foreign_hire_LL_2 = max(`t_LL
-> ') 
-
-. tsset frame_id_numeric year
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1980 to 2018, but with gaps
-         Delta: 1 unit
-
-. gen `t_LE' = (foreign_hire_expat_2==1 & l.foreign_hire_local_1==1)
-
-. bys frame_id_numeric foreign_hire_expat_2: egen foreign_hire_LE_2 = max(`t_LE
-> ') 
-
-. tsset frame_id_numeric year
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1980 to 2018, but with gaps
-         Delta: 1 unit
-
-. gen `t_EL' = (foreign_hire_local_2==1 & l.foreign_hire_expat_1==1)
-
-. bys frame_id_numeric foreign_hire_local_2: egen foreign_hire_EL_2 = max(`t_EL
-> ')
-
-. tsset frame_id_numeric year
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1980 to 2018, but with gaps
-         Delta: 1 unit
-
-. gen `t_EE' = (foreign_hire_expat_2==1 & l.foreign_hire_expat_1==1)
-
-. bys frame_id_numeric foreign_hire_expat_2: egen foreign_hire_EE_2 = max(`t_EE
-> ')
-
-. 
-. 
-. ***********Event time dummies for foreign_hire, expat************
-. sort frame_id_numeric year
-
-. foreach mantype in hire_local hire_expat `X' {
-  2.         
-.         tempvar t_year
-  3.         tempvar t_year_max
-  4.         gen `t_year' = year if foreign_`mantype'_1==1 & foreign_`mantype'_
-> 1[_n-1]==0 
-  5.         bys frame_id_numeric: egen `t_year_max'=max(`t_year')
-  6.         gen time_foreign_`mantype' = year-`t_year_max'
-  7.         *Make the variable 0 when the manager leaves
-.         replace time_foreign_`mantype'=. if foreign_`mantype'_1==0 & time_for
-> eign_`mantype'>0
-  8. 
-. 
-. forval i=0/5 {
-  9.         
-.         gen foreign_`mantype'_1_e`i'=(time_foreign_`mantype'==-`i')
- 10.         gen foreign_`mantype'_1e`i'=(time_foreign_`mantype'==`i')
- 11. 
-.         }
- 12. 
-. replace foreign_`mantype'_1e5=1 if time_foreign_`mantype'>5 & time_foreign_`m
-> antype'<.
- 13. drop foreign_`mantype'_1_e0
- 14. }
-(294,747 missing values generated)
-(286,121 missing values generated)
-(286,121 missing values generated)
-(2,135 real changes made, 2,135 to missing)
-(300 real changes made)
-(294,852 missing values generated)
-(286,622 missing values generated)
-(286,622 missing values generated)
-(3,524 real changes made, 3,524 to missing)
-(353 real changes made)
-
-. 
-. order foreign_hire_local_1_e5 foreign_hire_local_1_e4 foreign_hire_local_1_e3
->  foreign_hire_local_1_e2 foreign_hire_local_1_e1 foreign_hire_local_1e0 forei
-> gn_hire_local_1e1 foreign_hire_local_1e2 foreign_hire_local_1e3 foreign_hire_
-> local_1e4 foreign_hire_local_1e5 foreign_hire_expat_1_e5 foreign_hire_expat_1
-> _e4 foreign_hire_expat_1_e3 foreign_hire_expat_1_e2 foreign_hire_expat_1_e1 f
-> oreign_hire_expat_1e0 foreign_hire_expat_1e1 foreign_hire_expat_1e2 foreign_h
-> ire_expat_1e3 foreign_hire_expat_1e4 foreign_hire_expat_1e5, a(time_foreign_h
-> ire_expat)
-
-. 
-. *save, replace
-. 
-end of do-file
-
-. 
 . count
-  295,371
+  333,052
 
 . count if ever_foreign
-  23,231
+  40,393
 
 . count if ever_foreign & firm_tag
-  1,622
+  3,463
 
 . count if ever_expat_ceo & firm_tag
-  638
+  2,224
 
 . count if has_expat_ceo
-  4,818
+  17,427
 
 . 
 . drop ever_expat* ever_foreign_hire
+variable ever_foreign_hire not found
+r(111);
 
-. 
-. by frame_id_numeric: egen ever_expat = max(has_expat_ceo)
-
-. by frame_id_numeric: egen ever_foreign_hire = max(foreign_hire)
-
-. 
-. count
-  295,371
-
-. count if ever_foreign
-  23,231
-
-. count if ever_foreign & firm_tag
-  1,622
-
-. count if ever_expat & firm_tag
-  621
-
-. count if has_expat_ceo
-  4,818
-
-. 
-. replace foreign_hire = 1 if ever_foreign_hire == 1 & foreign == 1
-(1,486 real changes made)
-
-. replace has_expat_ceo = 1 if ever_expat == 1 & foreign == 1
-(2,650 real changes made)
-
-. 
-. gen foreign_only = foreign & !foreign_hire
-
-. gen foreign_hire_only = foreign_hire & !has_expat_ceo
-
-. 
-. tab foreign_only foreign_hire
-
-foreign_on |     foreign_hire
-        ly |         0          1 |     Total
------------+----------------------+----------
-         0 |   282,391     11,050 |   293,441 
-         1 |     1,930          0 |     1,930 
------------+----------------------+----------
-     Total |   284,321     11,050 |   295,371 
-
-. tab foreign_hire_only has_expat_ceo
-
-foreign_hi |     has_expat_ceo
-   re_only |         0          1 |     Total
------------+----------------------+----------
-         0 |   284,321      7,468 |   291,789 
-         1 |     3,582          0 |     3,582 
------------+----------------------+----------
-     Total |   287,903      7,468 |   295,371 
-
-. 
-. drop foreign_e5 foreign_e4 foreign_e3 foreign_e2 foreign_e1 foreigne0 foreign
-> e1 foreigne2 foreigne3 foreigne4 foreigne5 foreign_hire_local_1 foreign_hire_
-> expat_1 foreign_hire_local_2 foreign_hire_expat_2 foreign_hire_local_3 foreig
-> n_hire_expat_3 foreign_hire_local_4 foreign_hire_expat_4 foreign_hire_local_5
->  foreign_hire_expat_5 foreign_hire_local_6 foreign_hire_expat_6 foreign_hire_
-> local_7 foreign_hire_expat_7 foreign_hire_local_8 foreign_hire_expat_8 foreig
-> n_hire_local_9 foreign_hire_expat_9 foreign_hire_local_10 foreign_hire_expat_
-> 10 foreign_hire_local_11 foreign_hire_expat_11 foreign_hire_local_3plus forei
-> gn_hire_expat_3plus foreign_hire_LL_2 foreign_hire_LE_2 foreign_hire_EL_2 for
-> eign_hire_EE_2 foreign_hire_local_1_e5 foreign_hire_local_1_e4 foreign_hire_l
-> ocal_1_e3 foreign_hire_local_1_e2 foreign_hire_local_1_e1 foreign_hire_local_
-> 1e0 foreign_hire_local_1e1 foreign_hire_local_1e2 foreign_hire_local_1e3 fore
-> ign_hire_local_1e4 foreign_hire_local_1e5 foreign_hire_expat_1_e5 foreign_hir
-> e_expat_1_e4 foreign_hire_expat_1_e3 foreign_hire_expat_1_e2 foreign_hire_exp
-> at_1_e1 foreign_hire_expat_1e0 foreign_hire_expat_1e1 foreign_hire_expat_1e2 
-> foreign_hire_expat_1e3 foreign_hire_expat_1e4 foreign_hire_expat_1e5
-
-. 
-. compress
-  variable year was float now int
-  variable minyear was float now int
-  variable maxyear was float now int
-  variable foreign0 was float now byte
-  variable foreign1 was float now byte
-  variable foreign2 was float now byte
-  variable foreign3 was float now byte
-  variable foreign_1 was float now byte
-  variable foreign_2 was float now byte
-  variable foreign_3 was float now byte
-  variable count was float now byte
-  variable exporter_5 was float now byte
-  variable age was float now int
-  variable owner_spell was float now byte
-  variable owner_spell_total was float now byte
-  variable divest was float now byte
-  variable start_as_domestic was float now byte
-  variable industry_year was float now int
-  variable max_n_ceo was float now byte
-  variable min_n_ceo was float now byte
-  variable diff was float now byte
-  variable first_year_foreign was float now int
-  variable time_foreign was float now byte
-  variable first_year_firm was float now int
-  variable ceo_spell_hire was float now byte
-  variable last_ceo_spell_do was float now byte
-  variable foreign_hire was float now byte
-  variable foreign_hire_insider was float now byte
-  variable expat_alone was float now byte
-  variable ceo_spell_foreign was float now byte
-  variable time_foreign_hire_local was float now byte
-  variable time_foreign_hire_expat was float now byte
-  variable ever_expat was float now byte
-  variable ever_foreign_hire was float now byte
-  variable foreign_only was float now byte
-  variable foreign_hire_only was float now byte
-  variable originalid was double now long
-  variable jetok was double now long
-  variable export was double now long
-  variable immat was double now long
-  variable final_netgep was double now long
-  (35,739,891 bytes saved)
-
-. save "`here'/temp/analysis_sample.dta", replace
-file /srv/sandbox/expat/almos//temp/analysis_sample.dta saved
-
-. log close
-      name:  <unnamed>
-       log:  /srv/sandbox/expat/almos//output/analysis_sample.log
-  log type:  text
- closed on:  15 Feb 2023, 14:06:42
--------------------------------------------------------------------------------
-
-. 
 end of do-file
+r(111);
