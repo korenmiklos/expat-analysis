@@ -112,28 +112,15 @@ You must request the following datasets in your proposal:
 
 ### Software Requirements
 
-> INSTRUCTIONS: List all of the software requirements, up to and including any operating system requirements, for the entire set of code. It is suggested to distribute most dependencies together with the replication package if allowed, in particular if sourced from unversioned code repositories, Github repos, and personal webpages. In all cases, list the version *you* used. All packages should be listed in human-readable form in this README, but should also be included in a setup or install script.
+- Stata (version 18 is required)
+  - `estout` (version 3.31)
+  - `here` (version 1.0 https://github.com/korenmiklos/here/tree/v1.0)
+  - `eventbaseline` (version 0.7.2, https://github.com/codedthinking/eventbaseline/tree/v0.7.2)
+- GNU Make (optional)
 
-- [ ] The replication package contains one or more programs to install all dependencies and set up the necessary directory structure. [HIGHLY RECOMMENDED]
+All the Stata packages can be installed by running `code/util/install.do` or `make install`.
 
-- Stata (code was last run with version 15)
-  - `estout` (as of 2018-05-12)
-  - `rdrobust` (as of 2019-01-05)
-  - the program "`0_setup.do`" will install all dependencies locally, and should be run once.
-- Python 3.6.4
-  - `pandas` 0.24.2
-  - `numpy` 1.16.4
-  - the file "`requirements.txt`" lists these dependencies, please run "`pip install -r requirements.txt`" as the first step. See [https://pip.pypa.io/en/stable/user_guide/#ensuring-repeatability](https://pip.pypa.io/en/stable/user_guide/#ensuring-repeatability) for further instructions on creating and using the "`requirements.txt`" file.
-- Intel Fortran Compiler version 20200104
-- Matlab (code was run with Matlab Release 2018a)
-- R 3.4.3
-  - `tidyr` (0.8.3)
-  - `rdrobust` (0.99.4)
-  - the file "`0_setup.R`" will install all dependencies (latest version), and should be run once prior to running other programs.
-
-Portions of the code use bash scripting, which may require Linux.
-
-Portions of the code use Powershell scripting, which may require Windows 10 or higher.
+The package includes a `Makefile`, which can be used to run all the code in the proper order. This requires Linux or Mac.
 
 ### Controlled Randomness
 
