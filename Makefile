@@ -3,12 +3,10 @@ ESTIMATOR = temp/analysis_sample.dta estimate.do regram.do
 .PHONY: all
 SPECS = descriptive manager_level heterogeneity event_study switch selection
 
-all: output/table/selection.tex output/table/diffindiff.tex output/table/cross_section.tex output/table/exporter.tex output/table/dummies.tex
+#all: output/table/selection.tex output/table/diffindiff.tex output/table/cross_section.tex output/table/exporter.tex output/table/dummies.tex
 
-output/table/%.tex: code/estimate/%.do temp/analysis_sample.dta
-	$(STATA) $<
-output/estimate_%.log: est_%.do $(ESTIMATOR)
-	$(STATA) estimate $(subst est_,,$(basename $<))
+regressions.log: temp/analysis_sample.dta code/estimate/regressions.do
+	$(STATA) code/estimate/regressions.do
 output/descriptives.log: temp/analysis_sample.dta descriptives.do
 	$(STATA) descriptives 
 temp/analysis_sample.dta: temp/balance-small-clean.dta temp/firm_events.dta code/create/analysis_sample.do

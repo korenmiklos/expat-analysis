@@ -8,7 +8,11 @@ global here = r(here)
 
 use "$here/temp/analysis_sample.dta", clear
 
-*Tradeable-nontradeable variable
+* different ways of measuring export orientation
+generate lnEx = ln(export_18)
+generate lnQd = ln(sales_18 - export_18)
+clonevar export_entry = exporter
+replace export_entry = . if exporter_pre == 1
 
 *Create teaor in year -1, drop agriculture
 
@@ -35,7 +39,7 @@ drop TFP_temp
 global local_sample "(ever_local==1 | foreign==0)"
 global expat_sample "(ever_expat==1 | foreign==0)"
 
-global varlist_rhs "lnQ lnQL TFP lnK lnL lnM exporter lnEx lnQd"
+global varlist_rhs "lnQ lnQL TFP lnK lnL lnM exporter lnEx lnQd export_entry "
 local pre 3
 local post 5
 
@@ -43,7 +47,10 @@ local post 5
 
 foreach Y in $varlist_rhs {
 
-    display "`Y'"
+    display
+    display
+    display
+    display "=== Variable: `Y' ==="
 
     eststo clear
     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, group(frame_id_numeric) vce(cluster frame_id_numeric)
@@ -51,7 +58,8 @@ foreach Y in $varlist_rhs {
     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, group(frame_id_numeric) vce(cluster frame_id_numeric)
     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
 
-    display "Full sample"
+    display
+    display "=== Full sample ==="
     esttab, b(3) se  style(tex)
 
     eststo clear
@@ -60,7 +68,8 @@ foreach Y in $varlist_rhs {
     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & industrial_pre==1, group(frame_id_numeric) vce(cluster frame_id_numeric)
     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
 
-    display "Industry sample"
+    display
+    display "=== Industry sample ==="
     esttab, b(3) se  style(tex)
 
     eststo clear
@@ -69,11 +78,13 @@ foreach Y in $varlist_rhs {
     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & industrial_pre==0, group(frame_id_numeric) vce(cluster frame_id_numeric)
     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
 
-    display "Service sample"
+    display
+    display "=== Service sample ==="
     esttab, b(3) se style(tex)
 
 }
-BRK
+
+STOP HERE
 
 *Inputs
 
