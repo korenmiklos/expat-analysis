@@ -59,7 +59,6 @@ count if ever_expat & firm_tag
 count if has_expat_ceo
 
 drop ever_expat ever_foreign
-egen ever_expat = max(has_expat_ceo), by(frame_id_numeric)
 egen ever_foreign = max(foreign), by(frame_id_numeric)
 * did new foreign owner hire any ceos?
 egen ever_foreign_hire = max((hire_ceo == 1) & (foreign == 1) * (owner_spell == 2)), by(frame_id_numeric)
@@ -91,6 +90,8 @@ drop ever_foreign ever_foreign_hire
 
 egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric) 
 generate time_foreign = year - first_year_foreign
+
+egen ever_expat = max(has_expat_ceo), by(frame_id_numeric)
 
 * limit sample to event window
 keep if inrange(time_foreign, -10, 5)

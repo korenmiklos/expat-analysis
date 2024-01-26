@@ -42,7 +42,7 @@ Notes:
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
 > og
   log type:  text
- opened on:  24 Jan 2024, 19:49:54
+ opened on:  26 Jan 2024, 16:01:52
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -195,8 +195,6 @@ frame_id_numeric                                                    (unlabeled)
 . 
 . drop ever_expat ever_foreign
 
-. egen ever_expat = max(has_expat_ceo), by(frame_id_numeric)
-
 . egen ever_foreign = max(foreign), by(frame_id_numeric)
 
 . * did new foreign owner hire any ceos?
@@ -271,6 +269,9 @@ foreign_on |     foreign_hire
 . generate time_foreign = year - first_year_foreign
 
 . 
+. egen ever_expat = max(has_expat_ceo), by(frame_id_numeric)
+
+. 
 . * limit sample to event window
 . keep if inrange(time_foreign, -10, 5)
 (4,920 observations deleted)
@@ -287,7 +288,6 @@ foreign_on |     foreign_hire
   variable age was float now byte
   variable owner_spell was float now byte
   variable industry_year was float now int
-  variable ever_expat was float now byte
   variable foreign_hire was float now byte
   variable ceo_foreign_spell was float now byte
   variable foreign_only was float now byte
@@ -295,6 +295,7 @@ foreign_on |     foreign_hire
   variable ever_local_ceo was float now byte
   variable first_year_foreign was float now int
   variable time_foreign was float now byte
+  variable ever_expat was float now byte
   variable exporter_pre was float now byte
   variable originalid was double now long
   variable sales was double now long
@@ -315,7 +316,7 @@ file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
 > og
   log type:  text
- closed on:  24 Jan 2024, 19:49:55
+ closed on:  26 Jan 2024, 16:01:53
 -------------------------------------------------------------------------------
 
 . 

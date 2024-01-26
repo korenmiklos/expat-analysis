@@ -42,7 +42,7 @@ replace year = year - 1 if filled_in
 
 * create contiguous spells
 xtset company_manager_id year
-gen change = ceo != L.ceo // intuition: should be ok in both files (possible FIXME)
+gen change = ceo != L.ceo
 bysort company_manager_id (year): gen job_spell = sum(change)
 
 * create job begin and end for each manager spell
