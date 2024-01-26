@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- opened on:  26 Jan 2024, 16:01:26
+ opened on:  26 Jan 2024, 18:22:43
 
 . 
 . * keep only sample from balance-small
@@ -17,9 +17,9 @@
 . tempfile sample
 
 . save `sample', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St62819.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St63772.000001 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St62819.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St63772.000001 saved
     as .dta format
 
 . 
@@ -263,8 +263,8 @@ manager_aft |
 (444,831 missing values generated)
 
 . 
-. * if foreign manager arrives up to 3 years before 1 year later than foreign o
-> wner, use foreign manager as arrival date. 
+. * if foreign manager arrives up to 3 years before or 2 years later than forei
+> gn owner, use foreign manager as arrival date. 
 . replace foreign = 1 if (manager_after_owner == -3) & inlist(event_time, 0, 1,
 >  2)
 (267 real changes made)
@@ -277,6 +277,9 @@ manager_aft |
 
 . replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
 (28 real changes made)
+
+. replace foreign = 0 if (manager_after_owner == +2) & inlist(event_time, -2)
+(85 real changes made)
 
 . 
 . * drop firms where expat arrives earlier than 3 years before owner
@@ -446,5 +449,5 @@ file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- closed on:  26 Jan 2024, 16:01:52
+ closed on:  26 Jan 2024, 18:23:11
 -------------------------------------------------------------------------------
