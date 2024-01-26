@@ -73,15 +73,13 @@ tabulate manager_after_owner
 * event time relative to that
 generate event_time = year - first_year_expat
 
-* if foreign manager arrives up to 3 years before or 2 years later than foreign owner, use foreign manager as arrival date. 
-replace foreign = 1 if (manager_after_owner == -3) & inlist(event_time, 0, 1, 2)
+* if foreign manager arrives up to X years before or Y years later than foreign owner, use foreign manager as arrival date. 
 replace foreign = 1 if (manager_after_owner == -2) & inlist(event_time, 0, 1)
 replace foreign = 1 if (manager_after_owner == -1) & inlist(event_time, 0)
 replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
-replace foreign = 0 if (manager_after_owner == +2) & inlist(event_time, -2)
 
-* drop firms where expat arrives earlier than 3 years before owner
-drop if manager_after_owner < -3
+* drop firms where expat arrives earlier than X years before owner
+drop if manager_after_owner < -2
 
 * ever expat and foreign created after foreign changes (drops were firm level before so should not mess with ever variables)
 foreach X of var expat foreign {

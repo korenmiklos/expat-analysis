@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- opened on:  26 Jan 2024, 18:22:43
+ opened on:  26 Jan 2024, 18:39:05
 
 . 
 . * keep only sample from balance-small
@@ -17,9 +17,9 @@
 . tempfile sample
 
 . save `sample', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St63772.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St63959.000001 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St63772.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St63959.000001 saved
     as .dta format
 
 . 
@@ -263,12 +263,8 @@ manager_aft |
 (444,831 missing values generated)
 
 . 
-. * if foreign manager arrives up to 3 years before or 2 years later than forei
+. * if foreign manager arrives up to X years before or Y years later than forei
 > gn owner, use foreign manager as arrival date. 
-. replace foreign = 1 if (manager_after_owner == -3) & inlist(event_time, 0, 1,
->  2)
-(267 real changes made)
-
 . replace foreign = 1 if (manager_after_owner == -2) & inlist(event_time, 0, 1)
 (39 real changes made)
 
@@ -278,13 +274,10 @@ manager_aft |
 . replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
 (28 real changes made)
 
-. replace foreign = 0 if (manager_after_owner == +2) & inlist(event_time, -2)
-(85 real changes made)
-
 . 
-. * drop firms where expat arrives earlier than 3 years before owner
-. drop if manager_after_owner < -3
-(4,654 observations deleted)
+. * drop firms where expat arrives earlier than X years before owner
+. drop if manager_after_owner < -2
+(6,001 observations deleted)
 
 . 
 . * ever expat and foreign created after foreign changes (drops were firm level
@@ -305,7 +298,7 @@ manager_aft |
 . by frame_id_numeric: egen n_ceo_ever = sum(fp_tag)
 
 . drop if n_ceo > 15
-(13,783 observations deleted)
+(13,554 observations deleted)
 
 . drop fp_tag n_ceo_ever
 
@@ -314,7 +307,7 @@ manager_aft |
 . tempvar previous_year
 
 . generate previous_year = .
-(494,972 missing values generated)
+(493,854 missing values generated)
 
 . forval t = 1985/2018 {
   2.         quietly by frame_id_numeric: egen `previous_year' = max(cond(year 
@@ -327,7 +320,7 @@ manager_aft |
 . tempvar next_year
 
 . generate next_year = .
-(494,972 missing values generated)
+(493,854 missing values generated)
 
 . forval t = 1985/2018 {
   2.         quietly by frame_id_numeric: egen `next_year' = min(cond(year > `t
@@ -348,10 +341,10 @@ manager_aft |
            |         fire
       hire |         0          1 |     Total
 -----------+----------------------+----------
-         0 |   421,505     32,765 |   454,270 
-         1 |    35,377      5,325 |    40,702 
+         0 |   420,657     32,643 |   453,300 
+         1 |    35,254      5,300 |    40,554 
 -----------+----------------------+----------
-     Total |   456,882     38,090 |   494,972 
+     Total |   455,911     37,943 |   493,854 
 
 . 
 . * number of expats and locals
@@ -378,48 +371,48 @@ manager_aft |
 n_expat_ce |                 (firstnm) n_local_ceo
          o |         0          1          2          3          4 |     Total
 -----------+-------------------------------------------------------+----------
-         0 |         0    233,847     65,011     18,429      3,670 |   324,849 
-         1 |     7,406      4,963      1,081        218         69 |    13,760 
-         2 |     2,903      1,326        255         52         15 |     4,557 
-         3 |       708        296         85         14         14 |     1,118 
-         4 |       191         49         14          1          0 |       255 
+         0 |         0    233,673     64,953     18,408      3,669 |   324,594 
+         1 |     7,285      4,895      1,051        211         66 |    13,528 
+         2 |     2,846      1,299        247         52         15 |     4,465 
+         3 |       702        287         84         14         14 |     1,102 
+         4 |       191         37         14          1          0 |       243 
          5 |        49         33          2          0          0 |        87 
          6 |        27          4          0          0          0 |        40 
          7 |         4          0          0          0          0 |         4 
 -----------+-------------------------------------------------------+----------
-     Total |    11,288    240,518     66,448     18,714      3,768 |   344,670 
+     Total |    11,104    240,228     66,351     18,686      3,764 |   344,063 
 
 
  (firstnm) |
 n_expat_ce |                 (firstnm) n_local_ceo
          o |         5          6          7          8          9 |     Total
 -----------+-------------------------------------------------------+----------
-         0 |     2,514        576        525        115        106 |   324,849 
-         1 |        19          4          0          0          0 |    13,760 
-         2 |         4          2          0          0          0 |     4,557 
-         3 |         1          0          0          0          0 |     1,118 
-         4 |         0          0          0          0          0 |       255 
+         0 |     2,514        575        525        115        106 |   324,594 
+         1 |        17          3          0          0          0 |    13,528 
+         2 |         4          2          0          0          0 |     4,465 
+         3 |         1          0          0          0          0 |     1,102 
+         4 |         0          0          0          0          0 |       243 
          5 |         3          0          0          0          0 |        87 
          6 |         9          0          0          0          0 |        40 
          7 |         0          0          0          0          0 |         4 
 -----------+-------------------------------------------------------+----------
-     Total |     2,550        582        525        115        106 |   344,670 
+     Total |     2,548        580        525        115        106 |   344,063 
 
 
  (firstnm) |
 n_expat_ce |            (firstnm) n_local_ceo
          o |        10         11         12         13 |     Total
 -----------+--------------------------------------------+----------
-         0 |        22         28          4          2 |   324,849 
-         1 |         0          0          0          0 |    13,760 
-         2 |         0          0          0          0 |     4,557 
-         3 |         0          0          0          0 |     1,118 
-         4 |         0          0          0          0 |       255 
+         0 |        22         28          4          2 |   324,594 
+         1 |         0          0          0          0 |    13,528 
+         2 |         0          0          0          0 |     4,465 
+         3 |         0          0          0          0 |     1,102 
+         4 |         0          0          0          0 |       243 
          5 |         0          0          0          0 |        87 
          6 |         0          0          0          0 |        40 
          7 |         0          0          0          0 |         4 
 -----------+--------------------------------------------+----------
-     Total |        22         28          4          2 |   344,670 
+     Total |        22         28          4          2 |   344,063 
 
 . * create dummies from numbers
 . foreach var in expat local {
@@ -428,7 +421,7 @@ n_expat_ce |            (firstnm) n_local_ceo
 
 .         
 . count
-  344,670
+  344,063
 
 . compress
   variable year was float now int
@@ -440,7 +433,7 @@ n_expat_ce |            (firstnm) n_local_ceo
   variable ceo_spell was float now byte
   variable has_expat_ceo was float now byte
   variable has_local_ceo was float now byte
-  (8,961,420 bytes saved)
+  (8,945,638 bytes saved)
 
 . save "`here'/temp/firm_events.dta", replace
 file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
@@ -449,5 +442,5 @@ file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- closed on:  26 Jan 2024, 18:23:11
+ closed on:  26 Jan 2024, 18:39:35
 -------------------------------------------------------------------------------
