@@ -1,104 +1,53 @@
-clear all
-capture log close
-log using output/descriptives, text replace
+*Tables and figures for expat study
 
-local format scheme(538w) plotregion(style(none)) 
+* find root folder
+here
+global here = r(here)
 
-use temp/firm_ceo_panel
+use "$here/temp/analysis_sample.dta", clear
 
-gen spell_length = first_exit_year - enter_year + 1
-label var spell_length "Length of CEO spell"
-label var expat "manager nationality"
-label def xp 0 "Local" 1 "Expat"
-label val expat xp
+keep if ever_foreign_hire==1
 
-egen spt = tag(frame_id manager_id)
+drop if time_foreign<-4
+drop if time_foreign>4 & time_foreign!=.
 
-hist spell_length if spell_length <=30 & spt, by(expat) disc `format' xsize(20) ysize(8)
-graph export output/figure/CEO_tenure_histogram.png, width(1600) replace
+gen foreign_hire_local=(foreign_hire==1 & has_expat_ceo==0)
+egen ever_foreign_hire_local=max(foreign_hire_local), by(frame_id_numeric)
 
-use temp/analysis_sample, clear
+*Descriptive statistics
+gen firm_type_expat=(ever_expat==1)
+gen emp_100=(emp_cl>=100)
+gen tanass_growth=(tanass_18-l2.tanass_18)/l2.tanass_18
+gen tanass_growth_10=(tanass_growth>.1) if !missing(tanass_growth)
+gen tanass_growth_pos=(tanass_growth>0) if !missing(tanass_growth)
 
-label var expat "manager nationality"
-label def xp 0 "Local" 1 "Expat"
-label val expat xp
+label var emp_100 "Employment over 100"
+label var ever_expat "Expatriate"
+label var tanass_growth_10 "Asset Growth over 10\%"
+label var emp_cl "Employment"
+label var TFP_cd "TFP"
+label var exporter "Exporter"
+label var industrial_firm "Industrial"
 
-gen byte entrant = year==enter_year
-* only count managers actually at firm
-* cannot use "during" for this as that is 0 for founders
-keep if year>=enter_year & year<=first_exit_year
-
-preserve
-	egen spt = tag(frame_id manager_id)
-	collapse (sum) N=spt, by(DD DE ED EE)
-	gen str1 from = ""
-	gen str1 to = ""
-	gen byte i = 1
-	foreach from in D E {
-	foreach to in D E {
-		replace from = "`from'" if `from'`to'
-		replace to = "`to'" if `from'`to'
-		drop `from'`to'
-	}
-	}
-	l
-	drop if missing(from)
-	drop i
-	reshape wide N, i(from) j(to) string
-	replace from = cond(from=="D","domestic","expat")
-	ren ND to_domestic
-	ren NE to_expat
-	export delimited output/table/switches.csv, replace
-restore
-
-preserve
-	gen byte categ = 1+expat
-	replace categ = 0 if founder==1
-	tab categ
-	collapse (count) N=entrant, by(age categ)
-	reshape wide N, i(age) j(categ)
-	mvencode N*, mv(0) override
-	
-	egen total_N = rsum(N?)
-	foreach X of var N? {
-		gen `X'_share = 100*`X'/total_N
-	}
-	replace N1_share = N2_share+N1_share
-	replace N0_share = 100
-	label var age "Firm age (year)"
-	tw (area N0_share N1_share N2_share age if age<=20, fintensity(inten20 inten20 inten20) ),  `format' legend(order(1 "Founder" 2 "New local" 3 "New expat")) xsize(16) ysize(10) aspect(.67)
-	graph export output/figure/CEO_type_by_age.png, width(1600) replace
-restore
-
-collapse (count) N=entrant (sum) entrant (firstnm) age, by(frame_id year expat)
-reshape wide N entrant, i(frame_id year) j(expat)
-reshape long
-
-mvencode N entrant, mv(0) override
-
-egen total_N = sum(N), by(frame_id year)
-
-label var N "Number of CEOs"
-label var total_N "Number of CEOs"
-
-hist total_N, disc `format' xsize(16) ysize(10) aspect(.67)
-graph export output/figure/CEO_N_histogram.png, width(1600) replace
-
-hist N if N <=5, by(expat ) disc `format' xsize(20) ysize(8)
-graph export output/figure/CEO_N_histogram_by.png, width(1600) replace 
-
-* only count one CEO per firm
-replace N=1 if N>1
-replace entrant=1 if entrant>1
-
-reshape wide
-collapse (sum) N0 N1 entrant0 entrant1 total_N, by(year)
-
-foreach X of var N1 entrant1 entrant0 {
-	gen `X'_share = `X'/total_N*100
+*Desciptives table
+eststo clear
+forval i = 0/1 {
+quietly estpost sum industrial_firm emp_cl lnK lnQ lnKL TFP_cd exporter if firm_type_expat == `i' & time_foreign==-1
+est store i`i'
 }
+esttab i0 i1 using "$here/output/table/desc_firmvars_expat.tex", main(mean) aux(sd) mtitle("Local CEO" "Expatriate CEO") label par replace nonum
 
-line N1_share entrant0_share entrant1_share year, sort lwidth(thick thick thick) `format' ytitle("Share of firms (%)") legend(order(1 "Expat CEO" 2 "New local CEO" 3 "New expat CEO")) xsize(16) ysize(10) aspect(.67)
-graph export output/figure/shares_over_time.png, width(1600) replace
+*Selection regressions
+reghdfe ever_expat  industrial lnQ lnKL TFP_cd exporter if time_foreign==-1, absorb(year) cluster(frame_id_numeric)
+sum ever_expat if e(sample)
+estadd scalar mean2 = r(mean)
+est store est1
 
-log close
+
+reghdfe ever_expat  lnQ lnKL TFP_cd exporter if time_foreign==-1, absorb(year teaor08_2d) cluster(frame_id_numeric)
+sum ever_expat if e(sample)
+estadd scalar mean2 = r(mean)
+est store est1
+
+esttab est1 using "$here/output/table/selection_reg_expat.tex", star(* .1 ** .05 *** .01) b(3) scalar("mean2 Mean Expatriate" ) noconstant nonote se replace label ar2
+

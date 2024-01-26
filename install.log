@@ -1,0 +1,50 @@
+
+  ___  ____  ____  ____  ____ ®
+ /__    /   ____/   /   ____/      18.0
+___/   /   /___/   /   /___/       MP—Parallel Edition
+
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
+                                   StataCorp
+                                   4905 Lakeway Drive
+                                   College Station, Texas 77845 USA
+                                   800-STATA-PC        https://www.stata.com
+                                   979-696-4600        stata@stata.com
+
+Stata license: Single-user 2-core  perpetual
+Serial number: 501806323834
+  Licensed to: Miklós Koren
+               Central European University
+
+Notes:
+      1. Stata is running in batch mode.
+      2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
+
+. do code/util/install.do 
+
+. *install estout
+. capture ssc install estout
+
+. 
+. * install here
+. capture ado uninstall here
+
+. net install here, from(https://raw.githubusercontent.com/korenmiklos/here/v1.
+> 0)
+checking here consistency and verifying not already installed...
+installing into /Users/koren/Library/Application Support/Stata/ado/plus/...
+installation complete.
+
+. 
+. capture ado uninstall eventbaseline
+
+. net install eventbaseline, from(https://raw.githubusercontent.com/codedthinki
+> ng/eventbaseline/v0.7.2)
+checking eventbaseline consistency and verifying not already installed...
+installing into /Users/koren/Library/Application Support/Stata/ado/plus/...
+installation complete.
+
+. 
+end of do-file

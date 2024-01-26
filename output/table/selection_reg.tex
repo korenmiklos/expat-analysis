@@ -1,0 +1,28 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{3}{c}}
+\hline\hline
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}\\
+                    &\multicolumn{1}{c}{(firstnm) ever\_foreign\_ceo}&\multicolumn{1}{c}{ever\_foreign\_hire}&\multicolumn{1}{c}{ever\_expat}\\
+\hline
+Industry            &       0.001\sym{***}&       0.042         &       0.080\sym{***}\\
+                    &     (0.000)         &     (0.026)         &     (0.027)         \\
+[1em]
+large\_firm          &       0.002\sym{***}&       0.057\sym{**} &      -0.005         \\
+                    &     (0.000)         &     (0.026)         &     (0.028)         \\
+[1em]
+TFP (log)           &      -0.001\sym{**} &      -0.064\sym{***}&      -0.135\sym{***}\\
+                    &     (0.001)         &     (0.018)         &     (0.021)         \\
+[1em]
+Exporter (dummy)    &       0.006\sym{***}&       0.033         &       0.089\sym{***}\\
+                    &     (0.000)         &     (0.025)         &     (0.025)         \\
+[1em]
+year\_90s            &       0.003\sym{***}&       0.057\sym{**} &       0.135\sym{***}\\
+                    &     (0.000)         &     (0.024)         &     (0.026)         \\
+\hline
+Observations        &      264340         &        1555         &        1555         \\
+\(R^{2}\)           &       0.002         &       0.023         &       0.072         \\
+Mean depvar         &       0.006         &       0.698         &       0.380         \\
+\hline\hline
+\end{tabular}
+}
