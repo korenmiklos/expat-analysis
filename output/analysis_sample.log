@@ -3,7 +3,7 @@
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
 > og
   log type:  text
- opened on:  26 Jan 2024, 18:39:35
+ opened on:  26 Jan 2024, 19:06:55
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -159,7 +159,7 @@ frame_id_numeric                                                    (unlabeled)
 . egen ever_foreign = max(foreign), by(frame_id_numeric)
 
 . * did new foreign owner hire any ceos?
-. egen ever_foreign_hire = max((hire_ceo == 1) & (foreign == 1) * (owner_spell 
+. egen ever_foreign_hire = max((hire_ceo == 1) & (foreign == 1) & (owner_spell 
 > == 2)), by(frame_id_numeric)
 
 . generate foreign_hire = ever_foreign_hire & foreign
@@ -172,56 +172,26 @@ frame_id_numeric                                                    (unlabeled)
 > _n-1])
 
 . 
-. * drop after first expat leaves
-. drop if ceo_foreign_spell > 2
-(1,990 observations deleted)
-
-. drop if ceo_foreign_spell == 2 & has_expat_ceo == 0
-(0 observations deleted)
-
-. 
 . keep if ever_foreign == 1
 (292,659 observations deleted)
 
-. 
-. generate foreign_only = foreign & !foreign_hire
-
-. generate local_ceo = foreign_hire & !has_expat_ceo
-
-. egen ever_local_ceo = max(local_ceo), by(frame_id_numeric)
-
-. 
-. * drop if local hires are much later replaced by expats
-. drop if ever_local_ceo & has_expat_ceo
-(1,288 observations deleted)
-
-. 
-. tabulate foreign_only foreign_hire
-
-foreign_on |     foreign_hire
-        ly |         0          1 |     Total
------------+----------------------+----------
-         0 |    10,592      8,554 |    19,146 
-         1 |     2,073          0 |     2,073 
------------+----------------------+----------
-     Total |    12,665      8,554 |    21,219 
-
-. tabulate local_ceo has_expat_ceo
-
-           |     has_expat_ceo
- local_ceo |         0          1 |     Total
------------+----------------------+----------
-         0 |    12,665      3,385 |    16,050 
-         1 |     5,169          0 |     5,169 
------------+----------------------+----------
-     Total |    17,834      3,385 |    21,219 
-
-. 
 . keep if ever_foreign_hire
 (5,482 observations deleted)
 
 . * no variation in these, drop
 . drop ever_foreign ever_foreign_hire
+
+. 
+. egen ever_expat = max(has_expat_ceo & ceo_foreign_spell==2), by(frame_id_nume
+> ric)
+
+. generate ever_local = !ever_expat
+
+. generate local_ceo = foreign_hire & ever_local
+
+. * to ensure staggered treatment - this is intent to treat estimate
+. replace has_expat_ceo = foreign_hire & ever_expat
+(2,781 real changes made)
 
 . 
 . egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric
@@ -230,12 +200,35 @@ foreign_on |     foreign_hire
 . generate time_foreign = year - first_year_foreign
 
 . 
-. egen ever_expat = max(has_expat_ceo), by(frame_id_numeric)
+. * drop if local hires are much later replaced by expats
+. drop if ever_local & has_expat_ceo
+(0 observations deleted)
+
+. 
+. tabulate local_ceo has_expat_ceo
+
+           |     has_expat_ceo
+ local_ceo |         0          1 |     Total
+-----------+----------------------+----------
+         0 |     7,183      8,001 |    15,184 
+         1 |     3,831          0 |     3,831 
+-----------+----------------------+----------
+     Total |    11,014      8,001 |    19,015 
+
+. tabulate ever_expat ever_local if time_foreign == 0
+
+           |      ever_local
+ever_expat |         0          1 |     Total
+-----------+----------------------+----------
+         0 |         0        548 |       548 
+         1 |       675          0 |       675 
+-----------+----------------------+----------
+     Total |       675        548 |     1,223 
 
 . 
 . * limit sample to event window
 . keep if inrange(time_foreign, -10, 5)
-(4,839 observations deleted)
+(7,644 observations deleted)
 
 . 
 . egen exporter_pre = max(exporter & (time_foreign < 0)), by(frame_id_numeric)
@@ -251,12 +244,11 @@ foreign_on |     foreign_hire
   variable industry_year was float now int
   variable foreign_hire was float now byte
   variable ceo_foreign_spell was float now byte
-  variable foreign_only was float now byte
+  variable ever_expat was float now byte
+  variable ever_local was float now byte
   variable local_ceo was float now byte
-  variable ever_local_ceo was float now byte
   variable first_year_foreign was float now int
   variable time_foreign was float now byte
-  variable ever_expat was float now byte
   variable exporter_pre was float now byte
   variable originalid was double now long
   variable sales was double now long
@@ -267,7 +259,7 @@ foreign_on |     foreign_hire
   variable immat was double now long
   variable final_netgep was double now long
   variable tanass_18 was double now long
-  (860,942 bytes saved)
+  (864,196 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
 file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
@@ -277,5 +269,5 @@ file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
 > og
   log type:  text
- closed on:  26 Jan 2024, 18:39:37
+ closed on:  26 Jan 2024, 19:06:56
 -------------------------------------------------------------------------------
