@@ -44,7 +44,7 @@ local pre 3
 local post 5
 
 ****Average effect, foreign_hire sample, local and expat separately, xthdidreg
-
+local options group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
 foreach Y in $varlist_rhs {
 
     display
@@ -53,9 +53,9 @@ foreach Y in $varlist_rhs {
     display "=== Variable: `Y' ==="
 
     eststo clear
-    quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, group(frame_id_numeric) vce(cluster frame_id_numeric)
+    quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, `options'
     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
-    quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, group(frame_id_numeric) vce(cluster frame_id_numeric)
+    quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, `options'
     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
 
     display
@@ -63,9 +63,9 @@ foreach Y in $varlist_rhs {
     esttab, b(3) se  style(tex)
 
     eststo clear
-    quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industrial_pre==1, group(frame_id_numeric) vce(cluster frame_id_numeric)
+    quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industrial_pre==1,  `options'
     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
-    quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & industrial_pre==1, group(frame_id_numeric) vce(cluster frame_id_numeric)
+    quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & industrial_pre==1,  `options'
     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
 
     display
@@ -73,9 +73,9 @@ foreach Y in $varlist_rhs {
     esttab, b(3) se  style(tex)
 
     eststo clear
-    quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industrial_pre==0, group(frame_id_numeric) vce(cluster frame_id_numeric)
+    quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industrial_pre==0,  `options'
     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
-    quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & industrial_pre==0, group(frame_id_numeric) vce(cluster frame_id_numeric)
+    quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & industrial_pre==0,  `options'
     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
 
     display
