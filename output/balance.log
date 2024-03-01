@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac/projects/expat//output/balance.log
+       log:  /srv/sandbox/expat/miklos//output/balance.log
   log type:  text
- opened on:  24 Jan 2024, 18:15:54
+ opened on:   1 Mar 2024, 15:16:48
 
 . 
 . use "`here'/input/merleg-expat/balance-small.dta" 
@@ -234,8 +234,7 @@ Duplicates in terms of frame_id_numeric
 . tempfile expat
 
 . save `expat'
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St44153.000002 saved
-    as .dta format
+file /srv/sandbox/koren/St3027772.000002 saved as .dta format
 
 . restore
 
@@ -419,7 +418,7 @@ tanass_18:                                      Number of observations
 . * if gap_length <= 2, interpolate tanass with geometric average
 . bysort frame_id_numeric (year): replace tanass_18 = sqrt(tanass_18[_n-1] * ta
 > nass_18[_n+1]) if gap_length==1 & `gap'==1
-(22375 real changes made, 21033 to missing)
+(22,375 real changes made, 21,033 to missing)
 
 . bysort frame_id_numeric (year): replace tanass_18 = tanass_18[_n-1]^0.67 * ta
 > nass_18[_n+2]^0.33 if gap_length==2 & `gap'==1 & `gap'[_n-1]==0
@@ -427,16 +426,16 @@ tanass_18:                                      Number of observations
 
 . bysort frame_id_numeric (year): replace tanass_18 = tanass_18[_n-2]^0.33 * ta
 > nass_18[_n+1]^0.67 if gap_length==2 & `gap'==1 & `gap'[_n+1]==0
-(1601 real changes made, 1401 to missing)
+(1,601 real changes made, 1,401 to missing)
 
 . * at either end, extrapolate for 1 year
 . bysort frame_id_numeric (year): replace tanass_18 = tanass_18[_n+1] if spell=
 > =1 & `gap'==1 & `gap'[_n+1]==0
-(9756 real changes made)
+(9,756 real changes made)
 
 . bysort frame_id_numeric (year): replace tanass_18 = tanass_18[_n-1] if spell=
 > =max_spell & `gap'==1 & `gap'[_n-1]==0
-(3854 real changes made)
+(3,854 real changes made)
 
 . 
 . drop spell gap_length max_spell
@@ -520,12 +519,12 @@ tanass_18:                                      Number of observations
 . cap drop __*
 
 . save "`here'/temp/balance-small-clean.dta", replace
-file /Users/koren/Tresorit/Mac/projects/expat//temp/balance-small-clean.dta
-    saved
+(file /srv/sandbox/expat/miklos//temp/balance-small-clean.dta not found)
+file /srv/sandbox/expat/miklos//temp/balance-small-clean.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac/projects/expat//output/balance.log
+       log:  /srv/sandbox/expat/miklos//output/balance.log
   log type:  text
- closed on:  24 Jan 2024, 18:17:09
+ closed on:   1 Mar 2024, 15:19:22
 -------------------------------------------------------------------------------

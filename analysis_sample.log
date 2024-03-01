@@ -1,7 +1,7 @@
 
   ___  ____  ____  ____  ____ ®
  /__    /   ____/   /   ____/      18.0
-___/   /   /___/   /   /___/       MP—Parallel Edition
+___/   /   /___/   /   /___/       BE—Basic Edition
 
  Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
                                    StataCorp
@@ -10,17 +10,14 @@ ___/   /   /___/   /   /___/       MP—Parallel Edition
                                    800-STATA-PC        https://www.stata.com
                                    979-696-4600        stata@stata.com
 
-Stata license: Single-user 2-core  perpetual
-Serial number: 501806323834
+Stata license: 6-user network perpetual
+Serial number: 501806319769
   Licensed to: Miklos Koren
-               CEU MicroData
+               Central European University
 
 Notes:
       1. Stata is running in batch mode.
       2. Unicode is supported; see help unicode_advice.
-      3. More than 2 billion observations are allowed; see help obs_advice.
-      4. Maximum number of variables is set to 5,000 but can be increased;
-          see help set_maxvar.
 
 . do code/create/analysis_sample.do 
 
@@ -29,7 +26,7 @@ Notes:
 . 
 . * find root folder
 . here
-/Users/koren/Tresorit/Mac/projects/expat/
+/srv/sandbox/expat/miklos/
 
 . local here = r(here)
 
@@ -39,10 +36,9 @@ Notes:
 . log using "`here'/output/analysis_sample", text replace
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
-> og
+       log:  /srv/sandbox/expat/miklos//output/analysis_sample.log
   log type:  text
- opened on:  26 Jan 2024, 19:06:55
+ opened on:   1 Mar 2024, 15:20:07
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -74,9 +70,9 @@ owner_spell |
           1 |    306,313       89.46       89.46
           2 |     21,291        6.22       95.67
           3 |     11,006        3.21       98.89
-          4 |      2,198        0.64       99.53
-          5 |      1,214        0.35       99.88
-          6 |        241        0.07       99.95
+          4 |      2,217        0.65       99.53
+          5 |      1,214        0.35       99.89
+          6 |        222        0.06       99.95
           7 |        131        0.04       99.99
           8 |         26        0.01      100.00
 ------------+-----------------------------------
@@ -113,7 +109,7 @@ start_as_do |
 (17,747 observations deleted)
 
 . keep if owner_spell <= 2
-(3,707 observations deleted)
+(3,705 observations deleted)
 
 . drop if divest == 1
 (0 observations deleted)
@@ -127,7 +123,7 @@ start_as_do |
 
 . 
 . count if ever_foreign
-  24,497
+  24,499
 
 . count if ever_foreign & firm_tag
   1,734
@@ -137,7 +133,7 @@ start_as_do |
 
 . 
 . count if has_expat_ceo == 1
-  5,220
+  5,221
 
 . count if has_expat_ceo == 1 & foreign == 0 
   0
@@ -159,7 +155,7 @@ frame_id_numeric                                                    (unlabeled)
                   Type: Numeric (long)
 
                  Range: [10000049,74849574]           Units: 1
-         Unique values: 33,674                    Missing .: 0/317,156
+         Unique values: 33,674                    Missing .: 0/317,158
 
                   Mean: 1.4e+07
              Std. dev.: 6.6e+06
@@ -171,17 +167,17 @@ frame_id_numeric                                                    (unlabeled)
   33,674
 
 . count
-  317,156
+  317,158
 
 . 
 . drop first_year_foreign time_foreign 
 
 . 
 . count
-  317,156
+  317,158
 
 . count if ever_foreign
-  24,497
+  24,499
 
 . count if ever_foreign & firm_tag
   1,734
@@ -190,7 +186,7 @@ frame_id_numeric                                                    (unlabeled)
   694
 
 . count if has_expat_ceo
-  5,220
+  5,221
 
 . 
 . drop ever_expat ever_foreign
@@ -215,7 +211,7 @@ frame_id_numeric                                                    (unlabeled)
 (292,659 observations deleted)
 
 . keep if ever_foreign_hire
-(5,482 observations deleted)
+(5,472 observations deleted)
 
 . * no variation in these, drop
 . drop ever_foreign ever_foreign_hire
@@ -249,10 +245,10 @@ frame_id_numeric                                                    (unlabeled)
            |     has_expat_ceo
  local_ceo |         0          1 |     Total
 -----------+----------------------+----------
-         0 |     7,183      8,001 |    15,184 
-         1 |     3,831          0 |     3,831 
+         0 |     7,192      8,002 |    15,194 
+         1 |     3,833          0 |     3,833 
 -----------+----------------------+----------
-     Total |    11,014      8,001 |    19,015 
+     Total |    11,025      8,002 |    19,027 
 
 . tabulate ever_expat ever_local if time_foreign == 0
 
@@ -298,17 +294,17 @@ ever_expat |         0          1 |     Total
   variable immat was double now long
   variable final_netgep was double now long
   variable tanass_18 was double now long
-  (864,196 bytes saved)
+  (865,108 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
-file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
+(file /srv/sandbox/expat/miklos//temp/analysis_sample.dta not found)
+file /srv/sandbox/expat/miklos//temp/analysis_sample.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
-> og
+       log:  /srv/sandbox/expat/miklos//output/analysis_sample.log
   log type:  text
- closed on:  26 Jan 2024, 19:06:56
+ closed on:   1 Mar 2024, 15:20:09
 -------------------------------------------------------------------------------
 
 . 
