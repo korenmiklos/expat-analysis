@@ -111,6 +111,7 @@ drop if missing(`last_year_before')
 egen teaor08_2d_pre = max(cond(year==`last_year_before', teaor08_2d, .)), by(frame_id_numeric)
 egen teaor08_1d_pre = max(cond(year==`last_year_before', teaor08_1d_num, .)), by(frame_id_numeric)
 assert !missing(teaor08_2d_pre)
+drop `last_year_before'
 
 * drop agriculture and mining firms
 drop if teaor08_2d_pre < 5 

@@ -1,9 +1,8 @@
--------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
-> og
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.log
   log type:  text
- opened on:   8 Mar 2024, 11:38:22
+ opened on:   8 Mar 2024, 12:03:29
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -11,8 +10,7 @@
 . drop foreign
 
 . 
-. merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(match) noge
-> n
+. merge 1:1 frame_id year using "`here'/temp/firm_events.dta", keep(match) nogen
 
     Result                      Number of obs
     -----------------------------------------
@@ -24,8 +22,7 @@
 . * many foreign changes deleted
 . bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
 
-. bys frame_id_numeric (year): egen owner_spell_total = total(foreign != foreig
-> n[_n-1])
+. bys frame_id_numeric (year): egen owner_spell_total = total(foreign != foreign[_n-1])
 
 . tabulate owner_spell_total
 
@@ -49,16 +46,14 @@ owner_spell |
 
 . 
 . * divestment
-. bys frame_id_numeric (year): gen divest = sum(owner_spell != owner_spell[_n-1
-> ] & foreign == 0 & _n != 1)
+. bys frame_id_numeric (year): gen divest = sum(owner_spell != owner_spell[_n-1] & foreign == 0 & _n != 1)
 
 . replace divest = 1 if divest > 0
 (0 real changes made)
 
 . 
 . * only D, D-F F owner spells
-. bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (fore
-> ign == 0))
+. bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
 
 . tabulate start_as_domestic
 
@@ -113,9 +108,9 @@ start_as_do |
 . *for descriptives (number of firms and firm-years in final data)
 . codebook frame_id_numeric
 
--------------------------------------------------------------------------------
-frame_id_numeric                                                    (unlabeled)
--------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+frame_id_numeric                                                                                    (unlabeled)
+---------------------------------------------------------------------------------------------------------------
 
                   Type: Numeric (long)
 
@@ -159,8 +154,7 @@ frame_id_numeric                                                    (unlabeled)
 . egen ever_foreign = max(foreign), by(frame_id_numeric)
 
 . * did new foreign owner hire any ceos?
-. egen ever_foreign_hire = max((hire_ceo == 1) & (foreign == 1) * (owner_spell 
-> == 2)), by(frame_id_numeric)
+. egen ever_foreign_hire = max((hire_ceo == 1) & (foreign == 1) * (owner_spell == 2)), by(frame_id_numeric)
 
 . generate foreign_hire = ever_foreign_hire & foreign
 
@@ -168,8 +162,7 @@ frame_id_numeric                                                    (unlabeled)
 . * check the patterns of expat - local transitions. 
 . local ceo has_expat_ceo
 
-. bys frame_id_numeric (year): generate ceo_foreign_spell = sum(`ceo' != `ceo'[
-> _n-1])
+. bys frame_id_numeric (year): generate ceo_foreign_spell = sum(`ceo' != `ceo'[_n-1])
 
 . 
 . * drop after first expat leaves
@@ -224,8 +217,7 @@ foreign_on |     foreign_hire
 . drop ever_foreign ever_foreign_hire
 
 . 
-. egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric
-> ) 
+. egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric) 
 
 . generate time_foreign = year - first_year_foreign
 
@@ -238,8 +230,7 @@ foreign_on |     foreign_hire
 (5,821 observations deleted)
 
 . 
-. egen exporter_pre = max(exporter & inrange(time_foreign, -3, -1)), by(frame_i
-> d_numeric)
+. egen exporter_pre = max(exporter & inrange(time_foreign, -3, -1)), by(frame_id_numeric)
 
 . * different ways of measuring export orientation
 . clonevar export_entry = exporter
@@ -254,21 +245,20 @@ foreign_on |     foreign_hire
 
 . tempvar last_year_before 
 
-. egen `last_year_before' = max(cond(time_foreign < 0, year,.)), by(frame_id_nu
-> meric)
+. egen `last_year_before' = max(cond(time_foreign < 0, year,.)), by(frame_id_numeric)
 (10 missing values generated)
 
 . drop if missing(`last_year_before')
 (10 observations deleted)
 
 . 
-. egen teaor08_2d_pre = max(cond(year==`last_year_before', teaor08_2d, .)), by(
-> frame_id_numeric)
+. egen teaor08_2d_pre = max(cond(year==`last_year_before', teaor08_2d, .)), by(frame_id_numeric)
 
-. egen teaor08_1d_pre = max(cond(year==`last_year_before', teaor08_1d_num, .)),
->  by(frame_id_numeric)
+. egen teaor08_1d_pre = max(cond(year==`last_year_before', teaor08_1d_num, .)), by(frame_id_numeric)
 
 . assert !missing(teaor08_2d_pre)
+
+. drop `last_year_before'
 
 . 
 . * drop agriculture and mining firms
@@ -316,7 +306,6 @@ foreign_on |     foreign_hire
   variable ever_expat was float now byte
   variable exporter_pre was float now byte
   variable teaor08_1d_num was float now byte
-  variable __000000 was float now int
   variable teaor08_2d_pre was float now byte
   variable teaor08_1d_pre was float now byte
   variable industrial_pre was float now byte
@@ -329,15 +318,14 @@ foreign_on |     foreign_hire
   variable immat was double now long
   variable final_netgep was double now long
   variable tanass_18 was double now long
-  (878,943 bytes saved)
+  (860,041 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
 file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
-> og
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.log
   log type:  text
- closed on:   8 Mar 2024, 11:38:31
--------------------------------------------------------------------------------
+ closed on:   8 Mar 2024, 12:03:38
+---------------------------------------------------------------------------------------------------------------

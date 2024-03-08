@@ -12,9 +12,9 @@ use "$here/temp/analysis_sample.dta", clear
 global local_sample "(ever_local==1 | foreign==0)"
 global expat_sample "(ever_expat==1 | foreign==0)"
 
-global varlist_rhs "lnQ lnQL TFP lnK lnL lnM exporter lnEx lnQd export_entry "
-local pre 3
-local post 5
+global varlist_rhs "exporter lnEx lnQd export_entry "
+local pre 4
+local post 4
 
 ****Average effect, foreign_hire sample, local and expat separately, xthdidreg
 local options group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
