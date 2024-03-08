@@ -8,33 +8,6 @@ global here = r(here)
 
 use "$here/temp/analysis_sample.dta", clear
 
-* different ways of measuring export orientation
-generate lnEx = ln(export_18)
-generate lnQd = ln(sales_18 - export_18)
-clonevar export_entry = exporter
-replace export_entry = . if exporter_pre == 1
-
-*Create teaor in year -1, drop agriculture
-
-egen teaor08_1d_num = group(teaor08_1d)
-egen teaor08_2d_pre = max(cond(time_foreign==-1, teaor08_2d, .)), by(frame_id_numeric)
-egen teaor08_1d_pre = max(cond(time_foreign==-1, teaor08_1d_num, .)), by(frame_id_numeric)
-
-* drop agriculture and mining firms
-drop if teaor08_2d_pre<5
-generate industrial_pre = (teaor08_2d_pre < 40)
-
-* compute
-
-quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial_firm==1
-predict TFP if e(sample), resid
-
-quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial_firm==0
-predict TFP_temp if e(sample), resid
-
-replace TFP = TFP_temp if missing(TFP)
-drop TFP_temp
-
 *Samples
 global local_sample "(ever_local==1 | foreign==0)"
 global expat_sample "(ever_expat==1 | foreign==0)"

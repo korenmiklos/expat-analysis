@@ -96,7 +96,36 @@ egen ever_expat = max(has_expat_ceo), by(frame_id_numeric)
 * limit sample to event window
 keep if inrange(time_foreign, -10, 5)
 
-egen exporter_pre = max(exporter & (time_foreign < 0)), by(frame_id_numeric)
+egen exporter_pre = max(exporter & inrange(time_foreign, -3, -1)), by(frame_id_numeric)
+* different ways of measuring export orientation
+clonevar export_entry = exporter
+replace export_entry = . if exporter_pre == 1
+
+*Create teaor in year -1, drop agriculture
+
+egen teaor08_1d_num = group(teaor08_1d)
+tempvar last_year_before 
+egen `last_year_before' = max(cond(time_foreign < 0, year,.)), by(frame_id_numeric)
+assert !missing(`last_year_before')
+
+egen teaor08_2d_pre = max(cond(year==`last_year_before', teaor08_2d, .)), by(frame_id_numeric)
+egen teaor08_1d_pre = max(cond(year==`last_year_before', teaor08_1d_num, .)), by(frame_id_numeric)
+assert !missing(teaor08_2d_pre)
+
+* drop agriculture and mining firms
+drop if teaor08_2d_pre < 5 
+generate industrial_pre = (teaor08_2d_pre < 40)
+
+* compute TFP
+
+quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial_firm==1
+predict TFP if e(sample), resid
+
+quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial_firm==0
+predict TFP_temp if e(sample), resid
+
+replace TFP = TFP_temp if missing(TFP)
+drop TFP_temp
 
 compress
 save "`here'/temp/analysis_sample.dta", replace

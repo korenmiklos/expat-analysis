@@ -103,6 +103,7 @@ foreach x in sales export tanass jetok ranyag ranyag8091 immat {
 
 * minimal employment cleaning
 replace emp = 1 if emp <= 0 | missing(emp)
+mvencode export_18, mv(0) override
 
 * creating dependent variables
 gen lnL = ln(emp)
@@ -111,6 +112,9 @@ replace lnM = ln(ranyag8091_18) if year <= 1991
 gen lnQ = ln(sales_18)
 gen lnQL = lnQ - lnL
 gen lnMQ = lnM - lnQ
+generate lnEx = ln(export_18)
+generate lnQd = ln(sales_18 - export_18)
+
 gen byte exporter = export_18 > 0 & export_18 != .
 gen export_share = export_18 / sales_18
 gen exporter_5 = (export_share > .05 & export_share != .)
