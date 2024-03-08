@@ -1,7 +1,7 @@
 
   ___  ____  ____  ____  ____ ®
  /__    /   ____/   /   ____/      18.0
-___/   /   /___/   /   /___/       BE—Basic Edition
+___/   /   /___/   /   /___/       MP—Parallel Edition
 
  Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
                                    StataCorp
@@ -10,14 +10,17 @@ ___/   /   /___/   /   /___/       BE—Basic Edition
                                    800-STATA-PC        https://www.stata.com
                                    979-696-4600        stata@stata.com
 
-Stata license: 6-user network perpetual
-Serial number: 501806319769
+Stata license: Single-user 2-core  perpetual
+Serial number: 501806323834
   Licensed to: Miklos Koren
-               Central European University
+               CEU MicroData
 
 Notes:
       1. Stata is running in batch mode.
       2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
 
 . do code/create/analysis_sample.do 
 
@@ -26,7 +29,7 @@ Notes:
 . 
 . * find root folder
 . here
-/srv/sandbox/expat/miklos/
+/Users/koren/Tresorit/Mac/projects/expat/
 
 . local here = r(here)
 
@@ -36,9 +39,10 @@ Notes:
 . log using "`here'/output/analysis_sample", text replace
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /srv/sandbox/expat/miklos//output/analysis_sample.log
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
+> og
   log type:  text
- opened on:   1 Mar 2024, 15:20:07
+ opened on:   8 Mar 2024, 11:38:22
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -70,9 +74,9 @@ owner_spell |
           1 |    306,313       89.46       89.46
           2 |     21,291        6.22       95.67
           3 |     11,006        3.21       98.89
-          4 |      2,217        0.65       99.53
-          5 |      1,214        0.35       99.89
-          6 |        222        0.06       99.95
+          4 |      2,198        0.64       99.53
+          5 |      1,214        0.35       99.88
+          6 |        241        0.07       99.95
           7 |        131        0.04       99.99
           8 |         26        0.01      100.00
 ------------+-----------------------------------
@@ -109,7 +113,7 @@ start_as_do |
 (17,747 observations deleted)
 
 . keep if owner_spell <= 2
-(3,705 observations deleted)
+(3,707 observations deleted)
 
 . drop if divest == 1
 (0 observations deleted)
@@ -123,7 +127,7 @@ start_as_do |
 
 . 
 . count if ever_foreign
-  24,499
+  24,497
 
 . count if ever_foreign & firm_tag
   1,734
@@ -133,7 +137,7 @@ start_as_do |
 
 . 
 . count if has_expat_ceo == 1
-  5,221
+  5,220
 
 . count if has_expat_ceo == 1 & foreign == 0 
   0
@@ -155,7 +159,7 @@ frame_id_numeric                                                    (unlabeled)
                   Type: Numeric (long)
 
                  Range: [10000049,74849574]           Units: 1
-         Unique values: 33,674                    Missing .: 0/317,158
+         Unique values: 33,674                    Missing .: 0/317,156
 
                   Mean: 1.4e+07
              Std. dev.: 6.6e+06
@@ -167,17 +171,17 @@ frame_id_numeric                                                    (unlabeled)
   33,674
 
 . count
-  317,158
+  317,156
 
 . 
 . drop first_year_foreign time_foreign 
 
 . 
 . count
-  317,158
+  317,156
 
 . count if ever_foreign
-  24,499
+  24,497
 
 . count if ever_foreign & firm_tag
   1,734
@@ -186,7 +190,7 @@ frame_id_numeric                                                    (unlabeled)
   694
 
 . count if has_expat_ceo
-  5,221
+  5,220
 
 . 
 . drop ever_expat ever_foreign
@@ -194,7 +198,7 @@ frame_id_numeric                                                    (unlabeled)
 . egen ever_foreign = max(foreign), by(frame_id_numeric)
 
 . * did new foreign owner hire any ceos?
-. egen ever_foreign_hire = max((hire_ceo == 1) & (foreign == 1) & (owner_spell 
+. egen ever_foreign_hire = max((hire_ceo == 1) & (foreign == 1) * (owner_spell 
 > == 2)), by(frame_id_numeric)
 
 . generate foreign_hire = ever_foreign_hire & foreign
@@ -207,26 +211,56 @@ frame_id_numeric                                                    (unlabeled)
 > _n-1])
 
 . 
+. * drop after first expat leaves
+. drop if ceo_foreign_spell > 2
+(1,990 observations deleted)
+
+. drop if ceo_foreign_spell == 2 & has_expat_ceo == 0
+(0 observations deleted)
+
+. 
 . keep if ever_foreign == 1
 (292,659 observations deleted)
 
+. 
+. generate foreign_only = foreign & !foreign_hire
+
+. generate local_ceo = foreign_hire & !has_expat_ceo
+
+. egen ever_local_ceo = max(local_ceo), by(frame_id_numeric)
+
+. 
+. * drop if local hires are much later replaced by expats
+. drop if ever_local_ceo & has_expat_ceo
+(1,288 observations deleted)
+
+. 
+. tabulate foreign_only foreign_hire
+
+foreign_on |     foreign_hire
+        ly |         0          1 |     Total
+-----------+----------------------+----------
+         0 |    10,592      8,554 |    19,146 
+         1 |     2,073          0 |     2,073 
+-----------+----------------------+----------
+     Total |    12,665      8,554 |    21,219 
+
+. tabulate local_ceo has_expat_ceo
+
+           |     has_expat_ceo
+ local_ceo |         0          1 |     Total
+-----------+----------------------+----------
+         0 |    12,665      3,385 |    16,050 
+         1 |     5,169          0 |     5,169 
+-----------+----------------------+----------
+     Total |    17,834      3,385 |    21,219 
+
+. 
 . keep if ever_foreign_hire
-(5,472 observations deleted)
+(5,482 observations deleted)
 
 . * no variation in these, drop
 . drop ever_foreign ever_foreign_hire
-
-. 
-. egen ever_expat = max(has_expat_ceo & ceo_foreign_spell==2), by(frame_id_nume
-> ric)
-
-. generate ever_local = !ever_expat
-
-. generate local_ceo = foreign_hire & ever_local
-
-. * to ensure staggered treatment - this is intent to treat estimate
-. replace has_expat_ceo = foreign_hire & ever_expat
-(2,781 real changes made)
 
 . 
 . egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric
@@ -235,38 +269,72 @@ frame_id_numeric                                                    (unlabeled)
 . generate time_foreign = year - first_year_foreign
 
 . 
-. * drop if local hires are much later replaced by expats
-. drop if ever_local & has_expat_ceo
-(0 observations deleted)
-
-. 
-. tabulate local_ceo has_expat_ceo
-
-           |     has_expat_ceo
- local_ceo |         0          1 |     Total
------------+----------------------+----------
-         0 |     7,192      8,002 |    15,194 
-         1 |     3,833          0 |     3,833 
------------+----------------------+----------
-     Total |    11,025      8,002 |    19,027 
-
-. tabulate ever_expat ever_local if time_foreign == 0
-
-           |      ever_local
-ever_expat |         0          1 |     Total
------------+----------------------+----------
-         0 |         0        548 |       548 
-         1 |       675          0 |       675 
------------+----------------------+----------
-     Total |       675        548 |     1,223 
+. egen ever_expat = max(has_expat_ceo), by(frame_id_numeric)
 
 . 
 . * limit sample to event window
-. keep if inrange(time_foreign, -10, 5)
-(7,644 observations deleted)
+. keep if inrange(time_foreign, -7, 5)
+(5,821 observations deleted)
 
 . 
-. egen exporter_pre = max(exporter & (time_foreign < 0)), by(frame_id_numeric)
+. egen exporter_pre = max(exporter & inrange(time_foreign, -3, -1)), by(frame_i
+> d_numeric)
+
+. * different ways of measuring export orientation
+. clonevar export_entry = exporter
+
+. replace export_entry = . if exporter_pre == 1
+(5,587 real changes made, 5,587 to missing)
+
+. 
+. *Create teaor in year -1, drop agriculture
+. 
+. egen teaor08_1d_num = group(teaor08_1d)
+
+. tempvar last_year_before 
+
+. egen `last_year_before' = max(cond(time_foreign < 0, year,.)), by(frame_id_nu
+> meric)
+(10 missing values generated)
+
+. drop if missing(`last_year_before')
+(10 observations deleted)
+
+. 
+. egen teaor08_2d_pre = max(cond(year==`last_year_before', teaor08_2d, .)), by(
+> frame_id_numeric)
+
+. egen teaor08_1d_pre = max(cond(year==`last_year_before', teaor08_1d_num, .)),
+>  by(frame_id_numeric)
+
+. assert !missing(teaor08_2d_pre)
+
+. 
+. * drop agriculture and mining firms
+. drop if teaor08_2d_pre < 5 
+(455 observations deleted)
+
+. generate industrial_pre = (teaor08_2d_pre < 40)
+
+. 
+. * compute TFP
+. 
+. quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial_firm==1
+
+. predict TFP if e(sample), resid
+(5,160 missing values generated)
+
+. 
+. quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial_firm==0
+
+. predict TFP_temp if e(sample), resid
+(4,291 missing values generated)
+
+. 
+. replace TFP = TFP_temp if missing(TFP)
+(5,160 real changes made)
+
+. drop TFP_temp
 
 . 
 . compress
@@ -279,12 +347,18 @@ ever_expat |         0          1 |     Total
   variable industry_year was float now int
   variable foreign_hire was float now byte
   variable ceo_foreign_spell was float now byte
-  variable ever_expat was float now byte
-  variable ever_local was float now byte
+  variable foreign_only was float now byte
   variable local_ceo was float now byte
+  variable ever_local_ceo was float now byte
   variable first_year_foreign was float now int
   variable time_foreign was float now byte
+  variable ever_expat was float now byte
   variable exporter_pre was float now byte
+  variable teaor08_1d_num was float now byte
+  variable __000000 was float now int
+  variable teaor08_2d_pre was float now byte
+  variable teaor08_1d_pre was float now byte
+  variable industrial_pre was float now byte
   variable originalid was double now long
   variable sales was double now long
   variable tanass was double now long
@@ -294,17 +368,17 @@ ever_expat |         0          1 |     Total
   variable immat was double now long
   variable final_netgep was double now long
   variable tanass_18 was double now long
-  (865,108 bytes saved)
+  (878,943 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
-(file /srv/sandbox/expat/miklos//temp/analysis_sample.dta not found)
-file /srv/sandbox/expat/miklos//temp/analysis_sample.dta saved
+file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /srv/sandbox/expat/miklos//output/analysis_sample.log
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
+> og
   log type:  text
- closed on:   1 Mar 2024, 15:20:09
+ closed on:   8 Mar 2024, 11:38:31
 -------------------------------------------------------------------------------
 
 . 

@@ -94,7 +94,7 @@ generate time_foreign = year - first_year_foreign
 egen ever_expat = max(has_expat_ceo), by(frame_id_numeric)
 
 * limit sample to event window
-keep if inrange(time_foreign, -10, 5)
+keep if inrange(time_foreign, -7, 5)
 
 egen exporter_pre = max(exporter & inrange(time_foreign, -3, -1)), by(frame_id_numeric)
 * different ways of measuring export orientation
@@ -106,7 +106,7 @@ replace export_entry = . if exporter_pre == 1
 egen teaor08_1d_num = group(teaor08_1d)
 tempvar last_year_before 
 egen `last_year_before' = max(cond(time_foreign < 0, year,.)), by(frame_id_numeric)
-assert !missing(`last_year_before')
+drop if missing(`last_year_before')
 
 egen teaor08_2d_pre = max(cond(year==`last_year_before', teaor08_2d, .)), by(frame_id_numeric)
 egen teaor08_1d_pre = max(cond(year==`last_year_before', teaor08_1d_num, .)), by(frame_id_numeric)

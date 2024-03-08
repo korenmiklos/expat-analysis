@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /srv/sandbox/expat/miklos//output/firm_panel.log
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- opened on:   1 Mar 2024, 15:19:22
+ opened on:   8 Mar 2024, 11:24:15
 
 . 
 . * keep only sample from balance-small
@@ -17,8 +17,10 @@
 . tempfile sample
 
 . save `sample', replace
-(file /srv/sandbox/koren/St3028515.000001 not found)
-file /srv/sandbox/koren/St3028515.000001 saved as .dta format
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St63785.000001 not
+    found)
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St63785.000001 saved
+    as .dta format
 
 . 
 . use "`here'/input/ceo-panel/ceo-panel.dta", clear 
@@ -434,12 +436,11 @@ n_expat_ce |            (firstnm) n_local_ceo
   (8,945,638 bytes saved)
 
 . save "`here'/temp/firm_events.dta", replace
-(file /srv/sandbox/expat/miklos//temp/firm_events.dta not found)
-file /srv/sandbox/expat/miklos//temp/firm_events.dta saved
+file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /srv/sandbox/expat/miklos//output/firm_panel.log
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- closed on:   1 Mar 2024, 15:20:06
+ closed on:   8 Mar 2024, 11:24:42
 -------------------------------------------------------------------------------

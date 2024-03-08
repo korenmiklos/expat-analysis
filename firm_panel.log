@@ -1,7 +1,7 @@
 
   ___  ____  ____  ____  ____ ®
  /__    /   ____/   /   ____/      18.0
-___/   /   /___/   /   /___/       BE—Basic Edition
+___/   /   /___/   /   /___/       MP—Parallel Edition
 
  Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
                                    StataCorp
@@ -10,14 +10,17 @@ ___/   /   /___/   /   /___/       BE—Basic Edition
                                    800-STATA-PC        https://www.stata.com
                                    979-696-4600        stata@stata.com
 
-Stata license: 6-user network perpetual
-Serial number: 501806319769
+Stata license: Single-user 2-core  perpetual
+Serial number: 501806323834
   Licensed to: Miklos Koren
-               Central European University
+               CEU MicroData
 
 Notes:
       1. Stata is running in batch mode.
       2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
 
 . do code/create/firm_panel.do 
 
@@ -31,7 +34,7 @@ Notes:
 . 
 . * find root folder
 . here
-/srv/sandbox/expat/miklos/
+/Users/koren/Tresorit/Mac/projects/expat/
 
 . local here = r(here)
 
@@ -39,9 +42,9 @@ Notes:
 . log using "`here'/output/firm_panel", text replace
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /srv/sandbox/expat/miklos//output/firm_panel.log
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- opened on:   1 Mar 2024, 15:19:22
+ opened on:   8 Mar 2024, 11:24:15
 
 . 
 . * keep only sample from balance-small
@@ -56,8 +59,10 @@ Notes:
 . tempfile sample
 
 . save `sample', replace
-(file /srv/sandbox/koren/St3028515.000001 not found)
-file /srv/sandbox/koren/St3028515.000001 saved as .dta format
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St63785.000001 not
+    found)
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St63785.000001 saved
+    as .dta format
 
 . 
 . use "`here'/input/ceo-panel/ceo-panel.dta", clear 
@@ -473,14 +478,13 @@ n_expat_ce |            (firstnm) n_local_ceo
   (8,945,638 bytes saved)
 
 . save "`here'/temp/firm_events.dta", replace
-(file /srv/sandbox/expat/miklos//temp/firm_events.dta not found)
-file /srv/sandbox/expat/miklos//temp/firm_events.dta saved
+file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /srv/sandbox/expat/miklos//output/firm_panel.log
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- closed on:   1 Mar 2024, 15:20:06
+ closed on:   8 Mar 2024, 11:24:42
 -------------------------------------------------------------------------------
 
 . 

@@ -1,7 +1,7 @@
 
   ___  ____  ____  ____  ____ ®
  /__    /   ____/   /   ____/      18.0
-___/   /   /___/   /   /___/       BE—Basic Edition
+___/   /   /___/   /   /___/       MP—Parallel Edition
 
  Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
                                    StataCorp
@@ -10,14 +10,17 @@ ___/   /   /___/   /   /___/       BE—Basic Edition
                                    800-STATA-PC        https://www.stata.com
                                    979-696-4600        stata@stata.com
 
-Stata license: 6-user network perpetual
-Serial number: 501806319769
+Stata license: Single-user 2-core  perpetual
+Serial number: 501806323834
   Licensed to: Miklos Koren
-               Central European University
+               CEU MicroData
 
 Notes:
       1. Stata is running in batch mode.
       2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
 
 . do code/estimate/regressions.do 
 
@@ -27,7 +30,7 @@ Notes:
 . 
 . * find root folder
 . here
-/srv/sandbox/expat/miklos/
+/Users/koren/Tresorit/Mac/projects/expat/
 
 . global here = r(here)
 
@@ -35,58 +38,415 @@ Notes:
 . use "$here/temp/analysis_sample.dta", clear
 
 . 
-. * different ways of measuring export orientation
-. generate lnEx = ln(export_18)
-(5,356 missing values generated)
+. *Samples
+. global local_sample "(ever_local==1 | foreign==0)"
 
-. generate lnQd = ln(sales_18 - export_18)
-(1,747 missing values generated)
-
-. clonevar export_entry = exporter
-
-. replace export_entry = . if exporter_pre == 1
-(7,087 real changes made, 7,087 to missing)
+. global expat_sample "(ever_expat==1 | foreign==0)"
 
 . 
-. *Create teaor in year -1, drop agriculture
-. 
-. egen teaor08_1d_num = group(teaor08_1d)
+. global varlist_rhs "lnQ lnQL TFP lnK lnL lnM exporter lnEx lnQd export_entry 
+> "
 
-. egen teaor08_2d_pre = max(cond(time_foreign==-1, teaor08_2d, .)), by(frame_id
-> _numeric)
-(369 missing values generated)
+. local pre 3
 
-. egen teaor08_1d_pre = max(cond(time_foreign==-1, teaor08_1d_num, .)), by(fram
-> e_id_numeric)
-(369 missing values generated)
+. local post 5
 
 . 
-. * drop agriculture and mining firms
-. drop if teaor08_2d_pre<5
-(537 observations deleted)
+. ****Average effect, foreign_hire sample, local and expat separately, xthdidre
+> g
+. local options group(frame_id_numeric) vce(cluster frame_id_numeric) controlgr
+> oup(notyet)
 
-. generate industrial_pre = (teaor08_2d_pre < 40)
+. foreach Y in $varlist_rhs {
+  2. 
+.     display
+  3.     display
+  4.     display
+  5.     display "=== Variable: `Y' ==="
+  6. 
+.     eststo clear
+  7.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, `options'
+  8.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+  9.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, `opti
+> ons'
+ 10.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+ 11. 
+.     display
+ 12.     display "=== Full sample ==="
+ 13.     esttab, b(3) se  style(tex)
+ 14. 
+.     eststo clear
+ 15.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industri
+> al_pre==1,  `options'
+ 16.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+ 17.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & indu
+> strial_pre==1,  `options'
+ 18.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+ 19. 
+.     display
+ 20.     display "=== Industry sample ==="
+ 21.     esttab, b(3) se  style(tex)
+ 22. 
+.     eststo clear
+ 23.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industri
+> al_pre==0,  `options'
+ 24.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+ 25.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & indu
+> strial_pre==0,  `options'
+ 26.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+ 27. 
+.     display
+ 28.     display "=== Service sample ==="
+ 29.     esttab, b(3) se style(tex)
+ 30. 
+. }
 
-. 
-. * compute
-. 
-. quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial_firm==1
-unable to allocate matrix;
-    You have attempted to create a matrix with too many rows or columns or
-    attempted to fit a model with too many variables.
 
-    You are using Stata/BE which supports matrices with up to 800 rows or
-    columns.  See limits for how many more rows and columns Stata/SE and
-    Stata/MP can support.
 
-    If you are using factor variables and included an interaction that has
-    lots of missing cells, try set emptycells drop to reduce the required
-    matrix size; see help set emptycells.
+=== Variable: lnQ ===
+variable __000000 already defined
+could not restore sort index -- system header not found
+(est1 stored)
+(est2 stored)
 
-    If you are using factor variables, you might have accidentally treated a
-    continuous variable as a categorical, resulting in lots of categories.
-    Use the c. operator on such variables.
-r(915);
+=== Full sample ===
 
-end of do-file
-r(915);
+--------------------------------------------
+                      (1)             (2)   \\
+                      lnQ             lnQ   \\
+--------------------------------------------
+ATET                0.267**         1.025***\\
+                  (0.086)         (0.146)   \\
+--------------------------------------------
+N                    6313            5768   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+(est1 stored)
+(est2 stored)
+
+=== Industry sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                      lnQ             lnQ   \\
+--------------------------------------------
+ATET                0.425**         0.876***\\
+                  (0.143)         (0.173)   \\
+--------------------------------------------
+N                    2859            2686   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+(est1 stored)
+(est2 stored)
+
+=== Service sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                      lnQ             lnQ   \\
+--------------------------------------------
+ATET                0.139           1.252***\\
+                  (0.107)         (0.246)   \\
+--------------------------------------------
+N                    3454            3082   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+
+
+
+=== Variable: lnQL ===
+(est1 stored)
+(est2 stored)
+
+=== Full sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                     lnQL            lnQL   \\
+--------------------------------------------
+ATET                0.125           0.454***\\
+                  (0.076)         (0.100)   \\
+--------------------------------------------
+N                    6313            5768   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+(est1 stored)
+(est2 stored)
+
+=== Industry sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                     lnQL            lnQL   \\
+--------------------------------------------
+ATET                0.160           0.466***\\
+                  (0.115)         (0.121)   \\
+--------------------------------------------
+N                    2859            2686   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+(est1 stored)
+(est2 stored)
+
+=== Service sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                     lnQL            lnQL   \\
+--------------------------------------------
+ATET                0.076           0.436** \\
+                  (0.094)         (0.168)   \\
+--------------------------------------------
+N                    3454            3082   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+
+
+
+=== Variable: TFP ===
+(est1 stored)
+(est2 stored)
+
+=== Full sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                      TFP             TFP   \\
+--------------------------------------------
+ATET                0.056           0.199***\\
+                  (0.032)         (0.058)   \\
+--------------------------------------------
+N                    6313            5768   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+(est1 stored)
+(est2 stored)
+
+=== Industry sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                      TFP             TFP   \\
+--------------------------------------------
+ATET                0.048           0.132*  \\
+                  (0.051)         (0.066)   \\
+--------------------------------------------
+N                    2859            2686   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+(est1 stored)
+(est2 stored)
+
+=== Service sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                      TFP             TFP   \\
+--------------------------------------------
+ATET                0.044           0.274** \\
+                  (0.039)         (0.098)   \\
+--------------------------------------------
+N                    3454            3082   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+
+
+
+=== Variable: lnK ===
+(est1 stored)
+(est2 stored)
+
+=== Full sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                      lnK             lnK   \\
+--------------------------------------------
+ATET                0.016           0.359** \\
+                  (0.091)         (0.115)   \\
+--------------------------------------------
+N                    6313            5768   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+(est1 stored)
+(est2 stored)
+
+=== Industry sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                      lnK             lnK   \\
+--------------------------------------------
+ATET                0.149           0.484** \\
+                  (0.135)         (0.160)   \\
+--------------------------------------------
+N                    2859            2686   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+(est1 stored)
+(est2 stored)
+
+=== Service sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                      lnK             lnK   \\
+--------------------------------------------
+ATET               -0.054           0.273   \\
+                  (0.121)         (0.161)   \\
+--------------------------------------------
+N                    3454            3082   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+
+
+
+=== Variable: lnL ===
+(est1 stored)
+(est2 stored)
+
+=== Full sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                      lnL             lnL   \\
+--------------------------------------------
+ATET                0.142           0.571***\\
+                  (0.088)         (0.116)   \\
+--------------------------------------------
+N                    6313            5768   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+(est1 stored)
+(est2 stored)
+
+=== Industry sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                      lnL             lnL   \\
+--------------------------------------------
+ATET                0.264           0.410** \\
+                  (0.135)         (0.152)   \\
+--------------------------------------------
+N                    2859            2686   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+(est1 stored)
+(est2 stored)
+
+=== Service sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                      lnL             lnL   \\
+--------------------------------------------
+ATET                0.063           0.816***\\
+                  (0.112)         (0.176)   \\
+--------------------------------------------
+N                    3454            3082   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+
+
+
+=== Variable: lnM ===
+(est1 stored)
+(est2 stored)
+
+=== Full sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                      lnM             lnM   \\
+--------------------------------------------
+ATET                0.189*          0.876***\\
+                  (0.090)         (0.132)   \\
+--------------------------------------------
+N                    6313            5768   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+(est1 stored)
+(est2 stored)
+
+=== Industry sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                      lnM             lnM   \\
+--------------------------------------------
+ATET                0.331*          0.844***\\
+                  (0.139)         (0.163)   \\
+--------------------------------------------
+N                    2859            2686   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+(est1 stored)
+(est2 stored)
+
+=== Service sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                      lnM             lnM   \\
+--------------------------------------------
+ATET                0.101           0.974***\\
+                  (0.118)         (0.211)   \\
+--------------------------------------------
+N                    3454            3082   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+
+
+
+=== Variable: exporter ===
+(est1 stored)
+(est2 stored)
+
+=== Full sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                 exporter        exporter   \\
+--------------------------------------------
+ATET                0.031           0.070*  \\
+                  (0.023)         (0.031)   \\
+--------------------------------------------
+N                    6313            5768   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+(est1 stored)
+(est2 stored)
+
+=== Industry sample ===
+
+--------------------------------------------
+                      (1)             (2)   \\
+                 exporter        exporter   \\
+--------------------------------------------
+ATET                0.056           0.029   \\
+                  (0.035)         (0.039)   \\
+--------------------------------------------
+N                    2859            2686   \\
+--------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
