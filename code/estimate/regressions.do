@@ -11,10 +11,13 @@ use "$here/temp/analysis_sample.dta", clear
 *Samples
 global local_sample "(ever_local==1 | foreign==0)"
 global expat_sample "(ever_expat==1 | foreign==0)"
+global diff_sample "(ever_local==1 | ever_expat==1 | foreign==0)"
 
 global varlist_rhs "exporter lnEx lnQd export_entry "
 local pre 4
 local post 4
+
+generate byte diff_treatment = has_expat_ceo | local_ceo
 
 ****Average effect, foreign_hire sample, local and expat separately, xthdidreg
 local options group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
@@ -24,11 +27,16 @@ foreach Y in $varlist_rhs {
     display
     display
     display "=== Variable: `Y' ==="
+    tempvar diff
+    clonevar `diff' = `Y'
+    replace `diff' = -`diff' if ever_local==1
 
     eststo clear
     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, `options'
     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, `options'
+    eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+    quietly xthdidregress ra (`diff') (diff_treatment) if $diff_sample, `options'
     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
 
     display
@@ -40,6 +48,8 @@ foreach Y in $varlist_rhs {
     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & industrial_pre==1,  `options'
     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+    quietly xthdidregress ra (`diff') (diff_treatment) if $diff_sample & industrial_pre==1, `options'
+    eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
 
     display
     display "=== Industry sample ==="
@@ -50,11 +60,14 @@ foreach Y in $varlist_rhs {
     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & industrial_pre==0,  `options'
     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+    quietly xthdidregress ra (`diff') (diff_treatment) if $diff_sample & industrial_pre==0, `options'
+    eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
 
     display
     display "=== Service sample ==="
     esttab, b(3) se style(tex)
 
+    drop `diff'
 }
 
 STOP HERE
