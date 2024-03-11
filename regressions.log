@@ -46,7 +46,7 @@ Notes:
 . global diff_sample "(ever_local==1 | ever_expat==1 | foreign==0)"
 
 . 
-. global varlist_rhs "exporter lnEx lnQd export_entry "
+. global varlist_rhs "lnK lnL TFP export_entry lnEx lnQd  "
 
 . local pre 4
 
@@ -100,9 +100,9 @@ time_forei |         type
   3.     display
   4.     display
   5.     display "=== Variable: `Y' ==="
-  6.     tempvar diff
-  7.     clonevar `diff' = `Y'
-  8.     replace `diff' = -`diff' if ever_local==1 & added_controls==0
+  6.     clonevar difference = `Y'
+  7.     replace difference = -`Y' if ever_local==1 & added_controls==0
+  8.     replace difference = -`Y' if added_controls==1
   9. 
 .     eststo clear
  10.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, `options'
@@ -110,8 +110,8 @@ time_forei |         type
  12.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, `opti
 > ons'
  13.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
- 14.     quietly xthdidregress ra (`diff') (diff_treatment) if $diff_sample, `o
-> ptions'
+ 14.     quietly xthdidregress ra (difference) (diff_treatment) if $diff_sample
+> , `options'
  15.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
  16. 
 .     display
@@ -125,8 +125,8 @@ time_forei |         type
  22.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & indu
 > strial_pre==1,  `options'
  23.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
- 24.     quietly xthdidregress ra (`diff') (diff_treatment) if $diff_sample & i
-> ndustrial_pre==1, `options'
+ 24.     quietly xthdidregress ra (difference) (diff_treatment) if $diff_sample
+>  & industrial_pre==1, `options'
  25.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
  26. 
 .     display
@@ -140,21 +140,22 @@ time_forei |         type
  32.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & indu
 > strial_pre==0,  `options'
  33.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
- 34.     quietly xthdidregress ra (`diff') (diff_treatment) if $diff_sample & i
-> ndustrial_pre==0, `options'
+ 34.     quietly xthdidregress ra (difference) (diff_treatment) if $diff_sample
+>  & industrial_pre==0, `options'
  35.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
  36. 
 .     display
  37.     display "=== Service sample ==="
  38.     esttab, b(3) se style(tex)
  39. 
-.     drop `diff'
+.     drop difference
  40. }
 
 
 
-=== Variable: exporter ===
-(3,054 real changes made)
+=== Variable: lnK ===
+(6,115 real changes made)
+(4,559 real changes made)
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -163,10 +164,10 @@ time_forei |         type
 
 ------------------------------------------------------------
                       (1)             (2)             (3)   \\
-                 exporter        exporter        __000000   \\
+                      lnK             lnK      difference   \\
 ------------------------------------------------------------
-ATET                0.031           0.065*         -0.049** \\
-                  (0.023)         (0.030)         (0.019)   \\
+ATET                0.035           0.307**         0.332***\\
+                  (0.089)         (0.112)         (0.076)   \\
 ------------------------------------------------------------
 N                    6393            5752           12145   \\
 ------------------------------------------------------------
@@ -180,10 +181,10 @@ Standard errors in parentheses
 
 ------------------------------------------------------------
                       (1)             (2)             (3)   \\
-                 exporter        exporter        __000000   \\
+                      lnK             lnK      difference   \\
 ------------------------------------------------------------
-ATET                0.053           0.029          -0.088** \\
-                  (0.035)         (0.039)         (0.028)   \\
+ATET                0.167           0.413**         0.345** \\
+                  (0.129)         (0.149)         (0.108)   \\
 ------------------------------------------------------------
 N                    2872            2671            5543   \\
 ------------------------------------------------------------
@@ -197,10 +198,10 @@ Standard errors in parentheses
 
 ------------------------------------------------------------
                       (1)             (2)             (3)   \\
-                 exporter        exporter        __000000   \\
+                      lnK             lnK      difference   \\
 ------------------------------------------------------------
-ATET               -0.005           0.099*         -0.017   \\
-                  (0.029)         (0.047)         (0.025)   \\
+ATET               -0.042           0.234           0.318** \\
+                  (0.119)         (0.166)         (0.106)   \\
 ------------------------------------------------------------
 N                    3521            3081            6602   \\
 ------------------------------------------------------------
@@ -209,9 +210,9 @@ Standard errors in parentheses
 
 
 
-=== Variable: lnEx ===
-(6,693 missing values generated)
-(3,054 real changes made)
+=== Variable: lnL ===
+(5,769 real changes made)
+(4,237 real changes made)
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -220,13 +221,112 @@ Standard errors in parentheses
 
 ------------------------------------------------------------
                       (1)             (2)             (3)   \\
-                     lnEx            lnEx        __000001   \\
+                      lnL             lnL      difference   \\
 ------------------------------------------------------------
-ATET                0.691***        0.898***       -0.521***\\
-                  (0.171)         (0.195)         (0.149)   \\
+ATET                0.136           0.546***        0.114   \\
+                  (0.084)         (0.113)         (0.069)   \\
 ------------------------------------------------------------
-N                    3101            2859            5960   \\
+N                    6393            5752           12145   \\
 ------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
 (est1 stored)
+(est2 stored)
+(est3 stored)
+
+=== Industry sample ===
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      lnL             lnL      difference   \\
+------------------------------------------------------------
+ATET                0.262           0.409**         0.003   \\
+                  (0.136)         (0.146)         (0.103)   \\
+------------------------------------------------------------
+N                    2872            2671            5543   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+(est1 stored)
+(est2 stored)
+(est3 stored)
+
+=== Service sample ===
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      lnL             lnL      difference   \\
+------------------------------------------------------------
+ATET                0.053           0.777***        0.201*  \\
+                  (0.106)         (0.174)         (0.092)   \\
+------------------------------------------------------------
+N                    3521            3081            6602   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+
+
+
+=== Variable: TFP ===
+(5,997 real changes made)
+(4,446 real changes made)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+
+=== Full sample ===
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      TFP             TFP      difference   \\
+------------------------------------------------------------
+ATET                0.059           0.168**         0.033   \\
+                  (0.032)         (0.057)         (0.029)   \\
+------------------------------------------------------------
+N                    6393            5752           12145   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+(est1 stored)
+(est2 stored)
+(est3 stored)
+
+=== Industry sample ===
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      TFP             TFP      difference   \\
+------------------------------------------------------------
+ATET                0.055           0.107           0.058   \\
+                  (0.053)         (0.068)         (0.042)   \\
+------------------------------------------------------------
+N                    2872            2671            5543   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+(est1 stored)
+(est2 stored)
+(est3 stored)
+
+=== Service sample ===
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      TFP             TFP      difference   \\
+------------------------------------------------------------
+ATET                0.046           0.234*          0.024   \\
+                  (0.039)         (0.094)         (0.039)   \\
+------------------------------------------------------------
+N                    3521            3081            6602   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+
+
+
+=== Variable: export_entry ===
+(8,133 missing values generated)
+(395 real changes made)
+(80 real changes made)
+(est1 stored)
+(est2 stored)
