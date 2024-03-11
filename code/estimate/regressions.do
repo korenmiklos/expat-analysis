@@ -9,8 +9,8 @@ global here = r(here)
 use "$here/temp/analysis_sample.dta", clear
 
 *Samples
-global local_sample "(ever_local==1 | foreign==0)"
-global expat_sample "(ever_expat==1 | foreign==0)"
+global local_sample "((ever_local==1 | foreign==0) & (added_controls==0))"
+global expat_sample "((ever_expat==1 | foreign==0) & (added_controls==0))"
 global diff_sample "(ever_local==1 | ever_expat==1 | foreign==0)"
 
 global varlist_rhs "exporter lnEx lnQd export_entry "
@@ -18,6 +18,13 @@ local pre 4
 local post 4
 
 generate byte diff_treatment = has_expat_ceo | local_ceo
+* add explicit control firms
+* only keep control years of these firms
+generate byte control = (foreign==0)
+expand 1+control, generate(added_controls)
+tabulate time_foreign added_controls 
+* these firms need a new id
+replace frame_id_numeric = 10*frame_id_numeric if added_controls==1
 
 ****Average effect, foreign_hire sample, local and expat separately, xthdidreg
 local options group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
@@ -29,7 +36,7 @@ foreach Y in $varlist_rhs {
     display "=== Variable: `Y' ==="
     tempvar diff
     clonevar `diff' = `Y'
-    replace `diff' = -`diff' if ever_local==1
+    replace `diff' = -`diff' if ever_local==1 & added_controls==0
 
     eststo clear
     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, `options'

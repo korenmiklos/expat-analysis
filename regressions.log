@@ -39,9 +39,11 @@ Notes:
 
 . 
 . *Samples
-. global local_sample "(ever_local==1 | foreign==0)"
+. global local_sample "((ever_local==1 | foreign==0) & (added_controls==0))"
 
-. global expat_sample "(ever_expat==1 | foreign==0)"
+. global expat_sample "((ever_expat==1 | foreign==0) & (added_controls==0))"
+
+. global diff_sample "(ever_local==1 | ever_expat==1 | foreign==0)"
 
 . 
 . global varlist_rhs "exporter lnEx lnQd export_entry "
@@ -49,6 +51,42 @@ Notes:
 . local pre 4
 
 . local post 4
+
+. 
+. generate byte diff_treatment = has_expat_ceo | local_ceo
+
+. * add explicit control firms
+. * only keep control years of these firms
+. generate byte control = (foreign==0)
+
+. expand 1+control, generate(added_controls)
+(4,559 observations created)
+
+. tabulate time_foreign added_controls 
+
+           | Expanded observation
+time_forei |         type
+        gn | Original   Duplicate |     Total
+-----------+----------------------+----------
+        -7 |       388        388 |       776 
+        -6 |       443        443 |       886 
+        -5 |       507        507 |     1,014 
+        -4 |       591        591 |     1,182 
+        -3 |       692        692 |     1,384 
+        -2 |       810        810 |     1,620 
+        -1 |     1,128      1,128 |     2,256 
+         0 |     1,175          0 |     1,175 
+         1 |     1,023          0 |     1,023 
+         2 |       847          0 |       847 
+         3 |       713          0 |       713 
+         4 |       607          0 |       607 
+         5 |       527          0 |       527 
+-----------+----------------------+----------
+     Total |     9,451      4,559 |    14,010 
+
+. * these firms need a new id
+. replace frame_id_numeric = 10*frame_id_numeric if added_controls==1
+(4,559 real changes made)
 
 . 
 . ****Average effect, foreign_hire sample, local and expat separately, xthdidre
@@ -62,256 +100,133 @@ Notes:
   3.     display
   4.     display
   5.     display "=== Variable: `Y' ==="
-  6. 
+  6.     tempvar diff
+  7.     clonevar `diff' = `Y'
+  8.     replace `diff' = -`diff' if ever_local==1 & added_controls==0
+  9. 
 .     eststo clear
-  7.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, `options'
-  8.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
-  9.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, `opti
+ 10.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, `options'
+ 11.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+ 12.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, `opti
 > ons'
- 10.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
- 11. 
+ 13.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+ 14.     quietly xthdidregress ra (`diff') (diff_treatment) if $diff_sample, `o
+> ptions'
+ 15.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+ 16. 
 .     display
- 12.     display "=== Full sample ==="
- 13.     esttab, b(3) se  style(tex)
- 14. 
-.     eststo clear
- 15.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industri
-> al_pre==1,  `options'
- 16.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
- 17.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & indu
-> strial_pre==1,  `options'
- 18.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+ 17.     display "=== Full sample ==="
+ 18.     esttab, b(3) se  style(tex)
  19. 
-.     display
- 20.     display "=== Industry sample ==="
- 21.     esttab, b(3) se  style(tex)
- 22. 
 .     eststo clear
- 23.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industri
-> al_pre==0,  `options'
- 24.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
- 25.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & indu
-> strial_pre==0,  `options'
- 26.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
- 27. 
+ 20.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industri
+> al_pre==1,  `options'
+ 21.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+ 22.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & indu
+> strial_pre==1,  `options'
+ 23.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+ 24.     quietly xthdidregress ra (`diff') (diff_treatment) if $diff_sample & i
+> ndustrial_pre==1, `options'
+ 25.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+ 26. 
 .     display
- 28.     display "=== Service sample ==="
- 29.     esttab, b(3) se style(tex)
- 30. 
-. }
+ 27.     display "=== Industry sample ==="
+ 28.     esttab, b(3) se  style(tex)
+ 29. 
+.     eststo clear
+ 30.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industri
+> al_pre==0,  `options'
+ 31.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+ 32.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & indu
+> strial_pre==0,  `options'
+ 33.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+ 34.     quietly xthdidregress ra (`diff') (diff_treatment) if $diff_sample & i
+> ndustrial_pre==0, `options'
+ 35.     eststo: quietly eventbaseline, pre(`pre') post(`post') baseline(atet)
+ 36. 
+.     display
+ 37.     display "=== Service sample ==="
+ 38.     esttab, b(3) se style(tex)
+ 39. 
+.     drop `diff'
+ 40. }
 
 
 
 === Variable: exporter ===
+(3,054 real changes made)
 (est1 stored)
 (est2 stored)
+(est3 stored)
 
 === Full sample ===
 
---------------------------------------------
-                      (1)             (2)   \\
-                 exporter        exporter   \\
---------------------------------------------
-ATET                0.031           0.065*  \\
-                  (0.023)         (0.030)   \\
---------------------------------------------
-N                    6393            5752   \\
---------------------------------------------
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                 exporter        exporter        __000000   \\
+------------------------------------------------------------
+ATET                0.031           0.065*         -0.049** \\
+                  (0.023)         (0.030)         (0.019)   \\
+------------------------------------------------------------
+N                    6393            5752           12145   \\
+------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
 (est1 stored)
 (est2 stored)
+(est3 stored)
 
 === Industry sample ===
 
---------------------------------------------
-                      (1)             (2)   \\
-                 exporter        exporter   \\
---------------------------------------------
-ATET                0.053           0.029   \\
-                  (0.035)         (0.039)   \\
---------------------------------------------
-N                    2872            2671   \\
---------------------------------------------
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                 exporter        exporter        __000000   \\
+------------------------------------------------------------
+ATET                0.053           0.029          -0.088** \\
+                  (0.035)         (0.039)         (0.028)   \\
+------------------------------------------------------------
+N                    2872            2671            5543   \\
+------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
 (est1 stored)
 (est2 stored)
+(est3 stored)
 
 === Service sample ===
 
---------------------------------------------
-                      (1)             (2)   \\
-                 exporter        exporter   \\
---------------------------------------------
-ATET               -0.005           0.099*  \\
-                  (0.029)         (0.047)   \\
---------------------------------------------
-N                    3521            3081   \\
---------------------------------------------
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                 exporter        exporter        __000000   \\
+------------------------------------------------------------
+ATET               -0.005           0.099*         -0.017   \\
+                  (0.029)         (0.047)         (0.025)   \\
+------------------------------------------------------------
+N                    3521            3081            6602   \\
+------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
 
 
 
 === Variable: lnEx ===
+(6,693 missing values generated)
+(3,054 real changes made)
 (est1 stored)
 (est2 stored)
+(est3 stored)
 
 === Full sample ===
 
---------------------------------------------
-                      (1)             (2)   \\
-                     lnEx            lnEx   \\
---------------------------------------------
-ATET                0.691***        0.898***\\
-                  (0.171)         (0.195)   \\
---------------------------------------------
-N                    3101            2859   \\
---------------------------------------------
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                     lnEx            lnEx        __000001   \\
+------------------------------------------------------------
+ATET                0.691***        0.898***       -0.521***\\
+                  (0.171)         (0.195)         (0.149)   \\
+------------------------------------------------------------
+N                    3101            2859            5960   \\
+------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
 (est1 stored)
-(est2 stored)
-
-=== Industry sample ===
-
---------------------------------------------
-                      (1)             (2)   \\
-                     lnEx            lnEx   \\
---------------------------------------------
-ATET                0.687**         0.982***\\
-                  (0.221)         (0.242)   \\
---------------------------------------------
-N                    1868            1796   \\
---------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-(est1 stored)
-(est2 stored)
-
-=== Service sample ===
-
---------------------------------------------
-                      (1)             (2)   \\
-                     lnEx            lnEx   \\
---------------------------------------------
-ATET                0.762**         0.653*  \\
-                  (0.292)         (0.327)   \\
---------------------------------------------
-N                    1233            1063   \\
---------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-
-
-
-=== Variable: lnQd ===
-(est1 stored)
-(est2 stored)
-
-=== Full sample ===
-
---------------------------------------------
-                      (1)             (2)   \\
-                     lnQd            lnQd   \\
---------------------------------------------
-ATET                0.207*          0.696***\\
-                  (0.088)         (0.155)   \\
---------------------------------------------
-N                    6347            5650   \\
---------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-(est1 stored)
-(est2 stored)
-
-=== Industry sample ===
-
---------------------------------------------
-                      (1)             (2)   \\
-                     lnQd            lnQd   \\
---------------------------------------------
-ATET                0.263           0.469*  \\
-                  (0.143)         (0.187)   \\
---------------------------------------------
-N                    2845            2617   \\
---------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-(est1 stored)
-(est2 stored)
-
-=== Service sample ===
-
---------------------------------------------
-                      (1)             (2)   \\
-                     lnQd            lnQd   \\
---------------------------------------------
-ATET                0.169           1.030***\\
-                  (0.112)         (0.254)   \\
---------------------------------------------
-N                    3502            3033   \\
---------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-
-
-
-=== Variable: export_entry ===
-(est1 stored)
-(est2 stored)
-
-=== Full sample ===
-
---------------------------------------------
-                      (1)             (2)   \\
-             export_entry    export_entry   \\
---------------------------------------------
-ATET                0.303***        0.496***\\
-                  (0.028)         (0.044)   \\
---------------------------------------------
-N                    2773            2341   \\
---------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-(est1 stored)
-(est2 stored)
-
-=== Industry sample ===
-
---------------------------------------------
-                      (1)             (2)   \\
-             export_entry    export_entry   \\
---------------------------------------------
-ATET                0.559***        0.652***\\
-                  (0.076)         (0.090)   \\
---------------------------------------------
-N                     756             630   \\
---------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-(est1 stored)
-(est2 stored)
-
-=== Service sample ===
-
---------------------------------------------
-                      (1)             (2)   \\
-             export_entry    export_entry   \\
---------------------------------------------
-ATET                0.191***        0.427***\\
-                  (0.028)         (0.051)   \\
---------------------------------------------
-N                    2017            1711   \\
---------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-
-. 
-. STOP HERE
-command STOP is unrecognized
-r(199);
-
-end of do-file
-r(199);
