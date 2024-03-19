@@ -12,8 +12,8 @@ ___/   /   /___/   /   /___/       MP—Parallel Edition
 
 Stata license: Single-user 2-core  perpetual
 Serial number: 501806323834
-  Licensed to: Miklos Koren
-               CEU MicroData
+  Licensed to: Miklós Koren
+               Central European University
 
 Notes:
       1. Stata is running in batch mode.
@@ -29,7 +29,7 @@ Notes:
 . 
 . * find root folder
 . here
-/Users/koren/Tresorit/Mac/projects/expat/
+/Users/koren/Tresorit/Mac2Mac/projects/expat/
 
 . local here = r(here)
 
@@ -39,10 +39,10 @@ Notes:
 . log using "`here'/output/analysis_sample", text replace
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
-> og
+       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/analysis_samp
+> le.log
   log type:  text
- opened on:   8 Mar 2024, 11:38:22
+ opened on:  19 Mar 2024, 15:36:55
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -56,7 +56,7 @@ Notes:
     Result                      Number of obs
     -----------------------------------------
     Not matched                             0
-    Matched                           342,420  
+    Matched                           341,208  
     -----------------------------------------
 
 . 
@@ -71,20 +71,20 @@ Notes:
 owner_spell |
      _total |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          1 |    306,313       89.46       89.46
-          2 |     21,291        6.22       95.67
-          3 |     11,006        3.21       98.89
-          4 |      2,198        0.64       99.53
-          5 |      1,214        0.35       99.88
+          1 |    306,322       89.78       89.78
+          2 |     20,514        6.01       95.79
+          3 |     10,551        3.09       98.88
+          4 |      2,303        0.67       99.56
+          5 |      1,118        0.33       99.88
           6 |        241        0.07       99.95
-          7 |        131        0.04       99.99
-          8 |         26        0.01      100.00
+          7 |        118        0.03       99.99
+          8 |         41        0.01      100.00
 ------------+-----------------------------------
-      Total |    342,420      100.00
+      Total |    341,208      100.00
 
 . 
 . drop if owner_spell_total > 3 
-(3,810 observations deleted)
+(3,821 observations deleted)
 
 . 
 . * divestment
@@ -104,16 +104,16 @@ owner_spell |
 start_as_do |
      mestic |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |     17,747        5.24        5.24
-          1 |    320,863       94.76      100.00
+          0 |     19,868        5.89        5.89
+          1 |    317,519       94.11      100.00
 ------------+-----------------------------------
-      Total |    338,610      100.00
+      Total |    337,387      100.00
 
 . keep if start_as_domestic
-(17,747 observations deleted)
+(19,868 observations deleted)
 
 . keep if owner_spell <= 2
-(3,707 observations deleted)
+(3,476 observations deleted)
 
 . drop if divest == 1
 (0 observations deleted)
@@ -127,20 +127,20 @@ start_as_do |
 
 . 
 . count if ever_foreign
-  24,497
+  23,022
 
 . count if ever_foreign & firm_tag
-  1,734
+  1,615
 
 . count if ever_expat & firm_tag
-  694
+  632
 
 . 
 . count if has_expat_ceo == 1
-  5,220
+  4,697
 
 . count if has_expat_ceo == 1 & foreign == 0 
-  0
+  1
 
 . count if ever_expat == 1 & ever_foreign == 0
   0
@@ -159,7 +159,7 @@ frame_id_numeric                                                    (unlabeled)
                   Type: Numeric (long)
 
                  Range: [10000049,74849574]           Units: 1
-         Unique values: 33,674                    Missing .: 0/317,156
+         Unique values: 33,413                    Missing .: 0/314,043
 
                   Mean: 1.4e+07
              Std. dev.: 6.6e+06
@@ -168,29 +168,29 @@ frame_id_numeric                                                    (unlabeled)
                         1.0e+07   1.0e+07   1.1e+07   1.3e+07   2.4e+07
 
 . count if firm_tag
-  33,674
+  33,413
 
 . count
-  317,156
+  314,043
 
 . 
 . drop first_year_foreign time_foreign 
 
 . 
 . count
-  317,156
+  314,043
 
 . count if ever_foreign
-  24,497
+  23,022
 
 . count if ever_foreign & firm_tag
-  1,734
+  1,615
 
 . count if ever_expat & firm_tag
-  694
+  632
 
 . count if has_expat_ceo
-  5,220
+  4,697
 
 . 
 . drop ever_expat ever_foreign
@@ -213,14 +213,14 @@ frame_id_numeric                                                    (unlabeled)
 . 
 . * drop after first expat leaves
 . drop if ceo_foreign_spell > 2
-(1,990 observations deleted)
+(1,673 observations deleted)
 
 . drop if ceo_foreign_spell == 2 & has_expat_ceo == 0
 (0 observations deleted)
 
 . 
 . keep if ever_foreign == 1
-(292,659 observations deleted)
+(291,021 observations deleted)
 
 . 
 . generate foreign_only = foreign & !foreign_hire
@@ -232,7 +232,7 @@ frame_id_numeric                                                    (unlabeled)
 . 
 . * drop if local hires are much later replaced by expats
 . drop if ever_local_ceo & has_expat_ceo
-(1,288 observations deleted)
+(1,159 observations deleted)
 
 . 
 . tabulate foreign_only foreign_hire
@@ -240,24 +240,24 @@ frame_id_numeric                                                    (unlabeled)
 foreign_on |     foreign_hire
         ly |         0          1 |     Total
 -----------+----------------------+----------
-         0 |    10,592      8,554 |    19,146 
-         1 |     2,073          0 |     2,073 
+         0 |    10,482      7,815 |    18,297 
+         1 |     1,893          0 |     1,893 
 -----------+----------------------+----------
-     Total |    12,665      8,554 |    21,219 
+     Total |    12,375      7,815 |    20,190 
 
 . tabulate local_ceo has_expat_ceo
 
            |     has_expat_ceo
  local_ceo |         0          1 |     Total
 -----------+----------------------+----------
-         0 |    12,665      3,385 |    16,050 
-         1 |     5,169          0 |     5,169 
+         0 |    12,374      3,036 |    15,410 
+         1 |     4,780          0 |     4,780 
 -----------+----------------------+----------
-     Total |    17,834      3,385 |    21,219 
+     Total |    17,154      3,036 |    20,190 
 
 . 
 . keep if ever_foreign_hire
-(5,482 observations deleted)
+(5,292 observations deleted)
 
 . * no variation in these, drop
 . drop ever_foreign ever_foreign_hire
@@ -274,7 +274,7 @@ foreign_on |     foreign_hire
 . 
 . * limit sample to event window
 . keep if inrange(time_foreign, -7, 5)
-(5,821 observations deleted)
+(5,532 observations deleted)
 
 . 
 . egen exporter_pre = max(exporter & inrange(time_foreign, -3, -1)), by(frame_i
@@ -284,7 +284,7 @@ foreign_on |     foreign_hire
 . clonevar export_entry = exporter
 
 . replace export_entry = . if exporter_pre == 1
-(5,587 real changes made, 5,587 to missing)
+(5,345 real changes made, 5,345 to missing)
 
 . 
 . *Create teaor in year -1, drop agriculture
@@ -309,10 +309,12 @@ foreign_on |     foreign_hire
 
 . assert !missing(teaor08_2d_pre)
 
+. drop `last_year_before'
+
 . 
 . * drop agriculture and mining firms
 . drop if teaor08_2d_pre < 5 
-(455 observations deleted)
+(456 observations deleted)
 
 . generate industrial_pre = (teaor08_2d_pre < 40)
 
@@ -322,17 +324,17 @@ foreign_on |     foreign_hire
 . quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial_firm==1
 
 . predict TFP if e(sample), resid
-(5,160 missing values generated)
+(4,852 missing values generated)
 
 . 
 . quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial_firm==0
 
 . predict TFP_temp if e(sample), resid
-(4,291 missing values generated)
+(4,048 missing values generated)
 
 . 
 . replace TFP = TFP_temp if missing(TFP)
-(5,160 real changes made)
+(4,852 real changes made)
 
 . drop TFP_temp
 
@@ -355,7 +357,6 @@ foreign_on |     foreign_hire
   variable ever_expat was float now byte
   variable exporter_pre was float now byte
   variable teaor08_1d_num was float now byte
-  variable __000000 was float now int
   variable teaor08_2d_pre was float now byte
   variable teaor08_1d_pre was float now byte
   variable industrial_pre was float now byte
@@ -368,17 +369,18 @@ foreign_on |     foreign_hire
   variable immat was double now long
   variable final_netgep was double now long
   variable tanass_18 was double now long
-  (878,943 bytes saved)
+  (809,900 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
-file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
+file /Users/koren/Tresorit/Mac2Mac/projects/expat//temp/analysis_sample.dta
+    saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
-> og
+       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/analysis_samp
+> le.log
   log type:  text
- closed on:   8 Mar 2024, 11:38:31
+ closed on:  19 Mar 2024, 15:37:04
 -------------------------------------------------------------------------------
 
 . 
