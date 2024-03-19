@@ -18,11 +18,12 @@ foreach Y in $varlist_rhs {
 
     eststo clear
     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
-
     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+
     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
-
     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+
+    eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet)
 
     display "Full sample"
     esttab, b(3) se  style(tex)
@@ -39,6 +40,8 @@ foreach Y in $varlist_rhs {
     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & industrial==1, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
 
+    eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet)
+
     display "Industry sample"
     esttab, b(3) se  style(tex)
 }
@@ -53,6 +56,8 @@ foreach Y in $varlist_rhs {
     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & industrial==0, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+
+    eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet)
 
     display "Service sample"
     esttab, b(3) se style(tex)
