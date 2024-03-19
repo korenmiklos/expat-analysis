@@ -20,27 +20,32 @@ foreach Y in $varlist_rhs {
 
 }
 
-*Industrial sample
-foreach Y in $varlist_rhs {
-    display "`Y'"
+preserve
+    keep if industrial == 1
+    *Industrial sample
+    foreach Y in $varlist_rhs {
+        display "`Y'"
 
-    eststo clear
-    eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet)
+        eststo clear
+        eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet)
 
-    display "Industry sample"
-    esttab, b(3) se  style(tex)
-}
+        display "Industry sample"
+        esttab, b(3) se  style(tex)
+    }
+restore
 
 *Service sample
-foreach Y in $varlist_rhs {
+preserve
+    keep if industrial == 0
+    foreach Y in $varlist_rhs {
 
-    display "`Y'"
+        display "`Y'"
 
-    eststo clear
-    eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet)
+        eststo clear
+        eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet)
 
-    display "Service sample"
-    esttab, b(3) se style(tex)
-}
-
+        display "Service sample"
+        esttab, b(3) se style(tex)
+    }
+restore
 

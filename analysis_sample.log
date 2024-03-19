@@ -42,7 +42,7 @@ Notes:
        log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/analysis_samp
 > le.log
   log type:  text
- opened on:  19 Mar 2024, 18:46:11
+ opened on:  19 Mar 2024, 19:41:59
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -56,7 +56,7 @@ Notes:
     Result                      Number of obs
     -----------------------------------------
     Not matched                             0
-    Matched                            44,277  
+    Matched                           286,454  
     -----------------------------------------
 
 . 
@@ -71,20 +71,21 @@ Notes:
 owner_spell |
      _total |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          1 |     15,254       34.45       34.45
-          2 |     17,183       38.81       73.26
-          3 |      8,483       19.16       92.42
-          4 |      2,067        4.67       97.09
-          5 |      1,014        2.29       99.38
-          6 |        161        0.36       99.74
-          7 |         74        0.17       99.91
-          8 |         41        0.09      100.00
+          1 |    245,548       85.72       85.72
+          2 |     26,283        9.18       94.90
+          3 |     10,015        3.50       98.39
+          4 |      2,852        1.00       99.39
+          5 |      1,179        0.41       99.80
+          6 |        398        0.14       99.94
+          7 |        113        0.04       99.98
+          8 |         41        0.01       99.99
+          9 |         25        0.01      100.00
 ------------+-----------------------------------
-      Total |     44,277      100.00
+      Total |    286,454      100.00
 
 . 
 . drop if owner_spell_total > 3 
-(3,357 observations deleted)
+(4,608 observations deleted)
 
 . 
 . * divestment
@@ -104,16 +105,16 @@ owner_spell |
 start_as_do |
      mestic |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |     18,768       45.87       45.87
-          1 |     22,152       54.13      100.00
+          0 |     56,911       20.19       20.19
+          1 |    224,935       79.81      100.00
 ------------+-----------------------------------
-      Total |     40,920      100.00
+      Total |    281,846      100.00
 
 . keep if start_as_domestic
-(18,768 observations deleted)
+(56,911 observations deleted)
 
 . keep if owner_spell <= 2
-(2,868 observations deleted)
+(2,886 observations deleted)
 
 . drop if divest == 1
 (0 observations deleted)
@@ -127,20 +128,20 @@ start_as_do |
 
 . 
 . count if ever_foreign
-  18,762
+  19,115
 
 . count if ever_foreign & firm_tag
-  1,372
+  1,429
 
 . count if ever_expat & firm_tag
-  514
+  627
 
 . 
 . count if has_expat_ceo == 1
-  3,602
+  4,481
 
 . count if has_expat_ceo == 1 & foreign == 0 
-  0
+  11
 
 . count if ever_expat == 1 & ever_foreign == 0
   0
@@ -158,39 +159,33 @@ frame_id_numeric                                                    (unlabeled)
 
                   Type: Numeric (long)
 
-                 Range: [10000908,48416881]           Units: 1
-         Unique values: 1,433                     Missing .: 0/19,284
+                 Range: [10000063,74849574]           Units: 1
+         Unique values: 25,681                    Missing .: 0/222,049
 
-                  Mean: 1.2e+07
-             Std. dev.: 4.0e+06
+                  Mean: 1.4e+07
+             Std. dev.: 7.1e+06
 
            Percentiles:     10%       25%       50%       75%       90%
-                        1.0e+07   1.0e+07   1.1e+07   1.2e+07   1.4e+07
+                        1.0e+07   1.1e+07   1.1e+07   1.4e+07   2.5e+07
 
 . count if firm_tag
-  1,433
+  25,681
 
 . count
-  19,284
+  222,049
 
 . 
-. drop first_year_foreign time_foreign 
-
-. 
-. count
-  19,284
-
 . count if ever_foreign
-  18,762
+  19,115
 
 . count if ever_foreign & firm_tag
-  1,372
+  1,429
 
 . count if ever_expat & firm_tag
-  514
+  627
 
 . count if has_expat_ceo
-  3,602
+  4,481
 
 . 
 . drop ever_expat ever_foreign
@@ -213,14 +208,14 @@ frame_id_numeric                                                    (unlabeled)
 . 
 . * drop after first expat leaves
 . drop if ceo_foreign_spell > 2
-(1,566 observations deleted)
+(1,749 observations deleted)
 
 . drop if ceo_foreign_spell == 2 & has_expat_ceo == 0
 (0 observations deleted)
 
 . 
 . keep if ever_foreign == 1
-(522 observations deleted)
+(202,934 observations deleted)
 
 . 
 . generate foreign_only = foreign & !foreign_hire
@@ -232,7 +227,7 @@ frame_id_numeric                                                    (unlabeled)
 . 
 . * drop if local hires are much later replaced by expats
 . drop if ever_local_ceo & has_expat_ceo
-(976 observations deleted)
+(1,135 observations deleted)
 
 . 
 . tabulate foreign_only foreign_hire
@@ -240,24 +235,24 @@ frame_id_numeric                                                    (unlabeled)
 foreign_on |     foreign_hire
         ly |         0          1 |     Total
 -----------+----------------------+----------
-         0 |     8,282      6,232 |    14,514 
-         1 |     1,706          0 |     1,706 
+         0 |     8,008      6,538 |    14,546 
+         1 |     1,685          0 |     1,685 
 -----------+----------------------+----------
-     Total |     9,988      6,232 |    16,220 
+     Total |     9,693      6,538 |    16,231 
 
 . tabulate local_ceo has_expat_ceo
 
            |     has_expat_ceo
  local_ceo |         0          1 |     Total
 -----------+----------------------+----------
-         0 |     9,988      2,237 |    12,225 
-         1 |     3,995          0 |     3,995 
+         0 |     9,669      2,890 |    12,559 
+         1 |     3,672          0 |     3,672 
 -----------+----------------------+----------
-     Total |    13,983      2,237 |    16,220 
+     Total |    13,341      2,890 |    16,231 
 
 . 
 . keep if ever_foreign_hire
-(4,572 observations deleted)
+(4,469 observations deleted)
 
 . * no variation in these, drop
 . drop ever_foreign ever_foreign_hire
@@ -274,7 +269,7 @@ foreign_on |     foreign_hire
 . 
 . * limit sample to event window
 . keep if inrange(time_foreign, -6, 4)
-(4,931 observations deleted)
+(4,948 observations deleted)
 
 . 
 . egen exporter_pre = max(exporter & inrange(time_foreign, -3, -1)), by(frame_i
@@ -284,7 +279,7 @@ foreign_on |     foreign_hire
 . clonevar export_entry = exporter
 
 . replace export_entry = . if exporter_pre == 1
-(3,864 real changes made, 3,864 to missing)
+(3,920 real changes made, 3,920 to missing)
 
 . 
 . *Create teaor in year -1, drop agriculture
@@ -295,10 +290,10 @@ foreign_on |     foreign_hire
 
 . egen `last_year_before' = max(cond(time_foreign < 0, year,.)), by(frame_id_nu
 > meric)
-(5 missing values generated)
+(9 missing values generated)
 
 . drop if missing(`last_year_before')
-(5 observations deleted)
+(9 observations deleted)
 
 . 
 . egen teaor08_2d_pre = max(cond(year==`last_year_before', teaor08_2d, .)), by(
@@ -317,17 +312,17 @@ foreign_on |     foreign_hire
 . quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial==1
 
 . predict TFP if e(sample), resid
-(3,720 missing values generated)
+(3,706 missing values generated)
 
 . 
 . quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial==0
 
 . predict TFP_temp if e(sample), resid
-(2,992 missing values generated)
+(3,099 missing values generated)
 
 . 
 . replace TFP = TFP_temp if missing(TFP)
-(3,720 real changes made)
+(3,706 real changes made)
 
 . drop TFP_temp
 
@@ -362,7 +357,7 @@ foreign_on |     foreign_hire
   variable immat was double now long
   variable final_netgep was double now long
   variable tanass_18 was double now long
-  (610,792 bytes saved)
+  (619,255 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
 file /Users/koren/Tresorit/Mac2Mac/projects/expat//temp/analysis_sample.dta
@@ -373,7 +368,7 @@ file /Users/koren/Tresorit/Mac2Mac/projects/expat//temp/analysis_sample.dta
        log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/analysis_samp
 > le.log
   log type:  text
- closed on:  19 Mar 2024, 18:46:31
+ closed on:  19 Mar 2024, 19:42:18
 -------------------------------------------------------------------------------
 
 . 

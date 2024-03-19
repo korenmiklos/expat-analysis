@@ -31,6 +31,8 @@ foreach Y in $varlist_rhs {
 }
 
 *Industrial sample
+preserve
+keep if industrial==1
 foreach Y in $varlist_rhs {
     display "`Y'"
 
@@ -45,8 +47,11 @@ foreach Y in $varlist_rhs {
     display "Industry sample"
     esttab, b(3) se  style(tex)
 }
+restore
 
 *Service sample
+preserve
+keep if industrial==0
 foreach Y in $varlist_rhs {
 
     display "`Y'"
@@ -62,7 +67,7 @@ foreach Y in $varlist_rhs {
     display "Service sample"
     esttab, b(3) se style(tex)
 }
-
+restore
 
 *****Figures
 

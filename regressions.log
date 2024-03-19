@@ -76,10 +76,10 @@ Full sample
                       (1)             (2)             (3)   \\
                       lnK             lnK             lnK   \\
 ------------------------------------------------------------
-ATET                0.140           0.264*          0.081   \\
-                  (0.100)         (0.134)         (0.145)   \\
+ATET                0.124           0.413**         0.306*  \\
+                  (0.102)         (0.126)         (0.139)   \\
 ------------------------------------------------------------
-N                    5015            4288            5754   \\
+N                    4873            4504            5923   \\
 ------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
@@ -93,10 +93,10 @@ Full sample
                       (1)             (2)             (3)   \\
                       lnL             lnL             lnL   \\
 ------------------------------------------------------------
-ATET                0.103           0.565***        0.416** \\
-                  (0.088)         (0.131)         (0.137)   \\
+ATET                0.193*          0.608***        0.462***\\
+                  (0.094)         (0.122)         (0.130)   \\
 ------------------------------------------------------------
-N                    5015            4288            5754   \\
+N                    4873            4504            5923   \\
 ------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
@@ -110,10 +110,10 @@ Full sample
                       (1)             (2)             (3)   \\
                       TFP             TFP             TFP   \\
 ------------------------------------------------------------
-ATET                0.029           0.066           0.039   \\
-                  (0.037)         (0.059)         (0.055)   \\
+ATET                0.063           0.083           0.042   \\
+                  (0.036)         (0.053)         (0.047)   \\
 ------------------------------------------------------------
-N                    5015            4288            5754   \\
+N                    4873            4504            5923   \\
 ------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
@@ -127,10 +127,10 @@ Full sample
                       (1)             (2)             (3)   \\
                       lnQ             lnQ             lnQ   \\
 ------------------------------------------------------------
-ATET                0.305**         0.753***        0.424** \\
-                  (0.093)         (0.156)         (0.163)   \\
+ATET                0.368***        0.831***        0.482***\\
+                  (0.098)         (0.138)         (0.143)   \\
 ------------------------------------------------------------
-N                    5015            4288            5754   \\
+N                    4873            4504            5923   \\
 ------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
@@ -144,11 +144,433 @@ Full sample
                       (1)             (2)             (3)   \\
                      lnEx            lnEx            lnEx   \\
 ------------------------------------------------------------
-ATET                0.831***        0.805***        0.256   \\
-                  (0.197)         (0.211)         (0.226)   \\
+ATET                0.866***        0.627**        -0.084   \\
+                  (0.207)         (0.219)         (0.223)   \\
 ------------------------------------------------------------
-N                    2413            2109            2626   \\
+N                    2342            2241            2711   \\
 ------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
 lnQd
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Full sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                     lnQd            lnQd            lnQd   \\
+------------------------------------------------------------
+ATET                0.313**         0.608***        0.307   \\
+                  (0.107)         (0.153)         (0.159)   \\
+------------------------------------------------------------
+N                    4831            4427            5829   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+
+. 
+. *Industrial sample
+. preserve
+
+. keep if industrial==1
+(3,706 observations deleted)
+
+. foreach Y in $varlist_rhs {
+  2.     display "`Y'"
+  3. 
+.     eststo clear
+  4.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industri
+> al==1, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(not
+> yet)
+  5.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+  6.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & indu
+> strial==1, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup
+> (notyet)
+  7.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+  8. 
+.     eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(loca
+> l_ceo) pre(4) post(4) baseline(atet)
+  9. 
+.     display "Industry sample"
+ 10.     esttab, b(3) se  style(tex)
+ 11. }
+lnK
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Industry sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      lnK             lnK             lnK   \\
+------------------------------------------------------------
+ATET                0.295*          0.407*          0.150   \\
+                  (0.135)         (0.180)         (0.187)   \\
+------------------------------------------------------------
+N                    2142            2109            2733   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+lnL
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Industry sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      lnL             lnL             lnL   \\
+------------------------------------------------------------
+ATET                0.312*          0.548**         0.501** \\
+                  (0.149)         (0.167)         (0.188)   \\
+------------------------------------------------------------
+N                    2142            2109            2733   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+TFP
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Industry sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      TFP             TFP             TFP   \\
+------------------------------------------------------------
+ATET                0.022           0.031           0.060   \\
+                  (0.059)         (0.065)         (0.046)   \\
+------------------------------------------------------------
+N                    2142            2109            2733   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+lnQ
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Industry sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      lnQ             lnQ             lnQ   \\
+------------------------------------------------------------
+ATET                0.433**         0.698***        0.452** \\
+                  (0.164)         (0.173)         (0.173)   \\
+------------------------------------------------------------
+N                    2142            2109            2733   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+lnEx
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Industry sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                     lnEx            lnEx            lnEx   \\
+------------------------------------------------------------
+ATET                0.730**         0.666**         0.109   \\
+                  (0.273)         (0.251)         (0.284)   \\
+------------------------------------------------------------
+N                    1409            1419            1723   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+lnQd
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Industry sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                     lnQd            lnQd            lnQd   \\
+------------------------------------------------------------
+ATET                0.293           0.434*          0.283   \\
+                  (0.170)         (0.198)         (0.197)   \\
+------------------------------------------------------------
+N                    2108            2061            2663   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+
+. restore
+
+. 
+. *Service sample
+. preserve
+
+. keep if industrial==0
+(3,099 observations deleted)
+
+. foreach Y in $varlist_rhs {
+  2. 
+.     display "`Y'"
+  3. 
+.     eststo clear
+  4.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industri
+> al==0, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(not
+> yet)
+  5.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+  6.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & indu
+> strial==0, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup
+> (notyet)
+  7.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+  8. 
+.     eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(loca
+> l_ceo) pre(4) post(4) baseline(atet)
+  9. 
+.     display "Service sample"
+ 10.     esttab, b(3) se style(tex)
+ 11. }
+lnK
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Service sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      lnK             lnK             lnK   \\
+------------------------------------------------------------
+ATET               -0.011           0.428*          0.485*  \\
+                  (0.139)         (0.171)         (0.206)   \\
+------------------------------------------------------------
+N                    2731            2395            3186   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+lnL
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Service sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      lnL             lnL             lnL   \\
+------------------------------------------------------------
+ATET                0.084           0.735***        0.550** \\
+                  (0.116)         (0.176)         (0.190)   \\
+------------------------------------------------------------
+N                    2731            2395            3186   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+TFP
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Service sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      TFP             TFP             TFP   \\
+------------------------------------------------------------
+ATET                0.092*          0.130           0.043   \\
+                  (0.043)         (0.081)         (0.086)   \\
+------------------------------------------------------------
+N                    2731            2395            3186   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+lnQ
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Service sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      lnQ             lnQ             lnQ   \\
+------------------------------------------------------------
+ATET                0.293*          1.023***        0.645** \\
+                  (0.120)         (0.219)         (0.237)   \\
+------------------------------------------------------------
+N                    2731            2395            3186   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+lnEx
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Service sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                     lnEx            lnEx            lnEx   \\
+------------------------------------------------------------
+ATET                1.132***        0.640          -0.197   \\
+                  (0.265)         (0.358)         (0.396)   \\
+------------------------------------------------------------
+N                     933             822             945   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+lnQd
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Service sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                     lnQd            lnQd            lnQd   \\
+------------------------------------------------------------
+ATET                0.274*          0.847***        0.495   \\
+                  (0.129)         (0.233)         (0.260)   \\
+------------------------------------------------------------
+N                    2723            2366            3162   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+
+. restore
+
+. 
+. *****Figures
+. 
+. *Whole sample
+. foreach Y in $varlist_rhs {
+  2. 
+.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, group(fr
+> ame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+  3.     eventbaseline, pre(4) post(4) baseline(-1) generate(event_expat)
+  4. 
+.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, group(frame_
+> id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+  5.     eventbaseline, pre(4) post(4) baseline(-1) generate(event_local)
+  6. 
+.     frame event_expat: frlink 1:1 time, frame(event_local) generate(local)
+  7.     frame event_expat: frget coef_local=coef upper_local=upper lower_local
+> =lower, from(local)
+  8. 
+.     frame event_expat: graph twoway (rarea lower upper time, fcolor(red%10) l
+> color(red%10)) (line coef time, color(red)) (rarea lower_local upper_local ti
+> me, fcolor(gs10%10) lcolor(gs5%10)) (line coef_local time, color(grey)), grap
+> hregion(color(white)) xlabel(-4(1)4) legend(off) xline(-0.5) xtitle("Event ti
+> me") yline(0) 
+  9. 
+.     gr export "$here/output/twfe/expat_local_`Y'.pdf", replace
+ 10. 
+. }
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 4,504
+
+------------------------------------------------------------------------------
+         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .0368813   .1082531     0.34   0.733    -.1752908    .2490534
+          -3 |   .0355648   .0893633     0.40   0.691    -.1395841    .2107136
+          -2 |    .081173   .0603034     1.35   0.178    -.0370196    .1993656
+          -1 |          0  (omitted)
+           0 |   .2360325   .0629517     3.75   0.000     .1126494    .3594156
+           1 |   .3980538   .0928629     4.29   0.000     .2160458    .5800619
+           2 |   .4324812    .113382     3.81   0.000     .2102565     .654706
+           3 |    .509796   .1408628     3.62   0.000       .23371     .785882
+           4 |   .6786626   .1858743     3.65   0.000     .3143557     1.04297
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 4,873
+
+------------------------------------------------------------------------------
+         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0547779   .0919758    -0.60   0.551    -.2350473    .1254914
+          -3 |   .0230048    .064778     0.36   0.722    -.1039577    .1499673
+          -2 |   .0381407   .0495973     0.77   0.442    -.0590683    .1353497
+          -1 |          0  (omitted)
+           0 |   .0911559   .0511016     1.78   0.074    -.0090015    .1913132
+           1 |   .0815112   .0781158     1.04   0.297    -.0715929    .2346154
+           2 |     .10188   .1145444     0.89   0.374    -.1226229    .3263829
+           3 |   .1042401   .1316368     0.79   0.428    -.1537633    .3622434
+           4 |   .2475246   .1572747     1.57   0.116     -.060728    .5557773
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac2Mac/projects/expat//output/twfe/expat_local_lnK
+    > .pdf saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 4,504
+
+------------------------------------------------------------------------------
+         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.2237465   .1100226    -2.03   0.042    -.4393869   -.0081061
+          -3 |  -.1719337   .0832341    -2.07   0.039    -.3350697   -.0087978
+          -2 |  -.1349814   .0672961    -2.01   0.045    -.2668793   -.0030834
+          -1 |          0  (omitted)
+           0 |   .2542737   .0667085     3.81   0.000     .1235275      .38502
+           1 |   .3779455   .0955294     3.96   0.000     .1907113    .5651797
+           2 |   .5435499   .1114654     4.88   0.000     .3250817     .762018
+           3 |   .5416283   .1399843     3.87   0.000     .2672641    .8159925
+           4 |   .6588358   .1618833     4.07   0.000     .3415503    .9761214
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 4,873
+
+------------------------------------------------------------------------------
+         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .1092917    .091367     1.20   0.232    -.0697843    .2883677
+          -3 |   .1441994   .0751895     1.92   0.055    -.0031693    .2915681
+          -2 |   .0549269   .0506676     1.08   0.278    -.0443797    .1542336
+          -1 |          0  (omitted)
+           0 |   .1037543   .0558487     1.86   0.063    -.0057072    .2132159
+           1 |   .2325955   .0779857     2.98   0.003     .0797463    .3854447
+           2 |   .2423108   .1104663     2.19   0.028     .0258008    .4588209
+           3 |   .3137401   .1297977     2.42   0.016     .0593413    .5681389
+           4 |   .4585545    .139172     3.29   0.001     .1857823    .7313267
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac2Mac/projects/expat//output/twfe/expat_local_lnL
+    > .pdf saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 4,504
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |    .064051   .0472821     1.35   0.176    -.0286203    .1567222
+          -3 |   .0482811   .0384186     1.26   0.209    -.0270181    .1235802
+          -2 |   .0491575   .0317174     1.55   0.121    -.0130074    .1113225
+          -1 |          0  (omitted)
+           0 |   .0888313   .0297117     2.99   0.003     .0305974    .1470652
+           1 |   .0972725   .0405809     2.40   0.017     .0177355    .1768096
+           2 |   .1331583   .0497353     2.68   0.007     .0356789    .2306376
+           3 |   .1718707   .0657326     2.61   0.009     .0430372    .3007041
+           4 |   .1275747   .0791295     1.61   0.107    -.0275162    .2826657
+------------------------------------------------------------------------------

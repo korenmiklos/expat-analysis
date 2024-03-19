@@ -50,9 +50,6 @@ codebook frame_id_numeric
 count if firm_tag
 count
 
-drop first_year_foreign time_foreign 
-
-count
 count if ever_foreign
 count if ever_foreign & firm_tag
 count if ever_expat & firm_tag

@@ -46,36 +46,6 @@ bys foreign: egen `after' = count(1)
 scalar foreign_interpolate = `before'-`after'
 display foreign_interpolate
 
-* foreign change
-preserve
-use "`here'/temp/ceo-panel.dta", clear
-* expat is changed if job_begin < 1990 in firm_panel.do, not here
-bys frame_id_numeric: egen first_year_expat = min(cond(expat == 1, year,.))
-duplicates drop frame_id_numeric, force
-tempfile expat
-save `expat'
-restore
-
-merge m:1 frame_id_numeric using `expat', keepusing(first_year_expat) keep(1 3) nogen
-
-bys frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.))
-	
-generate manager_after_owner = first_year_expat - first_year_foreign
-generate event_time = year - first_year_expat
-
-replace foreign = 1 if (manager_after_owner == -2) & inlist(event_time, 0, 1)
-replace foreign = 1 if (manager_after_owner == -1) & inlist(event_time, 0)
-replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
-
-drop manager_after_owner event_time first_year_expat
-
-generate time_foreign = year - first_year_foreign
-
-* drop greenfield
-bys frame_id_numeric (year): gen owner_spell = sum(foreign != foreign[_n-1])
-bys frame_id_numeric: egen start_as_domestic = max((owner_spell == 1) & (foreign == 0))
-keep if start_as_domestic
-drop owner_spell start_as_domestic
 
 * limit sample before large merge - sampling based on firm-level variables, firm-year done later
 * average employment and financial firms deleted
@@ -85,16 +55,11 @@ bys frame_id_numeric: egen avg_emp = mean(emp)
 bys frame_id_numeric: egen industry_mode = mode(teaor08_2d), minmode
 
 
-* drop agriculture and mining firms
+* drop agriculture firms
 drop if industry_mode < 5 
 generate industrial = (industry_mode < 40)
 local sample ((avg_emp >= 20) & (industry_mode != 64 & industry_mode != 65 & industry_mode != 66))
 drop if !`sample'
-
-tempvar ever_foreign
-egen `ever_foreign' = max(foreign), by(frame_id_numeric)
-drop if `ever_foreign' == 0
-drop `ever_foreign'
 
 * proxy firm founding date with first balance sheet filed
 tempvar foundyear
