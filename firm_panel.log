@@ -45,7 +45,7 @@ Notes:
        log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/firm_panel.lo
 > g
   log type:  text
- opened on:  19 Mar 2024, 19:57:30
+ opened on:  19 Mar 2024, 20:07:26
 
 . 
 . * keep only sample from balance-small
@@ -60,9 +60,9 @@ Notes:
 . tempfile sample
 
 . save `sample', replace
-(file /var/folders/5z/21k9mmsd55d1w5_jl5n192sh0000gn/T//St59393.000001 not
+(file /var/folders/5z/21k9mmsd55d1w5_jl5n192sh0000gn/T//St62502.000001 not
     found)
-file /var/folders/5z/21k9mmsd55d1w5_jl5n192sh0000gn/T//St59393.000001 saved
+file /var/folders/5z/21k9mmsd55d1w5_jl5n192sh0000gn/T//St62502.000001 saved
     as .dta format
 
 . 
@@ -401,10 +401,9 @@ manager_aft |
 > c year)
 
 . 
-. * if there is a change in the ceo team, hiring or firing, increement the spel
-> l counter
-. bys frame_id_numeric (year): gen ceo_spell = sum(hire_ceo | fire_ceo) + 1 // 
-> so that index start from 1
+. * if there is a change in the ceo team, hiring, increement the spell counter
+. bys frame_id_numeric (year): gen ceo_spell = sum(hire_ceo) + 1 // so that ind
+> ex start from 1
 
 . 
 . tabulate n_expat_ceo n_local_ceo
@@ -485,7 +484,7 @@ file /Users/koren/Tresorit/Mac2Mac/projects/expat//temp/firm_events.dta saved
        log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/firm_panel.lo
 > g
   log type:  text
- closed on:  19 Mar 2024, 19:57:56
+ closed on:  19 Mar 2024, 20:07:51
 -------------------------------------------------------------------------------
 
 . 

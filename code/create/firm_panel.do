@@ -122,8 +122,8 @@ bys frame_id_numeric year: egen n_local_ceo = total(cond(!expat, 1, 0))
 * create firm-year data
 collapse (firstnm) n_expat_ceo n_local_ceo foreign ever_expat ever_foreign (count) n_ceo = expat (max) hire_ceo = hire fire_ceo = fire, by(frame_id_numeric year)
 
-* if there is a change in the ceo team, hiring or firing, increement the spell counter
-bys frame_id_numeric (year): gen ceo_spell = sum(hire_ceo | fire_ceo) + 1 // so that index start from 1
+* if there is a change in the ceo team, hiring, increement the spell counter
+bys frame_id_numeric (year): gen ceo_spell = sum(hire_ceo) + 1 // so that index start from 1
 
 tabulate n_expat_ceo n_local_ceo
 * create dummies from numbers

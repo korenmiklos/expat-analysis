@@ -42,7 +42,7 @@ Notes:
        log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/analysis_samp
 > le.log
   log type:  text
- opened on:  19 Mar 2024, 19:57:56
+ opened on:  19 Mar 2024, 20:07:51
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -309,3 +309,67 @@ foreign_on |     foreign_hire
 . 
 . * compute TFP
 . 
+. quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial==1
+
+. predict TFP if e(sample), resid
+(3,935 missing values generated)
+
+. 
+. quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial==0
+
+. predict TFP_temp if e(sample), resid
+(3,148 missing values generated)
+
+. 
+. replace TFP = TFP_temp if missing(TFP)
+(3,935 real changes made)
+
+. drop TFP_temp
+
+. 
+. compress
+  variable year was float now int
+  variable minyear was float now int
+  variable maxyear was float now int
+  variable industrial was float now byte
+  variable exporter_5 was float now byte
+  variable age was float now byte
+  variable owner_spell was float now byte
+  variable industry_year was float now int
+  variable foreign_hire was float now byte
+  variable ceo_foreign_spell was float now byte
+  variable foreign_only was float now byte
+  variable local_ceo was float now byte
+  variable ever_local_ceo was float now byte
+  variable first_year_foreign was float now int
+  variable time_foreign was float now byte
+  variable ever_expat was float now byte
+  variable exporter_pre was float now byte
+  variable teaor08_1d_num was float now byte
+  variable teaor08_2d_pre was float now byte
+  variable teaor08_1d_pre was float now byte
+  variable originalid was double now long
+  variable sales was double now long
+  variable tanass was double now long
+  variable jetok was double now long
+  variable export was double now long
+  variable ranyag was double now long
+  variable immat was double now long
+  variable final_netgep was double now long
+  variable tanass_18 was double now long
+  (644,553 bytes saved)
+
+. save "`here'/temp/analysis_sample.dta", replace
+file /Users/koren/Tresorit/Mac2Mac/projects/expat//temp/analysis_sample.dta
+    saved
+
+. log close
+      name:  <unnamed>
+       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/analysis_samp
+> le.log
+  log type:  text
+ closed on:  19 Mar 2024, 20:08:12
+-------------------------------------------------------------------------------
+
+. 
+end of do-file
