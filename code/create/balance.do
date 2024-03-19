@@ -48,7 +48,7 @@ display foreign_interpolate
 
 * foreign change
 preserve
-use "`here'/input/ceo-panel/ceo-panel.dta", clear
+use "`here'/temp/ceo-panel.dta", clear
 * expat is changed if job_begin < 1990 in firm_panel.do, not here
 bys frame_id_numeric: egen first_year_expat = min(cond(expat == 1, year,.))
 duplicates drop frame_id_numeric, force

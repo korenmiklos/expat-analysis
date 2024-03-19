@@ -17,8 +17,7 @@ keep frame_id year firm_birth firm_death foreign
 tempfile sample
 save `sample', replace
 
-use "`here'/input/ceo-panel/ceo-panel.dta", clear 
-rename person_id manager_id
+use "`here'/temp/ceo-panel.dta", clear 
 
 * only keep sample firms
 merge m:1 frame_id_numeric year using `sample', keep(match) nogen
