@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac/projects/expat//output/balance.log
+       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/balance.log
   log type:  text
- opened on:   8 Mar 2024, 11:22:57
+ opened on:  19 Mar 2024, 16:36:53
 
 . 
 . use "`here'/input/merleg-expat/balance-small.dta" 
@@ -223,18 +223,18 @@ owners from |
 
 . * expat is changed if job_begin < 1990 in firm_panel.do, not here
 . bys frame_id_numeric: egen first_year_expat = min(cond(expat == 1, year,.))
-(13,123,639 missing values generated)
+(10,878,879 missing values generated)
 
 . duplicates drop frame_id_numeric, force
 
 Duplicates in terms of frame_id_numeric
 
-(14,268,202 observations deleted)
+(13,977,508 observations deleted)
 
 . tempfile expat
 
 . save `expat'
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St60972.000002 saved
+file /var/folders/5z/21k9mmsd55d1w5_jl5n192sh0000gn/T//St99503.000002 saved
     as .dta format
 
 . restore
@@ -245,11 +245,11 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St60972.000002 saved
 
     Result                      Number of obs
     -----------------------------------------
-    Not matched                        21,031
-        from master                    21,031  
+    Not matched                        20,118
+        from master                    20,118  
         from using                          0  
 
-    Matched                         8,101,206  
+    Matched                         8,102,119  
     -----------------------------------------
 
 . 
@@ -259,20 +259,20 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St60972.000002 saved
 
 .         
 . generate manager_after_owner = first_year_expat - first_year_foreign
-(7,400,193 missing values generated)
+(7,302,193 missing values generated)
 
 . generate event_time = year - first_year_expat
-(7,129,948 missing values generated)
+(6,115,913 missing values generated)
 
 . 
 . replace foreign = 1 if (manager_after_owner == -2) & inlist(event_time, 0, 1)
-(2,167 real changes made)
+(3,157 real changes made)
 
 . replace foreign = 1 if (manager_after_owner == -1) & inlist(event_time, 0)
-(2,550 real changes made)
+(3,503 real changes made)
 
 . replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
-(33,294 real changes made)
+(37,475 real changes made)
 
 . 
 . drop manager_after_owner event_time first_year_expat
@@ -289,7 +289,7 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St60972.000002 saved
 > ign == 0))
 
 . keep if start_as_domestic
-(538,239 observations deleted)
+(516,831 observations deleted)
 
 . drop owner_spell start_as_domestic
 
@@ -300,24 +300,24 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St60972.000002 saved
 . * break the tie when mode is not unique
 . 
 . bys frame_id_numeric: egen avg_emp = mean(emp)
-(91,245 missing values generated)
+(91,551 missing values generated)
 
 . bys frame_id_numeric: egen industry_mode = mode(teaor08_2d), minmode
 warning: For at least one group, teaor08_2d contains all missing values.
          Generating missing values for the modes in these groups. Use option
          missing to treat missing values as a category.
-(1,189 missing values generated)
+(1,188 missing values generated)
 
 . local sample ((avg_emp >= 20) & (industry_mode != 64 & industry_mode != 65 & 
 > industry_mode != 66))
 
 . drop if !`sample'
-(7,103,695 observations deleted)
+(7,124,243 observations deleted)
 
 . scalar dropped_size_or_finance = r(N_drop)
 
 . display dropped_size_or_finance
-7103695
+7124243
 
 . 
 . * proxy firm founding date with first balance sheet filed
@@ -339,64 +339,64 @@ warning: For at least one group, teaor08_2d contains all missing values.
 >  is not filled up - just to not delete those rows because of missing ln depen
 > dent variables
   5. }
-(30,509 missing values generated)
-(56,597 real changes made)
-(208,788 missing values generated)
-(32,095 real changes made)
-(38,268 missing values generated)
-(54,493 real changes made)
-(30,286 missing values generated)
-(55,421 real changes made)
-(64,216 missing values generated)
+(30,570 missing values generated)
+(56,542 real changes made)
+(209,206 missing values generated)
+(32,063 real changes made)
+(38,385 missing values generated)
+(54,436 real changes made)
+(30,284 missing values generated)
+(55,371 real changes made)
+(64,186 missing values generated)
 (0 real changes made)
 (24,745 missing values generated)
-(56,753 real changes made)
-(167,508 missing values generated)
+(56,700 real changes made)
+(167,568 missing values generated)
 (0 real changes made)
 
 . 
 . * minimal employment cleaning
 . replace emp = 1 if emp <= 0 | missing(emp)
-(111,440 real changes made)
+(111,791 real changes made)
 
 . mvencode export_18, mv(0) override
-   export_18: 184937 missing values recoded
+   export_18: 185355 missing values recoded
 
 . 
 . * creating dependent variables
 . gen lnL = ln(emp)
 
 . gen lnM = ln(ranyag_18)
-(80,022 missing values generated)
+(80,038 missing values generated)
 
 . replace lnM = ln(ranyag8091_18) if year <= 1991
-(56,607 real changes made)
+(56,554 real changes made)
 
 . gen lnQ = ln(sales_18)
-(53,643 missing values generated)
+(53,872 missing values generated)
 
 . gen lnQL = lnQ - lnL
-(53,643 missing values generated)
+(53,872 missing values generated)
 
 . gen lnMQ = lnM - lnQ
-(57,846 missing values generated)
+(58,063 missing values generated)
 
 . generate lnEx = ln(export_18)
-(359,102 missing values generated)
+(359,760 missing values generated)
 
 . generate lnQd = ln(sales_18 - export_18)
-(55,573 missing values generated)
+(55,851 missing values generated)
 
 . 
 . gen byte exporter = export_18 > 0 & export_18 != .
 
 . gen export_share = export_18 / sales_18
-(53,643 missing values generated)
+(53,872 missing values generated)
 
 . gen exporter_5 = (export_share > .05 & export_share != .)
 
 . replace exporter_5 = . if export_share == .
-(53,643 real changes made, 53,643 to missing)
+(53,872 real changes made, 53,872 to missing)
 
 . 
 . * extrapolate capital stock
@@ -406,13 +406,13 @@ tanass_18:                                      Number of observations
 ------------                           ---------------------------------------
                                              Total      Integers   Nonintegers
 |  #                         Negative            4             1             3
-|  #                         Zero           68,119        68,119             -
-|  #                         Positive      397,763        75,276       322,487
+|  #                         Zero           68,316        68,316             -
+|  #                         Positive      398,309        75,289       323,020
 |  #                                   -----------   -----------   -----------
-|  #                         Total         465,886       143,396       322,490
-|  #   .   .   .   .         Missing        14,417
+|  #                         Total         466,629       143,606       323,023
+|  #   .   .   .   .         Missing        14,534
 +----------------------                -----------
--800.3072      6.09e+09                    480,303
+-800.3072      6.09e+09                    481,163
 (More than 99 unique values)
 
 . tempvar gap 
@@ -429,30 +429,30 @@ tanass_18:                                      Number of observations
 . * if gap_length <= 2, interpolate tanass with geometric average
 . bysort frame_id_numeric (year): replace tanass_18 = sqrt(tanass_18[_n-1] * ta
 > nass_18[_n+1]) if gap_length==1 & `gap'==1
-(22375 real changes made, 21033 to missing)
+(22435 real changes made, 21091 to missing)
 
 . bysort frame_id_numeric (year): replace tanass_18 = tanass_18[_n-1]^0.67 * ta
 > nass_18[_n+2]^0.33 if gap_length==2 & `gap'==1 & `gap'[_n-1]==0
-(808 real changes made, 608 to missing)
+(809 real changes made, 610 to missing)
 
 . bysort frame_id_numeric (year): replace tanass_18 = tanass_18[_n-2]^0.33 * ta
 > nass_18[_n+1]^0.67 if gap_length==2 & `gap'==1 & `gap'[_n+1]==0
-(1601 real changes made, 1401 to missing)
+(1602 real changes made, 1403 to missing)
 
 . * at either end, extrapolate for 1 year
 . bysort frame_id_numeric (year): replace tanass_18 = tanass_18[_n+1] if spell=
 > =1 & `gap'==1 & `gap'[_n+1]==0
-(9756 real changes made)
+(9803 real changes made)
 
 . bysort frame_id_numeric (year): replace tanass_18 = tanass_18[_n-1] if spell=
 > =max_spell & `gap'==1 & `gap'[_n-1]==0
-(3854 real changes made)
+(3864 real changes made)
 
 . 
 . drop spell gap_length max_spell
 
 . replace tanass_18 = round(tanass_18)
-(334,939 real changes made)
+(335,523 real changes made)
 
 . inspect tanass_18
 
@@ -460,50 +460,50 @@ tanass_18:                                      Number of observations
 ------------                           ---------------------------------------
                                              Total      Integers   Nonintegers
 |  #                         Negative            2             2             -
-|  #                         Zero           42,764        42,764             -
-|  #                         Positive      413,115       413,105            10
+|  #                         Zero           42,893        42,893             -
+|  #                         Positive      413,718       413,708            10
 |  #                                   -----------   -----------   -----------
-|  #                         Total         455,881       455,871            10
-|  #   .   .   .   .         Missing        24,422
+|  #                         Total         456,613       456,603            10
+|  #   .   .   .   .         Missing        24,550
 +----------------------                -----------
--60            6.09e+09                    480,303
+-60            6.09e+09                    481,163
 (More than 99 unique values)
 
 . 
 . gen lnK = ln(tanass_18)
-(67,188 missing values generated)
+(67,445 missing values generated)
 
 . gen lnKL = lnK - lnL
-(67,188 missing values generated)
+(67,445 missing values generated)
 
 . generate RperK = immat / (immat + tanass)
-(227,643 missing values generated)
+(227,873 missing values generated)
 
 . replace RperK = 0 if RperK < 0 | missing(immat)
-(166,623 real changes made)
+(166,683 real changes made)
 
 . label variable RperK "Share of immaterial assets [0,1]"
 
 . 
 . * firm-year deletions
 . count if missing(lnK, lnQ, lnL, lnM, foreign) & year > 1991
-  85,793
+  86,104
 
 . count if missing(lnK, lnQ, lnL, lnM, foreign)
-  87,717
+  88,036
 
 . 
 . foreach var in lnK lnQ lnL lnM {
   2.         drop if missing(`var')
   3. }
-(67,188 observations deleted)
-(17,412 observations deleted)
+(67,445 observations deleted)
+(17,490 observations deleted)
 (0 observations deleted)
-(3,117 observations deleted)
+(3,101 observations deleted)
 
 . 
 . count
-  392,586
+  393,127
 
 . 
 . * industry dummy and age
@@ -514,7 +514,7 @@ tanass_18:                                      Number of observations
 . 
 . * missing export means 0 export
 . mvencode export exporter exporter_5, mv(0) override
-      export: 111364 missing values recoded
+      export: 111548 missing values recoded
 
 . generate domestic_sales = sales - export
 
@@ -523,18 +523,19 @@ tanass_18:                                      Number of observations
 
 . 
 . count
-  392,586
+  393,127
 
 . 
 . cap drop __*
 
 . save "`here'/temp/balance-small-clean.dta", replace
-file /Users/koren/Tresorit/Mac/projects/expat//temp/balance-small-clean.dta
-    saved
+file
+    /Users/koren/Tresorit/Mac2Mac/projects/expat//temp/balance-small-clean.dt
+    > a saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac/projects/expat//output/balance.log
+       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/balance.log
   log type:  text
- closed on:   8 Mar 2024, 11:24:15
+ closed on:  19 Mar 2024, 16:38:07
 -------------------------------------------------------------------------------
