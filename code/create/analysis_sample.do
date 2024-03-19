@@ -94,7 +94,7 @@ generate time_foreign = year - first_year_foreign
 egen ever_expat = max(has_expat_ceo), by(frame_id_numeric)
 
 * limit sample to event window
-keep if inrange(time_foreign, -7, 5)
+keep if inrange(time_foreign, -6, 4)
 
 egen exporter_pre = max(exporter & inrange(time_foreign, -3, -1)), by(frame_id_numeric)
 * different ways of measuring export orientation
@@ -113,16 +113,12 @@ egen teaor08_1d_pre = max(cond(year==`last_year_before', teaor08_1d_num, .)), by
 assert !missing(teaor08_2d_pre)
 drop `last_year_before'
 
-* drop agriculture and mining firms
-drop if teaor08_2d_pre < 5 
-generate industrial_pre = (teaor08_2d_pre < 40)
-
 * compute TFP
 
-quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial_firm==1
+quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial==1
 predict TFP if e(sample), resid
 
-quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial_firm==0
+quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial==0
 predict TFP_temp if e(sample), resid
 
 replace TFP = TFP_temp if missing(TFP)

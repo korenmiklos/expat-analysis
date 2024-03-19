@@ -19,7 +19,6 @@ save `sample', replace
 
 use "`here'/input/ceo-panel/ceo-panel.dta", clear 
 rename person_id manager_id
-replace expat = (foreign_name == 1)
 
 * only keep sample firms
 merge m:1 frame_id_numeric year using `sample', keep(match) nogen

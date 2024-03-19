@@ -83,10 +83,18 @@ drop owner_spell start_as_domestic
 
 bys frame_id_numeric: egen avg_emp = mean(emp)
 bys frame_id_numeric: egen industry_mode = mode(teaor08_2d), minmode
+
+
+* drop agriculture and mining firms
+drop if industry_mode < 5 
+generate industrial = (industry_mode < 40)
 local sample ((avg_emp >= 20) & (industry_mode != 64 & industry_mode != 65 & industry_mode != 66))
 drop if !`sample'
-scalar dropped_size_or_finance = r(N_drop)
-display dropped_size_or_finance
+
+tempvar ever_foreign
+egen `ever_foreign' = max(foreign), by(frame_id_numeric)
+drop if `ever_foreign' == 0
+drop `ever_foreign'
 
 * proxy firm founding date with first balance sheet filed
 tempvar foundyear

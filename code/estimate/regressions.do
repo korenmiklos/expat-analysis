@@ -34,9 +34,9 @@ foreach Y in $varlist_rhs {
     display "`Y'"
 
     eststo clear
-    quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industrial_pre==1, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+    quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industrial==1, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
-    quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & industrial_pre==1, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+    quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & industrial==1, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
 
     display "Industry sample"
@@ -49,9 +49,9 @@ foreach Y in $varlist_rhs {
     display "`Y'"
 
     eststo clear
-    quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industrial_pre==0, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+    quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industrial==0, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
-    quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & industrial_pre==0, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+    quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & industrial==0, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
 
     display "Service sample"
@@ -82,7 +82,7 @@ foreach Y in $varlist_rhs {
 *Industry
 
 preserve
-keep if industrial_pre==1
+keep if industrial==1
 
 foreach Y in $varlist_rhs {
 
@@ -104,7 +104,7 @@ restore
 
 *Services
 preserve
-keep if industrial_pre==0
+keep if industrial==0
 
 foreach Y in $varlist_rhs {	
 
