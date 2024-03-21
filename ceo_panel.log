@@ -33,8 +33,40 @@ Notes:
 
 . rename person_id manager_id
 
-. replace expat = (first_address_foreign == 1)
-(253,921 real changes made)
+. 
+. local western AT DE BE CA CH DE DK ES FR GB IT NL NO SE US IE US
+
+. generate byte western = 0
+
+. foreach country in `western' {
+  2.     replace western = 1 if (country_code == "`country'")
+  3. }
+(118,837 real changes made)
+(127,445 real changes made)
+(11,626 real changes made)
+(7,096 real changes made)
+(21,920 real changes made)
+(0 real changes made)
+(2,736 real changes made)
+(10,639 real changes made)
+(16,989 real changes made)
+(28,688 real changes made)
+(47,664 real changes made)
+(25,152 real changes made)
+(1,529 real changes made)
+(7,730 real changes made)
+(25,821 real changes made)
+(12,500 real changes made)
+(0 real changes made)
+
+. egen byte ever_western = max(western), by(manager_id)
+
+. replace ever_western = 0 if !first_address_foreign
+(43,791 real changes made)
+
+. 
+. replace expat = (ever_western == 1)
+(530,243 real changes made)
 
 . 
 . compress
