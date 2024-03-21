@@ -44,7 +44,7 @@ Notes:
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- opened on:  21 Mar 2024, 16:18:14
+ opened on:  21 Mar 2024, 16:30:24
 
 . 
 . * keep only sample from balance-small
@@ -59,9 +59,9 @@ Notes:
 . tempfile sample
 
 . save `sample', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St56317.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St63199.000001 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St56317.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St63199.000001 saved
     as .dta format
 
 . 
@@ -217,7 +217,7 @@ Panel variable: company_manager_id (unbalanced)
 . 
 . * expat before 1990 are mostly error, convert them to locals
 . replace expat = 0 if job_begin < 1990
-(741 real changes made)
+(550 real changes made)
 
 . 
 . ***********************
@@ -225,7 +225,7 @@ Panel variable: company_manager_id (unbalanced)
 . ***********************
 . by frame_id_numeric: egen first_year_expat = min(cond(expat == 1, job_begin,.
 > ))
-(396,894 missing values generated)
+(413,242 missing values generated)
 
 . by frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.)
 > )
@@ -234,83 +234,78 @@ Panel variable: company_manager_id (unbalanced)
 . 
 . * which of the two happened first?
 . generate manager_after_owner = first_year_expat - first_year_foreign
-(409,241 missing values generated)
+(417,365 missing values generated)
 
 . tabulate manager_after_owner
 
 manager_aft |
    er_owner |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-        -25 |         61        0.05        0.05
-        -22 |         45        0.04        0.09
-        -18 |         41        0.03        0.12
-        -16 |         33        0.03        0.15
-        -15 |         81        0.07        0.22
-        -13 |        202        0.17        0.39
-        -12 |         84        0.07        0.46
-        -11 |         47        0.04        0.50
-        -10 |        110        0.09        0.60
-         -9 |        212        0.18        0.78
-         -8 |        510        0.43        1.21
-         -7 |        277        0.23        1.44
-         -6 |        622        0.53        1.97
-         -5 |        272        0.23        2.20
-         -4 |        373        0.32        2.52
-         -3 |        973        0.83        3.34
-         -2 |      1,274        1.08        4.42
-         -1 |     16,199       13.74       18.16
-          0 |     61,587       52.24       70.40
-          1 |      9,442        8.01       78.41
-          2 |      3,558        3.02       81.43
-          3 |      3,120        2.65       84.07
-          4 |      2,707        2.30       86.37
-          5 |      1,996        1.69       88.06
-          6 |      2,168        1.84       89.90
-          7 |      1,465        1.24       91.14
-          8 |      1,301        1.10       92.25
-          9 |      1,457        1.24       93.48
-         10 |      1,260        1.07       94.55
-         11 |        896        0.76       95.31
-         12 |        973        0.83       96.14
-         13 |        529        0.45       96.59
-         14 |        714        0.61       97.19
-         15 |        472        0.40       97.59
-         16 |        384        0.33       97.92
-         17 |        584        0.50       98.41
-         18 |        510        0.43       98.84
-         19 |        367        0.31       99.16
-         20 |         28        0.02       99.18
-         21 |        219        0.19       99.37
-         22 |        116        0.10       99.46
-         23 |         94        0.08       99.54
-         24 |        199        0.17       99.71
-         25 |         37        0.03       99.74
-         26 |        233        0.20       99.94
-         27 |         28        0.02       99.97
-         28 |         41        0.03      100.00
+        -25 |         61        0.06        0.06
+        -16 |         33        0.03        0.09
+        -15 |         54        0.05        0.13
+        -13 |        184        0.17        0.30
+        -12 |         41        0.04        0.34
+        -10 |         18        0.02        0.36
+         -9 |        107        0.10        0.45
+         -8 |        371        0.34        0.79
+         -7 |        267        0.24        1.03
+         -6 |        311        0.28        1.32
+         -5 |        163        0.15        1.47
+         -4 |        288        0.26        1.73
+         -3 |        754        0.69        2.42
+         -2 |      1,039        0.95        3.36
+         -1 |     14,025       12.78       16.14
+          0 |     56,616       51.57       67.71
+          1 |      9,486        8.64       76.35
+          2 |      3,381        3.08       79.43
+          3 |      3,123        2.84       82.28
+          4 |      2,551        2.32       84.60
+          5 |      1,967        1.79       86.39
+          6 |      2,298        2.09       88.49
+          7 |      2,005        1.83       90.31
+          8 |      1,378        1.26       91.57
+          9 |      1,841        1.68       93.25
+         10 |      1,307        1.19       94.44
+         11 |        692        0.63       95.07
+         12 |      1,056        0.96       96.03
+         13 |        820        0.75       96.78
+         14 |        591        0.54       97.31
+         15 |        433        0.39       97.71
+         16 |        415        0.38       98.09
+         17 |        375        0.34       98.43
+         18 |        412        0.38       98.80
+         19 |        415        0.38       99.18
+         20 |         91        0.08       99.26
+         21 |        199        0.18       99.45
+         22 |        141        0.13       99.57
+         23 |         66        0.06       99.63
+         24 |        123        0.11       99.75
+         26 |        238        0.22       99.96
+         28 |         41        0.04      100.00
 ------------+-----------------------------------
-      Total |    117,901      100.00
+      Total |    109,777      100.00
 
 . * event time relative to that
 . generate event_time = year - first_year_expat
-(396,894 missing values generated)
+(413,242 missing values generated)
 
 . 
 . * if foreign manager arrives up to X years before or Y years later than forei
 > gn owner, use foreign manager as arrival date. 
 . replace foreign = 1 if (manager_after_owner == -2) & inlist(event_time, 0, 1)
-(180 real changes made)
+(144 real changes made)
 
 . replace foreign = 1 if (manager_after_owner == -1) & inlist(event_time, 0)
-(184 real changes made)
+(150 real changes made)
 
 . replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
-(421 real changes made)
+(412 real changes made)
 
 . 
 . * drop firms where expat arrives earlier than X years before owner
 . drop if manager_after_owner < -2
-(3,943 observations deleted)
+(2,652 observations deleted)
 
 . 
 . * ever expat and foreign created after foreign changes (drops were firm level
@@ -322,7 +317,7 @@ manager_aft |
 . 
 . * drop if there was an expat but was never foreign - these are likely error
 . drop if ever_expat == 1 & ever_foreign == 0
-(12,350 observations deleted)
+(4,126 observations deleted)
 
 . 
 . * drop too many CEO-s
@@ -331,7 +326,7 @@ manager_aft |
 . by frame_id_numeric: egen n_ceo_ever = sum(fp_tag)
 
 . drop if n_ceo > 15
-(18,287 observations deleted)
+(19,939 observations deleted)
 
 . drop fp_tag n_ceo_ever
 
@@ -340,7 +335,7 @@ manager_aft |
 . tempvar previous_year
 
 . generate previous_year = .
-(492,562 missing values generated)
+(500,425 missing values generated)
 
 . forval t = 1985/2018 {
   2.         quietly by frame_id_numeric: egen `previous_year' = max(cond(year 
@@ -353,7 +348,7 @@ manager_aft |
 . tempvar next_year
 
 . generate next_year = .
-(492,562 missing values generated)
+(500,425 missing values generated)
 
 . forval t = 1985/2018 {
   2.         quietly by frame_id_numeric: egen `next_year' = min(cond(year > `t
@@ -374,10 +369,10 @@ manager_aft |
            |         fire
       hire |         0          1 |     Total
 -----------+----------------------+----------
-         0 |   412,839     35,917 |   448,756 
-         1 |    37,618      6,188 |    43,806 
+         0 |   419,037     36,648 |   455,685 
+         1 |    38,406      6,334 |    44,740 
 -----------+----------------------+----------
-     Total |   450,457     42,105 |   492,562 
+     Total |   457,443     42,982 |   500,425 
 
 . 
 . * number of expats and locals
@@ -403,48 +398,48 @@ manager_aft |
 n_expat_ce |                 (firstnm) n_local_ceo
          o |         0          1          2          3          4 |     Total
 -----------+-------------------------------------------------------+----------
-         0 |         0    218,441     62,952     16,208      3,053 |   302,951 
-         1 |    14,639      9,632      1,685        318         71 |    26,374 
-         2 |     6,158      2,545        425         96         19 |     9,247 
-         3 |     1,701        495        128         33         16 |     2,373 
-         4 |       435         97         13          1          0 |       548 
-         5 |        94         39          0          1          0 |       134 
-         6 |        51          6          1          0          0 |        58 
+         0 |         0    224,379     65,534     17,012      3,297 |   312,691 
+         1 |    11,720      9,662      1,915        353         94 |    23,770 
+         2 |     4,705      2,449        452         89         20 |     7,724 
+         3 |     1,186        456        120         33         10 |     1,805 
+         4 |       308         69         13          1          0 |       393 
+         5 |        78         45          1          1          0 |       125 
+         6 |        33          5          1          0          0 |        39 
          7 |         5          0          0          0          0 |         5 
 -----------+-------------------------------------------------------+----------
-     Total |    23,083    231,255     65,204     16,657      3,159 |   341,690 
+     Total |    18,035    237,065     68,036     17,489      3,421 |   346,552 
 
 
  (firstnm) |
 n_expat_ce |                 (firstnm) n_local_ceo
          o |         5          6          7          8          9 |     Total
 -----------+-------------------------------------------------------+----------
-         0 |     1,544        373        247         53         65 |   302,951 
-         1 |        16          8          2          2          1 |    26,374 
-         2 |         3          1          0          0          0 |     9,247 
-         3 |         0          0          0          0          0 |     2,373 
-         4 |         2          0          0          0          0 |       548 
-         5 |         0          0          0          0          0 |       134 
-         6 |         0          0          0          0          0 |        58 
+         0 |     1,638        426        266         57         67 |   312,691 
+         1 |        16          4          3          2          1 |    23,770 
+         2 |         9          0          0          0          0 |     7,724 
+         3 |         0          0          0          0          0 |     1,805 
+         4 |         2          0          0          0          0 |       393 
+         5 |         0          0          0          0          0 |       125 
+         6 |         0          0          0          0          0 |        39 
          7 |         0          0          0          0          0 |         5 
 -----------+-------------------------------------------------------+----------
-     Total |     1,565        382        249         55         66 |   341,690 
+     Total |     1,665        430        269         59         68 |   346,552 
 
 
  (firstnm) |
 n_expat_ce |      (firstnm) n_local_ceo
          o |        10         11         12 |     Total
 -----------+---------------------------------+----------
-         0 |         3          8          4 |   302,951 
-         1 |         0          0          0 |    26,374 
-         2 |         0          0          0 |     9,247 
-         3 |         0          0          0 |     2,373 
-         4 |         0          0          0 |       548 
-         5 |         0          0          0 |       134 
-         6 |         0          0          0 |        58 
+         0 |         3          8          4 |   312,691 
+         1 |         0          0          0 |    23,770 
+         2 |         0          0          0 |     7,724 
+         3 |         0          0          0 |     1,805 
+         4 |         0          0          0 |       393 
+         5 |         0          0          0 |       125 
+         6 |         0          0          0 |        39 
          7 |         0          0          0 |         5 
 -----------+---------------------------------+----------
-     Total |         3          8          4 |   341,690 
+     Total |         3          8          4 |   346,552 
 
 . * create dummies from numbers
 . foreach var in expat local {
@@ -453,7 +448,7 @@ n_expat_ce |      (firstnm) n_local_ceo
 
 .         
 . count
-  341,690
+  346,552
 
 . compress
   variable year was float now int
@@ -465,7 +460,7 @@ n_expat_ce |      (firstnm) n_local_ceo
   variable ceo_spell was float now byte
   variable has_expat_ceo was float now byte
   variable has_local_ceo was float now byte
-  (8,883,940 bytes saved)
+  (9,010,352 bytes saved)
 
 . save "`here'/temp/firm_events.dta", replace
 file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
@@ -474,7 +469,7 @@ file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- closed on:  21 Mar 2024, 16:18:42
+ closed on:  21 Mar 2024, 16:30:52
 -------------------------------------------------------------------------------
 
 . 
