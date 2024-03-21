@@ -6,7 +6,7 @@ use "$here/temp/analysis_sample.dta", clear
 global local_sample "(ever_local==1 | foreign==0)"
 global expat_sample "(ever_expat==1 | foreign==0)"
 
-global varlist_rhs "lnK lnL TFP lnQ lnEx lnQd"
+global varlist_rhs "exporter export_entry lnQL"
 
 ****Average effect, foreign_hire sample, local and expat separately, xthdidreg
 
