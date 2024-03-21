@@ -76,10 +76,10 @@ Full sample
                       (1)             (2)             (3)   \\
                       lnK             lnK             lnK   \\
 ------------------------------------------------------------
-ATET                0.122           0.269*          0.195   \\
-                  (0.085)         (0.115)         (0.122)   \\
+ATET                0.116           0.285**         0.231   \\
+                  (0.089)         (0.107)         (0.121)   \\
 ------------------------------------------------------------
-N                    6982            5640            7928   \\
+N                    6503            5755            7677   \\
 ------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
@@ -93,10 +93,10 @@ Full sample
                       (1)             (2)             (3)   \\
                       lnL             lnL             lnL   \\
 ------------------------------------------------------------
-ATET                0.171*          0.618***        0.526***\\
-                  (0.086)         (0.112)         (0.115)   \\
+ATET                0.169           0.545***        0.420***\\
+                  (0.090)         (0.109)         (0.114)   \\
 ------------------------------------------------------------
-N                    6982            5640            7928   \\
+N                    6503            5755            7677   \\
 ------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
@@ -110,10 +110,10 @@ Full sample
                       (1)             (2)             (3)   \\
                       TFP             TFP             TFP   \\
 ------------------------------------------------------------
-ATET                0.040           0.112*          0.072   \\
-                  (0.033)         (0.050)         (0.048)   \\
+ATET                0.063*          0.098*          0.059   \\
+                  (0.031)         (0.045)         (0.043)   \\
 ------------------------------------------------------------
-N                    6982            5640            7928   \\
+N                    6503            5755            7677   \\
 ------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
@@ -127,10 +127,10 @@ Full sample
                       (1)             (2)             (3)   \\
                       lnQ             lnQ             lnQ   \\
 ------------------------------------------------------------
-ATET                0.342***        0.890***        0.600***\\
-                  (0.084)         (0.135)         (0.136)   \\
+ATET                0.294***        0.832***        0.556***\\
+                  (0.086)         (0.129)         (0.130)   \\
 ------------------------------------------------------------
-N                    6982            5640            7928   \\
+N                    6503            5755            7677   \\
 ------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
@@ -144,11 +144,1254 @@ Full sample
                       (1)             (2)             (3)   \\
                      lnEx            lnEx            lnEx   \\
 ------------------------------------------------------------
-ATET                0.739***        0.900***        0.339   \\
-                  (0.159)         (0.188)         (0.202)   \\
+ATET                0.854***        0.833***        0.203   \\
+                  (0.169)         (0.193)         (0.199)   \\
 ------------------------------------------------------------
-N                    3364            2870            3685   \\
+N                    3134            2915            3549   \\
 ------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
 lnQd
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Full sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                     lnQd            lnQd            lnQd   \\
+------------------------------------------------------------
+ATET                0.203*          0.588***        0.374** \\
+                  (0.091)         (0.144)         (0.145)   \\
+------------------------------------------------------------
+N                    6446            5659            7559   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+
+. 
+. *Industrial sample
+. preserve
+
+. keep if industrial==1
+(4,778 observations deleted)
+
+. foreach Y in $varlist_rhs {
+  2.     display "`Y'"
+  3. 
+.     eststo clear
+  4.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industri
+> al==1, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(not
+> yet)
+  5.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+  6.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & indu
+> strial==1, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup
+> (notyet)
+  7.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+  8. 
+.     eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(loca
+> l_ceo) pre(4) post(4) baseline(atet)
+  9. 
+.     display "Industry sample"
+ 10.     esttab, b(3) se  style(tex)
+ 11. }
+lnK
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Industry sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      lnK             lnK             lnK   \\
+------------------------------------------------------------
+ATET                0.285*          0.304*          0.124   \\
+                  (0.135)         (0.147)         (0.166)   \\
+------------------------------------------------------------
+N                    2925            2720            3593   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+lnL
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Industry sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      lnL             lnL             lnL   \\
+------------------------------------------------------------
+ATET                0.249           0.333*          0.215   \\
+                  (0.146)         (0.147)         (0.158)   \\
+------------------------------------------------------------
+N                    2925            2720            3593   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+TFP
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Industry sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      TFP             TFP             TFP   \\
+------------------------------------------------------------
+ATET                0.075           0.042           0.058   \\
+                  (0.052)         (0.056)         (0.046)   \\
+------------------------------------------------------------
+N                    2925            2720            3593   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+lnQ
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Industry sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      lnQ             lnQ             lnQ   \\
+------------------------------------------------------------
+ATET                0.399**         0.593***        0.362*  \\
+                  (0.140)         (0.157)         (0.154)   \\
+------------------------------------------------------------
+N                    2925            2720            3593   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+lnEx
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Industry sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                     lnEx            lnEx            lnEx   \\
+------------------------------------------------------------
+ATET                0.714**         0.804***        0.184   \\
+                  (0.224)         (0.222)         (0.259)   \\
+------------------------------------------------------------
+N                    1903            1830            2272   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+lnQd
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Industry sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                     lnQd            lnQd            lnQd   \\
+------------------------------------------------------------
+ATET                0.221           0.299           0.179   \\
+                  (0.145)         (0.183)         (0.183)   \\
+------------------------------------------------------------
+N                    2879            2658            3506   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+
+. restore
+
+. 
+. *Service sample
+. preserve
+
+. keep if industrial==0
+(4,112 observations deleted)
+
+. foreach Y in $varlist_rhs {
+  2. 
+.     display "`Y'"
+  3. 
+.     eststo clear
+  4.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industri
+> al==0, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(not
+> yet)
+  5.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+  6.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & indu
+> strial==0, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup
+> (notyet)
+  7.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+  8. 
+.     eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(loca
+> l_ceo) pre(4) post(4) baseline(atet)
+  9. 
+.     display "Service sample"
+ 10.     esttab, b(3) se style(tex)
+ 11. }
+lnK
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Service sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      lnK             lnK             lnK   \\
+------------------------------------------------------------
+ATET               -0.034           0.277           0.337   \\
+                  (0.116)         (0.159)         (0.180)   \\
+------------------------------------------------------------
+N                    3578            3035            4080   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+lnL
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Service sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      lnL             lnL             lnL   \\
+------------------------------------------------------------
+ATET                0.136           0.835***        0.652***\\
+                  (0.107)         (0.164)         (0.169)   \\
+------------------------------------------------------------
+N                    3578            3035            4080   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+TFP
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Service sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      TFP             TFP             TFP   \\
+------------------------------------------------------------
+ATET                0.052           0.140           0.088   \\
+                  (0.037)         (0.073)         (0.076)   \\
+------------------------------------------------------------
+N                    3578            3035            4080   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+lnQ
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Service sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                      lnQ             lnQ             lnQ   \\
+------------------------------------------------------------
+ATET                0.200           1.108***        0.815***\\
+                  (0.107)         (0.214)         (0.220)   \\
+------------------------------------------------------------
+N                    3578            3035            4080   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+lnEx
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Service sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                     lnEx            lnEx            lnEx   \\
+------------------------------------------------------------
+ATET                0.873***        0.659*          0.241   \\
+                  (0.230)         (0.333)         (0.346)   \\
+------------------------------------------------------------
+N                    1231            1085            1255   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+lnQd
+(est1 stored)
+(est2 stored)
+(est3 stored)
+Service sample
+
+------------------------------------------------------------
+                      (1)             (2)             (3)   \\
+                     lnQd            lnQd            lnQd   \\
+------------------------------------------------------------
+ATET                0.189           0.958***        0.657** \\
+                  (0.114)         (0.227)         (0.236)   \\
+------------------------------------------------------------
+N                    3567            3001            4049   \\
+------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+
+. restore
+
+. 
+. *****Figures
+. 
+. *Whole sample
+. foreach Y in $varlist_rhs {
+  2. 
+.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, group(fr
+> ame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+  3.     eventbaseline, pre(4) post(4) baseline(-1) generate(event_expat)
+  4. 
+.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, group(frame_
+> id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+  5.     eventbaseline, pre(4) post(4) baseline(-1) generate(event_local)
+  6. 
+.     frame event_expat: frlink 1:1 time, frame(event_local) generate(local)
+  7.     frame event_expat: frget coef_local=coef upper_local=upper lower_local
+> =lower, from(local)
+  8. 
+.     frame event_expat: graph twoway (rarea lower upper time, fcolor(red%10) l
+> color(red%10)) (line coef time, color(red)) (rarea lower_local upper_local ti
+> me, fcolor(gs10%10) lcolor(gs5%10)) (line coef_local time, color(grey)), grap
+> hregion(color(white)) xlabel(-4(1)4) legend(off) xline(-0.5) xtitle("Event ti
+> me") yline(0) 
+  9. 
+.     gr export "$here/output/twfe/expat_local_`Y'.pdf", replace
+ 10. 
+. }
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 5,755
+
+------------------------------------------------------------------------------
+         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .2191012   .1040083     2.11   0.035     .0152487    .4229538
+          -3 |   .1440363   .0922647     1.56   0.118    -.0367992    .3248717
+          -2 |   .1135514   .0648115     1.75   0.080    -.0134768    .2405797
+          -1 |          0  (omitted)
+           0 |   .2055305   .0535281     3.84   0.000     .1006174    .3104436
+           1 |   .3289872   .0771594     4.26   0.000     .1777575    .4802169
+           2 |   .3471497   .0970879     3.58   0.000      .156861    .5374384
+           3 |   .4151446   .1318619     3.15   0.002     .1566999    .6735892
+           4 |   .7239239   .1612784     4.49   0.000     .4078241    1.040024
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 6,503
+
+------------------------------------------------------------------------------
+         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0996714   .0760672    -1.31   0.190    -.2487603    .0494175
+          -3 |   .0002552   .0582053     0.00   0.997     -.113825    .1143355
+          -2 |   .0522845    .040316     1.30   0.195    -.0267335    .1313024
+          -1 |          0  (omitted)
+           0 |   .0638106   .0453037     1.41   0.159     -.024983    .1526042
+           1 |    .031462   .0673687     0.47   0.640    -.1005782    .1635022
+           2 |   .0760161   .0962026     0.79   0.429    -.1125375    .2645697
+           3 |   .0669148   .1149652     0.58   0.561    -.1584128    .2922424
+           4 |    .281644   .1381299     2.04   0.041     .0109143    .5523737
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_lnK.pdf
+    saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 5,755
+
+------------------------------------------------------------------------------
+         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.1128715   .0925579    -1.22   0.223    -.2942815    .0685386
+          -3 |   -.107809   .0742033    -1.45   0.146    -.2532448    .0376268
+          -2 |  -.1135605   .0569041    -2.00   0.046    -.2250904   -.0020306
+          -1 |          0  (omitted)
+           0 |   .2023238   .0630465     3.21   0.001     .0787548    .3258927
+           1 |   .3102814   .0882662     3.52   0.000     .1372827      .48328
+           2 |    .512205   .0996367     5.14   0.000     .3169206    .7074894
+           3 |   .5649002   .1256646     4.50   0.000     .3186021    .8111983
+           4 |   .7159156   .1478459     4.84   0.000      .426143    1.005688
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 6,503
+
+------------------------------------------------------------------------------
+         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |    .105057   .0757849     1.39   0.166    -.0434786    .2535926
+          -3 |    .148858   .0611444     2.43   0.015     .0290172    .2686988
+          -2 |   .0478661   .0421345     1.14   0.256     -.034716    .1304482
+          -1 |          0  (omitted)
+           0 |   .1222297   .0479957     2.55   0.011     .0281599    .2162994
+           1 |   .1857162   .0672617     2.76   0.006     .0538856    .3175467
+           2 |   .2128281    .094596     2.25   0.024     .0274234    .3982328
+           3 |    .267997   .1174122     2.28   0.022     .0378732    .4981207
+           4 |   .4319534   .1423073     3.04   0.002     .1530363    .7108705
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_lnL.pdf
+    saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 5,755
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .0615583   .0426511     1.44   0.149    -.0220362    .1451529
+          -3 |   .0334574   .0333691     1.00   0.316    -.0319449    .0988597
+          -2 |   .0572674   .0257813     2.22   0.026     .0067369    .1077979
+          -1 |          0  (omitted)
+           0 |    .101176   .0285438     3.54   0.000     .0452311    .1571209
+           1 |   .1390753   .0406383     3.42   0.001     .0594257    .2187249
+           2 |   .1611957   .0432798     3.72   0.000     .0763688    .2460226
+           3 |   .1619934    .051194     3.16   0.002      .061655    .2623317
+           4 |   .1191531   .0680748     1.75   0.080    -.0142711    .2525773
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 6,503
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0236933   .0314496    -0.75   0.451    -.0853334    .0379469
+          -3 |  -.0408231   .0291121    -1.40   0.161    -.0978817    .0162356
+          -2 |  -.0285833   .0229119    -1.25   0.212    -.0734897    .0163231
+          -1 |          0  (omitted)
+           0 |   .0278016   .0220508     1.26   0.207    -.0154172    .0710204
+           1 |   .0091488   .0263958     0.35   0.729    -.0425861    .0608837
+           2 |   .0532005   .0296416     1.79   0.073    -.0048959    .1112969
+           3 |   .0320213   .0360195     0.89   0.374    -.0385755    .1026182
+           4 |   .0780208    .048088     1.62   0.105    -.0162299    .1722715
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_TFP.pdf
+    saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 5,755
+
+------------------------------------------------------------------------------
+         lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0626361   .1087542    -0.58   0.565    -.2757904    .1505181
+          -3 |  -.0615183   .0948536    -0.65   0.517     -.247428    .1243915
+          -2 |  -.0560618   .0650042    -0.86   0.388    -.1834677    .0713442
+          -1 |          0  (omitted)
+           0 |   .4504599   .0663117     6.79   0.000     .3204913    .5804286
+           1 |   .7157043   .0921782     7.76   0.000     .5350383    .8963704
+           2 |   .8720746   .1181127     7.38   0.000      .640578    1.103571
+           3 |    .930712   .1418083     6.56   0.000     .6527728    1.208651
+           4 |   .9642979    .188698     5.11   0.000     .5944565    1.334139
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 6,503
+
+------------------------------------------------------------------------------
+         lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0692643   .0767029    -0.90   0.367    -.2195992    .0810705
+          -3 |   -.018821   .0603937    -0.31   0.755    -.1371904    .0995484
+          -2 |  -.0435086   .0435899    -1.00   0.318    -.1289434    .0419261
+          -1 |          0  (omitted)
+           0 |   .1307003   .0441228     2.96   0.003     .0442212    .2171795
+           1 |   .2051568   .0664972     3.09   0.002     .0748246     .335489
+           2 |   .2996681   .0874932     3.43   0.001     .1281846    .4711515
+           3 |    .246994   .1043596     2.37   0.018     .0424528    .4515351
+           4 |   .4229547   .1256529     3.37   0.001     .1766795    .6692299
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_lnQ.pdf
+    saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 2,915
+
+------------------------------------------------------------------------------
+        lnEx |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .2154164   .2020062     1.07   0.286    -.1805084    .6113413
+          -3 |   .1263954   .1744176     0.72   0.469    -.2154569    .4682477
+          -2 |   .0354872   .1292337     0.27   0.784    -.2178062    .2887807
+          -1 |          0  (omitted)
+           0 |   .4334492   .1066097     4.07   0.000      .224498    .6424003
+           1 |   .7089572   .1567651     4.52   0.000     .4017033    1.016211
+           2 |   .7913586   .2017298     3.92   0.000     .3959754    1.186742
+           3 |   1.199956   .2230847     5.38   0.000     .7627179    1.637194
+           4 |   1.502664    .288581     5.21   0.000     .9370554    2.068272
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 3,134
+
+------------------------------------------------------------------------------
+        lnEx |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.3442829   .2006477    -1.72   0.086    -.7375451    .0489794
+          -3 |  -.3849258   .1445268    -2.66   0.008     -.668193   -.1016586
+          -2 |  -.2216866    .093992    -2.36   0.018    -.4059076   -.0374656
+          -1 |          0  (omitted)
+           0 |   .2988667   .0886719     3.37   0.001     .1250729    .4726605
+           1 |   .4528654   .1470981     3.08   0.002     .1645584    .7411723
+           2 |   .7626668   .1807531     4.22   0.000     .4083972    1.116936
+           3 |   .6498042   .2141279     3.03   0.002     .2301213    1.069487
+           4 |   .9174608   .2729707     3.36   0.001      .382448    1.452474
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_lnEx.pd
+    > f saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 5,659
+
+------------------------------------------------------------------------------
+        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0132832   .1210705    -0.11   0.913     -.250577    .2240106
+          -3 |  -.0512114   .1075791    -0.48   0.634    -.2620625    .1596396
+          -2 |  -.0043512    .076207    -0.06   0.954    -.1537143    .1450118
+          -1 |          0  (omitted)
+           0 |   .3821934   .0810461     4.72   0.000      .223346    .5410409
+           1 |   .5147938   .1082066     4.76   0.000     .3027127    .7268748
+           2 |   .6957488   .1309533     5.31   0.000     .4390851    .9524126
+           3 |   .6726603   .1667981     4.03   0.000     .3457422    .9995785
+           4 |   .5904368   .2161027     2.73   0.006     .1668833     1.01399
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 6,446
+
+------------------------------------------------------------------------------
+        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0752219   .0801199    -0.94   0.348     -.232254    .0818103
+          -3 |  -.0303675   .0631018    -0.48   0.630    -.1540448    .0933098
+          -2 |  -.0228916   .0428983    -0.53   0.594    -.1069707    .0611875
+          -1 |          0  (omitted)
+           0 |   .0711072   .0451723     1.57   0.115    -.0174288    .1596432
+           1 |   .1172302   .0677615     1.73   0.084    -.0155799    .2500403
+           2 |   .1839241   .0907576     2.03   0.043     .0060424    .3618057
+           3 |    .139466   .1152583     1.21   0.226    -.0864362    .3653681
+           4 |   .3428789   .1330982     2.58   0.010     .0820112    .6037465
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_lnQd.pd
+    > f saved as PDF format
+
+. 
+. *Industry
+. 
+. preserve
+
+. keep if industrial==1
+(4,778 observations deleted)
+
+. 
+. foreach Y in $varlist_rhs {
+  2. 
+.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, group(fr
+> ame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+  3.     eventbaseline, pre(4) post(4) baseline(-1) generate(event_expat)
+  4. 
+.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, group(frame_
+> id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+  5.     eventbaseline, pre(4) post(4) baseline(-1) generate(event_local)
+  6. 
+.     frame event_expat: frlink 1:1 time, frame(event_local) generate(local)
+  7.     frame event_expat: frget coef_local=coef upper_local=upper lower_local
+> =lower, from(local)
+  8. 
+.     frame event_expat: graph twoway (rarea lower upper time, fcolor(red%10) l
+> color(red%10)) (line coef time, color(red)) (rarea lower_local upper_local ti
+> me, fcolor(gs10%10) lcolor(gs5%10)) (line coef_local time, color(grey)), grap
+> hregion(color(white)) xlabel(-4(1)4) legend(off) xline(-0.5) xtitle("Event ti
+> me") yline(0) 
+  9. 
+.     gr export "$here/output/twfe/expat_local_ind_`Y'.pdf", replace
+ 10. 
+. }
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 2,720
+
+------------------------------------------------------------------------------
+         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .1849751   .1444929     1.28   0.200    -.0982259    .4681761
+          -3 |   .0914629   .1242748     0.74   0.462    -.1521112    .3350369
+          -2 |  -.0099207   .0939515    -0.11   0.916    -.1940623    .1742208
+          -1 |          0  (omitted)
+           0 |   .2289721   .0709757     3.23   0.001     .0898622     .368082
+           1 |   .3446446   .1075989     3.20   0.001     .1337547    .5555345
+           2 |   .2824734   .1397999     2.02   0.043     .0084706    .5564761
+           3 |   .3707159   .1816155     2.04   0.041     .0147561    .7266756
+           4 |   .6286437   .2335684     2.69   0.007      .170858    1.086429
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 2,925
+
+------------------------------------------------------------------------------
+         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.1513742   .1240943    -1.22   0.223    -.3945945    .0918461
+          -3 |  -.0253968   .0803305    -0.32   0.752    -.1828417     .132048
+          -2 |   .0106767   .0503797     0.21   0.832    -.0880657    .1094191
+          -1 |          0  (omitted)
+           0 |   .1157436   .0644124     1.80   0.072    -.0105025    .2419896
+           1 |   .0960864   .0897997     1.07   0.285    -.0799178    .2720907
+           2 |   .2885471   .1232069     2.34   0.019     .0470661    .5300281
+           3 |   .2428401   .1718085     1.41   0.158    -.0938984    .5795786
+           4 |   .4753711   .2046434     2.32   0.020     .0742775    .8764648
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_ind_lnK
+    > .pdf saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 2,720
+
+------------------------------------------------------------------------------
+         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .0188365   .1199122     0.16   0.875    -.2161871      .25386
+          -3 |  -.0389645   .1033113    -0.38   0.706     -.241451    .1635221
+          -2 |  -.0760277   .0610383    -1.25   0.213    -.1956605     .043605
+          -1 |          0  (omitted)
+           0 |   .2361938   .0821419     2.88   0.004     .0751986    .3971889
+           1 |   .2688626   .1136976     2.36   0.018     .0460193    .4917059
+           2 |   .3452462   .1301139     2.65   0.008     .0902276    .6002647
+           3 |   .3218582   .1570445     2.05   0.040     .0140567    .6296597
+           4 |   .3707498   .2057249     1.80   0.072    -.0324637    .7739632
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 2,925
+
+------------------------------------------------------------------------------
+         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0400752   .1153501    -0.35   0.728    -.2661573    .1860069
+          -3 |   .0257146   .0911385     0.28   0.778    -.1529136    .2043429
+          -2 |  -.0252704   .0684212    -0.37   0.712    -.1593734    .1088327
+          -1 |          0  (omitted)
+           0 |   .0927418   .0812398     1.14   0.254    -.0664852    .2519689
+           1 |   .0849244   .1079554     0.79   0.431    -.1266644    .2965131
+           2 |   .1925303   .1402325     1.37   0.170    -.0823204     .467381
+           3 |   .3000772    .188158     1.59   0.111    -.0687057    .6688602
+           4 |   .5251349   .2349922     2.23   0.025     .0645588    .9857111
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_ind_lnL
+    > .pdf saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 2,720
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .1276865   .0644167     1.98   0.047     .0014321    .2539409
+          -3 |   .0846662     .04369     1.94   0.053    -.0009647     .170297
+          -2 |   .0678719   .0350131     1.94   0.053    -.0007526    .1364964
+          -1 |          0  (omitted)
+           0 |   .0947503   .0402735     2.35   0.019     .0158158    .1736849
+           1 |   .1282945   .0443009     2.90   0.004     .0414664    .2151226
+           2 |   .1470295   .0517926     2.84   0.005     .0455178    .2485411
+           3 |   .1307905   .0570898     2.29   0.022     .0188966    .2426844
+           4 |   .0614938   .0727285     0.85   0.398    -.0810514    .2040391
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 2,925
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0374852   .0546954    -0.69   0.493    -.1446862    .0697158
+          -3 |  -.0530981   .0505737    -1.05   0.294    -.1522208    .0460246
+          -2 |  -.0601946    .047753    -1.26   0.207    -.1537886    .0333995
+          -1 |          0  (omitted)
+           0 |   .0644222   .0326557     1.97   0.049     .0004182    .1284262
+           1 |   .0440501   .0408129     1.08   0.280    -.0359417     .124042
+           2 |   .0507065   .0467641     1.08   0.278    -.0409495    .1423625
+           3 |  -.0340364   .0527288    -0.65   0.519    -.1373829    .0693101
+           4 |   .0615884   .0859922     0.72   0.474    -.1069532    .2301301
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_ind_TFP
+    > .pdf saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 2,720
+
+------------------------------------------------------------------------------
+         lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .1776244    .132015     1.35   0.178    -.0811204    .4363691
+          -3 |   .1486601   .1034788     1.44   0.151    -.0541545    .3514748
+          -2 |   -.007548    .081446    -0.09   0.926    -.1671791    .1520832
+          -1 |          0  (omitted)
+           0 |   .4219212     .08639     4.88   0.000     .2525999    .5912425
+           1 |   .6980584   .1136368     6.14   0.000     .4753343    .9207825
+           2 |   .7486961   .1409732     5.31   0.000     .4723936    1.024999
+           3 |   .8059431   .1626394     4.96   0.000     .4871758     1.12471
+           4 |     .69004   .2476766     2.79   0.005     .2046027    1.175477
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 2,925
+
+------------------------------------------------------------------------------
+         lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.1817646   .1263948    -1.44   0.150    -.4294938    .0659646
+          -3 |  -.1868422   .1027924    -1.82   0.069    -.3883115    .0146272
+          -2 |  -.1365261   .0755057    -1.81   0.071    -.2845145    .0114622
+          -1 |          0  (omitted)
+           0 |   .1153391   .0706439     1.63   0.103    -.0231203    .2537985
+           1 |   .1808237   .0999415     1.81   0.070    -.0150581    .3767055
+           2 |   .3966089   .1263329     3.14   0.002     .1490009    .6442169
+           3 |   .2478926   .1541378     1.61   0.108    -.0542119    .5499972
+           4 |   .4227829   .1979377     2.14   0.033     .0348322    .8107335
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_ind_lnQ
+    > .pdf saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 1,830
+
+------------------------------------------------------------------------------
+        lnEx |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .3927186   .2628103     1.49   0.135      -.12238    .9078172
+          -3 |   .2085349   .2263524     0.92   0.357    -.2351078    .6521775
+          -2 |   .1744828   .1741426     1.00   0.316    -.1668305    .5157961
+          -1 |          0  (omitted)
+           0 |   .5865545   .1259537     4.66   0.000     .3396898    .8334193
+           1 |   .9864595   .1769442     5.57   0.000     .6396553    1.333264
+           2 |   .8104047    .240503     3.37   0.001     .3390275    1.281782
+           3 |   1.265541   .2496132     5.07   0.000     .7763082    1.754774
+           4 |   1.340217   .3401498     3.94   0.000     .6735356    2.006898
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 1,903
+
+------------------------------------------------------------------------------
+        lnEx |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.2752061    .266467    -1.03   0.302    -.7974718    .2470596
+          -3 |  -.4869869   .1976394    -2.46   0.014    -.8743529   -.0996208
+          -2 |  -.3622337   .1254402    -2.89   0.004     -.608092   -.1163753
+          -1 |          0  (omitted)
+           0 |   .1852258   .1015715     1.82   0.068    -.0138507    .3843022
+           1 |   .4460892   .1803376     2.47   0.013      .092634    .7995443
+           2 |   .6282119   .2093747     3.00   0.003     .2178451    1.038579
+           3 |   .5806707   .2475459     2.35   0.019     .0954897    1.065852
+           4 |   .3266029   .3121589     1.05   0.295    -.2852173     .938423
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_ind_lnE
+    > x.pdf saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 2,658
+
+------------------------------------------------------------------------------
+        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .2609328   .1566672     1.67   0.096    -.0461292    .5679948
+          -3 |   .1677712    .130908     1.28   0.200    -.0888038    .4243463
+          -2 |   .0605065   .1053762     0.57   0.566     -.146027      .26704
+          -1 |          0  (omitted)
+           0 |   .3321092   .1178772     2.82   0.005     .1010742    .5631442
+           1 |   .3647191   .1454069     2.51   0.012     .0797267    .6497114
+           2 |   .4905774    .166454     2.95   0.003     .1643336    .8168212
+           3 |   .5625335   .1938743     2.90   0.004     .1825467    .9425202
+           4 |   .3550623    .288872     1.23   0.219    -.2111165    .9212411
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 2,879
+
+------------------------------------------------------------------------------
+        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.1919446   .1307182    -1.47   0.142    -.4481477    .0642584
+          -3 |  -.2276756   .1067651    -2.13   0.033    -.4369314   -.0184198
+          -2 |  -.0721173    .069927    -1.03   0.302    -.2091716    .0649371
+          -1 |          0  (omitted)
+           0 |   .0222088   .0690135     0.32   0.748    -.1130552    .1574729
+           1 |  -.0164393   .0995769    -0.17   0.869    -.2116066    .1787279
+           2 |   .1280971   .1344194     0.95   0.341      -.13536    .3915542
+           3 |  -.0007853   .1792504    -0.00   0.997    -.3521096    .3505391
+           4 |   .3559139   .2216323     1.61   0.108    -.0784774    .7903051
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_ind_lnQ
+    > d.pdf saved as PDF format
+
+. restore
+
+. 
+. *Services
+. preserve
+
+. keep if industrial==0
+(4,112 observations deleted)
+
+. 
+. foreach Y in $varlist_rhs {     
+  2. 
+.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, group(fr
+> ame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+  3.     eventbaseline, pre(4) post(4) baseline(-1) generate(event_expat)
+  4. 
+.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, group(frame_
+> id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+  5.     eventbaseline, pre(4) post(4) baseline(-1) generate(event_local)
+  6. 
+.     frame event_expat: frlink 1:1 time, frame(event_local) generate(local)
+  7.     frame event_expat: frget coef_local=coef upper_local=upper lower_local
+> =lower, from(local)
+  8. 
+.     frame event_expat: graph twoway (rarea lower upper time, fcolor(red%10) l
+> color(red%10)) (line coef time, color(red)) (rarea lower_local upper_local ti
+> me, fcolor(gs10%10) lcolor(gs5%10)) (line coef_local time, color(grey)), grap
+> hregion(color(white)) xlabel(-4(1)4) legend(off) xline(-0.5) xtitle("Event ti
+> me") yline(0) 
+  9. 
+.     gr export "$here/output/twfe/expat_local_serv_`Y'.pdf", replace
+ 10. 
+. }
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 3,035
+
+------------------------------------------------------------------------------
+         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .2491397   .1570082     1.59   0.113    -.0585907      .55687
+          -3 |   .1907609   .1372617     1.39   0.165    -.0782672     .459789
+          -2 |   .2419521   .0865127     2.80   0.005     .0723902    .4115139
+          -1 |          0  (omitted)
+           0 |   .1859731   .0830261     2.24   0.025     .0232448    .3487013
+           1 |   .2978254   .1151633     2.59   0.010     .0721096    .5235413
+           2 |   .4187793   .1426973     2.93   0.003     .1390978    .6984607
+           3 |   .4909606   .2019005     2.43   0.015     .0952429    .8866784
+           4 |   .8445859   .2472873     3.42   0.001     .3599118     1.32926
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 3,578
+
+------------------------------------------------------------------------------
+         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0503034   .0912507    -0.55   0.581    -.2291516    .1285447
+          -3 |   .0199246   .0777459     0.26   0.798    -.1324547    .1723038
+          -2 |   .0747089    .058806     1.27   0.204    -.0405487    .1899665
+          -1 |          0  (omitted)
+           0 |   .0173954   .0636028     0.27   0.784    -.1072638    .1420545
+           1 |  -.0285376    .096141    -0.30   0.767    -.2169705    .1598953
+           2 |  -.0906801   .1365799    -0.66   0.507    -.3583717    .1770116
+           3 |  -.0756035   .1564404    -0.48   0.629     -.382221    .2310141
+           4 |   .0618028   .1764317     0.35   0.726    -.2839969    .4076025
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_serv_ln
+    > K.pdf saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 3,035
+
+------------------------------------------------------------------------------
+         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.2544369   .1471602    -1.73   0.084    -.5428656    .0339919
+          -3 |  -.1836599   .1130779    -1.62   0.104    -.4052885    .0379688
+          -2 |  -.1747043   .1025738    -1.70   0.089    -.3757453    .0263367
+          -1 |          0  (omitted)
+           0 |   .1725383   .0973168     1.77   0.076    -.0181991    .3632757
+           1 |   .3664783   .1400804     2.62   0.009     .0919258    .6410308
+           2 |   .7706721   .1532018     5.03   0.000     .4704021    1.070942
+           3 |   .9372382    .203239     4.61   0.000     .5388971    1.335579
+           4 |   1.161503   .2172184     5.35   0.000     .7357632    1.587244
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 3,578
+
+------------------------------------------------------------------------------
+         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .1882696   .0961764     1.96   0.050    -.0002326    .3767718
+          -3 |   .2054326   .0727868     2.82   0.005      .062773    .3480921
+          -2 |   .0787566   .0471107     1.67   0.095    -.0135786    .1710918
+          -1 |          0  (omitted)
+           0 |   .1377679   .0594479     2.32   0.020     .0212522    .2542836
+           1 |   .2472595   .0882864     2.80   0.005     .0742213    .4202977
+           2 |   .2285638   .1258351     1.82   0.069    -.0180684    .4751959
+           3 |    .265883   .1384621     1.92   0.055    -.0054978    .5372638
+           4 |   .3894034   .1653786     2.35   0.019     .0652673    .7135395
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_serv_ln
+    > L.pdf saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 3,035
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .0068816   .0568669     0.12   0.904    -.1045755    .1183386
+          -3 |  -.0095866   .0509959    -0.19   0.851    -.1095367    .0903636
+          -2 |   .0584804   .0396621     1.47   0.140    -.0192559    .1362167
+          -1 |          0  (omitted)
+           0 |   .0992577   .0404704     2.45   0.014     .0199371    .1785783
+           1 |   .1540715    .072316     2.13   0.033     .0123348    .2958083
+           2 |   .1847575    .072982     2.53   0.011     .0417153    .3277997
+           3 |   .1785174   .0889487     2.01   0.045     .0041811    .3528538
+           4 |   .1547141    .119819     1.29   0.197    -.0801268    .3895549
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 3,578
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0024151   .0380352    -0.06   0.949    -.0769626    .0721325
+          -3 |  -.0190603   .0346394    -0.55   0.582    -.0869523    .0488317
+          -2 |  -.0081218   .0238915    -0.34   0.734    -.0549483    .0387048
+          -1 |          0  (omitted)
+           0 |   .0055946   .0309782     0.18   0.857    -.0551216    .0663108
+           1 |  -.0036103   .0360333    -0.10   0.920    -.0742343    .0670137
+           2 |   .0652532   .0386401     1.69   0.091    -.0104799    .1409864
+           3 |   .0815163   .0478057     1.71   0.088    -.0121811    .1752137
+           4 |   .0731198   .0583652     1.25   0.210    -.0412739    .1875135
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_serv_TF
+    > P.pdf saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 3,035
+
+------------------------------------------------------------------------------
+         lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.3352602   .1792262    -1.87   0.061    -.6865371    .0160166
+          -3 |   -.293824   .1650156    -1.78   0.075    -.6172486    .0296005
+          -2 |   -.116426   .1039706    -1.12   0.263    -.3202046    .0873525
+          -1 |          0  (omitted)
+           0 |   .4817034   .1027593     4.69   0.000     .2802989    .6831079
+           1 |   .7231061   .1523865     4.75   0.000      .424434    1.021778
+           2 |   1.042936   .1973908     5.28   0.000     .6560573    1.429815
+           3 |   1.112145   .2420938     4.59   0.000     .6376497     1.58664
+           4 |    1.24772   .3103387     4.02   0.000     .6394676    1.855973
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 3,578
+
+------------------------------------------------------------------------------
+         lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .0269669   .0947279     0.28   0.776    -.1586964    .2126302
+          -3 |   .1027933   .0723869     1.42   0.156    -.0390823     .244669
+          -2 |   .0142252   .0504636     0.28   0.778    -.0846816     .113132
+          -1 |          0  (omitted)
+           0 |    .134862   .0567581     2.38   0.017     .0236183    .2461058
+           1 |   .2299203   .0896442     2.56   0.010      .054221    .4056196
+           2 |   .2044262   .1143348     1.79   0.074     -.019666    .4285183
+           3 |   .2396674   .1395086     1.72   0.086    -.0337645    .5130993
+           4 |   .3719821   .1661076     2.24   0.025     .0464171     .697547
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_serv_ln
+    > Q.pdf saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 1,085
+
+------------------------------------------------------------------------------
+        lnEx |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.1269184   .2668185    -0.48   0.634     -.649873    .3960361
+          -3 |   .0258388   .2508765     0.10   0.918    -.4658701    .5175477
+          -2 |  -.2823347   .1626663    -1.74   0.083    -.6011548    .0364855
+          -1 |          0  (omitted)
+           0 |   .1548273   .2039441     0.76   0.448    -.2448958    .5545505
+           1 |   .0776168   .3242786     0.24   0.811    -.5579575    .7131911
+           2 |   .4239972    .351056     1.21   0.227    -.2640598    1.112054
+           3 |   1.057797    .526142     2.01   0.044     .0265774    2.089016
+           4 |   1.100202   .4661292     2.36   0.018     .1866051    2.013798
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 1,231
+
+------------------------------------------------------------------------------
+        lnEx |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.4314165   .2857557    -1.51   0.131    -.9914874    .1286544
+          -3 |  -.2756275   .2083846    -1.32   0.186    -.6840538    .1327988
+          -2 |   -.020779   .1552705    -0.13   0.894    -.3251036    .2835455
+          -1 |          0  (omitted)
+           0 |   .5214273    .156213     3.34   0.001     .2152555    .8275991
+           1 |   .4421692   .2422503     1.83   0.068    -.0326327     .916971
+           2 |    .965095   .3186173     3.03   0.002     .3406165    1.589573
+           3 |   .7390654    .383746     1.93   0.054     -.013063    1.491194
+           4 |   .7889019   .3493488     2.26   0.024     .1041908    1.473613
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_serv_ln
+    > Ex.pdf saved as PDF format
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 3,001
+
+------------------------------------------------------------------------------
+        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.3463081   .1857413    -1.86   0.062    -.7103543    .0177382
+          -3 |  -.3166742   .1728239    -1.83   0.067    -.6554029    .0220545
+          -2 |  -.0888492    .109556    -0.81   0.417    -.3035749    .1258766
+          -1 |          0  (omitted)
+           0 |   .4433216   .1117303     3.97   0.000     .2243342     .662309
+           1 |   .6763627   .1639909     4.12   0.000     .3549465    .9977789
+           2 |    .969986   .2077633     4.67   0.000     .5627774    1.377195
+           3 |   .8645638   .2859956     3.02   0.003     .3040227    1.425105
+           4 |   .8965466   .3440113     2.61   0.009     .2222968    1.570796
+------------------------------------------------------------------------------
+
+Time variable: time, -4 to 4
+        Delta: 1 unit
+
+Event study relative to -1               Number of obs = 3,567
+
+------------------------------------------------------------------------------
+        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .0243364   .0998552     0.24   0.807    -.1713763     .220049
+          -3 |   .0926891   .0763365     1.21   0.225    -.0569276    .2423059
+          -2 |  -.0016604   .0537313    -0.03   0.975    -.1069718     .103651
+          -1 |          0  (omitted)
+           0 |    .109567   .0601929     1.82   0.069     -.008409     .227543
+           1 |   .2287719   .0904802     2.53   0.011     .0514339    .4061099
+           2 |   .1952063   .1152951     1.69   0.090    -.0307678    .4211805
+           3 |   .2338745   .1483178     1.58   0.115    -.0568231     .524572
+           4 |   .3215354   .1738358     1.85   0.064    -.0191765    .6622473
+------------------------------------------------------------------------------
+(all observations in frame event_expat matched)
+(3 variables copied from linked frame)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+(note:  named style grey not found in class color, default attributes used)
+file
+    /Users/koren/Tresorit/Mac/projects/expat//output/twfe/expat_local_serv_ln
+    > Qd.pdf saved as PDF format
+
+. restore
+
+. 
+end of do-file
