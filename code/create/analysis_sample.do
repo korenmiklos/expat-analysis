@@ -121,6 +121,9 @@ predict TFP_temp if e(sample), resid
 replace TFP = TFP_temp if missing(TFP)
 drop TFP_temp
 
+tabulate foreignness has_expat_ceo
+tabulate time_foreign foreignness if inrange(time_foreign, -2, 2) & ever_expat 
+
 compress
 save "`here'/temp/analysis_sample.dta", replace
 log close

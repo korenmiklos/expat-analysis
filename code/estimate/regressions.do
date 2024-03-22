@@ -6,7 +6,19 @@ use "$here/temp/analysis_sample.dta", clear
 global local_sample "(ever_local==1 | foreign==0)"
 global expat_sample "(ever_expat==1 | foreign==0)"
 
-global varlist_rhs "exporter export_entry lnQL"
+global varlist_rhs "lnK lnL TFP lnQ lnEx lnQd exporter"
+
+tabulate foreignness ever_expat
+tabulate foreignness ever_expat if time_foreign == 0
+
+tabulate time_foreign foreignness if inrange(time_foreign, -2, 2) 
+
+tempvar f_fixed
+egen `f_fixed' = max(cond(time_foreign == 0, foreignness, .)), by(frame_id_numeric)
+label values `f_fixed' foreignness
+
+tabulate `f_fixed'
+keep if inlist(`f_fixed', 0, 5)
 
 ****Average effect, foreign_hire sample, local and expat separately, xthdidreg
 

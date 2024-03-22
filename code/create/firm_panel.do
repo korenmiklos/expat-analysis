@@ -47,7 +47,7 @@ bysort company_manager_id (year): gen job_spell = sum(change)
 * create job begin and end for each manager spell
 bys frame_id_numeric manager_id job_spell: egen job_begin = min(year)
 bys frame_id_numeric manager_id job_spell: egen job_end = max(year)
-keep frame_id_numeric manager_id job_spell year job_begin job_end expat firm_birth foreign
+keep frame_id_numeric manager_id job_spell year job_begin job_end firm_birth foreign foreignness
 
 * if first managers arrive in year 1, extrapolate to year 0 - DROP SPELL
 bys frame_id_numeric: egen first_cohort = min(job_begin)
@@ -57,9 +57,7 @@ replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_beg
 sort frame_id_numeric manager_id year
 count if frame_id_numeric == frame_id_numeric[_n-1] & manager_id == manager_id[_n-1] & year != (year[_n-1] + 1)
 
-* expat before 1990 are mostly error, convert them to locals
-replace expat = 0 if job_begin < 1990
-
+generate byte expat = foreignness > 0
 ***********************
 * time invariant vars and drop entire series of firms from sample *
 ***********************
@@ -115,22 +113,15 @@ generate byte hire = (job_begin <= year) & (job_begin > previous_year) & !missin
 generate byte fire = (job_end >= year) & (job_end < next_year) & !missing(next_year)
 tabulate hire fire 
 
-* number of expats and locals
-bys frame_id_numeric year: egen n_expat_ceo = total(cond(expat, 1, 0))
-bys frame_id_numeric year: egen n_local_ceo = total(cond(!expat, 1, 0))
-
 * create firm-year data
-collapse (firstnm) n_expat_ceo n_local_ceo foreign ever_expat ever_foreign (count) n_ceo = expat (max) hire_ceo = hire fire_ceo = fire, by(frame_id_numeric year)
+collapse (firstnm) foreign ever_expat ever_foreign (count) n_ceo = expat (max) hire_ceo = hire fire_ceo = fire foreignness, by(frame_id_numeric year)
+label values foreignness foreignness
+* define expat as any foreign link. we can limit the sample later
+generate has_expat_ceo = foreignness > 0 & !missing(foreignness)
 
 * if there is a change in the ceo team, hiring, increement the spell counter
 bys frame_id_numeric (year): gen ceo_spell = sum(hire_ceo) + 1 // so that index start from 1
 
-tabulate n_expat_ceo n_local_ceo
-* create dummies from numbers
-foreach var in expat local {
-	gen has_`var'_ceo = (n_`var'_ceo > 0) & !missing(n_`var'_ceo)
-}
-	
 count
 compress
 save "`here'/temp/firm_events.dta", replace
