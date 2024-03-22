@@ -34,7 +34,7 @@ Notes:
 . rename person_id manager_id
 
 . 
-. local western AT DE BE CA CH DE DK ES FR GB IT NL NO SE US IE US
+. local western AT DE BE CA CH DE DK ES FR GB IT NL NO SE US IE US IL KO JP
 
 . local neighbor SK UA RO RS HR SI 
 
@@ -60,6 +60,9 @@ Notes:
 (25,821 real changes made)
 (12,500 real changes made)
 (0 real changes made)
+(27,831 real changes made)
+(0 real changes made)
+(2,947 real changes made)
 
 . generate byte neighbor = 0
 
@@ -78,10 +81,144 @@ Notes:
 . egen byte ever_neighbor = max(neighbor), by(manager_id)
 
 . replace ever_western = 0 if !first_address_foreign
-(43,791 real changes made)
+(45,716 real changes made)
 
 . replace ever_neighbor = 0 if !first_address_foreign
 (19,680 real changes made)
+
+. 
+. generate originalid = frame_id_numeric
+
+. * special case some manually checked firms
+. * these are all Hungarian firms with Hungarian names and addresses
+. replace foreign_name = 0 if inlist(originalid, 11941712, 10362675, 12282799, 
+> 12566947, 13448064)
+(12 real changes made)
+
+. 
+. * these 40 names are cleary of Western origin
+. replace ever_western = 1 if originalid==10741973
+(11 real changes made)
+
+. replace ever_western = 1 if originalid==14655380
+(19 real changes made)
+
+. replace ever_western = 1 if originalid==24690210
+(12 real changes made)
+
+. replace ever_western = 1 if originalid==10414648
+(8 real changes made)
+
+. replace ever_western = 1 if originalid==10543294
+(39 real changes made)
+
+. replace ever_western = 1 if originalid==10751161
+(32 real changes made)
+
+. replace ever_western = 1 if originalid==11064899
+(59 real changes made)
+
+. replace ever_western = 1 if originalid==11077200
+(47 real changes made)
+
+. replace ever_western = 1 if originalid==11101291
+(33 real changes made)
+
+. replace ever_western = 1 if originalid==11179924
+(13 real changes made)
+
+. replace ever_western = 1 if originalid==11854463
+(35 real changes made)
+
+. replace ever_western = 1 if originalid==13212366
+(22 real changes made)
+
+. replace ever_western = 1 if originalid==14995806
+(16 real changes made)
+
+. replace ever_western = 1 if originalid==22592903
+(0 real changes made)
+
+. replace ever_western = 1 if originalid==23383636
+(21 real changes made)
+
+. replace ever_western = 1 if originalid==11182232
+(42 real changes made)
+
+. replace ever_western = 1 if originalid==11924717
+(14 real changes made)
+
+. replace ever_western = 1 if originalid==10548938
+(36 real changes made)
+
+. replace ever_western = 1 if originalid==11225685
+(6 real changes made)
+
+. replace ever_western = 1 if originalid==12106282
+(31 real changes made)
+
+. replace ever_western = 1 if originalid==12152104
+(31 real changes made)
+
+. replace ever_western = 1 if originalid==12206928
+(5 real changes made)
+
+. replace ever_western = 1 if originalid==12395073
+(22 real changes made)
+
+. replace ever_western = 1 if originalid==12691908
+(84 real changes made)
+
+. replace ever_western = 1 if originalid==12860777
+(3 real changes made)
+
+. replace ever_western = 1 if originalid==14068012
+(14 real changes made)
+
+. replace ever_western = 1 if originalid==12492455
+(21 real changes made)
+
+. replace ever_western = 1 if originalid==11142755
+(13 real changes made)
+
+. replace ever_western = 1 if originalid==11087388
+(27 real changes made)
+
+. replace ever_western = 1 if originalid==12353817
+(9 real changes made)
+
+. replace ever_western = 1 if originalid==26100667
+(0 real changes made)
+
+. replace ever_western = 1 if originalid==10640384
+(49 real changes made)
+
+. replace ever_western = 1 if originalid==10751642
+(14 real changes made)
+
+. replace ever_western = 1 if originalid==12509166
+(22 real changes made)
+
+. replace ever_western = 1 if originalid==12722312
+(20 real changes made)
+
+. replace ever_western = 1 if originalid==11192145
+(0 real changes made)
+
+. replace ever_western = 1 if originalid==10804472
+(8 real changes made)
+
+. replace ever_western = 1 if originalid==12158485
+(28 real changes made)
+
+. replace ever_western = 1 if originalid==11898353
+(0 real changes made)
+
+. replace ever_western = 1 if originalid==10732803
+(0 real changes made)
+
+. 
+. drop originalid
 
 . 
 . label define foreignness 0 "Hungarian name and address" 1 "Hungarian name, ne
@@ -90,13 +227,13 @@ Notes:
 > dress"
 
 . generate byte foreignness = 0 if !first_address_foreign & !foreign_name
-(1,573,804 missing values generated)
+(1,573,792 missing values generated)
 
 . replace foreignness = 1 if !foreign_name & ever_neighbor
 (146,312 real changes made)
 
 . replace foreignness = 2 if foreign_name & !first_address_foreign
-(447,365 real changes made)
+(447,353 real changes made)
 
 . replace foreignness = 3 if !foreign_name & !ever_neighbor & first_address_for
 > eign
@@ -104,11 +241,10 @@ Notes:
 
 . replace foreignness = 4 if foreign_name & !ever_western & first_address_forei
 > gn
-(451,299 real changes made)
+(421,718 real changes made)
 
-. replace foreignness = 5 if foreign_name & ever_western & first_address_foreig
-> n
-(421,219 real changes made)
+. replace foreignness = 5 if ever_western
+(533,497 real changes made)
 
 . label values foreignness foreignness
 
@@ -120,12 +256,12 @@ Notes:
 
                         foreignness |      Freq.     Percent        Cum.
 ------------------------------------+-----------------------------------
-         Hungarian name and address | 13,562,592       89.60       89.60
-Hungarian name, neighboring address |    146,312        0.97       90.57
-    Foreign name, Hungarian address |    447,365        2.96       93.52
-      Hungarian name, other address |    107,609        0.71       94.24
-  Foreign name, non-Western address |    451,299        2.98       97.22
-      Foreign name, Western address |    421,219        2.78      100.00
+         Hungarian name and address | 13,562,078       89.60       89.60
+Hungarian name, neighboring address |    145,158        0.96       90.56
+    Foreign name, Hungarian address |    447,014        2.95       93.51
+      Hungarian name, other address |     26,931        0.18       93.69
+  Foreign name, non-Western address |    421,718        2.79       96.48
+      Foreign name, Western address |    533,497        3.52      100.00
 ------------------------------------+-----------------------------------
                               Total | 15,136,396      100.00
 

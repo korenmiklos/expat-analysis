@@ -13,13 +13,11 @@ tabulate foreignness ever_expat if time_foreign == 0
 
 tabulate time_foreign foreignness if inrange(time_foreign, -2, 2) 
 
-tempvar f_fixed
-egen `f_fixed' = max(cond(time_foreign == 0, foreignness, .)), by(frame_id_numeric)
-label values `f_fixed' foreignness
+tempvar western
+egen `western' = max(foreignness == 5), by(frame_id_numeric)
 
-tabulate `f_fixed'
-keep if inlist(`f_fixed', 0, 5)
-
+tabulate foreignness `western'
+keep if ever_local | `western' == 1
 ****Average effect, foreign_hire sample, local and expat separately, xthdidreg
 
 
