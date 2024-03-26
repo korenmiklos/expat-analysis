@@ -14,7 +14,14 @@ tempvar N_control Yg
 
 ****Average effect, foreign_hire sample, local and expat separately, xthdidreg
 
-*Full sample
+local samples full industrial service
+local full 1
+local industrial industrial==1
+local service industrial==0
+foreach sample in `samples'{
+    preserve
+    display "`sample' sample"
+    keep if (``sample'') | fake
 foreach Y in $varlist_rhs {
 
     display "`Y'"
@@ -52,45 +59,8 @@ foreach Y in $varlist_rhs {
     drop `N_control'
 
 }
-BRK
-*Industrial sample
-preserve
-keep if industrial==1
-foreach Y in $varlist_rhs {
-    display "`Y'"
-
-    eststo clear
-    quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industrial==1, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
-    eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
-    quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & industrial==1, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
-    eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
-
-    eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet)
-
-    display "Industry sample"
-    esttab, b(3) se  style(tex)
-}
 restore
-
-*Service sample
-preserve
-keep if industrial==0
-foreach Y in $varlist_rhs {
-
-    display "`Y'"
-
-    eststo clear
-    quietly xthdidregress ra (`Y') (local_ceo) if $local_sample & industrial==0, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
-    eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
-    quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample & industrial==0, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
-    eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
-
-    eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet)
-
-    display "Service sample"
-    esttab, b(3) se style(tex)
 }
-restore
 
 *****Figures
 

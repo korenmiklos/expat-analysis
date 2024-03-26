@@ -13,7 +13,7 @@ log using "`here'/output/firm_panel", text replace
 use "`here'/temp/balance-small-clean.dta"
 by frame_id_numeric: egen firm_birth = min(year)
 by frame_id_numeric: egen firm_death = max(year)
-keep frame_id year firm_birth firm_death foreign
+keep frame_id_numeric year firm_birth firm_death foreign
 tempfile sample
 save `sample', replace
 
@@ -89,7 +89,7 @@ drop if ever_expat == 1 & ever_foreign == 0
 * drop too many CEO-s
 egen fp_tag = tag(frame_id_numeric manager_id) 
 by frame_id_numeric: egen n_ceo_ever = sum(fp_tag)
-drop if n_ceo > 15
+drop if n_ceo_ever > 15
 drop fp_tag n_ceo_ever
 	
 * hired or fired ceo since last observed year of firm
