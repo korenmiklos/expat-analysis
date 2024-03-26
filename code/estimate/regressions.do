@@ -3,8 +3,6 @@ here
 global here = r(here)
 use "$here/temp/analysis_sample.dta", clear
 
-keep if year < 2010
-
 *Samples
 global local_sample "(ever_local==1 | foreign==0) & !fake"
 global expat_sample "(ever_expat==1 | foreign==0) & !fake"

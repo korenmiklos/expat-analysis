@@ -35,10 +35,6 @@ Notes:
 . use "$here/temp/analysis_sample.dta", clear
 
 . 
-. keep if year < 2010
-(1,189 observations deleted)
-
-. 
 . *Samples
 . global local_sample "(ever_local==1 | foreign==0) & !fake"
 
@@ -56,7 +52,8 @@ Notes:
 >  treatment group
 . levelsof year, local(years)
 1984 1985 1986 1987 1988 1989 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999
->  2000 2001 2002 2003 2004 2005 2006 2007 2008 2009
+>  2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011 2012 2013 2014 2
+> 015 2016 2017 2018
 
 . local N_years : word count `years'
 
@@ -68,10 +65,10 @@ Notes:
 .     clear
 
 .     set obs `=`K'*`N_years''
-Number of observations (_N) was 0, now 6,006.
+Number of observations (_N) was 0, now 8,085.
 
 .     generate long frame_id_numeric = .
-(6,006 missing values generated)
+(8,085 missing values generated)
 
 .     forvalues k = 1/`K' {
   2.         quietly replace frame_id_numeric = `k' if inrange(_n, (`k'-1)*`N_y
@@ -79,7 +76,7 @@ Number of observations (_N) was 0, now 6,006.
   3.     }
 
 .     generate year = .
-(6,006 missing values generated)
+(8,085 missing values generated)
 
 .     forvalues i = 1/`N_years' {
   2.         local year : word `i' of `years'
@@ -107,12 +104,12 @@ Number of observations (_N) was 0, now 6,006.
   variable ever_expat was float now byte
   variable ever_local was float now byte
   variable foreign was float now byte
-  (240,240 bytes saved)
+  (323,400 bytes saved)
 
 .     save `fake', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St04767.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St87690.000001 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St04767.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St87690.000001 saved
     as .dta format
 
 . restore
@@ -155,14 +152,23 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St04767.000001 saved
       2007 |       378        129 |       507 
       2008 |       410         94 |       504 
       2009 |       404         75 |       479 
+      2010 |       370         72 |       442 
+      2011 |       361         81 |       442 
+      2012 |       330         73 |       403 
+      2013 |       315         63 |       378 
+      2014 |       297         54 |       351 
+      2015 |       293         40 |       333 
+      2016 |       286         35 |       321 
+      2017 |       290         18 |       308 
+      2018 |       290          0 |       290 
 -----------+----------------------+----------
-     Total |     9,219      3,407 |    12,626 
+     Total |    12,051      3,843 |    15,894 
 
 . 
 . * the time pattern of the fake control group should be the same as the real c
 > ontrol group
 . drop if (frame_id_numeric > N_control) & fake
-(2,599 observations deleted)
+(4,242 observations deleted)
 
 . tabulate year if fake
 
@@ -170,33 +176,41 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St04767.000001 saved
   1980-2018 |      Freq.     Percent        Cum.
 ------------+-----------------------------------
        1984 |          1        0.03        0.03
-       1985 |          3        0.09        0.12
-       1986 |          8        0.23        0.35
-       1987 |         12        0.35        0.70
-       1988 |         20        0.59        1.29
-       1989 |         68        2.00        3.29
-       1990 |        113        3.32        6.60
-       1991 |        159        4.67       11.27
-       1992 |        167        4.90       16.17
-       1993 |        174        5.11       21.28
-       1994 |        231        6.78       28.06
-       1995 |        215        6.31       34.37
-       1996 |        203        5.96       40.33
-       1997 |        194        5.69       46.02
-       1998 |        160        4.70       50.72
-       1999 |        169        4.96       55.68
-       2000 |        154        4.52       60.20
-       2001 |        168        4.93       65.13
-       2002 |        184        5.40       70.53
-       2003 |        194        5.69       76.23
-       2004 |        184        5.40       81.63
-       2005 |        162        4.75       86.38
-       2006 |        166        4.87       91.25
-       2007 |        129        3.79       95.04
-       2008 |         94        2.76       97.80
-       2009 |         75        2.20      100.00
+       1985 |          3        0.08        0.10
+       1986 |          8        0.21        0.31
+       1987 |         12        0.31        0.62
+       1988 |         20        0.52        1.14
+       1989 |         68        1.77        2.91
+       1990 |        113        2.94        5.85
+       1991 |        159        4.14        9.99
+       1992 |        167        4.35       14.34
+       1993 |        174        4.53       18.87
+       1994 |        231        6.01       24.88
+       1995 |        215        5.59       30.47
+       1996 |        203        5.28       35.75
+       1997 |        194        5.05       40.80
+       1998 |        160        4.16       44.96
+       1999 |        169        4.40       49.36
+       2000 |        154        4.01       53.37
+       2001 |        168        4.37       57.74
+       2002 |        184        4.79       62.53
+       2003 |        194        5.05       67.58
+       2004 |        184        4.79       72.37
+       2005 |        162        4.22       76.58
+       2006 |        166        4.32       80.90
+       2007 |        129        3.36       84.26
+       2008 |         94        2.45       86.70
+       2009 |         75        1.95       88.65
+       2010 |         72        1.87       90.53
+       2011 |         81        2.11       92.64
+       2012 |         73        1.90       94.54
+       2013 |         63        1.64       96.17
+       2014 |         54        1.41       97.58
+       2015 |         40        1.04       98.62
+       2016 |         35        0.91       99.53
+       2017 |         18        0.47      100.00
 ------------+-----------------------------------
-      Total |      3,407      100.00
+      Total |      3,843      100.00
 
 . drop N_control
 
@@ -204,7 +218,7 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St04767.000001 saved
 . xtset frame_id_numeric year
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
 . 
@@ -278,15 +292,15 @@ full sample
 lnK
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      3,407       60.80       60.80
-          1 |      2,197       39.20      100.00
+          0 |      3,843       58.40       58.40
+          1 |      2,737       41.60      100.00
 ------------+-----------------------------------
-      Total |      5,604      100.00
+      Total |      6,580      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -297,28 +311,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                       lnK             lnK             lnK             lnK   \\
 ----------------------------------------------------------------------------
-ATET                0.182           0.451**         0.853***        1.112***\\
-                  (0.101)         (0.144)         (0.086)         (0.139)   \\
+ATET                0.063           0.374**         0.703***        0.981***\\
+                  (0.094)         (0.129)         (0.078)         (0.124)   \\
 ----------------------------------------------------------------------------
-N                    5077            4267            7648            5103   \\
+N                    5908            4852            8760            5843   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: -.26965665
-ATET of differences: -.25904714
-Standard error of difference: .16389307
+Difference in means: -.31049435
+ATET of differences: -.27849076
+Standard error of difference: .14626365
 lnL
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      3,407       60.80       60.80
-          1 |      2,197       39.20      100.00
+          0 |      3,843       58.40       58.40
+          1 |      2,737       41.60      100.00
 ------------+-----------------------------------
-      Total |      5,604      100.00
+      Total |      6,580      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -329,28 +343,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                       lnL             lnL             lnL             lnL   \\
 ----------------------------------------------------------------------------
-ATET                0.166           0.499***        0.468***        0.685***\\
-                  (0.097)         (0.139)         (0.077)         (0.127)   \\
+ATET                0.117           0.550***        0.417***        0.736***\\
+                  (0.085)         (0.127)         (0.067)         (0.118)   \\
 ----------------------------------------------------------------------------
-N                    5077            4267            7648            5103   \\
+N                    5908            4852            8760            5843   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: -.33271072
-ATET of differences: -.21771349
-Standard error of difference: .14836368
+Difference in means: -.43245015
+ATET of differences: -.31911605
+Standard error of difference: .13598804
 TFP
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      3,407       60.80       60.80
-          1 |      2,197       39.20      100.00
+          0 |      3,843       58.40       58.40
+          1 |      2,737       41.60      100.00
 ------------+-----------------------------------
-      Total |      5,604      100.00
+      Total |      6,580      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -361,28 +375,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                       TFP             TFP             TFP             TFP   \\
 ----------------------------------------------------------------------------
-ATET                0.046           0.123*          0.058*          0.142** \\
-                  (0.037)         (0.052)         (0.024)         (0.043)   \\
+ATET                0.053           0.138**         0.044*          0.136** \\
+                  (0.031)         (0.050)         (0.020)         (0.043)   \\
 ----------------------------------------------------------------------------
-N                    5077            4267            7648            5103   \\
+N                    5908            4852            8760            5843   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: -.07781721
-ATET of differences: -.08422673
-Standard error of difference: .04960425
+Difference in means: -.08534782
+ATET of differences: -.09237357
+Standard error of difference: .04779486
 lnQ
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      3,407       60.80       60.80
-          1 |      2,197       39.20      100.00
+          0 |      3,843       58.40       58.40
+          1 |      2,737       41.60      100.00
 ------------+-----------------------------------
-      Total |      5,604      100.00
+      Total |      6,580      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -393,28 +407,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                       lnQ             lnQ             lnQ             lnQ   \\
 ----------------------------------------------------------------------------
-ATET                0.330***        0.813***        0.994***        1.474***\\
-                  (0.092)         (0.153)         (0.083)         (0.152)   \\
+ATET                0.255**         0.911***        0.850***        1.483***\\
+                  (0.083)         (0.148)         (0.075)         (0.144)   \\
 ----------------------------------------------------------------------------
-N                    5077            4267            7648            5103   \\
+N                    5908            4852            8760            5843   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: -.48263778
-ATET of differences: -.48044309
-Standard error of difference: .17281153
+Difference in means: -.65667545
+ATET of differences: -.63315378
+Standard error of difference: .16216372
 lnEx
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      3,407       60.80       60.80
-          1 |      2,197       39.20      100.00
+          0 |      3,843       58.40       58.40
+          1 |      2,737       41.60      100.00
 ------------+-----------------------------------
-      Total |      5,604      100.00
+      Total |      6,580      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -425,28 +439,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                      lnEx            lnEx            lnEx            lnEx   \\
 ----------------------------------------------------------------------------
-ATET                1.088***        0.934***        1.452***        1.313***\\
-                  (0.186)         (0.241)         (0.147)         (0.209)   \\
+ATET                0.915***        0.960***        1.311***        1.348***\\
+                  (0.177)         (0.219)         (0.134)         (0.191)   \\
 ----------------------------------------------------------------------------
-N                    2458            2163            3601            2662   \\
+N                    2839            2446            4106            3044   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: .15348443
-ATET of differences: .13954243
-Standard error of difference: .25502068
+Difference in means: -.04436526
+ATET of differences: -.03785384
+Standard error of difference: .23314969
 lnQd
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      3,407       60.80       60.80
-          1 |      2,197       39.20      100.00
+          0 |      3,843       58.40       58.40
+          1 |      2,737       41.60      100.00
 ------------+-----------------------------------
-      Total |      5,604      100.00
+      Total |      6,580      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -457,28 +471,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                      lnQd            lnQd            lnQd            lnQd   \\
 ----------------------------------------------------------------------------
-ATET                0.259**         0.583***        0.860***        1.214***\\
-                  (0.098)         (0.165)         (0.084)         (0.167)   \\
+ATET                0.165           0.657***        0.731***        1.226***\\
+                  (0.089)         (0.165)         (0.074)         (0.163)   \\
 ----------------------------------------------------------------------------
-N                    5040            4186            7592            5012   \\
+N                    5858            4765            8690            5745   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: -.32400758
-ATET of differences: -.35406033
-Standard error of difference: .18689197
+Difference in means: -.49243873
+ATET of differences: -.49512347
+Standard error of difference: .17847962
 exporter
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      3,407       60.80       60.80
-          1 |      2,197       39.20      100.00
+          0 |      3,843       58.40       58.40
+          1 |      2,737       41.60      100.00
 ------------+-----------------------------------
-      Total |      5,604      100.00
+      Total |      6,580      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -489,30 +503,30 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                  exporter        exporter        exporter        exporter   \\
 ----------------------------------------------------------------------------
-ATET                0.028           0.049           0.117***        0.132***\\
-                  (0.027)         (0.036)         (0.019)         (0.031)   \\
+ATET                0.037           0.068*          0.106***        0.122***\\
+                  (0.024)         (0.034)         (0.016)         (0.031)   \\
 ----------------------------------------------------------------------------
-N                    5077            4267            7648            5103   \\
+N                    5908            4852            8760            5843   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: -.0215588
-ATET of differences: -.01552089
-Standard error of difference: .03654199
+Difference in means: -.0312255
+ATET of differences: -.01584858
+Standard error of difference: .03473579
 industrial sample
-(3,421 observations deleted)
+(4,197 observations deleted)
 lnK
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      1,561       60.25       60.25
-          1 |      1,030       39.75      100.00
+          0 |      1,716       59.07       59.07
+          1 |      1,189       40.93      100.00
 ------------+-----------------------------------
-      Total |      2,591      100.00
+      Total |      2,905      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -523,28 +537,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                       lnK             lnK             lnK             lnK   \\
 ----------------------------------------------------------------------------
-ATET                0.286           0.387*          0.957***        0.988***\\
-                  (0.146)         (0.188)         (0.117)         (0.163)   \\
+ATET                0.230           0.293           0.865***        0.871***\\
+                  (0.146)         (0.174)         (0.110)         (0.152)   \\
 ----------------------------------------------------------------------------
-N                    2380            2077            3456            2562   \\
+N                    2650            2305            3812            2859   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: -.10101595
-ATET of differences: -.03115664
-Standard error of difference: .20053791
+Difference in means: -.0626727
+ATET of differences: -.00561988
+Standard error of difference: .18819067
 lnL
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      1,561       60.25       60.25
-          1 |      1,030       39.75      100.00
+          0 |      1,716       59.07       59.07
+          1 |      1,189       40.93      100.00
 ------------+-----------------------------------
-      Total |      2,591      100.00
+      Total |      2,905      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -555,28 +569,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                       lnL             lnL             lnL             lnL   \\
 ----------------------------------------------------------------------------
-ATET                0.328*          0.218           0.593***        0.354*  \\
-                  (0.151)         (0.187)         (0.119)         (0.159)   \\
+ATET                0.215           0.257           0.508***        0.417** \\
+                  (0.140)         (0.174)         (0.110)         (0.150)   \\
 ----------------------------------------------------------------------------
-N                    2380            2077            3456            2562   \\
+N                    2650            2305            3812            2859   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: .10991285
-ATET of differences: .23867529
-Standard error of difference: .19797892
+Difference in means: -.04190961
+ATET of differences: .09095673
+Standard error of difference: .18617527
 TFP
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      1,561       60.25       60.25
-          1 |      1,030       39.75      100.00
+          0 |      1,716       59.07       59.07
+          1 |      1,189       40.93      100.00
 ------------+-----------------------------------
-      Total |      2,591      100.00
+      Total |      2,905      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -587,28 +601,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                       TFP             TFP             TFP             TFP   \\
 ----------------------------------------------------------------------------
-ATET                0.064           0.033           0.095*          0.113*  \\
-                  (0.060)         (0.062)         (0.039)         (0.047)   \\
+ATET                0.083           0.073           0.080*          0.107*  \\
+                  (0.054)         (0.061)         (0.036)         (0.048)   \\
 ----------------------------------------------------------------------------
-N                    2380            2077            3456            2562   \\
+N                    2650            2305            3812            2859   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: .03175842
-ATET of differences: -.01833607
-Standard error of difference: .06125
+Difference in means: .00998334
+ATET of differences: -.02673945
+Standard error of difference: .05990893
 lnQ
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      1,561       60.25       60.25
-          1 |      1,030       39.75      100.00
+          0 |      1,716       59.07       59.07
+          1 |      1,189       40.93      100.00
 ------------+-----------------------------------
-      Total |      2,591      100.00
+      Total |      2,905      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -619,28 +633,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                       lnQ             lnQ             lnQ             lnQ   \\
 ----------------------------------------------------------------------------
-ATET                0.451**         0.459**         1.160***        1.148***\\
-                  (0.138)         (0.176)         (0.125)         (0.152)   \\
+ATET                0.406**         0.598***        1.054***        1.210***\\
+                  (0.136)         (0.174)         (0.124)         (0.154)   \\
 ----------------------------------------------------------------------------
-N                    2380            2077            3456            2562   \\
+N                    2650            2305            3812            2859   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: -.0081512
-ATET of differences: .01110269
-Standard error of difference: .19727942
+Difference in means: -.19223049
+ATET of differences: -.15651223
+Standard error of difference: .19764722
 lnEx
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      1,561       60.25       60.25
-          1 |      1,030       39.75      100.00
+          0 |      1,716       59.07       59.07
+          1 |      1,189       40.93      100.00
 ------------+-----------------------------------
-      Total |      2,591      100.00
+      Total |      2,905      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -651,28 +665,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                      lnEx            lnEx            lnEx            lnEx   \\
 ----------------------------------------------------------------------------
-ATET                0.980***        0.796**         1.527***        1.438***\\
-                  (0.235)         (0.280)         (0.185)         (0.234)   \\
+ATET                0.829***        0.820**         1.396***        1.485***\\
+                  (0.230)         (0.259)         (0.179)         (0.216)   \\
 ----------------------------------------------------------------------------
-N                    1530            1389            2190            1725   \\
+N                    1711            1532            2425            1915   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: .18469459
-ATET of differences: .08865765
-Standard error of difference: .29843308
+Difference in means: .00837935
+ATET of differences: -.08936829
+Standard error of difference: .28046273
 lnQd
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      1,561       60.25       60.25
-          1 |      1,030       39.75      100.00
+          0 |      1,716       59.07       59.07
+          1 |      1,189       40.93      100.00
 ------------+-----------------------------------
-      Total |      2,591      100.00
+      Total |      2,905      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -683,28 +697,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                      lnQd            lnQd            lnQd            lnQd   \\
 ----------------------------------------------------------------------------
-ATET                0.316*          0.148           0.867***        0.729***\\
-                  (0.148)         (0.186)         (0.121)         (0.172)   \\
+ATET                0.267           0.281           0.747***        0.805***\\
+                  (0.142)         (0.189)         (0.116)         (0.178)   \\
 ----------------------------------------------------------------------------
-N                    2349            2020            3413            2497   \\
+N                    2609            2245            3758            2790   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: .16781573
-ATET of differences: .13789388
-Standard error of difference: .21031475
+Difference in means: -.01329159
+ATET of differences: -.0577251
+Standard error of difference: .2121852
 exporter
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      1,561       60.25       60.25
-          1 |      1,030       39.75      100.00
+          0 |      1,716       59.07       59.07
+          1 |      1,189       40.93      100.00
 ------------+-----------------------------------
-      Total |      2,591      100.00
+      Total |      2,905      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -715,30 +729,30 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                  exporter        exporter        exporter        exporter   \\
 ----------------------------------------------------------------------------
-ATET                0.006          -0.019           0.169***        0.110** \\
-                  (0.042)         (0.046)         (0.029)         (0.037)   \\
+ATET                0.005           0.019           0.150***        0.111** \\
+                  (0.040)         (0.045)         (0.027)         (0.036)   \\
 ----------------------------------------------------------------------------
-N                    2380            2077            3456            2562   \\
+N                    2650            2305            3812            2859   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: .02496013
-ATET of differences: .05941502
-Standard error of difference: .04688524
+Difference in means: -.01483172
+ATET of differences: .03965865
+Standard error of difference: .04503012
 service sample
-(3,199 observations deleted)
+(3,612 observations deleted)
 lnK
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      1,846       61.27       61.27
-          1 |      1,167       38.73      100.00
+          0 |      2,127       57.88       57.88
+          1 |      1,548       42.12      100.00
 ------------+-----------------------------------
-      Total |      3,013      100.00
+      Total |      3,675      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -749,28 +763,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                       lnK             lnK             lnK             lnK   \\
 ----------------------------------------------------------------------------
-ATET                0.075           0.560*          0.755***        1.306***\\
-                  (0.137)         (0.231)         (0.124)         (0.250)   \\
+ATET               -0.074           0.480*          0.580***        1.139***\\
+                  (0.121)         (0.196)         (0.108)         (0.204)   \\
 ----------------------------------------------------------------------------
-N                    2697            2190            4192            2541   \\
+N                    3258            2547            4948            2984   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: -.48544905
-ATET of differences: -.5516726
-Standard error of difference: .27961707
+Difference in means: -.55399115
+ATET of differences: -.55877363
+Standard error of difference: .23069031
 lnL
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      1,846       61.27       61.27
-          1 |      1,167       38.73      100.00
+          0 |      2,127       57.88       57.88
+          1 |      1,548       42.12      100.00
 ------------+-----------------------------------
-      Total |      3,013      100.00
+      Total |      3,675      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -781,28 +795,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                       lnL             lnL             lnL             lnL   \\
 ----------------------------------------------------------------------------
-ATET                0.064           1.005***        0.350***        1.197***\\
-                  (0.123)         (0.212)         (0.100)         (0.193)   \\
+ATET                0.064           0.994***        0.345***        1.173***\\
+                  (0.107)         (0.192)         (0.083)         (0.179)   \\
 ----------------------------------------------------------------------------
-N                    2697            2190            4192            2541   \\
+N                    3258            2547            4948            2984   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: -.94112824
-ATET of differences: -.84795555
-Standard error of difference: .21762693
+Difference in means: -.92988136
+ATET of differences: -.82731582
+Standard error of difference: .19738823
 TFP
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      1,846       61.27       61.27
-          1 |      1,167       38.73      100.00
+          0 |      2,127       57.88       57.88
+          1 |      1,548       42.12      100.00
 ------------+-----------------------------------
-      Total |      3,013      100.00
+      Total |      3,675      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -813,28 +827,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                       TFP             TFP             TFP             TFP   \\
 ----------------------------------------------------------------------------
-ATET                0.038           0.224*          0.026           0.184*  \\
-                  (0.045)         (0.091)         (0.030)         (0.084)   \\
+ATET                0.034           0.211*          0.016           0.176*  \\
+                  (0.036)         (0.085)         (0.024)         (0.078)   \\
 ----------------------------------------------------------------------------
-N                    2697            2190            4192            2541   \\
+N                    3258            2547            4948            2984   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: -.18658194
-ATET of differences: -.15772631
-Standard error of difference: .08876609
+Difference in means: -.17741187
+ATET of differences: -.15938262
+Standard error of difference: .08191128
 lnQ
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      1,846       61.27       61.27
-          1 |      1,167       38.73      100.00
+          0 |      2,127       57.88       57.88
+          1 |      1,548       42.12      100.00
 ------------+-----------------------------------
-      Total |      3,013      100.00
+      Total |      3,675      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -845,28 +859,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                       lnQ             lnQ             lnQ             lnQ   \\
 ----------------------------------------------------------------------------
-ATET                0.211           1.345***        0.845***        2.000***\\
-                  (0.122)         (0.289)         (0.109)         (0.304)   \\
+ATET                0.135           1.336***        0.696***        1.866***\\
+                  (0.104)         (0.260)         (0.091)         (0.264)   \\
 ----------------------------------------------------------------------------
-N                    2697            2190            4192            2541   \\
+N                    3258            2547            4948            2984   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: -1.1341939
-ATET of differences: -1.1545334
-Standard error of difference: .32252466
+Difference in means: -1.2009175
+ATET of differences: -1.1697409
+Standard error of difference: .27893901
 lnEx
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      1,846       61.27       61.27
-          1 |      1,167       38.73      100.00
+          0 |      2,127       57.88       57.88
+          1 |      1,548       42.12      100.00
 ------------+-----------------------------------
-      Total |      3,013      100.00
+      Total |      3,675      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -877,28 +891,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                      lnEx            lnEx            lnEx            lnEx   \\
 ----------------------------------------------------------------------------
-ATET                1.038***        0.730           1.311***        0.855   \\
-                  (0.265)         (0.446)         (0.242)         (0.438)   \\
+ATET                0.930***        0.845*          1.178***        0.939*  \\
+                  (0.234)         (0.403)         (0.200)         (0.392)   \\
 ----------------------------------------------------------------------------
-N                     928             774            1411             937   \\
+N                    1128             914            1681            1129   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: .30741349
-ATET of differences: .45625154
-Standard error of difference: .50013698
+Difference in means: .08454912
+ATET of differences: .23907957
+Standard error of difference: .4397371
 lnQd
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      1,846       61.27       61.27
-          1 |      1,167       38.73      100.00
+          0 |      2,127       57.88       57.88
+          1 |      1,548       42.12      100.00
 ------------+-----------------------------------
-      Total |      3,013      100.00
+      Total |      3,675      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -909,28 +923,28 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                      lnQd            lnQd            lnQd            lnQd   \\
 ----------------------------------------------------------------------------
-ATET                0.215           1.292***        0.850***        1.969***\\
-                  (0.129)         (0.303)         (0.116)         (0.316)   \\
+ATET                0.103           1.210***        0.721***        1.793***\\
+                  (0.112)         (0.282)         (0.095)         (0.288)   \\
 ----------------------------------------------------------------------------
-N                    2691            2166            4179            2515   \\
+N                    3249            2520            4932            2955   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: -1.0773403
-ATET of differences: -1.1191933
-Standard error of difference: .33696326
+Difference in means: -1.1065551
+ATET of differences: -1.0721451
+Standard error of difference: .30279602
 exporter
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2009, but with gaps
+ Time variable: year, 1984 to 2018, but with gaps
          Delta: 1 unit
 
   local_ceo |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      1,846       61.27       61.27
-          1 |      1,167       38.73      100.00
+          0 |      2,127       57.88       57.88
+          1 |      1,548       42.12      100.00
 ------------+-----------------------------------
-      Total |      3,013      100.00
+      Total |      3,675      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
@@ -941,16 +955,16 @@ Full sample
                       (1)             (2)             (3)             (4)   \\
                  exporter        exporter        exporter        exporter   \\
 ----------------------------------------------------------------------------
-ATET                0.016           0.115           0.072**         0.166** \\
-                  (0.035)         (0.062)         (0.024)         (0.056)   \\
+ATET                0.034           0.111*          0.073***        0.139** \\
+                  (0.030)         (0.056)         (0.019)         (0.053)   \\
 ----------------------------------------------------------------------------
-N                    2697            2190            4192            2541   \\
+N                    3258            2547            4948            2984   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
-Difference in means: -.09812982
-ATET of differences: -.09425582
-Standard error of difference: .0611548
+Difference in means: -.07783118
+ATET of differences: -.06635166
+Standard error of difference: .05635992
 
 . 
 . *****Figures
@@ -983,39 +997,39 @@ Standard error of difference: .0611548
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 4,267
+Event study relative to -1               Number of obs = 4,852
 
 ------------------------------------------------------------------------------
          lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .1592858   .1545358     1.03   0.303    -.1435988    .4621704
-          -3 |   .0689857   .1409959     0.49   0.625    -.2073611    .3453326
-          -2 |   .1064925   .0993696     1.07   0.284    -.0882682    .3012533
+          -4 |   .2070417   .1312574     1.58   0.115     -.050218    .4643014
+          -3 |   .1389857   .1204056     1.15   0.248    -.0970048    .3749763
+          -2 |   .1149709   .0825116     1.39   0.164     -.046749    .2766907
           -1 |          0  (omitted)
-           0 |   .2745904   .0737449     3.72   0.000     .1300531    .4191278
-           1 |   .3839535   .1021622     3.76   0.000     .1837192    .5841878
-           2 |   .4252001   .1256988     3.38   0.001     .1788349    .6715653
-           3 |   .5993513   .1652199     3.63   0.000     .2755262    .9231764
-           4 |   .9914488    .206339     4.80   0.000     .5870318    1.395866
+           0 |   .2540524   .0666468     3.81   0.000     .1234271    .3846777
+           1 |   .3726179   .0941647     3.96   0.000     .1880585    .5571773
+           2 |   .4419768   .1164672     3.79   0.000     .2137053    .6702484
+           3 |   .5257433   .1524532     3.45   0.001     .2269406    .8245461
+           4 |   .8514679   .1858958     4.58   0.000     .4871188    1.215817
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 5,077
+Event study relative to -1               Number of obs = 5,908
 
 ------------------------------------------------------------------------------
          lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.1233346   .0872347    -1.41   0.157    -.2943115    .0476422
-          -3 |  -.0052942   .0624704    -0.08   0.932    -.1277339    .1171455
-          -2 |   .0359683   .0470259     0.76   0.444    -.0562008    .1281373
+          -4 |  -.0712235   .0778102    -0.92   0.360    -.2237286    .0812817
+          -3 |   .0078009   .0599575     0.13   0.896    -.1097135    .1253154
+          -2 |   .0478627   .0419204     1.14   0.254    -.0342997    .1300251
           -1 |          0  (omitted)
-           0 |   .0750531   .0507394     1.48   0.139    -.0243943    .1745006
-           1 |   .0212406   .0717282     0.30   0.767    -.1193441    .1618253
-           2 |   .0875471   .1021551     0.86   0.391    -.1126732    .2877674
-           3 |   .1963954   .1263852     1.55   0.120     -.051315    .4441058
-           4 |   .4117438   .1723925     2.39   0.017     .0738607    .7496268
+           0 |   .0606722   .0463446     1.31   0.190    -.0301615    .1515059
+           1 |   .0054018   .0661632     0.08   0.935    -.1242757    .1350793
+           2 |   .0110472   .0916375     0.12   0.904    -.1685589    .1906534
+           3 |   .0287841   .1188819     0.24   0.809    -.2042201    .2617883
+           4 |   .1917837   .1525818     1.26   0.209    -.1072712    .4908386
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1031,39 +1045,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 4,267
+Event study relative to -1               Number of obs = 4,852
 
 ------------------------------------------------------------------------------
          lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .0015997   .1250019     0.01   0.990    -.2433995    .2465989
-          -3 |  -.0140423   .1007247    -0.14   0.889     -.211459    .1833745
-          -2 |  -.0535491   .0656987    -0.82   0.415    -.1823161     .075218
+          -4 |  -.0171055   .1072894    -0.16   0.873    -.2273889    .1931778
+          -3 |  -.0267307   .0882346    -0.30   0.762    -.1996672    .1462059
+          -2 |  -.0437225   .0634097    -0.69   0.490    -.1680032    .0805581
           -1 |          0  (omitted)
-           0 |   .2200055   .0824134     2.67   0.008     .0584782    .3815328
-           1 |   .3631003   .1111561     3.27   0.001     .1452384    .5809623
-           2 |   .5320336   .1267621     4.20   0.000     .2835845    .7804827
-           3 |   .5873563   .1500688     3.91   0.000     .2932269    .8814857
-           4 |   .7096609   .1897584     3.74   0.000     .3377413    1.081581
+           0 |   .2838843   .0790009     3.59   0.000     .1290454    .4387232
+           1 |   .3625773   .1081268     3.35   0.001     .1506527     .574502
+           2 |   .5698974   .1158432     4.92   0.000     .3428489     .796946
+           3 |   .6575285   .1391467     4.73   0.000     .3848061     .930251
+           4 |   .7650063   .1685949     4.54   0.000     .4345665    1.095446
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 5,077
+Event study relative to -1               Number of obs = 5,908
 
 ------------------------------------------------------------------------------
          lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .0919004   .0852833     1.08   0.281    -.0752518    .2590526
-          -3 |   .1667357   .0690598     2.41   0.016     .0313811    .3020904
-          -2 |   .0682372   .0463519     1.47   0.141    -.0226108    .1590853
+          -4 |   .0992637   .0746544     1.33   0.184    -.0470563    .2455837
+          -3 |   .1455818   .0610308     2.39   0.017     .0259637    .2651999
+          -2 |   .0535423     .04246     1.26   0.207    -.0296778    .1367624
           -1 |          0  (omitted)
-           0 |   .1368242    .049508     2.76   0.006     .0397903    .2338581
-           1 |   .1636862   .0667554     2.45   0.014     .0328479    .2945244
-           2 |   .1968183   .1019529     1.93   0.054    -.0030057    .3966424
-           3 |   .3089575   .1252881     2.47   0.014     .0633973    .5545176
-           4 |    .433398   .1566116     2.77   0.006     .1264448    .7403512
+           0 |   .1105423   .0459343     2.41   0.016     .0205127    .2005719
+           1 |    .161998   .0628704     2.58   0.010     .0387742    .2852217
+           2 |   .1891859   .0890479     2.12   0.034     .0146553    .3637166
+           3 |   .2067951   .1076381     1.92   0.055    -.0041717    .4177619
+           4 |    .290555   .1291657     2.25   0.024     .0373949    .5437151
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1079,39 +1093,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 4,267
+Event study relative to -1               Number of obs = 4,852
 
 ------------------------------------------------------------------------------
          TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |    .054276   .0631551     0.86   0.390    -.0695058    .1780578
-          -3 |   .0379341   .0465226     0.82   0.415    -.0532484    .1291167
-          -2 |   .0552756   .0289522     1.91   0.056    -.0014697    .1120209
+          -4 |   .0602971    .053045     1.14   0.256    -.0436692    .1642635
+          -3 |   .0110155   .0395633     0.28   0.781    -.0665272    .0885581
+          -2 |   .0662325   .0292587     2.26   0.024     .0088865    .1235786
           -1 |          0  (omitted)
-           0 |   .1095995   .0366719     2.99   0.003     .0377239    .1814751
-           1 |   .1507043   .0547021     2.76   0.006     .0434903    .2579184
-           2 |   .2102209   .0541143     3.88   0.000     .1041588    .3162829
-           3 |   .1797797   .0555002     3.24   0.001     .0710013    .2885581
-           4 |   .1512779   .0710903     2.13   0.033     .0119436    .2906123
+           0 |    .122775   .0355642     3.45   0.001     .0530704    .1924796
+           1 |   .1550836   .0503087     3.08   0.002     .0564803    .2536869
+           2 |   .2154747   .0502489     4.29   0.000     .1169887    .3139607
+           3 |   .2132341   .0564262     3.78   0.000     .1026408    .3238274
+           4 |   .1552495   .0691182     2.25   0.025     .0197803    .2907186
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 5,077
+Event study relative to -1               Number of obs = 5,908
 
 ------------------------------------------------------------------------------
          TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.0416898   .0359824    -1.16   0.247    -.1122141    .0288344
-          -3 |  -.0462199   .0326566    -1.42   0.157    -.1102256    .0177857
-          -2 |  -.0406149   .0276504    -1.47   0.142    -.0948086    .0135788
+          -4 |  -.0246894   .0318212    -0.78   0.438    -.0870578    .0376791
+          -3 |  -.0401508   .0295142    -1.36   0.174    -.0979975     .017696
+          -2 |  -.0321504   .0244128    -1.32   0.188    -.0799986    .0156978
           -1 |          0  (omitted)
-           0 |   .0213269   .0228324     0.93   0.350    -.0234239    .0660777
-           1 |  -.0092669   .0283268    -0.33   0.744    -.0647864    .0462525
-           2 |   .0198052   .0338628     0.58   0.559    -.0465647    .0861752
-           3 |   .0054206   .0421789     0.13   0.898    -.0772484    .0880897
-           4 |   .0301974   .0678723     0.44   0.656    -.1028299    .1632248
+           0 |   .0237857   .0211163     1.13   0.260    -.0176015    .0651729
+           1 |   .0065685   .0253225     0.26   0.795    -.0430628    .0561997
+           2 |   .0442148   .0293486     1.51   0.132    -.0133074     .101737
+           3 |   .0302485   .0343498     0.88   0.379    -.0370759    .0975729
+           4 |   .0370907   .0515495     0.72   0.472    -.0639445    .1381259
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1127,39 +1141,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 4,267
+Event study relative to -1               Number of obs = 4,852
 
 ------------------------------------------------------------------------------
          lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .0760122   .1567502     0.48   0.628    -.2312126     .383237
-          -3 |   .0740644   .1264998     0.59   0.558    -.1738706    .3219995
-          -2 |   .0499305   .0708662     0.70   0.481    -.0889647    .1888257
+          -4 |   .0376445   .1279394     0.29   0.769    -.2131121    .2884012
+          -3 |   .0209703   .1089311     0.19   0.847    -.1925307    .2344714
+          -2 |   .0416736   .0608759     0.68   0.494    -.0776409     .160988
           -1 |          0  (omitted)
-           0 |   .4594659   .0810869     5.67   0.000     .3005385    .6183932
-           1 |   .7218425   .1130429     6.39   0.000     .5002825    .9434025
-           2 |   .9757959   .1448367     6.74   0.000     .6919211    1.259671
-           3 |   1.023251     .15691     6.52   0.000     .7157135    1.330789
-           4 |   1.132441   .2043134     5.54   0.000     .7319942    1.532888
+           0 |    .545517   .0827063     6.60   0.000     .3834156    .7076184
+           1 |   .7980876   .1128453     7.07   0.000     .5769148     1.01926
+           2 |   1.044495   .1398732     7.47   0.000     .7703488    1.318642
+           3 |   1.143749   .1585824     7.21   0.000     .8329335    1.454565
+           4 |   1.150656   .2041106     5.64   0.000     .7506066    1.550705
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 5,077
+Event study relative to -1               Number of obs = 5,908
 
 ------------------------------------------------------------------------------
          lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.1692553   .0834522    -2.03   0.043    -.3328186    -.005692
-          -3 |   -.076463   .0653895    -1.17   0.242    -.2046241    .0516981
-          -2 |   -.078351   .0486822    -1.61   0.108    -.1737665    .0170644
+          -4 |  -.0970917   .0739918    -1.31   0.189     -.242113    .0479296
+          -3 |   -.029805   .0589592    -0.51   0.613    -.1453629    .0857529
+          -2 |  -.0559326   .0438502    -1.28   0.202    -.1418774    .0300122
           -1 |          0  (omitted)
-           0 |   .1187547   .0421112     2.82   0.005     .0362182    .2012912
-           1 |   .1458123   .0666574     2.19   0.029     .0151662    .2764584
-           2 |   .2223337   .0900065     2.47   0.014     .0459241    .3987432
-           3 |   .2487666   .1110978     2.24   0.025      .031019    .4665143
-           4 |    .508845    .139125     3.66   0.000      .236165    .7815251
+           0 |   .1145184   .0419831     2.73   0.006     .0322332    .1968037
+           1 |   .1643841   .0646316     2.54   0.011     .0377085    .2910597
+           2 |   .2256403   .0826365     2.73   0.006     .0636758    .3876048
+           3 |    .203875   .1012462     2.01   0.044     .0054361    .4023139
+           4 |   .3368129   .1248851     2.70   0.007     .0920426    .5815831
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1175,39 +1189,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,163
+Event study relative to -1               Number of obs = 2,446
 
 ------------------------------------------------------------------------------
         lnEx |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |    .381949   .2687709     1.42   0.155    -.1448322    .9087303
-          -3 |   .1892927    .250876     0.75   0.451    -.3024153    .6810006
-          -2 |   .1170449   .1814263     0.65   0.519    -.2385442     .472634
+          -4 |   .3557867    .231528     1.54   0.124    -.0979999    .8095732
+          -3 |   .2259086   .2131656     1.06   0.289    -.1918884    .6437055
+          -2 |   .1014712   .1544867     0.66   0.511    -.2013172    .4042597
           -1 |          0  (omitted)
-           0 |   .5196959   .1398928     3.71   0.000     .2455111    .7938807
-           1 |    .836765    .178802     4.68   0.000     .4863194    1.187211
-           2 |   1.063633   .2129916     4.99   0.000      .646177    1.481089
-           3 |   1.330662   .2602541     5.11   0.000     .8205734    1.840751
-           4 |   1.779775   .3671207     4.85   0.000     1.060232    2.499318
+           0 |   .5113471   .1292296     3.96   0.000     .2580617    .7646324
+           1 |   .8951071   .1744601     5.13   0.000     .5531716    1.237043
+           2 |   1.132096   .2101565     5.39   0.000     .7201963    1.543995
+           3 |   1.370894   .2444284     5.61   0.000      .891823    1.849965
+           4 |   1.742377   .3310015     5.26   0.000     1.093626    2.391128
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,458
+Event study relative to -1               Number of obs = 2,839
 
 ------------------------------------------------------------------------------
         lnEx |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.5736773   .2349867    -2.44   0.015    -1.034243   -.1131119
-          -3 |  -.5138894   .1581838    -3.25   0.001    -.8239241   -.2038548
-          -2 |  -.3310193   .1017758    -3.25   0.001    -.5304962   -.1315424
+          -4 |  -.4618497   .2089697    -2.21   0.027    -.8714227   -.0522767
+          -3 |  -.4335161   .1473341    -2.94   0.003    -.7222856   -.1447465
+          -2 |  -.2574018   .0970997    -2.65   0.008    -.4477136   -.0670899
           -1 |          0  (omitted)
-           0 |   .2882917   .0902863     3.19   0.001     .1113339    .4652495
-           1 |   .5040745   .1562333     3.23   0.001      .197863    .8102861
-           2 |   .8314479   .1890544     4.40   0.000     .4609081    1.201988
-           3 |   .9180304   .2321822     3.95   0.000     .4629616    1.373099
-           4 |   1.122518   .2894596     3.88   0.000     .5551873    1.689848
+           0 |   .2935396   .0900234     3.26   0.001      .117097    .4699822
+           1 |   .4593808   .1484106     3.10   0.002     .1685013    .7502604
+           2 |   .7322902   .1831859     4.00   0.000     .3732525    1.091328
+           3 |   .7017455   .2245848     3.12   0.002     .2615673    1.141924
+           4 |   .9481203   .2836551     3.34   0.001     .3921665    1.504074
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1223,39 +1237,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 4,186
+Event study relative to -1               Number of obs = 4,765
 
 ------------------------------------------------------------------------------
         lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .1687116   .1792506     0.94   0.347    -.1826132    .5200363
-          -3 |   .1106976   .1504507     0.74   0.462    -.1841803    .4055755
-          -2 |    .114954   .0956642     1.20   0.230    -.0725443    .3024523
+          -4 |   .1223887   .1504943     0.81   0.416    -.1725746    .4173521
+          -3 |   .0232549    .132317     0.18   0.860    -.2360815    .2825914
+          -2 |   .1163362   .0814603     1.43   0.153    -.0433231    .2759954
           -1 |          0  (omitted)
-           0 |   .3995865   .0979732     4.08   0.000     .2075625    .5916104
-           1 |   .6127055   .1339996     4.57   0.000     .3500711    .8753399
-           2 |   .8539446   .1603322     5.33   0.000     .5396993     1.16819
-           3 |   .7595988   .1799869     4.22   0.000      .406831    1.112367
-           4 |   .7817166   .2186235     3.58   0.000     .3532225    1.210211
+           0 |   .5094105   .1006258     5.06   0.000     .3121875    .7066335
+           1 |   .6513531   .1298913     5.01   0.000     .3967708    .9059354
+           2 |   .8693253   .1544011     5.63   0.000     .5667047    1.171946
+           3 |   .8365532   .1877828     4.45   0.000     .4685058    1.204601
+           4 |   .7477918   .2380963     3.14   0.002     .2811316    1.214452
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 5,040
+Event study relative to -1               Number of obs = 5,858
 
 ------------------------------------------------------------------------------
         lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.1974336   .0877042    -2.25   0.024    -.3693307   -.0255366
-          -3 |  -.0970447   .0686694    -1.41   0.158    -.2316342    .0375448
-          -2 |   -.069306   .0479165    -1.45   0.148    -.1632206    .0246086
+          -4 |  -.1090886   .0802052    -1.36   0.174    -.2662879    .0481107
+          -3 |   -.052391    .062815    -0.83   0.404    -.1755061    .0707241
+          -2 |  -.0438609   .0431387    -1.02   0.309    -.1284113    .0406894
           -1 |          0  (omitted)
-           0 |   .0727583   .0451248     1.61   0.107    -.0156847    .1612012
-           1 |   .0819088    .070389     1.16   0.245    -.0560512    .2198687
-           2 |     .11461    .097247     1.18   0.239    -.0759907    .3052106
-           3 |   .1575536   .1249013     1.26   0.207    -.0872483    .4023556
-           4 |   .4129989   .1459303     2.83   0.005     .1269807    .6990171
+           0 |   .0537898    .043062     1.25   0.212    -.0306102    .1381898
+           1 |   .0772804   .0654314     1.18   0.238    -.0509628    .2055237
+           2 |   .1070522   .0851781     1.26   0.209    -.0598939    .2739982
+           3 |   .0816996   .1097585     0.74   0.457    -.1334231    .2968224
+           4 |   .2482678   .1327559     1.87   0.061     -.011929    .5084646
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1271,39 +1285,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 4,267
+Event study relative to -1               Number of obs = 4,852
 
 ------------------------------------------------------------------------------
     exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   -.007131   .0448932    -0.16   0.874    -.0951201     .080858
-          -3 |  -.0505566   .0371753    -1.36   0.174    -.1234188    .0223055
-          -2 |  -.0517996   .0339314    -1.53   0.127     -.118304    .0147048
+          -4 |  -.0013846    .041318    -0.03   0.973    -.0823665    .0795972
+          -3 |   -.036542   .0329396    -1.11   0.267    -.1011024    .0280184
+          -2 |  -.0388139   .0292906    -1.33   0.185    -.0962224    .0185947
           -1 |          0  (omitted)
-           0 |   .0076847    .027252     0.28   0.778    -.0457282    .0610976
-           1 |   .0071345   .0343691     0.21   0.836    -.0602277    .0744968
-           2 |   .0292604   .0385561     0.76   0.448    -.0463082     .104829
-           3 |   .0416295   .0411526     1.01   0.312    -.0390282    .1222871
-           4 |   .0248346    .047937     0.52   0.604    -.0691201    .1187894
+           0 |    .017362   .0246698     0.70   0.482    -.0309899    .0657139
+           1 |   .0221328   .0325203     0.68   0.496    -.0416059    .0858715
+           2 |   .0528779   .0371004     1.43   0.154    -.0198377    .1255934
+           3 |   .0838382   .0399228     2.10   0.036      .005591    .1620854
+           4 |   .0682642   .0446868     1.53   0.127    -.0193204    .1558487
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 5,077
+Event study relative to -1               Number of obs = 5,908
 
 ------------------------------------------------------------------------------
     exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .0031865   .0297128     0.11   0.915    -.0550495    .0614226
-          -3 |  -.0046053   .0234354    -0.20   0.844    -.0505379    .0413273
-          -2 |  -.0051593   .0188586    -0.27   0.784    -.0421214    .0318028
+          -4 |  -.0106139   .0270095    -0.39   0.694    -.0635515    .0423237
+          -3 |  -.0053378   .0212445    -0.25   0.802    -.0469763    .0363007
+          -2 |  -.0088065   .0169767    -0.52   0.604    -.0420803    .0244673
           -1 |          0  (omitted)
-           0 |   .0283761   .0164788     1.72   0.085    -.0039218     .060674
-           1 |   .0230942   .0216872     1.06   0.287    -.0194119    .0656003
-           2 |   .0100622   .0274519     0.37   0.714    -.0437426     .063867
-           3 |   .0051899   .0333168     0.16   0.876    -.0601098    .0704896
-           4 |   .0646639   .0466975     1.38   0.166    -.0268614    .1561893
+           0 |   .0305712   .0152922     2.00   0.046      .000599    .0605434
+           1 |   .0332473   .0200139     1.66   0.097    -.0059791    .0724738
+           2 |   .0263361   .0254972     1.03   0.302    -.0236376    .0763098
+           3 |   .0215134   .0295025     0.73   0.466    -.0363105    .0793372
+           4 |   .0416573    .038993     1.07   0.285    -.0347676    .1180822
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1322,7 +1336,7 @@ file
 . preserve
 
 . keep if industrial==1
-(6,828 observations deleted)
+(8,040 observations deleted)
 
 . 
 . foreach Y in $varlist_rhs {
@@ -1352,39 +1366,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,077
+Event study relative to -1               Number of obs = 2,305
 
 ------------------------------------------------------------------------------
          lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .1364108   .1727943     0.79   0.430    -.2022597    .4750814
-          -3 |   .0150619   .1520059     0.10   0.921    -.2828642    .3129881
-          -2 |  -.0711502   .1180497    -0.60   0.547    -.3025234     .160223
+          -4 |   .1857011   .1715248     1.08   0.279    -.1504812    .5218835
+          -3 |    .077902    .146588     0.53   0.595    -.2094052    .3652092
+          -2 |  -.0583325   .1030146    -0.57   0.571    -.2602373    .1435723
           -1 |          0  (omitted)
-           0 |   .2088084   .0957291     2.18   0.029     .0211828     .396434
-           1 |    .311447   .1362874     2.29   0.022     .0443286    .5785654
-           2 |   .2585398   .1786941     1.45   0.148    -.0916942    .6087739
-           3 |   .4741186   .2191676     2.16   0.031     .0445579    .9036793
-           4 |   .7846138   .2892207     2.71   0.007     .2177516    1.351476
+           0 |   .2130734   .0860615     2.48   0.013     .0443959    .3817509
+           1 |   .3326208   .1280908     2.60   0.009     .0815674    .5836742
+           2 |   .2909199    .169255     1.72   0.086    -.0408139    .6226536
+           3 |   .3411695   .2131345     1.60   0.109    -.0765664    .7589053
+           4 |   .5422461   .2747284     1.97   0.048     .0037884    1.080704
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,380
+Event study relative to -1               Number of obs = 2,650
 
 ------------------------------------------------------------------------------
          lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.1364799   .1402597    -0.97   0.331    -.4113838    .1384241
-          -3 |  -.0112428   .0892368    -0.13   0.900    -.1861438    .1636581
-          -2 |   .0074787   .0558025     0.13   0.893    -.1018922    .1168497
+          -4 |  -.1325343   .1277561    -1.04   0.300    -.3829316     .117863
+          -3 |  -.0184947   .0824811    -0.22   0.823    -.1801547    .1431653
+          -2 |   .0010402   .0524875     0.02   0.984    -.1018334    .1039138
           -1 |          0  (omitted)
-           0 |    .114344   .0702783     1.63   0.104    -.0233988    .2520868
-           1 |   .0932217   .0956343     0.97   0.330    -.0942181    .2806614
-           2 |   .2212913   .1244201     1.78   0.075    -.0225676    .4651501
-           3 |   .3188406   .1719337     1.85   0.064    -.0181433    .6558246
-           4 |   .5090421   .2547711     2.00   0.046     .0096999    1.008384
+           0 |   .1126173   .0654609     1.72   0.085    -.0156836    .2409183
+           1 |   .0720002   .0889043     0.81   0.418     -.102249    .2462494
+           2 |   .1714031   .1263997     1.36   0.175    -.0763357    .4191419
+           3 |   .2097624   .1918074     1.09   0.274    -.1661732    .5856981
+           4 |   .3968089   .2408603     1.65   0.099    -.0752687    .8688864
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1400,39 +1414,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,077
+Event study relative to -1               Number of obs = 2,305
 
 ------------------------------------------------------------------------------
          lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .1270172   .1662759     0.76   0.445    -.1988776     .452912
-          -3 |   .0215622   .1427027     0.15   0.880      -.25813    .3012544
-          -2 |  -.0627765    .085117    -0.74   0.461    -.2296028    .1040497
+          -4 |   .0643172   .1491941     0.43   0.666    -.2280978    .3567322
+          -3 |  -.0020612    .127573    -0.02   0.987    -.2520997    .2479773
+          -2 |   -.066673   .0755844    -0.88   0.378    -.2148157    .0814696
           -1 |          0  (omitted)
-           0 |   .1966806   .1043014     1.89   0.059    -.0077464    .4011075
-           1 |   .2216226   .1314681     1.69   0.092    -.0360501    .4792953
-           2 |   .2516337   .1545167     1.63   0.103    -.0512135    .5544809
-           3 |   .2288518   .1809016     1.27   0.206    -.1257088    .5834123
-           4 |   .2987316   .2542369     1.18   0.240    -.1995636    .7970269
+           0 |   .2527363   .0986287     2.56   0.010     .0594275    .4460451
+           1 |   .2379804    .130308     1.83   0.068    -.0174186    .4933795
+           2 |   .2883781   .1441515     2.00   0.045     .0058463    .5709099
+           3 |   .2555725   .1734636     1.47   0.141    -.0844098    .5955549
+           4 |   .2459212   .2370186     1.04   0.299    -.2186266    .7104691
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,380
+Event study relative to -1               Number of obs = 2,650
 
 ------------------------------------------------------------------------------
          lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.0364374   .1294646    -0.28   0.778    -.2901833    .2173086
-          -3 |    .014488   .1001247     0.14   0.885    -.1817528    .2107287
-          -2 |  -.0192849   .0776077    -0.25   0.804    -.1713931    .1328234
+          -4 |  -.0301789   .1172625    -0.26   0.797    -.2600092    .1996513
+          -3 |   .0087337   .0916652     0.10   0.924    -.1709269    .1883942
+          -2 |   -.025574   .0713356    -0.36   0.720    -.1653892    .1142411
           -1 |          0  (omitted)
-           0 |   .1019839   .0848687     1.20   0.229    -.0643557    .2683234
-           1 |   .1285962   .1053826     1.22   0.222    -.0779498    .3351423
-           2 |   .2838085   .1486467     1.91   0.056    -.0075336    .5751506
-           3 |   .4429418   .1900486     2.33   0.020     .0704535    .8154301
-           4 |   .6309578   .2299933     2.74   0.006     .1801792    1.081736
+           0 |   .0988003   .0791554     1.25   0.212    -.0563414    .2539419
+           1 |   .0976964   .0981395     1.00   0.320    -.0946534    .2900462
+           2 |   .1815594   .1370119     1.33   0.185     -.086979    .4500979
+           3 |   .2407767   .1772333     1.36   0.174    -.1065943    .5881477
+           4 |   .3989548   .2138555     1.87   0.062    -.0201943    .8181039
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1448,39 +1462,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,077
+Event study relative to -1               Number of obs = 2,305
 
 ------------------------------------------------------------------------------
          TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .1335044   .0923536     1.45   0.148    -.0475053    .3145142
-          -3 |   .0859286   .0486355     1.77   0.077    -.0093953    .1812525
-          -2 |   .0797073   .0368295     2.16   0.030     .0075229    .1518917
+          -4 |   .0979427   .0809229     1.21   0.226    -.0606632    .2565487
+          -3 |   .0592869   .0432518     1.37   0.170     -.025485    .1440588
+          -2 |   .0771772   .0352635     2.19   0.029     .0080619    .1462924
           -1 |          0  (omitted)
-           0 |   .0633779    .042978     1.47   0.140    -.0208574    .1476131
-           1 |   .0896503     .04685     1.91   0.056     -.002174    .1814747
-           2 |   .1520359   .0556276     2.73   0.006     .0430078    .2610639
-           3 |   .1199887   .0643652     1.86   0.062    -.0061648    .2461422
-           4 |   .1114338   .0800373     1.39   0.164    -.0454365    .2683041
+           0 |   .0974903   .0470155     2.07   0.038     .0053416     .189639
+           1 |   .1202087   .0497613     2.42   0.016     .0226783     .217739
+           2 |   .1893188   .0585521     3.23   0.001     .0745587    .3040789
+           3 |   .1507701   .0643592     2.34   0.019     .0246285    .2769118
+           4 |   .1013293   .0826731     1.23   0.220     -.060707    .2633657
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,380
+Event study relative to -1               Number of obs = 2,650
 
 ------------------------------------------------------------------------------
          TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.0715875    .061486    -1.16   0.244    -.1920978    .0489228
-          -3 |  -.0896888   .0544841    -1.65   0.100    -.1964757    .0170981
-          -2 |  -.0898521   .0553343    -1.62   0.104    -.1983053    .0186011
+          -4 |  -.0534521   .0579529    -0.92   0.356    -.1670376    .0601334
+          -3 |  -.0887578   .0520185    -1.71   0.088    -.1907122    .0131965
+          -2 |    -.08354   .0509281    -1.64   0.101    -.1833573    .0162773
           -1 |          0  (omitted)
-           0 |   .0421639   .0316364     1.33   0.183    -.0198423    .1041701
-           1 |  -.0056716   .0405526    -0.14   0.889    -.0851532      .07381
-           2 |  -.0049275   .0473245    -0.10   0.917    -.0976819    .0878269
-           3 |  -.0432014    .054204    -0.80   0.425    -.1494392    .0630365
-           4 |   .0190793   .1224778     0.16   0.876    -.2209727    .2591314
+           0 |   .0463747   .0297635     1.56   0.119    -.0119607    .1047101
+           1 |   .0293215   .0379566     0.77   0.440    -.0450722    .1037151
+           2 |   .0405688   .0472507     0.86   0.391    -.0520409    .1331786
+           3 |  -.0157463   .0498872    -0.32   0.752    -.1135234    .0820308
+           4 |   .0333193   .1060675     0.31   0.753    -.1745691    .2412077
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1496,39 +1510,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,077
+Event study relative to -1               Number of obs = 2,305
 
 ------------------------------------------------------------------------------
          lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .4152125   .1760914     2.36   0.018     .0700797    .7603454
-          -3 |   .2836318   .1281724     2.21   0.027     .0324186    .5348451
-          -2 |   .1041382   .0935444     1.11   0.266    -.0792054    .2874819
+          -4 |    .297064   .1594361     1.86   0.062     -.015425     .609553
+          -3 |    .233925    .113518     2.06   0.039     .0114339    .4564161
+          -2 |     .09202   .0820603     1.12   0.262    -.0688153    .2528552
           -1 |          0  (omitted)
-           0 |   .3764712   .0920859     4.09   0.000     .1959861    .5569563
-           1 |   .6014356   .1165912     5.16   0.000     .3729209    .8299502
-           2 |   .7482866   .1496828     5.00   0.000     .4549136     1.04166
-           3 |   .7715947   .1771413     4.36   0.000     .4244041    1.118785
-           4 |    .803274   .2656797     3.02   0.002     .2825514    1.323997
+           0 |   .4861933   .1025661     4.74   0.000     .2851675    .6872192
+           1 |   .7432663   .1307582     5.68   0.000      .486985    .9995476
+           2 |   .8879322   .1596328     5.56   0.000     .5750576    1.200807
+           3 |   .9094506    .180096     5.05   0.000     .5564689    1.262432
+           4 |   .7413745   .2869135     2.58   0.010     .1790343    1.303715
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,380
+Event study relative to -1               Number of obs = 2,650
 
 ------------------------------------------------------------------------------
          lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.2603962   .1403797    -1.85   0.064    -.5355353    .0147429
-          -3 |  -.2109931   .1128347    -1.87   0.061     -.432145    .0101588
-          -2 |  -.1447296   .0845651    -1.71   0.087    -.3104741    .0210148
+          -4 |  -.2218548   .1303063    -1.70   0.089    -.4772505    .0335408
+          -3 |  -.2093441   .1048374    -2.00   0.046    -.4148216   -.0038667
+          -2 |  -.1494399   .0778616    -1.92   0.055    -.3020458     .003166
           -1 |          0  (omitted)
-           0 |   .1205154   .0631528     1.91   0.056    -.0032618    .2442925
-           1 |   .1206616   .0977018     1.23   0.217    -.0708303    .3121536
-           2 |   .3117268   .1230878     2.53   0.011     .0704791    .5529744
-           3 |   .3410089   .1403487     2.43   0.015     .0659306    .6160873
-           4 |   .5925165   .1976476     3.00   0.003     .2051343    .9798987
+           0 |   .1330428   .0636459     2.09   0.037     .0082991    .2577865
+           1 |   .1423225   .0954527     1.49   0.136    -.0447613    .3294063
+           2 |   .3073657   .1161748     2.65   0.008     .0796673    .5350642
+           3 |   .2481004   .1441602     1.72   0.085    -.0344485    .5306492
+           4 |   .4716732   .2025778     2.33   0.020     .0746279    .8687184
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1544,39 +1558,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 1,389
+Event study relative to -1               Number of obs = 1,532
 
 ------------------------------------------------------------------------------
         lnEx |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .6781061   .3346087     2.03   0.043     .0222851    1.333927
-          -3 |   .3850727   .3216805     1.20   0.231    -.2454095    1.015555
-          -2 |   .2256244   .2402853     0.94   0.348    -.2453262     .696575
+          -4 |   .5666899   .3016484     1.88   0.060    -.0245301     1.15791
+          -3 |   .3571455   .2845047     1.26   0.209    -.2004735    .9147646
+          -2 |   .2393414    .215852     1.11   0.268    -.1837207    .6624036
           -1 |          0  (omitted)
-           0 |   .7347827   .1596257     4.60   0.000     .4219221    1.047643
-           1 |    1.01459   .2016164     5.03   0.000     .6194294    1.409751
-           2 |   1.000251   .2474676     4.04   0.000     .5152237    1.485279
-           3 |   1.416377   .2916132     4.86   0.000     .8448252    1.987928
-           4 |   1.424019   .4206362     3.39   0.001     .5995871    2.248451
+           0 |   .7269236     .15024     4.84   0.000     .4324586    1.021388
+           1 |    1.10568   .2010595     5.50   0.000     .7116104    1.499749
+           2 |   1.028291   .2457453     4.18   0.000     .5466393    1.509943
+           3 |   1.318104   .2760864     4.77   0.000     .7769852    1.859224
+           4 |   1.377196   .3897634     3.53   0.000     .6132736    2.141118
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 1,530
+Event study relative to -1               Number of obs = 1,711
 
 ------------------------------------------------------------------------------
         lnEx |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.5104569    .305288    -1.67   0.095     -1.10881    .0878966
-          -3 |  -.5837624   .2174741    -2.68   0.007    -1.010004   -.1575209
-          -2 |  -.4448718   .1447277    -3.07   0.002    -.7285329   -.1612106
+          -4 |  -.4012026   .2775457    -1.45   0.148    -.9451821    .1427769
+          -3 |  -.5391188   .2022595    -2.67   0.008      -.93554   -.1426975
+          -2 |  -.4122036    .131953    -3.12   0.002    -.6708267   -.1535806
           -1 |          0  (omitted)
-           0 |   .1720787   .1072459     1.60   0.109    -.0381195    .3822768
-           1 |   .4760659   .1956572     2.43   0.015     .0925849     .859547
-           2 |   .6377543   .2215628     2.88   0.004     .2034993    1.072009
-           3 |   .9153235   .2436874     3.76   0.000      .437705    1.392942
-           4 |   .7774022    .294243     2.64   0.008     .2006965    1.354108
+           0 |    .212168   .1072487     1.98   0.048     .0019645    .4223716
+           1 |   .4797335   .1831689     2.62   0.009      .120729     .838738
+           2 |   .6045071   .2127258     2.84   0.004     .1875721    1.021442
+           3 |   .7081904   .2456445     2.88   0.004      .226736    1.189645
+           4 |   .4488652   .3149588     1.43   0.154    -.1684427    1.066173
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1592,39 +1606,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,020
+Event study relative to -1               Number of obs = 2,245
 
 ------------------------------------------------------------------------------
         lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .5398692   .2070657     2.61   0.009     .1340279    .9457105
-          -3 |   .3009108   .1709489     1.76   0.078    -.0341429    .6359645
-          -2 |   .1945305   .1300788     1.50   0.135    -.0604192    .4494802
+          -4 |   .4903134   .1891418     2.59   0.010     .1196023    .8610245
+          -3 |   .2726144    .152069     1.79   0.073    -.0254354    .5706643
+          -2 |   .2098651   .1158085     1.81   0.070    -.0171154    .4368456
           -1 |          0  (omitted)
-           0 |   .2888516   .1214825     2.38   0.017     .0507502     .526953
-           1 |   .3771486   .1519939     2.48   0.013     .0792461     .675051
-           2 |   .5581577   .1628576     3.43   0.001     .2389627    .8773528
-           3 |   .4319193   .2002913     2.16   0.031     .0393557    .8244829
-           4 |   .3802775   .2656494     1.43   0.152    -.1403857    .9009408
+           0 |   .4424189   .1372548     3.22   0.001     .1734044    .7114334
+           1 |   .4803275   .1602214     3.00   0.003     .1662994    .7943557
+           2 |   .6605948   .1766358     3.74   0.000     .3143949    1.006795
+           3 |   .6273882   .2056563     3.05   0.002     .2243092    1.030467
+           4 |   .4078832   .2988174     1.36   0.172    -.1777882    .9935546
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,349
+Event study relative to -1               Number of obs = 2,609
 
 ------------------------------------------------------------------------------
         lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.2767859   .1462425    -1.89   0.058     -.563416    .0098442
-          -3 |  -.2569431   .1181164    -2.18   0.030     -.488447   -.0254393
-          -2 |  -.0989851   .0772543    -1.28   0.200    -.2504007    .0524304
+          -4 |  -.2690974   .1381475    -1.95   0.051    -.5398615    .0016667
+          -3 |  -.2768209   .1107135    -2.50   0.012    -.4938153   -.0598265
+          -2 |  -.0971718   .0718134    -1.35   0.176    -.2379235    .0435799
           -1 |          0  (omitted)
-           0 |   .0607234   .0661583     0.92   0.359    -.0689444    .1903912
-           1 |  -.0152938   .1031797    -0.15   0.882    -.2175223    .1869348
-           2 |   .1171643   .1382572     0.85   0.397    -.1538149    .3881435
-           3 |   .1280454   .1737512     0.74   0.461    -.2125008    .4685915
-           4 |   .4997634   .2177386     2.30   0.022     .0730035    .9265232
+           0 |   .0516135   .0621192     0.83   0.406    -.0701379     .173365
+           1 |  -.0341412    .095343    -0.36   0.720    -.2210101    .1527277
+           2 |   .0605169   .1265438     0.48   0.632    -.1875043    .3085382
+           3 |  -.0141609   .1656396    -0.09   0.932    -.3388085    .3104867
+           4 |   .4684725   .2317886     2.02   0.043     .0141752    .9227697
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1640,39 +1654,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,077
+Event study relative to -1               Number of obs = 2,305
 
 ------------------------------------------------------------------------------
     exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .0472922    .058814     0.80   0.421    -.0679811    .1625656
-          -3 |  -.0011696   .0431073    -0.03   0.978    -.0856583    .0833191
-          -2 |  -.0641381   .0434795    -1.48   0.140    -.1493563    .0210801
+          -4 |  -.0171125   .0563485    -0.30   0.761    -.1275535    .0933284
+          -3 |   -.017088   .0388521    -0.44   0.660    -.0932367    .0590607
+          -2 |  -.0691275   .0396082    -1.75   0.081    -.1467581    .0085031
           -1 |          0  (omitted)
-           0 |  -.0166078   .0315996    -0.53   0.599    -.0785419    .0453263
-           1 |  -.0090387   .0420144    -0.22   0.830    -.0913855    .0733081
-           2 |  -.0279651   .0459507    -0.61   0.543    -.1180269    .0620967
-           3 |  -.0295623   .0495531    -0.60   0.551    -.1266845    .0675599
-           4 |  -.0353571   .0611752    -0.58   0.563    -.1552584    .0845441
+           0 |  -.0048874   .0310172    -0.16   0.875    -.0656799    .0559052
+           1 |   .0099136   .0409587     0.24   0.809    -.0703641    .0901912
+           2 |  -.0088072   .0450618    -0.20   0.845    -.0971266    .0795123
+           3 |   .0032432   .0489631     0.07   0.947    -.0927228    .0992091
+           4 |  -.0315983   .0585729    -0.54   0.590     -.146399    .0832024
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,380
+Event study relative to -1               Number of obs = 2,650
 
 ------------------------------------------------------------------------------
     exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .0289505   .0457528     0.63   0.527    -.0607234    .1186244
-          -3 |   .0347731   .0397525     0.87   0.382    -.0431403    .1126865
-          -2 |   .0149176   .0284594     0.52   0.600    -.0408617    .0706969
+          -4 |   .0235803   .0441551     0.53   0.593    -.0629622    .1101228
+          -3 |   .0365228   .0375669     0.97   0.331     -.037107    .1101527
+          -2 |  -.0024156   .0272463    -0.09   0.929    -.0558174    .0509862
           -1 |          0  (omitted)
-           0 |   .0218846   .0268511     0.82   0.415    -.0307426    .0745118
-           1 |   .0093901   .0336852     0.28   0.780    -.0566316    .0754118
-           2 |   .0136768   .0408848     0.33   0.738    -.0664558    .0938095
-           3 |   .0430402   .0475514     0.91   0.365    -.0501588    .1362392
-           4 |   .0390988   .0720446     0.54   0.587     -.102106    .1803035
+           0 |   .0144196   .0256094     0.56   0.573     -.035774    .0646131
+           1 |   .0132578   .0322875     0.41   0.681    -.0500247    .0765402
+           2 |    .033166     .04002     0.83   0.407    -.0452718    .1116039
+           3 |   .0535928   .0480765     1.11   0.265    -.0406355     .147821
+           4 |  -.0194613   .0670774    -0.29   0.772    -.1509306     .112008
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1692,7 +1706,7 @@ file
 . preserve
 
 . keep if industrial==0
-(6,606 observations deleted)
+(7,455 observations deleted)
 
 . 
 . foreach Y in $varlist_rhs {     
@@ -1722,39 +1736,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,190
+Event study relative to -1               Number of obs = 2,547
 
 ------------------------------------------------------------------------------
          lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .1235273   .2915963     0.42   0.672    -.4479909    .6950456
-          -3 |   .1064914    .274807     0.39   0.698    -.4321204    .6451033
-          -2 |   .3791948   .1683994     2.25   0.024      .049138    .7092515
+          -4 |   .2032476    .212177     0.96   0.338    -.2126117    .6191069
+          -3 |   .1886255   .1998159     0.94   0.345    -.2030065    .5802576
+          -2 |    .333676   .1301417     2.56   0.010      .078603    .5887491
           -1 |          0  (omitted)
-           0 |   .3731223   .1220318     3.06   0.002     .1339444    .6123003
-           1 |   .4721113   .1629037     2.90   0.004      .152826    .7913967
-           2 |   .6458454   .1869226     3.46   0.001     .2794839    1.012207
-           3 |   .7684424   .2616561     2.94   0.003     .2556059    1.281279
-           4 |   1.303192   .3177816     4.10   0.000     .6803519    1.926033
+           0 |   .3099335   .1094959     2.83   0.005     .0953255    .5245415
+           1 |   .4157609   .1458738     2.85   0.004     .1298535    .7016683
+           2 |   .6448272   .1718914     3.75   0.000     .3079262    .9817282
+           3 |   .7517023   .2281826     3.29   0.001     .3044726    1.198932
+           4 |    1.18415   .2638204     4.49   0.000      .667072    1.701229
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,697
+Event study relative to -1               Number of obs = 3,258
 
 ------------------------------------------------------------------------------
          lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   -.101822   .1058958    -0.96   0.336    -.3093739    .1057299
-          -3 |  -.0038395   .0820386    -0.05   0.963    -.1646322    .1569531
-          -2 |   .0452079   .0707662     0.64   0.523    -.0934913    .1839071
+          -4 |  -.0163704   .0946953    -0.17   0.863    -.2019697     .169229
+          -3 |   .0248155   .0803195     0.31   0.757    -.1326078    .1822388
+          -2 |    .072263   .0606313     1.19   0.233    -.0465722    .1910982
           -1 |          0  (omitted)
-           0 |   .0389046    .072804     0.53   0.593    -.1037886    .1815977
-           1 |  -.0287028   .1013805    -0.28   0.777    -.2274049    .1699992
-           2 |  -.0180614   .1433345    -0.13   0.900    -.2989918     .262869
-           3 |   .0839804   .1796054     0.47   0.640    -.2680398    .4360005
-           4 |    .222264    .232241     0.96   0.339      -.23292     .677448
+           0 |   .0180692   .0650717     0.28   0.781     -.109469    .1456074
+           1 |  -.0478642   .0936441    -0.51   0.609    -.2314033    .1356748
+           2 |  -.0839736   .1233772    -0.68   0.496    -.3257885    .1578413
+           3 |  -.1101554   .1582555    -0.70   0.486    -.4203304    .2000197
+           4 |  -.0457086   .1921728    -0.24   0.812    -.4223603    .3309432
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1770,39 +1784,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,190
+Event study relative to -1               Number of obs = 2,547
 
 ------------------------------------------------------------------------------
          lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.2238515   .1918492    -1.17   0.243    -.5998691     .152166
-          -3 |  -.0899143   .1390931    -0.65   0.518    -.3625318    .1827032
-          -2 |  -.0846108   .1095016    -0.77   0.440    -.2992301    .1300084
+          -4 |  -.1547085   .1583398    -0.98   0.329    -.4650488    .1556319
+          -3 |  -.0747872   .1264316    -0.59   0.554    -.3225885    .1730142
+          -2 |  -.0485843   .1131372    -0.43   0.668    -.2703291    .1731606
           -1 |          0  (omitted)
-           0 |   .2726333   .1363235     2.00   0.046     .0054442    .5398223
-           1 |   .5791292   .1974122     2.93   0.003     .1922083      .96605
-           2 |   1.031799   .2102239     4.91   0.000     .6197673     1.44383
-           3 |   1.220225   .2579163     4.73   0.000     .7147186    1.725732
-           4 |   1.425518   .2915923     4.89   0.000     .8540075    1.997028
+           0 |   .3398376   .1307815     2.60   0.009     .0835107    .5961646
+           1 |   .5424038   .1872715     2.90   0.004     .1753583    .9094492
+           2 |   1.017967   .1870523     5.44   0.000     .6513518    1.384583
+           3 |   1.263482   .2274838     5.55   0.000     .8176221    1.709342
+           4 |   1.458512   .2481353     5.88   0.000     .9721762    1.944849
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,697
+Event study relative to -1               Number of obs = 3,258
 
 ------------------------------------------------------------------------------
          lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .1536864   .1071111     1.43   0.151    -.0562476    .3636204
-          -3 |   .2267913   .0822757     2.76   0.006     .0655339    .3880487
-          -2 |   .1022453   .0482455     2.12   0.034     .0076858    .1968048
+          -4 |   .1563209   .0944287     1.66   0.098    -.0287559    .3413977
+          -3 |   .1958878   .0729667     2.68   0.007     .0528757    .3388998
+          -2 |   .0798067   .0483051     1.65   0.099    -.0148696    .1744829
           -1 |          0  (omitted)
-           0 |   .1522364   .0600417     2.54   0.011     .0345569    .2699159
-           1 |   .1723293   .0900433     1.91   0.056    -.0041523     .348811
-           2 |   .1097217    .139339     0.79   0.431    -.1633778    .3828211
-           3 |   .2027817   .1644255     1.23   0.217    -.1194865    .5250498
-           4 |   .2879686   .2106214     1.37   0.172    -.1248418    .7007791
+           0 |   .1045415   .0572708     1.83   0.068    -.0077072    .2167902
+           1 |   .1855585   .0856166     2.17   0.030      .017753    .3533639
+           2 |   .1684371   .1168688     1.44   0.150    -.0606216    .3974958
+           3 |   .1662052   .1356991     1.22   0.221      -.09976    .4321705
+           4 |   .2356733   .1620683     1.45   0.146    -.0819749    .5533214
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1818,39 +1832,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,190
+Event study relative to -1               Number of obs = 2,547
 
 ------------------------------------------------------------------------------
          TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.0125901   .0851694    -0.15   0.882     -.179519    .1543389
-          -3 |  -.0113482   .0959617    -0.12   0.906    -.1994297    .1767332
-          -2 |   .0355729   .0507362     0.70   0.483    -.0638683    .1350141
+          -4 |   .0294103    .071464     0.41   0.681    -.1106566    .1694772
+          -3 |  -.0330729   .0730125    -0.45   0.651    -.1761748     .110029
+          -2 |   .0657454   .0517693     1.27   0.204    -.0357207    .1672115
           -1 |          0  (omitted)
-           0 |   .1643264   .0647051     2.54   0.011     .0375068     .291146
-           1 |   .2387079   .1170619     2.04   0.041     .0092708    .4681451
-           2 |   .2958922   .1065245     2.78   0.005      .087108    .5046764
-           3 |   .2417921   .0977712     2.47   0.013      .050164    .4334201
-           4 |   .1945697   .1372041     1.42   0.156    -.0743454    .4634847
+           0 |   .1455342   .0547859     2.66   0.008     .0381557    .2529127
+           1 |   .2130794   .0995403     2.14   0.032      .017984    .4081748
+           2 |   .2625892   .0895692     2.93   0.003     .0870368    .4381416
+           3 |   .2786109   .0995728     2.80   0.005     .0834517    .4737701
+           4 |   .2344628   .1234268     1.90   0.057    -.0074494    .4763749
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,697
+Event study relative to -1               Number of obs = 3,258
 
 ------------------------------------------------------------------------------
          TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.0070832   .0461278    -0.15   0.878     -.097492    .0833257
-          -3 |  -.0223428   .0415167    -0.54   0.590    -.1037141    .0590285
-          -2 |  -.0126026   .0298136    -0.42   0.673    -.0710362    .0458309
+          -4 |   .0072193   .0396784     0.18   0.856    -.0705489    .0849875
+          -3 |  -.0100895   .0359213    -0.28   0.779    -.0804939    .0603148
+          -2 |  -.0052961   .0262155    -0.20   0.840    -.0566775    .0460853
           -1 |          0  (omitted)
-           0 |   .0089817   .0329656     0.27   0.785    -.0556296     .073593
-           1 |  -.0057264   .0400104    -0.14   0.886    -.0841453    .0726926
-           2 |   .0432715   .0481706     0.90   0.369    -.0511412    .1376842
-           3 |   .0436794   .0602528     0.72   0.468    -.0744139    .1617727
-           4 |   .0450934   .0774157     0.58   0.560    -.1066386    .1968254
+           0 |   .0093257    .029873     0.31   0.755    -.0492243    .0678758
+           1 |   .0000333   .0350177     0.00   0.999    -.0686001    .0686667
+           2 |   .0562785   .0386632     1.46   0.146    -.0194999     .132057
+           3 |   .0622201   .0460952     1.35   0.177    -.0281247     .152565
+           4 |    .031548   .0548484     0.58   0.565    -.0759528    .1390488
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1866,39 +1880,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,190
+Event study relative to -1               Number of obs = 2,547
 
 ------------------------------------------------------------------------------
          lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.4585848   .3043036    -1.51   0.132    -1.055009    .1378393
-          -3 |  -.2452576    .266467    -0.92   0.357    -.7675234    .2770081
-          -2 |  -.0330924   .1075838    -0.31   0.758    -.2439528     .177768
+          -4 |  -.3196796   .2181488    -1.47   0.143    -.7472434    .1078842
+          -3 |  -.2524386   .2060517    -1.23   0.221    -.6562926    .1514153
+          -2 |  -.0287205   .0908577    -0.32   0.752    -.2067984    .1493574
           -1 |          0  (omitted)
-           0 |   .5955885   .1483145     4.02   0.000     .3048974    .8862796
-           1 |      .8873   .2241826     3.96   0.000     .4479102     1.32669
-           2 |   1.364356   .2835122     4.81   0.000     .8086823     1.92003
-           3 |   1.411547   .2844165     4.96   0.000     .8541006    1.968993
-           4 |   1.546391   .3731188     4.14   0.000     .8150914     2.27769
+           0 |   .6368667   .1374174     4.63   0.000     .3675336    .9061998
+           1 |   .8718178   .2036971     4.28   0.000     .4725788    1.271057
+           2 |   1.314515   .2493319     5.27   0.000     .8258332    1.803196
+           3 |   1.482478   .2780091     5.33   0.000     .9375905    2.027366
+           4 |     1.6248   .3300329     4.92   0.000     .9779477    2.271653
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,697
+Event study relative to -1               Number of obs = 3,258
 
 ------------------------------------------------------------------------------
          lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.0683402   .1012516    -0.67   0.500    -.2667897    .1301092
-          -3 |   .0285801   .0778916     0.37   0.714    -.1240846    .1812448
-          -2 |   -.028159   .0557046    -0.51   0.613    -.1373379    .0810199
+          -4 |   .0169685   .0877605     0.19   0.847    -.1550389     .188976
+          -3 |    .099579   .0694915     1.43   0.152    -.0366219    .2357799
+          -2 |   .0059539   .0510402     0.12   0.907    -.0940831    .1059909
           -1 |          0  (omitted)
-           0 |   .1080542   .0553101     1.95   0.051    -.0003516    .2164601
-           1 |   .1653363   .0928501     1.78   0.075    -.0166465    .3473192
-           2 |   .1599721   .1252341     1.28   0.201    -.0854823    .4054265
-           3 |   .1704935   .1634886     1.04   0.297    -.1499383    .4909253
-           4 |    .366626   .1954211     1.88   0.061    -.0163922    .7496443
+           0 |   .0937699   .0550644     1.70   0.089    -.0141545    .2016942
+           1 |   .1879839    .088987     2.11   0.035     .0135726    .3623952
+           2 |   .1609701   .1123764     1.43   0.152    -.0592836    .3812238
+           3 |   .1570541    .138143     1.14   0.256    -.1137012    .4278094
+           4 |   .2302876   .1575467     1.46   0.144    -.0784984    .5390735
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1914,39 +1928,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1                 Number of obs = 774
+Event study relative to -1                 Number of obs = 914
 
 ------------------------------------------------------------------------------
         lnEx |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.2051684   .3503436    -0.59   0.558    -.8918293    .4814926
-          -3 |  -.1097247   .3445924    -0.32   0.750    -.7851134     .565664
-          -2 |  -.1805342   .2234499    -0.81   0.419     -.618488    .2574195
+          -4 |  -.0610215   .3158243    -0.19   0.847    -.6800258    .5579828
+          -3 |  -.0090085   .3048897    -0.03   0.976    -.6065814    .5885644
+          -2 |  -.2419273    .198891    -1.22   0.224    -.6317466     .147892
           -1 |          0  (omitted)
-           0 |    .007653   .3049119     0.03   0.980    -.5899634    .6052695
-           1 |   .3455805   .3990013     0.87   0.386    -.4364477    1.127609
-           2 |   .7111006   .4209836     1.69   0.091    -.1140122    1.536213
-           3 |   1.068176   .7027492     1.52   0.129    -.3091869    2.445539
-           4 |   .8988525    .671087     1.34   0.180    -.4164538    2.214159
+           0 |   .0296636   .2685464     0.11   0.912    -.4966778    .5560049
+           1 |   .3421313   .3672749     0.93   0.352    -.3777143    1.061977
+           2 |   .9079722   .4220591     2.15   0.031     .0807517    1.735193
+           3 |    1.32959   .6050321     2.20   0.028     .1437493    2.515431
+           4 |   1.226012   .5503567     2.23   0.026     .1473325    2.304691
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1                 Number of obs = 928
+Event study relative to -1               Number of obs = 1,128
 
 ------------------------------------------------------------------------------
         lnEx |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.7062689   .3502626    -2.02   0.044    -1.392771   -.0197668
-          -3 |  -.4748202   .2154117    -2.20   0.028    -.8970194    -.052621
-          -2 |  -.1568578   .1483732    -1.06   0.290    -.4476638    .1339483
+          -4 |  -.5931095   .3004739    -1.97   0.048    -1.182028   -.0041915
+          -3 |  -.3486982    .215338    -1.62   0.105    -.7707529    .0733565
+          -2 |  -.0439276   .1566772    -0.28   0.779    -.3510092     .263154
           -1 |          0  (omitted)
-           0 |   .4638012   .1634863     2.84   0.005      .143374    .7842284
-           1 |   .4759935   .2472394     1.93   0.054    -.0085868    .9605738
-           2 |    1.13448   .3372373     3.36   0.001     .4735067    1.795453
-           3 |    .882437   .4604647     1.92   0.055    -.0200573    1.784931
-           4 |   .5585695   .4196979     1.33   0.183    -.2640232    1.381162
+           0 |   .4191962   .1531766     2.74   0.006     .1189757    .7194168
+           1 |   .4336671   .2427206     1.79   0.074    -.0420565    .9093907
+           2 |   .9440035   .3185917     2.96   0.003     .3195752    1.568432
+           3 |   .7846647   .3871144     2.03   0.043     .0259345    1.543395
+           4 |   .8343609   .3500777     2.38   0.017     .1482211    1.520501
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -1962,39 +1976,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,166
+Event study relative to -1               Number of obs = 2,520
 
 ------------------------------------------------------------------------------
         lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.4479813   .3192359    -1.40   0.161    -1.073672    .1777097
-          -3 |  -.2282137   .2808084    -0.81   0.416    -.7785879    .3221606
-          -2 |  -.0197215   .1313768    -0.15   0.881    -.2772153    .2377722
+          -4 |  -.4011596   .2398981    -1.67   0.094    -.8713513     .069032
+          -3 |  -.3282295    .228089    -1.44   0.150    -.7752758    .1188167
+          -2 |  -.0133587   .1069443    -0.12   0.901    -.2229658    .1962483
           -1 |          0  (omitted)
-           0 |   .5819814   .1645183     3.54   0.000     .2595314    .9044314
-           1 |   .9211492     .24652     3.74   0.000     .4379789     1.40432
-           2 |   1.343445   .3097112     4.34   0.000     .7364222    1.950468
-           3 |   1.316671    .328344     4.01   0.000     .6731282    1.960213
-           4 |   1.427742   .3972983     3.59   0.000     .6490515    2.206432
+           0 |   .6211186   .1493989     4.16   0.000     .3283022     .913935
+           1 |   .8656086   .2225975     3.89   0.000     .4293256    1.301892
+           2 |    1.22771   .2728859     4.50   0.000     .6928637    1.762557
+           3 |   1.199717   .3396683     3.53   0.000     .5339789    1.865454
+           4 |   1.207278   .3779602     3.19   0.001       .46649    1.948067
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,691
+Event study relative to -1               Number of obs = 3,249
 
 ------------------------------------------------------------------------------
         lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.0987412    .107007    -0.92   0.356    -.3084712    .1109888
-          -3 |    .005004   .0818949     0.06   0.951    -.1555071     .165515
-          -2 |  -.0557601   .0603242    -0.92   0.355    -.1739933     .062473
+          -4 |   .0336181   .0967284     0.35   0.728     -.155966    .2232023
+          -3 |   .0870598   .0746891     1.17   0.244    -.0593281    .2334477
+          -2 |  -.0168526   .0539124    -0.31   0.755     -.122519    .0888138
           -1 |          0  (omitted)
-           0 |    .084053   .0605839     1.39   0.165    -.0346892    .2027953
-           1 |   .1587515   .0964846     1.65   0.100    -.0303548    .3478578
-           2 |    .133641   .1312897     1.02   0.309    -.1236821    .3909641
-           3 |   .1865465   .1785491     1.04   0.296    -.1634033    .5364964
-           4 |   .3243182    .201174     1.61   0.107    -.0699757    .7186121
+           0 |   .0603275   .0583716     1.03   0.301    -.0540787    .1747336
+           1 |   .1761945   .0890331     1.98   0.048     .0016927    .3506962
+           2 |   .1328073   .1123544     1.18   0.237    -.0874032    .3530178
+           3 |   .1304122   .1463148     0.89   0.373    -.1563595    .4171839
+           4 |    .147132   .1641768     0.90   0.370    -.1746487    .4689126
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
@@ -2010,39 +2024,39 @@ file
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,190
+Event study relative to -1               Number of obs = 2,547
 
 ------------------------------------------------------------------------------
     exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   -.057351   .0755324    -0.76   0.448    -.2053917    .0906897
-          -3 |  -.1157181   .0713653    -1.62   0.105    -.2555915    .0241553
-          -2 |  -.0209238   .0555444    -0.38   0.706    -.1297888    .0879412
+          -4 |    .038491   .0660208     0.58   0.560    -.0909075    .1678894
+          -3 |  -.0517849   .0596728    -0.87   0.385    -.1687415    .0651718
+          -2 |   .0101687   .0442673     0.23   0.818    -.0765936     .096931
           -1 |          0  (omitted)
-           0 |   .0513252   .0498966     1.03   0.304    -.0464703    .1491208
-           1 |   .0293039   .0592282     0.49   0.621    -.0867813    .1453891
-           2 |   .0987789   .0699404     1.41   0.158    -.0383016    .2358595
-           3 |   .1050921   .0764075     1.38   0.169    -.0446639    .2548481
-           4 |   .0455776   .0911131     0.50   0.617    -.1330008     .224156
+           0 |   .0508754   .0412674     1.23   0.218    -.0300072    .1317579
+           1 |   .0431143   .0544045     0.79   0.428    -.0635165    .1497452
+           2 |   .1284231     .06502     1.98   0.048     .0009862    .2558601
+           3 |     .17184   .0700498     2.45   0.014     .0345449    .3091351
+           4 |   .1585122   .0775283     2.04   0.041     .0065594    .3104649
 ------------------------------------------------------------------------------
 
 Time variable: time, -4 to 4
         Delta: 1 unit
 
-Event study relative to -1               Number of obs = 2,697
+Event study relative to -1               Number of obs = 3,258
 
 ------------------------------------------------------------------------------
     exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |  -.0204925   .0371756    -0.55   0.581    -.0933554    .0523703
-          -3 |  -.0175629   .0291562    -0.60   0.547    -.0747081    .0395822
-          -2 |  -.0138188   .0245714    -0.56   0.574    -.0619779    .0343404
+          -4 |   -.031703   .0329694    -0.96   0.336    -.0963218    .0329157
+          -3 |  -.0210659   .0264246    -0.80   0.425    -.0728572    .0307255
+          -2 |  -.0072598    .021679    -0.33   0.738    -.0497498    .0352302
           -1 |          0  (omitted)
-           0 |   .0271775    .020286     1.34   0.180    -.0125823    .0669374
-           1 |   .0234492   .0289876     0.81   0.419    -.0333655    .0802638
-           2 |   -.007139   .0384064    -0.19   0.853    -.0824142    .0681362
-           3 |  -.0573696    .045646    -1.26   0.209    -.1468341    .0320949
-           4 |   .0309589   .0612029     0.51   0.613    -.0889966    .1509144
+           0 |   .0380071   .0183011     2.08   0.038     .0021375    .0738766
+           1 |   .0375837   .0259935     1.45   0.148    -.0133626      .08853
+           2 |   .0080515   .0333049     0.24   0.809    -.0572249     .073328
+           3 |  -.0298857   .0382888    -0.78   0.435    -.1049304     .045159
+           4 |   .0387232   .0475562     0.81   0.415    -.0544852    .1319316
 ------------------------------------------------------------------------------
 (all observations in frame event_expat matched)
 (3 variables copied from linked frame)
