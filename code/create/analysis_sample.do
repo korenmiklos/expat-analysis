@@ -124,6 +124,19 @@ drop TFP_temp
 tabulate foreignness has_expat_ceo
 tabulate time_foreign foreignness if inrange(time_foreign, -2, 2) & ever_expat 
 
+tabulate foreignness ever_expat
+tabulate foreignness ever_expat if time_foreign == 0
+
+tabulate time_foreign foreignness if inrange(time_foreign, -2, 2) 
+
+tempvar western
+egen `western' = max(foreignness == 5), by(frame_id_numeric)
+
+tabulate foreignness `western'
+keep if ever_local | `western' == 1
+
+drop __*
+
 compress
 save "`here'/temp/analysis_sample.dta", replace
 log close

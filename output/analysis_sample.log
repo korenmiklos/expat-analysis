@@ -3,7 +3,7 @@
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
 > og
   log type:  text
- opened on:  26 Mar 2024, 11:55:02
+ opened on:  26 Mar 2024, 15:42:32
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -331,6 +331,89 @@ time_forei |     s
      Total |       796 |     1,727 
 
 . 
+. tabulate foreignness ever_expat
+
+                      |      ever_expat
+    (max) foreignness |         0          1 |     Total
+----------------------+----------------------+----------
+Hungarian name and ad |     5,589      1,327 |     6,916 
+Hungarian name, neigh |         0         33 |        33 
+Foreign name, Hungari |         0        124 |       124 
+Hungarian name, other |         0          5 |         5 
+Foreign name, non-Wes |         0        222 |       222 
+Foreign name, Western |         0      1,164 |     1,164 
+----------------------+----------------------+----------
+                Total |     5,589      2,875 |     8,464 
+
+. tabulate foreignness ever_expat if time_foreign == 0
+
+                      |      ever_expat
+    (max) foreignness |         0          1 |     Total
+----------------------+----------------------+----------
+Hungarian name and ad |       732          0 |       732 
+Hungarian name, neigh |         0         14 |        14 
+Foreign name, Hungari |         0         36 |        36 
+Hungarian name, other |         0          2 |         2 
+Foreign name, non-Wes |         0         72 |        72 
+Foreign name, Western |         0        313 |       313 
+----------------------+----------------------+----------
+                Total |       732        437 |     1,169 
+
+. 
+. tabulate time_foreign foreignness if inrange(time_foreign, -2, 2) 
+
+time_forei |                   (max) foreignness
+        gn | Hungarian  Hungarian  Foreign n  Hungarian  Foreign n |     Total
+-----------+-------------------------------------------------------+----------
+        -2 |       801          0          0          0          0 |       801 
+        -1 |     1,123          0          0          0          0 |     1,126 
+         0 |       732         14         36          2         72 |     1,169 
+         1 |       664         10         30          1         45 |     1,009 
+         2 |       534          5         23          1         43 |       827 
+-----------+-------------------------------------------------------+----------
+     Total |     3,854         29         89          4        160 |     4,932 
+
+
+           |   (max)
+           | foreignnes
+time_forei |     s
+        gn | Foreign n |     Total
+-----------+-----------+----------
+        -2 |         0 |       801 
+        -1 |         3 |     1,126 
+         0 |       313 |     1,169 
+         1 |       259 |     1,009 
+         2 |       221 |       827 
+-----------+-----------+----------
+     Total |       796 |     4,932 
+
+. 
+. tempvar western
+
+. egen `western' = max(foreignness == 5), by(frame_id_numeric)
+
+. 
+. tabulate foreignness `western'
+
+                      |       __000001
+    (max) foreignness |         0          1 |     Total
+----------------------+----------------------+----------
+Hungarian name and ad |     5,928        988 |     6,916 
+Hungarian name, neigh |        33          0 |        33 
+Foreign name, Hungari |        85         39 |       124 
+Hungarian name, other |         5          0 |         5 
+Foreign name, non-Wes |       193         29 |       222 
+Foreign name, Western |         0      1,164 |     1,164 
+----------------------+----------------------+----------
+                Total |     6,244      2,220 |     8,464 
+
+. keep if ever_local | `western' == 1
+(655 observations deleted)
+
+. 
+. drop __*
+
+. 
 . compress
   variable year was float now int
   variable minyear was float now int
@@ -361,7 +444,7 @@ time_forei |     s
   variable immat was double now long
   variable final_netgep was double now long
   variable tanass_18 was double now long
-  (770,224 bytes saved)
+  (710,619 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
 file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
@@ -371,5 +454,5 @@ file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
 > og
   log type:  text
- closed on:  26 Mar 2024, 11:55:23
+ closed on:  26 Mar 2024, 15:42:53
 -------------------------------------------------------------------------------

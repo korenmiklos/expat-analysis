@@ -8,16 +8,6 @@ global expat_sample "(ever_expat==1 | foreign==0)"
 
 global varlist_rhs "lnK lnL TFP lnQ lnEx lnQd exporter"
 
-tabulate foreignness ever_expat
-tabulate foreignness ever_expat if time_foreign == 0
-
-tabulate time_foreign foreignness if inrange(time_foreign, -2, 2) 
-
-tempvar western
-egen `western' = max(foreignness == 5), by(frame_id_numeric)
-
-tabulate foreignness `western'
-keep if ever_local | `western' == 1
 ****Average effect, foreign_hire sample, local and expat separately, xthdidreg
 
 
