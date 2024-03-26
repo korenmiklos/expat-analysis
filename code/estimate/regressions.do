@@ -38,6 +38,8 @@ foreach Y in $varlist_rhs {
     display "Full sample"
     esttab, b(3) se  style(tex)
 
+    BRK
+
 }
 BRK
 *Industrial sample
