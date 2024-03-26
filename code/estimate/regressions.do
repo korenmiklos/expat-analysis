@@ -28,18 +28,18 @@ foreach Y in $varlist_rhs {
 
     eststo clear
     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
-    eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+    eststo: quietly eventbaseline, pre(4) post(4) baseline(-1)
 
     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
-    eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+    eststo: quietly eventbaseline, pre(4) post(4) baseline(-1)
 
-    eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet)
+    eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(-1)
 
     display "Full sample"
     esttab, b(3) se  style(tex)
 
 }
-
+BRK
 *Industrial sample
 preserve
 keep if industrial==1
