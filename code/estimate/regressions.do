@@ -27,25 +27,29 @@ foreach Y in $varlist_rhs {
     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
     egen `N_control' = total(control & e(sample)), by(year)
     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+    scalar mean1l = e(b)[1,1]
 
     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+    scalar mean1e = e(b)[1,1]
 
     quietly xthdidregress ra (`Y') (local_ceo) if (ever_local==1)|(fake & (frame_id_numeric <= `N_control')), group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(never)
     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
-    scalar variance1 = e(V)[1,1]
+    scalar mean2l = e(b)[1,1]
+    scalar variancel = e(V)[1,1]
 
     quietly xthdidregress ra (`Y') (has_expat_ceo) if (ever_expat==1)|(fake & (frame_id_numeric <= `N_control')), group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(never)
     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
-    scalar variance2 = e(V)[1,1]
+    scalar mean2e = e(b)[1,1]
+    scalar variancee = e(V)[1,1]
 
     display "Full sample"
     esttab, b(3) se  style(tex)
-    display "Standard error of difference: " sqrt(variance1 + variance2)
+    display "Difference in means: " mean1l - mean1e
+    display "ATET of differences: " mean2l - mean2e
+    display "Standard error of difference: " sqrt(variancel + variancee)
 
     drop `N_control'
-
-    BRK
 
 }
 BRK

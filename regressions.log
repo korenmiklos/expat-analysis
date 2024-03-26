@@ -107,9 +107,9 @@ Number of observations (_N) was 0, now 8,085.
   (323,400 bytes saved)
 
 .     save `fake', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St81813.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St24960.000001 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St81813.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St24960.000001 saved
     as .dta format
 
 . restore
@@ -244,31 +244,35 @@ end of do-file
 > id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
   7.     egen `N_control' = total(control & e(sample)), by(year)
   8.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
-  9. 
+  9.     scalar mean1l = e(b)[1,1]
+ 10. 
 .     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, group(fr
 > ame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
- 10.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
- 11. 
+ 11.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+ 12.     scalar mean1e = e(b)[1,1]
+ 13. 
 .     quietly xthdidregress ra (`Y') (local_ceo) if (ever_local==1)|(fake & (fr
 > ame_id_numeric <= `N_control')), group(frame_id_numeric) vce(cluster frame_id
 > _numeric) controlgroup(never)
- 12.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
- 13.     scalar variance1 = e(V)[1,1]
- 14. 
+ 14.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+ 15.     scalar mean2l = e(b)[1,1]
+ 16.     scalar variancel = e(V)[1,1]
+ 17. 
 .     quietly xthdidregress ra (`Y') (has_expat_ceo) if (ever_expat==1)|(fake &
 >  (frame_id_numeric <= `N_control')), group(frame_id_numeric) vce(cluster fram
 > e_id_numeric) controlgroup(never)
- 15.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
- 16.     scalar variance2 = e(V)[1,1]
- 17. 
-.     display "Full sample"
- 18.     esttab, b(3) se  style(tex)
- 19.     display "Standard error of difference: " sqrt(variance1 + variance2)
- 20. 
-.     drop `N_control'
+ 18.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+ 19.     scalar mean2e = e(b)[1,1]
+ 20.     scalar variancee = e(V)[1,1]
  21. 
-.     BRK
- 22. 
+.     display "Full sample"
+ 22.     esttab, b(3) se  style(tex)
+ 23.     display "Difference in means: " mean1l - mean1e
+ 24.     display "ATET of differences: " mean2l - mean2e
+ 25.     display "Standard error of difference: " sqrt(variancel + variancee)
+ 26. 
+.     drop `N_control'
+ 27. 
 . }
 lnK
 
@@ -299,7 +303,203 @@ N                    5908            4852            8760            5843   \\
 ----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
+Difference in means: -.31049435
+ATET of differences: -.27849076
 Standard error of difference: .14626365
+lnL
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+
+  local_ceo |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      3,843       58.40       58.40
+          1 |      2,737       41.60      100.00
+------------+-----------------------------------
+      Total |      6,580      100.00
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(est4 stored)
+Full sample
+
+----------------------------------------------------------------------------
+                      (1)             (2)             (3)             (4)   \\
+                      lnL             lnL             lnL             lnL   \\
+----------------------------------------------------------------------------
+ATET                0.117           0.550***        0.417***        0.736***\\
+                  (0.085)         (0.127)         (0.067)         (0.118)   \\
+----------------------------------------------------------------------------
+N                    5908            4852            8760            5843   \\
+----------------------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+Difference in means: -.43245015
+ATET of differences: -.31911605
+Standard error of difference: .13598804
+TFP
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+
+  local_ceo |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      3,843       58.40       58.40
+          1 |      2,737       41.60      100.00
+------------+-----------------------------------
+      Total |      6,580      100.00
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(est4 stored)
+Full sample
+
+----------------------------------------------------------------------------
+                      (1)             (2)             (3)             (4)   \\
+                      TFP             TFP             TFP             TFP   \\
+----------------------------------------------------------------------------
+ATET                0.053           0.138**         0.044*          0.136** \\
+                  (0.031)         (0.050)         (0.020)         (0.043)   \\
+----------------------------------------------------------------------------
+N                    5908            4852            8760            5843   \\
+----------------------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+Difference in means: -.08534782
+ATET of differences: -.09237357
+Standard error of difference: .04779486
+lnQ
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+
+  local_ceo |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      3,843       58.40       58.40
+          1 |      2,737       41.60      100.00
+------------+-----------------------------------
+      Total |      6,580      100.00
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(est4 stored)
+Full sample
+
+----------------------------------------------------------------------------
+                      (1)             (2)             (3)             (4)   \\
+                      lnQ             lnQ             lnQ             lnQ   \\
+----------------------------------------------------------------------------
+ATET                0.255**         0.911***        0.850***        1.483***\\
+                  (0.083)         (0.148)         (0.075)         (0.144)   \\
+----------------------------------------------------------------------------
+N                    5908            4852            8760            5843   \\
+----------------------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+Difference in means: -.65667545
+ATET of differences: -.63315378
+Standard error of difference: .16216372
+lnEx
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+
+  local_ceo |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      3,843       58.40       58.40
+          1 |      2,737       41.60      100.00
+------------+-----------------------------------
+      Total |      6,580      100.00
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(est4 stored)
+Full sample
+
+----------------------------------------------------------------------------
+                      (1)             (2)             (3)             (4)   \\
+                     lnEx            lnEx            lnEx            lnEx   \\
+----------------------------------------------------------------------------
+ATET                0.915***        0.960***        1.311***        1.348***\\
+                  (0.177)         (0.219)         (0.134)         (0.191)   \\
+----------------------------------------------------------------------------
+N                    2839            2446            4106            3044   \\
+----------------------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+Difference in means: -.04436526
+ATET of differences: -.03785384
+Standard error of difference: .23314969
+lnQd
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+
+  local_ceo |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      3,843       58.40       58.40
+          1 |      2,737       41.60      100.00
+------------+-----------------------------------
+      Total |      6,580      100.00
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(est4 stored)
+Full sample
+
+----------------------------------------------------------------------------
+                      (1)             (2)             (3)             (4)   \\
+                     lnQd            lnQd            lnQd            lnQd   \\
+----------------------------------------------------------------------------
+ATET                0.165           0.657***        0.731***        1.226***\\
+                  (0.089)         (0.165)         (0.074)         (0.163)   \\
+----------------------------------------------------------------------------
+N                    5858            4765            8690            5745   \\
+----------------------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+Difference in means: -.49243873
+ATET of differences: -.49512347
+Standard error of difference: .17847962
+exporter
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+
+  local_ceo |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      3,843       58.40       58.40
+          1 |      2,737       41.60      100.00
+------------+-----------------------------------
+      Total |      6,580      100.00
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(est4 stored)
+Full sample
+
+----------------------------------------------------------------------------
+                      (1)             (2)             (3)             (4)   \\
+                 exporter        exporter        exporter        exporter   \\
+----------------------------------------------------------------------------
+ATET                0.037           0.068*          0.106***        0.122***\\
+                  (0.024)         (0.034)         (0.016)         (0.031)   \\
+----------------------------------------------------------------------------
+N                    5908            4852            8760            5843   \\
+----------------------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+Difference in means: -.0312255
+ATET of differences: -.01584858
+Standard error of difference: .03473579
+
+. BRK
 command BRK is unrecognized
 r(199);
 
