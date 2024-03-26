@@ -24,6 +24,9 @@ Notes:
 
 . do code/estimate/regressions.do 
 
+. set varabbrev off, permanently
+(set varabbrev preference recorded)
+
 . here
 /Users/koren/Tresorit/Mac/projects/expat/
 
@@ -33,17 +36,134 @@ Notes:
 
 . 
 . *Samples
-. global local_sample "(ever_local==1 | foreign==0)"
+. global local_sample "(ever_local==1 | foreign==0) & !fake"
 
-. global expat_sample "(ever_expat==1 | foreign==0)"
+. global expat_sample "(ever_expat==1 | foreign==0) & !fake"
 
 . 
 . global varlist_rhs "lnK lnL TFP lnQ lnEx lnQd exporter"
 
 . 
+. do "code/create/fake_controls.do"
+
+. tempfile fake
+
+. * generate fake controls with 0 effect, to estimate the average effect in the
+>  treatment group
+. levelsof year, local(years)
+1984 1985 1986 1987 1988 1989 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999
+>  2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011 2012 2013 2014 2
+> 015 2016 2017 2018
+
+. local N_years : word count `years'
+
+. local K 2
+
+. 
+. preserve
+
+.     clear
+
+.     set obs `=`K'*`N_years''
+Number of observations (_N) was 0, now 70.
+
+.     generate long frame_id_numeric = .
+(70 missing values generated)
+
+.     forvalues k = 1/`K' {
+  2.         replace frame_id_numeric = `k' if inrange(_n, (`k'-1)*`N_years'+1,
+>  `k'*`N_years')
+  3.     }
+(35 real changes made)
+(35 real changes made)
+
+.     generate year = .
+(70 missing values generated)
+
+.     forvalues i = 1/`N_years' {
+  2.         local year : word `i' of `years'
+  3.         replace year = `year' if _n == (frame_id_numeric - 1)*`N_years' + 
+> `i'
+  4.     }
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+
+.     foreach Y in $varlist_rhs local_ceo has_expat_ceo ever_expat ever_local {
+  2.         generate `Y' = 0
+  3.     }
+
+.     compress
+  variable frame_id_numeric was long now byte
+  variable year was float now int
+  variable lnK was float now byte
+  variable lnL was float now byte
+  variable TFP was float now byte
+  variable lnQ was float now byte
+  variable lnEx was float now byte
+  variable lnQd was float now byte
+  variable exporter was float now byte
+  variable local_ceo was float now byte
+  variable has_expat_ceo was float now byte
+  variable ever_expat was float now byte
+  variable ever_local was float now byte
+  (2,660 bytes saved)
+
+.     save `fake', replace
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51611.000001 not
+    found)
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51611.000001 saved
+    as .dta format
+
+. restore
+
+. append using `fake', generate(fake)
+
+. 
+. xtset frame_id_numeric year
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+
+. 
+end of do-file
+
+. 
 . ****Average effect, foreign_hire sample, local and expat separately, xthdidre
 > g
-. 
 . 
 . *Full sample
 . foreach Y in $varlist_rhs {
@@ -51,312 +171,94 @@ Notes:
 .     display "`Y'"
   3. 
 .     eststo clear
-  4.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, group(fra
-> me_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
-  5.     eststo: quietly eventbaseline, pre(4) post(4) baseline(-1)
+  4.     xtset frame_id_numeric year
+  5. 
+.     tabulate local_ceo if $local_sample, missing
   6. 
-.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, group(fr
-> ame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, group(frame_
+> id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
   7.     eststo: quietly eventbaseline, pre(4) post(4) baseline(-1)
   8. 
-.     eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(loca
-> l_ceo) pre(4) post(4) baseline(-1)
-  9. 
+.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, group(fr
+> ame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+  9.     eststo: quietly eventbaseline, pre(4) post(4) baseline(-1)
+ 10. 
+.     quietly xthdidregress ra (`Y') (local_ceo) if (ever_local==1)|fake, group
+> (frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(never)
+ 11.     eststo: quietly eventbaseline, pre(4) post(4) baseline(-1)
+ 12. 
+.     quietly xthdidregress ra (`Y') (has_expat_ceo) if (ever_expat==1)|fake, g
+> roup(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(never)
+ 13.     eststo: quietly eventbaseline, pre(4) post(4) baseline(-1)
+ 14. 
 .     display "Full sample"
- 10.     esttab, b(3) se  style(tex)
- 11. 
+ 15.     esttab, b(3) se  style(tex)
+ 16. 
 . }
 lnK
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+
+  local_ceo |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      3,843       58.40       58.40
+          1 |      2,737       41.60      100.00
+------------+-----------------------------------
+      Total |      6,580      100.00
 (est1 stored)
 (est2 stored)
 (est3 stored)
+(est4 stored)
 Full sample
 
-------------------------------------------------------------
-                      (1)             (2)             (3)   \\
-                      lnK             lnK             lnK   \\
-------------------------------------------------------------
--4                 -0.071           0.207           0.150   \\
-                  (0.078)         (0.131)         (0.350)   \\
+----------------------------------------------------------------------------
+                      (1)             (2)             (3)             (4)   \\
+                      lnK             lnK             lnK             lnK   \\
+----------------------------------------------------------------------------
+-4                 -0.071           0.207          -0.563***       -0.328*  \\
+                  (0.078)         (0.131)         (0.070)         (0.140)   \\
 
--3                  0.008           0.139           0.136   \\
-                  (0.060)         (0.120)         (0.179)   \\
+-3                  0.008           0.139          -0.328***       -0.182   \\
+                  (0.060)         (0.120)         (0.056)         (0.124)   \\
 
--2                  0.048           0.115           0.055   \\
-                  (0.042)         (0.083)         (0.101)   \\
+-2                  0.048           0.115          -0.153***       -0.061   \\
+                  (0.042)         (0.083)         (0.037)         (0.083)   \\
 
--1                  0.000           0.000           0.000   \\
-                      (.)             (.)             (.)   \\
+-1                  0.000           0.000           0.000           0.000   \\
+                      (.)             (.)             (.)             (.)   \\
 
-0                   0.061           0.254***        0.254** \\
-                  (0.046)         (0.067)         (0.082)   \\
+0                   0.061           0.254***        0.254***        0.508***\\
+                  (0.046)         (0.067)         (0.047)         (0.067)   \\
 
-1                   0.005           0.373***        0.388***\\
-                  (0.066)         (0.094)         (0.108)   \\
+1                   0.005           0.373***        0.347***        0.743***\\
+                  (0.066)         (0.094)         (0.059)         (0.092)   \\
 
-2                   0.011           0.442***        0.386** \\
-                  (0.092)         (0.116)         (0.130)   \\
+2                   0.011           0.442***        0.523***        0.893***\\
+                  (0.092)         (0.116)         (0.073)         (0.109)   \\
 
-3                   0.029           0.526***        0.430** \\
-                  (0.119)         (0.152)         (0.158)   \\
+3                   0.029           0.526***        0.499***        0.924***\\
+                  (0.119)         (0.152)         (0.094)         (0.126)   \\
 
-4                   0.192           0.851***        0.540** \\
-                  (0.153)         (0.186)         (0.188)   \\
-------------------------------------------------------------
-N                    5908            4852            6730   \\
-------------------------------------------------------------
+4                   0.192           0.851***        0.573***        1.119***\\
+                  (0.153)         (0.186)         (0.105)         (0.148)   \\
+----------------------------------------------------------------------------
+N                    5908            4852            4987            2070   \\
+----------------------------------------------------------------------------
 Standard errors in parentheses
 * p<0.05, ** p<0.01, *** p<0.001
 lnL
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+
+  local_ceo |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      3,843       58.40       58.40
+          1 |      2,737       41.60      100.00
+------------+-----------------------------------
+      Total |      6,580      100.00
 (est1 stored)
 (est2 stored)
-(est3 stored)
-Full sample
-
-------------------------------------------------------------
-                      (1)             (2)             (3)   \\
-                      lnL             lnL             lnL   \\
-------------------------------------------------------------
--4                  0.099          -0.017          -0.195   \\
-                  (0.075)         (0.107)         (0.334)   \\
-
--3                  0.146*         -0.027          -0.188   \\
-                  (0.061)         (0.088)         (0.147)   \\
-
--2                  0.054          -0.044          -0.159   \\
-                  (0.042)         (0.063)         (0.155)   \\
-
--1                  0.000           0.000           0.000   \\
-                      (.)             (.)             (.)   \\
-
-0                   0.111*          0.284***        0.138   \\
-                  (0.046)         (0.079)         (0.091)   \\
-
-1                   0.162**         0.363***        0.170   \\
-                  (0.063)         (0.108)         (0.116)   \\
-
-2                   0.189*          0.570***        0.363** \\
-                  (0.089)         (0.116)         (0.126)   \\
-
-3                   0.207           0.658***        0.416** \\
-                  (0.108)         (0.139)         (0.150)   \\
-
-4                   0.291*          0.765***        0.390*  \\
-                  (0.129)         (0.169)         (0.174)   \\
-------------------------------------------------------------
-N                    5908            4852            6730   \\
-------------------------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-TFP
-(est1 stored)
-(est2 stored)
-(est3 stored)
-Full sample
-
-------------------------------------------------------------
-                      (1)             (2)             (3)   \\
-                      TFP             TFP             TFP   \\
-------------------------------------------------------------
--4                 -0.025           0.060           0.428*  \\
-                  (0.032)         (0.053)         (0.210)   \\
-
--3                 -0.040           0.011           0.077   \\
-                  (0.030)         (0.040)         (0.066)   \\
-
--2                 -0.032           0.066*          0.093*  \\
-                  (0.024)         (0.029)         (0.042)   \\
-
--1                  0.000           0.000           0.000   \\
-                      (.)             (.)             (.)   \\
-
-0                   0.024           0.123***        0.078*  \\
-                  (0.021)         (0.036)         (0.038)   \\
-
-1                   0.007           0.155**         0.135** \\
-                  (0.025)         (0.050)         (0.052)   \\
-
-2                   0.044           0.215***        0.164** \\
-                  (0.029)         (0.050)         (0.052)   \\
-
-3                   0.030           0.213***        0.191** \\
-                  (0.034)         (0.056)         (0.062)   \\
-
-4                   0.037           0.155*          0.117   \\
-                  (0.052)         (0.069)         (0.067)   \\
-------------------------------------------------------------
-N                    5908            4852            6730   \\
-------------------------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-lnQ
-(est1 stored)
-(est2 stored)
-(est3 stored)
-Full sample
-
-------------------------------------------------------------
-                      (1)             (2)             (3)   \\
-                      lnQ             lnQ             lnQ   \\
-------------------------------------------------------------
--4                 -0.097           0.038           0.176   \\
-                  (0.074)         (0.128)         (0.359)   \\
-
--3                 -0.030           0.021           0.137   \\
-                  (0.059)         (0.109)         (0.171)   \\
-
--2                 -0.056           0.042           0.085   \\
-                  (0.044)         (0.061)         (0.106)   \\
-
--1                  0.000           0.000           0.000   \\
-                      (.)             (.)             (.)   \\
-
-0                   0.115**         0.546***        0.445***\\
-                  (0.042)         (0.083)         (0.098)   \\
-
-1                   0.164*          0.798***        0.711***\\
-                  (0.065)         (0.113)         (0.131)   \\
-
-2                   0.226**         1.044***        0.804***\\
-                  (0.083)         (0.140)         (0.156)   \\
-
-3                   0.204*          1.144***        0.938***\\
-                  (0.101)         (0.159)         (0.185)   \\
-
-4                   0.337**         1.151***        0.671** \\
-                  (0.125)         (0.204)         (0.223)   \\
-------------------------------------------------------------
-N                    5908            4852            6730   \\
-------------------------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-lnEx
-(est1 stored)
-(est2 stored)
-(est3 stored)
-Full sample
-
-------------------------------------------------------------
-                      (1)             (2)             (3)   \\
-                     lnEx            lnEx            lnEx   \\
-------------------------------------------------------------
--4                 -0.462*          0.356           1.138   \\
-                  (0.209)         (0.232)         (1.326)   \\
-
--3                 -0.434**         0.226           0.962   \\
-                  (0.147)         (0.213)         (0.555)   \\
-
--2                 -0.257**         0.101           0.494*  \\
-                  (0.097)         (0.154)         (0.233)   \\
-
--1                  0.000           0.000           0.000   \\
-                      (.)             (.)             (.)   \\
-
-0                   0.294**         0.511***        0.279   \\
-                  (0.090)         (0.129)         (0.147)   \\
-
-1                   0.459**         0.895***        0.591** \\
-                  (0.148)         (0.174)         (0.195)   \\
-
-2                   0.732***        1.132***        0.493*  \\
-                  (0.183)         (0.210)         (0.233)   \\
-
-3                   0.702**         1.371***        0.755** \\
-                  (0.225)         (0.244)         (0.272)   \\
-
-4                   0.948***        1.742***        0.664   \\
-                  (0.284)         (0.331)         (0.353)   \\
-------------------------------------------------------------
-N                    2839            2446            3114   \\
-------------------------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-lnQd
-(est1 stored)
-(est2 stored)
-(est3 stored)
-Full sample
-
-------------------------------------------------------------
-                      (1)             (2)             (3)   \\
-                     lnQd            lnQd            lnQd   \\
-------------------------------------------------------------
--4                 -0.109           0.122           0.278   \\
-                  (0.080)         (0.150)         (0.349)   \\
-
--3                 -0.052           0.023           0.218   \\
-                  (0.063)         (0.132)         (0.186)   \\
-
--2                 -0.044           0.116           0.085   \\
-                  (0.043)         (0.081)         (0.149)   \\
-
--1                  0.000           0.000           0.000   \\
-                      (.)             (.)             (.)   \\
-
-0                   0.054           0.509***        0.461***\\
-                  (0.043)         (0.101)         (0.112)   \\
-
-1                   0.077           0.651***        0.649***\\
-                  (0.065)         (0.130)         (0.147)   \\
-
-2                   0.107           0.869***        0.750***\\
-                  (0.085)         (0.154)         (0.170)   \\
-
-3                   0.082           0.837***        0.800***\\
-                  (0.110)         (0.188)         (0.216)   \\
-
-4                   0.248           0.748**         0.368   \\
-                  (0.133)         (0.238)         (0.251)   \\
-------------------------------------------------------------
-N                    5858            4765            6622   \\
-------------------------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-exporter
-(est1 stored)
-(est2 stored)
-(est3 stored)
-Full sample
-
-------------------------------------------------------------
-                      (1)             (2)             (3)   \\
-                 exporter        exporter        exporter   \\
-------------------------------------------------------------
--4                 -0.011          -0.001           0.013   \\
-                  (0.027)         (0.041)         (0.083)   \\
-
--3                 -0.005          -0.037           0.008   \\
-                  (0.021)         (0.033)         (0.045)   \\
-
--2                 -0.009          -0.039           0.017   \\
-                  (0.017)         (0.029)         (0.049)   \\
-
--1                  0.000           0.000           0.000   \\
-                      (.)             (.)             (.)   \\
-
-0                   0.031*          0.017          -0.015   \\
-                  (0.015)         (0.025)         (0.027)   \\
-
-1                   0.033           0.022          -0.003   \\
-                  (0.020)         (0.033)         (0.033)   \\
-
-2                   0.026           0.053           0.023   \\
-                  (0.025)         (0.037)         (0.039)   \\
-
-3                   0.022           0.084*          0.047   \\
-                  (0.030)         (0.040)         (0.041)   \\
-
-4                   0.042           0.068          -0.010   \\
-                  (0.039)         (0.045)         (0.047)   \\
-------------------------------------------------------------
-N                    5908            4852            6730   \\
-------------------------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-
-. BRK
-command BRK is unrecognized
-r(199);
-
-end of do-file
-r(199);

@@ -1,15 +1,17 @@
+set varabbrev off, permanently
 here
 global here = r(here)
 use "$here/temp/analysis_sample.dta", clear
 
 *Samples
-global local_sample "(ever_local==1 | foreign==0)"
-global expat_sample "(ever_expat==1 | foreign==0)"
+global local_sample "(ever_local==1 | foreign==0) & !fake"
+global expat_sample "(ever_expat==1 | foreign==0) & !fake"
 
 global varlist_rhs "lnK lnL TFP lnQ lnEx lnQd exporter"
 
-****Average effect, foreign_hire sample, local and expat separately, xthdidreg
+do "code/create/fake_controls.do"
 
+****Average effect, foreign_hire sample, local and expat separately, xthdidreg
 
 *Full sample
 foreach Y in $varlist_rhs {
@@ -17,13 +19,21 @@ foreach Y in $varlist_rhs {
     display "`Y'"
 
     eststo clear
+    xtset frame_id_numeric year
+
+    tabulate local_ceo if $local_sample, missing
+
     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
     eststo: quietly eventbaseline, pre(4) post(4) baseline(-1)
 
     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
     eststo: quietly eventbaseline, pre(4) post(4) baseline(-1)
 
-    eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(-1)
+    quietly xthdidregress ra (`Y') (local_ceo) if (ever_local==1)|fake, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(never)
+    eststo: quietly eventbaseline, pre(4) post(4) baseline(-1)
+
+    quietly xthdidregress ra (`Y') (has_expat_ceo) if (ever_expat==1)|fake, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(never)
+    eststo: quietly eventbaseline, pre(4) post(4) baseline(-1)
 
     display "Full sample"
     esttab, b(3) se  style(tex)
