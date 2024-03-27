@@ -3,6 +3,11 @@ here
 global here = r(here)
 use "$here/temp/analysis_sample.dta", clear
 
+which xthdidregress
+which eventbaseline
+which xt2treatments
+which estout
+
 *Samples
 global local_sample "(ever_local==1 | foreign==0) & !fake"
 global expat_sample "(ever_expat==1 | foreign==0) & !fake"
