@@ -10,7 +10,6 @@ log using "`here'/output/analysis_sample", text replace
 use "`here'/temp/balance-small-clean.dta"
 drop foreign
 
-* do not abbreviate variable names: this leads to bugs that are horribly difficult to find
 merge 1:1 frame_id_numeric year using "`here'/temp/firm_events.dta", keep(match) nogen
 
 * many foreign changes deleted
@@ -74,11 +73,12 @@ keep if ever_foreign == 1
 
 generate foreign_only = foreign & !foreign_hire
 generate local_ceo = foreign_hire & !has_expat_ceo
-* do not abbreviate variable names: this leads to bugs that are horribly difficult to find
-egen ever_local = max(local_ceo), by(frame_id_numeric)
+egen ever_local_ceo = max(local_ceo), by(frame_id_numeric)
 
 * drop if local hires are much later replaced by expats
-drop if ever_local & has_expat_ceo
+drop if ever_local_ceo & has_expat_ceo
+* sometimes we refer to the short name
+clonevar ever_local = ever_local_ceo
 
 tabulate foreign_only foreign_hire
 tabulate local_ceo has_expat_ceo
@@ -114,30 +114,23 @@ drop `last_year_before'
 
 * compute TFP
 
-quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial==1
-predict TFP if e(sample), resid
+local agriculture 1 3
+local industry 5 39
+local services 40 75
 
-quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if industrial==0
-predict TFP_temp if e(sample), resid
-
-replace TFP = TFP_temp if missing(TFP)
-drop TFP_temp
+generate TFP = .
+tempvar TFP
+foreach sector in agriculture industry services {
+    local from : word 1 of ``sector''
+    local to : word 2 of ``sector''
+    quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if inrange(industry_mode, `from', `to')
+    predict `TFP' if e(sample), resid
+    replace TFP = `TFP' if inrange(industry_mode, `from', `to')
+    drop `TFP'
+}
 
 tabulate foreignness has_expat_ceo
 tabulate time_foreign foreignness if inrange(time_foreign, -2, 2) & ever_expat 
-
-tabulate foreignness ever_expat
-tabulate foreignness ever_expat if time_foreign == 0
-
-tabulate time_foreign foreignness if inrange(time_foreign, -2, 2) 
-
-tempvar western
-egen `western' = max(foreignness == 5), by(frame_id_numeric)
-
-tabulate foreignness `western'
-keep if ever_local | `western' == 1
-
-drop __*
 
 compress
 save "`here'/temp/analysis_sample.dta", replace

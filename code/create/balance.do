@@ -51,15 +51,17 @@ display foreign_interpolate
 * average employment and financial firms deleted
 * break the tie when mode is not unique
 
+* minimal employment cleaning
+replace emp = 1 if emp <= 0 | missing(emp)
 bys frame_id_numeric: egen avg_emp = mean(emp)
 bys frame_id_numeric: egen industry_mode = mode(teaor08_2d), minmode
 
-
-* drop agriculture firms
-drop if industry_mode < 5 
-generate industrial = (industry_mode < 40)
-local sample ((avg_emp >= 20) & (industry_mode != 64 & industry_mode != 65 & industry_mode != 66))
-drop if !`sample'
+* drop finance
+drop if inrange(industry_mode, 64, 66)
+* drop human services
+drop if inrange(industry_mode, 77, 99)
+* drop small firms
+drop if (avg_emp < 20)
 
 * proxy firm founding date with first balance sheet filed
 tempvar foundyear
@@ -74,8 +76,6 @@ foreach x in sales export tanass jetok ranyag ranyag8091 immat {
 	replace `x'_18 = `x' if year < 1992 // FIXME: till ppi before 1992 is not filled up - just to not delete those rows because of missing ln dependent variables
 }
 
-* minimal employment cleaning
-replace emp = 1 if emp <= 0 | missing(emp)
 mvencode export_18, mv(0) override
 
 * creating dependent variables
@@ -129,8 +129,6 @@ foreach var in lnK lnQ lnL lnM {
 
 count
 
-* industry dummy and age
-gen byte industrial_firm = inlist(teaor08_1d, "B", "C", "D", "E")
 gen age = year - foundyear
 
 * missing export means 0 export
