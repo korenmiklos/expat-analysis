@@ -24,6 +24,9 @@ Notes:
 
 . do code/estimate/regressions.do 
 
+. set varabbrev off, permanently
+(set varabbrev preference recorded)
+
 . here
 /Users/koren/Tresorit/Mac/projects/expat/
 
@@ -32,244 +35,519 @@ Notes:
 . use "$here/temp/analysis_sample.dta", clear
 
 . 
-. *Samples
-. global local_sample "(ever_local==1 | foreign==0)"
+. which xthdidregress
+/Applications/Stata/ado/base/x/xthdidregress.ado
+*! version 1.0.4  24may2023
 
-. global expat_sample "(ever_expat==1 | foreign==0)"
+. which eventbaseline
+/Users/koren/Library/Application Support/Stata/ado/plus/e/eventbaseline.ado
+*! version 0.7.2 23jan2024
+
+. which xt2treatments
+/Users/koren/Library/Application Support/Stata/ado/plus/x/xt2treatments.ado
+*! version 0.4.1 26mar2024
+
+. which estout
+/Users/koren/Library/Application Support/Stata/ado/plus/e/estout.ado
+*! version 3.31  26apr2022  Ben Jann
+
+. 
+. * only keep firms that have both t = g and t = g-1
+. egen has1 = max(time_foreign == -1), by(frame_id_numeric)
+
+. egen has0 = max(time_foreign == 0), by(frame_id_numeric)
+
+. keep if has0 & has1
+(238 observations deleted)
+
+. 
+. *Samples
+. global local_sample "(ever_local==1 | foreign==0) & !fake"
+
+. global expat_sample "(ever_expat==1 | foreign==0) & !fake"
 
 . 
 . global varlist_rhs "lnK lnL TFP lnQ lnEx lnQd exporter"
 
 . 
-. tabulate foreignness ever_expat
+. egen g = max(cond(time_foreign == 0, year, .)), by(frame_id_numeric)
 
-                      |      ever_expat
-    (max) foreignness |         0          1 |     Total
-----------------------+----------------------+----------
-Hungarian name and ad |     5,190      1,336 |     6,526 
-Hungarian name, neigh |         0         23 |        23 
-Foreign name, Hungari |         0        135 |       135 
-Hungarian name, other |         0          4 |         4 
-Foreign name, non-Wes |         0        200 |       200 
-Foreign name, Western |         0      1,191 |     1,191 
-----------------------+----------------------+----------
-                Total |     5,190      2,889 |     8,079 
+. egen Ng_expat = total(time_foreign == 0 & ever_expat), by(g)
 
-. tabulate foreignness ever_expat if time_foreign == 0
+. egen Ng_local = total(time_foreign == 0 & ever_local), by(g)
 
-                      |      ever_expat
-    (max) foreignness |         0          1 |     Total
-----------------------+----------------------+----------
-Hungarian name and ad |       670          0 |       670 
-Hungarian name, neigh |         0         11 |        11 
-Foreign name, Hungari |         0         36 |        36 
-Hungarian name, other |         0          1 |         1 
-Foreign name, non-Wes |         0         60 |        60 
-Foreign name, Western |         0        307 |       307 
-----------------------+----------------------+----------
-                Total |       670        415 |     1,085 
+. egen Ng_treated = total(time_foreign == 0), by(g)
+
+. assert Ng_treated == Ng_expat + Ng_local
+
+. generate weight = cond(ever_expat, round(Ng_treated/Ng_expat), round(Ng_treat
+> ed/Ng_local))
 
 . 
-. tabulate time_foreign foreignness if inrange(time_foreign, -2, 2) 
+. * explicitly duplicate overweighted observations
+. expand weight
+(8,377 observations created)
 
-time_forei |                   (max) foreignness
-        gn | Hungarian  Hungarian  Foreign n  Hungarian  Foreign n |     Total
------------+-------------------------------------------------------+----------
-        -2 |       764          0          0          0          0 |       764 
-        -1 |     1,042          0          0          0          0 |     1,046 
-         0 |       670         11         36          1         60 |     1,085 
-         1 |       613          7         32          1         41 |       958 
-         2 |       496          3         26          1         40 |       796 
------------+-------------------------------------------------------+----------
-     Total |     3,585         21         94          3        141 |     4,649 
+. egen index = seq(), by(frame_id_numeric year)
 
+. tabulate index
 
-           |   (max)
-           | foreignnes
-time_forei |     s
-        gn | Foreign n |     Total
------------+-----------+----------
-        -2 |         0 |       764 
-        -1 |         4 |     1,046 
-         0 |       307 |     1,085 
-         1 |       264 |       958 
-         2 |       230 |       796 
------------+-----------+----------
-     Total |       805 |     4,649 
-
-. 
-. tempvar western
-
-. egen `western' = max(foreignness == 5), by(frame_id_numeric)
-
-. 
-. tabulate foreignness `western'
-
-                      |       __000000
-    (max) foreignness |         0          1 |     Total
-----------------------+----------------------+----------
-Hungarian name and ad |     5,513      1,013 |     6,526 
-Hungarian name, neigh |        23          0 |        23 
-Foreign name, Hungari |        97         38 |       135 
-Hungarian name, other |         4          0 |         4 
-Foreign name, non-Wes |       170         30 |       200 
-Foreign name, Western |         0      1,191 |     1,191 
-----------------------+----------------------+----------
-                Total |     5,807      2,272 |     8,079 
-
-. keep if ever_local | `western' == 1
-(617 observations deleted)
-
-. ****Average effect, foreign_hire sample, local and expat separately, xthdidre
-> g
-. 
-. 
-. *Full sample
-. foreach Y in $varlist_rhs {
-  2. 
-.     display "`Y'"
-  3. 
-.     eststo clear
-  4.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, group(fra
-> me_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
-  5.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
-  6. 
-.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, group(fr
-> ame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
-  7.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
-  8. 
-.     eststo: quietly xt2treatments `Y',  treatment(has_expat_ceo) control(loca
-> l_ceo) pre(4) post(4) baseline(atet)
-  9. 
-.     display "Full sample"
- 10.     esttab, b(3) se  style(tex)
- 11. 
-. }
-lnK
-(est1 stored)
-(est2 stored)
-(est3 stored)
-Full sample
-
-------------------------------------------------------------
-                      (1)             (2)             (3)   \\
-                      lnK             lnK             lnK   \\
-------------------------------------------------------------
-ATET                0.095           0.329**         0.247   \\
-                  (0.092)         (0.121)         (0.174)   \\
-------------------------------------------------------------
-N                    5580            4690            6434   \\
-------------------------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-lnL
-(est1 stored)
-(est2 stored)
-(est3 stored)
-Full sample
-
-------------------------------------------------------------
-                      (1)             (2)             (3)   \\
-                      lnL             lnL             lnL   \\
-------------------------------------------------------------
-ATET                0.183*          0.488***        0.361*  \\
-                  (0.085)         (0.121)         (0.166)   \\
-------------------------------------------------------------
-N                    5580            4690            6434   \\
-------------------------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-TFP
-(est1 stored)
-(est2 stored)
-(est3 stored)
-Full sample
-
-------------------------------------------------------------
-                      (1)             (2)             (3)   \\
-                      TFP             TFP             TFP   \\
-------------------------------------------------------------
-ATET                0.064*          0.141**        -0.011   \\
-                  (0.031)         (0.047)         (0.070)   \\
-------------------------------------------------------------
-N                    5580            4690            6434   \\
-------------------------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-lnQ
-(est1 stored)
-(est2 stored)
-(est3 stored)
-Full sample
-
-------------------------------------------------------------
-                      (1)             (2)             (3)   \\
-                      lnQ             lnQ             lnQ   \\
-------------------------------------------------------------
-ATET                0.364***        0.818***        0.455*  \\
-                  (0.085)         (0.136)         (0.182)   \\
-------------------------------------------------------------
-N                    5580            4690            6434   \\
-------------------------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-lnEx
-(est1 stored)
-(est2 stored)
-(est3 stored)
-Full sample
-
-------------------------------------------------------------
-                      (1)             (2)             (3)   \\
-                     lnEx            lnEx            lnEx   \\
-------------------------------------------------------------
-ATET                0.930***        0.996***       -0.110   \\
-                  (0.175)         (0.216)         (0.504)   \\
-------------------------------------------------------------
-N                    2803            2437            3103   \\
-------------------------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-lnQd
-(est1 stored)
-(est2 stored)
-(est3 stored)
-Full sample
-
-------------------------------------------------------------
-                      (1)             (2)             (3)   \\
-                     lnQd            lnQd            lnQd   \\
-------------------------------------------------------------
-ATET                0.271**         0.548***        0.298   \\
-                  (0.091)         (0.153)         (0.192)   \\
-------------------------------------------------------------
-N                    5530            4598            6321   \\
-------------------------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-exporter
-(est1 stored)
-(est2 stored)
-(est3 stored)
-Full sample
-
-------------------------------------------------------------
-                      (1)             (2)             (3)   \\
-                 exporter        exporter        exporter   \\
-------------------------------------------------------------
-ATET                0.046           0.089**         0.005   \\
-                  (0.024)         (0.034)         (0.039)   \\
-------------------------------------------------------------
-N                    5580            4690            6434   \\
-------------------------------------------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
+      index |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      7,841       48.35       48.35
+          2 |      5,974       36.84       85.18
+          3 |      1,809       11.15       96.34
+          4 |        355        2.19       98.53
+          5 |         77        0.47       99.00
+          6 |          6        0.04       99.04
+          7 |          6        0.04       99.08
+          8 |          6        0.04       99.11
+          9 |          6        0.04       99.15
+         10 |          6        0.04       99.19
+         11 |          6        0.04       99.22
+         12 |          6        0.04       99.26
+         13 |          6        0.04       99.30
+         14 |          6        0.04       99.33
+         15 |          6        0.04       99.37
+         16 |          6        0.04       99.41
+         17 |          6        0.04       99.45
+         18 |          6        0.04       99.48
+         19 |          6        0.04       99.52
+         20 |          6        0.04       99.56
+         21 |          6        0.04       99.59
+         22 |          6        0.04       99.63
+         23 |          6        0.04       99.67
+         24 |          6        0.04       99.70
+         25 |          6        0.04       99.74
+         26 |          6        0.04       99.78
+         27 |          6        0.04       99.82
+         28 |          6        0.04       99.85
+         29 |          6        0.04       99.89
+         30 |          6        0.04       99.93
+         31 |          6        0.04       99.96
+         32 |          6        0.04      100.00
+------------+-----------------------------------
+      Total |     16,218      100.00
 
 . 
-. *Industrial sample
+. do "code/create/fake_controls.do"
+
+. tempfile fake
+
+. * generate fake controls with 0 effect, to estimate the average effect in the
+>  treatment group
+. levelsof year, local(years)
+1984 1985 1986 1987 1988 1989 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999
+>  2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011 2012 2013 2014 2
+> 015 2016 2017 2018
+
+. local N_years : word count `years'
+
+. local K 231
+
+. 
 . preserve
 
-. keep if industrial==1
+.     clear
+
+.     set obs `=`K'*`N_years''
+Number of observations (_N) was 0, now 8,085.
+
+.     generate long frame_id_numeric = .
+(8,085 missing values generated)
+
+.     forvalues k = 1/`K' {
+  2.         quietly replace frame_id_numeric = `k' if inrange(_n, (`k'-1)*`N_y
+> ears'+1, `k'*`N_years')
+  3.     }
+
+.     generate year = .
+(8,085 missing values generated)
+
+.     forvalues i = 1/`N_years' {
+  2.         local year : word `i' of `years'
+  3.         quietly replace year = `year' if _n == (frame_id_numeric - 1)*`N_y
+> ears' + `i'
+  4.     }
+
+.     foreach Y in $varlist_rhs local_ceo has_expat_ceo ever_expat ever_local f
+> oreign {
+  2.         generate `Y' = 0
+  3.     }
+
+.     compress
+  variable frame_id_numeric was long now int
+  variable year was float now int
+  variable lnK was float now byte
+  variable lnL was float now byte
+  variable TFP was float now byte
+  variable lnQ was float now byte
+  variable lnEx was float now byte
+  variable lnQd was float now byte
+  variable exporter was float now byte
+  variable local_ceo was float now byte
+  variable has_expat_ceo was float now byte
+  variable ever_expat was float now byte
+  variable ever_local was float now byte
+  variable foreign was float now byte
+  (323,400 bytes saved)
+
+.     save `fake', replace
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St16147.000001 not
+    found)
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St16147.000001 saved
+    as .dta format
+
+. restore
+
+. append using `fake', generate(fake)
+
+. 
+. generate byte control = !fake & !foreign
+
+. egen N_control = total(control), by(year)
+
+. tabulate year control
+
+      Year |        control
+ 1980-2018 |         0          1 |     Total
+-----------+----------------------+----------
+      1984 |       231          1 |       232 
+      1985 |       231          3 |       234 
+      1986 |       231         13 |       244 
+      1987 |       231         20 |       251 
+      1988 |       231         30 |       261 
+      1989 |       231        131 |       362 
+      1990 |       294        231 |       525 
+      1991 |       348        345 |       693 
+      1992 |       502        374 |       876 
+      1993 |       602        394 |       996 
+      1994 |       660        479 |     1,139 
+      1995 |       678        457 |     1,135 
+      1996 |       731        426 |     1,157 
+      1997 |       682        419 |     1,101 
+      1998 |       732        334 |     1,066 
+      1999 |       715        309 |     1,024 
+      2000 |       663        313 |       976 
+      2001 |       633        306 |       939 
+      2002 |       597        322 |       919 
+      2003 |       506        378 |       884 
+      2004 |       449        358 |       807 
+      2005 |       462        331 |       793 
+      2006 |       468        334 |       802 
+      2007 |       506        283 |       789 
+      2008 |       566        228 |       794 
+      2009 |       595        172 |       767 
+      2010 |       536        168 |       704 
+      2011 |       503        163 |       666 
+      2012 |       440        148 |       588 
+      2013 |       412        118 |       530 
+      2014 |       367        109 |       476 
+      2015 |       374         76 |       450 
+      2016 |       361         54 |       415 
+      2017 |       353         20 |       373 
+      2018 |       335          0 |       335 
+-----------+----------------------+----------
+     Total |    16,456      7,847 |    24,303 
+
+. 
+. * the time pattern of the fake control group should be the same as the real c
+> ontrol group
+. drop if (frame_id_numeric > N_control) & fake
+(2,473 observations deleted)
+
+. tabulate year if fake
+
+       Year |
+  1980-2018 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1984 |          1        0.02        0.02
+       1985 |          3        0.05        0.07
+       1986 |         13        0.23        0.30
+       1987 |         20        0.36        0.66
+       1988 |         30        0.53        1.19
+       1989 |        131        2.33        3.53
+       1990 |        231        4.12        7.64
+       1991 |        231        4.12       11.76
+       1992 |        231        4.12       15.88
+       1993 |        231        4.12       19.99
+       1994 |        231        4.12       24.11
+       1995 |        231        4.12       28.23
+       1996 |        231        4.12       32.34
+       1997 |        231        4.12       36.46
+       1998 |        231        4.12       40.57
+       1999 |        231        4.12       44.69
+       2000 |        231        4.12       48.81
+       2001 |        231        4.12       52.92
+       2002 |        231        4.12       57.04
+       2003 |        231        4.12       61.15
+       2004 |        231        4.12       65.27
+       2005 |        231        4.12       69.39
+       2006 |        231        4.12       73.50
+       2007 |        231        4.12       77.62
+       2008 |        228        4.06       81.68
+       2009 |        172        3.06       84.75
+       2010 |        168        2.99       87.74
+       2011 |        163        2.90       90.65
+       2012 |        148        2.64       93.28
+       2013 |        118        2.10       95.38
+       2014 |        109        1.94       97.33
+       2015 |         76        1.35       98.68
+       2016 |         54        0.96       99.64
+       2017 |         20        0.36      100.00
+------------+-----------------------------------
+      Total |      5,612      100.00
+
+. drop N_control
+
+. 
+end of do-file
+
+. replace index = 1 if missing(index)
+(5,612 real changes made)
+
+. egen new_firm_id = group(frame_id_numeric index)
+
+. xtset new_firm_id year
+
+Panel variable: new_firm_id (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+
+. 
+. ****Average effect, foreign_hire sample, local and expat separately, xthdidre
+> g
+. local coef 1
+
+. 
+. local samples full industrial service
+
+. local full 1
+
+. local industrial industrial==1
+
+. local service industrial==0
+
+. foreach sample in `samples'{
+  2.     preserve
+  3.     display "`sample' sample"
+  4.     keep if (``sample'') | fake
+  5. foreach Y in $varlist_rhs {
+  6. 
+.     display "`Y'"
+  7. 
+.     eststo clear
+  8.     xtset new_firm_id year
+  9. 
+.     quietly xthdidregress ra (`Y') (local_ceo) if $local_sample, group(frame_
+> id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+ 10.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+ 11.     scalar mean1l = e(b)[1, `coef']
+ 12. 
+.     quietly xthdidregress ra (`Y') (has_expat_ceo) if $expat_sample, group(fr
+> ame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+ 13.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+ 14.     scalar mean1e = e(b)[1, `coef']
+ 15. 
+.     quietly xthdidregress ra (`Y') (local_ceo) if (ever_local==1)|fake, group
+> (frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(never)
+ 16.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+ 17.     scalar mean2l = e(b)[1, `coef']
+ 18.     scalar variancel = e(V)[`coef', `coef']
+ 19. 
+.     quietly xthdidregress ra (`Y') (has_expat_ceo) if (ever_expat==1)|fake, g
+> roup(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(never)
+ 20.     eststo: quietly eventbaseline, pre(4) post(4) baseline(atet)
+ 21.     scalar mean2e = e(b)[1, `coef']
+ 22.     scalar variancee = e(V)[`coef', `coef']
+ 23. 
+.     display "Full sample"
+ 24.     esttab, b(3) se  style(tex)
+ 25.     display "Difference in means: " mean1l - mean1e
+ 26.     display "ATET of differences: " mean2l - mean2e
+ 27.     display "Standard error of difference: " sqrt(variancel + variancee)
+ 28. 
+. }
+ 29. restore
+ 30. }
+full sample
+(0 observations deleted)
+lnK
+
+Panel variable: new_firm_id (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(est4 stored)
+Full sample
+
+----------------------------------------------------------------------------
+                      (1)             (2)             (3)             (4)   \\
+                      lnK             lnK             lnK             lnK   \\
+----------------------------------------------------------------------------
+ATET                0.205*          0.327**         0.799***        0.877***\\
+                  (0.098)         (0.124)         (0.080)         (0.140)   \\
+----------------------------------------------------------------------------
+N                   11110           11168           13178           12477   \\
+----------------------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+Difference in means: -.12198706
+ATET of differences: -.0783305
+Standard error of difference: .16080995
+lnL
+
+Panel variable: new_firm_id (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(est4 stored)
+Full sample
+
+----------------------------------------------------------------------------
+                      (1)             (2)             (3)             (4)   \\
+                      lnL             lnL             lnL             lnL   \\
+----------------------------------------------------------------------------
+ATET                0.199*          0.583***        0.356***        0.690***\\
+                  (0.088)         (0.154)         (0.069)         (0.183)   \\
+----------------------------------------------------------------------------
+N                   11110           11168           13178           12477   \\
+----------------------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+Difference in means: -.38405894
+ATET of differences: -.33398207
+Standard error of difference: .19556613
+TFP
+
+Panel variable: new_firm_id (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(est4 stored)
+Full sample
+
+----------------------------------------------------------------------------
+                      (1)             (2)             (3)             (4)   \\
+                      TFP             TFP             TFP             TFP   \\
+----------------------------------------------------------------------------
+ATET                0.074*          0.123**         0.042*          0.114** \\
+                  (0.030)         (0.041)         (0.020)         (0.036)   \\
+----------------------------------------------------------------------------
+N                   11110           11168           13178           12477   \\
+----------------------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+Difference in means: -.0490168
+ATET of differences: -.07232435
+Standard error of difference: .04147236
+lnQ
+
+Panel variable: new_firm_id (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(est4 stored)
+Full sample
+
+----------------------------------------------------------------------------
+                      (1)             (2)             (3)             (4)   \\
+                      lnQ             lnQ             lnQ             lnQ   \\
+----------------------------------------------------------------------------
+ATET                0.422***        0.772***        0.910***        1.182***\\
+                  (0.090)         (0.126)         (0.076)         (0.126)   \\
+----------------------------------------------------------------------------
+N                   11110           11168           13178           12477   \\
+----------------------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+Difference in means: -.34984808
+ATET of differences: -.27135202
+Standard error of difference: .14702249
+lnEx
+
+Panel variable: new_firm_id (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(est4 stored)
+Full sample
+
+----------------------------------------------------------------------------
+                      (1)             (2)             (3)             (4)   \\
+                     lnEx            lnEx            lnEx            lnEx   \\
+----------------------------------------------------------------------------
+ATET                0.810***        0.938***        1.249***        1.350***\\
+                  (0.174)         (0.210)         (0.136)         (0.201)   \\
+----------------------------------------------------------------------------
+N                    5801            6083            9363            9573   \\
+----------------------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+Difference in means: -.12843292
+ATET of differences: -.10107589
+Standard error of difference: .2425488
+lnQd
+
+Panel variable: new_firm_id (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(est4 stored)
+Full sample
+
+----------------------------------------------------------------------------
+                      (1)             (2)             (3)             (4)   \\
+                     lnQd            lnQd            lnQd            lnQd   \\
+----------------------------------------------------------------------------
+ATET                0.338***        0.463**         0.773***        0.848***\\
+                  (0.095)         (0.150)         (0.073)         (0.135)   \\
+----------------------------------------------------------------------------
+N                   11011           10936           13112           12272   \\
+----------------------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+Difference in means: -.12514549
+ATET of differences: -.07577541
+Standard error of difference: .15352177
+exporter
+
+Panel variable: new_firm_id (unbalanced)
+ Time variable: year, 1984 to 2018, but with gaps
+         Delta: 1 unit
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(est4 stored)
+Full sample
+
+----------------------------------------------------------------------------
+                      (1)             (2)             (3)             (4)   \\
+                 exporter        exporter        exporter        exporter   \\
+----------------------------------------------------------------------------
+ATET                0.054*          0.058           0.105***        0.101** \\
+                  (0.024)         (0.040)         (0.017)         (0.033)   \\
+----------------------------------------------------------------------------
+N                   11110           11168           13178           12477   \\
+----------------------------------------------------------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+Difference in means: -.0038936
+ATET of differences: .0040844
+Standard error of difference: .03690759
+industrial sample
 industrial not found
 r(111);
 

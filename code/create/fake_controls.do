@@ -32,5 +32,3 @@ tabulate year control
 drop if (frame_id_numeric > N_control) & fake
 tabulate year if fake
 drop N_control
-
-xtset frame_id_numeric year
