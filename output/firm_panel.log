@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- opened on:   6 May 2024, 14:47:13
+ opened on:   6 May 2024, 16:23:00
 
 . 
 . * keep only sample from balance-small
@@ -17,9 +17,9 @@
 . tempfile sample
 
 . save `sample', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51177.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St40167.000001 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St51177.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St40167.000001 saved
     as .dta format
 
 . 
@@ -174,11 +174,76 @@ Panel variable: company_manager_id (unbalanced)
   3,162
 
 . 
+. * hired or fired ceo since last observed year of firm
+. tempvar previous_year
+
+. generate previous_year = .
+(517,605 missing values generated)
+
+. forval t = 1985/2018 {
+  2.         quietly by frame_id_numeric: egen `previous_year' = max(cond(year 
+> < `t', year, .))
+  3.         quietly replace previous_year = `previous_year' if year == `t'
+  4.         drop `previous_year'
+  5. }
+
+. 
+. tempvar next_year
+
+. generate next_year = .
+(517,605 missing values generated)
+
+. forval t = 1985/2018 {
+  2.         quietly by frame_id_numeric: egen `next_year' = min(cond(year > `t
+> ', year, .))
+  3.         quietly replace next_year = `next_year' if year == `t'
+  4.         drop `next_year'
+  5. }
+
+. 
+. generate byte hire = (job_begin <= year) & (job_begin > previous_year) & !mis
+> sing(previous_year)
+
+. * first cohort of managers are classified as newly hired
+. replace hire = 1 if job_begin == first_cohort
+(216,039 real changes made)
+
+. generate byte fire = (job_end >= year) & (job_end < next_year) & !missing(nex
+> t_year)
+
+. tabulate hire fire 
+
+           |         fire
+      hire |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   225,651     25,093 |   250,744 
+         1 |   244,242     22,619 |   266,861 
+-----------+----------------------+----------
+     Total |   469,893     47,712 |   517,605 
+
+. 
 . generate byte expat = foreignness > 0
+
+. 
+. * manager change may anticipate foreign change by max this many years
+. local anticipation 2
+
+. tempvar time_foreign first_year_foreign
 
 . ***********************
 . * time invariant vars and drop entire series of firms from sample *
 . ***********************
+. by frame_id_numeric: egen `first_year_foreign' = min(cond(foreign == 1, year,
+> .))
+(365,104 missing values generated)
+
+. generate `time_foreign' = year - `first_year_foreign'
+(365,104 missing values generated)
+
+. by frame_id_numeric: egen first_year_hire = min(cond((hire == 1) & (`time_for
+> eign' >= -`anticipation'), job_begin,.))
+(23,399 missing values generated)
+
 . by frame_id_numeric: egen first_year_expat = min(cond(expat == 1, job_begin,.
 > ))
 (385,624 missing values generated)
@@ -189,83 +254,99 @@ Panel variable: company_manager_id (unbalanced)
 
 . 
 . * which of the two happened first?
-. generate manager_after_owner = first_year_expat - first_year_foreign
+. generate expat_after_owner = first_year_expat - first_year_foreign
 (400,054 missing values generated)
+
+. generate manager_after_owner = first_year_hire - first_year_foreign
+(369,736 missing values generated)
 
 . tabulate manager_after_owner
 
 manager_aft |
    er_owner |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-        -29 |         37        0.03        0.03
-        -25 |        180        0.15        0.18
-        -18 |         41        0.03        0.22
-        -16 |        238        0.20        0.42
-        -15 |        192        0.16        0.59
-        -14 |         18        0.02        0.60
-        -13 |        290        0.25        0.85
-        -12 |         84        0.07        0.92
-        -11 |        200        0.17        1.09
-        -10 |        265        0.23        1.31
-         -9 |        191        0.16        1.48
-         -8 |        562        0.48        1.95
-         -7 |        518        0.44        2.40
-         -6 |        743        0.63        3.03
-         -5 |        376        0.32        3.35
-         -4 |        502        0.43        3.77
-         -3 |      1,349        1.15        4.92
-         -2 |      1,881        1.60        6.52
-         -1 |     18,793       15.99       22.51
-          0 |     60,784       51.71       74.22
-          1 |      8,765        7.46       81.67
-          2 |      3,119        2.65       84.33
-          3 |      2,671        2.27       86.60
-          4 |      2,230        1.90       88.50
-          5 |      1,711        1.46       89.95
-          6 |      1,974        1.68       91.63
-          7 |      1,172        1.00       92.63
-          8 |      1,303        1.11       93.74
-          9 |      1,205        1.03       94.76
-         10 |      1,119        0.95       95.71
-         11 |        752        0.64       96.35
-         12 |        861        0.73       97.09
-         13 |        537        0.46       97.54
-         14 |        486        0.41       97.96
-         15 |        245        0.21       98.17
-         16 |        384        0.33       98.49
-         17 |        418        0.36       98.85
-         18 |        317        0.27       99.12
-         19 |        349        0.30       99.41
-         21 |         86        0.07       99.49
-         22 |         65        0.06       99.54
-         23 |         94        0.08       99.62
-         24 |        135        0.11       99.74
-         25 |         37        0.03       99.77
-         26 |        203        0.17       99.94
-         27 |         28        0.02       99.97
-         28 |         41        0.03      100.00
+        -33 |         46        0.03        0.03
+        -28 |         52        0.04        0.07
+        -27 |         39        0.03        0.09
+        -26 |         54        0.04        0.13
+        -25 |        144        0.10        0.23
+        -24 |         99        0.07        0.29
+        -23 |         73        0.05        0.34
+        -22 |         37        0.03        0.37
+        -21 |         47        0.03        0.40
+        -20 |         74        0.05        0.45
+        -19 |         78        0.05        0.50
+        -18 |        204        0.14        0.64
+        -17 |        393        0.27        0.91
+        -16 |        728        0.49        1.40
+        -15 |        564        0.38        1.78
+        -14 |        493        0.33        2.11
+        -13 |        809        0.55        2.66
+        -12 |        780        0.53        3.19
+        -11 |        849        0.57        3.76
+        -10 |        895        0.61        4.37
+         -9 |        962        0.65        5.02
+         -8 |        728        0.49        5.51
+         -7 |      1,127        0.76        6.27
+         -6 |      1,324        0.90        7.17
+         -5 |      1,707        1.15        8.32
+         -4 |      2,098        1.42        9.74
+         -3 |      2,747        1.86       11.60
+         -2 |     10,251        6.93       18.53
+         -1 |     13,065        8.84       27.37
+          0 |     81,401       55.05       82.42
+          1 |      7,670        5.19       87.60
+          2 |      4,477        3.03       90.63
+          3 |      3,112        2.10       92.74
+          4 |      1,902        1.29       94.02
+          5 |      1,559        1.05       95.08
+          6 |      1,341        0.91       95.98
+          7 |      1,173        0.79       96.78
+          8 |        936        0.63       97.41
+          9 |        814        0.55       97.96
+         10 |        490        0.33       98.29
+         11 |        402        0.27       98.56
+         12 |        478        0.32       98.89
+         13 |        262        0.18       99.06
+         14 |        196        0.13       99.20
+         15 |        280        0.19       99.39
+         16 |        206        0.14       99.52
+         17 |        148        0.10       99.62
+         18 |        123        0.08       99.71
+         19 |        260        0.18       99.88
+         20 |         58        0.04       99.92
+         22 |         30        0.02       99.94
+         23 |         28        0.02       99.96
+         25 |         29        0.02       99.98
+         26 |         27        0.02      100.00
 ------------+-----------------------------------
-      Total |    117,551      100.00
+      Total |    147,869      100.00
 
 . * event time relative to that
-. generate event_time = year - first_year_expat
-(385,624 missing values generated)
+. generate event_time = year - first_year_hire
+(23,399 missing values generated)
 
 . 
 . * if foreign manager arrives up to X years before or Y years later than forei
 > gn owner, use foreign manager as arrival date. 
-. replace foreign = 1 if (manager_after_owner == -2) & inlist(event_time, 0, 1)
-(231 real changes made)
-
-. replace foreign = 1 if (manager_after_owner == -1) & inlist(event_time, 0)
-(266 real changes made)
+. forvalues t = -`anticipation'/-1 {
+  2.         local k = abs(`t') - 1
+  3.         replace foreign = 1 if (manager_after_owner == `t') & inrange(even
+> t_time, 0, `k')
+  4.         display "replace foreign = 1 if (manager_after_owner == `t') & inr
+> ange(event_time, 0, `k')""
+  5. }
+(1,051 real changes made)
+replace foreign = 1 if (manager_after_owner == -2) & inrange(event_time, 0, 1)
+(730 real changes made)
+replace foreign = 1 if (manager_after_owner == -1) & inrange(event_time, 0, 0)
 
 . replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
-(367 real changes made)
+(502 real changes made)
 
 . 
 . * drop firms where expat arrives earlier than X years before owner
-. drop if manager_after_owner < -2
+. drop if first_year_expat - first_year_foreign < -`anticipation'
 (5,786 observations deleted)
 
 . 
@@ -278,7 +359,7 @@ manager_aft |
 . 
 . * drop if there was an expat but was never foreign - these are likely error
 . drop if ever_expat == 1 & ever_foreign == 0
-(14,430 observations deleted)
+(14,492 observations deleted)
 
 . 
 . * drop too many CEO-s
@@ -292,50 +373,6 @@ manager_aft |
 . drop fp_tag n_ceo_ever
 
 .         
-. * hired or fired ceo since last observed year of firm
-. tempvar previous_year
-
-. generate previous_year = .
-(479,087 missing values generated)
-
-. forval t = 1985/2018 {
-  2.         quietly by frame_id_numeric: egen `previous_year' = max(cond(year 
-> < `t', year, .))
-  3.         quietly replace previous_year = `previous_year' if year == `t'
-  4.         drop `previous_year'
-  5. }
-
-. 
-. tempvar next_year
-
-. generate next_year = .
-(479,087 missing values generated)
-
-. forval t = 1985/2018 {
-  2.         quietly by frame_id_numeric: egen `next_year' = min(cond(year > `t
-> ', year, .))
-  3.         quietly replace next_year = `next_year' if year == `t'
-  4.         drop `next_year'
-  5. }
-
-. 
-. generate byte hire = (job_begin <= year) & (job_begin > previous_year) & !mis
-> sing(previous_year)
-
-. generate byte fire = (job_end >= year) & (job_end < next_year) & !missing(nex
-> t_year)
-
-. tabulate hire fire 
-
-           |         fire
-      hire |         0          1 |     Total
------------+----------------------+----------
-         0 |   401,379     34,576 |   435,955 
-         1 |    37,215      5,917 |    43,132 
------------+----------------------+----------
-     Total |   438,594     40,493 |   479,087 
-
-. 
 . * create firm-year data
 . collapse (firstnm) foreign ever_expat ever_foreign (count) n_ceo = expat (max
 > ) hire_ceo = hire fire_ceo = fire foreignness, by(frame_id_numeric year)
@@ -352,7 +389,7 @@ manager_aft |
 
 . 
 . count
-  327,405
+  327,373
 
 . compress
   variable year was float now int
@@ -361,7 +398,7 @@ manager_aft |
   variable n_ceo was long now byte
   variable has_expat_ceo was float now byte
   variable ceo_spell was float now byte
-  (5,565,885 bytes saved)
+  (5,565,341 bytes saved)
 
 . save "`here'/temp/firm_events.dta", replace
 file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
@@ -370,5 +407,5 @@ file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- closed on:   6 May 2024, 14:47:39
+ closed on:   6 May 2024, 16:23:28
 -------------------------------------------------------------------------------

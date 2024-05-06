@@ -57,41 +57,6 @@ replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_beg
 sort frame_id_numeric manager_id year
 count if frame_id_numeric == frame_id_numeric[_n-1] & manager_id == manager_id[_n-1] & year != (year[_n-1] + 1)
 
-generate byte expat = foreignness > 0
-***********************
-* time invariant vars and drop entire series of firms from sample *
-***********************
-by frame_id_numeric: egen first_year_expat = min(cond(expat == 1, job_begin,.))
-by frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.))
-
-* which of the two happened first?
-generate manager_after_owner = first_year_expat - first_year_foreign
-tabulate manager_after_owner
-* event time relative to that
-generate event_time = year - first_year_expat
-
-* if foreign manager arrives up to X years before or Y years later than foreign owner, use foreign manager as arrival date. 
-replace foreign = 1 if (manager_after_owner == -2) & inlist(event_time, 0, 1)
-replace foreign = 1 if (manager_after_owner == -1) & inlist(event_time, 0)
-replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
-
-* drop firms where expat arrives earlier than X years before owner
-drop if manager_after_owner < -2
-
-* ever expat and foreign created after foreign changes (drops were firm level before so should not mess with ever variables)
-foreach X of var expat foreign {
-	by frame_id_numeric: egen ever_`X' = max(`X'==1)
-}
-
-* drop if there was an expat but was never foreign - these are likely error
-drop if ever_expat == 1 & ever_foreign == 0
-
-* drop too many CEO-s
-egen fp_tag = tag(frame_id_numeric manager_id) 
-by frame_id_numeric: egen n_ceo_ever = sum(fp_tag)
-drop if n_ceo_ever > 15
-drop fp_tag n_ceo_ever
-	
 * hired or fired ceo since last observed year of firm
 tempvar previous_year
 generate previous_year = .
@@ -110,9 +75,57 @@ forval t = 1985/2018 {
 }
 
 generate byte hire = (job_begin <= year) & (job_begin > previous_year) & !missing(previous_year)
+* first cohort of managers are classified as newly hired
+replace hire = 1 if job_begin == first_cohort
 generate byte fire = (job_end >= year) & (job_end < next_year) & !missing(next_year)
 tabulate hire fire 
 
+generate byte expat = foreignness > 0
+
+* manager change may anticipate foreign change by max this many years
+local anticipation 2
+tempvar time_foreign first_year_foreign
+***********************
+* time invariant vars and drop entire series of firms from sample *
+***********************
+by frame_id_numeric: egen `first_year_foreign' = min(cond(foreign == 1, year,.))
+generate `time_foreign' = year - `first_year_foreign'
+by frame_id_numeric: egen first_year_hire = min(cond((hire == 1) & (`time_foreign' >= -`anticipation'), job_begin,.))
+by frame_id_numeric: egen first_year_expat = min(cond(expat == 1, job_begin,.))
+by frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.))
+
+* which of the two happened first?
+generate expat_after_owner = first_year_expat - first_year_foreign
+generate manager_after_owner = first_year_hire - first_year_foreign
+tabulate manager_after_owner
+* event time relative to that
+generate event_time = year - first_year_hire
+
+* if foreign manager arrives up to X years before or Y years later than foreign owner, use foreign manager as arrival date. 
+forvalues t = -`anticipation'/-1 {
+	local k = abs(`t') - 1
+	replace foreign = 1 if (manager_after_owner == `t') & inrange(event_time, 0, `k')
+	display "replace foreign = 1 if (manager_after_owner == `t') & inrange(event_time, 0, `k')""
+}
+replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
+
+* drop firms where expat arrives earlier than X years before owner
+drop if first_year_expat - first_year_foreign < -`anticipation'
+
+* ever expat and foreign created after foreign changes (drops were firm level before so should not mess with ever variables)
+foreach X of var expat foreign {
+	by frame_id_numeric: egen ever_`X' = max(`X'==1)
+}
+
+* drop if there was an expat but was never foreign - these are likely error
+drop if ever_expat == 1 & ever_foreign == 0
+
+* drop too many CEO-s
+egen fp_tag = tag(frame_id_numeric manager_id) 
+by frame_id_numeric: egen n_ceo_ever = sum(fp_tag)
+drop if n_ceo_ever > 15
+drop fp_tag n_ceo_ever
+	
 * create firm-year data
 collapse (firstnm) foreign ever_expat ever_foreign (count) n_ceo = expat (max) hire_ceo = hire fire_ceo = fire foreignness, by(frame_id_numeric year)
 label values foreignness foreignness
