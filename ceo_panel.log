@@ -92,130 +92,230 @@ Notes:
 . * special case some manually checked firms
 . * these are all Hungarian firms with Hungarian names and addresses
 . replace foreign_name = 0 if inlist(originalid, 11941712, 10362675, 12282799, 
-> 12566947, 13448064)
-(12 real changes made)
+> 12566947, 13448064, 10216770, 10441628, 11245652, 12862865, 12914539, 2278168
+> 4, 23464997)
+(41 real changes made)
 
 . 
-. * these 40 names are cleary of Western origin
-. replace ever_western = 1 if originalid==10741973
-(11 real changes made)
+. * these 73 names are clearly of Western origin
+. replace ever_western = 1 if originalid==10741973 & foreign_name==1
+(7 real changes made)
 
-. replace ever_western = 1 if originalid==14655380
-(19 real changes made)
+. replace ever_western = 1 if originalid==14655380 & foreign_name==1
+(2 real changes made)
 
-. replace ever_western = 1 if originalid==24690210
-(12 real changes made)
-
-. replace ever_western = 1 if originalid==10414648
-(8 real changes made)
-
-. replace ever_western = 1 if originalid==10543294
-(39 real changes made)
-
-. replace ever_western = 1 if originalid==10751161
-(32 real changes made)
-
-. replace ever_western = 1 if originalid==11064899
-(59 real changes made)
-
-. replace ever_western = 1 if originalid==11077200
-(47 real changes made)
-
-. replace ever_western = 1 if originalid==11101291
-(33 real changes made)
-
-. replace ever_western = 1 if originalid==11179924
-(13 real changes made)
-
-. replace ever_western = 1 if originalid==11854463
-(35 real changes made)
-
-. replace ever_western = 1 if originalid==13212366
-(22 real changes made)
-
-. replace ever_western = 1 if originalid==14995806
-(16 real changes made)
-
-. replace ever_western = 1 if originalid==22592903
-(0 real changes made)
-
-. replace ever_western = 1 if originalid==23383636
-(21 real changes made)
-
-. replace ever_western = 1 if originalid==11182232
-(42 real changes made)
-
-. replace ever_western = 1 if originalid==11924717
-(14 real changes made)
-
-. replace ever_western = 1 if originalid==10548938
-(36 real changes made)
-
-. replace ever_western = 1 if originalid==11225685
+. replace ever_western = 1 if originalid==24690210 & foreign_name==1
 (6 real changes made)
 
-. replace ever_western = 1 if originalid==12106282
-(31 real changes made)
-
-. replace ever_western = 1 if originalid==12152104
-(31 real changes made)
-
-. replace ever_western = 1 if originalid==12206928
-(5 real changes made)
-
-. replace ever_western = 1 if originalid==12395073
-(22 real changes made)
-
-. replace ever_western = 1 if originalid==12691908
-(84 real changes made)
-
-. replace ever_western = 1 if originalid==12860777
+. replace ever_western = 1 if originalid==10414648 & foreign_name==1
 (3 real changes made)
 
-. replace ever_western = 1 if originalid==14068012
-(14 real changes made)
+. replace ever_western = 1 if originalid==10543294 & foreign_name==1
+(12 real changes made)
 
-. replace ever_western = 1 if originalid==12492455
-(21 real changes made)
+. replace ever_western = 1 if originalid==10751161 & foreign_name==1
+(2 real changes made)
 
-. replace ever_western = 1 if originalid==11142755
-(13 real changes made)
+. replace ever_western = 1 if originalid==11064899 & foreign_name==1
+(45 real changes made)
 
-. replace ever_western = 1 if originalid==11087388
-(27 real changes made)
+. replace ever_western = 1 if originalid==11077200 & foreign_name==1
+(5 real changes made)
 
-. replace ever_western = 1 if originalid==12353817
+. replace ever_western = 1 if originalid==11101291 & foreign_name==1
+(11 real changes made)
+
+. replace ever_western = 1 if originalid==11179924 & foreign_name==1
+(1 real change made)
+
+. replace ever_western = 1 if originalid==11854463 & foreign_name==1
 (9 real changes made)
 
-. replace ever_western = 1 if originalid==26100667
+. replace ever_western = 1 if originalid==13212366 & foreign_name==1
+(2 real changes made)
+
+. replace ever_western = 1 if originalid==14995806 & foreign_name==1
+(1 real change made)
+
+. replace ever_western = 1 if originalid==22592903 & foreign_name==1
 (0 real changes made)
 
-. replace ever_western = 1 if originalid==10640384
-(49 real changes made)
-
-. replace ever_western = 1 if originalid==10751642
-(14 real changes made)
-
-. replace ever_western = 1 if originalid==12509166
-(22 real changes made)
-
-. replace ever_western = 1 if originalid==12722312
+. replace ever_western = 1 if originalid==23383636 & foreign_name==1
 (20 real changes made)
 
-. replace ever_western = 1 if originalid==11192145
-(0 real changes made)
+. replace ever_western = 1 if originalid==11182232 & foreign_name==1
+(7 real changes made)
 
-. replace ever_western = 1 if originalid==10804472
+. replace ever_western = 1 if originalid==11924717 & foreign_name==1
+(13 real changes made)
+
+. replace ever_western = 1 if originalid==10548938 & foreign_name==1
+(17 real changes made)
+
+. replace ever_western = 1 if originalid==11225685 & foreign_name==1
+(4 real changes made)
+
+. replace ever_western = 1 if originalid==12106282 & foreign_name==1
+(3 real changes made)
+
+. replace ever_western = 1 if originalid==12152104 & foreign_name==1
+(7 real changes made)
+
+. replace ever_western = 1 if originalid==12206928 & foreign_name==1
+(3 real changes made)
+
+. replace ever_western = 1 if originalid==12395073 & foreign_name==1
+(3 real changes made)
+
+. replace ever_western = 1 if originalid==12691908 & foreign_name==1
+(47 real changes made)
+
+. replace ever_western = 1 if originalid==12860777 & foreign_name==1
+(1 real change made)
+
+. replace ever_western = 1 if originalid==14068012 & foreign_name==1
 (8 real changes made)
 
-. replace ever_western = 1 if originalid==12158485
-(28 real changes made)
+. replace ever_western = 1 if originalid==12492455 & foreign_name==1
+(8 real changes made)
 
-. replace ever_western = 1 if originalid==11898353
+. replace ever_western = 1 if originalid==11142755 & foreign_name==1
+(5 real changes made)
+
+. replace ever_western = 1 if originalid==11087388 & foreign_name==1
+(2 real changes made)
+
+. replace ever_western = 1 if originalid==12353817 & foreign_name==1
+(2 real changes made)
+
+. replace ever_western = 1 if originalid==26100667 & foreign_name==1
 (0 real changes made)
 
-. replace ever_western = 1 if originalid==10732803
+. replace ever_western = 1 if originalid==10640384 & foreign_name==1
+(48 real changes made)
+
+. replace ever_western = 1 if originalid==10751642 & foreign_name==1
+(5 real changes made)
+
+. replace ever_western = 1 if originalid==12509166 & foreign_name==1
+(6 real changes made)
+
+. replace ever_western = 1 if originalid==12722312 & foreign_name==1
+(17 real changes made)
+
+. replace ever_western = 1 if originalid==11192145 & foreign_name==1
 (0 real changes made)
+
+. replace ever_western = 1 if originalid==10804472 & foreign_name==1
+(3 real changes made)
+
+. replace ever_western = 1 if originalid==12158485 & foreign_name==1
+(5 real changes made)
+
+. replace ever_western = 1 if originalid==11898353 & foreign_name==1
+(0 real changes made)
+
+. replace ever_western = 1 if originalid==10732803 & foreign_name==1
+(0 real changes made)
+
+. replace ever_western = 1 if originalid==13871275 & foreign_name==1
+(0 real changes made)
+
+. replace ever_western = 1 if originalid==10067710 & foreign_name==1
+(18 real changes made)
+
+. replace ever_western = 1 if originalid==10213454 & foreign_name==1
+(4 real changes made)
+
+. replace ever_western = 1 if originalid==10317871 & foreign_name==1
+(3 real changes made)
+
+. replace ever_western = 1 if originalid==10353581 & foreign_name==1
+(8 real changes made)
+
+. replace ever_western = 1 if originalid==10382312 & foreign_name==1
+(4 real changes made)
+
+. replace ever_western = 1 if originalid==10428627 & foreign_name==1
+(10 real changes made)
+
+. replace ever_western = 1 if originalid==10456732 & foreign_name==1
+(20 real changes made)
+
+. replace ever_western = 1 if originalid==10541326 & foreign_name==1
+(7 real changes made)
+
+. replace ever_western = 1 if originalid==10587328 & foreign_name==1
+(2 real changes made)
+
+. replace ever_western = 1 if originalid==10669848 & foreign_name==1
+(3 real changes made)
+
+. replace ever_western = 1 if originalid==10692082 & foreign_name==1
+(10 real changes made)
+
+. replace ever_western = 1 if originalid==10777189 & foreign_name==1
+(1 real change made)
+
+. replace ever_western = 1 if originalid==10815379 & foreign_name==1
+(7 real changes made)
+
+. replace ever_western = 1 if originalid==11018908 & foreign_name==1
+(1 real change made)
+
+. replace ever_western = 1 if originalid==11115658 & foreign_name==1
+(4 real changes made)
+
+. replace ever_western = 1 if originalid==11119700 & foreign_name==1
+(4 real changes made)
+
+. replace ever_western = 1 if originalid==11487018 & foreign_name==1
+(20 real changes made)
+
+. replace ever_western = 1 if originalid==11504656 & foreign_name==1
+(3 real changes made)
+
+. replace ever_western = 1 if originalid==12281262 & foreign_name==1
+(2 real changes made)
+
+. replace ever_western = 1 if originalid==12550904 & foreign_name==1
+(15 real changes made)
+
+. replace ever_western = 1 if originalid==12581555 & foreign_name==1
+(15 real changes made)
+
+. replace ever_western = 1 if originalid==12619849 & foreign_name==1
+(13 real changes made)
+
+. replace ever_western = 1 if originalid==12622810 & foreign_name==1
+(3 real changes made)
+
+. replace ever_western = 1 if originalid==12624197 & foreign_name==1
+(8 real changes made)
+
+. replace ever_western = 1 if originalid==12813469 & foreign_name==1
+(19 real changes made)
+
+. replace ever_western = 1 if originalid==13025481 & foreign_name==1
+(1 real change made)
+
+. replace ever_western = 1 if originalid==13497941 & foreign_name==1
+(3 real changes made)
+
+. replace ever_western = 1 if originalid==13639651 & foreign_name==1
+(1 real change made)
+
+. replace ever_western = 1 if originalid==13717108 & foreign_name==1
+(15 real changes made)
+
+. replace ever_western = 1 if originalid==14904134 & foreign_name==1
+(16 real changes made)
+
+. replace ever_western = 1 if originalid==20679570 & foreign_name==1
+(4 real changes made)
+
+. replace ever_western = 1 if originalid==22658948 & foreign_name==1
+(11 real changes made)
 
 . 
 . drop originalid
@@ -227,13 +327,13 @@ Notes:
 > dress"
 
 . generate byte foreignness = 0 if !first_address_foreign & !foreign_name
-(1,573,792 missing values generated)
+(1,573,763 missing values generated)
 
 . replace foreignness = 1 if !foreign_name & ever_neighbor
 (146,312 real changes made)
 
 . replace foreignness = 2 if foreign_name & !first_address_foreign
-(447,353 real changes made)
+(447,324 real changes made)
 
 . replace foreignness = 3 if !foreign_name & !ever_neighbor & first_address_for
 > eign
@@ -241,10 +341,10 @@ Notes:
 
 . replace foreignness = 4 if foreign_name & !ever_western & first_address_forei
 > gn
-(421,718 real changes made)
+(421,703 real changes made)
 
 . replace foreignness = 5 if ever_western
-(533,497 real changes made)
+(533,226 real changes made)
 
 . label values foreignness foreignness
 
@@ -256,12 +356,12 @@ Notes:
 
                         foreignness |      Freq.     Percent        Cum.
 ------------------------------------+-----------------------------------
-         Hungarian name and address | 13,562,078       89.60       89.60
+         Hungarian name and address | 13,562,633       89.60       89.60
 Hungarian name, neighboring address |    145,158        0.96       90.56
-    Foreign name, Hungarian address |    447,014        2.95       93.51
+    Foreign name, Hungarian address |    446,745        2.95       93.51
       Hungarian name, other address |     26,931        0.18       93.69
-  Foreign name, non-Western address |    421,718        2.79       96.48
-      Foreign name, Western address |    533,497        3.52      100.00
+  Foreign name, non-Western address |    421,703        2.79       96.48
+      Foreign name, Western address |    533,226        3.52      100.00
 ------------------------------------+-----------------------------------
                               Total | 15,136,396      100.00
 

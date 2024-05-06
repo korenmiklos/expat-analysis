@@ -44,7 +44,7 @@ Notes:
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- opened on:   6 May 2024, 17:06:44
+ opened on:   6 May 2024, 18:40:55
 
 . 
 . * keep only sample from balance-small
@@ -59,9 +59,9 @@ Notes:
 . tempfile sample
 
 . save `sample', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St40351.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St54062.000001 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St40351.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St54062.000001 saved
     as .dta format
 
 . 
@@ -293,7 +293,7 @@ Panel variable: company_manager_id (unbalanced)
 
 . by frame_id_numeric: egen first_year_expat = min(cond(expat == 1, job_begin,.
 > ))
-(746,991 missing values generated)
+(747,084 missing values generated)
 
 . by frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.)
 > )
@@ -302,7 +302,7 @@ Panel variable: company_manager_id (unbalanced)
 . 
 . * which of the two happened first?
 . generate expat_after_owner = first_year_expat - first_year_foreign
-(771,386 missing values generated)
+(771,479 missing values generated)
 
 . generate manager_after_owner = first_year_hire - first_year_foreign
 (723,863 missing values generated)
@@ -380,10 +380,10 @@ manager_aft |
   4.         replace foreign = 1 if (manager_after_owner == `t') & inrange(year
 >  - first_year_hire, 0, `k')   & !`ever_expat'
   5. }
-(364 real changes made)
-(900 real changes made)
-(376 real changes made)
-(589 real changes made)
+(371 real changes made)
+(902 real changes made)
+(371 real changes made)
+(593 real changes made)
 
 . forvalues t = 1/`lag' {
   2.         local minust = -`t'
@@ -392,12 +392,12 @@ manager_aft |
   4.         replace foreign = 0 if (manager_after_owner == `t') & inrange(year
 >  - first_year_hire, `minust', -1)             & !`ever_expat'
   5. }
-(519 real changes made)
+(534 real changes made)
 (211 real changes made)
 
 . * drop firms where expat arrives earlier than X years before owner
 . drop if first_year_expat - first_year_foreign < -`anticipation'
-(8,213 observations deleted)
+(7,872 observations deleted)
 
 . 
 . * ever expat and foreign created after foreign changes (drops were firm level
@@ -439,7 +439,7 @@ manager_aft |
 
 . 
 . count
-  619,226
+  619,460
 
 . compress
   variable year was float now int
@@ -448,7 +448,7 @@ manager_aft |
   variable n_ceo was long now byte
   variable has_expat_ceo was float now byte
   variable ceo_spell was float now byte
-  (10,526,842 bytes saved)
+  (10,530,820 bytes saved)
 
 . save "`here'/temp/firm_events.dta", replace
 file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
@@ -457,7 +457,7 @@ file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- closed on:   6 May 2024, 17:07:33
+ closed on:   6 May 2024, 18:41:45
 -------------------------------------------------------------------------------
 
 . 
