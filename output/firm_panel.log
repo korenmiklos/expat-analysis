@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- opened on:   6 May 2024, 16:48:34
+ opened on:   6 May 2024, 17:06:44
 
 . 
 . * keep only sample from balance-small
@@ -17,9 +17,9 @@
 . tempfile sample
 
 . save `sample', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St98516.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St40351.000001 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St98516.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St40351.000001 saved
     as .dta format
 
 . 
@@ -33,17 +33,17 @@ file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St98516.000001 saved
     Result                      Number of obs
     -----------------------------------------
     Not matched                             0
-    Matched                           514,377  
+    Matched                           929,502  
     -----------------------------------------
 
 . count if first_year_of_firm == firm_birth
-  309,225
+  558,214
 
 . 
 . *for descriptives (number of ceo-s and nceo-s in original data, number of ceo
 >  and nceo job-spells in original data)
 . count
-  514,377
+  929,502
 
 . egen company_manager_id = group(frame_id_numeric manager_id)
 
@@ -56,13 +56,13 @@ manager_id                                                    group(manager_id)
                   Type: Numeric (long)
 
                  Range: [2,1607091]                   Units: 1
-         Unique values: 71,919                    Missing .: 0/514,377
+         Unique values: 119,322                   Missing .: 0/929,502
 
-                  Mean: 843639
-             Std. dev.: 425397
+                  Mean: 868220
+             Std. dev.: 409165
 
            Percentiles:    10%       25%       50%       75%       90%
-                        224586    576653    833179   1.2e+06   1.4e+06
+                        290971    603981    851069   1.2e+06   1.4e+06
 
 . codebook company_manager_id
 
@@ -72,14 +72,14 @@ company_manager_id                           group(frame_id_numeric manager_id)
 
                   Type: Numeric (float)
 
-                 Range: [1,82318]                     Units: 1
-         Unique values: 82,318                    Missing .: 0/514,377
+                 Range: [1,139323]                    Units: 1
+         Unique values: 139,323                   Missing .: 0/929,502
 
-                  Mean: 39419.5
-             Std. dev.: 23724.2
+                  Mean: 67664.7
+             Std. dev.: 39942.3
 
            Percentiles:     10%       25%       50%       75%       90%
-                           6743     18845     39556     58934     73272
+                          12869     33513     67179    100437    123905
 
 . 
 . * balance panel
@@ -90,51 +90,51 @@ Panel variable: company_manager_id (unbalanced)
          Delta: 1 unit
 
 . by company_manager_id: generate gap = year - year[_n-1] - 1
-(82,318 missing values generated)
+(139,323 missing values generated)
 
 . replace gap = 0 if missing(gap)
-(82,318 real changes made)
+(139,323 real changes made)
 
 . tabulate gap
 
         gap |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |    507,987       98.76       98.76
-          1 |      3,228        0.63       99.39
-          2 |      1,025        0.20       99.58
-          3 |        648        0.13       99.71
-          4 |        371        0.07       99.78
-          5 |        329        0.06       99.85
-          6 |        192        0.04       99.88
-          7 |        134        0.03       99.91
-          8 |        122        0.02       99.93
-          9 |        107        0.02       99.95
-         10 |         52        0.01       99.96
-         11 |         39        0.01       99.97
-         12 |         29        0.01       99.98
-         13 |         22        0.00       99.98
-         14 |         18        0.00       99.99
-         15 |         19        0.00       99.99
-         16 |         14        0.00       99.99
-         17 |          7        0.00       99.99
-         18 |          6        0.00       99.99
-         19 |          5        0.00      100.00
-         20 |          8        0.00      100.00
-         21 |          7        0.00      100.00
-         22 |          2        0.00      100.00
-         23 |          2        0.00      100.00
+          0 |    917,679       98.73       98.73
+          1 |      6,462        0.70       99.42
+          2 |      1,776        0.19       99.61
+          3 |      1,093        0.12       99.73
+          4 |        667        0.07       99.80
+          5 |        550        0.06       99.86
+          6 |        340        0.04       99.90
+          7 |        213        0.02       99.92
+          8 |        189        0.02       99.94
+          9 |        159        0.02       99.96
+         10 |         82        0.01       99.97
+         11 |         68        0.01       99.98
+         12 |         47        0.01       99.98
+         13 |         44        0.00       99.99
+         14 |         32        0.00       99.99
+         15 |         26        0.00       99.99
+         16 |         22        0.00       99.99
+         17 |          9        0.00      100.00
+         18 |          7        0.00      100.00
+         19 |          9        0.00      100.00
+         20 |          9        0.00      100.00
+         21 |          8        0.00      100.00
+         22 |          3        0.00      100.00
+         23 |          3        0.00      100.00
          24 |          1        0.00      100.00
-         25 |          3        0.00      100.00
+         25 |          4        0.00      100.00
 ------------+-----------------------------------
-      Total |    514,377      100.00
+      Total |    929,502      100.00
 
 . 
 . * fill in holes of 1 year, but not longer
 . expand 1 + (gap == 1), generate(filled_in)
-(3,228 observations created)
+(6,462 observations created)
 
 . replace year = year - 1 if filled_in
-(3,228 real changes made)
+(6,462 real changes made)
 
 . 
 . * create contiguous spells
@@ -163,7 +163,7 @@ Panel variable: company_manager_id (unbalanced)
 
 . replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_
 > begin == first_cohort)
-(53,836 real changes made)
+(118,936 real changes made)
 
 . 
 . * NOTE: no collapse and expand --> there might be holes
@@ -171,14 +171,14 @@ Panel variable: company_manager_id (unbalanced)
 
 . count if frame_id_numeric == frame_id_numeric[_n-1] & manager_id == manager_i
 > d[_n-1] & year != (year[_n-1] + 1)
-  3,162
+  5,361
 
 . 
 . * hired or fired ceo since last observed year of firm
 . tempvar previous_year
 
 . generate previous_year = .
-(517,605 missing values generated)
+(935,964 missing values generated)
 
 . forval t = 1985/2018 {
   2.         quietly by frame_id_numeric: egen `previous_year' = max(cond(year 
@@ -191,7 +191,7 @@ Panel variable: company_manager_id (unbalanced)
 . tempvar next_year
 
 . generate next_year = .
-(517,605 missing values generated)
+(935,964 missing values generated)
 
 . forval t = 1985/2018 {
   2.         quietly by frame_id_numeric: egen `next_year' = min(cond(year > `t
@@ -206,7 +206,7 @@ Panel variable: company_manager_id (unbalanced)
 
 . * first cohort of managers are classified as newly hired
 . replace hire = 1 if job_begin == first_cohort
-(216,039 real changes made)
+(422,572 real changes made)
 
 . generate byte fire = (job_end >= year) & (job_end < next_year) & !missing(nex
 > t_year)
@@ -216,10 +216,10 @@ Panel variable: company_manager_id (unbalanced)
            |         fire
       hire |         0          1 |     Total
 -----------+----------------------+----------
-         0 |   225,651     25,093 |   250,744 
-         1 |   244,242     22,619 |   266,861 
+         0 |   400,411     36,397 |   436,808 
+         1 |   462,640     36,516 |   499,156 
 -----------+----------------------+----------
-     Total |   469,893     47,712 |   517,605 
+     Total |   863,051     72,913 |   935,964 
 
 . 
 . generate byte expat = foreignness > 0
@@ -237,95 +237,96 @@ Panel variable: company_manager_id (unbalanced)
 . ***********************
 . by frame_id_numeric: egen `first_year_foreign' = min(cond(foreign == 1, year,
 > .))
-(365,104 missing values generated)
+(714,649 missing values generated)
 
 . generate `time_foreign' = year - `first_year_foreign'
-(365,104 missing values generated)
+(714,649 missing values generated)
 
 . by frame_id_numeric: egen `ever_expat' = max((expat == 1) & inrange(`time_for
 > eign', -`anticipation', `lag'))
 
 . by frame_id_numeric: egen first_year_hire = min(cond((hire == 1) & (`time_for
 > eign' >= -`anticipation'), job_begin,.))
-(23,399 missing values generated)
+(59,591 missing values generated)
 
 . by frame_id_numeric: egen first_year_expat = min(cond(expat == 1, job_begin,.
 > ))
-(385,624 missing values generated)
+(746,991 missing values generated)
 
 . by frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.)
 > )
-(365,104 missing values generated)
+(714,649 missing values generated)
 
 . 
 . * which of the two happened first?
 . generate expat_after_owner = first_year_expat - first_year_foreign
-(400,054 missing values generated)
+(771,386 missing values generated)
 
 . generate manager_after_owner = first_year_hire - first_year_foreign
-(369,736 missing values generated)
+(723,863 missing values generated)
 
 . tabulate manager_after_owner
 
 manager_aft |
    er_owner |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-        -33 |         46        0.03        0.03
-        -28 |         52        0.04        0.07
-        -27 |         39        0.03        0.09
-        -26 |         54        0.04        0.13
-        -25 |        144        0.10        0.23
-        -24 |         99        0.07        0.29
-        -23 |         73        0.05        0.34
-        -22 |         37        0.03        0.37
-        -21 |         47        0.03        0.40
-        -20 |         74        0.05        0.45
-        -19 |         78        0.05        0.50
-        -18 |        204        0.14        0.64
-        -17 |        393        0.27        0.91
-        -16 |        728        0.49        1.40
-        -15 |        564        0.38        1.78
-        -14 |        493        0.33        2.11
-        -13 |        809        0.55        2.66
-        -12 |        780        0.53        3.19
-        -11 |        849        0.57        3.76
-        -10 |        895        0.61        4.37
-         -9 |        962        0.65        5.02
-         -8 |        728        0.49        5.51
-         -7 |      1,127        0.76        6.27
-         -6 |      1,324        0.90        7.17
-         -5 |      1,707        1.15        8.32
-         -4 |      2,098        1.42        9.74
-         -3 |      2,747        1.86       11.60
-         -2 |     10,251        6.93       18.53
-         -1 |     13,065        8.84       27.37
-          0 |     81,401       55.05       82.42
-          1 |      7,670        5.19       87.60
-          2 |      4,477        3.03       90.63
-          3 |      3,112        2.10       92.74
-          4 |      1,902        1.29       94.02
-          5 |      1,559        1.05       95.08
-          6 |      1,341        0.91       95.98
-          7 |      1,173        0.79       96.78
-          8 |        936        0.63       97.41
-          9 |        814        0.55       97.96
-         10 |        490        0.33       98.29
-         11 |        402        0.27       98.56
-         12 |        478        0.32       98.89
-         13 |        262        0.18       99.06
-         14 |        196        0.13       99.20
-         15 |        280        0.19       99.39
-         16 |        206        0.14       99.52
-         17 |        148        0.10       99.62
-         18 |        123        0.08       99.71
-         19 |        260        0.18       99.88
-         20 |         58        0.04       99.92
-         22 |         30        0.02       99.94
-         23 |         28        0.02       99.96
-         25 |         29        0.02       99.98
-         26 |         27        0.02      100.00
+        -33 |         46        0.02        0.02
+        -28 |         52        0.02        0.05
+        -27 |        142        0.07        0.11
+        -26 |         54        0.03        0.14
+        -25 |        144        0.07        0.21
+        -24 |        152        0.07        0.28
+        -23 |        138        0.07        0.34
+        -22 |        140        0.07        0.41
+        -21 |         73        0.03        0.44
+        -20 |         74        0.03        0.48
+        -19 |        204        0.10        0.57
+        -18 |        247        0.12        0.69
+        -17 |        596        0.28        0.97
+        -16 |      1,014        0.48        1.45
+        -15 |        610        0.29        1.74
+        -14 |        656        0.31        2.05
+        -13 |        907        0.43        2.47
+        -12 |      1,125        0.53        3.01
+        -11 |      1,317        0.62        3.63
+        -10 |      1,182        0.56        4.18
+         -9 |      1,226        0.58        4.76
+         -8 |      1,338        0.63        5.39
+         -7 |      1,411        0.67        6.06
+         -6 |      2,004        0.94        7.00
+         -5 |      2,240        1.06        8.06
+         -4 |      3,051        1.44        9.50
+         -3 |      4,066        1.92       11.41
+         -2 |     13,402        6.32       17.73
+         -1 |     17,924        8.45       26.18
+          0 |    119,900       56.53       82.71
+          1 |     10,494        4.95       87.66
+          2 |      5,705        2.69       90.35
+          3 |      4,093        1.93       92.28
+          4 |      2,713        1.28       93.56
+          5 |      2,319        1.09       94.65
+          6 |      2,135        1.01       95.66
+          7 |      1,937        0.91       96.57
+          8 |      1,283        0.60       97.18
+          9 |      1,081        0.51       97.69
+         10 |        672        0.32       98.00
+         11 |        527        0.25       98.25
+         12 |      1,004        0.47       98.73
+         13 |        520        0.25       98.97
+         14 |        345        0.16       99.13
+         15 |        386        0.18       99.32
+         16 |        261        0.12       99.44
+         17 |        217        0.10       99.54
+         18 |        150        0.07       99.61
+         19 |        311        0.15       99.76
+         20 |        187        0.09       99.85
+         21 |         27        0.01       99.86
+         22 |         86        0.04       99.90
+         23 |         56        0.03       99.93
+         25 |         83        0.04       99.97
+         26 |         74        0.03      100.00
 ------------+-----------------------------------
-      Total |    147,869      100.00
+      Total |    212,101      100.00
 
 . 
 . * if foreign manager arrives up to X years before or Y years later than forei
@@ -337,10 +338,10 @@ manager_aft |
   4.         replace foreign = 1 if (manager_after_owner == `t') & inrange(year
 >  - first_year_hire, 0, `k')   & !`ever_expat'
   5. }
-(231 real changes made)
-(605 real changes made)
-(266 real changes made)
-(372 real changes made)
+(364 real changes made)
+(900 real changes made)
+(376 real changes made)
+(589 real changes made)
 
 . forvalues t = 1/`lag' {
   2.         local minust = -`t'
@@ -349,12 +350,12 @@ manager_aft |
   4.         replace foreign = 0 if (manager_after_owner == `t') & inrange(year
 >  - first_year_hire, `minust', -1)             & !`ever_expat'
   5. }
-(367 real changes made)
-(144 real changes made)
+(519 real changes made)
+(211 real changes made)
 
 . * drop firms where expat arrives earlier than X years before owner
 . drop if first_year_expat - first_year_foreign < -`anticipation'
-(5,786 observations deleted)
+(8,213 observations deleted)
 
 . 
 . * ever expat and foreign created after foreign changes (drops were firm level
@@ -366,7 +367,7 @@ manager_aft |
 . 
 . * drop if there was an expat but was never foreign - these are likely error
 . drop if ever_expat == 1 & ever_foreign == 0
-(14,430 observations deleted)
+(24,424 observations deleted)
 
 . 
 . * drop too many CEO-s
@@ -375,7 +376,7 @@ manager_aft |
 . by frame_id_numeric: egen n_ceo_ever = sum(fp_tag)
 
 . drop if n_ceo_ever > 15
-(18,302 observations deleted)
+(19,830 observations deleted)
 
 . drop fp_tag n_ceo_ever
 
@@ -396,7 +397,7 @@ manager_aft |
 
 . 
 . count
-  327,405
+  619,226
 
 . compress
   variable year was float now int
@@ -405,7 +406,7 @@ manager_aft |
   variable n_ceo was long now byte
   variable has_expat_ceo was float now byte
   variable ceo_spell was float now byte
-  (5,565,885 bytes saved)
+  (10,526,842 bytes saved)
 
 . save "`here'/temp/firm_events.dta", replace
 file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
@@ -414,5 +415,5 @@ file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- closed on:   6 May 2024, 16:49:02
+ closed on:   6 May 2024, 17:07:33
 -------------------------------------------------------------------------------

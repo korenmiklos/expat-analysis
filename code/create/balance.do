@@ -61,7 +61,7 @@ drop if inrange(industry_mode, 64, 66)
 * drop human services
 drop if inrange(industry_mode, 77, 99)
 * drop small firms
-drop if (avg_emp < 20)
+drop if (avg_emp < 10)
 
 * proxy firm founding date with first balance sheet filed
 tempvar foundyear

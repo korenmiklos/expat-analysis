@@ -42,7 +42,7 @@ Notes:
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
 > og
   log type:  text
- opened on:   6 May 2024, 16:55:37
+ opened on:   6 May 2024, 17:07:33
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -56,7 +56,7 @@ Notes:
     Result                      Number of obs
     -----------------------------------------
     Not matched                             0
-    Matched                           325,881  
+    Matched                           615,652  
     -----------------------------------------
 
 . 
@@ -71,21 +71,21 @@ Notes:
 owner_spell |
      _total |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          1 |    283,277       86.93       86.93
-          2 |     27,729        8.51       95.44
-          3 |     10,285        3.16       98.59
-          4 |      2,944        0.90       99.49
-          5 |      1,088        0.33       99.83
-          6 |        379        0.12       99.95
-          7 |        128        0.04       99.98
-          8 |         26        0.01       99.99
-          9 |         25        0.01      100.00
+          1 |    545,829       88.66       88.66
+          2 |     45,464        7.38       96.04
+          3 |     16,499        2.68       98.72
+          4 |      4,926        0.80       99.52
+          5 |      1,817        0.30       99.82
+          6 |        786        0.13       99.95
+          7 |        226        0.04       99.98
+          8 |         55        0.01       99.99
+          9 |         50        0.01      100.00
 ------------+-----------------------------------
-      Total |    325,881      100.00
+      Total |    615,652      100.00
 
 . 
 . drop if owner_spell_total > 3 
-(4,590 observations deleted)
+(7,860 observations deleted)
 
 . 
 . * divestment
@@ -105,16 +105,16 @@ owner_spell |
 start_as_do |
      mestic |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |     54,696       17.02       17.02
-          1 |    266,595       82.98      100.00
+          0 |     85,046       13.99       13.99
+          1 |    522,746       86.01      100.00
 ------------+-----------------------------------
-      Total |    321,291      100.00
+      Total |    607,792      100.00
 
 . keep if start_as_domestic
-(54,696 observations deleted)
+(85,046 observations deleted)
 
 . keep if owner_spell <= 2
-(2,509 observations deleted)
+(4,018 observations deleted)
 
 . drop if divest == 1
 (0 observations deleted)
@@ -128,20 +128,20 @@ start_as_do |
 
 . 
 . count if ever_foreign
-  20,657
+  29,175
 
 . count if ever_foreign & firm_tag
-  1,375
+  2,087
 
 . count if ever_expat & firm_tag
-  575
+  790
 
 . 
 . count if has_expat_ceo == 1
-  4,368
+  5,564
 
 . count if has_expat_ceo == 1 & foreign == 0 
-  8
+  15
 
 . count if ever_expat == 1 & ever_foreign == 0
   0
@@ -160,32 +160,32 @@ frame_id_numeric                                                    (unlabeled)
                   Type: Numeric (long)
 
                  Range: [10000049,74849574]           Units: 1
-         Unique values: 20,048                    Missing .: 0/264,086
+         Unique values: 41,486                    Missing .: 0/518,728
 
-                  Mean: 1.3e+07
-             Std. dev.: 6.1e+06
+                  Mean: 1.4e+07
+             Std. dev.: 7.0e+06
 
            Percentiles:     10%       25%       50%       75%       90%
-                        1.0e+07   1.0e+07   1.1e+07   1.2e+07   1.9e+07
+                        1.0e+07   1.1e+07   1.1e+07   1.3e+07   2.3e+07
 
 . count if firm_tag
-  20,048
+  41,486
 
 . count
-  264,086
+  518,728
 
 . 
 . count if ever_foreign
-  20,657
+  29,175
 
 . count if ever_foreign & firm_tag
-  1,375
+  2,087
 
 . count if ever_expat & firm_tag
-  575
+  790
 
 . count if has_expat_ceo
-  4,368
+  5,564
 
 . 
 . drop ever_expat ever_foreign
@@ -208,14 +208,14 @@ frame_id_numeric                                                    (unlabeled)
 . 
 . * drop after first expat leaves
 . drop if ceo_foreign_spell > 2
-(1,584 observations deleted)
+(1,961 observations deleted)
 
 . drop if ceo_foreign_spell == 2 & has_expat_ceo == 0
 (0 observations deleted)
 
 . 
 . keep if ever_foreign == 1
-(243,429 observations deleted)
+(489,553 observations deleted)
 
 . 
 . generate foreign_only = foreign & !foreign_hire
@@ -227,7 +227,7 @@ frame_id_numeric                                                    (unlabeled)
 . 
 . * drop if local hires are much later replaced by expats
 . drop if ever_local_ceo & has_expat_ceo
-(824 observations deleted)
+(1,021 observations deleted)
 
 . * sometimes we refer to the short name
 . clonevar ever_local = ever_local_ceo
@@ -238,24 +238,24 @@ frame_id_numeric                                                    (unlabeled)
 foreign_on |     foreign_hire
         ly |         0          1 |     Total
 -----------+----------------------+----------
-         0 |     9,700      7,871 |    17,571 
-         1 |       678          0 |       678 
+         0 |    14,274     10,819 |    25,093 
+         1 |     1,100          0 |     1,100 
 -----------+----------------------+----------
-     Total |    10,378      7,871 |    18,249 
+     Total |    15,374     10,819 |    26,193 
 
 . tabulate local_ceo has_expat_ceo
 
            |     has_expat_ceo
  local_ceo |         0          1 |     Total
 -----------+----------------------+----------
-         0 |    10,365      3,114 |    13,479 
-         1 |     4,770          0 |     4,770 
+         0 |    15,343      4,024 |    19,367 
+         1 |     6,826          0 |     6,826 
 -----------+----------------------+----------
-     Total |    15,135      3,114 |    18,249 
+     Total |    22,169      4,024 |    26,193 
 
 . 
 . keep if ever_foreign_hire
-(2,219 observations deleted)
+(3,683 observations deleted)
 
 . * no variation in these, drop
 . drop ever_foreign ever_foreign_hire
@@ -263,8 +263,10 @@ foreign_on |     foreign_hire
 . 
 . egen first_year_foreign = min(cond(foreign==1, year, .)), by(frame_id_numeric
 > ) 
+(2 missing values generated)
 
 . generate time_foreign = year - first_year_foreign
+(2 missing values generated)
 
 . 
 . egen ever_expat = max(has_expat_ceo), by(frame_id_numeric)
@@ -272,7 +274,7 @@ foreign_on |     foreign_hire
 . 
 . * limit sample to event window
 . keep if inrange(time_foreign, -6, 4)
-(6,871 observations deleted)
+(9,126 observations deleted)
 
 . 
 . egen exporter_pre = max(exporter & inrange(time_foreign, -3, -1)), by(frame_i
@@ -282,7 +284,7 @@ foreign_on |     foreign_hire
 . clonevar export_entry = exporter
 
 . replace export_entry = . if exporter_pre == 1
-(5,544 real changes made, 5,544 to missing)
+(7,375 real changes made, 7,375 to missing)
 
 . 
 . *Create teaor in year -1, drop agriculture
@@ -293,10 +295,10 @@ foreign_on |     foreign_hire
 
 . egen `last_year_before' = max(cond(time_foreign < 0, year,.)), by(frame_id_nu
 > meric)
-(14 missing values generated)
+(26 missing values generated)
 
 . drop if missing(`last_year_before')
-(14 observations deleted)
+(26 observations deleted)
 
 . 
 . egen teaor08_2d_pre = max(cond(year==`last_year_before', teaor08_2d, .)), by(
@@ -320,7 +322,7 @@ foreign_on |     foreign_hire
 
 . 
 . generate TFP = .
-(9,145 missing values generated)
+(13,358 missing values generated)
 
 . tempvar TFP
 
@@ -333,12 +335,12 @@ foreign_on |     foreign_hire
   6.     replace TFP = `TFP' if inrange(industry_mode, `from', `to')
   7.     drop `TFP'
   8. }
-(8,611 missing values generated)
-(534 real changes made)
-(4,966 missing values generated)
-(4,179 real changes made)
-(4,713 missing values generated)
-(4,432 real changes made)
+(12,582 missing values generated)
+(776 real changes made)
+(8,216 missing values generated)
+(5,142 real changes made)
+(5,918 missing values generated)
+(7,440 real changes made)
 
 . 
 . tabulate foreignness has_expat_ceo
@@ -346,14 +348,14 @@ foreign_on |     foreign_hire
                       |     has_expat_ceo
     (max) foreignness |         0          1 |     Total
 ----------------------+----------------------+----------
-Hungarian name and ad |     7,586          0 |     7,586 
-Hungarian name, neigh |         0         23 |        23 
-Foreign name, Hungari |         0        135 |       135 
-Hungarian name, other |         0          4 |         4 
-Foreign name, non-Wes |         0        200 |       200 
-Foreign name, Western |         0      1,197 |     1,197 
+Hungarian name and ad |    11,247          0 |    11,247 
+Hungarian name, neigh |         0         54 |        54 
+Foreign name, Hungari |         0        257 |       257 
+Hungarian name, other |         0          6 |         6 
+Foreign name, non-Wes |         0        289 |       289 
+Foreign name, Western |         0      1,505 |     1,505 
 ----------------------+----------------------+----------
-                Total |     7,586      1,559 |     9,145 
+                Total |    11,247      2,111 |    13,358 
 
 . tabulate time_foreign foreignness if inrange(time_foreign, -2, 2) & ever_expa
 > t 
@@ -361,13 +363,13 @@ Foreign name, Western |         0      1,197 |     1,197
 time_forei |                   (max) foreignness
         gn | Hungarian  Hungarian  Foreign n  Hungarian  Foreign n |     Total
 -----------+-------------------------------------------------------+----------
-        -2 |       238          0          0          0          0 |       238 
-        -1 |       390          0          0          0          0 |       395 
-         0 |         0         11         36          1         60 |       416 
-         1 |         0          7         32          1         41 |       346 
-         2 |         0          3         26          1         40 |       301 
+        -2 |       345          0          1          0          0 |       346 
+        -1 |       561          0          2          0          0 |       570 
+         0 |         0         21         75          2         95 |       595 
+         1 |         0         15         60          1         61 |       473 
+         2 |         0         10         47          1         54 |       399 
 -----------+-------------------------------------------------------+----------
-     Total |       628         21         94          3        141 |     1,696 
+     Total |       906         46        185          4        210 |     2,383 
 
 
            |   (max)
@@ -375,13 +377,13 @@ time_forei |                   (max) foreignness
 time_forei |     s
         gn | Foreign n |     Total
 -----------+-----------+----------
-        -2 |         0 |       238 
-        -1 |         5 |       395 
-         0 |       308 |       416 
-         1 |       265 |       346 
-         2 |       231 |       301 
+        -2 |         0 |       346 
+        -1 |         7 |       570 
+         0 |       402 |       595 
+         1 |       336 |       473 
+         2 |       287 |       399 
 -----------+-----------+----------
-     Total |       809 |     1,696 
+     Total |     1,032 |     2,383 
 
 . 
 . * keep only western foreigners and locals with Hungarian names
@@ -394,13 +396,13 @@ time_forei |     s
            |         ever5
    always0 |         0          1 |     Total
 -----------+----------------------+----------
-         0 |       617      2,283 |     2,900 
-         1 |     6,245          0 |     6,245 
+         0 |     1,101      2,881 |     3,982 
+         1 |     9,376          0 |     9,376 
 -----------+----------------------+----------
-     Total |     6,862      2,283 |     9,145 
+     Total |    10,477      2,881 |    13,358 
 
 . keep if always0 | ever5 
-(617 observations deleted)
+(1,101 observations deleted)
 
 . drop always0 ever5
 
@@ -410,19 +412,19 @@ time_forei |     s
 time_forei |     has_expat_ceo
         gn |         0          1 |     Total
 -----------+----------------------+----------
-        -6 |       516          0 |       516 
-        -5 |       588          0 |       588 
-        -4 |       692          0 |       692 
-        -3 |       792          0 |       792 
-        -2 |       832          0 |       832 
-        -1 |     1,046          5 |     1,051 
-         0 |       772        323 |     1,095 
-         1 |       676        278 |       954 
-         2 |       546        245 |       791 
-         3 |       440        223 |       663 
-         4 |       363        191 |       554 
+        -6 |       739          0 |       739 
+        -5 |       853          0 |       853 
+        -4 |     1,002          0 |     1,002 
+        -3 |     1,159          0 |     1,159 
+        -2 |     1,227          0 |     1,227 
+        -1 |     1,508          7 |     1,515 
+         0 |     1,171        420 |     1,591 
+         1 |     1,014        351 |     1,365 
+         2 |       820        304 |     1,124 
+         3 |       647        271 |       918 
+         4 |       531        233 |       764 
 -----------+----------------------+----------
-     Total |     7,263      1,265 |     8,528 
+     Total |    10,671      1,586 |    12,257 
 
 . 
 . compress
@@ -455,7 +457,7 @@ time_forei |     has_expat_ceo
   variable immat was double now long
   variable final_netgep was double now long
   variable tanass_18 was double now long
-  (776,048 bytes saved)
+  (1,115,387 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
 file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
@@ -465,7 +467,7 @@ file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
 > og
   log type:  text
- closed on:   6 May 2024, 16:55:54
+ closed on:   6 May 2024, 17:07:59
 -------------------------------------------------------------------------------
 
 . 
