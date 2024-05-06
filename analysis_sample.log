@@ -42,7 +42,7 @@ Notes:
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
 > og
   log type:  text
- opened on:   6 May 2024, 18:41:45
+ opened on:   6 May 2024, 18:59:19
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -71,13 +71,13 @@ Notes:
 owner_spell |
      _total |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          1 |    545,679       88.60       88.60
-          2 |     45,838        7.44       96.04
-          3 |     16,509        2.68       98.72
-          4 |      4,926        0.80       99.52
-          5 |      1,817        0.30       99.82
-          6 |        786        0.13       99.95
-          7 |        226        0.04       99.98
+          1 |    543,332       88.22       88.22
+          2 |     45,651        7.41       95.63
+          3 |     18,509        3.01       98.64
+          4 |      5,117        0.83       99.47
+          5 |      2,131        0.35       99.81
+          6 |        786        0.13       99.94
+          7 |        255        0.04       99.98
           8 |         55        0.01       99.99
           9 |         50        0.01      100.00
 ------------+-----------------------------------
@@ -85,7 +85,7 @@ owner_spell |
 
 . 
 . drop if owner_spell_total > 3 
-(7,860 observations deleted)
+(8,394 observations deleted)
 
 . 
 . * divestment
@@ -105,16 +105,16 @@ owner_spell |
 start_as_do |
      mestic |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |     84,858       13.96       13.96
-          1 |    523,168       86.04      100.00
+          0 |     79,652       13.11       13.11
+          1 |    527,840       86.89      100.00
 ------------+-----------------------------------
-      Total |    608,026      100.00
+      Total |    607,492      100.00
 
 . keep if start_as_domestic
-(84,858 observations deleted)
+(79,652 observations deleted)
 
 . keep if owner_spell <= 2
-(4,031 observations deleted)
+(5,426 observations deleted)
 
 . drop if divest == 1
 (0 observations deleted)
@@ -128,17 +128,17 @@ start_as_do |
 
 . 
 . count if ever_foreign
-  29,584
+  32,950
 
 . count if ever_foreign & firm_tag
-  2,114
+  2,481
 
 . count if ever_expat & firm_tag
-  813
+  883
 
 . 
 . count if has_expat_ceo == 1
-  5,756
+  6,348
 
 . count if has_expat_ceo == 1 & foreign == 0 
   16
@@ -160,32 +160,32 @@ frame_id_numeric                                                    (unlabeled)
                   Type: Numeric (long)
 
                  Range: [10000049,74849574]           Units: 1
-         Unique values: 41,513                    Missing .: 0/519,137
+         Unique values: 41,872                    Missing .: 0/522,414
 
                   Mean: 1.4e+07
-             Std. dev.: 7.0e+06
+             Std. dev.: 6.9e+06
 
            Percentiles:     10%       25%       50%       75%       90%
                         1.0e+07   1.1e+07   1.1e+07   1.3e+07   2.3e+07
 
 . count if firm_tag
-  41,513
+  41,872
 
 . count
-  519,137
+  522,414
 
 . 
 . count if ever_foreign
-  29,584
+  32,950
 
 . count if ever_foreign & firm_tag
-  2,114
+  2,481
 
 . count if ever_expat & firm_tag
-  813
+  883
 
 . count if has_expat_ceo
-  5,756
+  6,348
 
 . 
 . drop ever_expat ever_foreign
@@ -208,14 +208,14 @@ frame_id_numeric                                                    (unlabeled)
 . 
 . * drop after first expat leaves
 . drop if ceo_foreign_spell > 2
-(2,078 observations deleted)
+(2,256 observations deleted)
 
 . drop if ceo_foreign_spell == 2 & has_expat_ceo == 0
 (0 observations deleted)
 
 . 
 . keep if ever_foreign == 1
-(489,553 observations deleted)
+(489,464 observations deleted)
 
 . 
 . generate foreign_only = foreign & !foreign_hire
@@ -227,7 +227,7 @@ frame_id_numeric                                                    (unlabeled)
 . 
 . * drop if local hires are much later replaced by expats
 . drop if ever_local_ceo & has_expat_ceo
-(1,021 observations deleted)
+(1,564 observations deleted)
 
 . * sometimes we refer to the short name
 . clonevar ever_local = ever_local_ceo
@@ -238,24 +238,24 @@ frame_id_numeric                                                    (unlabeled)
 foreign_on |     foreign_hire
         ly |         0          1 |     Total
 -----------+----------------------+----------
-         0 |    14,361     11,024 |    25,385 
-         1 |     1,100          0 |     1,100 
+         0 |    15,201     12,469 |    27,670 
+         1 |     1,460          0 |     1,460 
 -----------+----------------------+----------
-     Total |    15,461     11,024 |    26,485 
+     Total |    16,661     12,469 |    29,130 
 
 . tabulate local_ceo has_expat_ceo
 
            |     has_expat_ceo
  local_ceo |         0          1 |     Total
 -----------+----------------------+----------
-         0 |    15,429      4,199 |    19,628 
-         1 |     6,857          0 |     6,857 
+         0 |    16,629      4,199 |    20,828 
+         1 |     8,302          0 |     8,302 
 -----------+----------------------+----------
-     Total |    22,286      4,199 |    26,485 
+     Total |    24,931      4,199 |    29,130 
 
 . 
 . keep if ever_foreign_hire
-(3,683 observations deleted)
+(4,941 observations deleted)
 
 . * no variation in these, drop
 . drop ever_foreign ever_foreign_hire
@@ -274,7 +274,7 @@ foreign_on |     foreign_hire
 . 
 . * limit sample to event window
 . keep if inrange(time_foreign, -6, 4)
-(9,250 observations deleted)
+(9,679 observations deleted)
 
 . 
 . egen exporter_pre = max(exporter & inrange(time_foreign, -3, -1)), by(frame_i
@@ -284,7 +284,7 @@ foreign_on |     foreign_hire
 . clonevar export_entry = exporter
 
 . replace export_entry = . if exporter_pre == 1
-(7,502 real changes made, 7,502 to missing)
+(7,780 real changes made, 7,780 to missing)
 
 . 
 . *Create teaor in year -1, drop agriculture
@@ -295,10 +295,10 @@ foreign_on |     foreign_hire
 
 . egen `last_year_before' = max(cond(time_foreign < 0, year,.)), by(frame_id_nu
 > meric)
-(26 missing values generated)
+(19 missing values generated)
 
 . drop if missing(`last_year_before')
-(26 observations deleted)
+(19 observations deleted)
 
 . 
 . egen teaor08_2d_pre = max(cond(year==`last_year_before', teaor08_2d, .)), by(
@@ -322,7 +322,7 @@ foreign_on |     foreign_hire
 
 . 
 . generate TFP = .
-(13,526 missing values generated)
+(14,491 missing values generated)
 
 . tempvar TFP
 
@@ -335,12 +335,12 @@ foreign_on |     foreign_hire
   6.     replace TFP = `TFP' if inrange(industry_mode, `from', `to')
   7.     drop `TFP'
   8. }
-(12,750 missing values generated)
-(776 real changes made)
-(8,287 missing values generated)
-(5,239 real changes made)
-(6,015 missing values generated)
-(7,511 real changes made)
+(13,756 missing values generated)
+(735 real changes made)
+(8,808 missing values generated)
+(5,683 real changes made)
+(6,418 missing values generated)
+(8,073 real changes made)
 
 . 
 . tabulate foreignness has_expat_ceo
@@ -348,14 +348,14 @@ foreign_on |     foreign_hire
                       |     has_expat_ceo
     (max) foreignness |         0          1 |     Total
 ----------------------+----------------------+----------
-Hungarian name and ad |    11,332          0 |    11,332 
+Hungarian name and ad |    12,297          0 |    12,297 
 Hungarian name, neigh |         0         54 |        54 
 Foreign name, Hungari |         0        140 |       140 
 Hungarian name, other |         0          6 |         6 
 Foreign name, non-Wes |         0        289 |       289 
 Foreign name, Western |         0      1,705 |     1,705 
 ----------------------+----------------------+----------
-                Total |    11,332      2,194 |    13,526 
+                Total |    12,297      2,194 |    14,491 
 
 . tabulate time_foreign foreignness if inrange(time_foreign, -2, 2) & ever_expa
 > t 
@@ -397,9 +397,9 @@ time_forei |     s
    always0 |         0          1 |     Total
 -----------+----------------------+----------
          0 |       906      3,208 |     4,114 
-         1 |     9,412          0 |     9,412 
+         1 |    10,377          0 |    10,377 
 -----------+----------------------+----------
-     Total |    10,318      3,208 |    13,526 
+     Total |    11,283      3,208 |    14,491 
 
 . keep if always0 | ever5 
 (906 observations deleted)
@@ -412,19 +412,19 @@ time_forei |     s
 time_forei |     has_expat_ceo
         gn |         0          1 |     Total
 -----------+----------------------+----------
-        -6 |       754          0 |       754 
-        -5 |       870          0 |       870 
-        -4 |     1,023          0 |     1,023 
-        -3 |     1,185          0 |     1,185 
-        -2 |     1,262          0 |     1,262 
-        -1 |     1,561          9 |     1,570 
-         0 |     1,175        472 |     1,647 
-         1 |     1,018        393 |     1,411 
-         2 |       823        337 |     1,160 
-         3 |       650        297 |       947 
-         4 |       533        258 |       791 
+        -6 |       719          0 |       719 
+        -5 |       824          0 |       824 
+        -4 |       966          0 |       966 
+        -3 |     1,141          0 |     1,141 
+        -2 |     1,360          0 |     1,360 
+        -1 |     1,828          9 |     1,837 
+         0 |     1,436        472 |     1,908 
+         1 |     1,223        393 |     1,616 
+         2 |       945        337 |     1,282 
+         3 |       758        297 |     1,055 
+         4 |       619        258 |       877 
 -----------+----------------------+----------
-     Total |    10,854      1,766 |    12,620 
+     Total |    11,819      1,766 |    13,585 
 
 . 
 . compress
@@ -457,7 +457,7 @@ time_forei |     has_expat_ceo
   variable immat was double now long
   variable final_netgep was double now long
   variable tanass_18 was double now long
-  (1,148,420 bytes saved)
+  (1,236,235 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
 file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
@@ -467,7 +467,7 @@ file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
 > og
   log type:  text
- closed on:   6 May 2024, 18:42:10
+ closed on:   6 May 2024, 18:59:44
 -------------------------------------------------------------------------------
 
 . 

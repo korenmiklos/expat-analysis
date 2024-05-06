@@ -105,12 +105,10 @@ tabulate manager_after_owner
 forvalues t = -`anticipation'/-1 {
 	local k = abs(`t') - 1
 	replace foreign = 1 if (expat_after_owner == `t') 	& inrange(year - first_year_expat, 0, `k') 	& `ever_expat' 
-	replace foreign = 1 if (manager_after_owner == `t') & inrange(year - first_year_hire, 0, `k')	& !`ever_expat'
 }
 forvalues t = 1/`lag' {
 	local minust = -`t'
 	replace foreign = 0 if (expat_after_owner == `t') 	& inrange(year - first_year_expat, `minust', -1)	& `ever_expat'
-	replace foreign = 0 if (manager_after_owner == `t') & inrange(year - first_year_hire, `minust', -1)		& !`ever_expat'
 }
 * drop firms where expat arrives earlier than X years before owner
 drop if first_year_expat - first_year_foreign < -`anticipation'

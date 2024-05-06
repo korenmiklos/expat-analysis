@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- opened on:   6 May 2024, 18:40:55
+ opened on:   6 May 2024, 18:58:32
 
 . 
 . * keep only sample from balance-small
@@ -17,9 +17,9 @@
 . tempfile sample
 
 . save `sample', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St54062.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St94128.000001 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St54062.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St94128.000001 saved
     as .dta format
 
 . 
@@ -335,23 +335,16 @@ manager_aft |
   2.         local k = abs(`t') - 1
   3.         replace foreign = 1 if (expat_after_owner == `t')       & inrange(
 > year - first_year_expat, 0, `k')      & `ever_expat' 
-  4.         replace foreign = 1 if (manager_after_owner == `t') & inrange(year
->  - first_year_hire, 0, `k')   & !`ever_expat'
-  5. }
+  4. }
 (371 real changes made)
-(902 real changes made)
 (371 real changes made)
-(593 real changes made)
 
 . forvalues t = 1/`lag' {
   2.         local minust = -`t'
   3.         replace foreign = 0 if (expat_after_owner == `t')       & inrange(
 > year - first_year_expat, `minust', -1)        & `ever_expat'
-  4.         replace foreign = 0 if (manager_after_owner == `t') & inrange(year
->  - first_year_hire, `minust', -1)             & !`ever_expat'
-  5. }
+  4. }
 (534 real changes made)
-(211 real changes made)
 
 . * drop firms where expat arrives earlier than X years before owner
 . drop if first_year_expat - first_year_foreign < -`anticipation'
@@ -415,5 +408,5 @@ file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- closed on:   6 May 2024, 18:41:45
+ closed on:   6 May 2024, 18:59:19
 -------------------------------------------------------------------------------
