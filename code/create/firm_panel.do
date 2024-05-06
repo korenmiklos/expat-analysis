@@ -83,7 +83,7 @@ tabulate hire fire
 generate byte expat = foreignness > 0
 
 * manager change may anticipate foreign change by max this many years
-local anticipation 2
+local anticipation 1
 local lag 1
 tempvar time_foreign first_year_foreign ever_expat
 ***********************
