@@ -1,0 +1,146 @@
+
+  ___  ____  ____  ____  ____ ®
+ /__    /   ____/   /   ____/      18.0
+___/   /   /___/   /   /___/       MP—Parallel Edition
+
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
+                                   StataCorp
+                                   4905 Lakeway Drive
+                                   College Station, Texas 77845 USA
+                                   800-STATA-PC        https://www.stata.com
+                                   979-696-4600        stata@stata.com
+
+Stata license: Single-user 2-core  perpetual
+Serial number: 501806323834
+  Licensed to: Miklos Koren
+               CEU MicroData
+
+Notes:
+      1. Stata is running in batch mode.
+      2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
+
+. do code/estimate/tfp.do 
+
+. here
+/Users/koren/Tresorit/Mac/projects/expat/
+
+. global here = r(here)
+
+. use "$here/temp/analysis_sample.dta", clear
+
+. 
+. which xthdidregress
+/Applications/Stata/ado/base/x/xthdidregress.ado
+*! version 1.0.4  24may2023
+
+. which eventbaseline
+/Users/koren/Library/Application Support/Stata/ado/plus/e/eventbaseline.ado
+*! version 0.7.2 23jan2024
+
+. which xt2treatments
+/Users/koren/Library/Application Support/Stata/ado/plus/x/xt2treatments.ado
+*! version 0.6.0 28mar2024
+
+. which estout
+/Users/koren/Library/Application Support/Stata/ado/plus/e/estout.ado
+*! version 3.31  26apr2022  Ben Jann
+
+. 
+. *Samples
+. global local_sample "(ever_local==1 | foreign==0)"
+
+. global expat_sample "(ever_expat==1 | foreign==0)"
+
+. 
+. tabulate foreignness ever_expat
+
+                      |      ever_expat
+    (max) foreignness |         0          1 |     Total
+----------------------+----------------------+----------
+Hungarian name and ad |     5,190      1,336 |     6,526 
+Hungarian name, neigh |         0         23 |        23 
+Foreign name, Hungari |         0        135 |       135 
+Hungarian name, other |         0          4 |         4 
+Foreign name, non-Wes |         0        200 |       200 
+Foreign name, Western |         0      1,191 |     1,191 
+----------------------+----------------------+----------
+                Total |     5,190      2,889 |     8,079 
+
+. tabulate foreignness ever_expat if time_foreign == 0
+
+                      |      ever_expat
+    (max) foreignness |         0          1 |     Total
+----------------------+----------------------+----------
+Hungarian name and ad |       670          0 |       670 
+Hungarian name, neigh |         0         11 |        11 
+Foreign name, Hungari |         0         36 |        36 
+Hungarian name, other |         0          1 |         1 
+Foreign name, non-Wes |         0         60 |        60 
+Foreign name, Western |         0        307 |       307 
+----------------------+----------------------+----------
+                Total |       670        415 |     1,085 
+
+. 
+. foreach bs in atet -1 {
+  2.     quietly xthdidregress ra (TFP) (local_ceo) if $local_sample, group(fra
+> me_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+  3.     eventbaseline, pre(4) post(4) baseline(`bs')
+  4. 
+.     quietly xthdidregress ra (TFP) (has_expat_ceo) if $expat_sample, group(fr
+> ame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
+  5.     eventbaseline, pre(4) post(4) baseline(`bs')
+  6. }
+
+Event study relative to atet             Number of obs = 5,903
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .0689475   .0304967     2.26   0.024     .0091751      .12872
+------------------------------------------------------------------------------
+
+Event study relative to atet             Number of obs = 5,226
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .1155909   .0419649     2.75   0.006     .0333412    .1978406
+------------------------------------------------------------------------------
+
+Event study relative to -1               Number of obs = 5,903
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0462341    .031667    -1.46   0.144    -.1083003    .0158321
+          -3 |  -.0463939   .0293795    -1.58   0.114    -.1039766    .0111887
+          -2 |  -.0390142   .0249787    -1.56   0.118    -.0879714    .0099431
+          -1 |          0  (omitted)
+           0 |   .0341777    .021115     1.62   0.106     -.007207    .0755624
+           1 |   .0056245   .0251972     0.22   0.823    -.0437612    .0550101
+           2 |   .0647062   .0286566     2.26   0.024     .0085404    .1208721
+           3 |   .0293753   .0342961     0.86   0.392    -.0378437    .0965944
+           4 |   .0463012   .0524288     0.88   0.377    -.0564574    .1490597
+------------------------------------------------------------------------------
+
+Event study relative to -1               Number of obs = 5,226
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .0866229   .0399953     2.17   0.030     .0082336    .1650122
+          -3 |   .0424674   .0304634     1.39   0.163    -.0172398    .1021745
+          -2 |   .0537222   .0229146     2.34   0.019     .0088105    .0986339
+          -1 |          0  (omitted)
+           0 |   .0954103   .0295333     3.23   0.001     .0375261    .1532945
+           1 |    .155283   .0409018     3.80   0.000     .0751168    .2354491
+           2 |   .1999646   .0408867     4.89   0.000     .1198282    .2801011
+           3 |   .1923471   .0458141     4.20   0.000     .1025532     .282141
+           4 |   .1634651   .0566672     2.88   0.004     .0523994    .2745308
+------------------------------------------------------------------------------
+
+. 
+end of do-file

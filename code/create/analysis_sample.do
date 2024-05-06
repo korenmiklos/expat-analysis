@@ -132,6 +132,13 @@ foreach sector in agriculture industry services {
 tabulate foreignness has_expat_ceo
 tabulate time_foreign foreignness if inrange(time_foreign, -2, 2) & ever_expat 
 
+* keep only western foreigners and locals with Hungarian names
+egen always0 = min(foreignness == 0), by(frame_id_numeric )
+egen ever5 = max(foreignness == 5), by(frame_id_numeric )
+tab always0 ever5 
+keep if always0 | ever5 
+drop always0 ever5
+
 compress
 save "`here'/temp/analysis_sample.dta", replace
 log close
