@@ -44,7 +44,7 @@ Notes:
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- opened on:   6 May 2024, 16:23:00
+ opened on:   6 May 2024, 16:48:34
 
 . 
 . * keep only sample from balance-small
@@ -59,9 +59,9 @@ Notes:
 . tempfile sample
 
 . save `sample', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St40167.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St98516.000001 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St40167.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St98516.000001 saved
     as .dta format
 
 . 
@@ -270,7 +270,9 @@ Panel variable: company_manager_id (unbalanced)
 . * manager change may anticipate foreign change by max this many years
 . local anticipation 2
 
-. tempvar time_foreign first_year_foreign
+. local lag 1
+
+. tempvar time_foreign first_year_foreign ever_expat
 
 . ***********************
 . * time invariant vars and drop entire series of firms from sample *
@@ -281,6 +283,9 @@ Panel variable: company_manager_id (unbalanced)
 
 . generate `time_foreign' = year - `first_year_foreign'
 (365,104 missing values generated)
+
+. by frame_id_numeric: egen `ever_expat' = max((expat == 1) & inrange(`time_for
+> eign', -`anticipation', `lag'))
 
 . by frame_id_numeric: egen first_year_hire = min(cond((hire == 1) & (`time_for
 > eign' >= -`anticipation'), job_begin,.))
@@ -364,29 +369,31 @@ manager_aft |
 ------------+-----------------------------------
       Total |    147,869      100.00
 
-. * event time relative to that
-. generate event_time = year - first_year_hire
-(23,399 missing values generated)
-
 . 
 . * if foreign manager arrives up to X years before or Y years later than forei
 > gn owner, use foreign manager as arrival date. 
 . forvalues t = -`anticipation'/-1 {
   2.         local k = abs(`t') - 1
-  3.         replace foreign = 1 if (manager_after_owner == `t') & inrange(even
-> t_time, 0, `k')
-  4.         display "replace foreign = 1 if (manager_after_owner == `t') & inr
-> ange(event_time, 0, `k')""
+  3.         replace foreign = 1 if (expat_after_owner == `t')       & inrange(
+> year - first_year_expat, 0, `k')      & `ever_expat' 
+  4.         replace foreign = 1 if (manager_after_owner == `t') & inrange(year
+>  - first_year_hire, 0, `k')   & !`ever_expat'
   5. }
-(1,051 real changes made)
-replace foreign = 1 if (manager_after_owner == -2) & inrange(event_time, 0, 1)
-(730 real changes made)
-replace foreign = 1 if (manager_after_owner == -1) & inrange(event_time, 0, 0)
+(231 real changes made)
+(605 real changes made)
+(266 real changes made)
+(372 real changes made)
 
-. replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
-(502 real changes made)
+. forvalues t = 1/`lag' {
+  2.         local minust = -`t'
+  3.         replace foreign = 0 if (expat_after_owner == `t')       & inrange(
+> year - first_year_expat, `minust', -1)        & `ever_expat'
+  4.         replace foreign = 0 if (manager_after_owner == `t') & inrange(year
+>  - first_year_hire, `minust', -1)             & !`ever_expat'
+  5. }
+(367 real changes made)
+(144 real changes made)
 
-. 
 . * drop firms where expat arrives earlier than X years before owner
 . drop if first_year_expat - first_year_foreign < -`anticipation'
 (5,786 observations deleted)
@@ -401,7 +408,7 @@ replace foreign = 1 if (manager_after_owner == -1) & inrange(event_time, 0, 0)
 . 
 . * drop if there was an expat but was never foreign - these are likely error
 . drop if ever_expat == 1 & ever_foreign == 0
-(14,492 observations deleted)
+(14,430 observations deleted)
 
 . 
 . * drop too many CEO-s
@@ -431,7 +438,7 @@ replace foreign = 1 if (manager_after_owner == -1) & inrange(event_time, 0, 0)
 
 . 
 . count
-  327,373
+  327,405
 
 . compress
   variable year was float now int
@@ -440,7 +447,7 @@ replace foreign = 1 if (manager_after_owner == -1) & inrange(event_time, 0, 0)
   variable n_ceo was long now byte
   variable has_expat_ceo was float now byte
   variable ceo_spell was float now byte
-  (5,565,341 bytes saved)
+  (5,565,885 bytes saved)
 
 . save "`here'/temp/firm_events.dta", replace
 file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
@@ -449,7 +456,7 @@ file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- closed on:   6 May 2024, 16:23:28
+ closed on:   6 May 2024, 16:49:02
 -------------------------------------------------------------------------------
 
 . 

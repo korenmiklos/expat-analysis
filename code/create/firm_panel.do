@@ -84,12 +84,14 @@ generate byte expat = foreignness > 0
 
 * manager change may anticipate foreign change by max this many years
 local anticipation 2
-tempvar time_foreign first_year_foreign
+local lag 1
+tempvar time_foreign first_year_foreign ever_expat
 ***********************
 * time invariant vars and drop entire series of firms from sample *
 ***********************
 by frame_id_numeric: egen `first_year_foreign' = min(cond(foreign == 1, year,.))
 generate `time_foreign' = year - `first_year_foreign'
+by frame_id_numeric: egen `ever_expat' = max((expat == 1) & inrange(`time_foreign', -`anticipation', `lag'))
 by frame_id_numeric: egen first_year_hire = min(cond((hire == 1) & (`time_foreign' >= -`anticipation'), job_begin,.))
 by frame_id_numeric: egen first_year_expat = min(cond(expat == 1, job_begin,.))
 by frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.))
@@ -98,17 +100,18 @@ by frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.))
 generate expat_after_owner = first_year_expat - first_year_foreign
 generate manager_after_owner = first_year_hire - first_year_foreign
 tabulate manager_after_owner
-* event time relative to that
-generate event_time = year - first_year_hire
 
 * if foreign manager arrives up to X years before or Y years later than foreign owner, use foreign manager as arrival date. 
 forvalues t = -`anticipation'/-1 {
 	local k = abs(`t') - 1
-	replace foreign = 1 if (manager_after_owner == `t') & inrange(event_time, 0, `k')
-	display "replace foreign = 1 if (manager_after_owner == `t') & inrange(event_time, 0, `k')""
+	replace foreign = 1 if (expat_after_owner == `t') 	& inrange(year - first_year_expat, 0, `k') 	& `ever_expat' 
+	replace foreign = 1 if (manager_after_owner == `t') & inrange(year - first_year_hire, 0, `k')	& !`ever_expat'
 }
-replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
-
+forvalues t = 1/`lag' {
+	local minust = -`t'
+	replace foreign = 0 if (expat_after_owner == `t') 	& inrange(year - first_year_expat, `minust', -1)	& `ever_expat'
+	replace foreign = 0 if (manager_after_owner == `t') & inrange(year - first_year_hire, `minust', -1)		& !`ever_expat'
+}
 * drop firms where expat arrives earlier than X years before owner
 drop if first_year_expat - first_year_foreign < -`anticipation'
 
