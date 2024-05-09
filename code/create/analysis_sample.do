@@ -118,14 +118,23 @@ local agriculture 1 3
 local industry 5 39
 local services 40 75
 
+keep if inrange(teaor08_2d_pre, 1, 75)
+* drop finance
+drop if inrange(teaor08_2d_pre, 64, 66)
+
+* tradable as defined by OECD https://doi.org/10.1787/888933707836
+generate byte tradable_sector = 0
+replace tradable_sector = 1 if inrange(teaor08_2d_pre, 1, 39)
+replace tradable_sector = 1 if inrange(teaor08_2d_pre, 58, 63)
+
 generate TFP = .
 tempvar TFP
 foreach sector in agriculture industry services {
     local from : word 1 of ``sector''
     local to : word 2 of ``sector''
-    quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if inrange(industry_mode, `from', `to')
+    quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if inrange(teaor08_2d_pre, `from', `to')
     predict `TFP' if e(sample), resid
-    replace TFP = `TFP' if inrange(industry_mode, `from', `to')
+    replace TFP = `TFP' if inrange(teaor08_2d_pre, `from', `to')
     drop `TFP'
 }
 

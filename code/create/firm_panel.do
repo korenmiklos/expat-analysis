@@ -11,6 +11,8 @@ log using "`here'/output/firm_panel", text replace
 
 * keep only sample from balance-small
 use "`here'/temp/balance-small-clean.dta"
+
+sort frame_id_numeric year
 by frame_id_numeric: egen firm_birth = min(year)
 by frame_id_numeric: egen firm_death = max(year)
 keep frame_id_numeric year firm_birth firm_death foreign

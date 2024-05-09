@@ -13,7 +13,7 @@ temp/analysis_sample.dta: temp/balance-small-clean.dta temp/firm_events.dta code
 	$(STATA) code/create/analysis_sample.do
 temp/firm_events.dta: temp/ceo-panel.dta temp/balance-small-clean.dta code/create/firm_panel.do
 	$(STATA) code/create/firm_panel.do
-temp/balance-small-clean.dta: input/merleg-expat/balance-small.dta code/create/balance.do
+temp/balance-small-clean.dta: input/merleg-LTS-MVP/balance.dta code/create/balance.do
 	$(STATA) code/create/balance.do
 temp/ceo-panel.dta: input/ceo-panel/ceo-panel.dta code/create/ceo_panel.do
 	$(STATA) code/create/ceo_panel.do
