@@ -17,9 +17,5 @@ tabulate foreignness ever_expat if time_foreign == 0
 local outcome TFP
 
 foreach bs in atet -1 {
-    quietly xthdidregress ra (`outcome') (local_ceo) if $local_sample, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
-    eventbaseline, pre(4) post(4) baseline(`bs')
-
-    quietly xthdidregress ra (`outcome') (has_expat_ceo) if $expat_sample, group(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
-    eventbaseline, pre(4) post(4) baseline(`bs')
+    xt2treatments `outcome', treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(`bs') weighting(optimal)
 }

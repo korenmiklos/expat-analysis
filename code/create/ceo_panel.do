@@ -21,7 +21,7 @@ replace ever_neighbor = 0 if !first_address_foreign
 generate originalid = frame_id_numeric
 * special case some manually checked firms
 * these are all Hungarian firms with Hungarian names and addresses
-replace foreign_name = 0 if inlist(originalid, 11941712, 10362675, 12282799, 12566947, 13448064, 10216770, 10441628, 11245652, 12862865, 12914539, 22781684, 23464997)
+replace foreign_name = 0 if inlist(originalid, 11941712, 10362675, 12282799, 12566947, 13448064, 10216770, 10441628, 11245652, 12862865, 12914539, 22781684, 23464997, 12903388, 13857486)
 
 * these 73 names are clearly of Western origin
 replace ever_western = 1 if originalid==10741973 & foreign_name==1
@@ -97,6 +97,11 @@ replace ever_western = 1 if originalid==13717108 & foreign_name==1
 replace ever_western = 1 if originalid==14904134 & foreign_name==1
 replace ever_western = 1 if originalid==20679570 & foreign_name==1
 replace ever_western = 1 if originalid==22658948 & foreign_name==1
+replace ever_western = 1 if originalid==12343090 & foreign_name==1
+replace ever_western = 1 if originalid==14182925 & foreign_name==1
+replace ever_western = 1 if originalid==11936718 & foreign_name==1
+replace ever_western = 1 if originalid==22926139 & foreign_name==1
+replace ever_western = 1 if originalid==23094965 & foreign_name==1
 
 drop originalid
 

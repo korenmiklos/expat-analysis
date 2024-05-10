@@ -149,6 +149,7 @@ keep if always0 | ever5
 drop always0 ever5
 
 tabulate time_foreign has_expat_ceo 
+xtset frame_id_numeric year
 
 compress
 save "`here'/temp/analysis_sample.dta", replace

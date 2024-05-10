@@ -42,7 +42,7 @@ Notes:
 
 . which xt2treatments
 /Users/koren/Library/Application Support/Stata/ado/plus/x/xt2treatments.ado
-*! version 0.6.0 28mar2024
+*! version 0.8.2 10may2024
 
 . which estout
 /Users/koren/Library/Application Support/Stata/ado/plus/e/estout.ado
@@ -60,85 +60,64 @@ Notes:
                       |      ever_expat
     (max) foreignness |         0          1 |     Total
 ----------------------+----------------------+----------
-Hungarian name and ad |    10,377      1,383 |    11,760 
-Foreign name, Hungari |         0         23 |        23 
-Hungarian name, other |         0          1 |         1 
-Foreign name, non-Wes |         0         35 |        35 
-Foreign name, Western |         0      1,639 |     1,639 
+Hungarian name and ad |    11,393      1,496 |    12,889 
+Foreign name, Hungari |         0         26 |        26 
+Hungarian name, other |         0          5 |         5 
+Foreign name, non-Wes |         0         36 |        36 
+Foreign name, Western |         0      1,770 |     1,770 
 ----------------------+----------------------+----------
-                Total |    10,377      3,081 |    13,458 
+                Total |    11,393      3,333 |    14,726 
 
 . tabulate foreignness ever_expat if time_foreign == 0
 
                       |      ever_expat
     (max) foreignness |         0          1 |     Total
 ----------------------+----------------------+----------
-Hungarian name and ad |     1,436          0 |     1,436 
-Foreign name, non-Wes |         0          8 |         8 
-Foreign name, Western |         0        447 |       447 
+Hungarian name and ad |     1,578          0 |     1,578 
+Foreign name, non-Wes |         0          9 |         9 
+Foreign name, Western |         0        483 |       483 
 ----------------------+----------------------+----------
-                Total |     1,436        455 |     1,891 
+                Total |     1,578        492 |     2,070 
 
 . 
 . local outcome TFP
 
 . 
 . foreach bs in atet -1 {
-  2.     quietly xthdidregress ra (`outcome') (local_ceo) if $local_sample, gro
-> up(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
-  3.     eventbaseline, pre(4) post(4) baseline(`bs')
-  4. 
-.     quietly xthdidregress ra (`outcome') (has_expat_ceo) if $expat_sample, gr
-> oup(frame_id_numeric) vce(cluster frame_id_numeric) controlgroup(notyet)
-  5.     eventbaseline, pre(4) post(4) baseline(`bs')
-  6. }
+  2.     xt2treatments `outcome', treatment(has_expat_ceo) control(local_ceo) p
+> re(4) post(4) baseline(`bs') weighting(optimal)
+  3. }
 
-Event study relative to atet            Number of obs = 10,540
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
 
-------------------------------------------------------------------------------
-         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |  -.0235555   .0312818    -0.75   0.451    -.0848668    .0377557
-------------------------------------------------------------------------------
-
-Event study relative to atet             Number of obs = 8,173
+Event study relative to atet            Number of obs = 14,310
 
 ------------------------------------------------------------------------------
          TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .1667411   .0502188     3.32   0.001      .068314    .2651681
+        ATET |   .1370721   .0460445     2.98   0.003     .0468265    .2273177
 ------------------------------------------------------------------------------
 
-Event study relative to -1              Number of obs = 10,540
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1              Number of obs = 14,310
 
 ------------------------------------------------------------------------------
          TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-          -4 |   .0081961   .0288304     0.28   0.776    -.0483104    .0647026
-          -3 |  -.0010993     .02295    -0.05   0.962    -.0460805     .043882
-          -2 |  -.0036834   .0190291    -0.19   0.847    -.0409796    .0336129
+          -4 |    .003791   .0441978     0.09   0.932    -.0828351     .090417
+          -3 |   .0073437   .0400089     0.18   0.854    -.0710723    .0857597
+          -2 |   .0119676   .0313102     0.38   0.702    -.0493994    .0733345
           -1 |          0  (omitted)
-           0 |   .0036664   .0175933     0.21   0.835    -.0308157    .0381486
-           1 |  -.0165433   .0218264    -0.76   0.448    -.0593223    .0262357
-           2 |  -.0034036   .0274666    -0.12   0.901    -.0572371      .05043
-           3 |   -.036542   .0343035    -1.07   0.287    -.1037756    .0306916
-           4 |  -.0606883   .0522046    -1.16   0.245    -.1630075    .0416309
-------------------------------------------------------------------------------
-
-Event study relative to -1               Number of obs = 8,173
-
-------------------------------------------------------------------------------
-         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-          -4 |   .0036271   .0465714     0.08   0.938    -.0876512    .0949054
-          -3 |   .0064484   .0382974     0.17   0.866    -.0686132    .0815099
-          -2 |    .049971   .0276832     1.81   0.071     -.004287    .1042291
-          -1 |          0  (omitted)
-           0 |   .1159289   .0345847     3.35   0.001     .0481441    .1837136
-           1 |   .1565802   .0469727     3.33   0.001     .0645155    .2486449
-           2 |   .2091579   .0505104     4.14   0.000     .1101593    .3081564
-           3 |   .2116731   .0564839     3.75   0.000     .1009666    .3223795
-           4 |   .2154235   .0764001     2.82   0.005     .0656821    .3651649
+           0 |   .0800284   .0371198     2.16   0.031     .0072749    .1527818
+           1 |   .1222858   .0457905     2.67   0.008     .0325381    .2120336
+           2 |   .1478798   .0498549     2.97   0.003     .0501659    .2455937
+           3 |   .1958182    .054337     3.60   0.000     .0893196    .3023168
+           4 |    .168226   .0668842     2.52   0.012     .0371354    .2993166
 ------------------------------------------------------------------------------
 
 . 

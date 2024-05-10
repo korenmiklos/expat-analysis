@@ -93,8 +93,8 @@ Notes:
 . * these are all Hungarian firms with Hungarian names and addresses
 . replace foreign_name = 0 if inlist(originalid, 11941712, 10362675, 12282799, 
 > 12566947, 13448064, 10216770, 10441628, 11245652, 12862865, 12914539, 2278168
-> 4, 23464997)
-(41 real changes made)
+> 4, 23464997, 12903388, 13857486)
+(48 real changes made)
 
 . 
 . * these 73 names are clearly of Western origin
@@ -317,6 +317,21 @@ Notes:
 . replace ever_western = 1 if originalid==22658948 & foreign_name==1
 (11 real changes made)
 
+. replace ever_western = 1 if originalid==12343090 & foreign_name==1
+(15 real changes made)
+
+. replace ever_western = 1 if originalid==14182925 & foreign_name==1
+(12 real changes made)
+
+. replace ever_western = 1 if originalid==11936718 & foreign_name==1
+(0 real changes made)
+
+. replace ever_western = 1 if originalid==22926139 & foreign_name==1
+(0 real changes made)
+
+. replace ever_western = 1 if originalid==23094965 & foreign_name==1
+(0 real changes made)
+
 . 
 . drop originalid
 
@@ -327,13 +342,13 @@ Notes:
 > dress"
 
 . generate byte foreignness = 0 if !first_address_foreign & !foreign_name
-(1,573,763 missing values generated)
+(1,573,756 missing values generated)
 
 . replace foreignness = 1 if !foreign_name & ever_neighbor
 (146,312 real changes made)
 
 . replace foreignness = 2 if foreign_name & !first_address_foreign
-(447,324 real changes made)
+(447,317 real changes made)
 
 . replace foreignness = 3 if !foreign_name & !ever_neighbor & first_address_for
 > eign
@@ -344,7 +359,7 @@ Notes:
 (421,703 real changes made)
 
 . replace foreignness = 5 if ever_western
-(533,226 real changes made)
+(533,253 real changes made)
 
 . label values foreignness foreignness
 
@@ -356,12 +371,12 @@ Notes:
 
                         foreignness |      Freq.     Percent        Cum.
 ------------------------------------+-----------------------------------
-         Hungarian name and address | 13,562,633       89.60       89.60
+         Hungarian name and address | 13,562,640       89.60       89.60
 Hungarian name, neighboring address |    145,158        0.96       90.56
-    Foreign name, Hungarian address |    446,745        2.95       93.51
+    Foreign name, Hungarian address |    446,711        2.95       93.51
       Hungarian name, other address |     26,931        0.18       93.69
   Foreign name, non-Western address |    421,703        2.79       96.48
-      Foreign name, Western address |    533,226        3.52      100.00
+      Foreign name, Western address |    533,253        3.52      100.00
 ------------------------------------+-----------------------------------
                               Total | 15,136,396      100.00
 

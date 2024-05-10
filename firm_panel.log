@@ -44,7 +44,7 @@ Notes:
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- opened on:   9 May 2024, 17:01:52
+ opened on:  10 May 2024, 11:07:39
 
 . 
 . * keep only sample from balance-small
@@ -62,9 +62,9 @@ Notes:
 . tempfile sample
 
 . save `sample', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St35675.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St22355.000001 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St35675.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St22355.000001 saved
     as .dta format
 
 . 
@@ -295,7 +295,7 @@ Panel variable: company_manager_id (unbalanced)
 
 . by frame_id_numeric: egen first_year_expat = min(cond(expat == 1, job_begin,.
 > ))
-(891,318 missing values generated)
+(891,352 missing values generated)
 
 . by frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.)
 > )
@@ -304,7 +304,7 @@ Panel variable: company_manager_id (unbalanced)
 . 
 . * which of the two happened first?
 . generate expat_after_owner = first_year_expat - first_year_foreign
-(921,875 missing values generated)
+(921,909 missing values generated)
 
 . generate manager_after_owner = first_year_hire - first_year_foreign
 (862,705 missing values generated)
@@ -385,7 +385,7 @@ manager_aft |
   3.         replace foreign = 0 if (expat_after_owner == `t')       & inrange(
 > year - first_year_expat, `minust', -1)        & `ever_expat'
   4. }
-(683 real changes made)
+(682 real changes made)
 
 . * drop firms where expat arrives earlier than X years before owner
 . drop if first_year_expat - first_year_foreign < -`anticipation'
@@ -448,7 +448,7 @@ file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- closed on:   9 May 2024, 17:02:45
+ closed on:  10 May 2024, 11:08:36
 -------------------------------------------------------------------------------
 
 . 
