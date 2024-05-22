@@ -1,7 +1,10 @@
 *Tables and figures for expat study
 
 use "temp/analysis_sample.dta", clear
-
+which xt2treatments
+which e2frame
+which reghdfe
+which estout
 
 *Industrial firms
 generate industrial_pre = inrange(teaor08_2d_pre, 5, 39)

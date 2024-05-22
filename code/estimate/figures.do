@@ -1,5 +1,10 @@
 use "temp/analysis_sample.dta", clear
+which xt2treatments
+which e2frame
+which reghdfe
+which estout
 
+global varlist_rhs "lnK lnL TFP lnQ export_share"
 
 *Figures, full sample
 
@@ -34,7 +39,7 @@ forval s=0/1 {
 			(connected coef xvar, lcolor(cranberry)), ///
 			graphregion(color(white)) xlabel(-4(1)4) legend(off) xline(-0.5) xscale(range (-4 4)) xtitle("Event time") yline(0)
 		
-		graph export "$here/output/twfe/expat_tradable`s'_`Y'.pdf", replace
+		graph export "output/twfe/expat_tradable`s'_`Y'.pdf", replace
 
 
 	}
@@ -71,7 +76,7 @@ frame expat_fig: graph twoway (rarea lower upper xvar, fcolor(gray%5) lcolor(gra
 	(connected coef xvar, lcolor(cranberry)), ///
 	graphregion(color(white)) xlabel(-4(1)4) legend(off) xline(-0.5) xscale(range (-4 4)) xtitle("Event time") yline(0)
 
-graph export "$here/output/twfe/expat_lnQd.pdf", replace
+graph export "output/twfe/expat_lnQd.pdf", replace
 
 forvalues i=0/1 {
 	
