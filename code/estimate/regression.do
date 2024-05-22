@@ -1,34 +1,32 @@
 *Tables and figures for expat study
 
-global here "/srv/sandbox/expat/almos"
-use "/srv/sandbox/expat/miklos/temp/analysis_sample.dta", clear
+use "temp/analysis_sample.dta", clear
 
 
 *Industrial firms
-gen industrial_pre=inrange(teaor08_2d_pre, 5, 39)
+generate industrial_pre = inrange(teaor08_2d_pre, 5, 39)
 
 *Tradable sectors (up to TEAOR 75)
-generate tradable_nonservice=inrange(teaor08_2d_pre, 1, 35)
-generate tradable_service=inlist(teaor08_2d_pre, 50, 51, 52, 58, 59, 60, 61, 62, 63, 69, 70, 71, 72, 73, 74) 
+generate tradable_nonservice = inrange(teaor08_2d_pre, 1, 35)
+generate tradable_service = inlist(teaor08_2d_pre, 50, 51, 52, 58, 59, 60, 61, 62, 63, 69, 70, 71, 72, 73, 74) 
 drop tradable_sector
-generate tradable_sector=(tradable_nonservice==1  | tradable_service==1)
+generate tradable_sector = (tradable_nonservice==1 | tradable_service==1)
 
 *Time of treatment
-egen time_treat=min(cond(time_foreign==0, year, .)), by(frame_id_numeric)
+egen time_treat = min(cond(time_foreign==0, year, .)), by(frame_id_numeric)
 
 *Variables for descriptives
-egen time_treat_1990s=max(time_treat<2000), by(frame_id_numeric)
-gen time_tradable_int=time_treat_1990s*tradable_sector
+egen time_treat_1990s = max(time_treat<2000), by(frame_id_numeric)
+generate time_tradable_int = time_treat_1990s*tradable_sector
 
 *Missing Qd before and after treatment
 foreach Y in lnQd {
-	
-	egen `Y'_exist_pre=max(cond(`Y'!=. & time_foreign<0, 1, 0)), by(frame_id_numeric)
-	egen `Y'_exist_post=max(cond(`Y'!=. & time_foreign>=0, 1, 0)), by(frame_id_numeric)
+	egen `Y'_exist_pre = max(cond(!missing(`Y') & time_foreign<0, 1, 0)), by(frame_id_numeric)
+	egen `Y'_exist_post = max(cond(!missing(`Y') & time_foreign>=0, 1, 0)), by(frame_id_numeric)
 }
 
-egen lnQd_missing=max(cond(lnQd==., 1, 0)), by(frame_id_numeric)
-count if lnQd==. & lnQd_exist_pre==1 & lnQd_exist_post==1
+egen lnQd_missing = max(cond(missing(lnQd), 1, 0)), by(frame_id_numeric)
+count if missing(lnQd) & lnQd_exist_pre==1 & lnQd_exist_post==1
 *74 cases, 0.57%
 
 *Variable labels
@@ -59,7 +57,7 @@ est store local
 quietly estpost sum tradable_sector emp lnK lnQ lnKL TFP export_share if ever_expat==1 & (time_foreign==-1)
 est store expat
 
-esttab local expat using "$here/output/table/desc_firmvars.tex", main(mean) aux(sd) mtitle("Local CEO" "Expatriate CEO") label pare nolegend nonote replace
+esttab local expat using "output/table/desc_firmvars.tex", main(mean) aux(sd) mtitle("Local CEO" "Expatriate CEO") label pare nolegend nonote replace
 
 *Selection regression
 
@@ -73,7 +71,7 @@ sum ever_expat if e(sample)
 estadd scalar mean2 = r(mean)
 est store est2
 
-esttab est1 est2  using "$here/output/table/selection_reg.tex", star(* .1 ** .05 *** .01) b(3) scalar("mean2 Mean depvar" ) noconstant nonote se replace label r2 nolegend nonote
+esttab est1 est2  using "output/table/selection_reg.tex", star(* .1 ** .05 *** .01) b(3) scalar("mean2 Mean depvar" ) noconstant nonote se replace label r2 nolegend nonote
 
 
 *Regressions
@@ -89,21 +87,19 @@ foreach Y in $varlist_rhs {
 
 }
 
-esttab using "$here/output/table/reg_full_sample.tex", b(3) se  style(tex) replace nolegend label nonote
+esttab using "output/table/reg_full_sample.tex", b(3) se  style(tex) replace nolegend label nonote
 
 *Tradable/nontradable
 
 
-forval i=0/1 {
+forvalues i=0/1 {
 	
 	eststo clear
 	foreach Y in $varlist_rhs {
-
-	eststo: xt2treatments `Y' if tradable_sector==`i', treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
-
+		eststo: xt2treatments `Y' if tradable_sector==`i', treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
 	}
 
-	esttab using "$here/output/table/reg_tradable`i'_sample.tex", b(3) se  style(tex) replace nolegend nonote label
+	esttab using "output/table/reg_tradable`i'_sample.tex", b(3) se  style(tex) replace nolegend nonote label
 
 }
 
@@ -113,13 +109,13 @@ eststo clear
 eststo: xt2treatments exporter, treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
 eststo: xt2treatments exporter if tradable_sector==0, treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
 eststo: xt2treatments exporter if tradable_sector==1, treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
-esttab using "$here/output/table/reg_exporter.tex", b(3) se  style(tex) replace nolegend label nonote
+esttab using "output/table/reg_exporter.tex", b(3) se  style(tex) replace nolegend label nonote
 
 eststo clear
 eststo: xt2treatments exporter if exporter_pre==0, treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
 eststo: xt2treatments exporter if exporter_pre==0 & tradable_sector==0, treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
 eststo: xt2treatments exporter if exporter_pre==0 & tradable_sector==1, treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
-esttab using "$here/output/table/reg_exportentry.tex", b(3) se  style(tex) replace nolegend label nonote
+esttab using "output/table/reg_exportentry.tex", b(3) se  style(tex) replace nolegend label nonote
 
 
 *Qd
@@ -127,7 +123,7 @@ eststo clear
 eststo: xt2treatments lnQd if lnQd_exist_post==1, treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
 eststo: xt2treatments lnQd if lnQd_exist_post==1 & tradable_sector==0, treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
 eststo: xt2treatments lnQd if lnQd_exist_post==1 & tradable_sector==1, treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
-esttab using "$here/output/table/reg_lnQd.tex", b(3) se  style(tex) replace nolegend label nonote
+esttab using "output/table/reg_lnQd.tex", b(3) se  style(tex) replace nolegend label nonote
 
 
 
