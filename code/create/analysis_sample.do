@@ -151,6 +151,48 @@ drop always0 ever5
 tabulate time_foreign has_expat_ceo 
 xtset frame_id_numeric year
 
+*Industrial firms
+generate industrial_pre = inrange(teaor08_2d_pre, 5, 39)
+
+*Tradable sectors (up to TEAOR 75)
+generate tradable_nonservice = inrange(teaor08_2d_pre, 1, 35)
+generate tradable_service = inlist(teaor08_2d_pre, 50, 51, 52, 58, 59, 60, 61, 62, 63, 69, 70, 71, 72, 73, 74) 
+drop tradable_sector
+generate tradable_sector = (tradable_nonservice==1 | tradable_service==1)
+
+*Time of treatment
+egen time_treat = min(cond(time_foreign==0, year, .)), by(frame_id_numeric)
+
+*Variables for descriptives
+egen time_treat_1990s = max(time_treat<2000), by(frame_id_numeric)
+generate time_tradable_int = time_treat_1990s*tradable_sector
+
+*Missing Qd before and after treatment
+foreach Y in lnQd {
+	egen `Y'_exist_pre = max(cond(!missing(`Y') & time_foreign<0, 1, 0)), by(frame_id_numeric)
+	egen `Y'_exist_post = max(cond(!missing(`Y') & time_foreign>=0, 1, 0)), by(frame_id_numeric)
+}
+
+egen lnQd_missing = max(cond(missing(lnQd), 1, 0)), by(frame_id_numeric)
+count if missing(lnQd) & lnQd_exist_pre==1 & lnQd_exist_post==1
+*74 cases, 0.57%
+
+*Variable labels
+label var industrial_pre "Industrial Firm"
+label var emp "Employment"
+label var TFP "TFP"
+label var tradable_sector "Tradable Sector"
+label var time_treat_1990s "Early Acquisition"
+label var export_share "Export Share"
+label var local_ceo "Local CEO"
+label var has_expat_ceo "Expatriate CEO"
+label var lnK "Capital"
+label var lnL "Labor"
+label var lnQ "Sales"
+label var lnQd "Domestic Sales"
+label var lnKL "Capital-Labor Ratio"
+label var ever_expat "Expatriate CEO"
+
 compress
 save "`here'/temp/analysis_sample.dta", replace
 log close

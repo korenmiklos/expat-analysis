@@ -45,78 +45,6 @@ Notes:
 *! version 3.31  26apr2022  Ben Jann
 
 . 
-. *Industrial firms
-. generate industrial_pre = inrange(teaor08_2d_pre, 5, 39)
-
-. 
-. *Tradable sectors (up to TEAOR 75)
-. generate tradable_nonservice = inrange(teaor08_2d_pre, 1, 35)
-
-. generate tradable_service = inlist(teaor08_2d_pre, 50, 51, 52, 58, 59, 60, 61
-> , 62, 63, 69, 70, 71, 72, 73, 74) 
-
-. drop tradable_sector
-
-. generate tradable_sector = (tradable_nonservice==1 | tradable_service==1)
-
-. 
-. *Time of treatment
-. egen time_treat = min(cond(time_foreign==0, year, .)), by(frame_id_numeric)
-
-. 
-. *Variables for descriptives
-. egen time_treat_1990s = max(time_treat<2000), by(frame_id_numeric)
-
-. generate time_tradable_int = time_treat_1990s*tradable_sector
-
-. 
-. *Missing Qd before and after treatment
-. foreach Y in lnQd {
-  2.         egen `Y'_exist_pre = max(cond(!missing(`Y') & time_foreign<0, 1, 0
-> )), by(frame_id_numeric)
-  3.         egen `Y'_exist_post = max(cond(!missing(`Y') & time_foreign>=0, 1,
->  0)), by(frame_id_numeric)
-  4. }
-
-. 
-. egen lnQd_missing = max(cond(missing(lnQd), 1, 0)), by(frame_id_numeric)
-
-. count if missing(lnQd) & lnQd_exist_pre==1 & lnQd_exist_post==1
-  74
-
-. *74 cases, 0.57%
-. 
-. *Variable labels
-. label var industrial_pre "Industrial Firm"
-
-. label var emp "Employment"
-
-. label var TFP "TFP"
-
-. label var tradable_sector "Tradable Sector"
-
-. label var time_treat_1990s "Early Acquisition"
-
-. label var export_share "Export Share"
-
-. label var local_ceo "Local CEO"
-
-. label var has_expat_ceo "Expatriate CEO"
-
-. label var lnK "Capital"
-
-. label var lnL "Labor"
-
-. label var lnQ "Sales"
-
-. label var lnQd "Domestic Sales"
-
-. label var lnKL "Capital-Labor Ratio"
-
-. label var ever_expat "Expatriate CEO"
-
-. 
-. 
 . *Descriptive statistics
 . 
 . *Desciptives table
@@ -240,17 +168,19 @@ added scalar:
 . global varlist_rhs "lnK lnL TFP lnQ export_share"
 
 . 
+. local estab_options b(3) se  style(tex) replace nolegend label nonote
+
+. local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4
+> ) post(4) baseline(atet) weighting(optimal)
+
 . 
 . *Full sample
 . 
 . eststo clear
 
 . foreach Y in $varlist_rhs {
-  2. 
-.         eststo: xt2treatments `Y', treatment(has_expat_ceo) control(local_ceo
-> ) pre(4) post(4) baseline(atet) weighting(optimal)
-  3. 
-. }
+  2.         eststo: xt2treatments `Y', `xt2treatments_options'
+  3. }
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -318,8 +248,7 @@ export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 (est5 stored)
 
 . 
-. esttab using "output/table/reg_full_sample.tex", b(3) se  style(tex) replace 
-> nolegend label nonote
+. esttab using "output/table/reg_full_sample.tex", `estab_options' 
 (output written to output/table/reg_full_sample.tex)
 
 . 
@@ -327,18 +256,14 @@ export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 . 
 . 
 . forvalues i=0/1 {
-  2.         
-.         eststo clear
+  2.         eststo clear
   3.         foreach Y in $varlist_rhs {
-  4.                 eststo: xt2treatments `Y' if tradable_sector==`i', treatme
-> nt(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting(
-> optimal)
+  4.                 eststo: xt2treatments `Y' if tradable_sector==`i', `xt2tre
+> atments_options'
   5.         }
-  6. 
-.         esttab using "output/table/reg_tradable`i'_sample.tex", b(3) se  styl
-> e(tex) replace nolegend nonote label
-  7. 
-. }
+  6.         esttab using "output/table/reg_tradable`i'_sample.tex", `estab_opt
+> ions'
+  7. }
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -404,7 +329,6 @@ export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
         ATET |   -.013675   .0262788    -0.52   0.603    -.0651805    .0378305
 ------------------------------------------------------------------------------
 (est5 stored)
-(file output/table/reg_tradable0_sample.tex not found)
 (output written to output/table/reg_tradable0_sample.tex)
 
 Panel variable: frame_id_numeric (unbalanced)
@@ -471,7 +395,6 @@ export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
         ATET |   .0845353   .0347516     2.43   0.015     .0164234    .1526472
 ------------------------------------------------------------------------------
 (est5 stored)
-(file output/table/reg_tradable1_sample.tex not found)
 (output written to output/table/reg_tradable1_sample.tex)
 
 . 
@@ -479,8 +402,7 @@ export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 . *Export, export entry
 . eststo clear
 
-. eststo: xt2treatments exporter, treatment(has_expat_ceo) control(local_ceo) p
-> re(4) post(4) baseline(atet) weighting(optimal)
+. eststo: xt2treatments exporter, `xt2treatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -495,8 +417,7 @@ Event study relative to atet            Number of obs = 14,310
 ------------------------------------------------------------------------------
 (est1 stored)
 
-. eststo: xt2treatments exporter if tradable_sector==0, treatment(has_expat_ceo
-> ) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
+. eststo: xt2treatments exporter if tradable_sector==0, `xt2treatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -511,8 +432,7 @@ Event study relative to atet             Number of obs = 6,163
 ------------------------------------------------------------------------------
 (est2 stored)
 
-. eststo: xt2treatments exporter if tradable_sector==1, treatment(has_expat_ceo
-> ) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
+. eststo: xt2treatments exporter if tradable_sector==1, `xt2treatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -527,16 +447,13 @@ Event study relative to atet             Number of obs = 8,143
 ------------------------------------------------------------------------------
 (est3 stored)
 
-. esttab using "output/table/reg_exporter.tex", b(3) se  style(tex) replace nol
-> egend label nonote
-(file output/table/reg_exporter.tex not found)
+. esttab using "output/table/reg_exporter.tex", `estab_options'
 (output written to output/table/reg_exporter.tex)
 
 . 
 . eststo clear
 
-. eststo: xt2treatments exporter if exporter_pre==0, treatment(has_expat_ceo) c
-> ontrol(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
+. eststo: xt2treatments exporter if exporter_pre==0, `xt2treatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -551,9 +468,8 @@ Event study relative to atet             Number of obs = 6,512
 ------------------------------------------------------------------------------
 (est1 stored)
 
-. eststo: xt2treatments exporter if exporter_pre==0 & tradable_sector==0, treat
-> ment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weightin
-> g(optimal)
+. eststo: xt2treatments exporter if exporter_pre==0 & tradable_sector==0, `xt2t
+> reatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -568,9 +484,8 @@ Event study relative to atet             Number of obs = 3,519
 ------------------------------------------------------------------------------
 (est2 stored)
 
-. eststo: xt2treatments exporter if exporter_pre==0 & tradable_sector==1, treat
-> ment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weightin
-> g(optimal)
+. eststo: xt2treatments exporter if exporter_pre==0 & tradable_sector==1, `xt2t
+> reatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -585,9 +500,7 @@ Event study relative to atet             Number of obs = 2,972
 ------------------------------------------------------------------------------
 (est3 stored)
 
-. esttab using "output/table/reg_exportentry.tex", b(3) se  style(tex) replace 
-> nolegend label nonote
-(file output/table/reg_exportentry.tex not found)
+. esttab using "output/table/reg_exportentry.tex", `estab_options'
 (output written to output/table/reg_exportentry.tex)
 
 . 
@@ -595,8 +508,7 @@ Event study relative to atet             Number of obs = 2,972
 . *Qd
 . eststo clear
 
-. eststo: xt2treatments lnQd if lnQd_exist_post==1, treatment(has_expat_ceo) co
-> ntrol(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
+. eststo: xt2treatments lnQd if lnQd_exist_post==1, `xt2treatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -611,9 +523,8 @@ Event study relative to atet            Number of obs = 14,049
 ------------------------------------------------------------------------------
 (est1 stored)
 
-. eststo: xt2treatments lnQd if lnQd_exist_post==1 & tradable_sector==0, treatm
-> ent(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting
-> (optimal)
+. eststo: xt2treatments lnQd if lnQd_exist_post==1 & tradable_sector==0, `xt2tr
+> eatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -628,9 +539,8 @@ Event study relative to atet             Number of obs = 6,114
 ------------------------------------------------------------------------------
 (est2 stored)
 
-. eststo: xt2treatments lnQd if lnQd_exist_post==1 & tradable_sector==1, treatm
-> ent(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting
-> (optimal)
+. eststo: xt2treatments lnQd if lnQd_exist_post==1 & tradable_sector==1, `xt2tr
+> eatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -645,13 +555,9 @@ Event study relative to atet             Number of obs = 7,931
 ------------------------------------------------------------------------------
 (est3 stored)
 
-. esttab using "output/table/reg_lnQd.tex", b(3) se  style(tex) replace nolegen
-> d label nonote
-(file output/table/reg_lnQd.tex not found)
+. esttab using "output/table/reg_lnQd.tex", `estab_options'
 (output written to output/table/reg_lnQd.tex)
 
-. 
-. 
 . 
 . 
 end of do-file

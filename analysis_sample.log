@@ -42,7 +42,7 @@ Notes:
        log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/analysis_samp
 > le.log
   log type:  text
- opened on:  22 May 2024, 12:26:14
+ opened on:  22 May 2024, 16:49:54
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -451,6 +451,77 @@ Panel variable: frame_id_numeric (unbalanced)
          Delta: 1 unit
 
 . 
+. *Industrial firms
+. generate industrial_pre = inrange(teaor08_2d_pre, 5, 39)
+
+. 
+. *Tradable sectors (up to TEAOR 75)
+. generate tradable_nonservice = inrange(teaor08_2d_pre, 1, 35)
+
+. generate tradable_service = inlist(teaor08_2d_pre, 50, 51, 52, 58, 59, 60, 61
+> , 62, 63, 69, 70, 71, 72, 73, 74) 
+
+. drop tradable_sector
+
+. generate tradable_sector = (tradable_nonservice==1 | tradable_service==1)
+
+. 
+. *Time of treatment
+. egen time_treat = min(cond(time_foreign==0, year, .)), by(frame_id_numeric)
+
+. 
+. *Variables for descriptives
+. egen time_treat_1990s = max(time_treat<2000), by(frame_id_numeric)
+
+. generate time_tradable_int = time_treat_1990s*tradable_sector
+
+. 
+. *Missing Qd before and after treatment
+. foreach Y in lnQd {
+  2.         egen `Y'_exist_pre = max(cond(!missing(`Y') & time_foreign<0, 1, 0
+> )), by(frame_id_numeric)
+  3.         egen `Y'_exist_post = max(cond(!missing(`Y') & time_foreign>=0, 1,
+>  0)), by(frame_id_numeric)
+  4. }
+
+. 
+. egen lnQd_missing = max(cond(missing(lnQd), 1, 0)), by(frame_id_numeric)
+
+. count if missing(lnQd) & lnQd_exist_pre==1 & lnQd_exist_post==1
+  74
+
+. *74 cases, 0.57%
+. 
+. *Variable labels
+. label var industrial_pre "Industrial Firm"
+
+. label var emp "Employment"
+
+. label var TFP "TFP"
+
+. label var tradable_sector "Tradable Sector"
+
+. label var time_treat_1990s "Early Acquisition"
+
+. label var export_share "Export Share"
+
+. label var local_ceo "Local CEO"
+
+. label var has_expat_ceo "Expatriate CEO"
+
+. label var lnK "Capital"
+
+. label var lnL "Labor"
+
+. label var lnQ "Sales"
+
+. label var lnQd "Domestic Sales"
+
+. label var lnKL "Capital-Labor Ratio"
+
+. label var ever_expat "Expatriate CEO"
+
+. 
 . compress
   variable firmage was int now byte
   variable minyear was float now int
@@ -472,6 +543,16 @@ Panel variable: frame_id_numeric (unbalanced)
   variable teaor08_1d_num was float now byte
   variable teaor08_2d_pre was float now byte
   variable teaor08_1d_pre was float now byte
+  variable industrial_pre was float now byte
+  variable tradable_nonservice was float now byte
+  variable tradable_service was float now byte
+  variable tradable_sector was float now byte
+  variable time_treat was float now int
+  variable time_treat_1990s was float now byte
+  variable time_tradable_int was float now byte
+  variable lnQd_exist_pre was float now byte
+  variable lnQd_exist_post was float now byte
+  variable lnQd_missing was float now byte
   variable eszk was double now long
   variable hlk was double now long
   variable rlk was double now long
@@ -495,7 +576,7 @@ Panel variable: frame_id_numeric (unbalanced)
   variable tax was double now long
   variable final_netgep was double now long
   variable tanass_18 was double now long
-  (2,149,996 bytes saved)
+  (2,577,050 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
 file /Users/koren/Tresorit/Mac2Mac/projects/expat//temp/analysis_sample.dta
@@ -506,7 +587,7 @@ file /Users/koren/Tresorit/Mac2Mac/projects/expat//temp/analysis_sample.dta
        log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/analysis_samp
 > le.log
   log type:  text
- closed on:  22 May 2024, 12:26:45
+ closed on:  22 May 2024, 16:50:25
 -------------------------------------------------------------------------------
 
 . 
