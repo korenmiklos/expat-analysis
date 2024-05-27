@@ -12,8 +12,8 @@ ___/   /   /___/   /   /___/       MP—Parallel Edition
 
 Stata license: Single-user 2-core  perpetual
 Serial number: 501806323834
-  Licensed to: Miklós Koren
-               Central European University
+  Licensed to: Miklos Koren
+               CEU MicroData
 
 Notes:
       1. Stata is running in batch mode.
@@ -25,7 +25,7 @@ Notes:
 . do code/create/ceo_panel.do 
 
 . here
-/Users/koren/Tresorit/Mac2Mac/projects/expat/
+/Users/koren/Tresorit/Mac/projects/expat/
 
 . local here = r(here)
 
@@ -34,7 +34,7 @@ Notes:
 . rename person_id manager_id
 
 . 
-. local western AT DE BE CA CH DE DK ES FR GB IT NL NO SE US IE US IL KO JP
+. local western AT DE BE CA CH DK ES FR GB IT NL NO SE US IE IL KO JP
 
 . local neighbor SK UA RO RS HR SI 
 
@@ -48,7 +48,6 @@ Notes:
 (11,626 real changes made)
 (7,096 real changes made)
 (21,920 real changes made)
-(0 real changes made)
 (2,736 real changes made)
 (10,639 real changes made)
 (16,989 real changes made)
@@ -59,7 +58,6 @@ Notes:
 (7,730 real changes made)
 (25,821 real changes made)
 (12,500 real changes made)
-(0 real changes made)
 (27,831 real changes made)
 (0 real changes made)
 (2,947 real changes made)
@@ -385,7 +383,7 @@ Hungarian name, neighboring address |    145,158        0.96       90.56
   (0 bytes saved)
 
 . save "`here'/temp/ceo-panel.dta", replace
-file /Users/koren/Tresorit/Mac2Mac/projects/expat//temp/ceo-panel.dta saved
+file /Users/koren/Tresorit/Mac/projects/expat//temp/ceo-panel.dta saved
 
 . 
 end of do-file

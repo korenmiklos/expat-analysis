@@ -12,8 +12,8 @@ ___/   /   /___/   /   /___/       MP—Parallel Edition
 
 Stata license: Single-user 2-core  perpetual
 Serial number: 501806323834
-  Licensed to: Miklós Koren
-               Central European University
+  Licensed to: Miklos Koren
+               CEU MicroData
 
 Notes:
       1. Stata is running in batch mode.
@@ -29,7 +29,7 @@ Notes:
 . 
 . * find root folder
 . here
-/Users/koren/Tresorit/Mac2Mac/projects/expat/
+/Users/koren/Tresorit/Mac/projects/expat/
 
 . local here = r(here)
 
@@ -39,10 +39,10 @@ Notes:
 . log using "`here'/output/analysis_sample", text replace
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/analysis_samp
-> le.log
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
+> og
   log type:  text
- opened on:  22 May 2024, 16:49:54
+ opened on:  27 May 2024, 13:37:21
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -579,15 +579,14 @@ Panel variable: frame_id_numeric (unbalanced)
   (2,577,050 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
-file /Users/koren/Tresorit/Mac2Mac/projects/expat//temp/analysis_sample.dta
-    saved
+file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/analysis_samp
-> le.log
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
+> og
   log type:  text
- closed on:  22 May 2024, 16:50:25
+ closed on:  27 May 2024, 13:37:51
 -------------------------------------------------------------------------------
 
 . 

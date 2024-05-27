@@ -3,7 +3,7 @@ local here = r(here)
 use "`here'/input/ceo-panel/ceo-panel.dta", clear 
 rename person_id manager_id
 
-local western AT DE BE CA CH DE DK ES FR GB IT NL NO SE US IE US IL KO JP
+local western AT DE BE CA CH DK ES FR GB IT NL NO SE US IE IL KO JP
 local neighbor SK UA RO RS HR SI 
 generate byte western = 0
 foreach country in `western' {
