@@ -3,7 +3,7 @@
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
 > og
   log type:  text
- opened on:  27 May 2024, 13:37:21
+ opened on:  27 May 2024, 16:40:00
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -540,6 +540,8 @@ Panel variable: frame_id_numeric (unbalanced)
   (2,577,050 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
+(file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta not
+    found)
 file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
 
 . log close
@@ -547,5 +549,5 @@ file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
 > og
   log type:  text
- closed on:  27 May 2024, 13:37:51
+ closed on:  27 May 2024, 16:40:29
 -------------------------------------------------------------------------------

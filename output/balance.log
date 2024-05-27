@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/balance.log
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/balance.log
   log type:  text
- opened on:  22 May 2024, 12:22:50
+ opened on:  27 May 2024, 16:37:47
 
 . 
 . use "`here'/input/merleg-LTS-MVP/balance.dta" 
@@ -372,13 +372,14 @@ tanass_18:                                      Number of observations
 . cap drop __*
 
 . save "`here'/temp/balance-small-clean.dta", replace
-file
-    /Users/koren/Tresorit/Mac2Mac/projects/expat//temp/balance-small-clean.dt
-    > a saved
+(file /Users/koren/Tresorit/Mac/projects/expat//temp/balance-small-clean.dta
+    not found)
+file /Users/koren/Tresorit/Mac/projects/expat//temp/balance-small-clean.dta
+    saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/balance.log
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/balance.log
   log type:  text
- closed on:  22 May 2024, 12:24:09
+ closed on:  27 May 2024, 16:39:05
 -------------------------------------------------------------------------------

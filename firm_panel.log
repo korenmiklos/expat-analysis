@@ -44,7 +44,7 @@ Notes:
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- opened on:  27 May 2024, 13:36:28
+ opened on:  27 May 2024, 16:39:05
 
 . 
 . * keep only sample from balance-small
@@ -62,9 +62,9 @@ Notes:
 . tempfile sample
 
 . save `sample', replace
-(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St04858.000001 not
+(file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St41962.000001 not
     found)
-file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St04858.000001 saved
+file /var/folders/3b/07ltjm9n0rq1pwkn1_49vqn40000gn/T//St41962.000001 saved
     as .dta format
 
 . 
@@ -442,13 +442,15 @@ manager_aft |
   (11,007,900 bytes saved)
 
 . save "`here'/temp/firm_events.dta", replace
+(file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta not
+    found)
 file /Users/koren/Tresorit/Mac/projects/expat//temp/firm_events.dta saved
 
 . log close
       name:  <unnamed>
        log:  /Users/koren/Tresorit/Mac/projects/expat//output/firm_panel.log
   log type:  text
- closed on:  27 May 2024, 13:37:21
+ closed on:  27 May 2024, 16:40:00
 -------------------------------------------------------------------------------
 
 . 

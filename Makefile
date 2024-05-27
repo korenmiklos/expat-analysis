@@ -1,7 +1,6 @@
 STATA = stata -b do
 ESTIMATOR = temp/analysis_sample.dta estimate.do regram.do
 .PHONY: all
-SPECS = descriptive manager_level heterogeneity event_study switch selection
 
 all: regression.log figures.log
 %.log: code/estimate/%.do temp/analysis_sample.dta 
