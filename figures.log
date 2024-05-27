@@ -47,13 +47,15 @@ Notes:
 
 . local graph_command graph twoway (rarea lower upper xvar, fcolor(gray%5) lcol
 > or(gray%10)) (connected coef xvar, lcolor(cranberry)), graphregion(color(whit
-> e)) xlabel(-4(1)4) legend(off) xline(-0.5) xscale(range (-4 4)) xtitle("Event
->  time") yline(0)
+> e)) xlabel(-4(1)4) legend(off) xline(-0.5) xscale(range (-4 4)) xtitle("Time 
+> since foreign acquisution (year)") yline(0)
 
 . local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4
 > ) post(4) baseline(-1) weighting(optimal)
 
 . local esttab_options b(3) se style(tex) replace nolegend label nonote
+
+. local folder output/figure
 
 . 
 . *Figures, full sample
@@ -64,7 +66,7 @@ Notes:
   2.         eststo: xt2treatments `Y', `xt2treatments_options'
   3.         e2frame, generate(expat_fig)
   4.         frame expat_fig: `graph_command'
-  5.         graph export "output/twfe/expat_`Y'.pdf", replace
+  5.         graph export "`folder'/expat_`Y'.pdf", replace
   6. }
 
 Panel variable: frame_id_numeric (unbalanced)
@@ -87,7 +89,7 @@ Event study relative to -1              Number of obs = 14,310
            4 |   .5352206   .1365938     3.92   0.000     .2675016    .8029396
 ------------------------------------------------------------------------------
 (est1 stored)
-file output/twfe/expat_lnK.pdf saved as PDF format
+file output/figure/expat_lnK.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -109,7 +111,7 @@ Event study relative to -1              Number of obs = 14,310
            4 |   .4100341   .1249443     3.28   0.001     .1651478    .6549203
 ------------------------------------------------------------------------------
 (est2 stored)
-file output/twfe/expat_lnL.pdf saved as PDF format
+file output/figure/expat_lnL.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -131,7 +133,7 @@ Event study relative to -1              Number of obs = 14,310
            4 |    .168226   .0668842     2.52   0.012     .0371354    .2993166
 ------------------------------------------------------------------------------
 (est3 stored)
-file output/twfe/expat_TFP.pdf saved as PDF format
+file output/figure/expat_TFP.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -153,7 +155,7 @@ Event study relative to -1              Number of obs = 14,310
            4 |   .8756383   .1530077     5.72   0.000     .5757488    1.175528
 ------------------------------------------------------------------------------
 (est4 stored)
-file output/twfe/expat_lnQ.pdf saved as PDF format
+file output/figure/expat_lnQ.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -175,7 +177,7 @@ export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
            4 |   .0862224   .0328451     2.63   0.009     .0218471    .1505976
 ------------------------------------------------------------------------------
 (est5 stored)
-file output/twfe/expat_export_share.pdf saved as PDF format
+file output/figure/expat_export_share.pdf saved as PDF format
 
 . 
 . esttab using "output/table/dynamics_coeff.tex", `esttab_options'
@@ -191,8 +193,7 @@ file output/twfe/expat_export_share.pdf saved as PDF format
 > atments_options'
   5.                 e2frame, generate(expat_fig)
   6.                 frame expat_fig: `graph_command'
-  7.                 graph export "output/twfe/expat_tradable`s'_`Y'.pdf", repl
-> ace
+  7.                 graph export "`folder'/expat_tradable`s'_`Y'.pdf", replace
   8.         }
   9. }
 
@@ -216,7 +217,7 @@ Event study relative to -1               Number of obs = 6,163
            4 |   .4915959   .2354169     2.09   0.037     .0301872    .9530045
 ------------------------------------------------------------------------------
 (est1 stored)
-file output/twfe/expat_tradable0_lnK.pdf saved as PDF format
+file output/figure/expat_tradable0_lnK.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -238,7 +239,7 @@ Event study relative to -1               Number of obs = 6,163
            4 |   .7131761   .1825081     3.91   0.000     .3554668    1.070885
 ------------------------------------------------------------------------------
 (est2 stored)
-file output/twfe/expat_tradable0_lnL.pdf saved as PDF format
+file output/figure/expat_tradable0_lnL.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -260,7 +261,7 @@ Event study relative to -1               Number of obs = 6,163
            4 |   .2479544   .1370553     1.81   0.070     -.020669    .5165778
 ------------------------------------------------------------------------------
 (est3 stored)
-file output/twfe/expat_tradable0_TFP.pdf saved as PDF format
+file output/figure/expat_tradable0_TFP.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -282,7 +283,7 @@ Event study relative to -1               Number of obs = 6,163
            4 |   .9173935    .284675     3.22   0.001     .3594407    1.475346
 ------------------------------------------------------------------------------
 (est4 stored)
-file output/twfe/expat_tradable0_lnQ.pdf saved as PDF format
+file output/figure/expat_tradable0_lnQ.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -304,7 +305,7 @@ export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
            4 |   .0078307   .0352021     0.22   0.824    -.0611642    .0768257
 ------------------------------------------------------------------------------
 (est5 stored)
-file output/twfe/expat_tradable0_export_share.pdf saved as PDF format
+file output/figure/expat_tradable0_export_share.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -326,7 +327,7 @@ Event study relative to -1               Number of obs = 8,143
            4 |   .5240501   .1610352     3.25   0.001     .2084269    .8396733
 ------------------------------------------------------------------------------
 (est1 stored)
-file output/twfe/expat_tradable1_lnK.pdf saved as PDF format
+file output/figure/expat_tradable1_lnK.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -348,7 +349,7 @@ Event study relative to -1               Number of obs = 8,143
            4 |   .2877648   .1573919     1.83   0.067    -.0207176    .5962472
 ------------------------------------------------------------------------------
 (est2 stored)
-file output/twfe/expat_tradable1_lnL.pdf saved as PDF format
+file output/figure/expat_tradable1_lnL.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -370,7 +371,7 @@ Event study relative to -1               Number of obs = 8,143
            4 |   .1237524   .0615953     2.01   0.045      .003028    .2444769
 ------------------------------------------------------------------------------
 (est3 stored)
-file output/twfe/expat_tradable1_TFP.pdf saved as PDF format
+file output/figure/expat_tradable1_TFP.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -392,7 +393,7 @@ Event study relative to -1               Number of obs = 8,143
            4 |    .838576   .1695219     4.95   0.000     .5063192    1.170833
 ------------------------------------------------------------------------------
 (est4 stored)
-file output/twfe/expat_tradable1_lnQ.pdf saved as PDF format
+file output/figure/expat_tradable1_lnQ.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -414,7 +415,7 @@ export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
            4 |   .1185751   .0495766     2.39   0.017     .0214067    .2157436
 ------------------------------------------------------------------------------
 (est5 stored)
-file output/twfe/expat_tradable1_export_share.pdf saved as PDF format
+file output/figure/expat_tradable1_export_share.pdf saved as PDF format
 
 . 
 . *Figures, export, export entry lnQd
@@ -445,8 +446,8 @@ Event study relative to -1              Number of obs = 14,310
 
 . frame expat_fig: `graph_command'
 
-. graph export "output/twfe/expat_exporter.pdf", replace
-file output/twfe/expat_exporter.pdf saved as PDF format
+. graph export "`folder'/expat_exporter.pdf", replace
+file output/figure/expat_exporter.pdf saved as PDF format
 
 . 
 . xt2treatments exporter if exporter_pre==0, `xt2treatments_options'
@@ -475,8 +476,8 @@ Event study relative to -1               Number of obs = 6,512
 
 . frame expat_fig: `graph_command'
 
-. graph export "output/twfe/expat_export_entry.pdf", replace
-file output/twfe/expat_export_entry.pdf saved as PDF format
+. graph export "`folder'/expat_export_entry.pdf", replace
+file output/figure/expat_export_entry.pdf saved as PDF format
 
 . 
 . xt2treatments lnQd if lnQd_exist_post==1, `xt2treatments_options'
@@ -505,8 +506,8 @@ Event study relative to -1              Number of obs = 14,049
 
 . frame expat_fig: `graph_command'
 
-. graph export "output/twfe/expat_lnQd.pdf", replace
-file output/twfe/expat_lnQd.pdf saved as PDF format
+. graph export "`folder'/expat_lnQd.pdf", replace
+file output/figure/expat_lnQd.pdf saved as PDF format
 
 . 
 . forvalues i = 0/1 {
@@ -514,20 +515,20 @@ file output/twfe/expat_lnQd.pdf saved as PDF format
 > ions'
   3.         e2frame, generate(expat_fig)
   4.         frame expat_fig: `graph_command'
-  5.         graph export "output/twfe/expat_tradable`i'_exporter.pdf", replace
+  5.         graph export "`folder'/expat_tradable`i'_exporter.pdf", replace
   6. 
 .         xt2treatments exporter if exporter_pre==0 & tradable_sector==`i', `xt
 > 2treatments_options'
   7.         e2frame, generate(expat_fig)
   8.         frame expat_fig: `graph_command'
-  9.         graph export "output/twfe/expat_tradable`i'_export_entry.pdf", rep
-> lace
+  9.         graph export "`folder'/expat_tradable`i'_export_entry.pdf", replac
+> e
  10. 
 .         xt2treatments lnQd if lnQd_exist_post==1 & tradable_sector==`i', `xt2
 > treatments_options'
  11.         e2frame, generate(expat_fig)
  12.         frame expat_fig: `graph_command'
- 13.         graph export "output/twfe/expat_tradable`i'_lnQd.pdf", replace
+ 13.         graph export "`folder'/expat_tradable`i'_lnQd.pdf", replace
  14. }
 
 Panel variable: frame_id_numeric (unbalanced)
@@ -549,7 +550,7 @@ Event study relative to -1               Number of obs = 6,163
            3 |   .0639072   .0684578     0.93   0.351    -.0702677    .1980821
            4 |   .0335631    .068211     0.49   0.623     -.100128    .1672542
 ------------------------------------------------------------------------------
-file output/twfe/expat_tradable0_exporter.pdf saved as PDF format
+file output/figure/expat_tradable0_exporter.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -570,7 +571,7 @@ Event study relative to -1               Number of obs = 3,519
            3 |   .3692142   .0543481     6.79   0.000     .2626938    .4757346
            4 |   .2709877   .0601911     4.50   0.000     .1530152    .3889601
 ------------------------------------------------------------------------------
-file output/twfe/expat_tradable0_export_entry.pdf saved as PDF format
+file output/figure/expat_tradable0_export_entry.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -591,7 +592,7 @@ Event study relative to -1               Number of obs = 6,114
            3 |   .7096152   .2846949     2.49   0.013     .1516235    1.267607
            4 |   .5640163   .3342601     1.69   0.092    -.0911214    1.219154
 ------------------------------------------------------------------------------
-file output/twfe/expat_tradable0_lnQd.pdf saved as PDF format
+file output/figure/expat_tradable0_lnQd.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -612,7 +613,7 @@ Event study relative to -1               Number of obs = 8,143
            3 |   .0796001   .0387529     2.05   0.040     .0036458    .1555544
            4 |   .0948767    .044026     2.16   0.031     .0085873     .181166
 ------------------------------------------------------------------------------
-file output/twfe/expat_tradable1_exporter.pdf saved as PDF format
+file output/figure/expat_tradable1_exporter.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -633,7 +634,7 @@ Event study relative to -1               Number of obs = 2,972
            3 |   .1324603   .0583445     2.27   0.023     .0181072    .2468133
            4 |   .1626653   .0630952     2.58   0.010      .039001    .2863296
 ------------------------------------------------------------------------------
-file output/twfe/expat_tradable1_export_entry.pdf saved as PDF format
+file output/figure/expat_tradable1_export_entry.pdf saved as PDF format
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1984 to 2019, but with gaps
@@ -654,7 +655,7 @@ Event study relative to -1               Number of obs = 7,931
            3 |   .6268941   .1745479     3.59   0.000     .2847865    .9690017
            4 |   .5062333    .204888     2.47   0.013     .1046603    .9078064
 ------------------------------------------------------------------------------
-file output/twfe/expat_tradable1_lnQd.pdf saved as PDF format
+file output/figure/expat_tradable1_lnQd.pdf saved as PDF format
 
 . 
 end of do-file

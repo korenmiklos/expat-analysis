@@ -5,9 +5,10 @@ which reghdfe
 which estout
 
 global varlist_rhs "lnK lnL TFP lnQ export_share"
-local graph_command graph twoway (rarea lower upper xvar, fcolor(gray%5) lcolor(gray%10)) (connected coef xvar, lcolor(cranberry)), graphregion(color(white)) xlabel(-4(1)4) legend(off) xline(-0.5) xscale(range (-4 4)) xtitle("Event time") yline(0)
+local graph_command graph twoway (rarea lower upper xvar, fcolor(gray%5) lcolor(gray%10)) (connected coef xvar, lcolor(cranberry)), graphregion(color(white)) xlabel(-4(1)4) legend(off) xline(-0.5) xscale(range (-4 4)) xtitle("Time since foreign acquisution (year)") yline(0)
 local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(-1) weighting(optimal)
 local esttab_options b(3) se style(tex) replace nolegend label nonote
+local folder output/figure
 
 *Figures, full sample
 
@@ -16,7 +17,7 @@ foreach Y in $varlist_rhs {
 	eststo: xt2treatments `Y', `xt2treatments_options'
 	e2frame, generate(expat_fig)
 	frame expat_fig: `graph_command'
-	graph export "output/twfe/expat_`Y'.pdf", replace
+	graph export "`folder'/expat_`Y'.pdf", replace
 }
 
 esttab using "output/table/dynamics_coeff.tex", `esttab_options'
@@ -29,7 +30,7 @@ forvalues s = 0/1 {
 		eststo: xt2treatments `Y' if tradable_sector==`s', `xt2treatments_options'
 		e2frame, generate(expat_fig)
 		frame expat_fig: `graph_command'
-		graph export "output/twfe/expat_tradable`s'_`Y'.pdf", replace
+		graph export "`folder'/expat_tradable`s'_`Y'.pdf", replace
 	}
 }
 
@@ -38,31 +39,31 @@ forvalues s = 0/1 {
 xt2treatments exporter, `xt2treatments_options'
 e2frame, generate(expat_fig)
 frame expat_fig: `graph_command'
-graph export "output/twfe/expat_exporter.pdf", replace
+graph export "`folder'/expat_exporter.pdf", replace
 
 xt2treatments exporter if exporter_pre==0, `xt2treatments_options'
 e2frame, generate(expat_fig)
 frame expat_fig: `graph_command'
-graph export "output/twfe/expat_export_entry.pdf", replace
+graph export "`folder'/expat_export_entry.pdf", replace
 
 xt2treatments lnQd if lnQd_exist_post==1, `xt2treatments_options'
 e2frame, generate(expat_fig)
 frame expat_fig: `graph_command'
-graph export "output/twfe/expat_lnQd.pdf", replace
+graph export "`folder'/expat_lnQd.pdf", replace
 
 forvalues i = 0/1 {
 	xt2treatments exporter if tradable_sector==`i', `xt2treatments_options'
 	e2frame, generate(expat_fig)
 	frame expat_fig: `graph_command'
-	graph export "output/twfe/expat_tradable`i'_exporter.pdf", replace
+	graph export "`folder'/expat_tradable`i'_exporter.pdf", replace
 
 	xt2treatments exporter if exporter_pre==0 & tradable_sector==`i', `xt2treatments_options'
 	e2frame, generate(expat_fig)
 	frame expat_fig: `graph_command'
-	graph export "output/twfe/expat_tradable`i'_export_entry.pdf", replace
+	graph export "`folder'/expat_tradable`i'_export_entry.pdf", replace
 
 	xt2treatments lnQd if lnQd_exist_post==1 & tradable_sector==`i', `xt2treatments_options'
 	e2frame, generate(expat_fig)
 	frame expat_fig: `graph_command'
-	graph export "output/twfe/expat_tradable`i'_lnQd.pdf", replace
+	graph export "`folder'/expat_tradable`i'_lnQd.pdf", replace
 }
