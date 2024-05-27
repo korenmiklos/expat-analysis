@@ -1,0 +1,563 @@
+
+  ___  ____  ____  ____  ____ ®
+ /__    /   ____/   /   ____/      18.0
+___/   /   /___/   /   /___/       MP—Parallel Edition
+
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
+                                   StataCorp
+                                   4905 Lakeway Drive
+                                   College Station, Texas 77845 USA
+                                   800-STATA-PC        https://www.stata.com
+                                   979-696-4600        stata@stata.com
+
+Stata license: Single-user 2-core  perpetual
+Serial number: 501806323834
+  Licensed to: Miklos Koren
+               CEU MicroData
+
+Notes:
+      1. Stata is running in batch mode.
+      2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
+
+. do code/estimate/regression.do 
+
+. *Tables and figures for expat study
+. 
+. use "temp/analysis_sample.dta", clear
+
+. which xt2treatments
+/Users/koren/Library/Application Support/Stata/ado/plus/x/xt2treatments.ado
+*! version 0.8.4 21may2024
+
+. which e2frame
+/Users/koren/Library/Application Support/Stata/ado/plus/e/e2frame.ado
+*! version 0.1.0 21may2024
+
+. which reghdfe
+/Users/koren/Library/Application Support/Stata/ado/plus/r/reghdfe.ado
+*! version 6.12.2 02Nov2021
+
+. which estout
+/Users/koren/Library/Application Support/Stata/ado/plus/e/estout.ado
+*! version 3.31  26apr2022  Ben Jann
+
+. 
+. *Descriptive statistics
+. 
+. *Desciptives table
+. eststo clear
+
+. 
+. quietly estpost sum tradable_sector emp lnK lnQ lnKL TFP export_share if ever
+> _local==1 & (time_foreign==-1)
+
+. est store local
+
+. 
+. quietly estpost sum tradable_sector emp lnK lnQ lnKL TFP export_share if ever
+> _expat==1 & (time_foreign==-1)
+
+. est store expat
+
+. 
+. esttab local expat using "output/table/desc_firmvars.tex", main(mean) aux(sd)
+>  mtitle("Local CEO" "Expatriate CEO") label pare nolegend nonote replace
+(output written to output/table/desc_firmvars.tex)
+
+. 
+. *Selection regression
+. 
+. reghdfe ever_expat tradable_sector time_treat_1990s lnL lnKL TFP export_share
+>  if time_foreign==-1, noabsorb cluster(frame_id_numeric)
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =      1,995
+Absorbing 1 HDFE group                            F(   6,   1988) =       9.58
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.0331
+                                                  Adj R-squared   =     0.0302
+                                                  Within R-sq.    =     0.0331
+Number of clusters (frame_id_numeric) =      1,995Root MSE        =     0.4189
+
+                   (Std. err. adjusted for 1,995 clusters in frame_id_numeric)
+------------------------------------------------------------------------------
+             |               Robust
+  ever_expat | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+tradable_s~r |   .0869663   .0196573     4.42   0.000     .0484151    .1255174
+time_t~1990s |   .0605027   .0199337     3.04   0.002     .0214094    .0995959
+         lnL |   .0037235    .006186     0.60   0.547    -.0084082    .0158553
+        lnKL |   .0100588    .004465     2.25   0.024     .0013022    .0188155
+         TFP |  -.0224266   .0188516    -1.19   0.234    -.0593976    .0145445
+export_share |   .1020337   .0669225     1.52   0.128    -.0292119    .2332793
+       _cons |   .0528671   .0441163     1.20   0.231    -.0336519    .1393862
+------------------------------------------------------------------------------
+
+. sum ever_expat if e(sample)
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+  ever_expat |      1,995    .2370927    .4254063          0          1
+
+. estadd scalar mean2 = r(mean)
+
+added scalar:
+              e(mean2) =  .23709273
+
+. est store est1
+
+. 
+. reghdfe ever_expat lnL lnKL TFP export_share if time_foreign==-1, absorb(year
+> ##teaor08_2d_pre time_treat) cluster(frame_id_numeric)
+(dropped 392 singleton observations)
+(MWFE estimator converged in 2 iterations)
+
+HDFE Linear regression                            Number of obs   =      1,603
+Absorbing 2 HDFE groups                           F(   4,   1178) =       0.56
+Statistics robust to heteroskedasticity           Prob > F        =     0.6926
+                                                  R-squared       =     0.3345
+                                                  Adj R-squared   =     0.0950
+                                                  Within R-sq.    =     0.0039
+Number of clusters (frame_id_numeric) =      1,603Root MSE        =     0.4065
+
+                   (Std. err. adjusted for 1,603 clusters in frame_id_numeric)
+------------------------------------------------------------------------------
+             |               Robust
+  ever_expat | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         lnL |   .0040278   .0087691     0.46   0.646    -.0131769    .0212325
+        lnKL |   .0060627   .0065076     0.93   0.352    -.0067052    .0188305
+         TFP |  -.0187868   .0225291    -0.83   0.405    -.0629883    .0254148
+export_share |   .0556588   .0677883     0.82   0.412    -.0773404    .1886581
+       _cons |   .1697891   .0651507     2.61   0.009     .0419647    .2976134
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+---------------------------------------------------------------+
+           Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-----------------------+---------------------------------------|
+   year#teaor08_2d_pre |       421           0         421     |
+            time_treat |        30          30           0     |
+---------------------------------------------------------------+
+
+. sum ever_expat if e(sample)
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+  ever_expat |      1,603    .2401747    .4273227          0          1
+
+. estadd scalar mean2 = r(mean)
+
+added scalar:
+              e(mean2) =  .24017467
+
+. est store est2
+
+. 
+. esttab est1 est2  using "output/table/selection_reg.tex", star(* .1 ** .05 **
+> * .01) b(3) scalar("mean2 Mean depvar" ) noconstant nonote se replace label r
+> 2 nolegend nonote
+(output written to output/table/selection_reg.tex)
+
+. 
+. 
+. *Regressions
+. global varlist_rhs "lnK lnL TFP lnQ export_share"
+
+. 
+. local estab_options b(3) se  style(tex) replace nolegend label nonote
+
+. local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4
+> ) post(4) baseline(atet) weighting(optimal)
+
+. 
+. *Full sample
+. 
+. eststo clear
+
+. foreach Y in $varlist_rhs {
+  2.         eststo: xt2treatments `Y', `xt2treatments_options'
+  3. }
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet            Number of obs = 14,310
+
+------------------------------------------------------------------------------
+         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .3152809   .1016583     3.10   0.002     .1160342    .5145275
+------------------------------------------------------------------------------
+(est1 stored)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet            Number of obs = 14,310
+
+------------------------------------------------------------------------------
+         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .3657999   .0917284     3.99   0.000     .1860155    .5455843
+------------------------------------------------------------------------------
+(est2 stored)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet            Number of obs = 14,310
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .1242949   .0438998     2.83   0.005     .0382528    .2103369
+------------------------------------------------------------------------------
+(est3 stored)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet            Number of obs = 14,310
+
+------------------------------------------------------------------------------
+         lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .6672523   .1108501     6.02   0.000     .4499901    .8845145
+------------------------------------------------------------------------------
+(est4 stored)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet            Number of obs = 14,310
+
+------------------------------------------------------------------------------
+export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .0554658   .0231585     2.40   0.017     .0100758    .1008557
+------------------------------------------------------------------------------
+(est5 stored)
+
+. 
+. esttab using "output/table/reg_full_sample.tex", `estab_options' 
+(output written to output/table/reg_full_sample.tex)
+
+. 
+. *Tradable/nontradable
+. 
+. 
+. forvalues i=0/1 {
+  2.         eststo clear
+  3.         foreach Y in $varlist_rhs {
+  4.                 eststo: xt2treatments `Y' if tradable_sector==`i', `xt2tre
+> atments_options'
+  5.         }
+  6.         esttab using "output/table/reg_tradable`i'_sample.tex", `estab_opt
+> ions'
+  7. }
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 6,163
+
+------------------------------------------------------------------------------
+         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .2819506    .166482     1.69   0.090    -.0443481    .6082493
+------------------------------------------------------------------------------
+(est1 stored)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 6,163
+
+------------------------------------------------------------------------------
+         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .5080878   .1330472     3.82   0.000       .24732    .7688555
+------------------------------------------------------------------------------
+(est2 stored)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 6,163
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .2056559   .0815725     2.52   0.012     .0457767    .3655351
+------------------------------------------------------------------------------
+(est3 stored)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 6,163
+
+------------------------------------------------------------------------------
+         lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .6998489   .1815928     3.85   0.000     .3439335    1.055764
+------------------------------------------------------------------------------
+(est4 stored)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 6,163
+
+------------------------------------------------------------------------------
+export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   -.013675   .0262788    -0.52   0.603    -.0651805    .0378305
+------------------------------------------------------------------------------
+(est5 stored)
+(output written to output/table/reg_tradable0_sample.tex)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 8,143
+
+------------------------------------------------------------------------------
+         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .3331747   .1277454     2.61   0.009     .0827984     .583551
+------------------------------------------------------------------------------
+(est1 stored)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 8,143
+
+------------------------------------------------------------------------------
+         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .2942194    .117319     2.51   0.012     .0642784    .5241605
+------------------------------------------------------------------------------
+(est2 stored)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 8,143
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .0838811   .0459355     1.83   0.068    -.0061509    .1739131
+------------------------------------------------------------------------------
+(est3 stored)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 8,143
+
+------------------------------------------------------------------------------
+         lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .6169775   .1328289     4.64   0.000     .3566376    .8773175
+------------------------------------------------------------------------------
+(est4 stored)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 8,143
+
+------------------------------------------------------------------------------
+export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .0845353   .0347516     2.43   0.015     .0164234    .1526472
+------------------------------------------------------------------------------
+(est5 stored)
+(output written to output/table/reg_tradable1_sample.tex)
+
+. 
+. 
+. *Export, export entry
+. eststo clear
+
+. eststo: xt2treatments exporter, `xt2treatments_options'
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet            Number of obs = 14,310
+
+------------------------------------------------------------------------------
+    exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .0869735   .0273177     3.18   0.001     .0334318    .1405152
+------------------------------------------------------------------------------
+(est1 stored)
+
+. eststo: xt2treatments exporter if tradable_sector==0, `xt2treatments_options'
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 6,163
+
+------------------------------------------------------------------------------
+    exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .0745564   .0482919     1.54   0.123     -.020094    .1692067
+------------------------------------------------------------------------------
+(est2 stored)
+
+. eststo: xt2treatments exporter if tradable_sector==1, `xt2treatments_options'
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 8,143
+
+------------------------------------------------------------------------------
+    exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .0888101   .0332346     2.67   0.008     .0236714    .1539488
+------------------------------------------------------------------------------
+(est3 stored)
+
+. esttab using "output/table/reg_exporter.tex", `estab_options'
+(output written to output/table/reg_exporter.tex)
+
+. 
+. eststo clear
+
+. eststo: xt2treatments exporter if exporter_pre==0, `xt2treatments_options'
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 6,512
+
+------------------------------------------------------------------------------
+    exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .2037215   .0336227     6.06   0.000     .1378224    .2696207
+------------------------------------------------------------------------------
+(est1 stored)
+
+. eststo: xt2treatments exporter if exporter_pre==0 & tradable_sector==0, `xt2t
+> reatments_options'
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 3,519
+
+------------------------------------------------------------------------------
+    exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |    .245889    .039089     6.29   0.000     .1692759    .3225021
+------------------------------------------------------------------------------
+(est2 stored)
+
+. eststo: xt2treatments exporter if exporter_pre==0 & tradable_sector==1, `xt2t
+> reatments_options'
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 2,972
+
+------------------------------------------------------------------------------
+    exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .1535581   .0439951     3.49   0.000     .0673294    .2397868
+------------------------------------------------------------------------------
+(est3 stored)
+
+. esttab using "output/table/reg_exportentry.tex", `estab_options'
+(output written to output/table/reg_exportentry.tex)
+
+. 
+. 
+. *Qd
+. eststo clear
+
+. eststo: xt2treatments lnQd if lnQd_exist_post==1, `xt2treatments_options'
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet            Number of obs = 14,049
+
+------------------------------------------------------------------------------
+        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .3815471   .1273462     3.00   0.003     .1319532     .631141
+------------------------------------------------------------------------------
+(est1 stored)
+
+. eststo: xt2treatments lnQd if lnQd_exist_post==1 & tradable_sector==0, `xt2tr
+> eatments_options'
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 6,114
+
+------------------------------------------------------------------------------
+        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .5722326   .2089781     2.74   0.006      .162643    .9818222
+------------------------------------------------------------------------------
+(est2 stored)
+
+. eststo: xt2treatments lnQd if lnQd_exist_post==1 & tradable_sector==1, `xt2tr
+> eatments_options'
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 7,931
+
+------------------------------------------------------------------------------
+        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .2900042   .1549783     1.87   0.061    -.0137476     .593756
+------------------------------------------------------------------------------
+(est3 stored)
+
+. esttab using "output/table/reg_lnQd.tex", `estab_options'
+(output written to output/table/reg_lnQd.tex)
+
+. 
+. 
+end of do-file

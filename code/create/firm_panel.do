@@ -9,178 +9,136 @@ local here = r(here)
 
 log using "`here'/output/firm_panel", text replace
 
-* keep only sample from balance-small - NOTE: had to restructure as we have to keep foreign which is different in years - so no collapse this time
+* keep only sample from balance-small
 use "`here'/temp/balance-small-clean.dta"
+
+sort frame_id_numeric year
 by frame_id_numeric: egen firm_birth = min(year)
 by frame_id_numeric: egen firm_death = max(year)
-keep frame_id year firm_birth firm_death foreign
+keep frame_id_numeric year firm_birth firm_death foreign
 tempfile sample
 save `sample', replace
 
-* count expats in do - asterisk used
-*use "`here'/input/ceo-panel/ceo-panel.dta", clear // QUESTION: what is owner
-*rename person_id manager_id
-*merge m:1 frame_id_numeric year using `sample', keep(match) nogen
-*bys frame_id_numeric: egen ever_expat = max(expat == 1)
-*bys frame_id_numeri: egen ever_foreign = max(foreign == 1)
-*egen firm_tag = tag(frame_id_numeric)
-*count if ever_expat == 1 & ever_foreign == 0 & firm_tag == 1
+use "`here'/temp/ceo-panel.dta", clear 
 
-foreach type in ceo nceo {
-	use "`here'/input/`type'-panel/`type'-panel.dta", clear // QUESTION: what is owner
-	rename person_id manager_id
-	
-	*for descriptives (number of ceo-s and nceo-s in original data, number of ceo and nceo job-spells in original data)
-	count
-	egen company_manager_id = group(frame_id_numeric manager_id)
-	codebook manager_id
-	codebook company_manager_id
-	drop company_manager_id
+* only keep sample firms
+merge m:1 frame_id_numeric year using `sample', keep(match) nogen
+count if first_year_of_firm == firm_birth
 
-	* only keep sample firms
-	merge m:1 frame_id_numeric year using `sample', keep(match) nogen
-	count if first_year_of_firm == firm_birth // QUESTION: why not the same? - same for the last year
+*for descriptives (number of ceo-s and nceo-s in original data, number of ceo and nceo job-spells in original data)
+count
+egen company_manager_id = group(frame_id_numeric manager_id)
+codebook manager_id
+codebook company_manager_id
 
-	* balance panel
-	egen company_manager_id = group(frame_id manager_id)
-	xtset company_manager_id year
-	by company_manager_id: generate gap = year - year[_n-1] - 1
-	replace gap = 0 if missing(gap)
-	tabulate gap
+* balance panel
+xtset company_manager_id year
+by company_manager_id: generate gap = year - year[_n-1] - 1
+replace gap = 0 if missing(gap)
+tabulate gap
 
-	* fill in gap if only 1 or 2-year long
-	
-	*forval i = 1(1)2 {
-	*	sort company_manager_id year
-	*	expand 1 + `i' if gap == `i', generate(filled_in_`i') // FIXME OR QUESTION: maybe second year as well
-	*	replace year = year - `i' if filled_in_`i'
-	*	tab filled_in_`i'
-	*}
-	
-	*bys company_manager_id year: replace year = year + _n - 1 if filled_in_2
-	
-	expand 1 + (gap == 1), generate(filled_in)
-	replace year = year - 1 if filled_in
+* fill in holes of 1 year, but not longer
+expand 1 + (gap == 1), generate(filled_in)
+replace year = year - 1 if filled_in
 
-	* create contiguous spells
-	xtset company_manager_id year
-	gen change = ceo != L.ceo // intuition: should be ok in both files (possible FIXME)
-	bysort company_manager_id (year): gen job_spell = sum(change)
+* create contiguous spells
+xtset company_manager_id year
+gen change = ceo != L.ceo
+bysort company_manager_id (year): gen job_spell = sum(change)
 
-	* create job begin and end for each manager spell
-	bys frame_id_numeric manager_id job_spell: egen job_begin = min(year)
-	bys frame_id_numeric manager_id job_spell: egen job_end = max(year)
-	keep frame_id_numeric manager_id job_spell year job_begin job_end expat founder insider outsider firm_birth foreign country_code
+* create job begin and end for each manager spell
+bys frame_id_numeric manager_id job_spell: egen job_begin = min(year)
+bys frame_id_numeric manager_id job_spell: egen job_end = max(year)
+keep frame_id_numeric manager_id job_spell year job_begin job_end firm_birth foreign foreignness
 
-	* if first managers arrive in year 1, extrapolate to year 0 - DROP SPELL
-	bys frame_id_numeric: egen first_cohort = min(job_begin)
-	replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_begin == first_cohort)
+* if first managers arrive in year 1, extrapolate to year 0 - DROP SPELL
+bys frame_id_numeric: egen first_cohort = min(job_begin)
+replace job_begin = job_begin - 1 if (first_cohort == firm_birth + 1) & (job_begin == first_cohort)
 
-	* NOTE: no collapse and expand --> there might be holes
-	sort frame_id_numeric manager_id year
-	count if frame_id_numeric == frame_id_numeric[_n-1] & manager_id == manager_id[_n-1] & year != (year[_n-1] + 1)
+* NOTE: no collapse and expand --> there might be holes
+sort frame_id_numeric manager_id year
+count if frame_id_numeric == frame_id_numeric[_n-1] & manager_id == manager_id[_n-1] & year != (year[_n-1] + 1)
 
-	* expat before 1990
-	replace expat = 0 if job_begin < 1990
-
-	***********************
-	* time invariant vars and drop entire series of firms from sample *
-	***********************
-		by frame_id_numeric: egen first_year_expat = min(cond(expat == 1, job_begin,.))
-		by frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.))
-		
-		* which of the two happened first?
-		generate manager_after_owner = first_year_expat - first_year_foreign
-		* event time relative to that
-		generate event_time = year - first_year_expat
-		
-		* if foreign manager arrives up to 2 years before 1 year later than foreign owner, use foreign manager as arrival date. this is easier to implement
-		replace foreign = 1 if (manager_after_owner == -2) & inlist(event_time, 0, 1)
-		replace foreign = 1 if (manager_after_owner == -1) & inlist(event_time, 0)
-		replace foreign = 0 if (manager_after_owner == +1) & inlist(event_time, -1)
-
-		* QUESTION: order of deletions (may be fine as all are firm level)
-		* drop firms where expat arrives earlier than 2 years before owner
-		drop if manager_after_owner < -2
-		
-		* ever expat and foreign created after foreign changes (drops were firm level before so should not mess with ever variables)
-		foreach X of var expat foreign {
-			by frame_id_numeric: egen ever_`X'_`type' = max(`X'==1)
-		}
-
-		* drop if there was an expat but was never foreign
-		drop if ever_expat == 1 & ever_foreign == 0
-		scalar dropped_do3_expat_firmyears = r(N_drop)
-		
-		* drop too many CEO-s - FIXME AND QUESTION: should be moved in the next file where spells are limited - but there cannot be created without manager level data
-		egen fp_tag = tag(frame_id_numeric manager_id) 
-		by frame_id_numeric: egen n_ceo_ever = sum(fp_tag)
-		drop if n_ceo > 15
-		scalar dropped_too_many_CEOs = r(N_drop)
-		drop fp_tag n_ceo_ever
-		
-	* hired or fired ceo since last observed year of firm - * POSSIBLE FIXME: expat, owner, insider, outsider, founder - hire, fire combinations later
-	tempvar previous_year
-	generate previous_year = .
-	forval t = 1985/2018 {
-		by frame_id_numeric: egen `previous_year' = max(cond(year < `t', year, .))
-		replace previous_year = `previous_year' if year == `t'
-		drop `previous_year'
-	}
-
-	by frame_id_numeric: egen first_year = min(year)
-	bys frame_id_numeric (year): generate byte hire = cond(first_year == year, 1, (job_begin <= year) & (job_begin > previous_year))
-
-	tempvar next_year
-	generate next_year = .
-	forval t = 1985/2018 {
-		by frame_id_numeric: egen `next_year' = min(cond(year > `t', year, .))
-		replace next_year = `next_year' if year == `t'
-		drop `next_year'
-	}
-
-	gen byte fire = ((job_end >= year) & (job_end < next_year))
-	tabulate hire fire 
-
-	gen hire_expat_`type' = hire * expat
-	gen fire_expat_`type' = fire * expat
-
-	* number of expats and locals
-	bys frame_id_numeric year: egen n_expat_`type' = total(cond(expat, 1, 0)) // could be in collapse but local not
-	bys frame_id_numeric year: egen n_local_`type' = total(cond(!expat, 1, 0))
-	
-	* create firm-year data
-	* FIXME: country_code may be different within a firm-year
-	collapse (sum) n_founder_`type' = founder n_insider_`type' = insider n_outsider_`type' = outsider (firstnm) n_expat_`type' n_local_`type' foreign_`type' = foreign ever_expat_`type' ever_foreign_`type' (count) n_`type' = expat (max) hire_`type' = hire fire_`type' = fire hire_expat_`type' fire_expat_`type', by(frame_id_numeric year)
-
-	* managers in first year not classified as new hires and in last year not classified as fired
-	bys frame_id_numeric (year): replace hire_`type' = 0 if (_n==1)
-	bys frame_id_numeric (year): replace fire_`type' = 0 if (_n==_N)
-	bys frame_id_numeric (year): replace hire_expat_`type' = 0 if (_n==1)
-	bys frame_id_numeric (year): replace fire_expat_`type' = 0 if (_n==_N)
-	bys frame_id_numeric (year): gen ceo_spell_`type' = sum(hire_`type' | fire_`type') + 1 // so that index start from 1
-
-	* create dummies from numbers
-	foreach var in expat local founder insider outsider {
-		gen has_`var'_`type' = (n_`var'_`type' > 0) & n_`var'_`type' != .
-	}
-	
-	tempfile manager_`type'
-	save `manager_`type''
+* hired or fired ceo since last observed year of firm
+tempvar previous_year
+generate previous_year = .
+forval t = 1985/2018 {
+	quietly by frame_id_numeric: egen `previous_year' = max(cond(year < `t', year, .))
+	quietly replace previous_year = `previous_year' if year == `t'
+	drop `previous_year'
 }
 
-use `manager_ceo'
-* merge on manager_countries
-merge 1:1 frame_id_numeric year using "`here'/temp/manager_country.dta", keep(master match) nogen
-tabulate has_expat_ceo if missing(country_list)
-tabulate has_expat_ceo if !missing(country_list)
-rename country_list country_all_ceo
-rename language_list lang_all_ceo
+tempvar next_year
+generate next_year = .
+forval t = 1985/2018 {
+	quietly by frame_id_numeric: egen `next_year' = min(cond(year > `t', year, .))
+	quietly replace next_year = `next_year' if year == `t'
+	drop `next_year'
+}
 
-merge 1:1 frame_id_numeric year using `manager_nceo', keep (1 3) nogen // 1, only 1 and 3 to not have missing cases in tab has_expat_ceo, missing in analysis-sample 2, merge here to makes sure to have only ceo-s when countries are merged
+generate byte hire = (job_begin <= year) & (job_begin > previous_year) & !missing(previous_year)
+* first cohort of managers are classified as newly hired
+replace hire = 1 if job_begin == first_cohort
+generate byte fire = (job_end >= year) & (job_end < next_year) & !missing(next_year)
+tabulate hire fire 
+
+generate byte expat = foreignness > 0
+
+* manager change may anticipate foreign change by max this many years
+local anticipation 1
+local lag 1
+tempvar time_foreign first_year_foreign ever_expat
+***********************
+* time invariant vars and drop entire series of firms from sample *
+***********************
+by frame_id_numeric: egen `first_year_foreign' = min(cond(foreign == 1, year,.))
+generate `time_foreign' = year - `first_year_foreign'
+by frame_id_numeric: egen `ever_expat' = max((expat == 1) & inrange(`time_foreign', -`anticipation', `lag'))
+by frame_id_numeric: egen first_year_hire = min(cond((hire == 1) & (`time_foreign' >= -`anticipation'), job_begin,.))
+by frame_id_numeric: egen first_year_expat = min(cond(expat == 1, job_begin,.))
+by frame_id_numeric: egen first_year_foreign = min(cond(foreign == 1, year,.))
+
+* which of the two happened first?
+generate expat_after_owner = first_year_expat - first_year_foreign
+generate manager_after_owner = first_year_hire - first_year_foreign
+tabulate manager_after_owner
+
+* if foreign manager arrives up to X years before or Y years later than foreign owner, use foreign manager as arrival date. 
+forvalues t = -`anticipation'/-1 {
+	local k = abs(`t') - 1
+	replace foreign = 1 if (expat_after_owner == `t') 	& inrange(year - first_year_expat, 0, `k') 	& `ever_expat' 
+}
+forvalues t = 1/`lag' {
+	local minust = -`t'
+	replace foreign = 0 if (expat_after_owner == `t') 	& inrange(year - first_year_expat, `minust', -1)	& `ever_expat'
+}
+* drop firms where expat arrives earlier than X years before owner
+drop if first_year_expat - first_year_foreign < -`anticipation'
+
+* ever expat and foreign created after foreign changes (drops were firm level before so should not mess with ever variables)
+foreach X of var expat foreign {
+	by frame_id_numeric: egen ever_`X' = max(`X'==1)
+}
+
+* drop if there was an expat but was never foreign - these are likely error
+drop if ever_expat == 1 & ever_foreign == 0
+
+* drop too many CEO-s
+egen fp_tag = tag(frame_id_numeric manager_id) 
+by frame_id_numeric: egen n_ceo_ever = sum(fp_tag)
+drop if n_ceo_ever > 15
+drop fp_tag n_ceo_ever
+	
+* create firm-year data
+collapse (firstnm) foreign ever_expat ever_foreign (count) n_ceo = expat (max) hire_ceo = hire fire_ceo = fire foreignness, by(frame_id_numeric year)
+label values foreignness foreignness
+* define expat as any foreign link. we can limit the sample later
+generate has_expat_ceo = foreignness > 0 & !missing(foreignness)
+
+* if there is a change in the ceo team, hiring, increement the spell counter
+bys frame_id_numeric (year): gen ceo_spell = sum(hire_ceo) + 1 // so that index start from 1
 
 count
 compress
-*save_all_to_json
 save "`here'/temp/firm_events.dta", replace
 log close

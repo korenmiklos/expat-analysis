@@ -1,0 +1,57 @@
+
+  ___  ____  ____  ____  ____ ®
+ /__    /   ____/   /   ____/      17.0
+___/   /   /___/   /   /___/       BE—Basic Edition
+
+ Statistics and Data Science       Copyright 1985-2021 StataCorp LLC
+                                   StataCorp
+                                   4905 Lakeway Drive
+                                   College Station, Texas 77845 USA
+                                   800-STATA-PC        https://www.stata.com
+                                   979-696-4600        stata@stata.com
+
+Stata license: 6-user network perpetual
+Serial number: 501706335292
+  Licensed to: Miklos Koren
+               Central European University
+
+Notes:
+      1. Stata is running in batch mode.
+      2. Unicode is supported; see help unicode_advice.
+
+. do code/estimate/cross_section.do 
+
+. clear all
+
+. here
+/srv/sandbox/expat/almos/
+
+. local here = r(here)
+
+. 
+. use "`here'/temp/analysis_sample.dta", clear
+
+. 
+. local LHS lnL lnQL TFP_cd exporter RperK
+
+. local dummies teaor08_2d##year
+
+. local treatments foreign foreign_hire has_expat
+
+. local options keep(`treatments') tex(frag) dec(3)  nocons nonotes addtext(Ind
+> -year FE, YES)
+
+. 
+. local fmode replace
+
+. foreach Y of var `LHS' {
+  2.         reghdfe `Y' `treatments', a(`dummies') cluster(originalid)
+  3.         outreg2 using "`here'/output/table/cross_section.tex", `fmode' `op
+> tions'
+  4.         local fmode append
+  5. }
+has_expat ambiguous abbreviation
+r(111);
+
+end of do-file
+r(111);

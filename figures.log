@@ -1,0 +1,660 @@
+
+  ___  ____  ____  ____  ____ ®
+ /__    /   ____/   /   ____/      18.0
+___/   /   /___/   /   /___/       MP—Parallel Edition
+
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
+                                   StataCorp
+                                   4905 Lakeway Drive
+                                   College Station, Texas 77845 USA
+                                   800-STATA-PC        https://www.stata.com
+                                   979-696-4600        stata@stata.com
+
+Stata license: Single-user 2-core  perpetual
+Serial number: 501806323834
+  Licensed to: Miklos Koren
+               CEU MicroData
+
+Notes:
+      1. Stata is running in batch mode.
+      2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
+
+. do code/estimate/figures.do 
+
+. use "temp/analysis_sample.dta", clear
+
+. which xt2treatments
+/Users/koren/Library/Application Support/Stata/ado/plus/x/xt2treatments.ado
+*! version 0.8.4 21may2024
+
+. which e2frame
+/Users/koren/Library/Application Support/Stata/ado/plus/e/e2frame.ado
+*! version 0.1.0 21may2024
+
+. which reghdfe
+/Users/koren/Library/Application Support/Stata/ado/plus/r/reghdfe.ado
+*! version 6.12.2 02Nov2021
+
+. which estout
+/Users/koren/Library/Application Support/Stata/ado/plus/e/estout.ado
+*! version 3.31  26apr2022  Ben Jann
+
+. 
+. global varlist_rhs "lnK lnL TFP lnQ export_share"
+
+. local graph_command graph twoway (rarea lower upper xvar, fcolor(gray%5) lcol
+> or(gray%10)) (connected coef xvar, lcolor(cranberry)), graphregion(color(whit
+> e)) xlabel(-4(1)4) legend(off) xline(-0.5) xscale(range (-4 4)) xtitle("Event
+>  time") yline(0)
+
+. local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4
+> ) post(4) baseline(-1) weighting(optimal)
+
+. local esttab_options b(3) se style(tex) replace nolegend label nonote
+
+. 
+. *Figures, full sample
+. 
+. eststo clear
+
+. foreach Y in $varlist_rhs {
+  2.         eststo: xt2treatments `Y', `xt2treatments_options'
+  3.         e2frame, generate(expat_fig)
+  4.         frame expat_fig: `graph_command'
+  5.         graph export "output/twfe/expat_`Y'.pdf", replace
+  6. }
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1              Number of obs = 14,310
+
+------------------------------------------------------------------------------
+         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |     .04686   .0993863     0.47   0.637    -.1479336    .2416537
+          -3 |   .0052371   .0902278     0.06   0.954    -.1716061    .1820803
+          -2 |  -.0465764   .0642643    -0.72   0.469    -.1725321    .0793794
+          -1 |          0  (omitted)
+           0 |    .138374   .0606869     2.28   0.023       .01943    .2573181
+           1 |   .2490007   .0812582     3.06   0.002     .0897375    .4082639
+           2 |   .3091954    .099632     3.10   0.002     .1139203    .5044706
+           3 |   .3515145   .1211766     2.90   0.004     .1140127    .5890162
+           4 |   .5352206   .1365938     3.92   0.000     .2675016    .8029396
+------------------------------------------------------------------------------
+(est1 stored)
+file output/twfe/expat_lnK.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1              Number of obs = 14,310
+
+------------------------------------------------------------------------------
+         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0542629   .0719735    -0.75   0.451    -.1953284    .0868025
+          -3 |  -.0488707   .0602413    -0.81   0.417    -.1669414       .0692
+          -2 |  -.0559101   .0473133    -1.18   0.237    -.1486424    .0368222
+          -1 |          0  (omitted)
+           0 |   .2513296    .061755     4.07   0.000      .130292    .3723672
+           1 |   .1980488   .0826886     2.40   0.017     .0359821    .3601154
+           2 |   .3776374   .0905925     4.17   0.000     .2000794    .5551954
+           3 |   .3931449   .1067906     3.68   0.000     .1838392    .6024507
+           4 |   .4100341   .1249443     3.28   0.001     .1651478    .6549203
+------------------------------------------------------------------------------
+(est2 stored)
+file output/twfe/expat_lnL.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1              Number of obs = 14,310
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |    .018247   .0357936     0.51   0.610    -.0519072    .0884012
+          -3 |   .0270085   .0331848     0.81   0.416    -.0380324    .0920495
+          -2 |   .0125353   .0299459     0.42   0.676    -.0461576    .0712282
+          -1 |          0  (omitted)
+           0 |   .0803492   .0366109     2.19   0.028     .0085931    .1521053
+           1 |   .1179397   .0456483     2.58   0.010     .0284708    .2074087
+           2 |   .1348668   .0486712     2.77   0.006      .039473    .2302607
+           3 |   .1923311   .0525449     3.66   0.000     .0893449    .2953172
+           4 |    .168226   .0668842     2.52   0.012     .0371354    .2993166
+------------------------------------------------------------------------------
+(est3 stored)
+file output/twfe/expat_TFP.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1              Number of obs = 14,310
+
+------------------------------------------------------------------------------
+         lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .0124286   .0891565     0.14   0.889    -.1623149    .1871721
+          -3 |   .0721027   .0781073     0.92   0.356    -.0809848    .2251901
+          -2 |   .0252097    .051818     0.49   0.627    -.0763517    .1267712
+          -1 |          0  (omitted)
+           0 |    .412708   .0721164     5.72   0.000     .2713624    .5540537
+           1 |   .5491588   .0933834     5.88   0.000     .3661306    .7321869
+           2 |    .742237   .1128911     6.57   0.000     .5209745    .9634995
+           3 |   .8936958   .1269459     7.04   0.000     .6448864    1.142505
+           4 |   .8756383   .1530077     5.72   0.000     .5757488    1.175528
+------------------------------------------------------------------------------
+(est4 stored)
+file output/twfe/expat_lnQ.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1              Number of obs = 14,310
+
+------------------------------------------------------------------------------
+export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   -.038217   .0177855    -2.15   0.032    -.0730759    -.003358
+          -3 |  -.0179039   .0156845    -1.14   0.254     -.048645    .0128372
+          -2 |  -.0099967   .0199763    -0.50   0.617    -.0491495    .0291561
+          -1 |          0  (omitted)
+           0 |   .0225963   .0162563     1.39   0.165    -.0092654     .054458
+           1 |   .0265443   .0205921     1.29   0.197    -.0138155    .0669042
+           2 |   .0259403   .0249755     1.04   0.299    -.0230109    .0748914
+           3 |   .0333787   .0475837     0.70   0.483    -.0598837    .1266411
+           4 |   .0862224   .0328451     2.63   0.009     .0218471    .1505976
+------------------------------------------------------------------------------
+(est5 stored)
+file output/twfe/expat_export_share.pdf saved as PDF format
+
+. 
+. esttab using "output/table/dynamics_coeff.tex", `esttab_options'
+(output written to output/table/dynamics_coeff.tex)
+
+. 
+. *Figures, tradable/nontradable
+. 
+. forvalues s = 0/1 {
+  2.         eststo clear
+  3.         foreach Y in $varlist_rhs {
+  4.                 eststo: xt2treatments `Y' if tradable_sector==`s', `xt2tre
+> atments_options'
+  5.                 e2frame, generate(expat_fig)
+  6.                 frame expat_fig: `graph_command'
+  7.                 graph export "output/twfe/expat_tradable`s'_`Y'.pdf", repl
+> ace
+  8.         }
+  9. }
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 6,163
+
+------------------------------------------------------------------------------
+         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .0730947    .137102     0.53   0.594    -.1956203    .3418097
+          -3 |  -.0476466   .1477882    -0.32   0.747    -.3373062     .242013
+          -2 |   .0181458   .1181404     0.15   0.878    -.2134052    .2496968
+          -1 |          0  (omitted)
+           0 |   .1302682    .094261     1.38   0.167      -.05448    .3150164
+           1 |   .2789822   .1480432     1.88   0.060    -.0111771    .5691416
+           2 |   .2643054   .1732371     1.53   0.127    -.0752331    .6038438
+           3 |   .2990938   .2106058     1.42   0.156     -.113686    .7118736
+           4 |   .4915959   .2354169     2.09   0.037     .0301872    .9530045
+------------------------------------------------------------------------------
+(est1 stored)
+file output/twfe/expat_tradable0_lnK.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 6,163
+
+------------------------------------------------------------------------------
+         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .0083589   .0937435     0.09   0.929    -.1753749    .1920928
+          -3 |  -.0790876   .0767951    -1.03   0.303    -.2296033    .0714281
+          -2 |   -.078641   .0605115    -1.30   0.194    -.1972414    .0399594
+          -1 |          0  (omitted)
+           0 |   .1911622   .1062845     1.80   0.072    -.0171516     .399476
+           1 |   .2888896   .1481199     1.95   0.051    -.0014202    .5791993
+           2 |   .5611465   .1450483     3.87   0.000      .276857    .8454359
+           3 |   .5993523   .1602623     3.74   0.000      .285244    .9134605
+           4 |   .7131761   .1825081     3.91   0.000     .3554668    1.070885
+------------------------------------------------------------------------------
+(est2 stored)
+file output/twfe/expat_tradable0_lnL.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 6,163
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .0588387   .0567263     1.04   0.300    -.0523429    .1700202
+          -3 |   .0543196   .0617551     0.88   0.379    -.0667181    .1753573
+          -2 |   .0596412   .0508547     1.17   0.241    -.0400321    .1593145
+          -1 |          0  (omitted)
+           0 |   .1985216   .0704674     2.82   0.005      .060408    .3366353
+           1 |   .2537151    .092446     2.74   0.006     .0725244    .4349059
+           2 |    .277657   .0905503     3.07   0.002     .1001816    .4551325
+           3 |   .2664307   .0963898     2.76   0.006     .0775101    .4553513
+           4 |   .2479544   .1370553     1.81   0.070     -.020669    .5165778
+------------------------------------------------------------------------------
+(est3 stored)
+file output/twfe/expat_tradable0_TFP.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 6,163
+
+------------------------------------------------------------------------------
+         lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .1443439   .1212744     1.19   0.234    -.0933496    .3820373
+          -3 |   .0718106   .1594817     0.45   0.653    -.2407678    .3843889
+          -2 |   .0589251    .074263     0.79   0.428    -.0866277    .2044778
+          -1 |          0  (omitted)
+           0 |   .4561481   .1171997     3.89   0.000     .2264408    .6858553
+           1 |   .6260359   .1545985     4.05   0.000     .3230284    .9290433
+           2 |   .9072648   .1923518     4.72   0.000     .5302622    1.284267
+           3 |   .9362515   .2215847     4.23   0.000     .5019535    1.370549
+           4 |   .9173935    .284675     3.22   0.001     .3594407    1.475346
+------------------------------------------------------------------------------
+(est4 stored)
+file output/twfe/expat_tradable0_lnQ.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 6,163
+
+------------------------------------------------------------------------------
+export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0184233   .0172862    -1.07   0.287    -.0523036     .015457
+          -3 |    .010804   .0137053     0.79   0.431    -.0160578    .0376658
+          -2 |  -.0006593   .0075554    -0.09   0.930    -.0154677     .014149
+          -1 |          0  (omitted)
+           0 |  -.0287954   .0158649    -1.82   0.070      -.05989    .0022993
+           1 |   -.033664   .0229895    -1.46   0.143    -.0787226    .0113946
+           2 |  -.0221141   .0289214    -0.76   0.444    -.0787991    .0345708
+           3 |  -.0019806   .0349897    -0.06   0.955    -.0705592     .066598
+           4 |   .0078307   .0352021     0.22   0.824    -.0611642    .0768257
+------------------------------------------------------------------------------
+(est5 stored)
+file output/twfe/expat_tradable0_export_share.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 8,143
+
+------------------------------------------------------------------------------
+         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0546326   .1401154    -0.39   0.697    -.3292537    .2199885
+          -3 |  -.0142621   .1122856    -0.13   0.899     -.234338    .2058137
+          -2 |  -.0613399   .0776563    -0.79   0.430    -.2135433    .0908636
+          -1 |          0  (omitted)
+           0 |    .125102   .0790945     1.58   0.114    -.0299204    .2801244
+           1 |   .2004714   .0974885     2.06   0.040     .0093974    .3915454
+           2 |   .3026865   .1201531     2.52   0.012     .0671907    .5381823
+           3 |   .3507705   .1447189     2.42   0.015     .0671266    .6344144
+           4 |   .5240501   .1610352     3.25   0.001     .2084269    .8396733
+------------------------------------------------------------------------------
+(est1 stored)
+file output/twfe/expat_tradable1_lnK.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 8,143
+
+------------------------------------------------------------------------------
+         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0714719   .0959648    -0.74   0.456    -.2595595    .1166157
+          -3 |  -.0317017   .0814253    -0.39   0.697    -.1912924     .127889
+          -2 |  -.0446562    .060382    -0.74   0.460    -.1630026    .0736903
+          -1 |          0  (omitted)
+           0 |   .2601568   .0782961     3.32   0.001     .1066993    .4136142
+           1 |    .151206   .0995702     1.52   0.129    -.0439479    .3463599
+           2 |   .2884723   .1120449     2.57   0.010     .0688684    .5080762
+           3 |   .2987101    .134141     2.23   0.026     .0357987    .5616216
+           4 |   .2877648   .1573919     1.83   0.067    -.0207176    .5962472
+------------------------------------------------------------------------------
+(est2 stored)
+file output/twfe/expat_tradable1_lnL.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 8,143
+
+------------------------------------------------------------------------------
+         TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0078631   .0428955    -0.18   0.855    -.0919367    .0762105
+          -3 |     .02331   .0402538     0.58   0.563    -.0555859     .102206
+          -2 |   .0137281   .0369776     0.37   0.710    -.0587466    .0862029
+          -1 |          0  (omitted)
+           0 |   .0255777   .0414712     0.62   0.537    -.0557044    .1068597
+           1 |   .0595912   .0477078     1.25   0.212    -.0339144    .1530968
+           2 |   .0836095   .0522442     1.60   0.110    -.0187873    .1860063
+           3 |   .1633437   .0561077     2.91   0.004     .0533746    .2733128
+           4 |   .1237524   .0615953     2.01   0.045      .003028    .2444769
+------------------------------------------------------------------------------
+(est3 stored)
+file output/twfe/expat_tradable1_TFP.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 8,143
+
+------------------------------------------------------------------------------
+         lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   -.069255   .1090973    -0.63   0.526    -.2830817    .1445717
+          -3 |   .0828149   .0844069     0.98   0.327    -.0826195    .2482494
+          -2 |   .0395658   .0668849     0.59   0.554    -.0915263    .1706579
+          -1 |          0  (omitted)
+           0 |   .3612752   .0879335     4.11   0.000     .1889286    .5336217
+           1 |   .4926036   .1116921     4.41   0.000     .2736911    .7115161
+           2 |   .6374397   .1334016     4.78   0.000     .3759773    .8989021
+           3 |   .8214004   .1477806     5.56   0.000     .5317558    1.111045
+           4 |    .838576   .1695219     4.95   0.000     .5063192    1.170833
+------------------------------------------------------------------------------
+(est4 stored)
+file output/twfe/expat_tradable1_lnQ.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 8,143
+
+------------------------------------------------------------------------------
+export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0486456   .0257638    -1.89   0.059    -.0991417    .0018505
+          -3 |  -.0349054   .0228064    -1.53   0.126    -.0796052    .0097943
+          -2 |  -.0110359   .0315108    -0.35   0.726    -.0727959    .0507242
+          -1 |          0  (omitted)
+           0 |   .0454885   .0268136     1.70   0.090    -.0070653    .0980422
+           1 |   .0520975   .0318987     1.63   0.102    -.0104229    .1146178
+           2 |   .0459241   .0379187     1.21   0.226    -.0283952    .1202435
+           3 |   .0423575   .0722687     0.59   0.558    -.0992865    .1840015
+           4 |   .1185751   .0495766     2.39   0.017     .0214067    .2157436
+------------------------------------------------------------------------------
+(est5 stored)
+file output/twfe/expat_tradable1_export_share.pdf saved as PDF format
+
+. 
+. *Figures, export, export entry lnQd
+. 
+. xt2treatments exporter, `xt2treatments_options'
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1              Number of obs = 14,310
+
+------------------------------------------------------------------------------
+    exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0492074   .0344196    -1.43   0.153    -.1166686    .0182539
+          -3 |  -.0506561   .0315057    -1.61   0.108    -.1124062    .0110939
+          -2 |  -.0390021   .0255539    -1.53   0.127    -.0890869    .0110827
+          -1 |          0  (omitted)
+           0 |   .0208763   .0209186     1.00   0.318    -.0201233    .0618759
+           1 |   .0372795   .0265174     1.41   0.160    -.0146936    .0892527
+           2 |   .0541258    .031128     1.74   0.082    -.0068838    .1151355
+           3 |   .0790712   .0331983     2.38   0.017     .0140038    .1441386
+           4 |   .0699326   .0372668     1.88   0.061    -.0031089    .1429741
+------------------------------------------------------------------------------
+
+. e2frame, generate(expat_fig)
+
+. frame expat_fig: `graph_command'
+
+. graph export "output/twfe/expat_exporter.pdf", replace
+file output/twfe/expat_exporter.pdf saved as PDF format
+
+. 
+. xt2treatments exporter if exporter_pre==0, `xt2treatments_options'
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 6,512
+
+------------------------------------------------------------------------------
+    exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0032067   .0310275    -0.10   0.918    -.0640196    .0576061
+          -3 |   3.30e-19   5.19e-19     0.64   0.525    -6.87e-19    1.35e-18
+          -2 |   1.46e-18   4.45e-19     3.29   0.001     5.91e-19    2.34e-18
+          -1 |          0  (omitted)
+           0 |   .1090288    .032078     3.40   0.001      .046157    .1719005
+           1 |   .1980593   .0395957     5.00   0.000     .1204532    .2756654
+           2 |   .2484401    .042499     5.85   0.000     .1651437    .3317366
+           3 |   .2414153   .0456964     5.28   0.000      .151852    .3309785
+           4 |   .2176558   .0511233     4.26   0.000      .117456    .3178557
+------------------------------------------------------------------------------
+
+. e2frame, generate(expat_fig)
+
+. frame expat_fig: `graph_command'
+
+. graph export "output/twfe/expat_export_entry.pdf", replace
+file output/twfe/expat_export_entry.pdf saved as PDF format
+
+. 
+. xt2treatments lnQd if lnQd_exist_post==1, `xt2treatments_options'
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1              Number of obs = 14,049
+
+------------------------------------------------------------------------------
+        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .2297714   .1196261     1.92   0.055    -.0046915    .4642344
+          -3 |    .181703   .0982073     1.85   0.064    -.0107798    .3741858
+          -2 |   .1099496   .0669139     1.64   0.100    -.0211992    .2410983
+          -1 |          0  (omitted)
+           0 |   .3634247   .0858039     4.24   0.000      .195252    .5315973
+           1 |   .4024716   .1092312     3.68   0.000     .1883825    .6165608
+           2 |   .6212978   .1266122     4.91   0.000     .3731425    .8694531
+           3 |   .6562438   .1537539     4.27   0.000     .3548917     .957596
+           4 |   .5160777   .1812137     2.85   0.004     .1609055      .87125
+------------------------------------------------------------------------------
+
+. e2frame, generate(expat_fig)
+
+. frame expat_fig: `graph_command'
+
+. graph export "output/twfe/expat_lnQd.pdf", replace
+file output/twfe/expat_lnQd.pdf saved as PDF format
+
+. 
+. forvalues i = 0/1 {
+  2.         xt2treatments exporter if tradable_sector==`i', `xt2treatments_opt
+> ions'
+  3.         e2frame, generate(expat_fig)
+  4.         frame expat_fig: `graph_command'
+  5.         graph export "output/twfe/expat_tradable`i'_exporter.pdf", replace
+  6. 
+.         xt2treatments exporter if exporter_pre==0 & tradable_sector==`i', `xt
+> 2treatments_options'
+  7.         e2frame, generate(expat_fig)
+  8.         frame expat_fig: `graph_command'
+  9.         graph export "output/twfe/expat_tradable`i'_export_entry.pdf", rep
+> lace
+ 10. 
+.         xt2treatments lnQd if lnQd_exist_post==1 & tradable_sector==`i', `xt2
+> treatments_options'
+ 11.         e2frame, generate(expat_fig)
+ 12.         frame expat_fig: `graph_command'
+ 13.         graph export "output/twfe/expat_tradable`i'_lnQd.pdf", replace
+ 14. }
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 6,163
+
+------------------------------------------------------------------------------
+    exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0494551   .0488151    -1.01   0.311    -.1451309    .0462208
+          -3 |  -.1094169   .0530329    -2.06   0.039    -.2133595   -.0054744
+          -2 |  -.0364793   .0380375    -0.96   0.338    -.1110314    .0380728
+          -1 |          0  (omitted)
+           0 |  -.0415897   .0379964    -1.09   0.274    -.1160612    .0328818
+           1 |   .0013723   .0471447     0.03   0.977    -.0910297    .0937743
+           2 |   .0713398   .0582012     1.23   0.220    -.0427324    .1854119
+           3 |   .0639072   .0684578     0.93   0.351    -.0702677    .1980821
+           4 |   .0335631    .068211     0.49   0.623     -.100128    .1672542
+------------------------------------------------------------------------------
+file output/twfe/expat_tradable0_exporter.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 3,519
+
+------------------------------------------------------------------------------
+    exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |  -.0146584   .0230959    -0.63   0.526    -.0599256    .0306088
+          -3 |  -3.96e-18   6.25e-18    -0.63   0.527    -1.62e-17    8.30e-18
+          -2 |   3.18e-18   1.37e-18     2.33   0.020     5.04e-19    5.86e-18
+          -1 |          0  (omitted)
+           0 |   .0659469   .0410811     1.61   0.108    -.0145705    .1464643
+           1 |   .1779969   .0552818     3.22   0.001     .0696467    .2863472
+           2 |   .3269764   .0557514     5.86   0.000     .2177056    .4362472
+           3 |   .3692142   .0543481     6.79   0.000     .2626938    .4757346
+           4 |   .2709877   .0601911     4.50   0.000     .1530152    .3889601
+------------------------------------------------------------------------------
+file output/twfe/expat_tradable0_export_entry.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 6,114
+
+------------------------------------------------------------------------------
+        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .1561002    .140859     1.11   0.268    -.1199783    .4321787
+          -3 |   .0257832   .1575719     0.16   0.870    -.2830522    .3346185
+          -2 |   .0493869    .076818     0.64   0.520    -.1011736    .1999474
+          -1 |          0  (omitted)
+           0 |   .4602809   .1500808     3.07   0.002     .1661279    .7544338
+           1 |   .6121327   .1804547     3.39   0.001     .2584479    .9658174
+           2 |   .8042058    .219147     3.67   0.000     .3746857    1.233726
+           3 |   .7096152   .2846949     2.49   0.013     .1516235    1.267607
+           4 |   .5640163   .3342601     1.69   0.092    -.0911214    1.219154
+------------------------------------------------------------------------------
+file output/twfe/expat_tradable0_lnQd.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 8,143
+
+------------------------------------------------------------------------------
+    exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   -.045222   .0432932    -1.04   0.296     -.130075    .0396311
+          -3 |  -.0155586   .0382887    -0.41   0.684     -.090603    .0594859
+          -2 |  -.0349485   .0318886    -1.10   0.273    -.0974491     .027552
+          -1 |          0  (omitted)
+           0 |   .0484353   .0261093     1.86   0.064    -.0027381    .0996087
+           1 |   .0578648   .0321897     1.80   0.072    -.0052259    .1209555
+           2 |   .0436123   .0376518     1.16   0.247    -.0301839    .1174085
+           3 |   .0796001   .0387529     2.05   0.040     .0036458    .1555544
+           4 |   .0948767    .044026     2.16   0.031     .0085873     .181166
+------------------------------------------------------------------------------
+file output/twfe/expat_tradable1_exporter.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 2,972
+
+------------------------------------------------------------------------------
+    exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |    .013128   .0477404     0.27   0.783    -.0804414    .1066973
+          -3 |   1.26e-17   5.66e-18     2.23   0.026     1.50e-18    2.37e-17
+          -2 |   1.25e-18   1.84e-18     0.68   0.496    -2.35e-18    4.86e-18
+          -1 |          0  (omitted)
+           0 |   .1155666   .0468138     2.47   0.014     .0238132    .2073199
+           1 |   .1859366    .049479     3.76   0.000     .0889595    .2829138
+           2 |   .1875716   .0576796     3.25   0.001     .0745218    .3006215
+           3 |   .1324603   .0583445     2.27   0.023     .0181072    .2468133
+           4 |   .1626653   .0630952     2.58   0.010      .039001    .2863296
+------------------------------------------------------------------------------
+file output/twfe/expat_tradable1_export_entry.pdf saved as PDF format
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to -1               Number of obs = 7,931
+
+------------------------------------------------------------------------------
+        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          -4 |   .2445131    .155567     1.57   0.116    -.0603926    .5494187
+          -3 |   .2676657   .1179626     2.27   0.023     .0364633    .4988682
+          -2 |   .1803152   .0911456     1.98   0.048     .0016731    .3589573
+          -1 |          0  (omitted)
+           0 |   .3167213   .1059943     2.99   0.003     .1089763    .5244662
+           1 |   .3211386    .133276     2.41   0.016     .0599224    .5823548
+           2 |   .5446515   .1510909     3.60   0.000     .2485188    .8407841
+           3 |   .6268941   .1745479     3.59   0.000     .2847865    .9690017
+           4 |   .5062333    .204888     2.47   0.013     .1046603    .9078064
+------------------------------------------------------------------------------
+file output/twfe/expat_tradable1_lnQd.pdf saved as PDF format
+
+. 
+end of do-file
