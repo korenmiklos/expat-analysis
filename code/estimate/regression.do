@@ -20,8 +20,9 @@ est store expat
 esttab local expat using "output/table/desc_firmvars.tex", main(mean) aux(sd) mtitle("Local CEO" "Expatriate CEO") label pare nolegend nonote replace
 
 *Selection regression
-
-reghdfe ever_expat tradable_sector time_treat_1990s lnL lnKL TFP export_share if time_foreign==-1, noabsorb cluster(frame_id_numeric)
+generate X = tradable_sector*time_treat_1990s
+label variable X "Tradable Sector X Early Acquisition"
+reghdfe ever_expat lnL lnKL TFP export_share tradable_sector time_treat_1990s X  if time_foreign==-1, noabsorb cluster(frame_id_numeric)
 sum ever_expat if e(sample)
 estadd scalar mean2 = r(mean)
 est store est1
