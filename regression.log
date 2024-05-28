@@ -165,7 +165,8 @@ added scalar:
 . global varlist_rhs "lnK lnL TFP lnQ export_share"
 
 . 
-. local estab_options nostar b(3) se  style(tex) replace nolegend label nonote
+. local estab_options nostar b(3) se  style(tex) replace nolegend label nonote 
+> coeflabels(ATET "Expatriate CEO")
 
 . local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4
 > ) post(4) baseline(atet) weighting(optimal)
@@ -444,7 +445,8 @@ Event study relative to atet             Number of obs = 8,143
 ------------------------------------------------------------------------------
 (est3 stored)
 
-. esttab using "output/table/reg_exporter.tex", `estab_options'
+. esttab using "output/table/reg_exporter.tex", `estab_options' mtitle("Full sa
+> mple" "Nontradable" "Tradable")
 (output written to output/table/reg_exporter.tex)
 
 . 
@@ -497,7 +499,8 @@ Event study relative to atet             Number of obs = 2,972
 ------------------------------------------------------------------------------
 (est3 stored)
 
-. esttab using "output/table/reg_exportentry.tex", `estab_options'
+. esttab using "output/table/reg_exportentry.tex", `estab_options' mtitle("Full
+>  sample" "Nontradable" "Tradable")
 (output written to output/table/reg_exportentry.tex)
 
 . 
@@ -552,7 +555,8 @@ Event study relative to atet             Number of obs = 7,931
 ------------------------------------------------------------------------------
 (est3 stored)
 
-. esttab using "output/table/reg_lnQd.tex", `estab_options'
+. esttab using "output/table/reg_lnQd.tex", `estab_options' mtitle("Full sample
+> " "Nontradable" "Tradable")
 (output written to output/table/reg_lnQd.tex)
 
 . 

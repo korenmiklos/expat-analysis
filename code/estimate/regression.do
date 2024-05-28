@@ -36,7 +36,7 @@ esttab est1 est2  using "output/table/selection_reg.tex", nostar b(3) scalar("me
 *Regressions
 global varlist_rhs "lnK lnL TFP lnQ export_share"
 
-local estab_options nostar b(3) se  style(tex) replace nolegend label nonote
+local estab_options nostar b(3) se  style(tex) replace nolegend label nonote coeflabels(ATET "Expatriate CEO")
 local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
 
 *Full sample
@@ -65,13 +65,13 @@ eststo clear
 eststo: xt2treatments exporter, `xt2treatments_options'
 eststo: xt2treatments exporter if tradable_sector==0, `xt2treatments_options'
 eststo: xt2treatments exporter if tradable_sector==1, `xt2treatments_options'
-esttab using "output/table/reg_exporter.tex", `estab_options'
+esttab using "output/table/reg_exporter.tex", `estab_options' mtitle("Full sample" "Nontradable" "Tradable")
 
 eststo clear
 eststo: xt2treatments exporter if exporter_pre==0, `xt2treatments_options'
 eststo: xt2treatments exporter if exporter_pre==0 & tradable_sector==0, `xt2treatments_options'
 eststo: xt2treatments exporter if exporter_pre==0 & tradable_sector==1, `xt2treatments_options'
-esttab using "output/table/reg_exportentry.tex", `estab_options'
+esttab using "output/table/reg_exportentry.tex", `estab_options' mtitle("Full sample" "Nontradable" "Tradable")
 
 
 *Qd
@@ -79,5 +79,5 @@ eststo clear
 eststo: xt2treatments lnQd if lnQd_exist_post==1, `xt2treatments_options'
 eststo: xt2treatments lnQd if lnQd_exist_post==1 & tradable_sector==0, `xt2treatments_options'
 eststo: xt2treatments lnQd if lnQd_exist_post==1 & tradable_sector==1, `xt2treatments_options'
-esttab using "output/table/reg_lnQd.tex", `estab_options'
+esttab using "output/table/reg_lnQd.tex", `estab_options' mtitle("Full sample" "Nontradable" "Tradable")
 
