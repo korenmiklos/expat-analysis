@@ -32,13 +32,13 @@ sum ever_expat if e(sample)
 estadd scalar mean2 = r(mean)
 est store est2
 
-esttab est1 est2  using "output/table/selection_reg.tex", star(* .1 ** .05 *** .01) b(3) scalar("mean2 Mean depvar" ) noconstant nonote se replace label r2 nolegend nonote
+esttab est1 est2  using "output/table/selection_reg.tex", nostar b(3) scalar("mean2 Mean depvar" ) noconstant nonote se replace label r2 nolegend nonote
 
 
 *Regressions
 global varlist_rhs "lnK lnL TFP lnQ export_share"
 
-local estab_options b(3) se  style(tex) replace nolegend label nonote
+local estab_options nostar b(3) se  style(tex) replace nolegend label nonote
 local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
 
 *Full sample

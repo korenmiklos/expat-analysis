@@ -69,17 +69,20 @@ Notes:
 
 . 
 . *Selection regression
-. 
-. reghdfe ever_expat tradable_sector time_treat_1990s lnL lnKL TFP export_share
->  if time_foreign==-1, noabsorb cluster(frame_id_numeric)
+. generate X = tradable_sector*time_treat_1990s
+
+. label variable X "Tradable Sector X Early Acquisition"
+
+. reghdfe ever_expat lnL lnKL TFP export_share tradable_sector time_treat_1990s
+>  X  if time_foreign==-1, noabsorb cluster(frame_id_numeric)
 (MWFE estimator converged in 1 iterations)
 
 HDFE Linear regression                            Number of obs   =      1,995
-Absorbing 1 HDFE group                            F(   6,   1988) =       9.58
+Absorbing 1 HDFE group                            F(   7,   1987) =       9.13
 Statistics robust to heteroskedasticity           Prob > F        =     0.0000
-                                                  R-squared       =     0.0331
-                                                  Adj R-squared   =     0.0302
-                                                  Within R-sq.    =     0.0331
+                                                  R-squared       =     0.0339
+                                                  Adj R-squared   =     0.0305
+                                                  Within R-sq.    =     0.0339
 Number of clusters (frame_id_numeric) =      1,995Root MSE        =     0.4189
 
                    (Std. err. adjusted for 1,995 clusters in frame_id_numeric)
@@ -87,13 +90,14 @@ Number of clusters (frame_id_numeric) =      1,995Root MSE        =     0.4189
              |               Robust
   ever_expat | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-tradable_s~r |   .0869663   .0196573     4.42   0.000     .0484151    .1255174
-time_t~1990s |   .0605027   .0199337     3.04   0.002     .0214094    .0995959
-         lnL |   .0037235    .006186     0.60   0.547    -.0084082    .0158553
-        lnKL |   .0100588    .004465     2.25   0.024     .0013022    .0188155
-         TFP |  -.0224266   .0188516    -1.19   0.234    -.0593976    .0145445
-export_share |   .1020337   .0669225     1.52   0.128    -.0292119    .2332793
-       _cons |   .0528671   .0441163     1.20   0.231    -.0336519    .1393862
+         lnL |   .0038776   .0061816     0.63   0.531    -.0082456    .0160007
+        lnKL |   .0101547   .0044608     2.28   0.023     .0014063     .018903
+         TFP |  -.0228703   .0188993    -1.21   0.226    -.0599349    .0141943
+export_share |   .1015939   .0671004     1.51   0.130    -.0300006    .2331884
+tradable_s~r |    .106624   .0236437     4.51   0.000     .0602549     .152993
+time_t~1990s |   .0897263   .0288087     3.11   0.002     .0332278    .1462247
+           X |  -.0491121   .0389718    -1.26   0.208    -.1255419    .0273177
+       _cons |   .0413504   .0442526     0.93   0.350     -.045436    .1281368
 ------------------------------------------------------------------------------
 
 . sum ever_expat if e(sample)
@@ -157,9 +161,8 @@ added scalar:
 . est store est2
 
 . 
-. esttab est1 est2  using "output/table/selection_reg.tex", star(* .1 ** .05 **
-> * .01) b(3) scalar("mean2 Mean depvar" ) noconstant nonote se replace label r
-> 2 nolegend nonote
+. esttab est1 est2  using "output/table/selection_reg.tex", nostar b(3) scalar(
+> "mean2 Mean depvar" ) noconstant nonote se replace label r2 nolegend nonote
 (output written to output/table/selection_reg.tex)
 
 . 
@@ -168,7 +171,7 @@ added scalar:
 . global varlist_rhs "lnK lnL TFP lnQ export_share"
 
 . 
-. local estab_options b(3) se  style(tex) replace nolegend label nonote
+. local estab_options nostar b(3) se  style(tex) replace nolegend label nonote
 
 . local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4
 > ) post(4) baseline(atet) weighting(optimal)
