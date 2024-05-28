@@ -12,8 +12,8 @@ ___/   /   /___/   /   /___/       MP—Parallel Edition
 
 Stata license: Single-user 2-core  perpetual
 Serial number: 501806323834
-  Licensed to: Miklos Koren
-               CEU MicroData
+  Licensed to: Miklós Koren
+               Central European University
 
 Notes:
       1. Stata is running in batch mode.
@@ -38,7 +38,7 @@ Notes:
 
 . which reghdfe
 /Users/koren/Library/Application Support/Stata/ado/plus/r/reghdfe.ado
-*! version 6.12.2 02Nov2021
+*! version 6.12.5 27Dec2023
 
 . which estout
 /Users/koren/Library/Application Support/Stata/ado/plus/e/estout.ado
@@ -162,7 +162,7 @@ added scalar:
 . 
 . 
 . *Regressions
-. global varlist_rhs "lnK lnL TFP lnQ export_share"
+. global varlist_rhs "lnK lnL TFP lnQ export_share lnQd"
 
 . 
 . local estab_options nostar b(3) se  style(tex) replace nolegend label nonote 
@@ -171,13 +171,15 @@ added scalar:
 . local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4
 > ) post(4) baseline(atet) weighting(optimal)
 
-. 
+. local lnQd_condition "lnQd_exist_post=="
+
 . *Full sample
 . 
 . eststo clear
 
 . foreach Y in $varlist_rhs {
-  2.         eststo: xt2treatments `Y', `xt2treatments_options'
+  2.         eststo: xt2treatments `Y' if ``Y'_condition' 1, `xt2treatments_opt
+> ions'
   3. }
 
 Panel variable: frame_id_numeric (unbalanced)
@@ -245,6 +247,19 @@ export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 ------------------------------------------------------------------------------
 (est5 stored)
 
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet            Number of obs = 14,049
+
+------------------------------------------------------------------------------
+        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .3815471   .1273462     3.00   0.003     .1319532     .631141
+------------------------------------------------------------------------------
+(est6 stored)
+
 . 
 . esttab using "output/table/reg_full_sample.tex", `estab_options' 
 (output written to output/table/reg_full_sample.tex)
@@ -256,8 +271,8 @@ export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 . forvalues i=0/1 {
   2.         eststo clear
   3.         foreach Y in $varlist_rhs {
-  4.                 eststo: xt2treatments `Y' if tradable_sector==`i', `xt2tre
-> atments_options'
+  4.                 eststo: xt2treatments `Y' if ``Y'_condition' 1 & tradable_
+> sector==`i', `xt2treatments_options'
   5.         }
   6.         esttab using "output/table/reg_tradable`i'_sample.tex", `estab_opt
 > ions'
@@ -327,6 +342,19 @@ export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
         ATET |   -.013675   .0262788    -0.52   0.603    -.0651805    .0378305
 ------------------------------------------------------------------------------
 (est5 stored)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 6,114
+
+------------------------------------------------------------------------------
+        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .5722326   .2089781     2.74   0.006      .162643    .9818222
+------------------------------------------------------------------------------
+(est6 stored)
 (output written to output/table/reg_tradable0_sample.tex)
 
 Panel variable: frame_id_numeric (unbalanced)
@@ -393,6 +421,19 @@ export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
         ATET |   .0845353   .0347516     2.43   0.015     .0164234    .1526472
 ------------------------------------------------------------------------------
 (est5 stored)
+
+Panel variable: frame_id_numeric (unbalanced)
+ Time variable: year, 1984 to 2019, but with gaps
+         Delta: 1 unit
+
+Event study relative to atet             Number of obs = 7,931
+
+------------------------------------------------------------------------------
+        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        ATET |   .2900042   .1549783     1.87   0.061    -.0137476     .593756
+------------------------------------------------------------------------------
+(est6 stored)
 (output written to output/table/reg_tradable1_sample.tex)
 
 . 
@@ -448,116 +489,6 @@ Event study relative to atet             Number of obs = 8,143
 . esttab using "output/table/reg_exporter.tex", `estab_options' mtitle("Full sa
 > mple" "Nontradable" "Tradable")
 (output written to output/table/reg_exporter.tex)
-
-. 
-. eststo clear
-
-. eststo: xt2treatments exporter if exporter_pre==0, `xt2treatments_options'
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet             Number of obs = 6,512
-
-------------------------------------------------------------------------------
-    exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |   .2037215   .0336227     6.06   0.000     .1378224    .2696207
-------------------------------------------------------------------------------
-(est1 stored)
-
-. eststo: xt2treatments exporter if exporter_pre==0 & tradable_sector==0, `xt2t
-> reatments_options'
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet             Number of obs = 3,519
-
-------------------------------------------------------------------------------
-    exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |    .245889    .039089     6.29   0.000     .1692759    .3225021
-------------------------------------------------------------------------------
-(est2 stored)
-
-. eststo: xt2treatments exporter if exporter_pre==0 & tradable_sector==1, `xt2t
-> reatments_options'
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet             Number of obs = 2,972
-
-------------------------------------------------------------------------------
-    exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |   .1535581   .0439951     3.49   0.000     .0673294    .2397868
-------------------------------------------------------------------------------
-(est3 stored)
-
-. esttab using "output/table/reg_exportentry.tex", `estab_options' mtitle("Full
->  sample" "Nontradable" "Tradable")
-(output written to output/table/reg_exportentry.tex)
-
-. 
-. 
-. *Qd
-. eststo clear
-
-. eststo: xt2treatments lnQd if lnQd_exist_post==1, `xt2treatments_options'
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet            Number of obs = 14,049
-
-------------------------------------------------------------------------------
-        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |   .3815471   .1273462     3.00   0.003     .1319532     .631141
-------------------------------------------------------------------------------
-(est1 stored)
-
-. eststo: xt2treatments lnQd if lnQd_exist_post==1 & tradable_sector==0, `xt2tr
-> eatments_options'
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet             Number of obs = 6,114
-
-------------------------------------------------------------------------------
-        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |   .5722326   .2089781     2.74   0.006      .162643    .9818222
-------------------------------------------------------------------------------
-(est2 stored)
-
-. eststo: xt2treatments lnQd if lnQd_exist_post==1 & tradable_sector==1, `xt2tr
-> eatments_options'
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet             Number of obs = 7,931
-
-------------------------------------------------------------------------------
-        lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |   .2900042   .1549783     1.87   0.061    -.0137476     .593756
-------------------------------------------------------------------------------
-(est3 stored)
-
-. esttab using "output/table/reg_lnQd.tex", `estab_options' mtitle("Full sample
-> " "Nontradable" "Tradable")
-(output written to output/table/reg_lnQd.tex)
 
 . 
 . 
