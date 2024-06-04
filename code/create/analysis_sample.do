@@ -193,6 +193,9 @@ label var lnQd "Domestic Sales"
 label var lnKL "Capital-Labor Ratio"
 label var ever_expat "Expatriate CEO"
 
+* limit sample to event window
+keep if inrange(time_foreign, -4, 4) 
+
 compress
 save "`here'/temp/analysis_sample.dta", replace
 log close

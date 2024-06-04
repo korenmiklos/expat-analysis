@@ -12,8 +12,8 @@ ___/   /   /___/   /   /___/       MP—Parallel Edition
 
 Stata license: Single-user 2-core  perpetual
 Serial number: 501806323834
-  Licensed to: Miklos Koren
-               CEU MicroData
+  Licensed to: Miklós Koren
+               Central European University
 
 Notes:
       1. Stata is running in batch mode.
@@ -29,7 +29,7 @@ Notes:
 . 
 . * find root folder
 . here
-/Users/koren/Tresorit/Mac/projects/expat/
+/Users/koren/Tresorit/Mac2Mac/projects/expat/
 
 . local here = r(here)
 
@@ -39,10 +39,10 @@ Notes:
 . log using "`here'/output/analysis_sample", text replace
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
-> og
+       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/analysis_samp
+> le.log
   log type:  text
- opened on:  27 May 2024, 16:40:00
+ opened on:   4 Jun 2024, 18:30:24
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -522,6 +522,11 @@ Panel variable: frame_id_numeric (unbalanced)
 . label var ever_expat "Expatriate CEO"
 
 . 
+. * limit sample to event window
+. keep if inrange(time_foreign, -4, 4) 
+(1,664 observations deleted)
+
+. 
 . compress
   variable firmage was int now byte
   variable minyear was float now int
@@ -576,19 +581,18 @@ Panel variable: frame_id_numeric (unbalanced)
   variable tax was double now long
   variable final_netgep was double now long
   variable tanass_18 was double now long
-  (2,577,050 bytes saved)
+  (2,285,850 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
-(file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta not
-    found)
-file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
+file /Users/koren/Tresorit/Mac2Mac/projects/expat//temp/analysis_sample.dta
+    saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
-> og
+       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/analysis_samp
+> le.log
   log type:  text
- closed on:  27 May 2024, 16:40:29
+ closed on:   4 Jun 2024, 18:30:55
 -------------------------------------------------------------------------------
 
 . 

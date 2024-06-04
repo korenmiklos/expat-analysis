@@ -12,8 +12,8 @@ ___/   /   /___/   /   /___/       MP—Parallel Edition
 
 Stata license: Single-user 2-core  perpetual
 Serial number: 501806323834
-  Licensed to: Miklos Koren
-               CEU MicroData
+  Licensed to: Miklós Koren
+               Central European University
 
 Notes:
       1. Stata is running in batch mode.
@@ -38,7 +38,7 @@ Notes:
 
 . which reghdfe
 /Users/koren/Library/Application Support/Stata/ado/plus/r/reghdfe.ado
-*! version 6.12.2 02Nov2021
+*! version 6.12.5 27Dec2023
 
 . which estout
 /Users/koren/Library/Application Support/Stata/ado/plus/e/estout.ado
@@ -183,67 +183,67 @@ added scalar:
   3. }
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet            Number of obs = 14,310
+Event study relative to atet            Number of obs = 12,714
 
 ------------------------------------------------------------------------------
          lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .3152809   .1016583     3.10   0.002     .1160342    .5145275
+        ATET |   .3157956   .1015839     3.11   0.002     .1166948    .5148965
 ------------------------------------------------------------------------------
 (est1 stored)
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet            Number of obs = 14,310
+Event study relative to atet            Number of obs = 12,714
 
 ------------------------------------------------------------------------------
          lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .3657999   .0917284     3.99   0.000     .1860155    .5455843
+        ATET |   .3677388   .0916857     4.01   0.000     .1880382    .5474394
 ------------------------------------------------------------------------------
 (est2 stored)
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet            Number of obs = 14,310
+Event study relative to atet            Number of obs = 12,714
 
 ------------------------------------------------------------------------------
          TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .1242949   .0438998     2.83   0.005     .0382528    .2103369
+        ATET |   .1237343   .0438497     2.82   0.005     .0377905    .2096782
 ------------------------------------------------------------------------------
 (est3 stored)
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet            Number of obs = 14,310
+Event study relative to atet            Number of obs = 12,714
 
 ------------------------------------------------------------------------------
          lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .6672523   .1108501     6.02   0.000     .4499901    .8845145
+        ATET |   .6682752    .110757     6.03   0.000     .4511954     .885355
 ------------------------------------------------------------------------------
 (est4 stored)
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet            Number of obs = 14,310
+Event study relative to atet            Number of obs = 12,714
 
 ------------------------------------------------------------------------------
 export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .0554658   .0231585     2.40   0.017     .0100758    .1008557
+        ATET |   .0555552   .0231434     2.40   0.016     .0101951    .1009154
 ------------------------------------------------------------------------------
 (est5 stored)
 
@@ -266,133 +266,133 @@ export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
   7. }
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 6,163
+Event study relative to atet             Number of obs = 5,417
 
 ------------------------------------------------------------------------------
          lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .2819506    .166482     1.69   0.090    -.0443481    .6082493
+        ATET |    .283963    .166352     1.71   0.088    -.0420808    .6100069
 ------------------------------------------------------------------------------
 (est1 stored)
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 6,163
+Event study relative to atet             Number of obs = 5,417
 
 ------------------------------------------------------------------------------
          lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .5080878   .1330472     3.82   0.000       .24732    .7688555
+        ATET |   .5088573   .1329862     3.83   0.000     .2482092    .7695055
 ------------------------------------------------------------------------------
 (est2 stored)
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 6,163
+Event study relative to atet             Number of obs = 5,417
 
 ------------------------------------------------------------------------------
          TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .2056559   .0815725     2.52   0.012     .0457767    .3655351
+        ATET |   .2038102   .0816481     2.50   0.013      .043783    .3638375
 ------------------------------------------------------------------------------
 (est3 stored)
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 6,163
+Event study relative to atet             Number of obs = 5,417
 
 ------------------------------------------------------------------------------
          lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .6998489   .1815928     3.85   0.000     .3439335    1.055764
+        ATET |   .6996121   .1814752     3.86   0.000     .3439273    1.055297
 ------------------------------------------------------------------------------
 (est4 stored)
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 6,163
+Event study relative to atet             Number of obs = 5,417
 
 ------------------------------------------------------------------------------
 export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   -.013675   .0262788    -0.52   0.603    -.0651805    .0378305
+        ATET |  -.0139282   .0262031    -0.53   0.595    -.0652853    .0374289
 ------------------------------------------------------------------------------
 (est5 stored)
 (output written to output/table/reg_tradable0_sample.tex)
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 8,143
+Event study relative to atet             Number of obs = 7,297
 
 ------------------------------------------------------------------------------
          lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .3331747   .1277454     2.61   0.009     .0827984     .583551
+        ATET |   .3324823   .1274814     2.61   0.009     .0826234    .5823412
 ------------------------------------------------------------------------------
 (est1 stored)
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 8,143
+Event study relative to atet             Number of obs = 7,297
 
 ------------------------------------------------------------------------------
          lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .2942194    .117319     2.51   0.012     .0642784    .5241605
+        ATET |   .2967734   .1171369     2.53   0.011     .0671893    .5263574
 ------------------------------------------------------------------------------
 (est2 stored)
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 8,143
+Event study relative to atet             Number of obs = 7,297
 
 ------------------------------------------------------------------------------
          TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .0838811   .0459355     1.83   0.068    -.0061509    .1739131
+        ATET |   .0836674   .0458282     1.83   0.068    -.0061542    .1734889
 ------------------------------------------------------------------------------
 (est3 stored)
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 8,143
+Event study relative to atet             Number of obs = 7,297
 
 ------------------------------------------------------------------------------
          lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .6169775   .1328289     4.64   0.000     .3566376    .8773175
+        ATET |   .6184273   .1325444     4.67   0.000     .3586451    .8782095
 ------------------------------------------------------------------------------
 (est4 stored)
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 8,143
+Event study relative to atet             Number of obs = 7,297
 
 ------------------------------------------------------------------------------
 export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .0845353   .0347516     2.43   0.015     .0164234    .1526472
+        ATET |   .0847111   .0346706     2.44   0.015     .0167579    .1526643
 ------------------------------------------------------------------------------
 (est5 stored)
 (output written to output/table/reg_tradable1_sample.tex)
@@ -405,45 +405,45 @@ export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 . eststo: xt2treatments exporter, `xt2treatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet            Number of obs = 14,310
+Event study relative to atet            Number of obs = 12,714
 
 ------------------------------------------------------------------------------
     exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .0869735   .0273177     3.18   0.001     .0334318    .1405152
+        ATET |   .0853787   .0271662     3.14   0.002     .0321339    .1386236
 ------------------------------------------------------------------------------
 (est1 stored)
 
 . eststo: xt2treatments exporter if tradable_sector==0, `xt2treatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 6,163
+Event study relative to atet             Number of obs = 5,417
 
 ------------------------------------------------------------------------------
     exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .0745564   .0482919     1.54   0.123     -.020094    .1692067
+        ATET |   .0684665   .0467963     1.46   0.143    -.0232526    .1601856
 ------------------------------------------------------------------------------
 (est2 stored)
 
 . eststo: xt2treatments exporter if tradable_sector==1, `xt2treatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 8,143
+Event study relative to atet             Number of obs = 7,297
 
 ------------------------------------------------------------------------------
     exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .0888101   .0332346     2.67   0.008     .0236714    .1539488
+        ATET |   .0890882   .0331711     2.69   0.007      .024074    .1541024
 ------------------------------------------------------------------------------
 (est3 stored)
 
@@ -456,15 +456,15 @@ Event study relative to atet             Number of obs = 8,143
 . eststo: xt2treatments exporter if exporter_pre==0, `xt2treatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 6,512
+Event study relative to atet             Number of obs = 5,824
 
 ------------------------------------------------------------------------------
     exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .2037215   .0336227     6.06   0.000     .1378224    .2696207
+        ATET |   .2037215   .0335317     6.08   0.000     .1380006    .2694425
 ------------------------------------------------------------------------------
 (est1 stored)
 
@@ -472,15 +472,15 @@ Event study relative to atet             Number of obs = 6,512
 > reatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 3,519
+Event study relative to atet             Number of obs = 3,135
 
 ------------------------------------------------------------------------------
     exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |    .245889    .039089     6.29   0.000     .1692759    .3225021
+        ATET |    .245889   .0389854     6.31   0.000     .1694791    .3222989
 ------------------------------------------------------------------------------
 (est2 stored)
 
@@ -488,15 +488,15 @@ Event study relative to atet             Number of obs = 3,519
 > reatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 2,972
+Event study relative to atet             Number of obs = 2,679
 
 ------------------------------------------------------------------------------
     exporter |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .1535581   .0439951     3.49   0.000     .0673294    .2397868
+        ATET |   .1535581   .0437727     3.51   0.000     .0677651    .2393511
 ------------------------------------------------------------------------------
 (est3 stored)
 
@@ -511,15 +511,15 @@ Event study relative to atet             Number of obs = 2,972
 . eststo: xt2treatments lnQd if lnQd_exist_post==1, `xt2treatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet            Number of obs = 14,049
+Event study relative to atet            Number of obs = 12,466
 
 ------------------------------------------------------------------------------
         lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .3815471   .1273462     3.00   0.003     .1319532     .631141
+        ATET |   .3819559   .1272546     3.00   0.003     .1325415    .6313703
 ------------------------------------------------------------------------------
 (est1 stored)
 
@@ -527,15 +527,15 @@ Event study relative to atet            Number of obs = 14,049
 > eatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 6,114
+Event study relative to atet             Number of obs = 5,371
 
 ------------------------------------------------------------------------------
         lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .5722326   .2089781     2.74   0.006      .162643    .9818222
+        ATET |    .572134   .2087323     2.74   0.006     .1630262    .9812417
 ------------------------------------------------------------------------------
 (est2 stored)
 
@@ -543,15 +543,15 @@ Event study relative to atet             Number of obs = 6,114
 > eatments_options'
 
 Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1984 to 2019, but with gaps
+ Time variable: year, 1986 to 2019, but with gaps
          Delta: 1 unit
 
-Event study relative to atet             Number of obs = 7,931
+Event study relative to atet             Number of obs = 7,095
 
 ------------------------------------------------------------------------------
         lnQd |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-        ATET |   .2900042   .1549783     1.87   0.061    -.0137476     .593756
+        ATET |   .2909061   .1546649     1.88   0.060    -.0122316    .5940437
 ------------------------------------------------------------------------------
 (est3 stored)
 
