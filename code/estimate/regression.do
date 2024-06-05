@@ -71,15 +71,15 @@ forvalues i=0/1 {
 *Export, export entry
 eststo clear
 xt2treatments exporter, `xt2treatments_options'
-sum `Y' if e(sample)
+sum exporter if e(sample)
 estadd scalar mean2 = r(mean)
 eststo 
 xt2treatments exporter if tradable_sector==0, `xt2treatments_options'
-sum `Y' if e(sample)
+sum exporter if e(sample)
 estadd scalar mean2 = r(mean)
 eststo 
 xt2treatments exporter if tradable_sector==1, `xt2treatments_options'
-sum `Y' if e(sample)
+sum exporter if e(sample)
 estadd scalar mean2 = r(mean)
 eststo 
 esttab using "output/table/reg_exporter.tex", `estab_options' mtitle("Full sample" "Nontradable" "Tradable")
