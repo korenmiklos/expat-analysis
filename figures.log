@@ -50,7 +50,7 @@ Notes:
 . local graph_command graph twoway (rarea lower upper xvar, fcolor(gray%5) lcol
 > or(gray%10)) (connected coef xvar, lcolor(cranberry)), graphregion(color(whit
 > e)) xlabel(-4(1)4) legend(off) xline(-0.5) xscale(range (-4 4)) xtitle("Time 
-> since foreign acquisution (year)") yline(0)
+> since CEO hire (year)") yline(0)
 
 . local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4
 > ) post(4) baseline(-1) weighting(optimal)
