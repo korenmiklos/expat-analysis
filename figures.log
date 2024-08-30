@@ -55,7 +55,8 @@ Notes:
 . local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4
 > ) post(4) baseline(-1) weighting(optimal)
 
-. local esttab_options b(3) se style(tex) replace nolegend label nonote
+. local esttab_options star(* 0.10 ** 0.05 *** 0.01) b(3) se style(tex) replace
+>  nolegend label nonote
 
 . local folder output/figure
 

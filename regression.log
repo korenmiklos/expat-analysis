@@ -159,8 +159,9 @@ added scalar:
 . est store est2
 
 . 
-. esttab est1 est2  using "output/table/selection_reg.tex", b(3) scalar("mean2 
-> Mean dep.var.") noconstant nonote se replace label r2 nolegend nonote
+. esttab est1 est2  using "output/table/selection_reg.tex", star(* 0.10 ** 0.05
+>  *** 0.01) b(3) scalar("mean2 Mean dep.var.") noconstant nonote se replace la
+> bel r2 nolegend nonote
 (output written to output/table/selection_reg.tex)
 
 . 
@@ -169,8 +170,8 @@ added scalar:
 . global varlist_rhs "TFP lnQd"
 
 . 
-. local estab_options b(3) se style(tex) replace nolegend label nonote coeflabe
-> ls(ATET "Expatriate CEO")
+. local estab_options star(* 0.10 ** 0.05 *** 0.01) b(3) se style(tex) replace 
+> nolegend label nonote coeflabels(ATET "Expatriate CEO")
 
 . local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4
 > ) post(4) baseline(atet) weighting(optimal)
