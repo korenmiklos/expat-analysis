@@ -1,28 +1,31 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
 \begin{tabular}{l*{2}{c}}
 \hline\hline
                     &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}\\
                     &\multicolumn{1}{c}{Expatriate CEO}&\multicolumn{1}{c}{Expatriate CEO}\\
 \hline
-Labor               &       0.004&       0.004\\
-                    &     (0.006)&     (0.009)\\
+Labor               &       0.004         &       0.004         \\
+                    &     (0.006)         &     (0.009)         \\
 [1em]
-Capital-Labor Ratio &       0.010&       0.006\\
-                    &     (0.004)&     (0.007)\\
+Capital-Labor Ratio &       0.010\sym{*}  &       0.006         \\
+                    &     (0.004)         &     (0.007)         \\
 [1em]
-TFP                 &      -0.022&      -0.019\\
-                    &     (0.019)&     (0.023)\\
+TFP                 &      -0.022         &      -0.019         \\
+                    &     (0.019)         &     (0.023)         \\
 [1em]
-Export Share        &       0.102&       0.056\\
-                    &     (0.067)&     (0.068)\\
+Export Share        &       0.102         &       0.056         \\
+                    &     (0.067)         &     (0.068)         \\
 [1em]
-Tradable Sector     &       0.087&            \\
-                    &     (0.020)&            \\
+Tradable Sector     &       0.087\sym{***}&                     \\
+                    &     (0.020)         &                     \\
 [1em]
-Early Acquisition   &       0.061&            \\
-                    &     (0.020)&            \\
+Early Acquisition   &       0.061\sym{**} &                     \\
+                    &     (0.020)         &                     \\
 \hline
-Observations        &        1995&        1603\\
-\(R^{2}\)           &       0.033&       0.335\\
-Mean dep.var.       &       0.237&       0.240\\
+Observations        &        1995         &        1603         \\
+\(R^{2}\)           &       0.033         &       0.335         \\
+Mean dep.var.       &       0.237         &       0.240         \\
 \hline\hline
 \end{tabular}
+}
