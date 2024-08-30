@@ -4,7 +4,7 @@ which e2frame
 which reghdfe
 which estout
 
-global varlist_rhs "lnK lnL TFP lnQ export_share lnQd"
+global varlist_rhs "TFP lnQd lnK lnL lnQ export_share "
 local lnQd_condition "lnQd_exist_post=="
 local graph_command graph twoway (rarea lower upper xvar, fcolor(gray%5) lcolor(gray%10)) (connected coef xvar, lcolor(cranberry)), graphregion(color(white)) xlabel(-4(1)4) legend(off) xline(-0.5) xscale(range (-4 4)) xtitle("Time since CEO hire (year)") yline(0)
 local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(-1) weighting(optimal)

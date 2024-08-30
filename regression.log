@@ -12,8 +12,8 @@ ___/   /   /___/   /   /___/       MP—Parallel Edition
 
 Stata license: Single-user 2-core  perpetual
 Serial number: 501806323834
-  Licensed to: Miklós Koren
-               Central European University
+  Licensed to: Miklos Koren
+               CEU MicroData
 
 Notes:
       1. Stata is running in batch mode.
@@ -166,11 +166,11 @@ added scalar:
 . 
 . 
 . *Regressions
-. global varlist_rhs "lnK lnL TFP lnQ export_share lnQd"
+. global varlist_rhs "TFP lnQd"
 
 . 
-. local estab_options nostar b(3) se scalar("mean2 Mean dep.var.")  style(tex) 
-> replace nolegend label nonote coeflabels(ATET "Expatriate CEO")
+. local estab_options nostar b(3) se style(tex) replace nolegend label nonote c
+> oeflabels(ATET "Expatriate CEO")
 
 . local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4
 > ) post(4) baseline(atet) weighting(optimal)
@@ -195,46 +195,6 @@ Panel variable: frame_id_numeric (unbalanced)
 Event study relative to atet            Number of obs = 12,714
 
 ------------------------------------------------------------------------------
-         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |   .3157956   .1015839     3.11   0.002     .1166948    .5148965
-------------------------------------------------------------------------------
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-         lnK |     12,714    11.58952    2.362135   1.098612    20.0784
-
-added scalar:
-              e(mean2) =  11.589517
-(est1 stored)
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1986 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet            Number of obs = 12,714
-
-------------------------------------------------------------------------------
-         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |   .3677388   .0916857     4.01   0.000     .1880382    .5474394
-------------------------------------------------------------------------------
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-         lnL |     12,714    3.441347    1.527151          0   8.439232
-
-added scalar:
-              e(mean2) =  3.4413467
-(est2 stored)
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1986 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet            Number of obs = 12,714
-
-------------------------------------------------------------------------------
          TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
         ATET |   .1237343   .0438497     2.82   0.005     .0377905    .2096782
@@ -246,47 +206,7 @@ Event study relative to atet            Number of obs = 12,714
 
 added scalar:
               e(mean2) =  .00417261
-(est3 stored)
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1986 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet            Number of obs = 12,714
-
-------------------------------------------------------------------------------
-         lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |   .6682752    .110757     6.03   0.000     .4511954     .885355
-------------------------------------------------------------------------------
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-         lnQ |     12,714     13.4566    1.837304   1.767058   19.90297
-
-added scalar:
-              e(mean2) =  13.456602
-(est4 stored)
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1986 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet            Number of obs = 12,714
-
-------------------------------------------------------------------------------
-export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |   .0555552   .0231434     2.40   0.016     .0101951    .1009154
-------------------------------------------------------------------------------
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-export_share |     12,714    .1541333    .3651372          0   23.72011
-
-added scalar:
-              e(mean2) =  .15413328
-(est5 stored)
+(est1 stored)
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1986 to 2019, but with gaps
@@ -306,7 +226,7 @@ Event study relative to atet            Number of obs = 12,466
 
 added scalar:
               e(mean2) =  13.177228
-(est6 stored)
+(est2 stored)
 
 . 
 . esttab using "output/table/reg_full_sample.tex", `estab_options' 
@@ -336,46 +256,6 @@ Panel variable: frame_id_numeric (unbalanced)
 Event study relative to atet             Number of obs = 5,417
 
 ------------------------------------------------------------------------------
-         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |    .283963    .166352     1.71   0.088    -.0420808    .6100069
-------------------------------------------------------------------------------
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-         lnK |      5,417    11.28751    2.294593   1.098612   17.98325
-
-added scalar:
-              e(mean2) =  11.287505
-(est1 stored)
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1986 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet             Number of obs = 5,417
-
-------------------------------------------------------------------------------
-         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |   .5088573   .1329862     3.83   0.000     .2482092    .7695055
-------------------------------------------------------------------------------
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-         lnL |      5,417    3.161032    1.416369          0   8.420682
-
-added scalar:
-              e(mean2) =  3.1610318
-(est2 stored)
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1986 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet             Number of obs = 5,417
-
-------------------------------------------------------------------------------
          TFP |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
         ATET |   .2038102   .0816481     2.50   0.013      .043783    .3638375
@@ -387,47 +267,7 @@ Event study relative to atet             Number of obs = 5,417
 
 added scalar:
               e(mean2) =  .00367873
-(est3 stored)
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1986 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet             Number of obs = 5,417
-
-------------------------------------------------------------------------------
-         lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |   .6996121   .1814752     3.86   0.000     .3439273    1.055297
-------------------------------------------------------------------------------
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-         lnQ |      5,417    13.55839    1.817534   1.767058   19.90297
-
-added scalar:
-              e(mean2) =  13.558392
-(est4 stored)
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1986 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet             Number of obs = 5,417
-
-------------------------------------------------------------------------------
-export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |  -.0139282   .0262031    -0.53   0.595    -.0652853    .0374289
-------------------------------------------------------------------------------
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-export_share |      5,417    .0820033    .2110132          0          1
-
-added scalar:
-              e(mean2) =  .08200332
-(est5 stored)
+(est1 stored)
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1986 to 2019, but with gaps
@@ -447,48 +287,8 @@ Event study relative to atet             Number of obs = 5,371
 
 added scalar:
               e(mean2) =  13.410807
-(est6 stored)
-(output written to output/table/reg_tradable0_sample.tex)
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1986 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet             Number of obs = 7,297
-
-------------------------------------------------------------------------------
-         lnK |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |   .3324823   .1274814     2.61   0.009     .0826234    .5823412
-------------------------------------------------------------------------------
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-         lnK |      7,297    11.81372    2.386615   2.397895    20.0784
-
-added scalar:
-              e(mean2) =  11.813719
-(est1 stored)
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1986 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet             Number of obs = 7,297
-
-------------------------------------------------------------------------------
-         lnL |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |   .2967734   .1171369     2.53   0.011     .0671893    .5263574
-------------------------------------------------------------------------------
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-         lnL |      7,297    3.649441    1.572554          0   8.439232
-
-added scalar:
-              e(mean2) =  3.6494412
 (est2 stored)
+(output written to output/table/reg_tradable0_sample.tex)
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1986 to 2019, but with gaps
@@ -508,47 +308,7 @@ Event study relative to atet             Number of obs = 7,297
 
 added scalar:
               e(mean2) =  .00453924
-(est3 stored)
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1986 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet             Number of obs = 7,297
-
-------------------------------------------------------------------------------
-         lnQ |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |   .6184273   .1325444     4.67   0.000     .3586451    .8782095
-------------------------------------------------------------------------------
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-         lnQ |      7,297    13.38104    1.848346   2.012259   19.73901
-
-added scalar:
-              e(mean2) =  13.381037
-(est4 stored)
-
-Panel variable: frame_id_numeric (unbalanced)
- Time variable: year, 1986 to 2019, but with gaps
-         Delta: 1 unit
-
-Event study relative to atet             Number of obs = 7,297
-
-------------------------------------------------------------------------------
-export_share |       ATET   Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-        ATET |   .0847111   .0346706     2.44   0.015     .0167579    .1526643
-------------------------------------------------------------------------------
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-export_share |      7,297    .2076797    .4387828          0   23.72011
-
-added scalar:
-              e(mean2) =  .20767966
-(est5 stored)
+(est1 stored)
 
 Panel variable: frame_id_numeric (unbalanced)
  Time variable: year, 1986 to 2019, but with gaps
@@ -568,7 +328,7 @@ Event study relative to atet             Number of obs = 7,095
 
 added scalar:
               e(mean2) =  13.000405
-(est6 stored)
+(est2 stored)
 (output written to output/table/reg_tradable1_sample.tex)
 
 . 

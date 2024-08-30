@@ -36,9 +36,9 @@ esttab est1 est2  using "output/table/selection_reg.tex", nostar b(3) scalar("me
 
 
 *Regressions
-global varlist_rhs "lnK lnL TFP lnQ export_share lnQd"
+global varlist_rhs "TFP lnQd"
 
-local estab_options nostar b(3) se scalar("mean2 Mean dep.var.")  style(tex) replace nolegend label nonote coeflabels(ATET "Expatriate CEO")
+local estab_options nostar b(3) se style(tex) replace nolegend label nonote coeflabels(ATET "Expatriate CEO")
 local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
 local lnQd_condition "lnQd_exist_post=="
 *Full sample
