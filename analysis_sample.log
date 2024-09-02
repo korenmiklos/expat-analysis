@@ -12,8 +12,8 @@ ___/   /   /___/   /   /___/       MP—Parallel Edition
 
 Stata license: Single-user 2-core  perpetual
 Serial number: 501806323834
-  Licensed to: Miklós Koren
-               Central European University
+  Licensed to: Miklos Koren
+               CEU MicroData
 
 Notes:
       1. Stata is running in batch mode.
@@ -29,7 +29,7 @@ Notes:
 . 
 . * find root folder
 . here
-/Users/koren/Tresorit/Mac2Mac/projects/expat/
+/Users/koren/Tresorit/Mac/projects/expat/
 
 . local here = r(here)
 
@@ -39,10 +39,10 @@ Notes:
 . log using "`here'/output/analysis_sample", text replace
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/analysis_samp
-> le.log
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
+> og
   log type:  text
- opened on:   4 Jun 2024, 20:12:51
+ opened on:   2 Sep 2024, 16:51:32
 
 . 
 . use "`here'/temp/balance-small-clean.dta"
@@ -347,18 +347,24 @@ foreign_on |     foreign_hire
 . foreach sector in agriculture industry services {
   2.     local from : word 1 of ``sector''
   3.     local to : word 2 of ``sector''
-  4.     quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if inrange(teaor08_
-> 2d_pre, `from', `to')
-  5.     predict `TFP' if e(sample), resid
+  4.     quietly reghdfe lnQ lnK lnL lnM if inrange(teaor08_2d_pre, `from', `to
+> '), absorb(i.teaor08_2d##i.year) resid
+  5.     predict `TFP', resid
   6.     replace TFP = `TFP' if inrange(teaor08_2d_pre, `from', `to')
-  7.     drop `TFP'
-  8. }
-(14,966 missing values generated)
-(644 real changes made)
-(9,838 missing values generated)
-(5,772 real changes made)
-(6,416 missing values generated)
-(9,194 real changes made)
+  7.     * if singleton in sector, use average TFP of 0
+.     replace TFP = 0 if missing(TFP) & inrange(teaor08_2d_pre, `from', `to') &
+>  !missing(lnQ, lnK, lnL, lnM)
+  8.     drop `TFP'
+  9. }
+(15,002 missing values generated)
+(608 real changes made)
+(36 real changes made)
+(10,119 missing values generated)
+(5,491 real changes made)
+(281 real changes made)
+(6,700 missing values generated)
+(8,910 real changes made)
+(284 real changes made)
 
 . 
 . tabulate foreignness has_expat_ceo
@@ -584,15 +590,14 @@ Panel variable: frame_id_numeric (unbalanced)
   (2,285,850 bytes saved)
 
 . save "`here'/temp/analysis_sample.dta", replace
-file /Users/koren/Tresorit/Mac2Mac/projects/expat//temp/analysis_sample.dta
-    saved
+file /Users/koren/Tresorit/Mac/projects/expat//temp/analysis_sample.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /Users/koren/Tresorit/Mac2Mac/projects/expat//output/analysis_samp
-> le.log
+       log:  /Users/koren/Tresorit/Mac/projects/expat//output/analysis_sample.l
+> og
   log type:  text
- closed on:   4 Jun 2024, 20:13:22
+ closed on:   2 Sep 2024, 16:51:37
 -------------------------------------------------------------------------------
 
 . 

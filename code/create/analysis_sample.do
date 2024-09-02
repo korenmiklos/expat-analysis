@@ -132,9 +132,11 @@ tempvar TFP
 foreach sector in agriculture industry services {
     local from : word 1 of ``sector''
     local to : word 2 of ``sector''
-    quietly regress lnQ lnK lnL lnM i.teaor08_2d##year if inrange(teaor08_2d_pre, `from', `to')
-    predict `TFP' if e(sample), resid
+    quietly reghdfe lnQ lnK lnL lnM if inrange(teaor08_2d_pre, `from', `to'), absorb(i.teaor08_2d##i.year) resid
+    predict `TFP', resid
     replace TFP = `TFP' if inrange(teaor08_2d_pre, `from', `to')
+    * if singleton in sector, use average TFP of 0
+    replace TFP = 0 if missing(TFP) & inrange(teaor08_2d_pre, `from', `to') & !missing(lnQ, lnK, lnL, lnM)
     drop `TFP'
 }
 
