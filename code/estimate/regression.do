@@ -36,7 +36,7 @@ esttab est1 est2  using "output/table/selection_reg.tex", star(* 0.10 ** 0.05 **
 
 
 *Regressions
-global varlist_rhs "TFP lnQd"
+global varlist_rhs "TFP lnQd lnK lnL lnQ export_share"
 
 local estab_options star(* 0.10 ** 0.05 *** 0.01) b(3) se style(tex) replace nolegend label nonote coeflabels(ATET "Expatriate CEO")
 local xt2treatments_options treatment(has_expat_ceo) control(local_ceo) pre(4) post(4) baseline(atet) weighting(optimal)
